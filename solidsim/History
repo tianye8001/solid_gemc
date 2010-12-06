@@ -1,0 +1,4 @@
+Dec 3, 2010 - Seamus
+	Set up framework for some of the classes.  The code compiles
+	but doesn't do anything.  This builds against ROOT so all
+	it's classes are available to use.
