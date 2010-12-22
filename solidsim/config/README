@@ -1,0 +1,62 @@
+The binmake.gmk file has been mildly modified from 
+the distributed Geant4 version to build the Python
+libraries in tandem with main executable. 
+
+Additionally, the Python environment generated 
+when we import the Geant4 module has issues with
+visualization being created twice, so the __init__
+needs to be tweaked.  Because this is likely
+very highly version dependent, we copy the interface
+and modify it with a script, getSolidGeant4.sh, 
+because it's just a few lines.
+
+This all comes from Geant4 4.9.2.  Possibly future 
+versions of Geant4 may break it.  So I document
+the changes here for future generations.
+
+Seamus Riordan
+sriordan@physics.umass.edu
+December 17, 2010
+
+
+The few changes that need to be made are: 
+
+-------------------------------------------
+
+Copy $G4INSTALL/config/binmake.gmk to this directory
+
+-------------------------------------------
+
+Add pylib to .PHONY:
+
+.PHONY: bin clean clean_bin debug
+.PHONY: bin clean clean_bin debug pylib
+
+-------------------------------------------
+
+Add the line to build pylib with bin
+
+bin: $(G4BINDIR)/$(G4TARGET)
+	make pylib
+
+-------------------------------------------
+
+Add the following rules to build pylib:
+
+# Find object files we need from all the classes in src
+PYOBJS :=  $(patsubst src/%.cc, pylib/%.o, $(wildcard src/*cc))
+
+# Clean out copied object files after we build
+pylib:  pylib/$(G4TARGET).so
+	@rm -f pylib/*.o
+ 
+# Build
+pylib/$(G4TARGET).so: $(PYOBJS)
+	@echo Building pylib
+	@cd pylib && make
+ 
+# This copies all the files in from the tmp directory
+# after they are build by the main program
+$(PYOBJS):  $(patsubst pylib/%.o, $(G4TMPDIR)/%.o, $@)
+	@cp $(patsubst pylib/%.o, $(G4TMPDIR)/%.o, $@) pylib/
+

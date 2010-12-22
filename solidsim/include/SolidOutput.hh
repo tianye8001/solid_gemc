@@ -1,6 +1,9 @@
 #ifndef SolidOutput_hh
 #define SolidOutput_hh
 
+#include <vector>
+#include <G4String.hh>
+
 /**
  SolidOutput
 
@@ -15,12 +18,32 @@
 
 */
 
+class SolidData;
+class TTree;
+class TFile;
+
 class SolidOutput{
     public:
 	SolidOutput();
 	~SolidOutput();
-	void CreateOutputFile();
+	int CreateOutputFile();
+	int CloseOutputFile();
+
+	static SolidOutput *GetInstance();
+
+	int FillTree();
+
+	const char *GetClassName(){ return "SolidOutput";}
+
+	TTree *GetTree(){ return fTree; }
     private:
+	static int __SolidOutputInit;
+	static SolidOutput *__SolidOutputPtr;
+
+	G4String fOutputFileName;
+
+	TFile *fFile;
+	TTree *fTree;
 };
 
 #endif//SolidOutput_hh

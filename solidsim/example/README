@@ -1,0 +1,13 @@
+Example inputs
+
+Seamus Riordan
+December 22, 2010
+
+The default macro SolidSim uses is defaultMacro.mac.  It includes
+some basic visualization.
+
+The default geometry is in defaultgeo.py.  It contains an example
+of how to build an arbitrary geometry and associate sensitive
+detectors.  It can be tested without SolidSim by running
+
+python testgeo.py

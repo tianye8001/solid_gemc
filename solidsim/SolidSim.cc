@@ -28,6 +28,11 @@ int main(int argc ,char ** argv) {
 
   G4RunManager* runManager = new G4RunManager;
 
+  // Output manager needs to be created before
+  // SolidDetectorConstruction so detector classes 
+  // can register their output when they are created
+  SolidOutput *soutput = new SolidOutput();
+
   // Initialize the geometry
   runManager->SetUserInitialization(new SolidDetectorConstruction());
   
@@ -44,9 +49,6 @@ int main(int argc ,char ** argv) {
   SolidEventAction* pEventAction = new SolidEventAction();
   runManager->SetUserAction(pEventAction);
 
-  SolidOutput *soutput = new SolidOutput();
-  soutput->CreateOutputFile();
-  delete soutput; soutput = NULL;
   
 #ifdef G4VIS_USE
   // Visualization manager
@@ -83,6 +85,8 @@ int main(int argc ,char ** argv) {
 #endif
 
   delete runManager;
+
+  delete soutput; soutput = NULL;
 
   return 0;
 }

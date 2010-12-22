@@ -16,10 +16,29 @@
 #include "SolidPhysicsList.hh"
 #include "SolidPhysicsListMessenger.hh"
 
+#include "G4DecayPhysics.hh"
+#include "G4EmStandardPhysics.hh"
+
 
 SolidPhysicsList::SolidPhysicsList(){
   fMessenger = new SolidPhysicsListMessenger(this);
   SetVerboseLevel(1);
+  particleList = new G4DecayPhysics("decays");
+  emPhysicsList = new G4EmStandardPhysics();
+}
+
+void SolidPhysicsList::ConstructParticle(){
+  particleList->ConstructParticle();
+//  emPhysicsList->ConstructParticle();
+}
+
+void SolidPhysicsList::ConstructProcess(){
+  // FIXME:  Temporary list for now
+
+  AddTransportation();
+  particleList->ConstructProcess();
+  emPhysicsList->ConstructProcess();
+
 }
 
 SolidPhysicsList::~SolidPhysicsList(){ 

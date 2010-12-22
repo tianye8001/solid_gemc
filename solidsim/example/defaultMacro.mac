@@ -1,0 +1,24 @@
+
+/control/verbose 1
+/tracking/verbose 0
+/run/verbose 0
+/event/verbose 0
+
+/run/initialize
+
+# FIX THE FOLLOWIG PARAMETERS
+# TO SET THE RANGE SHIFTER
+#/beamLine/RangeShifter/thickness 4 cm
+#/beamLine/RangeShifter/RSMat Water
+#/tracking/verbose 1
+# SET OF THE VISUALISATION CHARACTERISTICS
+
+/vis/scene/create
+/vis/open OGLIX
+/vis/viewer/flush
+/vis/scene/add/trajectories
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/vis/viewer/update
+/run/beamOn 10
+

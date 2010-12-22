@@ -22,8 +22,10 @@ include $(G4INSTALL)/config/architecture.gmk
  
 all: lib bin
 
-include $(G4INSTALL)/config/binmake.gmk
+include config/binmake.gmk
 
 # include ROOT flags in compilation
-INCFLAGS += -I$(ROOT_INCDIR)
-LDFLAGS  += -L$(ROOT_LIBDIR) $(ROOT_LIBFLG)
+INCFLAGS += -I$(ROOT_INCDIR) -I/usr/include/python2.4/
+LDFLAGS  += -L$(ROOT_LIBDIR) $(ROOT_LIBFLG) -lpython2.4 -lboost_python
+CXXFLAGS += -g
+

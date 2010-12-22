@@ -2,3 +2,27 @@ Dec 3, 2010 - Seamus
 	Set up framework for some of the classes.  The code compiles
 	but doesn't do anything.  This builds against ROOT so all
 	it's classes are available to use.
+
+Dec 22, 2010 - Seamus
+	Python bindings incorporated and a Python interpreter runs
+	in the geometry construction class.  Worked out the base
+	interface for data getting written to the ROOT tree as well
+	as a sensitive detector that records the hits (though I think
+	the position and momentum components aren't getting read out
+	correctly.
+
+	Makefiles updated to build everything.  The Python libraries
+	are built.  We need to use our own version of the Python 
+	libraries that don't initialize a visualization manager, so
+	a script that takes what we need and modifies it is included.
+	This also allows us to make any further changes to the bindings
+	if we want.
+
+	Added an example of how to build a geometry and add detectors
+	is included.
+
+	Added in a simple physics list and particle gun for testing
+	purposes.
+
+	Messenger interfaces are not written.  Documentation needs more
+	work well.

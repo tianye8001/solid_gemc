@@ -14,6 +14,8 @@ class SolidRunMessenger;
  * Call things to initialize
  */
 
+class SolidOutput;
+
 class SolidRunAction : public G4UserRunAction {
     public:
 	SolidRunAction();
@@ -23,7 +25,9 @@ class SolidRunAction : public G4UserRunAction {
 	void BeginOfRunAction(const G4Run*);
 	void EndOfRunAction(const G4Run* );
 
+	const char *GetClassName(){ return "SolidRunAction";}
     private:  
+	SolidOutput *fOutput;
 };
 #endif
 

@@ -16,10 +16,10 @@
 
 class SolidFieldMap{
     public:
-	SolidFieldMap(const char *);
+	SolidFieldMap(const char *){};
 	~SolidFieldMap() {};
 
-	virtual int AddField() = 0;
+	virtual int AddField(){return 0;}
 
 	virtual const char *GetName(){ return fName.Data(); }
     private:

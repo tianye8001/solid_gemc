@@ -1,20 +1,13 @@
 #ifndef SolidData_hh
 #define SolidData_hh
 
-#include "TROOT.h"
-#include "TString.h"
+#include "G4String.hh"
+#include <vector>
 
-enum datatype_t {kInt, kDouble, kFloat, kIntArray, kDoubleArray, kFloatArray};
+class SolidDatum;
+class SolidOutput;
 
-/** Data description struct */
-struct datadesc_t {
-    char branchname[255];///< Branchname to be put in tree
-    datatype_t type;     ///< Data type to be stored
-    void *ptr;           ///< Pointer to data
-    UInt_t *size;        ///< Pointer to size of data (only relevant for Array)
-};
-
-/**
+/*!
  * SolidData
  *
  * Generic class describing data to be written
@@ -23,22 +16,29 @@ struct datadesc_t {
  */
 class SolidData {
     public:
-	 SolidData(const char *n){ fName = n; fData = NULL; fNdata = 0; }
-        ~SolidData();
+	SolidData(const G4String &n);
+        virtual ~SolidData(){ClearData();}
 
-	const char  *GetName() { return fName.Data();}
-	int          GetNData(){ return fNdata; }
-	datadesc_t **GetData() { return fData; }
+	const char   *GetName() { return fName.data();}
+	unsigned int  GetNdata(){ return fData.size(); }
 
-	void SetName(const char *n){ fName = n; }
-	int  SetData(datadesc_t *);
+	std::vector<SolidDatum *>GetData() { return fData; }
+	SolidDatum* GetDatum(unsigned int i) { return fData[i]; }
 
-    private:
-	TString      fName;
-	int          fNdata;
-	datadesc_t **fData;
+	void SetName(const G4String &n){ fName = n; }
+	unsigned int AddDatum(SolidDatum *d){fData.push_back(d); 
+	                                     return fData.size(); }
+
+	const char *GetClassName(){ return "SolidData";}
 
 	int  ClearData();
+	int  RegisterData();
+
+    private:
+	G4String  fName;
+	std::vector<SolidDatum *> fData;
+
+	SolidOutput *fOutput;
 };
 #endif//SolidData_hh
 

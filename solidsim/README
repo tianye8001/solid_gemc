@@ -1,19 +1,29 @@
 SolidSim - Geant4 SoLID simulation
-December 3, 2010
+December 22, 2010
 
 Seamus Riordan
-Zhiwen Zhao
-Lorenzo Zana
 
 This is the Geant4 SoLID simulation code.  It requires
 the following packages to be installed:
 
-	Geant4
+	Geant4 (with Python support implies:
+		Python
+		Boost C++/Python libraries
+               )
 	ROOT
 
 It's a standard Geant4 installation (linked against
 ROOT) so you can just run make to build it. The executable
 is called SolidSim
+
+You'll need to install a modified version of the Geant4 python
+modules.  Run the script in config/getSolidGeant.sh to do it.
+It will tell you what to add in your PYTHONPATH as well, which
+is necessary to run everything.
+
+There's an example that runs in example/.  The default macro
+is defaultMacro.mac and the default path it looks for the
+geometry description is defaultgeo.py
 
 Information and macros to run the thing is to come as 
 they're developed

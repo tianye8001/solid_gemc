@@ -14,10 +14,16 @@ public:
   SolidPhysicsList();
   virtual ~SolidPhysicsList();
 
+  void ConstructParticle();
+  void ConstructProcess();
+
    void SetCuts();
 
 private:
   SolidPhysicsListMessenger* fMessenger;
+  G4VPhysicsConstructor*  emPhysicsList;
+  G4VPhysicsConstructor*  particleList;
+
 };
 
 #endif

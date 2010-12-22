@@ -36,9 +36,13 @@ class SolidDetectorConstruction : public G4VUserDetectorConstruction
 	G4VPhysicalVolume* Construct();  
 	const char *GetClassName(){ return "SolidDetectorConstruction";}
 
+	G4String GetGeoFileName(){ return fGeoFile; }
+	void    SetGeoFile(G4String f){ fGeoFile = f;}
     private:
 	SolidDetectorMessenger *fDetectorMessenger;
 
 	SolidFieldManager *fFieldMan;
+
+	G4String fGeoFile; // Geometry Python file
 };
 #endif

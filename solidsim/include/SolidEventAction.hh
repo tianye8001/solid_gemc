@@ -8,11 +8,14 @@
   SolidEventAction
 */
 
+class SolidOutput;
+
 class SolidEventAction : public G4UserEventAction
 {
 public:
   SolidEventAction();
   ~SolidEventAction();
+  const char *GetClassName(){ return "SolidEventAction";}
 
 public:
   void BeginOfEventAction(const G4Event*);
@@ -20,6 +23,7 @@ public:
     
 private: 
   G4int fHitsCollectionID;
+  SolidOutput *fOutput;
 };
 
 #endif

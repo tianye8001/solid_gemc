@@ -1,44 +1,40 @@
-#include "SolidData.hh"
+#include "SolidData.hh" 
+#include "SolidDatum.hh" 
+#include "SolidOutput.hh"
+
+SolidData::SolidData(const G4String &n) : fName(n) {
+    const char *fname = "SolidData()";
+
+    fOutput = SolidOutput::GetInstance();
+    if( !fOutput ){
+	fprintf(stderr, "%s::%s  Warning: SolidOutput manager not found\n",
+	       GetClassName(), fname);
+    }
+}
+
 
 /**
- * Sets the data to be put into output tree
- * Accepts NULL terminated array as input
- * Handles it's own memory management, so
- * transient structures passed are OK
- *
- * Returns number of data allocated (fNdata)
- * Returns -1 on fail
+ * Clears data that is set
+ * Returns number of data destroyed
  */
-int SolidData::SetData(datadesc_t darray[]){
-    int n = 0;
-    ClearData();
-
-    datadesc_t *data = darray;
-
-    while( data ){
-	fData[n] = (datadesc_t *) malloc(sizeof(datadesc_t));
-	strcpy(fData[n]->branchname, data->branchname);
-	fData[n]->type = data->type;
-	fData[n]->ptr  = data->ptr;
-	fData[n]->size = data->size;
-	n++; data++;
-    }
-    fNdata = n;
+int SolidData::ClearData(){
+    int n = fData.size();
+    fData.clear();
     return n;
 }
 
 /**
- * Clears data that is set
- * Returns number of data destroyed (fNdata)
+ * Make this class available for output
  */
-int SolidData::ClearData(){
-    int i;
-    int n = fNdata;
+int SolidData::RegisterData(){
+    unsigned int i;
+    if( !fOutput ) return 0;
+    // No error if fOutput is NULL, 
+    // we warned at initialization
 
-    for( i = 0; i < fNdata; i++ ){
-	free(fData[i]);
+    for( i = 0; i < fData.size(); i++ ){
+	fData[i]->SetOutput(fOutput);
     }
 
-    fNdata = 0;
-    return n;
+    return fData.size();
 }
