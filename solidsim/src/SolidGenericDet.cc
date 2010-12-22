@@ -113,7 +113,7 @@ G4bool SolidGenericDet::ProcessHits(G4Step* aStep, G4TouchableHistory*){
 }
 
 void SolidGenericDet::EndOfEvent(G4HCofThisEvent*){
-    unsigned int i;
+    int i;
     foNhit->Fill(fHits->entries());
 
     // Copy hits into arrays

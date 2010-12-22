@@ -149,7 +149,7 @@ G4VPhysicalVolume* SolidDetectorConstruction::Construct() {
     G4SDManager* g4sdman = G4SDManager::GetSDMpointer();
     g4sdman->SetVerboseLevel(1000);
 
-    int i;
+    unsigned int i;
     for( i = 0; i < sdman->GetNdet(); i++ ){
 	g4sdman->AddNewDetector(sdman->GetDet(i));
     }

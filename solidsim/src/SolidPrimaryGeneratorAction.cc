@@ -15,7 +15,7 @@ SolidPrimaryGeneratorAction::SolidPrimaryGeneratorAction() {
   fParticleGun  = new G4ParticleGun();
 
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  fParticleGun->SetParticleDefinition(G4ParticleTable::GetParticleTable()->FindParticle(particleName="e-"));
+  fParticleGun->SetParticleDefinition(particleTable->FindParticle(particleName="e-"));
 
 }  
 
