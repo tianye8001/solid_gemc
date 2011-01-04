@@ -20,6 +20,7 @@ class SolidData {
         virtual ~SolidData(){ClearData();}
 
 	const char   *GetName() { return fName.data();}
+	const char   *GetBranchName() { return fBranchName.data();}
 	unsigned int  GetNdata(){ return fData.size(); }
 
 	std::vector<SolidDatum *>GetData() { return fData; }
@@ -36,6 +37,7 @@ class SolidData {
 
     private:
 	G4String  fName;
+	G4String  fBranchName;
 	std::vector<SolidDatum *> fData;
 
 	SolidOutput *fOutput;

@@ -19,7 +19,8 @@ is called SolidSim
 You'll need to install a modified version of the Geant4 python
 modules.  Run the script in config/getSolidGeant.sh to do it.
 It will tell you what to add in your PYTHONPATH as well, which
-is necessary to run everything.
+is necessary to run everything.  You probably need to add the
+current directory in there as well as '.'
 
 There's an example that runs in example/.  The default macro
 is defaultMacro.mac and the default path it looks for the

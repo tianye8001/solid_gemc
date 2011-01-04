@@ -50,5 +50,11 @@ fi
 echo
 echo --- Finished ---
 echo "Add $PYLIBDIR"
-echo "to \$PYTHONPATH" in your .login, .bashrc, .cshrc, etc...
+echo "and . to \$PYTHONPATH" in your .login, .bashrc, .cshrc, etc...
+echo
+echo For example, for csh:
+echo setenv PYTHONPATH $PYLIBDIR:.
+echo
+echo bash:
+echo export PYTHONPATH=\"$PYLIBDIR:.\"
 echo

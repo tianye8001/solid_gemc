@@ -5,7 +5,7 @@
 #include <TTree.h>
 
 SolidDatum::SolidDatum(SolidData *d, vartype_t type, G4String name, int len ){
-    fName = d->GetName()+G4String(".")+name;
+    fName = d->GetBranchName()+G4String(".")+name;
     fLen  = len;
     fOutput = NULL;
     fType = type;

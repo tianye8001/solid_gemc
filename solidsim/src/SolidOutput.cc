@@ -13,6 +13,8 @@
 #include "TFile.h"
 #include "TTree.h"
 
+#include <stdlib.h>
+
 int SolidOutput::__SolidOutputInit = 0; 
 SolidOutput *SolidOutput::__SolidOutputPtr = NULL;
 

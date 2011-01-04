@@ -1,5 +1,5 @@
 /*
- */
+*/
 #include "SolidPrimaryGeneratorAction.hh"
 #include "SolidPrimaryGeneratorMessenger.hh"
 #include "G4Event.hh"
@@ -10,24 +10,25 @@
 
 SolidPrimaryGeneratorAction::SolidPrimaryGeneratorAction() {
     G4String particleName;
-  // Define the messenger
-  fGunMessenger = new SolidPrimaryGeneratorMessenger(this);
-  fParticleGun  = new G4ParticleGun();
+    // Define the messenger
+    fGunMessenger = new SolidPrimaryGeneratorMessenger(this);
+    fParticleGun  = new G4ParticleGun();
 
-  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  fParticleGun->SetParticleDefinition(particleTable->FindParticle(particleName="e-"));
+    G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+    fParticleGun->SetParticleDefinition(particleTable->FindParticle(particleName="e-"));
+
+    fParticleGun->SetParticleMomentum(1.0*GeV);
+    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.0, 0.0, 0.0));
 
 }  
 
 SolidPrimaryGeneratorAction::~SolidPrimaryGeneratorAction() {
-  delete fParticleGun;
-  delete fGunMessenger;
+    delete fParticleGun;
+    delete fGunMessenger;
 }
 
 
 void SolidPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
-     fParticleGun->SetParticleMomentum(1.0*GeV);
-     fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.0, 0.0, 0.0));
-     fParticleGun->GeneratePrimaryVertex(anEvent);
+    fParticleGun->GeneratePrimaryVertex(anEvent);
 } 
 

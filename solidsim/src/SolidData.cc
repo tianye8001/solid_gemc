@@ -2,8 +2,23 @@
 #include "SolidDatum.hh" 
 #include "SolidOutput.hh"
 
+#include <stdlib.h>
+
 SolidData::SolidData(const G4String &n) : fName(n) {
     const char *fname = "SolidData()";
+
+    const char *name = fName.data();
+    int len = strlen(name)-1;
+
+    // Search backwards for slashes and just keep
+    // the main detector name
+    //
+    // This is what will be used in the ROOT tree
+    // for the branch names
+    while(len>0 && name[len] != '/'){ len--; }
+    if( len==0 && name[0] != '/' ){ fBranchName = fName; } else {
+	fBranchName = fName(len+1,strlen(name));
+    }
 
     fOutput = SolidOutput::GetInstance();
     if( !fOutput ){
