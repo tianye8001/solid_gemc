@@ -16,6 +16,9 @@ ROOT_INCDIR := $(shell root-config --incdir)
 ROOT_LIBDIR := $(shell root-config --libdir)
 ROOT_LIBFLG := $(shell root-config --libs)
 
+PY_INCFLG   := $(shell ./config/getpyconfig.pl --includes)
+PY_LIBFLG   := $(shell ./config/getpyconfig.pl --libs)
+
 include $(G4INSTALL)/config/architecture.gmk
 
 .PHONY: all
@@ -25,7 +28,7 @@ all: lib bin
 include config/binmake.gmk
 
 # include ROOT flags in compilation
-INCFLAGS += -I$(ROOT_INCDIR) -I/usr/include/python2.4/
-LDFLAGS  += -L$(ROOT_LIBDIR) $(ROOT_LIBFLG) -lpython2.4 -lboost_python
+INCFLAGS += -I$(ROOT_INCDIR) $(PY_INCFLG)
+LDFLAGS  += -L$(ROOT_LIBDIR) $(ROOT_LIBFLG) $(PY_LIBFLG) -lboost_python
 CXXFLAGS += -g
 
