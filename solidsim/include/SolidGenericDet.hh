@@ -42,7 +42,7 @@ class SolidGenericDet : public G4VSensitiveDetector, public SolidData {
 	    *fofTrE,  *fofTrP,  *fofTrPx, *fofTrPy, *fofTrPz,
 	    *fofNhit, *fofTrID, *fofPname;
 
-	double GetNFADC(){ return (int) (fGate_stop-fGate_start)/fFADC_tRes;}
+	int    GetNFADC(){ return ((int)((fGate_stop-fGate_start)/fFADC_tRes));}
 	int    GetFADCbin(double t);
 
 	double fGate_start;

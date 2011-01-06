@@ -255,6 +255,7 @@ bool SolidOutput::IsMatch(G4String gastr, G4String gbstr ){
 		    printf("Failed match, not in glob\n");
 		    return false;
 		}
+		if( debug )
 		printf("a %d->%d   b %d->%d\n", aidx, aidx+1, bidx, bidx+1);
 		aidx++;
 		bidx++;

@@ -301,7 +301,7 @@ int SolidGenericDet::GetFADCbin(double t){
 
     double fbin = scale/fFADC_tRes;
 
-    return floor(fbin);
+    return (int) floor(fbin);
 }
 
 
