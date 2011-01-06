@@ -26,3 +26,23 @@ Dec 22, 2010 - Seamus
 
 	Messenger interfaces are not written.  Documentation needs more
 	work well.
+
+Jan 6, 2011 - Seamus
+	Fixed some of the Python compilation stuff.  It should now 
+	build for arbitrary (mostly sane) systems.
+
+	Added in a bunch of useful stuff.  Fixed the ROOT output to
+	get the momentum and position components right.  Added in 
+	a reasonable system for magnetic fields, since the python
+	bindings don't seem to be fully supported in what we need.
+	This is done in SolidSimpleField.  Waiting to get sample maps
+	from both the TOSCA and POISSON crowds.
+
+	Put in more messaging interfaces.  Still need to do the
+	primary generation and physics lists.  Selective output into
+	the ROOT trees is working.
+
+	Output for generic detectors includes all hits, hits from
+	unique tracks (useful for background analysis and our baffles
+	code).  ADC, TDC, and flash ADC outputs are generated.  This
+	basically does most basic detector analysis we need for now.
