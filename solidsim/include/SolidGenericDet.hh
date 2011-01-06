@@ -22,6 +22,12 @@ class SolidGenericDet : public G4VSensitiveDetector, public SolidData {
 
 	const char *GetClassName(){ return "SolidGenericDet";}
 
+	void SetGateStart(double g){ fGate_start = g; }
+	void SetGateStop(double g){ fGate_stop  = g; }
+	void SetFADCtRes(double r){ fFADC_tRes  = r; }
+	void SetTDCThresh(double t){ fTDC_thresh  = t; }
+	void SetTDCDeadtime(double dt){ fTDC_deadtime  = dt; }
+
     private:
 	SolidGenericDetHitsCollection *fHits;
 
@@ -31,11 +37,21 @@ class SolidGenericDet : public G4VSensitiveDetector, public SolidData {
 	    *foFADCa, *foFADCt, *foTDC,  *foADC,
 	    *foNhit, *foTrID, *foPname;
 
+	SolidDatum
+	    *fofTime, *fofTrX, *fofTrY, *fofTrZ,
+	    *fofTrE,  *fofTrP,  *fofTrPx, *fofTrPy, *fofTrPz,
+	    *fofNhit, *fofTrID, *fofPname;
+
+	double GetNFADC(){ return (int) (fGate_stop-fGate_start)/fFADC_tRes;}
+	int    GetFADCbin(double t);
+
 	double fGate_start;
 	double fGate_stop;
-	double fFADC_size;
+	double fFADC_tRes;
 	double fTDC_thresh;
 	double fTDC_deadtime;
+
+	bool FirstHitsAreActive();
 };
 
 #endif//SOLIDGENERICDET_HH

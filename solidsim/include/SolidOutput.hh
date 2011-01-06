@@ -36,11 +36,24 @@ class SolidOutput{
 	const char *GetClassName(){ return "SolidOutput";}
 
 	TTree *GetTree(){ return fTree; }
+
+	void SetOutputFile(G4String file){ fOutputFileName = file; }
+	unsigned int SetOutputList(G4String file);
+
+	bool IsActiveBranch(G4String);
+
     private:
 	static int __SolidOutputInit;
 	static SolidOutput *__SolidOutputPtr;
 
 	G4String fOutputFileName;
+
+	bool fOutListDefined;
+	G4String fOutputListName;
+	std::vector <G4String> fActiveBranches;
+
+	bool IsMatch(G4String,G4String);
+	void TrimWhiteAndComments(char *);
 
 	TFile *fFile;
 	TTree *fTree;

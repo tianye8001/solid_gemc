@@ -1,0 +1,5 @@
+# Default cuts
+pbdet.*n  #Record total number of hits
+#*fhit*   #Only keep the first hits
+*adc*
+*tdc*

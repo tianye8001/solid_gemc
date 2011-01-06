@@ -26,8 +26,14 @@ class SolidFieldManager {
 	void AddField(SolidFieldMap *m){ fFieldMaps.push_back(m);}
 	int ProcessFieldMaps();
 	const char *GetClassName(){ return "SolidFieldManager";}
+
+	static SolidFieldManager *GetInstance();
+
     private:
 	std::vector <SolidFieldMap *> fFieldMaps;
+
+	static int __SolidFieldManagerInit;
+	static SolidFieldManager *__SolidFieldManagerPtr;
 };
 
 #endif//SolidFieldManager_hh

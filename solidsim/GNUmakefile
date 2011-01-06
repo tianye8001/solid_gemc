@@ -5,6 +5,7 @@
 name := SolidSim
 G4TARGET := $(name)
 G4EXLIB := true
+G4NO_OPTIMISE := 1
 
 ifndef G4INSTALL
   G4INSTALL = ../../../

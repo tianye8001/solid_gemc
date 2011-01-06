@@ -19,7 +19,12 @@ class SolidDetectorMessenger: public G4UImessenger
   ~SolidDetectorMessenger();
   void SetNewValue(G4UIcommand*, G4String );
     
-private:
+  private:
+  
+  SolidDetectorConstruction *fDC;
+  G4UIdirectory *fDCdir;
+
+  G4UIcmdWithAString *fGeoFileCmd;
 
 };
 #endif

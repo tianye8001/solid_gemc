@@ -44,13 +44,16 @@ def Construct():
     # It's done automatically.  The detector shows up as
     # the name in the manager
 
-    leadbox = G4Box("leadbox", 80*cm, 20*cm, 20*cm )
+    leadbox = G4Box("leadbox", 1*mm, 20*cm, 20*cm )
     # We associate the logical volume with a sensitive detector
     # in the constructor.  SetSensitiveDetector has no bindings
     # included with Geant4
-    llead = G4LogicalVolume(leadbox, pbmat, "leadbox", None, pbdet)
+    llead = G4LogicalVolume(leadbox, pbmat, "leadbox", None, None)
 
-    ptiny = G4PVPlacement(None, G4ThreeVector(6.0*m, 0.0*m, 0.0), "plead", llead, pworld, False, 0)
+    ldetlead = G4LogicalVolume(leadbox, pbmat, "leadbox", None, pbdet)
+
+    for i in range(20):
+		ptiny = G4PVPlacement(None, G4ThreeVector(6.0*m+i*8.0*cm, 0.0*m, 0.0*m), "plead", ldetlead, pworld, False, 0)
 
     # Create some more boxes with rotations
 
@@ -76,12 +79,13 @@ def Construct():
 	pbox.append(G4PVPlacement(rot[i], tv, "pbox_"+str(i), logbox, pworld, False, 0))
 
     # Make uniform magnetic field
-    fieldMgr = gTransportationManager.GetFieldManager();
+#    fieldMgr = gTransportationManager.GetFieldManager();
     global magfield;
-    magfield = G4UniformMagField(G4ThreeVector(0.01*tesla,0.01*tesla,0.01*tesla));
+#    magfield = G4UniformMagField(G4ThreeVector(0.01*tesla,0.01*tesla,0.01*tesla));
+#    fieldMgr.SetDetectorField(magfield)
+#    fieldMgr.CreateChordFinder(magfield)
 
-    fieldMgr.SetDetectorField(magfield);
-    fieldMgr.CreateChordFinder(magfield);
+    magfield = SolidSimpleField("simple", lworld)
 
     # Return the physical world volume.
     return pworld

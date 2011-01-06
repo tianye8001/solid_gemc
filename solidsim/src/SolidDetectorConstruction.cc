@@ -129,10 +129,11 @@ G4VPhysicalVolume* SolidDetectorConstruction::Construct() {
 	exit(1);
     }
 
-    // FIXME:  I like this being handled in the code here,
-    // instead of the interpeter but we should be able to 
-    // associate it with logical volumes.  Perhaps we can 
-    // do this by name from GeoManager...
+    // We set the fields to logical volumes
+    // in the interpreter, but the field manager
+    // sets everything up in terms of the chord finder, etc
+    // since the Python bindings seem to be of limited
+    // functionality
     
     int ret = fFieldMan->ProcessFieldMaps();
 

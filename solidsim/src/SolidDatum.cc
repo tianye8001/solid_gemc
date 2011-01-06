@@ -9,6 +9,7 @@ SolidDatum::SolidDatum(SolidData *d, vartype_t type, G4String name, int len ){
     fLen  = len;
     fOutput = NULL;
     fType = type;
+    fIsActive = false;
 
     Init();
 
@@ -31,7 +32,7 @@ void SolidDatum::Init(){
 	    fROOTtype = "???";
     }
 
-
+    fAllocLen = fLen;
 }
 
 SolidDatum::~SolidDatum(){
@@ -52,7 +53,11 @@ void SolidDatum::SetOutput(SolidOutput *out){
     }
 
     fOutput = out;
-    SetupBranch();
+
+    if( fOutput->IsActiveBranch(fName)){
+	SetupBranch();
+	fIsActive = true;
+    }
 }
 
 void SolidDatum::UnsetBranch(){
@@ -64,10 +69,13 @@ void SolidDatum::UnsetBranch(){
     // Tree may be destroyed by fOutput
     // already... make sure
 
-    if( t ){
+    if( t && fIsActive ){
 	t->ResetBranchAddress(fNbranch);
 	t->ResetBranchAddress(fDbranch);
     }
+
+    fIsActive = false;
+
     return;
 }
 
@@ -123,10 +131,12 @@ int SolidDatum::Resize(unsigned int len){
     // Strings don't need to be resized
     if( fType == kString ){ return 0; }
 
+    fLen = len; 
+
     // We already have enough space
-    if( fLen >= len ){ return 0; }
+    if( fAllocLen >= len ){ return 0; }
     
-    ret = len - fLen;
+    ret = len - fAllocLen;
 
     switch( fType ){
 	case kInt:
@@ -141,11 +151,13 @@ int SolidDatum::Resize(unsigned int len){
 	    break;
     }
 
-    fLen = len;
+    fAllocLen = len;
 
     // Update the branch address
     // in the tree
-    SetBranchAddress();
+    if( IsActive() ){
+	SetBranchAddress();
+    }
 
     return ret;
 }
@@ -216,6 +228,11 @@ int SolidDatum::Fill(std::vector<std::string> v){
 }
 
 int SolidDatum::Fill(int t, int l){
+    // If we're accessing outside our
+    // current range, make it big enough
+    // to write to the array
+    // (This may be a bit dangerous)
+    if( l >= (int) fLen ){ Resize(l+1); }
 
     if( l < 0 ){
 	Resize(1);
@@ -229,6 +246,12 @@ int SolidDatum::Fill(int t, int l){
 }
 
 int SolidDatum::Fill(double t, int l){
+    // If we're accessing outside our
+    // current range, make it big enough
+    // to write to the array
+    // (This may be a bit dangerous)
+    if( l >= (int) fLen ){ Resize(l+1); }
+
     if( l < 0 ){
 	Resize(1);
 	((double *)fData)[0] = t;

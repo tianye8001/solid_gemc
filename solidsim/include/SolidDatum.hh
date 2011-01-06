@@ -40,6 +40,7 @@ class SolidDatum {
 
 	const char *GetClassName(){return "SolidDatum";}
 
+	bool IsActive(){ return fIsActive; }
 
     private:
 	void *fData;
@@ -48,6 +49,9 @@ class SolidDatum {
 	G4String fName;
 	G4String fROOTtype;
 	unsigned int fLen;
+	unsigned int fAllocLen;
+
+	bool fIsActive;
 
 	SolidOutput *fOutput;
 	vartype_t fType;

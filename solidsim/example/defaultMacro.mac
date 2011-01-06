@@ -4,6 +4,11 @@
 /run/verbose 0
 /event/verbose 0
 
+# Our input parameters
+/det/geofile defaultgeo
+/output/outfile defaultout.root
+/output/outlist outputdef.dat
+
 /run/initialize
 
 # FIX THE FOLLOWIG PARAMETERS
@@ -20,5 +25,10 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/update
-/run/beamOn 10
 
+# Change detector parameters
+/det/pbdet/gatestart 15.0 ns
+/det/pbdet/gatestop  35.0 ns
+/det/pbdet/tdcthresh 30.0 MeV
+
+/run/beamOn 10

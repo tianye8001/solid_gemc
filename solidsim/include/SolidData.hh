@@ -19,7 +19,7 @@ class SolidData {
 	SolidData(const G4String &n);
         virtual ~SolidData(){ClearData();}
 
-	const char   *GetName() { return fName.data();}
+	const char   *GetDataName() { return fName.data();}
 	const char   *GetBranchName() { return fBranchName.data();}
 	unsigned int  GetNdata(){ return fData.size(); }
 
@@ -32,6 +32,7 @@ class SolidData {
 
 	const char *GetClassName(){ return "SolidData";}
 
+	int  ResetData();
 	int  ClearData();
 	int  RegisterData();
 

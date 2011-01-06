@@ -13,10 +13,12 @@
 #endif
 #include "SolidEventAction.hh"
 #include "SolidDetectorConstruction.hh"
+#include "SolidDetectorMessenger.hh"
 #include "SolidPhysicsList.hh"
 #include "SolidPrimaryGeneratorAction.hh"
 #include "SolidRunAction.hh"
 #include "SolidOutput.hh"
+#include "SolidOutputMessenger.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -32,9 +34,12 @@ int main(int argc ,char ** argv) {
   // SolidDetectorConstruction so detector classes 
   // can register their output when they are created
   SolidOutput *soutput = new SolidOutput();
+  new SolidOutputMessenger(soutput);
 
   // Initialize the geometry
-  runManager->SetUserInitialization(new SolidDetectorConstruction());
+  SolidDetectorConstruction *sdc = new SolidDetectorConstruction();
+  new SolidDetectorMessenger(sdc);
+  runManager->SetUserInitialization(sdc);
   
   // Initialize the physics 
   runManager->SetUserInitialization(new SolidPhysicsList());
@@ -42,7 +47,7 @@ int main(int argc ,char ** argv) {
   // Initialize the primary particles  
   runManager->SetUserAction(new SolidPrimaryGeneratorAction());
 
-  // Run ACtion
+  // Run Action
   SolidRunAction* pRunAction = new SolidRunAction();
   runManager->SetUserAction(pRunAction);
 

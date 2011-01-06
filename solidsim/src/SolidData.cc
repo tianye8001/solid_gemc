@@ -27,6 +27,9 @@ SolidData::SolidData(const G4String &n) : fName(n) {
     }
 }
 
+int SolidData::ResetData(){
+    return fData.size();
+}
 
 /**
  * Clears data that is set
