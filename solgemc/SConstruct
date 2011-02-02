@@ -1,0 +1,43 @@
+#!/usr/bin/python 
+from init_env import init_environment
+
+import os
+
+env = init_environment("qt4 geant4 clhep evio")
+
+# Get GEMC path
+gemcpath = os.environ['GEMC']
+libpath = [gemcpath]
+# LIBPATH here is what GEMC used to link all the libraries to gemc.so
+rpath = env['LIBPATH']
+
+
+# Include Path
+incpath = ['.',gemcpath, gemcpath+'src', gemcpath+'gui/src']
+env.Append(CPPPATH = incpath)
+
+# Sources
+gemc_sources = Split("""solgemc.cc""")
+
+# Physics
+phys_sources = Split("""""")
+incpath = [gemcpath+'physics']
+env.Append(CPPPATH = incpath)
+
+
+# Hit Processes
+hitp_sources = Split("""""")
+                        
+incpath = [gemcpath+'hitprocess', gemcpath+'hitprocess/clas12', gemcpath+'hitprocess/clas12/svt', gemcpath+'hitprocess/clas12/micromegas', gemcpath+'hitprocess/Aprime', gemcpath+'hitprocess/GlueX']
+env.Append(CPPPATH = incpath)
+
+# Outputs
+output_sources = Split("""""")
+incpath = [gemcpath+'output']
+env.Append(CPPPATH = incpath)
+
+
+
+Target = 'solgemc'
+env.Program(source = gemc_sources + phys_sources + hitp_sources + output_sources, target = Target, LIBS="gemc", LIBPATH=libpath, RPATH=rpath )
+
