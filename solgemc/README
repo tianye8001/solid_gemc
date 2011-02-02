@@ -1,0 +1,30 @@
+Seamus Riordan
+sriordan@physics.umass.edu
+February 2, 2011
+
+This is an example of how to build against GEMC which has been compiled as a
+shared object library.  
+
+Because GEMC is usually not build this way, one must first compile it from 
+source with a modification to the SConstruct file.  Because the build system 
+was ported using scons, it's actually trivial to do this.  From the included
+GEMC SConstruct file, add an additional line copied from the main build Program
+line:
+
+Target = 'gemc'
+env.Program(source = gemc_sources + phys_sources + hitp_sources + output_sources, target = Target)
+
+to
+
+Target = 'gemc'
+env.Program(source = gemc_sources + phys_sources + hitp_sources + output_sources, target = Target)
+env.SharedLibrary(source = gemc_sources + phys_sources + hitp_sources + output_sources, target = Target)
+
+This will build libgemc.so
+
+Once this is built you must do two things:
+
+Make sure that GEMC is set to the path that contains libgemc.so
+Make sure that PYTHONPATH points to where the GEMC scons_scripts live
+
+You should then be able to build what is here, which add on to what GEMC has
