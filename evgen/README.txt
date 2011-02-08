@@ -40,3 +40,29 @@ It requires at the moment the file PolQuarkDist_fine.txt in the running director
      -i (or -input) inputfile    input file name with correct flags (default input.dat)  
      -o (or -output) outputfile output file name with correct flags (default output.root)
      -h (or -help) print this message 
+
+
+
+3) Changing output from root format to lund format
+
+cd root_to_lund/
+make
+
+ENVIRONMENT VARIABLES FOR COMPILING (example in bash):
+If you are using root 5.28 like me seems you need to put some extra environment for your compiler for the "include" 
+LD_LIBRARY_PATH=/home/zana/lib:$LD_LIBRARY_PATH; export LD_LIBRARY_PATH
+LIBRARY_PATH=/home/zana/lib:${ROOTSYS}/lib:$LIBRARY_PATH; export LIBRARY_PATH
+C_INCLUDE_PATH=/home/zana/include:${ROOTSYS}/include:$C_INCLUDE_PATH; export C_INCLUDE_PATH
+CPLUS_INCLUDE_PATH=/home/zana/include:${ROOTSYS}/include:$CPLUS_INCLUDE_PATH; export CPLUS_INCLUDE_PATH
+
+(csh example)
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:/home/zana/lib:${LD_LIBRARY_PATH}
+setenv CPLUS_INCLUDE_PATH /home/zana/include:${ROOTSYS}/include 
+setenv LIBRARY_PATH /home/zana/lib:${ROOTSYS}/lib
+
+
+root2lund : This Program translate the output from eicRate in LUND format 
+Usage: root2lund -o outputfile -i inputfile 
+     -o outputfile   - output file name (example pluto.lund)  
+     -i inputfile   - input file name (example pluto.root)  
+     -h help, print this message 
