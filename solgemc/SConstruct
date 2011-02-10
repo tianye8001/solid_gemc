@@ -3,11 +3,11 @@ from init_env import init_environment
 
 import os
 
-env = init_environment("qt4 geant4 clhep evio")
+env = init_environment("evio qt4 geant4 clhep")
 
 # Get GEMC path
 gemcpath = os.environ['GEMC']
-libpath = [gemcpath]
+env.Append(LIBPATH = gemcpath);
 # LIBPATH here is what GEMC used to link all the libraries to gemc.so
 rpath = env['LIBPATH']
 
@@ -36,8 +36,7 @@ output_sources = Split("""""")
 incpath = [gemcpath+'output']
 env.Append(CPPPATH = incpath)
 
-
+env.Append(LIBS = "gemc");
 
 Target = 'solgemc'
-env.Program(source = gemc_sources + phys_sources + hitp_sources + output_sources, target = Target, LIBS="gemc", LIBPATH=libpath, RPATH=rpath )
-
+env.Program(source = gemc_sources + phys_sources + hitp_sources + output_sources, target = Target)
