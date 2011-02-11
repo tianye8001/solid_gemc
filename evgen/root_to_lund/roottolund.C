@@ -322,7 +322,7 @@ void Parse_Args(int *argc, char **argv){
 
 void Print_Usage() {
   cout << " root2lund : This Program translate the output from eicRate in LUND format and Filter the scattered electron angles\n";  
-  cout << " Usage: root2lund -o outputfile -i inputfile [-th_min theta_min] [-th_max theta_max] [-ph_min phi_min] [-ph_max phi_max] [-l 1-2]\n";  
+  cout << " Usage: root2lund -o outputfile -i inputfile [-th_min theta_min] [-th_max theta_max] [-ph_min phi_min] [-ph_max phi_max] [-l 1-0]\n";  
   cout << "     -o outputfile     : output file name (example pluto.lund)  \n";  
   cout << "     -i inputfile      : input file name (example pluto.root)  \n";  
   cout << "     -h help, print this message \n";
@@ -331,6 +331,6 @@ void Print_Usage() {
   cout << "     -th_max theta_max : specify theta maximum for scattered electron \n"; 
   cout << "     -ph_min phi_min   : specify phi minimum for scattered electron \n";
   cout << "     -ph_max phi_max   : specify phi maximum for scattered electron \n";  
-  cout << "     -l 1-2            : specify format input file ( lund-> 1 (just angle filtering); root->0 (default) )\n";
+  cout << "     -l 1-0            : specify format input file ( lund-> 1 (just angle filtering); root->0 (default) )\n";
   cout << " --- \n\n";
 }
