@@ -28,6 +28,10 @@ extern TSystem *gSystem;
 //////////////////////////////////////////////////////////////
 char  outfilename[128];
 char  infilename[100];
+double theta_min;
+double theta_max;
+double phi_min;
+double phi_max;
 
 
 int main (int argc, char **argv) {
@@ -36,8 +40,57 @@ int main (int argc, char **argv) {
     Print_Usage();
     exit(1);
   }
-  
+
+  theta_min = -1000;
+  theta_max = -1000;
+  phi_min = -1000;
+  phi_max = -1000;
+
   Parse_Args( &argc, argv );
+ 
+  if( outfilename[0] == 0 ) {
+    cout << "Specify Output File Name" << endl;
+    Print_Usage();
+    exit(1);
+  }
+  
+  if( infilename[0] == 0 ) {
+    cout << "Specify Input File Name" << endl;
+    Print_Usage();
+    exit(1);
+  }  
+
+  if( theta_min == -1000 ) {
+    theta_min = 0;
+  }  
+  cout << "Minimum of theta set to " << theta_min << endl; 
+
+  if( theta_max == -1000 ) {
+    theta_max = TMath::Pi();
+  }  
+  cout << "Maximum of theta set to " << theta_max << endl; 
+
+  if( phi_min == -1000 ) {
+    phi_min = -TMath::Pi();
+  }  
+  cout << "Minimum of phi set to " << phi_min << endl; 
+
+  if( phi_max == -1000 ) {
+    phi_max = TMath::Pi();
+  } 
+  cout << "Maximum of phi set to " << phi_max << endl; 
+
+  if (phi_min >= phi_max) {
+    cout << "phi minimum >= phi maximum. Please recheck your values" << endl;
+    Print_Usage();
+    exit(1);
+  }  
+    
+  if (theta_min >= theta_max) {
+    cout << "theta minimum >= theta maximum. Please recheck your values" << endl;
+    Print_Usage();
+    exit(1);
+  }
 
   double weight;
   double theta;
@@ -133,11 +186,13 @@ int main (int argc, char **argv) {
     vy = 0.0;
     vz = 0.0;
 
-      
+  
+    if (phi >=phi_min && phi <=phi_max && theta >= theta_min && theta <= theta_max) {  
 
-    OUT << "1" << " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
-    OUT << " \t " << "1" << " \t " << "-1" << " \t " << "1" << " \t " << "11" << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << "0.00051 " << " \t " << vx  << " \t " << vy << " \t " << vz << endl; 
+      OUT << "1" << " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
+      OUT << " \t " << "1" << " \t " << "-1" << " \t " << "1" << " \t " << "11" << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << "0.00051 " << " \t " << vx  << " \t " << vy << " \t " << vz << endl; 
 
+    }
   }
 
   OUT.close();
@@ -175,6 +230,30 @@ void Parse_Args(int *argc, char **argv){
 	    strcpy(infilename,argv[i]);
 	    REMOVE_ONE;
 	  }
+	else if(strcmp(argv[i],"-th_min")==0)
+          {
+            I_PLUS_PLUS;
+            sscanf(argv[i],"%lf",&theta_min);
+            REMOVE_ONE;
+          }
+	else if(strcmp(argv[i],"-th_max")==0)
+          {
+            I_PLUS_PLUS;
+            sscanf(argv[i],"%lf",&theta_max);
+            REMOVE_ONE;
+          }
+	else if(strcmp(argv[i],"-ph_min")==0)
+          {
+            I_PLUS_PLUS;
+            sscanf(argv[i],"%lf",&phi_min);
+            REMOVE_ONE;
+          }
+	else if(strcmp(argv[i],"-ph_max")==0)
+          {
+            I_PLUS_PLUS;
+            sscanf(argv[i],"%lf",&phi_max);
+            REMOVE_ONE;
+          }
 	else if(strcmp(argv[i],"-help")==0||strcmp(argv[i],"-h")==0)  
 	  {
 	    Print_Usage();
@@ -197,10 +276,15 @@ void Parse_Args(int *argc, char **argv){
 //***********************************************************************************
 
 void Print_Usage() {
-  cout << " root2lund : This Program translate the output from eicRate in LUND format \n";  
-  cout << " Usage: root2lund -o outputfile -i inputfile \n";  
-  cout << "     -o outputfile   - output file name (example pluto.lund)  \n";  
-  cout << "     -i inputfile   - input file name (example pluto.root)  \n";  
+  cout << " root2lund : This Program translate the output from eicRate in LUND format and Filter the scattered electron angles\n";  
+  cout << " Usage: root2lund -o outputfile -i inputfile [-th_min theta_min] [-th_max theta_max] [-ph_min phi_min] [-ph_max phi_max]\n";  
+  cout << "     -o outputfile     : output file name (example pluto.lund)  \n";  
+  cout << "     -i inputfile      : input file name (example pluto.root)  \n";  
   cout << "     -h help, print this message \n";
+  cout << "   [optional] \n";
+  cout << "     -th_min theta_min : specify theta minimum for scattered electron \n";
+  cout << "     -th_max theta_max : specify theta maximum for scattered electron \n"; 
+  cout << "     -ph_min phi_min   : specify phi minimum for scattered electron \n";
+  cout << "     -ph_max phi_max   : specify phi maximum for scattered electron \n";  
   cout << " --- \n\n";
 }
