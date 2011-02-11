@@ -7,6 +7,7 @@
 #include "TF1.h"
 #include "TF2.h"
 #include "TF3.h"
+#include "TVector3.h"
 #include "snprintf.h"
 #include <stdio.h>
 #include <iostream>
@@ -32,6 +33,7 @@ double theta_min;
 double theta_max;
 double phi_min;
 double phi_max;
+int lund;
 
 
 int main (int argc, char **argv) {
@@ -45,6 +47,7 @@ int main (int argc, char **argv) {
   theta_max = -1000;
   phi_min = -1000;
   phi_max = -1000;
+  lund = -1000;
 
   Parse_Args( &argc, argv );
  
@@ -79,7 +82,13 @@ int main (int argc, char **argv) {
     phi_max = TMath::Pi();
   } 
   cout << "Maximum of phi set to " << phi_max << endl; 
+  if( lund == -1000 || lund == 0) {
+    cout << "Using root format as input file" << endl;
+    lund = 0;
+  } 
+  else cout << "Using Lund format as input file" << endl;
 
+  
   if (phi_min >= phi_max) {
     cout << "phi minimum >= phi maximum. Please recheck your values" << endl;
     Print_Usage();
@@ -123,81 +132,111 @@ int main (int argc, char **argv) {
   double Y_T;
   double eta_T;
 
-  TChain input_chain("T");
-  input_chain.Add(infilename);
-
-  input_chain.SetBranchAddress("weight",&weight);
-  input_chain.SetBranchAddress("theta",&theta);
-  input_chain.SetBranchAddress("phi",&phi);
-  input_chain.SetBranchAddress("Ef",&Ef);
-  input_chain.SetBranchAddress("x",&x);
-  input_chain.SetBranchAddress("W",&W);
-  input_chain.SetBranchAddress("y",&y);
-  input_chain.SetBranchAddress("crs",&crs);
-  input_chain.SetBranchAddress("f1",&f1);
-  input_chain.SetBranchAddress("f2",&f2);
-  input_chain.SetBranchAddress("f1gz",&f1gz);
-  input_chain.SetBranchAddress("f3gz",&f3gz);
-  input_chain.SetBranchAddress("g1gz",&g1gz);
-  input_chain.SetBranchAddress("g5gz",&g5gz);
-  input_chain.SetBranchAddress("Q2",&Q2);
-  input_chain.SetBranchAddress("eta_gZ",&eta_gZ);
-  input_chain.SetBranchAddress("rate",&rate);
-  input_chain.SetBranchAddress("pdf",&pdf);
-  input_chain.SetBranchAddress("Dpdf",&Dpdf);
-  
-  input_chain.SetBranchAddress("Abeam",&Abeam);
-  input_chain.SetBranchAddress("Y",&Y);
-  
-  input_chain.SetBranchAddress("A_L",&A_L);
-  input_chain.SetBranchAddress("Y_L",&Y_L);
-  input_chain.SetBranchAddress("eta_L",&eta_L);
-  
-  input_chain.SetBranchAddress("A_T",&A_T);
-  input_chain.SetBranchAddress("Y_T",&Y_T);
-  input_chain.SetBranchAddress("eta_T",&eta_T);  
-
-  Int_t nentries = (Int_t)input_chain.GetEntries();
-
 
   // Variables used for determine the lund output
-
+  
   double nu; // energy of the Gamma*
   double MASS_p = 0.938; // mass proton in GeV 
   double px,py,pz ;
   double vx,vy,vz ;
+
+  if (lund == 0) {
+
+    TChain input_chain("T");
+    input_chain.Add(infilename);
+
+    input_chain.SetBranchAddress("weight",&weight);
+    input_chain.SetBranchAddress("theta",&theta);
+    input_chain.SetBranchAddress("phi",&phi);
+    input_chain.SetBranchAddress("Ef",&Ef);
+    input_chain.SetBranchAddress("x",&x);
+    input_chain.SetBranchAddress("W",&W);
+    input_chain.SetBranchAddress("y",&y);
+    input_chain.SetBranchAddress("crs",&crs);
+    input_chain.SetBranchAddress("f1",&f1);
+    input_chain.SetBranchAddress("f2",&f2);
+    input_chain.SetBranchAddress("f1gz",&f1gz);
+    input_chain.SetBranchAddress("f3gz",&f3gz);
+    input_chain.SetBranchAddress("g1gz",&g1gz);
+    input_chain.SetBranchAddress("g5gz",&g5gz);
+    input_chain.SetBranchAddress("Q2",&Q2);
+    input_chain.SetBranchAddress("eta_gZ",&eta_gZ);
+    input_chain.SetBranchAddress("rate",&rate);
+    input_chain.SetBranchAddress("pdf",&pdf);
+    input_chain.SetBranchAddress("Dpdf",&Dpdf);
+  
+    input_chain.SetBranchAddress("Abeam",&Abeam);
+    input_chain.SetBranchAddress("Y",&Y);
+  
+    input_chain.SetBranchAddress("A_L",&A_L);
+    input_chain.SetBranchAddress("Y_L",&Y_L);
+    input_chain.SetBranchAddress("eta_L",&eta_L);
+  
+    input_chain.SetBranchAddress("A_T",&A_T);
+    input_chain.SetBranchAddress("Y_T",&Y_T);
+    input_chain.SetBranchAddress("eta_T",&eta_T);  
+
+    Int_t nentries = (Int_t)input_chain.GetEntries();
   
   
-  ofstream OUT (outfilename);
-  for (int i=0; i<nentries ; i++) {
-    input_chain.GetEntry(i);
-    if(i % 100000 == 0 ){
-      printf("Analyzed %09d events of total %09d \n",i,nentries);
-     }
+    ofstream OUT (outfilename);
+    for (int i=0; i<nentries ; i++) {
+      input_chain.GetEntry(i);
+      if(i % 100000 == 0 ){
+	printf("Analyzed %09d events of total %09d \n",i,nentries);
+      }
 
-    if (x>0)   nu = Q2 / (2 * MASS_p * x) ;
-    else nu = 0;
+      if (x>0)   nu = Q2 / (2 * MASS_p * x) ;
+      else nu = 0;
 
-    px = Ef * sin(theta) * cos(phi);
-    py = Ef * sin(theta)* sin(phi);
-    pz = Ef * cos(theta);
+      px = Ef * sin(theta) * cos(phi);
+      py = Ef * sin(theta)* sin(phi);
+      pz = Ef * cos(theta);
 
-    vx = 0.0;
-    vy = 0.0;
-    vz = 0.0;
+      vx = 0.0;
+      vy = 0.0;
+      vz = 0.0;
 
   
-    if (phi >=phi_min && phi <=phi_max && theta >= theta_min && theta <= theta_max) {  
+      if (phi >=phi_min && phi <=phi_max && theta >= theta_min && theta <= theta_max) {  
+	
+	OUT << "1" << " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
+	OUT << " \t " << "1" << " \t " << "-1" << " \t " << "1" << " \t " << "11" << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << "0.00051 " << " \t " << vx  << " \t " << vy << " \t " << vz << endl; 
 
-      OUT << "1" << " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
-      OUT << " \t " << "1" << " \t " << "-1" << " \t " << "1" << " \t " << "11" << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << "0.00051 " << " \t " << vx  << " \t " << vy << " \t " << vz << endl; 
-
+      }
     }
+
+    OUT.close();
+  
   }
+  
+  else {  // Filtering events from Lund format
+    ifstream IN (infilename);
+    ofstream OUT (outfilename);
+    char tmp[10];
+    TVector3 v_p3;
 
-  OUT.close();
+    if (IN.is_open())
+      {
+	while ( IN.good() )
+	  {
+	    IN >> tmp  >> tmp   >> tmp   >> tmp   >> tmp   >> x  >> y   >> W   >> Q2   >> nu ;
+	    IN  >> tmp  >> tmp  >> tmp  >> tmp  >> tmp  >> tmp  >> px  >> py  >> pz  >> Ef  >> tmp  >> vx   >> vy  >> vz;  
+	    v_p3.SetXYZ(px,py,pz);
+	    theta = v_p3.Theta();
+	    phi = v_p3.Phi();
+	    if (phi >=phi_min && phi <=phi_max && theta >= theta_min && theta <= theta_max) {
+	      OUT << "1" << " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
+	      OUT << " \t " << "1" << " \t " << "-1" << " \t " << "1" << " \t " << "11" << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << "0.00051 " << " \t " << vx  << " \t " << vy << " \t " << vz << endl;
+	    }
+	  }
+	IN.close();
+	OUT.close();
+      }
 
 
+
+  }
 }
 
 
@@ -254,6 +293,12 @@ void Parse_Args(int *argc, char **argv){
             sscanf(argv[i],"%lf",&phi_max);
             REMOVE_ONE;
           }
+	else if(strcmp(argv[i],"-l")==0)
+          {
+            I_PLUS_PLUS;
+            sscanf(argv[i],"%d",&lund);
+            REMOVE_ONE;
+          }
 	else if(strcmp(argv[i],"-help")==0||strcmp(argv[i],"-h")==0)  
 	  {
 	    Print_Usage();
@@ -277,7 +322,7 @@ void Parse_Args(int *argc, char **argv){
 
 void Print_Usage() {
   cout << " root2lund : This Program translate the output from eicRate in LUND format and Filter the scattered electron angles\n";  
-  cout << " Usage: root2lund -o outputfile -i inputfile [-th_min theta_min] [-th_max theta_max] [-ph_min phi_min] [-ph_max phi_max]\n";  
+  cout << " Usage: root2lund -o outputfile -i inputfile [-th_min theta_min] [-th_max theta_max] [-ph_min phi_min] [-ph_max phi_max] [-l 1-2]\n";  
   cout << "     -o outputfile     : output file name (example pluto.lund)  \n";  
   cout << "     -i inputfile      : input file name (example pluto.root)  \n";  
   cout << "     -h help, print this message \n";
@@ -286,5 +331,6 @@ void Print_Usage() {
   cout << "     -th_max theta_max : specify theta maximum for scattered electron \n"; 
   cout << "     -ph_min phi_min   : specify phi minimum for scattered electron \n";
   cout << "     -ph_max phi_max   : specify phi maximum for scattered electron \n";  
+  cout << "     -l 1-2            : specify format input file ( lund-> 1 (just angle filtering); root->0 (default) )\n";
   cout << " --- \n\n";
 }
