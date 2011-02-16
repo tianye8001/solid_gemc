@@ -73,6 +73,7 @@
 #include "MOutputBaseClass.h"
 #include "MPHBaseClass.h"
 #include "MPhysicsList.h"
+#include "SolidNoPhysicsList.h"
 #include "MPrimaryGeneratorAction.h"
 #include "MSteppingAction.h"
 #include "Output_Register.h"
@@ -240,9 +241,10 @@ int main( int argc, char **argv )
 	{
 		physics = new MPhysicsList(gemcOpt);
 		runManager->SetUserInitialization(physics);
-	}
-	else
-	{
+	} else if(phys_list == "noint" ) {
+	    	physics = new SolidNoPhysicsList(gemcOpt);
+		runManager->SetUserInitialization(physics);
+	} else {
 		if(factory.IsReferencePhysList(phys_list))
 				phys = factory.GetReferencePhysList(phys_list);
 

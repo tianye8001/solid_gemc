@@ -13,27 +13,29 @@ rpath = env['LIBPATH']
 
 
 # Include Path
-incpath = ['.',gemcpath, gemcpath+'src', gemcpath+'gui/src']
+incpath = ['.',gemcpath, gemcpath+'src', gemcpath+'gui/src', 'src', 'gui/src']
 env.Append(CPPPATH = incpath)
 
 # Sources
 gemc_sources = Split("""solgemc.cc""")
 
 # Physics
-phys_sources = Split("""""")
-incpath = [gemcpath+'physics']
+phys_sources = Split("""physics/SolidNoPhysicsList.cc
+			physics/SolidNoPhysics.cc""")
+
+incpath = [gemcpath+'physics', 'physics']
 env.Append(CPPPATH = incpath)
 
 
 # Hit Processes
 hitp_sources = Split("""""")
                         
-incpath = [gemcpath+'hitprocess', gemcpath+'hitprocess/clas12', gemcpath+'hitprocess/clas12/svt', gemcpath+'hitprocess/clas12/micromegas', gemcpath+'hitprocess/Aprime', gemcpath+'hitprocess/GlueX']
+incpath = [gemcpath+'hitprocess', gemcpath+'hitprocess/clas12', gemcpath+'hitprocess/clas12/svt', gemcpath+'hitprocess/clas12/micromegas', gemcpath+'hitprocess/Aprime', gemcpath+'hitprocess/GlueX','hitprocess']
 env.Append(CPPPATH = incpath)
 
 # Outputs
 output_sources = Split("""""")
-incpath = [gemcpath+'output']
+incpath = [gemcpath+'output', 'output']
 env.Append(CPPPATH = incpath)
 
 env.Append(LIBS = "gemc");
