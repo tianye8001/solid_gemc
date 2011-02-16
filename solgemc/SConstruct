@@ -6,7 +6,7 @@ import os
 env = init_environment("evio qt4 geant4 clhep")
 
 # Get GEMC path
-gemcpath = os.environ['GEMC']
+gemcpath = os.environ['GEMC']+'/'
 env.Append(LIBPATH = gemcpath);
 # LIBPATH here is what GEMC used to link all the libraries to gemc.so
 rpath = env['LIBPATH']
