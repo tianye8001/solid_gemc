@@ -108,10 +108,13 @@
 	int get_pid(){return 0;}
 #endif
 
+#include "addopts.h"
+
 int main( int argc, char **argv )
 {
 	
 	gemc_opts gemcOpt;
+	AddOpts(gemcOpt);
 	gemcOpt.Set(argc, argv);
 	string hd_msg    = gemcOpt.args["LOG_MSG"].args + " Init: >> " ;
 	
