@@ -66,22 +66,22 @@ int main (int argc, char **argv) {
   if( theta_min == -1000 ) {
     theta_min = 0;
   }  
-  cout << "Minimum of theta set to " << theta_min << "rad" << endl; 
+  cout << "Minimum of theta set to " << theta_min << " rad" << endl; 
 
   if( theta_max == -1000 ) {
     theta_max = TMath::Pi();
   }  
-  cout << "Maximum of theta set to " << theta_max << "rad" << endl; 
+  cout << "Maximum of theta set to " << theta_max << " rad" << endl; 
 
   if( phi_min == -1000 ) {
     phi_min = -TMath::Pi();
   }  
-  cout << "Minimum of phi set to " << phi_min << "rad" << endl; 
+  cout << "Minimum of phi set to " << phi_min << " rad" << endl; 
 
   if( phi_max == -1000 ) {
     phi_max = TMath::Pi();
   } 
-  cout << "Maximum of phi set to " << phi_max << "rad" << endl; 
+  cout << "Maximum of phi set to " << phi_max << " rad" << endl; 
   if( lund == -1000 || lund == 0) {
     cout << "Using root format as input file" << endl;
     lund = 0;
@@ -153,12 +153,12 @@ int main (int argc, char **argv) {
     input_chain.SetBranchAddress("W",&W);
     input_chain.SetBranchAddress("y",&y);
     input_chain.SetBranchAddress("crs",&crs);
-    input_chain.SetBranchAddress("f1",&f1);
-    input_chain.SetBranchAddress("f2",&f2);
-    input_chain.SetBranchAddress("f1gz",&f1gz);
-    input_chain.SetBranchAddress("f3gz",&f3gz);
-    input_chain.SetBranchAddress("g1gz",&g1gz);
-    input_chain.SetBranchAddress("g5gz",&g5gz);
+    input_chain.SetBranchAddress("F1",&f1);
+    input_chain.SetBranchAddress("F2",&f2);
+    input_chain.SetBranchAddress("F1gZ",&f1gz);
+    input_chain.SetBranchAddress("F3gZ",&f3gz);
+    input_chain.SetBranchAddress("g1gZ",&g1gz);
+    input_chain.SetBranchAddress("g5gZ",&g5gz);
     input_chain.SetBranchAddress("Q2",&Q2);
     input_chain.SetBranchAddress("eta_gZ",&eta_gZ);
     input_chain.SetBranchAddress("rate",&rate);
@@ -183,7 +183,7 @@ int main (int argc, char **argv) {
     for (int i=0; i<nentries ; i++) {
       input_chain.GetEntry(i);
       if(i % 100000 == 0 ){
-	printf("Analyzed %09d events of total %09d \n",i,nentries);
+	printf("Analyzed %9d events of total %9d \n",i,nentries);
       }
 
       if (x>0)   nu = Q2 / (2 * MASS_p * x) ;
