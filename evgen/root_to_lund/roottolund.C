@@ -34,6 +34,7 @@ double theta_max;
 double phi_min;
 double phi_max;
 int lund;
+int geantino;
 
 
 int main (int argc, char **argv) {
@@ -48,6 +49,7 @@ int main (int argc, char **argv) {
   phi_min = -1000;
   phi_max = -1000;
   lund = -1000;
+  geantino = -1000;
 
   Parse_Args( &argc, argv );
  
@@ -66,27 +68,31 @@ int main (int argc, char **argv) {
   if( theta_min == -1000 ) {
     theta_min = 0;
   }  
-  cout << "Minimum of theta set to " << theta_min << " rad" << endl; 
+  cout << "Minimum of theta set to " << theta_min << endl; 
 
   if( theta_max == -1000 ) {
     theta_max = TMath::Pi();
   }  
-  cout << "Maximum of theta set to " << theta_max << " rad" << endl; 
+  cout << "Maximum of theta set to " << theta_max << endl; 
 
   if( phi_min == -1000 ) {
     phi_min = -TMath::Pi();
   }  
-  cout << "Minimum of phi set to " << phi_min << " rad" << endl; 
+  cout << "Minimum of phi set to " << phi_min << endl; 
 
   if( phi_max == -1000 ) {
     phi_max = TMath::Pi();
   } 
-  cout << "Maximum of phi set to " << phi_max << " rad" << endl; 
+  cout << "Maximum of phi set to " << phi_max << endl; 
   if( lund == -1000 || lund == 0) {
     cout << "Using root format as input file" << endl;
     lund = 0;
   } 
   else cout << "Using Lund format as input file" << endl;
+  if( geantino == -1000 || geantino == 0) {
+    geantino = 0;
+  } 
+  else cout << "Using geantino/charged geantino in output" << endl;
 
   
   if (phi_min >= phi_max) {
@@ -132,6 +138,10 @@ int main (int argc, char **argv) {
   double Y_T;
   double eta_T;
 
+  int particle_id;
+  int charge;
+  double mass;
+
 
   // Variables used for determine the lund output
   
@@ -140,6 +150,21 @@ int main (int argc, char **argv) {
   double px,py,pz ;
   double vx,vy,vz ;
 
+  if (geantino == 0) {
+    particle_id = 11; // Setting to have an electron or a geantino in the output
+    charge = -1;
+    mass = 0.00051;
+  } 
+  else if (geantino == 1) {
+    particle_id = 0;
+    charge = 0;
+    mass = 0.0;
+  }
+  else if (geantino == 2) {
+    particle_id = 0;
+    charge = 1;
+    mass = 0.0;
+  }  
   if (lund == 0) {
 
     TChain input_chain("T");
@@ -153,12 +178,12 @@ int main (int argc, char **argv) {
     input_chain.SetBranchAddress("W",&W);
     input_chain.SetBranchAddress("y",&y);
     input_chain.SetBranchAddress("crs",&crs);
-    input_chain.SetBranchAddress("F1",&f1);
-    input_chain.SetBranchAddress("F2",&f2);
-    input_chain.SetBranchAddress("F1gZ",&f1gz);
-    input_chain.SetBranchAddress("F3gZ",&f3gz);
-    input_chain.SetBranchAddress("g1gZ",&g1gz);
-    input_chain.SetBranchAddress("g5gZ",&g5gz);
+    input_chain.SetBranchAddress("f1",&f1);
+    input_chain.SetBranchAddress("f2",&f2);
+    input_chain.SetBranchAddress("f1gz",&f1gz);
+    input_chain.SetBranchAddress("f3gz",&f3gz);
+    input_chain.SetBranchAddress("g1gz",&g1gz);
+    input_chain.SetBranchAddress("g5gz",&g5gz);
     input_chain.SetBranchAddress("Q2",&Q2);
     input_chain.SetBranchAddress("eta_gZ",&eta_gZ);
     input_chain.SetBranchAddress("rate",&rate);
@@ -183,7 +208,7 @@ int main (int argc, char **argv) {
     for (int i=0; i<nentries ; i++) {
       input_chain.GetEntry(i);
       if(i % 100000 == 0 ){
-	printf("Analyzed %9d events of total %9d \n",i,nentries);
+	printf("Analyzed %09d events of total %09d \n",i,nentries);
       }
 
       if (x>0)   nu = Q2 / (2 * MASS_p * x) ;
@@ -201,7 +226,7 @@ int main (int argc, char **argv) {
       if (phi >=phi_min && phi <=phi_max && theta >= theta_min && theta <= theta_max) {  
 	
 	OUT << "1" << " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
-	OUT << " \t " << "1" << " \t " << "-1" << " \t " << "1" << " \t " << "11" << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << "0.00051 " << " \t " << vx  << " \t " << vy << " \t " << vz << endl; 
+	OUT << " \t " << "1" << " \t " << charge << " \t " << "1" << " \t " << particle_id << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << mass << " \t " << vx  << " \t " << vy << " \t " << vz << endl; 
 
       }
     }
@@ -227,7 +252,7 @@ int main (int argc, char **argv) {
 	    phi = v_p3.Phi();
 	    if (phi >=phi_min && phi <=phi_max && theta >= theta_min && theta <= theta_max) {
 	      OUT << "1" << " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
-	      OUT << " \t " << "1" << " \t " << "-1" << " \t " << "1" << " \t " << "11" << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << "0.00051 " << " \t " << vx  << " \t " << vy << " \t " << vz << endl;
+	      OUT << " \t " << "1" << " \t " << charge << " \t " << "1" << " \t " << particle_id << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << mass << " \t " << vx  << " \t " << vy << " \t " << vz << endl;
 	    }
 	  }
 	IN.close();
@@ -299,6 +324,12 @@ void Parse_Args(int *argc, char **argv){
             sscanf(argv[i],"%d",&lund);
             REMOVE_ONE;
           }
+	else if(strcmp(argv[i],"-g")==0)
+          {
+            I_PLUS_PLUS;
+            sscanf(argv[i],"%d",&geantino);
+            REMOVE_ONE;
+          }
 	else if(strcmp(argv[i],"-help")==0||strcmp(argv[i],"-h")==0)  
 	  {
 	    Print_Usage();
@@ -322,15 +353,16 @@ void Parse_Args(int *argc, char **argv){
 
 void Print_Usage() {
   cout << " root2lund : This Program translate the output from eicRate in LUND format and Filter the scattered electron angles\n";  
-  cout << " Usage: root2lund -o outputfile -i inputfile [-th_min theta_min] [-th_max theta_max] [-ph_min phi_min] [-ph_max phi_max] [-l 1-0]\n";  
+  cout << " Usage: root2lund -o outputfile -i inputfile [-th_min theta_min] [-th_max theta_max] [-ph_min phi_min] [-ph_max phi_max] [-l 1-0] [-g 1-0]\n";  
   cout << "     -o outputfile     : output file name (example pluto.lund)  \n";  
   cout << "     -i inputfile      : input file name (example pluto.root)  \n";  
   cout << "     -h help, print this message \n";
   cout << "   [optional] \n";
-  cout << "     -th_min theta_min : specify theta minimum for scattered electron (radians) \n";
-  cout << "     -th_max theta_max : specify theta maximum for scattered electron(radians) \n"; 
-  cout << "     -ph_min phi_min   : specify phi minimum for scattered electron (radians) \n";
-  cout << "     -ph_max phi_max   : specify phi maximum for scattered electron (radians) \n";  
+  cout << "     -th_min theta_min : specify theta minimum for scattered electron \n";
+  cout << "     -th_max theta_max : specify theta maximum for scattered electron \n"; 
+  cout << "     -ph_min phi_min   : specify phi minimum for scattered electron \n";
+  cout << "     -ph_max phi_max   : specify phi maximum for scattered electron \n";  
   cout << "     -l 1-0            : specify format input file ( lund-> 1 (just angle filtering); root->0 (default) )\n";
+  cout << "     -g 2-1-0          : specify if particle in output is a geantino ( geantino-> 1 ; charged geantino-> 2 ; normal->0 (default) )\n";
   cout << " --- \n\n";
 }
