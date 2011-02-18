@@ -5,13 +5,18 @@ FFLAGS=
 CCFLAGS=-fPIC -g -Wall
 EXEC=root2lund
 
+ROOTCONFIG   := ${ROOTSYS}/bin/root-config
+
+ROOTCFLAGS   := $(shell $(ROOTCONFIG) --cflags)
+ROOTLIBS     := $(shell $(ROOTCONFIG) --libs)
+
 all: $(EXEC)
 
 root2lund : roottolund.o
-	$(CC) $^  -L/usr/lib/root -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lz -pthread -lm -ldl -rdynamic -o $@ 
+	$(CC) $^ $(ROOTCFLAGS) $(ROOTLIBS)  -o $@ 
 
 roottolund.o : roottolund.C
-	$(CC)  -c $(CCFLAGS) $< -o $@
+	$(CC)  -c $(CCFLAGS) $(ROOTCFLAGS) $< -o $@
 
 
 
