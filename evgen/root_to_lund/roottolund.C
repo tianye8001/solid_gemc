@@ -66,22 +66,22 @@ int main (int argc, char **argv) {
   if( theta_min == -1000 ) {
     theta_min = 0;
   }  
-  cout << "Minimum of theta set to " << theta_min << endl; 
+  cout << "Minimum of theta set to " << theta_min << "rad" << endl; 
 
   if( theta_max == -1000 ) {
     theta_max = TMath::Pi();
   }  
-  cout << "Maximum of theta set to " << theta_max << endl; 
+  cout << "Maximum of theta set to " << theta_max << "rad" << endl; 
 
   if( phi_min == -1000 ) {
     phi_min = -TMath::Pi();
   }  
-  cout << "Minimum of phi set to " << phi_min << endl; 
+  cout << "Minimum of phi set to " << phi_min << "rad" << endl; 
 
   if( phi_max == -1000 ) {
     phi_max = TMath::Pi();
   } 
-  cout << "Maximum of phi set to " << phi_max << endl; 
+  cout << "Maximum of phi set to " << phi_max << "rad" << endl; 
   if( lund == -1000 || lund == 0) {
     cout << "Using root format as input file" << endl;
     lund = 0;
@@ -327,10 +327,10 @@ void Print_Usage() {
   cout << "     -i inputfile      : input file name (example pluto.root)  \n";  
   cout << "     -h help, print this message \n";
   cout << "   [optional] \n";
-  cout << "     -th_min theta_min : specify theta minimum for scattered electron \n";
-  cout << "     -th_max theta_max : specify theta maximum for scattered electron \n"; 
-  cout << "     -ph_min phi_min   : specify phi minimum for scattered electron \n";
-  cout << "     -ph_max phi_max   : specify phi maximum for scattered electron \n";  
+  cout << "     -th_min theta_min : specify theta minimum for scattered electron (radians) \n";
+  cout << "     -th_max theta_max : specify theta maximum for scattered electron(radians) \n"; 
+  cout << "     -ph_min phi_min   : specify phi minimum for scattered electron (radians) \n";
+  cout << "     -ph_max phi_max   : specify phi maximum for scattered electron (radians) \n";  
   cout << "     -l 1-0            : specify format input file ( lund-> 1 (just angle filtering); root->0 (default) )\n";
   cout << " --- \n\n";
 }
