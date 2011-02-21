@@ -50,9 +50,7 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt)
 	// Energy of the track
 	double Ene = aHit->GetE();
 
-	//out.raws.push_back(Etot);
-	// We have to lie about this to get it out
-	out.raws.push_back(1.0*MeV);
+	out.raws.push_back(Etot);
 	out.raws.push_back(x);
 	out.raws.push_back(y);
 	out.raws.push_back(z);
