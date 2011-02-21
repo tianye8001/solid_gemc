@@ -1,0 +1,3 @@
+#!/bin/csh -f
+mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < magf_table_commands
+

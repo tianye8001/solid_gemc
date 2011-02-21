@@ -1,0 +1,16 @@
+use user_geometry;
+drop table if exists magnetic_fields;
+create table user_geometry.magnetic_fields (  
+  name          VARCHAR(40) UNIQUE,
+  type          VARCHAR(150),
+  magnitude     VARCHAR(240),
+  swim_method   VARCHAR(40),
+  description   VARCHAR(100),
+ PRIMARY KEY  (`name`)
+)ENGINE=NDBCLUSTER;
+LOAD DATA LOCAL INFILE 'magnetic_fields.txt'  into TABLE magnetic_fields;
+
+
+
+
+

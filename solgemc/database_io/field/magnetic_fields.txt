@@ -1,0 +1,3 @@
+solenoid_BaBar      	mapped txt cylindrical solenoid_BaBar.dat      	301 0 300  cm  776  -300  475 cm 0 0 0 cm gauss    	RungeKutta     	solenoid_BaBar
+solenoid_CDF      	mapped txt cylindrical solenoid_CDF.dat      	301 0 300  cm  776  -300  475 cm 0 0 0 cm gauss    	RungeKutta     	solenoid_CDF
+solenoid_ZEUS      	mapped txt cylindrical solenoid_ZEUS.dat      	301 0 300  cm  776  -300  475 cm 0 0 0 cm gauss    	RungeKutta     	solenoid_ZEUS
