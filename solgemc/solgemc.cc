@@ -109,6 +109,7 @@
 #endif
 
 #include "addopts.h"
+#include "solidhp.h"
 
 int main( int argc, char **argv )
 {
@@ -206,6 +207,7 @@ int main( int argc, char **argv )
 	msg = " Building gemc Process Hit Factory...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, MPHB_Factory> MProcessHit_Map = HitProcess_Map(gemcOpt.args["HIT_PROCESS_LIST"].args);
+	AddSoLIDHP(MProcessHit_Map);
 	
 	
 	

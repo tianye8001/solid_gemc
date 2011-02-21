@@ -28,7 +28,7 @@ env.Append(CPPPATH = incpath)
 
 
 # Hit Processes
-hitp_sources = Split("""""")
+hitp_sources = Split("""hitprocess/trace_HitProcess.cc""")
                         
 incpath = [gemcpath+'hitprocess', gemcpath+'hitprocess/clas12', gemcpath+'hitprocess/clas12/svt', gemcpath+'hitprocess/clas12/micromegas', gemcpath+'hitprocess/Aprime', gemcpath+'hitprocess/GlueX','hitprocess']
 env.Append(CPPPATH = incpath)
