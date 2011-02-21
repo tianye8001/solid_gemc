@@ -1,1 +1,0 @@
-solenoid_BaBar_spr      	mapped txt cylindrical solenoid_BaBar.dat      	301 0 300  cm  776  -300  475 cm 0 0 0 cm gauss    	RungeKutta     	solenoid_BaBar
