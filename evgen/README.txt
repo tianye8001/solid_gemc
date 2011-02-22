@@ -61,8 +61,17 @@ setenv CPLUS_INCLUDE_PATH /home/zana/include:${ROOTSYS}/include
 setenv LIBRARY_PATH /home/zana/lib:${ROOTSYS}/lib
 
 
-root2lund : This Program translate the output from eicRate in LUND format 
-Usage: root2lund -o outputfile -i inputfile 
-     -o outputfile   - output file name (example pluto.lund)  
-     -i inputfile   - input file name (example pluto.root)  
+ root2lund : This Program translate the output from eicRate in LUND format and Filter the scattered electron angles
+ Usage: root2lund -o outputfile -i inputfile [-th_min theta_min] [-th_max theta_max] [-ph_min phi_min] [-ph_max phi_max] [-l 1-0] [-g 1-0]
+     -o outputfile     : output file name (example pluto.lund)  
+     -i inputfile      : input file name (example pluto.root)  
      -h help, print this message 
+   [optional] 
+     -th_min theta_min : specify theta minimum for scattered electron 
+     -th_max theta_max : specify theta maximum for scattered electron 
+     -ph_min phi_min   : specify phi minimum for scattered electron 
+     -ph_max phi_max   : specify phi maximum for scattered electron 
+     -l 1-0            : specify format input file ( lund-> 1 (just angle filtering); root->0 (default) )
+     -g 2-1-0          : specify if particle in output is a geantino ( geantino-> 1 ; charged geantino-> 2 ; normal->0 (default) )
+ --- 
+
