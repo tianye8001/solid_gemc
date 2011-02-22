@@ -17,3 +17,6 @@ mvy	16	1	1	y coordinate of mother vertex
 mvz	17	1	1	z coordinate of mother vertex
 trid	18	1	1	Track ID
 weight	19	1	1	Event weight
+px	20	1	1	Momentum x
+py	21	1	1	Momentum y
+pz	22	1	1	Momentum z

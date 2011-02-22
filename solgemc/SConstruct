@@ -17,7 +17,8 @@ incpath = ['.',gemcpath, gemcpath+'src', gemcpath+'gui/src', 'src', 'gui/src']
 env.Append(CPPPATH = incpath)
 
 # Sources
-gemc_sources = Split("""solgemc.cc""")
+gemc_sources = Split("""solgemc.cc
+			src/SolPrimaryGeneratorAction.cc""")
 
 # Physics
 phys_sources = Split("""physics/SolidNoPhysicsList.cc

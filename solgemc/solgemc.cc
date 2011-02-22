@@ -75,6 +75,7 @@
 #include "MPhysicsList.h"
 #include "SolidNoPhysicsList.h"
 #include "MPrimaryGeneratorAction.h"
+#include "SolPrimaryGeneratorAction.h"
 #include "MSteppingAction.h"
 #include "Output_Register.h"
 #include "usage.h"
@@ -270,7 +271,19 @@ int main( int argc, char **argv )
 	///< Generator
 	msg = " Initializing Primary Generator Action...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
-	G4VUserPrimaryGeneratorAction* gen_action = new MPrimaryGeneratorAction(&gemcOpt);
+
+	// parse output file format
+	int commaplace = gemcOpt.args["INPUT_GEN_FILE"].args.find_first_of(',');
+	string fform = gemcOpt.args["INPUT_GEN_FILE"].args.substr(0,commaplace);
+
+	G4VUserPrimaryGeneratorAction* gen_action;
+	if( fform == "SOLLUND" ){
+		gen_action = new SolPrimaryGeneratorAction(&gemcOpt);
+	} else {
+		gen_action = new MPrimaryGeneratorAction(&gemcOpt);
+	}
+
+
 	runManager->SetUserAction(gen_action);
 	
 	///< Event Action

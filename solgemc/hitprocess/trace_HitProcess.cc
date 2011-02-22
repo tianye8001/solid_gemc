@@ -8,13 +8,26 @@
 // gemc headers
 // %%%%%%%%%%%%%
 #include "trace_HitProcess.h"
+#include "SolPrimaryGeneratorAction.h"
 
+trace_HitProcess :: trace_HitProcess() {
+    // PrimaryGeneratorAction can contain more information
+    // that we want to pull out, such as info on the primary
+    // track, any weighting that we want
+    fPMG = NULL;
+}
 
-PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt)
-{
+SolPrimaryGeneratorAction *trace_HitProcess::GetPMG(){
+    fPMG = SolPrimaryGeneratorAction::GetInstance();
+    return fPMG;
+}
+
+PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	PH_output out;
 	out.identity = aHit->GetId();
 	HCname = "Trace Hit Process";
+
+	if( !fPMG ){GetPMG();}
 
 	// %%%%%%%%%%%%%%%%%%%
 	// Raw hit information
@@ -32,6 +45,7 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt)
 	x = y = z = lx = ly = lz = 0;
 	vector<G4ThreeVector> pos  = aHit->GetPos();
 	vector<G4ThreeVector> Lpos = aHit->GetLPos();
+	G4ThreeVector p = aHit->GetMom();
 	
 	for(int s=0; s<nsteps; s++) {
 	    x  = x  +  pos[s].x()/((double) nsteps);
@@ -67,6 +81,11 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt)
 	out.raws.push_back(aHit->GetmVert().getX());
 	out.raws.push_back(aHit->GetmVert().getY());
 	out.raws.push_back(aHit->GetmVert().getZ());
+	out.raws.push_back(aHit->GetTId());
+	out.raws.push_back(fPMG->GetWeight());
+	out.raws.push_back(p.x());
+	out.raws.push_back(p.y());
+	out.raws.push_back(p.z());
 
 
 	return out;
