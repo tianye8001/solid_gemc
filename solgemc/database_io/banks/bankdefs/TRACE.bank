@@ -15,3 +15,5 @@ mpid	14	1	1	Mother  Particle ID
 mvx	15	1	1	x coordinate of mother vertex
 mvy	16	1	1	y coordinate of mother vertex
 mvz	17	1	1	z coordinate of mother vertex
+trid	18	1	1	Track ID
+weight	19	1	1	Event weight
