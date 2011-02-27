@@ -29,6 +29,13 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 
 	if( !fPMG ){GetPMG();}
 
+	double weight;
+	if( fPMG ){ 
+	    weight = fPMG->GetWeight(); 
+	} else {
+	    weight = 1.0;
+	}
+
 	// %%%%%%%%%%%%%%%%%%%
 	// Raw hit information
 	// %%%%%%%%%%%%%%%%%%%
@@ -55,7 +62,7 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	    ly = ly + Lpos[s].y()/((double) nsteps);
 	    lz = lz + Lpos[s].z()/((double) nsteps);
 	}
-
+	
 	// average time
 	double time = 0;
 	vector<G4double> times = aHit->GetTime();
@@ -82,7 +89,7 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	out.raws.push_back(aHit->GetmVert().getY());
 	out.raws.push_back(aHit->GetmVert().getZ());
 	out.raws.push_back(aHit->GetTId());
-	out.raws.push_back(fPMG->GetWeight());
+	out.raws.push_back(weight);
 	out.raws.push_back(p.x());
 	out.raws.push_back(p.y());
 	out.raws.push_back(p.z());
