@@ -1,0 +1,2430 @@
+lrwxrwxrwx    1 root     root           30 May 21  2004 /initrd.old -> boot/initrd.img-2.4.20-686-smp
+lrwxrwxrwx    1 root     root           27 May 21  2004 /initrd.img.old -> boot/initrd.img-2.6.3-1-686
+lrwxrwxrwx    1 root     root           31 May 21  2004 /initrd.img -> boot/initrd.img-2.6.3-1-686-smp
+lrwxrwxrwx    1 root     root           15 May 21  2004 /hermes -> /data/28/hermes
+lrwxrwxrwx    1 root     root           24 May 21  2004 /vmlinuz.old -> boot/vmlinuz-2.6.3-1-686
+lrwxrwxrwx    1 root     root           28 May 21  2004 /vmlinuz -> boot/vmlinuz-2.6.3-1-686-smp
+lrwxrwxrwx    1 root     root           14 May 21  2004 /home -> /.autofs/home/
+
+/floppy:
+total 0
+
+/cdrom:
+total 0
+
+/local:
+total 16
+drwxrwxr-x    2 root     root         4096 Dec  3  2000 3
+drwxrwxr-x    2 root     root         4096 Dec  3  2000 4
+drwxrwxr-x    2 g2       g2           4096 Mar 10  2001 1
+drwxrwxr-x    2 g2       g2           4096 Mar 10  2001 2
+
+/zip:
+total 0
+
+/pub:
+total 0
+lrwxrwxrwx    1 root     root           12 May 21  2004 www -> /.autofs/www
+lrwxrwxrwx    1 root     root           12 May 21  2004 ftp -> /.autofs/ftp
+
+/initrd:
+total 0
+
+/var:
+total 60
+drwxrwsr-x    2 root     staff        4096 Feb  1  1999 local
+drwxr-xr-x    2 postgres postgres     4096 Oct 22  2000 postgres
+drwxr-xr-x    3 root     root         4096 Oct  5  2001 autofs
+drwxr-xr-x    3 root     root         4096 Mar  5  2004 www
+drwxr-xr-x    3 root     root         4096 Mar  5  2004 games
+drwxr-xr-x    4 root     root         4096 Apr 16  2004 state
+lrwxrwxrwx    1 root     root           10 May 21  2004 mail -> spool/mail
+drwxr-xr-x    3 root     root         4096 May 24  2004 yp
+drwxr-xr-x   11 root     root         4096 Jun  4  2004 spool
+drwxr-xr-x    9 root     root         4096 Jul 12  2004 cache
+drwxrwxrwt    7 root     root         4096 Feb  1 09:31 tmp
+drwxr-xr-x   49 root     root         4096 Mar 17 07:45 lib
+drwxrwxrwt    3 root     root         4096 Mar 21 11:19 lock
+drwxr-xr-x   14 root     root         4096 Mar 21 13:08 run
+drwxr-xr-x    2 backup   backup       4096 Mar 29 07:36 backups
+drwxr-xr-x    9 root     root         4096 Mar 29 07:36 log
+
+/lost+found:
+total 80
+-rw-r--r--    1 root     root         1019 Mar  9  2004 #786420
+-rw-r--r--    1 root     root        72131 Mar  9  2004 #786419
+
+/usr:
+total 188
+drwxr-xr-x    7 root     root         4096 Oct 19  2000 X11R6
+drwxr-xr-x    4 root     root         4096 Oct 19  2000 i486-linuxlibc1
+drwxr-xr-x    2 root     root         4096 Nov 28  2000 local0
+drwxr-xr-x    2 root     root        16384 Mar  7  2003 lost+found
+drwxrwsr-x    4 root     src          4096 Dec 10  2003 src
+drwxr-xr-x    3 root     root         4096 Mar  2  2004 man
+lrwxrwxrwx    1 root     root           10 May 21  2004 info -> share/info
+lrwxrwxrwx    1 root     root            5 May 21  2004 openwin -> X11R6
+lrwxrwxrwx    1 root     root           14 May 21  2004 local -> /.autofs/local
+drwxr-xr-x    2 root     root         4096 Jun  5  2004 games
+drwxr-xr-x   28 root     root         8192 Sep 20  2004 doc
+drwxr-xr-x  295 root     root         8192 Sep 21  2004 share
+drwxr-xr-x    2 root     root         8192 Feb 11 09:31 sbin
+drwxr-xr-x    3 root     root        53248 Feb 24 13:40 bin
+drwxr-xr-x   69 root     root         8192 Mar 28 15:20 include
+drwxr-xr-x  210 root     root        57344 Mar 28 16:07 lib
+
+/opt:
+total 4
+drwxr-xr-x   12 root     root         4096 Mar  9  2004 eagle
+
+/mnt:
+total 8
+drwxr-xr-x    2 root     root         4096 Mar  9  2004 redhat
+drwxr-xr-x    2 root     root         4096 Mar 12  2004 usbkey
+
+/bin:
+total 3932
+-rwxr-xr-x    1 root     root        23888 Oct 17  1999 ae
+-rwsr-xr-x    1 root     root        15244 Nov 18  2001 ping
+-rwxr-xr-x    1 root     root         3660 Jan 23  2002 vi
+-rwxr-xr-x    1 root     root        67436 Jan 23  2002 elvis-tiny
+-rwxr-xr-x    1 root     root        71960 Jan 30  2002 loadkeys
+-rwxr-xr-x    1 root     root         2968 Mar 30  2003 fdflush
+-rwxr-xr-x    1 root     root        39544 Apr  2  2003 ed
+-rwxr-xr-x    1 root     root         3518 Jul 10  2003 znew
+-rwxr-xr-x    1 root     root         1885 Jul 10  2003 zmore
+-rwxr-xr-x    1 root     root          103 Jul 10  2003 zless
+-rwxr-xr-x    1 root     root         2944 Jul 10  2003 zgrep
+-rwxr-xr-x    1 root     root         1525 Jul 10  2003 zforce
+-rwxr-xr-x    1 root     root         2944 Jul 10  2003 zfgrep
+-rwxr-xr-x    1 root     root         2944 Jul 10  2003 zegrep
+-rwxr-xr-x    1 root     root         1974 Jul 10  2003 zdiff
+-rwxr-xr-x    1 root     root         1974 Jul 10  2003 zcmp
+-rwxr-xr-x    1 root     root         4745 Jul 10  2003 gzexe
+-rwxr-xr-x    1 root     root        49580 Jul 10  2003 zcat
+-rwxr-xr-x    1 root     root        49580 Jul 10  2003 uncompress
+-rwxr-xr-x    1 root     root        49580 Jul 10  2003 gzip
+-rwxr-xr-x    1 root     root        49580 Jul 10  2003 gunzip
+-rwxr-xr-x    1 root     root        14708 Aug 23  2003 mt-gnu
+-rwxr-xr-x    1 root     root        47628 Aug 23  2003 cpio
+-rwxr-xr-x    1 root     root        19352 Aug 24  2003 nc
+-rwxr-xr-x    1 root     root        96536 Aug 28  2003 cftp
+-rwxr-xr-x    1 root     root        26712 Sep 19  2003 more
+-rwxr-xr-x    1 root     root         3932 Sep 19  2003 dmesg
+-rwxr-xr-x    1 root     root         2628 Sep 19  2003 arch
+-rwsr-xr-x    1 root     root        39768 Sep 19  2003 umount
+-rwsr-xr-x    1 root     root        76888 Sep 19  2003 mount
+-rwxr-xr-x    1 root     root        72460 Oct  4  2003 vdir
+-rwxr-xr-x    1 root     root        11736 Oct  4  2003 uname
+-rwxr-xr-x    1 root     root        10072 Oct  4  2003 true
+-rwxr-xr-x    1 root     root        28344 Oct  4  2003 touch
+-rwxr-xr-x    1 root     root        10552 Oct  4  2003 sync
+-rwxr-xr-x    1 root     root        36824 Oct  4  2003 stty
+-rwxr-xr-x    1 root     root        12664 Oct  4  2003 sleep
+-rwxr-xr-x    1 root     root        11960 Oct  4  2003 rmdir
+-rwxr-xr-x    1 root     root        28248 Oct  4  2003 rm
+-rwxr-xr-x    1 root     root        11576 Oct  4  2003 readlink
+-rwxr-xr-x    1 root     root        11928 Oct  4  2003 pwd
+-rwxr-xr-x    1 root     root        55244 Oct  4  2003 mv
+-rwxr-xr-x    1 root     root        18092 Oct  4  2003 mknod
+-rwxr-xr-x    1 root     root        19448 Oct  4  2003 mkdir
+-rwxr-xr-x    1 root     root        72460 Oct  4  2003 ls
+-rwxr-xr-x    1 root     root        22104 Oct  4  2003 ln
+-rwxr-xr-x    1 root     root        10072 Oct  4  2003 false
+-rwxr-xr-x    1 root     root        12216 Oct  4  2003 echo
+-rwxr-xr-x    1 root     root        72460 Oct  4  2003 dir
+-rwxr-xr-x    1 root     root        30476 Oct  4  2003 df
+-rwxr-xr-x    1 root     root        27084 Oct  4  2003 dd
+-rwxr-xr-x    1 root     root        39224 Oct  4  2003 date
+-rwxr-xr-x    1 root     root        51148 Oct  4  2003 cp
+-rwxr-xr-x    1 root     root        20024 Oct  4  2003 chown
+-rwxr-xr-x    1 root     root        17976 Oct  4  2003 chmod
+-rwxr-xr-x    1 root     root        18008 Oct  4  2003 chgrp
+-rwxr-xr-x    1 root     root        15000 Oct  4  2003 cat
+-rwxr-xr-x    1 root     root        18456 Nov 28  2003 fuser
+-rwxr-xr-x    1 root     root           33 Dec  7  2003 fgrep
+-rwxr-xr-x    1 root     root           33 Dec  7  2003 egrep
+-rwxr-xr-x    1 root     root        72364 Dec  7  2003 grep
+-rwxr-xr-x    1 root     root        10740 Dec 18  2003 hostname
+-rwxr-xr-x    1 root     root        10740 Dec 18  2003 dnsdomainname
+-rwxr-xr-x    1 root     root       302476 Mar 24  2004 tcsh
+-rwxr-xr-x    1 root     root         4944 Apr  5  2004 mountpoint
+-rwxr-xr-x    1 root     root        65356 Apr 13  2004 ps
+-rwxr-xr-x    1 root     root        12044 Apr 13  2004 kill
+-rwxr-xr-x    1 root     root        20664 Apr 14  2004 setserial
+-rwxr-xr-x    1 root     root        98156 Apr 22  2004 netstat
+-rwxr-xr-x    1 root     root       165740 Apr 24  2004 tar
+-rwxr-xr-x    1 root     root        36536 Apr 24  2004 sed
+-rwxr-xr-x    1 root     root        11157 Apr 29  2004 mkbimage
+-rwxr-xr-x    1 root     root       180652 Apr 29  2004 ksh
+-rwxr-xr-x    1 root     root        80472 Apr 30  2004 dash
+-rwxr-xr-x    1 root     root         6104 May  8  2004 domainname
+-rwxr-xr-x    1 root     root       628684 May  8  2004 bash
+-rwxr-xr-x    1 root     root         5576 May  9  2004 mktemp
+-rwxr-xr-x    1 root     root         5620 May  9  2004 tempfile
+-rwxr-xr-x    1 root     root        11036 May  9  2004 run-parts
+-rwsr-xr-x    1 root     root        23448 May 10  2004 su
+-rwsr-xr-x    1 root     root        35512 May 10  2004 login
+-rwxr-xr-x    1 root     root         6088 May 12  2004 mbchk
+-rwxr-xr-x    1 root     root       448172 May 12  2004 zsh4
+-rwxr-xr-x    1 root     root         5600 May 16  2004 lsmod
+lrwxrwxrwx    1 root     root           21 May 21  2004 zsh -> /etc/alternatives/zsh
+lrwxrwxrwx    1 root     root           15 May 21  2004 setpci -> /usr/bin/setpci
+lrwxrwxrwx    1 root     root           22 May 21  2004 rzsh -> /etc/alternatives/rzsh
+lrwxrwxrwx    1 root     root           16 May 21  2004 pidof -> ../sbin/killall5
+lrwxrwxrwx    1 root     root            2 May 21  2004 netcat -> nc
+lrwxrwxrwx    1 root     root           20 May 21  2004 mt -> /etc/alternatives/mt
+lrwxrwxrwx    1 root     root           14 May 21  2004 lspci -> /usr/bin/lspci
+lrwxrwxrwx    1 root     root           20 May 21  2004 lsmod.modutils -> /sbin/lsmod.modutils
+lrwxrwxrwx    1 root     root           21 May 21  2004 kernelversion -> ../sbin/kernelversion
+lrwxrwxrwx    1 root     root           21 May 21  2004 csh -> /etc/alternatives/csh
+lrwxrwxrwx    1 root     root            4 May 21  2004 ash -> dash
+lrwxrwxrwx    1 root     root           15 May 24  2004 ypdomainname -> /bin/domainname
+lrwxrwxrwx    1 root     root           15 May 24  2004 nisdomainname -> /bin/domainname
+lrwxrwxrwx    1 root     root            4 May 24  2004 sh -> bash
+lrwxrwxrwx    1 root     root            4 May 24  2004 rbash -> bash
+
+/boot:
+total 26468
+-rw-r--r--    1 root     root          512 Oct 18  2000 boot.0302
+-rw-r--r--    1 root     root          512 Dec  4  2000 boot.0300
+-rw-r--r--    1 root     root       539245 Oct 14  2001 vmlinuz-2.2.19-mu-ide
+-rw-r--r--    1 root     root        38235 Aug  8  2002 config-2.4.19-686-smp
+-rw-r--r--    1 root     root       689955 Aug 10  2002 vmlinuz-2.4.19-686-smp
+-rw-r--r--    1 root     root       433076 Aug 10  2002 System.map-2.4.19-686-smp
+-rw-r--r--    1 root     root      3694592 Sep 12  2002 initrd-2.4.9-686-smp-systemimager
+-rw-r--r--    1 root     root      2789376 Jan  7  2003 initrd.img-2.4.19-686-smp
+-rw-r--r--    1 root     root        43672 Feb 18  2004 config-2.4.24-1-686
+-rw-r--r--    1 root     root       859906 Feb 18  2004 vmlinuz-2.4.24-1-686
+-rw-r--r--    1 root     root       530744 Feb 18  2004 System.map-2.4.24-1-686
+-rw-r--r--    1 root     root        50709 Feb 24  2004 config-2.6.3-1-686
+-rw-r--r--    1 root     root        47567 Feb 24  2004 config-2.6.3-1-686-smp
+-rw-r--r--    1 root     root      1113932 Feb 24  2004 vmlinuz-2.6.3-1-686
+-rw-r--r--    1 root     root       774677 Feb 24  2004 System.map-2.6.3-1-686
+-rw-r--r--    1 root     root      1174275 Feb 24  2004 vmlinuz-2.6.3-1-686-smp
+-rw-r--r--    1 root     root       784641 Feb 24  2004 System.map-2.6.3-1-686-smp
+-rw-r--r--    1 root     root      3657728 Mar  5  2004 initrd.img-2.4.24-1-686
+-rw-r--r--    1 root     root      4734976 Mar  9  2004 initrd.img-2.6.3-1-686
+drwxr-xr-x    2 root     root         4096 Mar  9  2004 grub
+-rw-r--r--    1 root     root          512 Apr  2  2004 boot.0800
+-rw-r--r--    1 root     root      4845568 Apr 23  2004 initrd.img-2.6.3-1-686-smp
+lrwxrwxrwx    1 root     root           18 May 21  2004 vmlinuz -> vmlinuz-2.2.19-ide
+lrwxrwxrwx    1 root     root           11 May 21  2004 boot.b -> boot-menu.b
+lrwxrwxrwx    1 root     root           21 May 21  2004 System.map -> System.map-2.2.19-ide
+-rw-------    1 root     root       178688 May 21  2004 map
+lrwxrwxrwx    1 root     root           31 May 25  2004 sid.bmp -> /usr/share/lilo/contrib/sid.bmp
+lrwxrwxrwx    1 root     root           33 May 25  2004 sarge.bmp -> /usr/share/lilo/contrib/sarge.bmp
+lrwxrwxrwx    1 root     root           38 May 25  2004 debianlilo.bmp -> /usr/share/lilo/contrib/debianlilo.bmp
+lrwxrwxrwx    1 root     root           34 May 25  2004 debian.bmp -> /usr/share/lilo/contrib/debian.bmp
+
+/sbin:
+total 3568
+-rwxr-xr-x    1 root     root        17440 Sep 30  2001 install-mbr
+-rwxr-xr-x    1 root     root        25816 Jan  3  2002 syslogd
+-rwxr-xr-x    1 root     root        19672 Jan  3  2002 klogd
+-rwxr-xr-x    1 root     root         5584 Jan 27  2002 update
+-rwxr-xr-x    1 root     root         5536 Jan 30  2002 kbdrate
+-rwxr-xr-x    1 root     root        21953 Mar 23  2002 ipfwadm-wrapper
+-rwxr-xr-x    1 root     root         4112 Mar 23  2002 ipchains-save
+-rwxr-xr-x    1 root     root         3032 Mar 23  2002 ipchains-restore
+-rwxr-xr-x    1 root     root        39032 Mar 23  2002 ipchains
+-rwxr-xr-x    1 root     root        48332 Sep 19  2003 sfdisk
+-rwxr-xr-x    1 root     root         5024 Sep 19  2003 raw
+-rwxr-xr-x    1 root     root         2776 Sep 19  2003 pivot_root
+-rwxr-xr-x    1 root     root         9808 Sep 19  2003 mkswap
+-rwxr-xr-x    1 root     root        15320 Sep 19  2003 mkfs.minix
+-rwxr-xr-x    1 root     root        14772 Sep 19  2003 mkfs.cramfs
+-rwxr-xr-x    1 root     root         4664 Sep 19  2003 mkfs
+-rwxr-xr-x    1 root     root        29028 Sep 19  2003 hwclock
+-rwxr-xr-x    1 root     root        14264 Sep 19  2003 getty
+-rwxr-xr-x    1 root     root        22040 Sep 19  2003 fsck.minix
+-rwxr-xr-x    1 root     root        10488 Sep 19  2003 fsck.cramfs
+-rwxr-xr-x    1 root     root        77324 Sep 19  2003 fdisk
+-rwxr-xr-x    1 root     root        48300 Sep 19  2003 cfdisk
+-rwxr-xr-x    1 root     root         7372 Sep 19  2003 blockdev
+-rwxr-xr-x    1 root     root         7872 Sep 19  2003 swapon
+-rwxr-xr-x    1 root     root        21584 Sep 19  2003 losetup
+-rwxr-xr-x    1 root     root        23820 Sep 22  2003 mkdosfs
+-rwxr-xr-x    1 root     root        44460 Sep 22  2003 dosfsck
+-rwxr-xr-x    1 root     root        47480 Dec  6  2003 isapnp
+-rwxr-xr-x    1 root     root       105240 Dec 13  2003 dhclient
+-rwxr-xr-x    1 root     root         4559 Dec 30  2003 update-modules.modutils
+-rwxr-xr-x    1 root     root        56204 Dec 30  2003 modinfo.modutils
+-rwxr-xr-x    1 root     root          451 Dec 30  2003 kernelversion
+-rwxr-xr-x    1 root     root          359 Dec 30  2003 insmod_ksymoops_clean
+-rwxr-xr-x    1 root     root       129868 Dec 30  2003 insmod.modutils
+-rwxr-xr-x    1 root     root        35928 Dec 30  2003 genksyms
+-rwxr-xr-x    1 root     root        84716 Dec 30  2003 depmod.modutils
+-rwxr-xr-x    1 root     root        47436 Mar  3  2004 hdparm
+-rwxr-xr-x    1 root     root         9900 Mar 24  2004 showmount
+-rwxr-xr-x    1 root     root        36632 Mar 24  2004 rpc.statd
+-rwxr-xr-x    1 root     root         3348 Mar 24  2004 rpc.lockd
+-rwxr-xr-x    1 root     root        59564 Mar 25  2004 quotaon
+-rwxr-xr-x    1 root     root        84396 Mar 25  2004 quotacheck
+-rwxr-xr-x    1 root     root        55724 Mar 25  2004 convertquota
+-rwxr-xr-x    1 root     root        12016 Apr  3  2004 portmap
+-rwxr-xr-x    1 root     root         3500 Apr  3  2004 pmap_set
+-rwxr-xr-x    1 root     root         3384 Apr  3  2004 pmap_dump
+-rwxr-xr-x    1 root     root        10136 Apr  5  2004 sulogin
+-rwxr-xr-x    1 root     root        18528 Apr  5  2004 shutdown
+-rwxr-xr-x    1 root     root         3448 Apr  5  2004 runlevel
+-rwxr-xr-x    1 root     root         9596 Apr  5  2004 killall5
+-rwxr-xr-x    1 root     root        31420 Apr  5  2004 init
+-rwxr-xr-x    1 root     root         9320 Apr  5  2004 halt
+-rwxr-xr-x    1 root     root        11544 Apr  5  2004 bootlogd
+-rwxr-xr-x    1 root     root          413 Apr  5  2004 fsck.nfs
+-rwxr-xr-x    1 root     root        24472 Apr 10  2004 ifup
+-rwxr-xr-x    1 root     root        24472 Apr 10  2004 ifdown
+-rwxr-xr-x    1 root     root         1139 Apr 10  2004 hotplug
+-rwxr-xr-x    1 root     root         8444 Apr 13  2004 sysctl
+-rwxr-xr-x    1 root     root          602 Apr 18  2004 lilo
+-rwxr-xr-x    1 root     root       185912 Apr 18  2004 lilo.real
+-rwxr-xr-x    1 root     root         4460 Apr 18  2004 activate
+-rwxr-xr-x    1 root     root        27800 Apr 22  2004 slattach
+-rwxr-xr-x    1 root     root        46680 Apr 22  2004 route
+-rwxr-xr-x    1 root     root        23736 Apr 22  2004 rarp
+-rwxr-xr-x    1 root     root         4824 Apr 22  2004 plipconfig
+-rwxr-xr-x    1 root     root         7516 Apr 22  2004 nameif
+-rwxr-xr-x    1 root     root        10712 Apr 22  2004 mii-tool
+-rwxr-xr-x    1 root     root        14968 Apr 22  2004 iptunnel
+-rwxr-xr-x    1 root     root        10516 Apr 22  2004 ipmaddr
+-rwxr-xr-x    1 root     root        58348 Apr 22  2004 ifconfig
+-rwxr-xr-x    1 root     root        18424 Apr 25  2004 start-stop-daemon
+-rwxr-xr-x    1 root     root        50146 Apr 27  2004 MAKEDEV
+-r-sr-xr-x    1 root     root        15000 May  4  2004 unix_chkpwd
+-rwxr-xr-x    1 root     root         6872 May  5  2004 blkid
+-rwxr-xr-x    3 root     root        20040 May  5  2004 tune2fs
+-rwxr-xr-x    1 root     root        22152 May  5  2004 resize2fs
+-rwxr-xr-x    3 root     root        28396 May  5  2004 mkfs.ext3
+-rwxr-xr-x    3 root     root        28396 May  5  2004 mkfs.ext2
+-rwxr-xr-x    3 root     root        28396 May  5  2004 mke2fs
+-rwxr-xr-x    1 root     root         5716 May  5  2004 logsave
+-rwxr-xr-x    3 root     root       121772 May  5  2004 fsck.ext3
+-rwxr-xr-x    3 root     root       121772 May  5  2004 fsck.ext2
+-rwxr-xr-x    1 root     root        16696 May  5  2004 fsck
+-rwxr-xr-x    3 root     root        20040 May  5  2004 findfs
+-rwxr-xr-x    3 root     root        20040 May  5  2004 e2label
+-rwxr-xr-x    1 root     root         9272 May  5  2004 e2image
+-rwxr-xr-x    3 root     root       121772 May  5  2004 e2fsck
+-rwxr-xr-x    1 root     root         9020 May  5  2004 dumpe2fs
+-rwxr-xr-x    1 root     root        52376 May  5  2004 debugfs
+-rwxr-xr-x    1 root     root        15988 May  5  2004 badblocks
+-rwxr-xr-x    1 root     root         5196 May  8  2004 partprobe
+-rwxr-xr-x    1 root     root        47340 May  8  2004 parted
+-rwxr-xr-x    1 root     root         1221 May  9  2004 installkernel
+-rwxr-xr-x    1 root     root          877 May 10  2004 shadowconfig
+-rwxr-xr-x    1 root     root        19303 May 11  2004 update-grub
+-rwxr-xr-x    1 root     root          677 May 11  2004 grub-reboot
+-rwxr-xr-x    1 root     root         2959 May 11  2004 grub-floppy
+-rwxr-xr-x    1 root     root         2473 May 12  2004 grub-terminfo
+-rwxr-xr-x    1 root     root         2301 May 12  2004 grub-md5-crypt
+-rwxr-xr-x    1 root     root        12690 May 12  2004 grub-install
+-rwxr-xr-x    1 root     root       132728 May 12  2004 grub
+-rwxr-xr-x    1 root     root         2946 May 16  2004 update-modules
+-rwxr-xr-x    1 root     root         8524 May 16  2004 rmmod
+-rwxr-xr-x    1 root     root        21428 May 16  2004 modprobe
+-rwxr-xr-x    1 root     root         9892 May 16  2004 modinfo
+-rwxr-xr-x    1 root     root         6324 May 16  2004 insmod
+-rwxr-xr-x    1 root     root        23896 May 16  2004 depmod
+lrwxrwxrwx    1 root     root            4 May 21  2004 telinit -> init
+lrwxrwxrwx    1 root     root            6 May 21  2004 swapoff -> swapon
+lrwxrwxrwx    1 root     root           13 May 21  2004 rmt -> /usr/sbin/rmt
+lrwxrwxrwx    1 root     root           15 May 21  2004 rmmod.modutils -> insmod.modutils
+lrwxrwxrwx    1 root     root            6 May 21  2004 rmmod.Lmodutils -> insmod
+lrwxrwxrwx    1 root     root            4 May 21  2004 reboot -> halt
+lrwxrwxrwx    1 root     root            7 May 21  2004 quotaoff -> quotaon
+lrwxrwxrwx    1 root     root            4 May 21  2004 poweroff -> halt
+lrwxrwxrwx    1 root     root           15 May 21  2004 modprobe.modutils -> insmod.modutils
+lrwxrwxrwx    1 root     root            6 May 21  2004 modprobe.Lmodutils -> insmod
+lrwxrwxrwx    1 root     root            7 May 21  2004 mkfs.vfat -> mkdosfs
+lrwxrwxrwx    1 root     root            7 May 21  2004 mkfs.msdos -> mkdosfs
+lrwxrwxrwx    1 root     root           15 May 21  2004 lsmod.modutils -> insmod.modutils
+lrwxrwxrwx    1 root     root            6 May 21  2004 lsmod.Lmodutils -> insmod
+lrwxrwxrwx    1 root     root            6 May 21  2004 ksyms.modutils -> insmod
+lrwxrwxrwx    1 root     root           15 May 21  2004 ksyms -> insmod.modutils
+lrwxrwxrwx    1 root     root            6 May 21  2004 kallsyms.modutils -> insmod
+lrwxrwxrwx    1 root     root           15 May 21  2004 kallsyms -> insmod.modutils
+lrwxrwxrwx    1 root     root           25 May 21  2004 ipfwadm -> /etc/alternatives/ipfwadm
+lrwxrwxrwx    1 root     root            7 May 21  2004 fsck.vfat -> dosfsck
+lrwxrwxrwx    1 root     root            7 May 21  2004 fsck.msdos -> dosfsck
+lrwxrwxrwx    1 root     root           10 May 24  2004 lsmod -> /bin/lsmod
+-rwxr-xr-x    1 root     root       470560 Dec 26 20:41 ldconfig
+
+/lib:
+total 6480
+-rw-r--r--    1 root     root       242644 Oct 30  1998 libncurses.so.3.4
+drwxr-xr-x    2 root     root         4096 Feb  8  1999 libc5-compat
+-rw-r--r--    1 root     root        10500 Feb  3  2000 libtermcap.so.2.0.8
+-rw-r--r--    1 root     root       163840 Nov 26  2000 libreadline.so.2.1
+-rwxr-xr-x    1 root     root         6200 Mar  6  2001 libdl.so.1.9.11
+-rwxr-xr-x    1 root     root        99568 Mar  6  2001 ld.so.1.9.11
+-rwxr-xr-x    1 root     root        99568 Mar  6  2001 ld.so
+-rwxr-xr-x    1 root     root        24817 Mar  6  2001 ld-linux.so.1.9.11
+-rw-r--r--    1 root     root        16824 Nov 11  2001 libctutils.so.0.0.0
+-rw-r--r--    1 root     root        60016 Nov 11  2001 libconsole.so.0.0.0
+-rw-r--r--    1 root     root        11260 Nov 11  2001 libcfont.so.0.0.0
+-rw-r--r--    1 root     root       248900 Mar 28  2002 libparted-1.4.so.14.3.7
+-rw-r--r--    1 root     root       237956 Jul  5  2002 libncurses.so.4.2
+-rw-r--r--    1 root     root        49424 Oct 18  2002 libdb1-2.2.5.so
+-rw-r--r--    1 root     root       565940 Sep 22  2003 libc.so.5.4.46
+-rw-r--r--    1 root     root        30180 Sep 22  2003 libm.so.5.0.9
+-rw-r--r--    1 root     root       378512 Oct  1  2003 libslang.so.1.4.9
+-rw-r--r--    1 root     root       378512 Oct  1  2003 libslang.so.1-UTF8.4.9
+-rw-r--r--    1 root     root        26592 Dec 10  2003 libpopt.so.0.0.0
+-rw-r--r--    1 root     root       293256 Dec 22  2003 libdb2.so.2.7.7
+-rw-r--r--    1 root     root       261116 Dec 22  2003 libdb.so.3
+-rw-r--r--    1 root     root       172464 Jan 21  2004 libreadline.so.4.3
+-rw-r--r--    1 root     root        23856 Jan 21  2004 libhistory.so.4.3
+-rw-r--r--    1 root     root        22336 Feb  2  2004 libacl.so.1.1.0
+-rw-r--r--    1 root     root       252272 Mar 22  2004 libncurses.so.5.4
+-rw-r--r--    1 root     root        26864 Apr  9  2004 libdevmapper.so.1.00
+-rw-r--r--    1 root     root        47624 Apr 13  2004 libproc.so.3.2.1
+-rw-r--r--    1 root     root        11024 Apr 13  2004 libcap.so.1.10
+drwxr-xr-x    2 root     root         4096 Apr 16  2004 init
+-rw-r--r--    1 root     root        10824 Apr 27  2004 libattr.so.1.1.0
+-rw-r--r--    1 root     root        22016 Apr 29  2004 libiw.so.27
+-rw-r--r--    1 root     root        28400 May  2  2004 libwrap.so.0.7.6
+-rw-r--r--    1 root     root         9980 May  4  2004 libpamc.so.0.76
+-rw-r--r--    1 root     root         8800 May  4  2004 libpam_misc.so.0.76
+-rw-r--r--    1 root     root        30360 May  4  2004 libpam.so.0.76
+-rw-r--r--    1 root     root         9128 May  5  2004 libuuid.so.1.2
+-rw-r--r--    1 root     root        17008 May  5  2004 libss.so.2.0
+-rw-r--r--    1 root     root         5900 May  5  2004 libcom_err.so.2.1
+-rw-r--r--    1 root     root        23504 May  5  2004 libblkid.so.1.0
+-rw-r--r--    1 root     root        86564 May  5  2004 libext2fs.so.2.4
+-rw-r--r--    1 root     root        16720 May  5  2004 libe2p.so.2.3
+-rw-r--r--    1 root     root       364232 May  8  2004 libparted-1.6.so.0.0.9
+lrwxrwxrwx    1 root     root           16 May 21  2004 libwrap.so.0 -> libwrap.so.0.7.6
+lrwxrwxrwx    1 root     root           19 May 21  2004 libtermcap.so.2 -> libtermcap.so.2.0.8
+lrwxrwxrwx    1 root     root           22 May 21  2004 libslang.so.1-UTF8 -> libslang.so.1-UTF8.4.9
+lrwxrwxrwx    1 root     root           17 May 21  2004 libslang.so.1 -> libslang.so.1.4.9
+lrwxrwxrwx    1 root     root           18 May 21  2004 libreadline.so.4 -> libreadline.so.4.3
+lrwxrwxrwx    1 root     root           18 May 21  2004 libreadline.so.2 -> libreadline.so.2.1
+lrwxrwxrwx    1 root     root           16 May 21  2004 libpopt.so.0 -> libpopt.so.0.0.0
+lrwxrwxrwx    1 root     root           23 May 21  2004 libparted-1.4.so.14 -> libparted-1.4.so.14.3.7
+lrwxrwxrwx    1 root     root           17 May 21  2004 libncurses.so.5 -> libncurses.so.5.4
+lrwxrwxrwx    1 root     root           17 May 21  2004 libncurses.so.4 -> libncurses.so.4.2
+lrwxrwxrwx    1 root     root           13 May 21  2004 libm.so.5 -> libm.so.5.0.9
+lrwxrwxrwx    1 root     root           17 May 21  2004 libhistory.so.4 -> libhistory.so.4.3
+lrwxrwxrwx    1 root     root           15 May 21  2004 libdl.so.1 -> libdl.so.1.9.11
+lrwxrwxrwx    1 root     root           15 May 21  2004 libdb2.so.2 -> libdb2.so.2.7.7
+lrwxrwxrwx    1 root     root           15 May 21  2004 libdb1.so.2 -> libdb1-2.2.5.so
+lrwxrwxrwx    1 root     root           15 May 21  2004 libdb.so.2 -> libdb1-2.2.5.so
+lrwxrwxrwx    1 root     root           19 May 21  2004 libctutils.so.0 -> libctutils.so.0.0.0
+lrwxrwxrwx    1 root     root           19 May 21  2004 libconsole.so.0 -> libconsole.so.0.0.0
+lrwxrwxrwx    1 root     root           17 May 21  2004 libcfont.so.0 -> libcfont.so.0.0.0
+lrwxrwxrwx    1 root     root           14 May 21  2004 libcap.so.1 -> libcap.so.1.10
+lrwxrwxrwx    1 root     root           14 May 21  2004 libc.so.5 -> libc.so.5.4.46
+lrwxrwxrwx    1 root     root           16 May 21  2004 libattr.so.1 -> libattr.so.1.1.0
+lrwxrwxrwx    1 root     root           15 May 21  2004 libacl.so.1 -> libacl.so.1.1.0
+lrwxrwxrwx    1 root     root           18 May 21  2004 ld-linux.so.1 -> ld-linux.so.1.9.11
+lrwxrwxrwx    1 root     root           15 May 24  2004 libpamc.so.0 -> libpamc.so.0.76
+lrwxrwxrwx    1 root     root           19 May 24  2004 libpam_misc.so.0 -> libpam_misc.so.0.76
+lrwxrwxrwx    1 root     root           14 May 24  2004 libpam.so.0 -> libpam.so.0.76
+drwxr-xr-x    2 root     root         4096 May 24  2004 security
+lrwxrwxrwx    1 root     root           17 May 24  2004 libcom_err.so.2 -> libcom_err.so.2.1
+lrwxrwxrwx    1 root     root           14 May 24  2004 libuuid.so.1 -> libuuid.so.1.2
+lrwxrwxrwx    1 root     root           22 May 24  2004 libparted-1.6.so.0 -> libparted-1.6.so.0.0.9
+lrwxrwxrwx    1 root     root           16 May 24  2004 libext2fs.so.2 -> libext2fs.so.2.4
+lrwxrwxrwx    1 root     root           13 May 24  2004 libe2p.so.2 -> libe2p.so.2.3
+lrwxrwxrwx    1 root     root           15 May 24  2004 libblkid.so.1 -> libblkid.so.1.0
+lrwxrwxrwx    1 root     root           12 May 24  2004 libss.so.2 -> libss.so.2.0
+drwxr-xr-x    7 root     root         4096 May 24  2004 modules
+-rw-r--r--    1 root     root        32324 Dec 18 20:16 libgcc_s.so.1
+-rw-r--r--    1 root     root        64924 Dec 26 20:41 libresolv-2.3.2.so
+-rw-r--r--    1 root     root         4396 Dec 26 20:41 libpcprofile.so
+-rw-r--r--    1 root     root        39832 Dec 26 20:41 libnss_nisplus-2.3.2.so
+-rw-r--r--    1 root     root        32480 Dec 26 20:41 libnss_nis-2.3.2.so
+-rw-r--r--    1 root     root        14268 Dec 26 20:41 libnss_hesiod-2.3.2.so
+-rw-r--r--    1 root     root        34520 Dec 26 20:41 libnss_files-2.3.2.so
+-rw-r--r--    1 root     root        13976 Dec 26 20:41 libnss_dns-2.3.2.so
+-rw-r--r--    1 root     root        27304 Dec 26 20:41 libnss_compat-2.3.2.so
+-rw-r--r--    1 root     root        73528 Dec 26 20:41 libnsl-2.3.2.so
+-rw-r--r--    1 root     root        11264 Dec 26 20:41 libmemusage.so
+-rw-r--r--    1 root     root       134464 Dec 26 20:41 libm-2.3.2.so
+-rw-r--r--    1 root     root         9872 Dec 26 20:41 libdl-2.3.2.so
+-rw-r--r--    1 root     root        18780 Dec 26 20:41 libcrypt-2.3.2.so
+-rw-r--r--    1 root     root      1244016 Dec 26 20:41 libc-2.3.2.so
+-rw-r--r--    1 root     root         9532 Dec 26 20:41 libanl-2.3.2.so
+-rw-r--r--    1 root     root         3552 Dec 26 20:41 libBrokenLocale-2.3.2.so
+-rwxr-xr-x    1 root     root        90088 Dec 26 20:41 ld-2.3.2.so
+-rw-r--r--    1 root     root         7844 Dec 26 20:41 libutil-2.3.2.so
+-rw-r--r--    1 root     root        18084 Dec 26 20:41 libthread_db-1.0.so
+-rw-r--r--    1 root     root        26884 Dec 26 20:41 librt-2.3.2.so
+-rw-r--r--    1 root     root        11984 Dec 26 20:41 libSegFault.so
+-rw-r--r--    1 root     root        81127 Dec 26 20:41 libpthread-0.10.so
+drwxr-xr-x    2 root     root         4096 Jan  5 11:42 tls
+lrwxrwxrwx    1 root     root           16 Jan  5 11:42 libutil.so.1 -> libutil-2.3.2.so
+lrwxrwxrwx    1 root     root           19 Jan  5 11:42 libthread_db.so.1 -> libthread_db-1.0.so
+lrwxrwxrwx    1 root     root           14 Jan  5 11:42 librt.so.1 -> librt-2.3.2.so
+lrwxrwxrwx    1 root     root           18 Jan  5 11:42 libresolv.so.2 -> libresolv-2.3.2.so
+lrwxrwxrwx    1 root     root           18 Jan  5 11:42 libpthread.so.0 -> libpthread-0.10.so
+lrwxrwxrwx    1 root     root           23 Jan  5 11:42 libnss_nisplus.so.2 -> libnss_nisplus-2.3.2.so
+lrwxrwxrwx    1 root     root           19 Jan  5 11:42 libnss_nis.so.2 -> libnss_nis-2.3.2.so
+lrwxrwxrwx    1 root     root           22 Jan  5 11:42 libnss_hesiod.so.2 -> libnss_hesiod-2.3.2.so
+lrwxrwxrwx    1 root     root           21 Jan  5 11:42 libnss_files.so.2 -> libnss_files-2.3.2.so
+lrwxrwxrwx    1 root     root           19 Jan  5 11:42 libnss_dns.so.2 -> libnss_dns-2.3.2.so
+lrwxrwxrwx    1 root     root           22 Jan  5 11:42 libnss_compat.so.2 -> libnss_compat-2.3.2.so
+lrwxrwxrwx    1 root     root           15 Jan  5 11:42 libnsl.so.1 -> libnsl-2.3.2.so
+lrwxrwxrwx    1 root     root           13 Jan  5 11:42 libm.so.6 -> libm-2.3.2.so
+lrwxrwxrwx    1 root     root           14 Jan  5 11:42 libdl.so.2 -> libdl-2.3.2.so
+lrwxrwxrwx    1 root     root           17 Jan  5 11:42 libcrypt.so.1 -> libcrypt-2.3.2.so
+lrwxrwxrwx    1 root     root           13 Jan  5 11:42 libc.so.6 -> libc-2.3.2.so
+lrwxrwxrwx    1 root     root           15 Jan  5 11:42 libanl.so.1 -> libanl-2.3.2.so
+lrwxrwxrwx    1 root     root           24 Jan  5 11:42 libBrokenLocale.so.1 -> libBrokenLocale-2.3.2.so
+lrwxrwxrwx    1 root     root           11 Jan  5 11:42 ld-linux.so.2 -> ld-2.3.2.so
+lrwxrwxrwx    1 root     root           16 Jan  5 11:43 cpp -> /usr/bin/cpp-3.3
+
+/sys:
+total 0
+drwxr-xr-x    8 root     root            0 Mar 21 11:17 cdev
+drwxr-xr-x    2 root     root            0 Mar 21 11:18 power
+drwxr-xr-x    3 root     root            0 Mar 21 11:18 firmware
+drwxr-xr-x    7 root     root            0 Mar 21 11:18 devices
+drwxr-xr-x   14 root     root            0 Mar 21 11:18 class
+drwxr-xr-x    8 root     root            0 Mar 21 11:18 bus
+drwxr-xr-x   19 root     root            0 Mar 21 11:18 block
+
+/proc:
+total 515530
+dr-xr-xr-x    6 root     root            0 Mar 21 11:18 bus
+-r--------    1 root     root            0 Mar 21 11:19 kmsg
+-rw-r--r--    1 root     root            0 Mar 21 11:19 mtrr
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 99
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 9
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 8
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 742
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 7
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 6
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 5
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 472
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 4
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 3
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1529
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1524
+dr-xr-xr-x    3 distccd  nobody          0 Mar 29 07:36 1518
+dr-xr-xr-x    3 distccd  nobody          0 Mar 29 07:36 1517
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1492
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1422
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1405
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1402
+dr-xr-xr-x    3 daemon   daemon          0 Mar 29 07:36 1343
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 11
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3431
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3426
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3415
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3410
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3401
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3388
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3387
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3382
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3381
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3377
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3375
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3374
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3372
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3370
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3339
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3330
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3327
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3325
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3322
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3310
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3255
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 3246
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2161
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2148
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2147
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2146
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2145
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2144
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2022
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2013
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 2008
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1867
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1783
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1782
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1769
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1765
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1763
+dr-xr-xr-x    3 daemon   daemon          0 Mar 29 07:36 1761
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1758
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1753
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1734
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1731
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1730
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1729
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1660
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1653
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 1648
+dr-xr-xr-x    3 root     smmsp           0 Mar 29 07:36 1637
+dr-xr-xr-x    3 distccd  nobody          0 Mar 29 07:36 1636
+dr-xr-xr-x    3 distccd  nobody          0 Mar 29 07:36 1541
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3599
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3434
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3616
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3611
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 4241
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3954
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3951
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 3625
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 5129
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 5128
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 5126
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 7601
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 7599
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 7597
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 7595
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 7593
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 7591
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 7560
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 7558
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6397
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 6395
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6393
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 6391
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6389
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 6387
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6385
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 6383
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6381
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 6379
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6335
+dr-xr-xr-x    3 dchitwoo utmp            0 Mar 29 07:36 6334
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6218
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6217
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6145
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 07:36 6144
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 6142
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 07:36 19102
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 07:36 19101
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 19099
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 07:36 18225
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 07:36 16090
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 07:36 16067
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 07:36 16040
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 07:36 16038
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 07:36 16037
+dr-xr-xr-x    3 root     root            0 Mar 29 07:36 16035
+lrwxrwxrwx    1 root     root           64 Mar 29 10:58 self -> 28680
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 10:58 19328
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 11:24 19327
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 11:24 14484
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 11:24 14475
+dr-xr-xr-x    3 dchitwoo dchitwoo        0 Mar 29 11:24 14466
+-r--r--r--    1 root     root            0 Mar 29 11:25 vmstat
+-r--r--r--    1 root     root            0 Mar 29 11:25 version
+-r--r--r--    1 root     root            0 Mar 29 11:25 uptime
+dr-xr-xr-x    4 root     root            0 Mar 29 11:25 tty
+dr-xr-xr-x    2 root     root            0 Mar 29 11:25 sysvipc
+dr-xr-xr-x   11 root     root            0 Mar 29 11:25 sys
+-r--r--r--    1 root     root            0 Mar 29 11:25 swaps
+-r--r--r--    1 root     root            0 Mar 29 11:25 stat
+-rw-r--r--    1 root     root            0 Mar 29 11:25 slabinfo
+dr-xr-xr-x    2 root     root            0 Mar 29 11:25 scsi
+-r--r--r--    1 root     root            0 Mar 29 11:25 partitions
+dr-xr-xr-x    5 root     root            0 Mar 29 11:25 net
+-r--r--r--    1 root     root            0 Mar 29 11:25 mtd
+lrwxrwxrwx    1 root     root           11 Mar 29 11:25 mounts -> self/mounts
+-r--r--r--    1 root     root            0 Mar 29 11:25 modules
+-r--r--r--    1 root     root            0 Mar 29 11:25 misc
+-r--r--r--    1 root     root            0 Mar 29 11:25 meminfo
+-r--r--r--    1 root     root            0 Mar 29 11:25 locks
+-r--r--r--    1 root     root            0 Mar 29 11:25 loadavg
+-r--------    1 root     root     527900672 Mar 29 11:25 kcore
+-r--r--r--    1 root     root            0 Mar 29 11:25 kallsyms
+dr-xr-xr-x   18 root     root            0 Mar 29 11:25 irq
+-r--r--r--    1 root     root            0 Mar 29 11:25 ioports
+-r--r--r--    1 root     root            0 Mar 29 11:25 iomem
+-r--r--r--    1 root     root            0 Mar 29 11:25 interrupts
+dr-xr-xr-x    4 root     root            0 Mar 29 11:25 ide
+dr-xr-xr-x    3 root     root            0 Mar 29 11:25 fs
+-r--r--r--    1 root     root            0 Mar 29 11:25 filesystems
+-r--r--r--    1 root     root            0 Mar 29 11:25 fb
+-r--r--r--    1 root     root            0 Mar 29 11:25 execdomains
+dr-xr-xr-x    3 root     root            0 Mar 29 11:25 driver
+dr-xr-xr-x    3 root     root            0 Mar 29 11:25 dri
+-r--r--r--    1 root     root            0 Mar 29 11:25 dma
+-r--r--r--    1 root     root            0 Mar 29 11:25 diskstats
+-r--r--r--    1 root     root            0 Mar 29 11:25 devices
+-r--r--r--    1 root     root            0 Mar 29 11:25 crypto
+-r--r--r--    1 root     root            0 Mar 29 11:25 cpuinfo
+-r--r--r--    1 root     root            0 Mar 29 11:25 cmdline
+-r--r--r--    1 root     root            0 Mar 29 11:25 buddyinfo
+dr-xr-xr-x    5 root     root            0 Mar 29 11:25 asound
+dr-xr-xr-x    4 root     root            0 Mar 29 11:25 acpi
+dr-xr-xr-x    3 rmcnabb  users           0 Mar 29 11:25 28680
+
+/dev:
+total 16
+brw-rw----    1 root     floppy     2,  53 Mar  3  1999 fd1u820
+brw-rw----    1 root     floppy     2,  17 Mar  3  1999 fd1u720
+brw-rw----    1 root     floppy     2,  13 Mar  3  1999 fd1u360
+brw-rw----    1 root     floppy     2,  33 Mar  3  1999 fd1u2880
+brw-rw----    1 root     floppy     2,  45 Mar  3  1999 fd1u1680
+brw-rw----    1 root     floppy     2,  29 Mar  3  1999 fd1u1440
+brw-rw----    1 root     floppy     2,  25 Mar  3  1999 fd1h720
+brw-rw----    1 root     floppy     2,  49 Mar  3  1999 fd1h410
+brw-rw----    1 root     floppy     2,  21 Mar  3  1999 fd1h360
+brw-rw----    1 root     floppy     2,  41 Mar  3  1999 fd1h1440
+brw-rw----    1 root     floppy     2,   9 Mar  3  1999 fd1h1200
+brw-rw----    1 root     floppy     2,   5 Mar  3  1999 fd1d360
+brw-rw----    1 root     floppy     2,  37 Mar  3  1999 fd1CompaQ
+brw-rw----    1 root     floppy     2,   1 Mar  3  1999 fd1
+brw-rw----    1 root     disk       3,   9 Mar  3  1999 hda9
+brw-rw----    1 root     disk       3,   8 Mar  3  1999 hda8
+brw-rw----    1 root     disk       3,   7 Mar  3  1999 hda7
+brw-rw----    1 root     disk       3,   6 Mar  3  1999 hda6
+brw-rw----    1 root     disk       3,   5 Mar  3  1999 hda5
+brw-rw----    1 root     disk       3,   4 Mar  3  1999 hda4
+brw-rw----    1 root     disk       3,   3 Mar  3  1999 hda3
+brw-rw----    1 root     disk       3,   2 Mar  3  1999 hda2
+brw-rw----    1 root     disk       3,  13 Mar  3  1999 hda13
+brw-rw----    1 root     disk       3,  12 Mar  3  1999 hda12
+brw-rw----    1 root     disk       3,  11 Mar  3  1999 hda11
+brw-rw----    1 root     disk       3,  10 Mar  3  1999 hda10
+brw-rw----    1 root     disk       3,   1 Mar  3  1999 hda1
+brw-rw----    1 root     disk       3,   0 Mar  3  1999 hda
+brw-rw----    1 root     floppy     2,  69 Mar  3  1999 fd1u830
+brw-rw----    1 root     floppy     2, 121 Mar  3  1999 fd1u800
+brw-rw----    1 root     floppy     2, 113 Mar  3  1999 fd1u3840
+brw-rw----    1 root     floppy     2, 109 Mar  3  1999 fd1u3520
+brw-rw----    1 root     floppy     2, 105 Mar  3  1999 fd1u3200
+brw-rw----    1 root     floppy     2, 101 Mar  3  1999 fd1u1920
+brw-rw----    1 root     floppy     2, 117 Mar  3  1999 fd1u1840
+brw-rw----    1 root     floppy     2,  97 Mar  3  1999 fd1u1760
+brw-rw----    1 root     floppy     2,  77 Mar  3  1999 fd1u1743
+brw-rw----    1 root     floppy     2,  61 Mar  3  1999 fd1u1722
+brw-rw----    1 root     floppy     2, 125 Mar  3  1999 fd1u1600
+brw-rw----    1 root     floppy     2,  89 Mar  3  1999 fd1u1120
+brw-rw----    1 root     floppy     2,  85 Mar  3  1999 fd1u1040
+brw-rw----    1 root     floppy     2,  81 Mar  3  1999 fd1h880
+brw-rw----    1 root     floppy     2,  65 Mar  3  1999 fd1h420
+brw-rw----    1 root     floppy     2,  93 Mar  3  1999 fd1h1600
+brw-rw----    1 root     floppy     2,  73 Mar  3  1999 fd1h1494
+brw-rw----    1 root     floppy     2,  57 Mar  3  1999 fd1h1476
+brw-rw----    1 root     disk       3,  73 Mar  3  1999 hdb9
+brw-rw----    1 root     disk       3,  72 Mar  3  1999 hdb8
+brw-rw----    1 root     disk       3,  71 Mar  3  1999 hdb7
+brw-rw----    1 root     disk       3,  70 Mar  3  1999 hdb6
+brw-rw----    1 root     disk       3,  69 Mar  3  1999 hdb5
+brw-rw----    1 root     disk       3,  68 Mar  3  1999 hdb4
+brw-rw----    1 root     disk       3,  67 Mar  3  1999 hdb3
+brw-rw----    1 root     disk       3,  84 Mar  3  1999 hdb20
+brw-rw----    1 root     disk       3,  66 Mar  3  1999 hdb2
+brw-rw----    1 root     disk       3,  83 Mar  3  1999 hdb19
+brw-rw----    1 root     disk       3,  82 Mar  3  1999 hdb18
+brw-rw----    1 root     disk       3,  81 Mar  3  1999 hdb17
+brw-rw----    1 root     disk       3,  80 Mar  3  1999 hdb16
+brw-rw----    1 root     disk       3,  79 Mar  3  1999 hdb15
+brw-rw----    1 root     disk       3,  78 Mar  3  1999 hdb14
+brw-rw----    1 root     disk       3,  77 Mar  3  1999 hdb13
+brw-rw----    1 root     disk       3,  76 Mar  3  1999 hdb12
+brw-rw----    1 root     disk       3,  75 Mar  3  1999 hdb11
+brw-rw----    1 root     disk       3,  74 Mar  3  1999 hdb10
+brw-rw----    1 root     disk       3,  65 Mar  3  1999 hdb1
+brwxrwx--x    1 root     disk       3,  64 Mar  3  1999 hdb
+brw-rw----    1 root     disk       3,  20 Mar  3  1999 hda20
+brw-rw----    1 root     disk       3,  19 Mar  3  1999 hda19
+brw-rw----    1 root     disk       3,  18 Mar  3  1999 hda18
+brw-rw----    1 root     disk       3,  17 Mar  3  1999 hda17
+brw-rw----    1 root     disk       3,  16 Mar  3  1999 hda16
+brw-rw----    1 root     disk       3,  15 Mar  3  1999 hda15
+brw-rw----    1 root     disk       3,  14 Mar  3  1999 hda14
+brw-rw----    1 root     disk      13,   8 Mar  3  1999 xda8
+brw-rw----    1 root     disk      13,   7 Mar  3  1999 xda7
+brw-rw----    1 root     disk      13,   6 Mar  3  1999 xda6
+brw-rw----    1 root     disk      13,   5 Mar  3  1999 xda5
+brw-rw----    1 root     disk      13,   4 Mar  3  1999 xda4
+brw-rw----    1 root     disk      13,   3 Mar  3  1999 xda3
+brw-rw----    1 root     disk      13,   2 Mar  3  1999 xda2
+brw-rw----    1 root     disk      13,   1 Mar  3  1999 xda1
+brw-rw----    1 root     disk      13,   0 Mar  3  1999 xda
+brw-rw----    1 root     disk      13,  72 Mar  3  1999 xdb8
+brw-rw----    1 root     disk      13,  71 Mar  3  1999 xdb7
+brw-rw----    1 root     disk      13,  70 Mar  3  1999 xdb6
+brw-rw----    1 root     disk      13,  69 Mar  3  1999 xdb5
+brw-rw----    1 root     disk      13,  68 Mar  3  1999 xdb4
+brw-rw----    1 root     disk      13,  67 Mar  3  1999 xdb3
+brw-rw----    1 root     disk      13,  66 Mar  3  1999 xdb2
+brw-rw----    1 root     disk      13,  65 Mar  3  1999 xdb1
+brw-rw----    1 root     disk      13,  64 Mar  3  1999 xdb
+brw-rw----    1 root     disk       8,  20 Mar  3  1999 sdb4
+brw-rw----    1 root     disk       8,  19 Mar  3  1999 sdb3
+brw-rw----    1 root     disk       8,  18 Mar  3  1999 sdb2
+brw-rw----    1 root     disk       8,  17 Mar  3  1999 sdb1
+brw-rw----    1 root     disk       8,  16 Mar  3  1999 sdb
+brw-rw----    1 root     disk       8,   9 Mar  3  1999 sda9
+brw-rw----    1 root     disk       8,   8 Mar  3  1999 sda8
+brw-rw----    1 root     disk       8,   7 Mar  3  1999 sda7
+brw-rw----    1 root     disk       8,   6 Mar  3  1999 sda6
+brw-rw----    1 root     disk       8,   5 Mar  3  1999 sda5
+brw-rw----    1 root     disk       8,   4 Mar  3  1999 sda4
+brw-rw----    1 root     disk       8,   3 Mar  3  1999 sda3
+brw-rw----    1 root     disk       8,   2 Mar  3  1999 sda2
+brw-rw----    1 root     disk       8,  15 Mar  3  1999 sda15
+brw-rw----    1 root     disk       8,  14 Mar  3  1999 sda14
+brw-rw----    1 root     disk       8,  13 Mar  3  1999 sda13
+brw-rw----    1 root     disk       8,  12 Mar  3  1999 sda12
+brw-rw----    1 root     disk       8,  11 Mar  3  1999 sda11
+brw-rw----    1 root     disk       8,  10 Mar  3  1999 sda10
+brw-rw----    1 root     disk       8,   1 Mar  3  1999 sda1
+brw-rw----    1 root     disk       8,   0 Mar  3  1999 sda
+brw-rw----    1 root     disk       8,  25 Mar  3  1999 sdb9
+brw-rw----    1 root     disk       8,  24 Mar  3  1999 sdb8
+brw-rw----    1 root     disk       8,  23 Mar  3  1999 sdb7
+brw-rw----    1 root     disk       8,  22 Mar  3  1999 sdb6
+brw-rw----    1 root     disk       8,  21 Mar  3  1999 sdb5
+brw-rw----    1 root     disk       8,  31 Mar  3  1999 sdb15
+brw-rw----    1 root     disk       8,  30 Mar  3  1999 sdb14
+brw-rw----    1 root     disk       8,  29 Mar  3  1999 sdb13
+brw-rw----    1 root     disk       8,  28 Mar  3  1999 sdb12
+brw-rw----    1 root     disk       8,  27 Mar  3  1999 sdb11
+brw-rw----    1 root     disk       8,  26 Mar  3  1999 sdb10
+crw-rw-rw-    1 root     tty        3, 255 Mar  3  1999 ttyef
+crw-rw-rw-    1 root     tty        3, 254 Mar  3  1999 ttyee
+crw-rw-rw-    1 root     tty        3, 253 Mar  3  1999 ttyed
+crw-rw-rw-    1 root     tty        3, 252 Mar  3  1999 ttyec
+crw-rw-rw-    1 root     tty        3, 251 Mar  3  1999 ttyeb
+crw-rw-rw-    1 root     tty        3, 250 Mar  3  1999 ttyea
+crw-rw-rw-    1 root     tty        2, 255 Mar  3  1999 ptyef
+crw-rw-rw-    1 root     tty        2, 254 Mar  3  1999 ptyee
+crw-rw-rw-    1 root     tty        2, 253 Mar  3  1999 ptyed
+crw-rw-rw-    1 root     tty        2, 252 Mar  3  1999 ptyec
+crw-rw-rw-    1 root     tty        2, 251 Mar  3  1999 ptyeb
+crw-------    1 root     root       7, 135 Mar  3  1999 vcsa7
+crw-------    1 root     sys        7, 134 Mar  3  1999 vcsa6
+crw-------    1 root     sys        7, 133 Mar  3  1999 vcsa5
+crw-------    1 root     sys        7, 132 Mar  3  1999 vcsa4
+crw-------    1 root     sys        7, 131 Mar  3  1999 vcsa3
+crw-------    1 root     sys        7, 130 Mar  3  1999 vcsa2
+crw-------    1 root     sys        7, 129 Mar  3  1999 vcsa1
+crw-------    1 root     root       7, 128 Mar  3  1999 vcsa
+crw-------    1 root     root       7,   8 Mar  3  1999 vcs8
+crw-------    1 root     root       7,   7 Mar  3  1999 vcs7
+crw-------    1 root     sys        7,   6 Mar  3  1999 vcs6
+crw-------    1 root     sys        7,   5 Mar  3  1999 vcs5
+crw-------    1 root     sys        7,   4 Mar  3  1999 vcs4
+crw-------    1 root     sys        7,   3 Mar  3  1999 vcs3
+crw-------    1 root     sys        7,   2 Mar  3  1999 vcs2
+crw-------    1 root     sys        7,   1 Mar  3  1999 vcs1
+crw-------    1 root     root       7,   0 Mar  3  1999 vcs0
+crw--w----    1 dchitwoo dchitwoo   4,   8 Mar  3  1999 tty8
+crw--w----    1 root     root       4,   7 Mar  3  1999 tty7
+crw-------    1 root     root       7, 137 Mar  3  1999 vcsa9
+crw-------    1 root     root       7, 136 Mar  3  1999 vcsa8
+crw-------    1 root     root       7, 147 Mar  3  1999 vcsa19
+crw-------    1 root     root       7, 146 Mar  3  1999 vcsa18
+crw-------    1 root     root       7, 145 Mar  3  1999 vcsa17
+crw-------    1 root     root       7, 144 Mar  3  1999 vcsa16
+crw-------    1 root     root       7, 143 Mar  3  1999 vcsa15
+crw-------    1 root     root       7, 142 Mar  3  1999 vcsa14
+crw-------    1 root     root       7, 141 Mar  3  1999 vcsa13
+crw-------    1 root     root       7, 140 Mar  3  1999 vcsa12
+crw-------    1 root     root       7, 139 Mar  3  1999 vcsa11
+crw-------    1 root     root       7, 138 Mar  3  1999 vcsa10
+crw-------    1 root     root       7,   9 Mar  3  1999 vcs9
+crw-------    1 root     root       7,  19 Mar  3  1999 vcs19
+crw-------    1 root     root       7,  18 Mar  3  1999 vcs18
+crw-------    1 root     root       7,  17 Mar  3  1999 vcs17
+crw-------    1 root     root       7,  16 Mar  3  1999 vcs16
+crw-------    1 root     root       7,  15 Mar  3  1999 vcs15
+crw-------    1 root     root       7,  14 Mar  3  1999 vcs14
+crw-------    1 root     root       7,  13 Mar  3  1999 vcs13
+crw-------    1 root     root       7,  12 Mar  3  1999 vcs12
+crw-------    1 root     root       7,  11 Mar  3  1999 vcs11
+crw-------    1 root     root       7,  10 Mar  3  1999 vcs10
+crw--w----    1 root     tty        4,   9 Mar  3  1999 tty9
+crw--w----    1 root     tty        4,  19 Mar  3  1999 tty19
+crw--w----    1 root     tty        4,  18 Mar  3  1999 tty18
+crw--w----    1 root     tty        4,  17 Mar  3  1999 tty17
+crw--w----    1 root     tty        4,  16 Mar  3  1999 tty16
+crw--w----    1 root     tty        4,  15 Mar  3  1999 tty15
+crw--w----    1 root     tty        4,  14 Mar  3  1999 tty14
+crw--w----    1 root     tty        4,  13 Mar  3  1999 tty13
+crw--w----    1 root     tty        4,  12 Mar  3  1999 tty12
+crw--w----    1 root     tty        4,  11 Mar  3  1999 tty11
+crw--w----    1 root     tty        4,  10 Mar  3  1999 tty10
+crw-------    1 root     root       7, 159 Mar  3  1999 vcsa31
+crw-------    1 root     root       7, 158 Mar  3  1999 vcsa30
+crw-------    1 root     root       7, 157 Mar  3  1999 vcsa29
+crw-------    1 root     root       7, 156 Mar  3  1999 vcsa28
+crw-------    1 root     root       7, 155 Mar  3  1999 vcsa27
+crw-------    1 root     root       7, 154 Mar  3  1999 vcsa26
+crw-------    1 root     root       7, 153 Mar  3  1999 vcsa25
+crw-------    1 root     root       7, 152 Mar  3  1999 vcsa24
+crw-------    1 root     root       7, 151 Mar  3  1999 vcsa23
+crw-------    1 root     root       7, 150 Mar  3  1999 vcsa22
+crw-------    1 root     root       7, 149 Mar  3  1999 vcsa21
+crw-------    1 root     root       7, 148 Mar  3  1999 vcsa20
+crw-------    1 root     root       7,  31 Mar  3  1999 vcs31
+crw-------    1 root     root       7,  30 Mar  3  1999 vcs30
+crw-------    1 root     root       7,  29 Mar  3  1999 vcs29
+crw-------    1 root     root       7,  28 Mar  3  1999 vcs28
+crw-------    1 root     root       7,  27 Mar  3  1999 vcs27
+crw-------    1 root     root       7,  26 Mar  3  1999 vcs26
+crw-------    1 root     root       7,  25 Mar  3  1999 vcs25
+crw-------    1 root     root       7,  24 Mar  3  1999 vcs24
+crw-------    1 root     root       7,  23 Mar  3  1999 vcs23
+crw-------    1 root     root       7,  22 Mar  3  1999 vcs22
+crw-------    1 root     root       7,  21 Mar  3  1999 vcs21
+crw-------    1 root     root       7,  20 Mar  3  1999 vcs20
+crw--w----    1 root     tty        4,  31 Mar  3  1999 tty31
+crw--w----    1 root     tty        4,  30 Mar  3  1999 tty30
+crw--w----    1 root     tty        4,  29 Mar  3  1999 tty29
+crw--w----    1 root     tty        4,  28 Mar  3  1999 tty28
+crw--w----    1 root     tty        4,  27 Mar  3  1999 tty27
+crw--w----    1 root     tty        4,  26 Mar  3  1999 tty26
+crw--w----    1 root     tty        4,  25 Mar  3  1999 tty25
+crw--w----    1 root     tty        4,  24 Mar  3  1999 tty24
+crw--w----    1 root     tty        4,  23 Mar  3  1999 tty23
+crw--w----    1 root     tty        4,  22 Mar  3  1999 tty22
+crw--w----    1 root     tty        4,  21 Mar  3  1999 tty21
+crw--w----    1 root     tty        4,  20 Mar  3  1999 tty20
+crw-------    1 root     root       7, 170 Mar  3  1999 vcsa42
+crw-------    1 root     root       7, 169 Mar  3  1999 vcsa41
+crw-------    1 root     root       7, 168 Mar  3  1999 vcsa40
+crw-------    1 root     root       7, 167 Mar  3  1999 vcsa39
+crw-------    1 root     root       7, 166 Mar  3  1999 vcsa38
+crw-------    1 root     root       7, 165 Mar  3  1999 vcsa37
+crw-------    1 root     root       7, 164 Mar  3  1999 vcsa36
+crw-------    1 root     root       7, 163 Mar  3  1999 vcsa35
+crw-------    1 root     root       7, 162 Mar  3  1999 vcsa34
+crw-------    1 root     root       7, 161 Mar  3  1999 vcsa33
+crw-------    1 root     root       7, 160 Mar  3  1999 vcsa32
+crw-------    1 root     root       7,  43 Mar  3  1999 vcs43
+crw-------    1 root     root       7,  42 Mar  3  1999 vcs42
+crw-------    1 root     root       7,  41 Mar  3  1999 vcs41
+crw-------    1 root     root       7,  40 Mar  3  1999 vcs40
+crw-------    1 root     root       7,  39 Mar  3  1999 vcs39
+crw-------    1 root     root       7,  38 Mar  3  1999 vcs38
+crw-------    1 root     root       7,  37 Mar  3  1999 vcs37
+crw-------    1 root     root       7,  36 Mar  3  1999 vcs36
+crw-------    1 root     root       7,  35 Mar  3  1999 vcs35
+crw-------    1 root     root       7,  34 Mar  3  1999 vcs34
+crw-------    1 root     root       7,  33 Mar  3  1999 vcs33
+crw-------    1 root     root       7,  32 Mar  3  1999 vcs32
+crw--w----    1 root     tty        4,  43 Mar  3  1999 tty43
+crw--w----    1 root     tty        4,  42 Mar  3  1999 tty42
+crw--w----    1 root     tty        4,  41 Mar  3  1999 tty41
+crw--w----    1 root     tty        4,  40 Mar  3  1999 tty40
+crw--w----    1 root     tty        4,  39 Mar  3  1999 tty39
+crw--w----    1 root     tty        4,  38 Mar  3  1999 tty38
+crw--w----    1 root     tty        4,  37 Mar  3  1999 tty37
+crw--w----    1 root     tty        4,  36 Mar  3  1999 tty36
+crw--w----    1 root     tty        4,  35 Mar  3  1999 tty35
+crw--w----    1 root     tty        4,  34 Mar  3  1999 tty34
+crw--w----    1 root     tty        4,  33 Mar  3  1999 tty33
+crw--w----    1 root     tty        4,  32 Mar  3  1999 tty32
+crw-------    1 root     root       7, 182 Mar  3  1999 vcsa54
+crw-------    1 root     root       7, 181 Mar  3  1999 vcsa53
+crw-------    1 root     root       7, 180 Mar  3  1999 vcsa52
+crw-------    1 root     root       7, 179 Mar  3  1999 vcsa51
+crw-------    1 root     root       7, 178 Mar  3  1999 vcsa50
+crw-------    1 root     root       7, 177 Mar  3  1999 vcsa49
+crw-------    1 root     root       7, 176 Mar  3  1999 vcsa48
+crw-------    1 root     root       7, 175 Mar  3  1999 vcsa47
+crw-------    1 root     root       7, 174 Mar  3  1999 vcsa46
+crw-------    1 root     root       7, 173 Mar  3  1999 vcsa45
+crw-------    1 root     root       7, 172 Mar  3  1999 vcsa44
+crw-------    1 root     root       7, 171 Mar  3  1999 vcsa43
+crw-------    1 root     root       7,  54 Mar  3  1999 vcs54
+crw-------    1 root     root       7,  53 Mar  3  1999 vcs53
+crw-------    1 root     root       7,  52 Mar  3  1999 vcs52
+crw-------    1 root     root       7,  51 Mar  3  1999 vcs51
+crw-------    1 root     root       7,  50 Mar  3  1999 vcs50
+crw-------    1 root     root       7,  49 Mar  3  1999 vcs49
+crw-------    1 root     root       7,  48 Mar  3  1999 vcs48
+crw-------    1 root     root       7,  47 Mar  3  1999 vcs47
+crw-------    1 root     root       7,  46 Mar  3  1999 vcs46
+crw-------    1 root     root       7,  45 Mar  3  1999 vcs45
+crw-------    1 root     root       7,  44 Mar  3  1999 vcs44
+crw--w----    1 root     tty        4,  55 Mar  3  1999 tty55
+crw--w----    1 root     tty        4,  54 Mar  3  1999 tty54
+crw--w----    1 root     tty        4,  53 Mar  3  1999 tty53
+crw--w----    1 root     tty        4,  52 Mar  3  1999 tty52
+crw--w----    1 root     tty        4,  51 Mar  3  1999 tty51
+crw--w----    1 root     tty        4,  50 Mar  3  1999 tty50
+crw--w----    1 root     tty        4,  49 Mar  3  1999 tty49
+crw--w----    1 root     tty        4,  48 Mar  3  1999 tty48
+crw--w----    1 root     tty        4,  47 Mar  3  1999 tty47
+crw--w----    1 root     tty        4,  46 Mar  3  1999 tty46
+crw--w----    1 root     tty        4,  45 Mar  3  1999 tty45
+crw--w----    1 root     tty        4,  44 Mar  3  1999 tty44
+crw-------    1 root     root       7, 191 Mar  3  1999 vcsa63
+crw-------    1 root     root       7, 190 Mar  3  1999 vcsa62
+crw-------    1 root     root       7, 189 Mar  3  1999 vcsa61
+crw-------    1 root     root       7, 188 Mar  3  1999 vcsa60
+crw-------    1 root     root       7, 187 Mar  3  1999 vcsa59
+crw-------    1 root     root       7, 186 Mar  3  1999 vcsa58
+crw-------    1 root     root       7, 185 Mar  3  1999 vcsa57
+crw-------    1 root     root       7, 184 Mar  3  1999 vcsa56
+crw-------    1 root     root       7, 183 Mar  3  1999 vcsa55
+crw-------    1 root     root       7,  63 Mar  3  1999 vcs63
+crw-------    1 root     root       7,  62 Mar  3  1999 vcs62
+crw-------    1 root     root       7,  61 Mar  3  1999 vcs61
+crw-------    1 root     root       7,  60 Mar  3  1999 vcs60
+crw-------    1 root     root       7,  59 Mar  3  1999 vcs59
+crw-------    1 root     root       7,  58 Mar  3  1999 vcs58
+crw-------    1 root     root       7,  57 Mar  3  1999 vcs57
+crw-------    1 root     root       7,  56 Mar  3  1999 vcs56
+crw-------    1 root     root       7,  55 Mar  3  1999 vcs55
+crw-rw----    1 root     dialout    4,  67 Mar  3  1999 ttyS3
+crw-rw----    1 root     dialout    4,  66 Mar  3  1999 ttyS2
+crw-rw----    1 root     dialout    4,  65 Mar  3  1999 ttyS1
+crw-rw----    1 root     dialout    4,  64 Mar  3  1999 ttyS0
+crw--w----    1 root     tty        4,  63 Mar  3  1999 tty63
+crw--w----    1 root     tty        4,  62 Mar  3  1999 tty62
+crw--w----    1 root     tty        4,  61 Mar  3  1999 tty61
+crw--w----    1 root     tty        4,  60 Mar  3  1999 tty60
+crw--w----    1 root     tty        4,  59 Mar  3  1999 tty59
+crw--w----    1 root     tty        4,  58 Mar  3  1999 tty58
+crw--w----    1 root     tty        4,  57 Mar  3  1999 tty57
+crw--w----    1 root     tty        4,  56 Mar  3  1999 tty56
+crw-rw----    1 root     lp         6,   2 Mar  3  1999 par2
+crw-rw----    1 root     lp         6,   1 Mar  3  1999 par1
+crw-rw----    1 root     lp         6,   0 Mar  3  1999 par0
+crw-rw----    1 root     lp         6,   2 Mar  3  1999 lp2
+crw-rw----    1 root     lp         6,   1 Mar  3  1999 lp1
+crw-rw----    1 root     lp         6,   0 Mar  3  1999 lp0
+crw-------    1 root     root      10,   0 Mar  3  1999 logibm
+crw-------    1 root     root      10,   4 Mar  3  1999 jbm
+crw-------    1 root     root      10,   2 Mar  3  1999 inportbm
+brw-rw----    1 root     disk      22,   5 Mar  3  1999 hdc5
+brw-rw----    1 root     disk      22,   4 Mar  3  1999 hdc4
+brw-rw----    1 root     disk      22,   3 Mar  3  1999 hdc3
+brw-rw----    1 root     disk      22,   2 Mar  3  1999 hdc2
+brw-rw----    1 root     disk      22,   1 Mar  3  1999 hdc1
+brw-rw-rw-    1 root     disk      22,   0 Mar  3  1999 hdc
+crw-------    1 root     root      10,   3 Mar  3  1999 atibm
+brw-rw----    1 root     disk      22,  73 Mar  3  1999 hdd9
+brw-rw----    1 root     disk      22,  72 Mar  3  1999 hdd8
+brw-rw----    1 root     disk      22,  71 Mar  3  1999 hdd7
+brw-rw----    1 root     disk      22,  70 Mar  3  1999 hdd6
+brw-rw----    1 root     disk      22,  69 Mar  3  1999 hdd5
+brw-rw----    1 root     disk      22,  68 Mar  3  1999 hdd4
+brw-rw----    1 root     disk      22,  67 Mar  3  1999 hdd3
+brw-rw----    1 root     disk      22,  66 Mar  3  1999 hdd2
+brw-rw----    1 root     disk      22,  79 Mar  3  1999 hdd15
+brw-rw----    1 root     disk      22,  78 Mar  3  1999 hdd14
+brw-rw----    1 root     disk      22,  77 Mar  3  1999 hdd13
+brw-rw----    1 root     disk      22,  76 Mar  3  1999 hdd12
+brw-rw----    1 root     disk      22,  75 Mar  3  1999 hdd11
+brw-rw----    1 root     disk      22,  74 Mar  3  1999 hdd10
+brw-rw----    1 root     disk      22,  65 Mar  3  1999 hdd1
+brw-rw----    1 root     disk      22,  64 Mar  3  1999 hdd
+brw-rw----    1 root     disk      22,   9 Mar  3  1999 hdc9
+brw-rw----    1 root     disk      22,   8 Mar  3  1999 hdc8
+brw-rw----    1 root     disk      22,   7 Mar  3  1999 hdc7
+brw-rw----    1 root     disk      22,   6 Mar  3  1999 hdc6
+brw-rw----    1 root     disk      22,  20 Mar  3  1999 hdc20
+brw-rw----    1 root     disk      22,  19 Mar  3  1999 hdc19
+brw-rw----    1 root     disk      22,  18 Mar  3  1999 hdc18
+brw-rw----    1 root     disk      22,  17 Mar  3  1999 hdc17
+brw-rw----    1 root     disk      22,  16 Mar  3  1999 hdc16
+brw-rw----    1 root     disk      22,  15 Mar  3  1999 hdc15
+brw-rw----    1 root     disk      22,  14 Mar  3  1999 hdc14
+brw-rw----    1 root     disk      22,  13 Mar  3  1999 hdc13
+brw-rw----    1 root     disk      22,  12 Mar  3  1999 hdc12
+brw-rw----    1 root     disk      22,  11 Mar  3  1999 hdc11
+brw-rw----    1 root     disk      22,  10 Mar  3  1999 hdc10
+brw-rw----    1 root     disk       8,  56 Mar  3  1999 sdd8
+brw-rw----    1 root     disk       8,  55 Mar  3  1999 sdd7
+brw-rw----    1 root     disk       8,  54 Mar  3  1999 sdd6
+brw-rw----    1 root     disk       8,  53 Mar  3  1999 sdd5
+brw-rw----    1 root     disk       8,  52 Mar  3  1999 sdd4
+brw-rw----    1 root     disk       8,  51 Mar  3  1999 sdd3
+brw-rw----    1 root     disk       8,  50 Mar  3  1999 sdd2
+brw-rw----    1 root     disk       8,  49 Mar  3  1999 sdd1
+brw-rw----    1 root     disk       8,  48 Mar  3  1999 sdd
+brw-rw----    1 root     disk       8,  41 Mar  3  1999 sdc9
+brw-rw----    1 root     disk       8,  40 Mar  3  1999 sdc8
+brw-rw----    1 root     disk       8,  39 Mar  3  1999 sdc7
+brw-rw----    1 root     disk       8,  38 Mar  3  1999 sdc6
+brw-rw----    1 root     disk       8,  37 Mar  3  1999 sdc5
+brw-rw----    1 root     disk       8,  36 Mar  3  1999 sdc4
+brw-rw----    1 root     disk       8,  35 Mar  3  1999 sdc3
+brw-rw----    1 root     disk       8,  34 Mar  3  1999 sdc2
+brw-rw----    1 root     disk       8,  47 Mar  3  1999 sdc15
+brw-rw----    1 root     disk       8,  46 Mar  3  1999 sdc14
+brw-rw----    1 root     disk       8,  45 Mar  3  1999 sdc13
+brw-rw----    1 root     disk       8,  44 Mar  3  1999 sdc12
+brw-rw----    1 root     disk       8,  43 Mar  3  1999 sdc11
+brw-rw----    1 root     disk       8,  42 Mar  3  1999 sdc10
+brw-rw----    1 root     disk       8,  33 Mar  3  1999 sdc1
+brw-rw----    1 root     disk       8,  32 Mar  3  1999 sdc
+brw-rw----    1 root     disk      22,  84 Mar  3  1999 hdd20
+brw-rw----    1 root     disk      22,  83 Mar  3  1999 hdd19
+brw-rw----    1 root     disk      22,  82 Mar  3  1999 hdd18
+brw-rw----    1 root     disk      22,  81 Mar  3  1999 hdd17
+brw-rw----    1 root     disk      22,  80 Mar  3  1999 hdd16
+brw-rw----    1 root     disk       8,  87 Mar  3  1999 sdf7
+brw-rw----    1 root     disk       8,  86 Mar  3  1999 sdf6
+brw-rw----    1 root     disk       8,  85 Mar  3  1999 sdf5
+brw-rw----    1 root     disk       8,  84 Mar  3  1999 sdf4
+brw-rw----    1 root     disk       8,  83 Mar  3  1999 sdf3
+brw-rw----    1 root     disk       8,  82 Mar  3  1999 sdf2
+brw-rw----    1 root     disk       8,  81 Mar  3  1999 sdf1
+brw-rw----    1 root     disk       8,  80 Mar  3  1999 sdf
+brw-rw----    1 root     disk       8,  73 Mar  3  1999 sde9
+brw-rw----    1 root     disk       8,  72 Mar  3  1999 sde8
+brw-rw----    1 root     disk       8,  71 Mar  3  1999 sde7
+brw-rw----    1 root     disk       8,  70 Mar  3  1999 sde6
+brw-rw----    1 root     disk       8,  69 Mar  3  1999 sde5
+brw-rw----    1 root     disk       8,  68 Mar  3  1999 sde4
+brw-rw----    1 root     disk       8,  67 Mar  3  1999 sde3
+brw-rw----    1 root     disk       8,  66 Mar  3  1999 sde2
+brw-rw----    1 root     disk       8,  79 Mar  3  1999 sde15
+brw-rw----    1 root     disk       8,  78 Mar  3  1999 sde14
+brw-rw----    1 root     disk       8,  77 Mar  3  1999 sde13
+brw-rw----    1 root     disk       8,  76 Mar  3  1999 sde12
+brw-rw----    1 root     disk       8,  75 Mar  3  1999 sde11
+brw-rw----    1 root     disk       8,  74 Mar  3  1999 sde10
+brw-rw----    1 root     disk       8,  65 Mar  3  1999 sde1
+brw-rw----    1 root     disk       8,  64 Mar  3  1999 sde
+brw-rw----    1 root     disk       8,  57 Mar  3  1999 sdd9
+brw-rw----    1 root     disk       8,  63 Mar  3  1999 sdd15
+brw-rw----    1 root     disk       8,  62 Mar  3  1999 sdd14
+brw-rw----    1 root     disk       8,  61 Mar  3  1999 sdd13
+brw-rw----    1 root     disk       8,  60 Mar  3  1999 sdd12
+brw-rw----    1 root     disk       8,  59 Mar  3  1999 sdd11
+brw-rw----    1 root     disk       8,  58 Mar  3  1999 sdd10
+brw-rw----    1 root     disk       8, 117 Mar  3  1999 sdh5
+brw-rw----    1 root     disk       8, 116 Mar  3  1999 sdh4
+brw-rw----    1 root     disk       8, 115 Mar  3  1999 sdh3
+brw-rw----    1 root     disk       8, 114 Mar  3  1999 sdh2
+brw-rw----    1 root     disk       8, 113 Mar  3  1999 sdh1
+brw-rw----    1 root     disk       8, 112 Mar  3  1999 sdh
+brw-rw----    1 root     disk       8, 105 Mar  3  1999 sdg9
+brw-rw----    1 root     disk       8, 104 Mar  3  1999 sdg8
+brw-rw----    1 root     disk       8, 103 Mar  3  1999 sdg7
+brw-rw----    1 root     disk       8, 102 Mar  3  1999 sdg6
+brw-rw----    1 root     disk       8, 101 Mar  3  1999 sdg5
+brw-rw----    1 root     disk       8, 100 Mar  3  1999 sdg4
+brw-rw----    1 root     disk       8,  99 Mar  3  1999 sdg3
+brw-rw----    1 root     disk       8,  98 Mar  3  1999 sdg2
+brw-rw----    1 root     disk       8, 111 Mar  3  1999 sdg15
+brw-rw----    1 root     disk       8, 110 Mar  3  1999 sdg14
+brw-rw----    1 root     disk       8, 109 Mar  3  1999 sdg13
+brw-rw----    1 root     disk       8, 108 Mar  3  1999 sdg12
+brw-rw----    1 root     disk       8, 107 Mar  3  1999 sdg11
+brw-rw----    1 root     disk       8, 106 Mar  3  1999 sdg10
+brw-rw----    1 root     disk       8,  97 Mar  3  1999 sdg1
+brw-rw----    1 root     disk       8,  96 Mar  3  1999 sdg
+brw-rw----    1 root     disk       8,  89 Mar  3  1999 sdf9
+brw-rw----    1 root     disk       8,  88 Mar  3  1999 sdf8
+brw-rw----    1 root     disk       8,  95 Mar  3  1999 sdf15
+brw-rw----    1 root     disk       8,  94 Mar  3  1999 sdf14
+brw-rw----    1 root     disk       8,  93 Mar  3  1999 sdf13
+brw-rw----    1 root     disk       8,  92 Mar  3  1999 sdf12
+brw-rw----    1 root     disk       8,  91 Mar  3  1999 sdf11
+brw-rw----    1 root     disk       8,  90 Mar  3  1999 sdf10
+brw-rw----    1 root     disk       8, 121 Mar  3  1999 sdh9
+brw-rw----    1 root     disk       8, 120 Mar  3  1999 sdh8
+brw-rw----    1 root     disk       8, 119 Mar  3  1999 sdh7
+brw-rw----    1 root     disk       8, 118 Mar  3  1999 sdh6
+brw-rw----    1 root     disk       8, 127 Mar  3  1999 sdh15
+brw-rw----    1 root     disk       8, 126 Mar  3  1999 sdh14
+brw-rw----    1 root     disk       8, 125 Mar  3  1999 sdh13
+brw-rw----    1 root     disk       8, 124 Mar  3  1999 sdh12
+brw-rw----    1 root     disk       8, 123 Mar  3  1999 sdh11
+brw-rw----    1 root     disk       8, 122 Mar  3  1999 sdh10
+crw-rw----    1 root     dialout   45,  65 Mar  3  1999 isdnctrl1
+crw-rw----    1 root     dialout   45,  64 Mar  3  1999 isdnctrl0
+crw-rw----    1 root     dialout   45,   2 Mar  3  1999 isdn2
+crw-rw----    1 root     dialout   45,   1 Mar  3  1999 isdn1
+crw-rw----    1 root     dialout   45,   0 Mar  3  1999 isdn0
+crw-rw----    1 root     dialout   45, 129 Mar  3  1999 ippp1
+crw-rw----    1 root     dialout   45, 128 Mar  3  1999 ippp0
+crw-rw----    1 root     root      10, 135 Mar  3  1999 rtc
+brw-rw----    1 root     disk      20,   0 Mar  3  1999 mcdx
+brw-rw----    1 root     disk      23,   0 Mar  3  1999 mcd
+brw-rw----    1 root     disk      24,   0 Mar  3  1999 lmscd
+crw-rw----    1 root     dialout   45, 255 Mar  3  1999 isdninfo
+crw-rw----    1 root     dialout   45,  71 Mar  3  1999 isdnctrl7
+crw-rw----    1 root     dialout   45,  70 Mar  3  1999 isdnctrl6
+crw-rw----    1 root     dialout   45,  69 Mar  3  1999 isdnctrl5
+crw-rw----    1 root     dialout   45,  68 Mar  3  1999 isdnctrl4
+crw-rw----    1 root     dialout   45,  67 Mar  3  1999 isdnctrl3
+crw-rw----    1 root     dialout   45,  66 Mar  3  1999 isdnctrl2
+crw-rw----    1 root     dialout   45,   7 Mar  3  1999 isdn7
+crw-rw----    1 root     dialout   45,   6 Mar  3  1999 isdn6
+crw-rw----    1 root     dialout   45,   5 Mar  3  1999 isdn5
+crw-rw----    1 root     dialout   45,   4 Mar  3  1999 isdn4
+crw-rw----    1 root     dialout   45,   3 Mar  3  1999 isdn3
+crw-rw----    1 root     dialout   45, 135 Mar  3  1999 ippp7
+crw-rw----    1 root     dialout   45, 134 Mar  3  1999 ippp6
+crw-rw----    1 root     dialout   45, 133 Mar  3  1999 ippp5
+crw-rw----    1 root     dialout   45, 132 Mar  3  1999 ippp4
+crw-rw----    1 root     dialout   45, 131 Mar  3  1999 ippp3
+crw-rw----    1 root     dialout   45, 130 Mar  3  1999 ippp2
+brw-rw----    1 root     disk       1, 250 Mar  3  1999 initrd
+brw-rw----    1 root     disk      24,   0 Mar  3  1999 cdu535
+brw-rw----    1 root     disk      41,   0 Mar  3  1999 bpcd
+crw-------    1 root     root      21,   2 Oct 19  2000 sg2
+crw-------    1 root     root      21,   1 Oct 19  2000 sg1
+crw-------    1 root     root      21,   0 Oct 19  2000 sg0
+crw-------    1 root     root      21,   9 Oct 19  2000 sg9
+crw-------    1 root     root      21,   8 Oct 19  2000 sg8
+crw-------    1 root     root      21,   7 Oct 19  2000 sg7
+crw-------    1 root     root      21,   6 Oct 19  2000 sg6
+crw-------    1 root     root      21,   5 Oct 19  2000 sg5
+crw-------    1 root     root      21,   4 Oct 19  2000 sg4
+crw-------    1 root     root      21,   3 Oct 19  2000 sg3
+crw-------    1 root     root      21,  16 Oct 19  2000 sg16
+crw-------    1 root     root      21,  15 Oct 19  2000 sg15
+crw-------    1 root     root      21,  14 Oct 19  2000 sg14
+crw-------    1 root     root      21,  13 Oct 19  2000 sg13
+crw-------    1 root     root      21,  12 Oct 19  2000 sg12
+crw-------    1 root     root      21,  11 Oct 19  2000 sg11
+crw-------    1 root     root      21,  10 Oct 19  2000 sg10
+brw-rw----    1 root     floppy     2,  12 Oct 22  2000 fd0u360
+brw-rw-rw-    1 root     floppy     2,   0 Oct 22  2000 fd0
+brw-rw----    1 root     floppy     2,  68 Oct 22  2000 fd0u830
+brw-rw----    1 root     floppy     2,  52 Oct 22  2000 fd0u820
+brw-rw----    1 root     floppy     2,  16 Oct 22  2000 fd0u720
+brw-rw----    1 root     floppy     2,  60 Oct 22  2000 fd0u1722
+brw-rw----    1 root     floppy     2,  44 Oct 22  2000 fd0u1680
+brw-rw----    1 root     floppy     2,  28 Oct 22  2000 fd0u1440
+brw-rw----    1 root     floppy     2, 120 Oct 22  2000 fd0u800
+brw-rw----    1 root     floppy     2, 100 Oct 22  2000 fd0u1920
+brw-rw----    1 root     floppy     2, 116 Oct 22  2000 fd0u1840
+brw-rw----    1 root     floppy     2,  96 Oct 22  2000 fd0u1760
+brw-rw----    1 root     floppy     2,  76 Oct 22  2000 fd0u1743
+brw-rw----    1 root     floppy     2,  88 Oct 22  2000 fd0u1120
+brw-rw----    1 root     floppy     2,  84 Oct 22  2000 fd0u1040
+brw-rw----    1 root     floppy     2, 124 Oct 22  2000 fd0u1600
+brw-rw----    1 root     cdrom     11,   0 Oct 22  2000 sr0
+brw-rw----    1 root     cdrom     11,   0 Oct 22  2000 scd0
+brw-rw----    1 root     cdrom     11,   9 Oct 22  2000 sr9
+brw-rw----    1 root     cdrom     11,   8 Oct 22  2000 sr8
+brw-rw----    1 root     cdrom     11,   7 Oct 22  2000 sr7
+brw-rw----    1 root     cdrom     11,   6 Oct 22  2000 sr6
+brw-rw----    1 root     cdrom     11,   5 Oct 22  2000 sr5
+brw-rw----    1 root     cdrom     11,   4 Oct 22  2000 sr4
+brw-rw----    1 root     cdrom     11,   3 Oct 22  2000 sr3
+brw-rw----    1 root     cdrom     11,   2 Oct 22  2000 sr2
+brw-rw----    1 root     cdrom     11,  16 Oct 22  2000 sr16
+brw-rw----    1 root     cdrom     11,  15 Oct 22  2000 sr15
+brw-rw----    1 root     cdrom     11,  14 Oct 22  2000 sr14
+brw-rw----    1 root     cdrom     11,  13 Oct 22  2000 sr13
+brw-rw----    1 root     cdrom     11,  12 Oct 22  2000 sr12
+brw-rw----    1 root     cdrom     11,  11 Oct 22  2000 sr11
+brw-rw----    1 root     cdrom     11,  10 Oct 22  2000 sr10
+brw-rw----    1 root     cdrom     11,   1 Oct 22  2000 sr1
+brw-rw----    1 root     cdrom     11,   9 Oct 22  2000 scd9
+brw-rw----    1 root     cdrom     11,   8 Oct 22  2000 scd8
+brw-rw----    1 root     cdrom     11,   7 Oct 22  2000 scd7
+brw-rw----    1 root     cdrom     11,   6 Oct 22  2000 scd6
+brw-rw----    1 root     cdrom     11,   5 Oct 22  2000 scd5
+brw-rw----    1 root     cdrom     11,   4 Oct 22  2000 scd4
+brw-rw----    1 root     cdrom     11,   3 Oct 22  2000 scd3
+brw-rw----    1 root     cdrom     11,   2 Oct 22  2000 scd2
+brw-rw----    1 root     cdrom     11,  16 Oct 22  2000 scd16
+brw-rw----    1 root     cdrom     11,  15 Oct 22  2000 scd15
+brw-rw----    1 root     cdrom     11,  14 Oct 22  2000 scd14
+brw-rw----    1 root     cdrom     11,  13 Oct 22  2000 scd13
+brw-rw----    1 root     cdrom     11,  12 Oct 22  2000 scd12
+brw-rw----    1 root     cdrom     11,  11 Oct 22  2000 scd11
+brw-rw----    1 root     cdrom     11,  10 Oct 22  2000 scd10
+brw-rw----    1 root     cdrom     11,   1 Oct 22  2000 scd1
+crw-rw-rw-    1 root     tape       9,  64 Jan 22  2001 st0m
+crw-rw-rw-    1 root     tape       9,  32 Jan 22  2001 st0l
+crw-rw-rw-    1 root     tape       9,  96 Jan 22  2001 st0a
+crw-rw-rw-    1 root     tape       9,   0 Jan 22  2001 st0
+crw-rw-rw-    1 root     tape       9, 192 Jan 22  2001 nst0m
+crw-rw-rw-    1 root     tape       9, 160 Jan 22  2001 nst0l
+crw-rw-rw-    1 root     tape       9, 224 Jan 22  2001 nst0a
+crw-rw-rw-    1 root     tape       9, 128 Jan 22  2001 nst0
+crw-rw-rw-    1 root     tape       9,  65 Jan 22  2001 st1m
+crw-rw-rw-    1 root     tape       9,  33 Jan 22  2001 st1l
+crw-rw-rw-    1 root     tape       9,  97 Jan 22  2001 st1a
+crw-rw-rw-    1 root     tape       9,   1 Jan 22  2001 st1
+crw-rw-rw-    1 root     tape       9, 193 Jan 22  2001 nst1m
+crw-rw-rw-    1 root     tape       9, 161 Jan 22  2001 nst1l
+crw-rw-rw-    1 root     tape       9, 225 Jan 22  2001 nst1a
+crw-rw-rw-    1 root     tape       9, 129 Jan 22  2001 nst1
+crwxrwxrwx    1 root     root      21,   2 Jan 22  2001 robot
+crw-rw-rw-    1 root     tape       9,  66 Jan 22  2001 st2m
+crw-rw-rw-    1 root     tape       9,  34 Jan 22  2001 st2l
+crw-rw-rw-    1 root     tape       9,  98 Jan 22  2001 st2a
+crw-rw-rw-    1 root     tape       9,   2 Jan 22  2001 st2
+crw-rw-rw-    1 root     tape       9, 194 Jan 22  2001 nst2m
+crw-rw-rw-    1 root     tape       9, 162 Jan 22  2001 nst2l
+crw-rw-rw-    1 root     tape       9, 226 Jan 22  2001 nst2a
+crw-rw-rw-    1 root     tape       9, 130 Jan 22  2001 nst2
+crw-rw-rw-    1 root     tape       9,  35 Jan 22  2001 st3l
+crw-rw-rw-    1 root     tape       9,   3 Jan 22  2001 st3
+crw-rw-rw-    1 root     tape       9, 163 Jan 22  2001 nst3l
+crw-rw-rw-    1 root     tape       9, 131 Jan 22  2001 nst3
+crw-rw-rw-    1 root     tape       9,  67 Jan 22  2001 st3m
+crw-rw-rw-    1 root     tape       9,  99 Jan 22  2001 st3a
+crw-rw-rw-    1 root     tape       9, 195 Jan 22  2001 nst3m
+crw-rw-rw-    1 root     tape       9, 227 Jan 22  2001 nst3a
+brw-rw----    1 root     disk      33,   9 Mar 14  2001 hde9
+brw-rw----    1 root     disk      33,   8 Mar 14  2001 hde8
+brw-rw----    1 root     disk      33,   7 Mar 14  2001 hde7
+brw-rw----    1 root     disk      33,   6 Mar 14  2001 hde6
+brw-rw----    1 root     disk      33,   5 Mar 14  2001 hde5
+brw-rw----    1 root     disk      33,   4 Mar 14  2001 hde4
+brw-rw----    1 root     disk      33,   3 Mar 14  2001 hde3
+brw-rw----    1 root     disk      33,  20 Mar 14  2001 hde20
+brw-rw----    1 root     disk      33,   2 Mar 14  2001 hde2
+brw-rw----    1 root     disk      33,  19 Mar 14  2001 hde19
+brw-rw----    1 root     disk      33,  18 Mar 14  2001 hde18
+brw-rw----    1 root     disk      33,  17 Mar 14  2001 hde17
+brw-rw----    1 root     disk      33,  16 Mar 14  2001 hde16
+brw-rw----    1 root     disk      33,  15 Mar 14  2001 hde15
+brw-rw----    1 root     disk      33,  14 Mar 14  2001 hde14
+brw-rw----    1 root     disk      33,  13 Mar 14  2001 hde13
+brw-rw----    1 root     disk      33,  12 Mar 14  2001 hde12
+brw-rw----    1 root     disk      33,  11 Mar 14  2001 hde11
+brw-rw----    1 root     disk      33,  10 Mar 14  2001 hde10
+brw-rw----    1 root     disk      33,   1 Mar 14  2001 hde1
+brw-rw----    1 root     disk      33,   0 Mar 14  2001 hde
+brw-rw----    1 root     disk      33,  73 Mar 14  2001 hdf9
+brw-rw----    1 root     disk      33,  72 Mar 14  2001 hdf8
+brw-rw----    1 root     disk      33,  71 Mar 14  2001 hdf7
+brw-rw----    1 root     disk      33,  70 Mar 14  2001 hdf6
+brw-rw----    1 root     disk      33,  69 Mar 14  2001 hdf5
+brw-rw----    1 root     disk      33,  68 Mar 14  2001 hdf4
+brw-rw----    1 root     disk      33,  67 Mar 14  2001 hdf3
+brw-rw----    1 root     disk      33,  84 Mar 14  2001 hdf20
+brw-rw----    1 root     disk      33,  66 Mar 14  2001 hdf2
+brw-rw----    1 root     disk      33,  83 Mar 14  2001 hdf19
+brw-rw----    1 root     disk      33,  82 Mar 14  2001 hdf18
+brw-rw----    1 root     disk      33,  81 Mar 14  2001 hdf17
+brw-rw----    1 root     disk      33,  80 Mar 14  2001 hdf16
+brw-rw----    1 root     disk      33,  79 Mar 14  2001 hdf15
+brw-rw----    1 root     disk      33,  78 Mar 14  2001 hdf14
+brw-rw----    1 root     disk      33,  77 Mar 14  2001 hdf13
+brw-rw----    1 root     disk      33,  76 Mar 14  2001 hdf12
+brw-rw----    1 root     disk      33,  75 Mar 14  2001 hdf11
+brw-rw----    1 root     disk      33,  74 Mar 14  2001 hdf10
+brw-rw----    1 root     disk      33,  65 Mar 14  2001 hdf1
+brw-rw----    1 root     disk      33,  64 Mar 14  2001 hdf
+brw-rw----    1 root     disk      34,   1 Mar 14  2001 hdg1
+brw-rw----    1 root     disk      34,   0 Mar 14  2001 hdg
+brw-rw----    1 root     disk      34,   9 Mar 14  2001 hdg9
+brw-rw----    1 root     disk      34,   8 Mar 14  2001 hdg8
+brw-rw----    1 root     disk      34,   7 Mar 14  2001 hdg7
+brw-rw----    1 root     disk      34,   6 Mar 14  2001 hdg6
+brw-rw----    1 root     disk      34,   5 Mar 14  2001 hdg5
+brw-rw----    1 root     disk      34,   4 Mar 14  2001 hdg4
+brw-rw----    1 root     disk      34,   3 Mar 14  2001 hdg3
+brw-rw----    1 root     disk      34,  20 Mar 14  2001 hdg20
+brw-rw----    1 root     disk      34,   2 Mar 14  2001 hdg2
+brw-rw----    1 root     disk      34,  19 Mar 14  2001 hdg19
+brw-rw----    1 root     disk      34,  18 Mar 14  2001 hdg18
+brw-rw----    1 root     disk      34,  17 Mar 14  2001 hdg17
+brw-rw----    1 root     disk      34,  16 Mar 14  2001 hdg16
+brw-rw----    1 root     disk      34,  15 Mar 14  2001 hdg15
+brw-rw----    1 root     disk      34,  14 Mar 14  2001 hdg14
+brw-rw----    1 root     disk      34,  13 Mar 14  2001 hdg13
+brw-rw----    1 root     disk      34,  12 Mar 14  2001 hdg12
+brw-rw----    1 root     disk      34,  11 Mar 14  2001 hdg11
+brw-rw----    1 root     disk      34,  10 Mar 14  2001 hdg10
+brw-rw----    1 root     disk      34,  66 Mar 14  2001 hdh2
+brw-rw----    1 root     disk      34,  65 Mar 14  2001 hdh1
+brw-rw----    1 root     disk      34,  64 Mar 14  2001 hdh
+brw-rw----    1 root     disk      34,  73 Mar 14  2001 hdh9
+brw-rw----    1 root     disk      34,  72 Mar 14  2001 hdh8
+brw-rw----    1 root     disk      34,  71 Mar 14  2001 hdh7
+brw-rw----    1 root     disk      34,  70 Mar 14  2001 hdh6
+brw-rw----    1 root     disk      34,  69 Mar 14  2001 hdh5
+brw-rw----    1 root     disk      34,  68 Mar 14  2001 hdh4
+brw-rw----    1 root     disk      34,  67 Mar 14  2001 hdh3
+brw-rw----    1 root     disk      34,  84 Mar 14  2001 hdh20
+brw-rw----    1 root     disk      34,  83 Mar 14  2001 hdh19
+brw-rw----    1 root     disk      34,  82 Mar 14  2001 hdh18
+brw-rw----    1 root     disk      34,  81 Mar 14  2001 hdh17
+brw-rw----    1 root     disk      34,  80 Mar 14  2001 hdh16
+brw-rw----    1 root     disk      34,  79 Mar 14  2001 hdh15
+brw-rw----    1 root     disk      34,  78 Mar 14  2001 hdh14
+brw-rw----    1 root     disk      34,  77 Mar 14  2001 hdh13
+brw-rw----    1 root     disk      34,  76 Mar 14  2001 hdh12
+brw-rw----    1 root     disk      34,  75 Mar 14  2001 hdh11
+brw-rw----    1 root     disk      34,  74 Mar 14  2001 hdh10
+br--rwxr--    1 root     cdrom      3,  64 Jun 13  2001 cdrom
+crw-rw----    1 root     video     10, 175 Jul 31  2001 agpgart
+crw-rw-rw-    1 root     tty        3,  47 Feb 10  2003 ttyrf
+crw-rw-rw-    1 root     tty        3,  65 Feb 10  2003 ttyt1
+crw-rw-rw-    1 root     tty        3,  64 Feb 10  2003 ttyt0
+crw-rw-rw-    1 root     tty        3,  63 Feb 10  2003 ttysf
+crw-rw-rw-    1 root     tty        3,  62 Feb 10  2003 ttyse
+crw-rw-rw-    1 root     tty        3,  61 Feb 10  2003 ttysd
+crw-rw-rw-    1 root     tty        3,  60 Feb 10  2003 ttysc
+crw-rw-rw-    1 root     tty        3,  59 Feb 10  2003 ttysb
+crw-rw-rw-    1 root     tty        3,  58 Feb 10  2003 ttysa
+crw-rw-rw-    1 root     tty        3,  57 Feb 10  2003 ttys9
+crw-rw-rw-    1 root     tty        3,  56 Feb 10  2003 ttys8
+crw-rw-rw-    1 root     tty        3,  55 Feb 10  2003 ttys7
+crw-rw-rw-    1 root     tty        3,  54 Feb 10  2003 ttys6
+crw-rw-rw-    1 root     tty        3,  53 Feb 10  2003 ttys5
+crw-rw-rw-    1 root     tty        3,  52 Feb 10  2003 ttys4
+crw-rw-rw-    1 root     tty        3,  51 Feb 10  2003 ttys3
+crw-rw-rw-    1 root     tty        3,  50 Feb 10  2003 ttys2
+crw-rw-rw-    1 root     tty        3,  49 Feb 10  2003 ttys1
+crw-rw-rw-    1 root     tty        3,  48 Feb 10  2003 ttys0
+crw-rw-rw-    1 root     tty        2,  65 Feb 10  2003 ptyt1
+crw-rw-rw-    1 root     tty        2,  64 Feb 10  2003 ptyt0
+crw-rw-rw-    1 root     tty        2,  63 Feb 10  2003 ptysf
+crw-rw-rw-    1 root     tty        2,  62 Feb 10  2003 ptyse
+crw-rw-rw-    1 root     tty        2,  61 Feb 10  2003 ptysd
+crw-rw-rw-    1 root     tty        2,  60 Feb 10  2003 ptysc
+crw-rw-rw-    1 root     tty        2,  59 Feb 10  2003 ptysb
+crw-rw-rw-    1 root     tty        2,  58 Feb 10  2003 ptysa
+crw-rw-rw-    1 root     tty        2,  57 Feb 10  2003 ptys9
+crw-rw-rw-    1 root     tty        2,  56 Feb 10  2003 ptys8
+crw-rw-rw-    1 root     tty        2,  55 Feb 10  2003 ptys7
+crw-rw-rw-    1 root     tty        2,  54 Feb 10  2003 ptys6
+crw-rw-rw-    1 root     tty        2,  53 Feb 10  2003 ptys5
+crw-rw-rw-    1 root     tty        2,  52 Feb 10  2003 ptys4
+crw-rw-rw-    1 root     tty        2,  51 Feb 10  2003 ptys3
+crw-rw-rw-    1 root     tty        2,  50 Feb 10  2003 ptys2
+crw-rw-rw-    1 root     tty        2,  49 Feb 10  2003 ptys1
+crw-rw-rw-    1 root     tty        2,  48 Feb 10  2003 ptys0
+crw-rw-rw-    1 root     tty        3,  81 Feb 10  2003 ttyu1
+crw-rw-rw-    1 root     tty        3,  80 Feb 10  2003 ttyu0
+crw-rw-rw-    1 root     tty        3,  79 Feb 10  2003 ttytf
+crw-rw-rw-    1 root     tty        3,  78 Feb 10  2003 ttyte
+crw-rw-rw-    1 root     tty        3,  77 Feb 10  2003 ttytd
+crw-rw-rw-    1 root     tty        3,  76 Feb 10  2003 ttytc
+crw-rw-rw-    1 root     tty        3,  75 Feb 10  2003 ttytb
+crw-rw-rw-    1 root     tty        3,  74 Feb 10  2003 ttyta
+crw-rw-rw-    1 root     tty        3,  73 Feb 10  2003 ttyt9
+crw-rw-rw-    1 root     tty        3,  72 Feb 10  2003 ttyt8
+crw-rw-rw-    1 root     tty        3,  71 Feb 10  2003 ttyt7
+crw-rw-rw-    1 root     tty        3,  70 Feb 10  2003 ttyt6
+crw-rw-rw-    1 root     tty        3,  69 Feb 10  2003 ttyt5
+crw-rw-rw-    1 root     tty        3,  68 Feb 10  2003 ttyt4
+crw-rw-rw-    1 root     tty        3,  67 Feb 10  2003 ttyt3
+crw-rw-rw-    1 root     tty        3,  66 Feb 10  2003 ttyt2
+crw-rw-rw-    1 root     tty        2,  82 Feb 10  2003 ptyu2
+crw-rw-rw-    1 root     tty        2,  81 Feb 10  2003 ptyu1
+crw-rw-rw-    1 root     tty        2,  80 Feb 10  2003 ptyu0
+crw-rw-rw-    1 root     tty        2,  79 Feb 10  2003 ptytf
+crw-rw-rw-    1 root     tty        2,  78 Feb 10  2003 ptyte
+crw-rw-rw-    1 root     tty        2,  77 Feb 10  2003 ptytd
+crw-rw-rw-    1 root     tty        2,  76 Feb 10  2003 ptytc
+crw-rw-rw-    1 root     tty        2,  75 Feb 10  2003 ptytb
+crw-rw-rw-    1 root     tty        2,  74 Feb 10  2003 ptyta
+crw-rw-rw-    1 root     tty        2,  73 Feb 10  2003 ptyt9
+crw-rw-rw-    1 root     tty        2,  72 Feb 10  2003 ptyt8
+crw-rw-rw-    1 root     tty        2,  71 Feb 10  2003 ptyt7
+crw-rw-rw-    1 root     tty        2,  70 Feb 10  2003 ptyt6
+crw-rw-rw-    1 root     tty        2,  69 Feb 10  2003 ptyt5
+crw-rw-rw-    1 root     tty        2,  68 Feb 10  2003 ptyt4
+crw-rw-rw-    1 root     tty        2,  67 Feb 10  2003 ptyt3
+crw-rw-rw-    1 root     tty        2,  66 Feb 10  2003 ptyt2
+crw-rw-rw-    1 root     tty        3,  98 Feb 10  2003 ttyv2
+crw-rw-rw-    1 root     tty        3,  97 Feb 10  2003 ttyv1
+crw-rw-rw-    1 root     tty        3,  96 Feb 10  2003 ttyv0
+crw-rw-rw-    1 root     tty        3,  95 Feb 10  2003 ttyuf
+crw-rw-rw-    1 root     tty        3,  94 Feb 10  2003 ttyue
+crw-rw-rw-    1 root     tty        3,  93 Feb 10  2003 ttyud
+crw-rw-rw-    1 root     tty        3,  92 Feb 10  2003 ttyuc
+crw-rw-rw-    1 root     tty        3,  91 Feb 10  2003 ttyub
+crw-rw-rw-    1 root     tty        3,  90 Feb 10  2003 ttyua
+crw-rw-rw-    1 root     tty        3,  89 Feb 10  2003 ttyu9
+crw-rw-rw-    1 root     tty        3,  88 Feb 10  2003 ttyu8
+crw-rw-rw-    1 root     tty        3,  87 Feb 10  2003 ttyu7
+crw-rw-rw-    1 root     tty        3,  86 Feb 10  2003 ttyu6
+crw-rw-rw-    1 root     tty        3,  85 Feb 10  2003 ttyu5
+crw-rw-rw-    1 root     tty        3,  84 Feb 10  2003 ttyu4
+crw-rw-rw-    1 root     tty        3,  83 Feb 10  2003 ttyu3
+crw-rw-rw-    1 root     tty        3,  82 Feb 10  2003 ttyu2
+crw-rw-rw-    1 root     tty        2,  99 Feb 10  2003 ptyv3
+crw-rw-rw-    1 root     tty        2,  98 Feb 10  2003 ptyv2
+crw-rw-rw-    1 root     tty        2,  97 Feb 10  2003 ptyv1
+crw-rw-rw-    1 root     tty        2,  96 Feb 10  2003 ptyv0
+crw-rw-rw-    1 root     tty        2,  95 Feb 10  2003 ptyuf
+crw-rw-rw-    1 root     tty        2,  94 Feb 10  2003 ptyue
+crw-rw-rw-    1 root     tty        2,  93 Feb 10  2003 ptyud
+crw-rw-rw-    1 root     tty        2,  92 Feb 10  2003 ptyuc
+crw-rw-rw-    1 root     tty        2,  91 Feb 10  2003 ptyub
+crw-rw-rw-    1 root     tty        2,  90 Feb 10  2003 ptyua
+crw-rw-rw-    1 root     tty        2,  89 Feb 10  2003 ptyu9
+crw-rw-rw-    1 root     tty        2,  88 Feb 10  2003 ptyu8
+crw-rw-rw-    1 root     tty        2,  87 Feb 10  2003 ptyu7
+crw-rw-rw-    1 root     tty        2,  86 Feb 10  2003 ptyu6
+crw-rw-rw-    1 root     tty        2,  85 Feb 10  2003 ptyu5
+crw-rw-rw-    1 root     tty        2,  84 Feb 10  2003 ptyu4
+crw-rw-rw-    1 root     tty        2,  83 Feb 10  2003 ptyu3
+crw-rw-rw-    1 root     tty        3, 112 Feb 10  2003 ttyw0
+crw-rw-rw-    1 root     tty        3, 111 Feb 10  2003 ttyvf
+crw-rw-rw-    1 root     tty        3, 110 Feb 10  2003 ttyve
+crw-rw-rw-    1 root     tty        3, 109 Feb 10  2003 ttyvd
+crw-rw-rw-    1 root     tty        3, 108 Feb 10  2003 ttyvc
+crw-rw-rw-    1 root     tty        3, 107 Feb 10  2003 ttyvb
+crw-rw-rw-    1 root     tty        3, 106 Feb 10  2003 ttyva
+crw-rw-rw-    1 root     tty        3, 105 Feb 10  2003 ttyv9
+crw-rw-rw-    1 root     tty        3, 104 Feb 10  2003 ttyv8
+crw-rw-rw-    1 root     tty        3, 103 Feb 10  2003 ttyv7
+crw-rw-rw-    1 root     tty        3, 102 Feb 10  2003 ttyv6
+crw-rw-rw-    1 root     tty        3, 101 Feb 10  2003 ttyv5
+crw-rw-rw-    1 root     tty        3, 100 Feb 10  2003 ttyv4
+crw-rw-rw-    1 root     tty        3,  99 Feb 10  2003 ttyv3
+crw-rw-rw-    1 root     tty        2, 113 Feb 10  2003 ptyw1
+crw-rw-rw-    1 root     tty        2, 112 Feb 10  2003 ptyw0
+crw-rw-rw-    1 root     tty        2, 111 Feb 10  2003 ptyvf
+crw-rw-rw-    1 root     tty        2, 110 Feb 10  2003 ptyve
+crw-rw-rw-    1 root     tty        2, 109 Feb 10  2003 ptyvd
+crw-rw-rw-    1 root     tty        2, 108 Feb 10  2003 ptyvc
+crw-rw-rw-    1 root     tty        2, 107 Feb 10  2003 ptyvb
+crw-rw-rw-    1 root     tty        2, 106 Feb 10  2003 ptyva
+crw-rw-rw-    1 root     tty        2, 105 Feb 10  2003 ptyv9
+crw-rw-rw-    1 root     tty        2, 104 Feb 10  2003 ptyv8
+crw-rw-rw-    1 root     tty        2, 103 Feb 10  2003 ptyv7
+crw-rw-rw-    1 root     tty        2, 102 Feb 10  2003 ptyv6
+crw-rw-rw-    1 root     tty        2, 101 Feb 10  2003 ptyv5
+crw-rw-rw-    1 root     tty        2, 100 Feb 10  2003 ptyv4
+crw-rw-rw-    1 root     tty        3, 127 Feb 10  2003 ttywf
+crw-rw-rw-    1 root     tty        3, 126 Feb 10  2003 ttywe
+crw-rw-rw-    1 root     tty        3, 125 Feb 10  2003 ttywd
+crw-rw-rw-    1 root     tty        3, 124 Feb 10  2003 ttywc
+crw-rw-rw-    1 root     tty        3, 123 Feb 10  2003 ttywb
+crw-rw-rw-    1 root     tty        3, 122 Feb 10  2003 ttywa
+crw-rw-rw-    1 root     tty        3, 121 Feb 10  2003 ttyw9
+crw-rw-rw-    1 root     tty        3, 120 Feb 10  2003 ttyw8
+crw-rw-rw-    1 root     tty        3, 119 Feb 10  2003 ttyw7
+crw-rw-rw-    1 root     tty        3, 118 Feb 10  2003 ttyw6
+crw-rw-rw-    1 root     tty        3, 117 Feb 10  2003 ttyw5
+crw-rw-rw-    1 root     tty        3, 116 Feb 10  2003 ttyw4
+crw-rw-rw-    1 root     tty        3, 115 Feb 10  2003 ttyw3
+crw-rw-rw-    1 root     tty        3, 114 Feb 10  2003 ttyw2
+crw-rw-rw-    1 root     tty        3, 113 Feb 10  2003 ttyw1
+crw-rw-rw-    1 root     tty        2, 127 Feb 10  2003 ptywf
+crw-rw-rw-    1 root     tty        2, 126 Feb 10  2003 ptywe
+crw-rw-rw-    1 root     tty        2, 125 Feb 10  2003 ptywd
+crw-rw-rw-    1 root     tty        2, 124 Feb 10  2003 ptywc
+crw-rw-rw-    1 root     tty        2, 123 Feb 10  2003 ptywb
+crw-rw-rw-    1 root     tty        2, 122 Feb 10  2003 ptywa
+crw-rw-rw-    1 root     tty        2, 121 Feb 10  2003 ptyw9
+crw-rw-rw-    1 root     tty        2, 120 Feb 10  2003 ptyw8
+crw-rw-rw-    1 root     tty        2, 119 Feb 10  2003 ptyw7
+crw-rw-rw-    1 root     tty        2, 118 Feb 10  2003 ptyw6
+crw-rw-rw-    1 root     tty        2, 117 Feb 10  2003 ptyw5
+crw-rw-rw-    1 root     tty        2, 116 Feb 10  2003 ptyw4
+crw-rw-rw-    1 root     tty        2, 115 Feb 10  2003 ptyw3
+crw-rw-rw-    1 root     tty        2, 114 Feb 10  2003 ptyw2
+crw-rw-rw-    1 root     tty        3, 143 Feb 10  2003 ttyxf
+crw-rw-rw-    1 root     tty        3, 142 Feb 10  2003 ttyxe
+crw-rw-rw-    1 root     tty        3, 141 Feb 10  2003 ttyxd
+crw-rw-rw-    1 root     tty        3, 140 Feb 10  2003 ttyxc
+crw-rw-rw-    1 root     tty        3, 139 Feb 10  2003 ttyxb
+crw-rw-rw-    1 root     tty        3, 138 Feb 10  2003 ttyxa
+crw-rw-rw-    1 root     tty        3, 137 Feb 10  2003 ttyx9
+crw-rw-rw-    1 root     tty        3, 136 Feb 10  2003 ttyx8
+crw-rw-rw-    1 root     tty        3, 135 Feb 10  2003 ttyx7
+crw-rw-rw-    1 root     tty        3, 134 Feb 10  2003 ttyx6
+crw-rw-rw-    1 root     tty        3, 133 Feb 10  2003 ttyx5
+crw-rw-rw-    1 root     tty        3, 132 Feb 10  2003 ttyx4
+crw-rw-rw-    1 root     tty        3, 131 Feb 10  2003 ttyx3
+crw-rw-rw-    1 root     tty        3, 130 Feb 10  2003 ttyx2
+crw-rw-rw-    1 root     tty        3, 129 Feb 10  2003 ttyx1
+crw-rw-rw-    1 root     tty        3, 128 Feb 10  2003 ttyx0
+crw-rw-rw-    1 root     tty        2, 144 Feb 10  2003 ptyy0
+crw-rw-rw-    1 root     tty        2, 143 Feb 10  2003 ptyxf
+crw-rw-rw-    1 root     tty        2, 142 Feb 10  2003 ptyxe
+crw-rw-rw-    1 root     tty        2, 141 Feb 10  2003 ptyxd
+crw-rw-rw-    1 root     tty        2, 140 Feb 10  2003 ptyxc
+crw-rw-rw-    1 root     tty        2, 139 Feb 10  2003 ptyxb
+crw-rw-rw-    1 root     tty        2, 138 Feb 10  2003 ptyxa
+crw-rw-rw-    1 root     tty        2, 137 Feb 10  2003 ptyx9
+crw-rw-rw-    1 root     tty        2, 136 Feb 10  2003 ptyx8
+crw-rw-rw-    1 root     tty        2, 135 Feb 10  2003 ptyx7
+crw-rw-rw-    1 root     tty        2, 134 Feb 10  2003 ptyx6
+crw-rw-rw-    1 root     tty        2, 133 Feb 10  2003 ptyx5
+crw-rw-rw-    1 root     tty        2, 132 Feb 10  2003 ptyx4
+crw-rw-rw-    1 root     tty        2, 131 Feb 10  2003 ptyx3
+crw-rw-rw-    1 root     tty        2, 130 Feb 10  2003 ptyx2
+crw-rw-rw-    1 root     tty        2, 129 Feb 10  2003 ptyx1
+crw-rw-rw-    1 root     tty        2, 128 Feb 10  2003 ptyx0
+crw-rw-rw-    1 root     tty        3, 154 Feb 10  2003 ttyya
+crw-rw-rw-    1 root     tty        3, 153 Feb 10  2003 ttyy9
+crw-rw-rw-    1 root     tty        3, 152 Feb 10  2003 ttyy8
+crw-rw-rw-    1 root     tty        3, 151 Feb 10  2003 ttyy7
+crw-rw-rw-    1 root     tty        3, 150 Feb 10  2003 ttyy6
+crw-rw-rw-    1 root     tty        3, 149 Feb 10  2003 ttyy5
+crw-rw-rw-    1 root     tty        3, 148 Feb 10  2003 ttyy4
+crw-rw-rw-    1 root     tty        3, 147 Feb 10  2003 ttyy3
+crw-rw-rw-    1 root     tty        3, 146 Feb 10  2003 ttyy2
+crw-rw-rw-    1 root     tty        3, 145 Feb 10  2003 ttyy1
+crw-rw-rw-    1 root     tty        3, 144 Feb 10  2003 ttyy0
+crw-rw-rw-    1 root     tty        2, 154 Feb 10  2003 ptyya
+crw-rw-rw-    1 root     tty        2, 153 Feb 10  2003 ptyy9
+crw-rw-rw-    1 root     tty        2, 152 Feb 10  2003 ptyy8
+crw-rw-rw-    1 root     tty        2, 151 Feb 10  2003 ptyy7
+crw-rw-rw-    1 root     tty        2, 150 Feb 10  2003 ptyy6
+crw-rw-rw-    1 root     tty        2, 149 Feb 10  2003 ptyy5
+crw-rw-rw-    1 root     tty        2, 148 Feb 10  2003 ptyy4
+crw-rw-rw-    1 root     tty        2, 147 Feb 10  2003 ptyy3
+crw-rw-rw-    1 root     tty        2, 146 Feb 10  2003 ptyy2
+crw-rw-rw-    1 root     tty        2, 145 Feb 10  2003 ptyy1
+crw-rw-rw-    1 root     tty        3, 171 Feb 10  2003 ttyzb
+crw-rw-rw-    1 root     tty        3, 170 Feb 10  2003 ttyza
+crw-rw-rw-    1 root     tty        3, 169 Feb 10  2003 ttyz9
+crw-rw-rw-    1 root     tty        3, 168 Feb 10  2003 ttyz8
+crw-rw-rw-    1 root     tty        3, 167 Feb 10  2003 ttyz7
+crw-rw-rw-    1 root     tty        3, 166 Feb 10  2003 ttyz6
+crw-rw-rw-    1 root     tty        3, 165 Feb 10  2003 ttyz5
+crw-rw-rw-    1 root     tty        3, 164 Feb 10  2003 ttyz4
+crw-rw-rw-    1 root     tty        3, 163 Feb 10  2003 ttyz3
+crw-rw-rw-    1 root     tty        3, 162 Feb 10  2003 ttyz2
+crw-rw-rw-    1 root     tty        3, 161 Feb 10  2003 ttyz1
+crw-rw-rw-    1 root     tty        3, 160 Feb 10  2003 ttyz0
+crw-rw-rw-    1 root     tty        3, 159 Feb 10  2003 ttyyf
+crw-rw-rw-    1 root     tty        3, 158 Feb 10  2003 ttyye
+crw-rw-rw-    1 root     tty        3, 157 Feb 10  2003 ttyyd
+crw-rw-rw-    1 root     tty        3, 156 Feb 10  2003 ttyyc
+crw-rw-rw-    1 root     tty        3, 155 Feb 10  2003 ttyyb
+crw-rw-rw-    1 root     tty        2, 172 Feb 10  2003 ptyzc
+crw-rw-rw-    1 root     tty        2, 171 Feb 10  2003 ptyzb
+crw-rw-rw-    1 root     tty        2, 170 Feb 10  2003 ptyza
+crw-rw-rw-    1 root     tty        2, 169 Feb 10  2003 ptyz9
+crw-rw-rw-    1 root     tty        2, 168 Feb 10  2003 ptyz8
+crw-rw-rw-    1 root     tty        2, 167 Feb 10  2003 ptyz7
+crw-rw-rw-    1 root     tty        2, 166 Feb 10  2003 ptyz6
+crw-rw-rw-    1 root     tty        2, 165 Feb 10  2003 ptyz5
+crw-rw-rw-    1 root     tty        2, 164 Feb 10  2003 ptyz4
+crw-rw-rw-    1 root     tty        2, 163 Feb 10  2003 ptyz3
+crw-rw-rw-    1 root     tty        2, 162 Feb 10  2003 ptyz2
+crw-rw-rw-    1 root     tty        2, 161 Feb 10  2003 ptyz1
+crw-rw-rw-    1 root     tty        2, 160 Feb 10  2003 ptyz0
+crw-rw-rw-    1 root     tty        2, 159 Feb 10  2003 ptyyf
+crw-rw-rw-    1 root     tty        2, 158 Feb 10  2003 ptyye
+crw-rw-rw-    1 root     tty        2, 157 Feb 10  2003 ptyyd
+crw-rw-rw-    1 root     tty        2, 156 Feb 10  2003 ptyyc
+crw-rw-rw-    1 root     tty        2, 155 Feb 10  2003 ptyyb
+crw-rw-rw-    1 root     tty        3, 175 Feb 10  2003 ttyzf
+crw-rw-rw-    1 root     tty        3, 174 Feb 10  2003 ttyze
+crw-rw-rw-    1 root     tty        3, 173 Feb 10  2003 ttyzd
+crw-rw-rw-    1 root     tty        3, 172 Feb 10  2003 ttyzc
+crw-rw-rw-    1 root     tty        3, 181 Feb 10  2003 ttya5
+crw-rw-rw-    1 root     tty        3, 180 Feb 10  2003 ttya4
+crw-rw-rw-    1 root     tty        3, 179 Feb 10  2003 ttya3
+crw-rw-rw-    1 root     tty        3, 178 Feb 10  2003 ttya2
+crw-rw-rw-    1 root     tty        3, 177 Feb 10  2003 ttya1
+crw-rw-rw-    1 root     tty        3, 176 Feb 10  2003 ttya0
+crw-rw-rw-    1 root     tty        2, 175 Feb 10  2003 ptyzf
+crw-rw-rw-    1 root     tty        2, 174 Feb 10  2003 ptyze
+crw-rw-rw-    1 root     tty        2, 173 Feb 10  2003 ptyzd
+crw-rw-rw-    1 root     tty        2, 182 Feb 10  2003 ptya6
+crw-rw-rw-    1 root     tty        2, 181 Feb 10  2003 ptya5
+crw-rw-rw-    1 root     tty        2, 180 Feb 10  2003 ptya4
+crw-rw-rw-    1 root     tty        2, 179 Feb 10  2003 ptya3
+crw-rw-rw-    1 root     tty        2, 178 Feb 10  2003 ptya2
+crw-rw-rw-    1 root     tty        2, 177 Feb 10  2003 ptya1
+crw-rw-rw-    1 root     tty        2, 176 Feb 10  2003 ptya0
+crw-rw-rw-    1 root     tty        3, 191 Feb 10  2003 ttyaf
+crw-rw-rw-    1 root     tty        3, 190 Feb 10  2003 ttyae
+crw-rw-rw-    1 root     tty        3, 189 Feb 10  2003 ttyad
+crw-rw-rw-    1 root     tty        3, 188 Feb 10  2003 ttyac
+crw-rw-rw-    1 root     tty        3, 187 Feb 10  2003 ttyab
+crw-rw-rw-    1 root     tty        3, 186 Feb 10  2003 ttyaa
+crw-rw-rw-    1 root     tty        3, 185 Feb 10  2003 ttya9
+crw-rw-rw-    1 root     tty        3, 184 Feb 10  2003 ttya8
+crw-rw-rw-    1 root     tty        3, 183 Feb 10  2003 ttya7
+crw-rw-rw-    1 root     tty        3, 182 Feb 10  2003 ttya6
+crw-rw-rw-    1 root     tty        2, 192 Feb 10  2003 ptyb0
+crw-rw-rw-    1 root     tty        2, 191 Feb 10  2003 ptyaf
+crw-rw-rw-    1 root     tty        2, 190 Feb 10  2003 ptyae
+crw-rw-rw-    1 root     tty        2, 189 Feb 10  2003 ptyad
+crw-rw-rw-    1 root     tty        2, 188 Feb 10  2003 ptyac
+crw-rw-rw-    1 root     tty        2, 187 Feb 10  2003 ptyab
+crw-rw-rw-    1 root     tty        2, 186 Feb 10  2003 ptyaa
+crw-rw-rw-    1 root     tty        2, 185 Feb 10  2003 ptya9
+crw-rw-rw-    1 root     tty        2, 184 Feb 10  2003 ptya8
+crw-rw-rw-    1 root     tty        2, 183 Feb 10  2003 ptya7
+crw-rw-rw-    1 root     tty        3, 207 Feb 10  2003 ttybf
+crw-rw-rw-    1 root     tty        3, 206 Feb 10  2003 ttybe
+crw-rw-rw-    1 root     tty        3, 205 Feb 10  2003 ttybd
+crw-rw-rw-    1 root     tty        3, 204 Feb 10  2003 ttybc
+crw-rw-rw-    1 root     tty        3, 203 Feb 10  2003 ttybb
+crw-rw-rw-    1 root     tty        3, 202 Feb 10  2003 ttyba
+crw-rw-rw-    1 root     tty        3, 201 Feb 10  2003 ttyb9
+crw-rw-rw-    1 root     tty        3, 200 Feb 10  2003 ttyb8
+crw-rw-rw-    1 root     tty        3, 199 Feb 10  2003 ttyb7
+crw-rw-rw-    1 root     tty        3, 198 Feb 10  2003 ttyb6
+crw-rw-rw-    1 root     tty        3, 197 Feb 10  2003 ttyb5
+crw-rw-rw-    1 root     tty        3, 196 Feb 10  2003 ttyb4
+crw-rw-rw-    1 root     tty        3, 195 Feb 10  2003 ttyb3
+crw-rw-rw-    1 root     tty        3, 194 Feb 10  2003 ttyb2
+crw-rw-rw-    1 root     tty        3, 193 Feb 10  2003 ttyb1
+crw-rw-rw-    1 root     tty        3, 192 Feb 10  2003 ttyb0
+crw-rw-rw-    1 root     tty        2, 208 Feb 10  2003 ptyc0
+crw-rw-rw-    1 root     tty        2, 207 Feb 10  2003 ptybf
+crw-rw-rw-    1 root     tty        2, 206 Feb 10  2003 ptybe
+crw-rw-rw-    1 root     tty        2, 205 Feb 10  2003 ptybd
+crw-rw-rw-    1 root     tty        2, 204 Feb 10  2003 ptybc
+crw-rw-rw-    1 root     tty        2, 203 Feb 10  2003 ptybb
+crw-rw-rw-    1 root     tty        2, 202 Feb 10  2003 ptyba
+crw-rw-rw-    1 root     tty        2, 201 Feb 10  2003 ptyb9
+crw-rw-rw-    1 root     tty        2, 200 Feb 10  2003 ptyb8
+crw-rw-rw-    1 root     tty        2, 199 Feb 10  2003 ptyb7
+crw-rw-rw-    1 root     tty        2, 198 Feb 10  2003 ptyb6
+crw-rw-rw-    1 root     tty        2, 197 Feb 10  2003 ptyb5
+crw-rw-rw-    1 root     tty        2, 196 Feb 10  2003 ptyb4
+crw-rw-rw-    1 root     tty        2, 195 Feb 10  2003 ptyb3
+crw-rw-rw-    1 root     tty        2, 194 Feb 10  2003 ptyb2
+crw-rw-rw-    1 root     tty        2, 193 Feb 10  2003 ptyb1
+crw-rw-rw-    1 root     tty        3, 225 Feb 10  2003 ttyd1
+crw-rw-rw-    1 root     tty        3, 224 Feb 10  2003 ttyd0
+crw-rw-rw-    1 root     tty        3, 223 Feb 10  2003 ttycf
+crw-rw-rw-    1 root     tty        3, 222 Feb 10  2003 ttyce
+crw-rw-rw-    1 root     tty        3, 221 Feb 10  2003 ttycd
+crw-rw-rw-    1 root     tty        3, 220 Feb 10  2003 ttycc
+crw-rw-rw-    1 root     tty        3, 219 Feb 10  2003 ttycb
+crw-rw-rw-    1 root     tty        3, 218 Feb 10  2003 ttyca
+crw-rw-rw-    1 root     tty        3, 217 Feb 10  2003 ttyc9
+crw-rw-rw-    1 root     tty        3, 216 Feb 10  2003 ttyc8
+crw-rw-rw-    1 root     tty        3, 215 Feb 10  2003 ttyc7
+crw-rw-rw-    1 root     tty        3, 214 Feb 10  2003 ttyc6
+crw-rw-rw-    1 root     tty        3, 213 Feb 10  2003 ttyc5
+crw-rw-rw-    1 root     tty        3, 212 Feb 10  2003 ttyc4
+crw-rw-rw-    1 root     tty        3, 211 Feb 10  2003 ttyc3
+crw-rw-rw-    1 root     tty        3, 210 Feb 10  2003 ttyc2
+crw-rw-rw-    1 root     tty        3, 209 Feb 10  2003 ttyc1
+crw-rw-rw-    1 root     tty        3, 208 Feb 10  2003 ttyc0
+crw-rw-rw-    1 root     tty        2, 225 Feb 10  2003 ptyd1
+crw-rw-rw-    1 root     tty        2, 224 Feb 10  2003 ptyd0
+crw-rw-rw-    1 root     tty        2, 223 Feb 10  2003 ptycf
+crw-rw-rw-    1 root     tty        2, 222 Feb 10  2003 ptyce
+crw-rw-rw-    1 root     tty        2, 221 Feb 10  2003 ptycd
+crw-rw-rw-    1 root     tty        2, 220 Feb 10  2003 ptycc
+crw-rw-rw-    1 root     tty        2, 219 Feb 10  2003 ptycb
+crw-rw-rw-    1 root     tty        2, 218 Feb 10  2003 ptyca
+crw-rw-rw-    1 root     tty        2, 217 Feb 10  2003 ptyc9
+crw-rw-rw-    1 root     tty        2, 216 Feb 10  2003 ptyc8
+crw-rw-rw-    1 root     tty        2, 215 Feb 10  2003 ptyc7
+crw-rw-rw-    1 root     tty        2, 214 Feb 10  2003 ptyc6
+crw-rw-rw-    1 root     tty        2, 213 Feb 10  2003 ptyc5
+crw-rw-rw-    1 root     tty        2, 212 Feb 10  2003 ptyc4
+crw-rw-rw-    1 root     tty        2, 211 Feb 10  2003 ptyc3
+crw-rw-rw-    1 root     tty        2, 210 Feb 10  2003 ptyc2
+crw-rw-rw-    1 root     tty        2, 209 Feb 10  2003 ptyc1
+crw-rw-rw-    1 root     tty        3, 241 Feb 10  2003 ttye1
+crw-rw-rw-    1 root     tty        3, 240 Feb 10  2003 ttye0
+crw-rw-rw-    1 root     tty        3, 239 Feb 10  2003 ttydf
+crw-rw-rw-    1 root     tty        3, 238 Feb 10  2003 ttyde
+crw-rw-rw-    1 root     tty        3, 237 Feb 10  2003 ttydd
+crw-rw-rw-    1 root     tty        3, 236 Feb 10  2003 ttydc
+crw-rw-rw-    1 root     tty        3, 235 Feb 10  2003 ttydb
+crw-rw-rw-    1 root     tty        3, 234 Feb 10  2003 ttyda
+crw-rw-rw-    1 root     tty        3, 233 Feb 10  2003 ttyd9
+crw-rw-rw-    1 root     tty        3, 232 Feb 10  2003 ttyd8
+crw-rw-rw-    1 root     tty        3, 231 Feb 10  2003 ttyd7
+crw-rw-rw-    1 root     tty        3, 230 Feb 10  2003 ttyd6
+crw-rw-rw-    1 root     tty        3, 229 Feb 10  2003 ttyd5
+crw-rw-rw-    1 root     tty        3, 228 Feb 10  2003 ttyd4
+crw-rw-rw-    1 root     tty        3, 227 Feb 10  2003 ttyd3
+crw-rw-rw-    1 root     tty        3, 226 Feb 10  2003 ttyd2
+crw-rw-rw-    1 root     tty        2, 241 Feb 10  2003 ptye1
+crw-rw-rw-    1 root     tty        2, 240 Feb 10  2003 ptye0
+crw-rw-rw-    1 root     tty        2, 239 Feb 10  2003 ptydf
+crw-rw-rw-    1 root     tty        2, 238 Feb 10  2003 ptyde
+crw-rw-rw-    1 root     tty        2, 237 Feb 10  2003 ptydd
+crw-rw-rw-    1 root     tty        2, 236 Feb 10  2003 ptydc
+crw-rw-rw-    1 root     tty        2, 235 Feb 10  2003 ptydb
+crw-rw-rw-    1 root     tty        2, 234 Feb 10  2003 ptyda
+crw-rw-rw-    1 root     tty        2, 233 Feb 10  2003 ptyd9
+crw-rw-rw-    1 root     tty        2, 232 Feb 10  2003 ptyd8
+crw-rw-rw-    1 root     tty        2, 231 Feb 10  2003 ptyd7
+crw-rw-rw-    1 root     tty        2, 230 Feb 10  2003 ptyd6
+crw-rw-rw-    1 root     tty        2, 229 Feb 10  2003 ptyd5
+crw-rw-rw-    1 root     tty        2, 228 Feb 10  2003 ptyd4
+crw-rw-rw-    1 root     tty        2, 227 Feb 10  2003 ptyd3
+crw-rw-rw-    1 root     tty        2, 226 Feb 10  2003 ptyd2
+crw-rw-rw-    1 root     tty        3, 250 Feb 10  2003 ttyea-
+crw-rw-rw-    1 root     tty        3, 249 Feb 10  2003 ttye9
+crw-rw-rw-    1 root     tty        3, 248 Feb 10  2003 ttye8
+crw-rw-rw-    1 root     tty        3, 247 Feb 10  2003 ttye7
+crw-rw-rw-    1 root     tty        3, 246 Feb 10  2003 ttye6
+crw-rw-rw-    1 root     tty        3, 245 Feb 10  2003 ttye5
+crw-rw-rw-    1 root     tty        3, 244 Feb 10  2003 ttye4
+crw-rw-rw-    1 root     tty        3, 243 Feb 10  2003 ttye3
+crw-rw-rw-    1 root     tty        3, 242 Feb 10  2003 ttye2
+crw-rw-rw-    1 root     tty        2, 250 Feb 10  2003 ptyea
+crw-rw-rw-    1 root     tty        2, 249 Feb 10  2003 ptye9
+crw-rw-rw-    1 root     tty        2, 248 Feb 10  2003 ptye8
+crw-rw-rw-    1 root     tty        2, 247 Feb 10  2003 ptye7
+crw-rw-rw-    1 root     tty        2, 246 Feb 10  2003 ptye6
+crw-rw-rw-    1 root     tty        2, 245 Feb 10  2003 ptye5
+crw-rw-rw-    1 root     tty        2, 244 Feb 10  2003 ptye4
+crw-rw-rw-    1 root     tty        2, 243 Feb 10  2003 ptye3
+crw-rw-rw-    1 root     tty        2, 242 Feb 10  2003 ptye2
+crw-rw----    1 root     audio     35, 131 Feb 10  2003 smpte3
+crw-rw----    1 root     audio     35, 130 Feb 10  2003 smpte2
+crw-rw----    1 root     audio     35, 129 Feb 10  2003 smpte1
+crw-rw----    1 root     audio     35, 128 Feb 10  2003 smpte0
+crw-rw----    1 root     audio     35,  67 Feb 10  2003 rmidi3
+crw-rw----    1 root     audio     35,  66 Feb 10  2003 rmidi2
+crw-rw----    1 root     audio     35,  65 Feb 10  2003 rmidi1
+crw-rw----    1 root     audio     35,  64 Feb 10  2003 rmidi0
+crw-rw----    1 root     audio     31,   1 Feb 10  2003 mpu401stat
+crw-rw----    1 root     audio     31,   0 Feb 10  2003 mpu401data
+crw-rw----    1 root     audio     35,   3 Feb 10  2003 midi3
+crw-rw----    1 root     audio     35,   2 Feb 10  2003 midi2
+crw-rw----    1 root     audio     35,   1 Feb 10  2003 midi1
+crw-rw----    1 root     audio     14,   7 Feb 10  2003 audioctl
+crw-rw----    1 root     audio     13,   3 Feb 10  2003 pcsp
+crw-rw----    1 root     audio     13,   0 Feb 10  2003 pcmixer
+crw-rw----    1 root     audio     13,   4 Feb 10  2003 pcaudio
+crw-rw-rw-    1 root     tty        3,  13 Feb 10  2003 ttypd
+crw-rw-rw-    1 root     tty        3,  12 Feb 10  2003 ttypc
+crw-rw-rw-    1 root     tty        3,  11 Feb 10  2003 ttypb
+crw-rw-rw-    1 root     tty        3,  10 Feb 10  2003 ttypa
+crw-rw-rw-    1 root     tty        3,   9 Feb 10  2003 ttyp9
+crw-rw-rw-    1 root     tty        3,   8 Feb 10  2003 ttyp8
+crw-rw-rw-    1 root     tty        3,   7 Feb 10  2003 ttyp7
+crw-rw-rw-    1 root     tty        3,   6 Feb 10  2003 ttyp6
+crw-rw-rw-    1 root     tty        3,   5 Feb 10  2003 ttyp5
+crw-rw-rw-    1 root     tty        3,   4 Feb 10  2003 ttyp4
+crw-rw-rw-    1 root     tty        3,   3 Feb 10  2003 ttyp3
+crw-rw-rw-    1 root     tty        3,   2 Feb 10  2003 ttyp2
+crw-rw-rw-    1 root     tty        3,   1 Feb 10  2003 ttyp1
+crw-rw-rw-    1 root     tty        2,  14 Feb 10  2003 ptype
+crw-rw-rw-    1 root     tty        2,  13 Feb 10  2003 ptypd
+crw-rw-rw-    1 root     tty        2,  12 Feb 10  2003 ptypc
+crw-rw-rw-    1 root     tty        2,  11 Feb 10  2003 ptypb
+crw-rw-rw-    1 root     tty        2,  10 Feb 10  2003 ptypa
+crw-rw-rw-    1 root     tty        2,   9 Feb 10  2003 ptyp9
+crw-rw-rw-    1 root     tty        2,   8 Feb 10  2003 ptyp8
+crw-rw-rw-    1 root     tty        2,   7 Feb 10  2003 ptyp7
+crw-rw-rw-    1 root     tty        2,   6 Feb 10  2003 ptyp6
+crw-rw-rw-    1 root     tty        2,   5 Feb 10  2003 ptyp5
+crw-rw-rw-    1 root     tty        2,   4 Feb 10  2003 ptyp4
+crw-rw-rw-    1 root     tty        2,   3 Feb 10  2003 ptyp3
+crw-rw-rw-    1 root     tty        2,   2 Feb 10  2003 ptyp2
+crw-rw-rw-    1 root     tty        2,   1 Feb 10  2003 ptyp1
+crw-rw-rw-    1 root     tty        2,   0 Feb 10  2003 ptyp0
+crw-rw-rw-    1 root     tty        3,  32 Feb 10  2003 ttyr0
+crw-rw-rw-    1 root     tty        3,  31 Feb 10  2003 ttyqf
+crw-rw-rw-    1 root     tty        3,  30 Feb 10  2003 ttyqe
+crw-rw-rw-    1 root     tty        3,  29 Feb 10  2003 ttyqd
+crw-rw-rw-    1 root     tty        3,  28 Feb 10  2003 ttyqc
+crw-rw-rw-    1 root     tty        3,  27 Feb 10  2003 ttyqb
+crw-rw-rw-    1 root     tty        3,  26 Feb 10  2003 ttyqa
+crw-rw-rw-    1 root     tty        3,  25 Feb 10  2003 ttyq9
+crw-rw-rw-    1 root     tty        3,  24 Feb 10  2003 ttyq8
+crw-rw-rw-    1 root     tty        3,  23 Feb 10  2003 ttyq7
+crw-rw-rw-    1 root     tty        3,  22 Feb 10  2003 ttyq6
+crw-rw-rw-    1 root     tty        3,  21 Feb 10  2003 ttyq5
+crw-rw-rw-    1 root     tty        3,  20 Feb 10  2003 ttyq4
+crw-rw-rw-    1 root     tty        3,  19 Feb 10  2003 ttyq3
+crw-rw-rw-    1 root     tty        3,  18 Feb 10  2003 ttyq2
+crw-rw-rw-    1 root     tty        3,  17 Feb 10  2003 ttyq1
+crw-rw-rw-    1 root     tty        3,  16 Feb 10  2003 ttyq0
+crw-rw-rw-    1 root     tty        3,  15 Feb 10  2003 ttypf
+crw-rw-rw-    1 root     tty        3,  14 Feb 10  2003 ttype
+crw-rw-rw-    1 root     tty        2,  32 Feb 10  2003 ptyr0
+crw-rw-rw-    1 root     tty        2,  31 Feb 10  2003 ptyqf
+crw-rw-rw-    1 root     tty        2,  30 Feb 10  2003 ptyqe
+crw-rw-rw-    1 root     tty        2,  29 Feb 10  2003 ptyqd
+crw-rw-rw-    1 root     tty        2,  28 Feb 10  2003 ptyqc
+crw-rw-rw-    1 root     tty        2,  27 Feb 10  2003 ptyqb
+crw-rw-rw-    1 root     tty        2,  26 Feb 10  2003 ptyqa
+crw-rw-rw-    1 root     tty        2,  25 Feb 10  2003 ptyq9
+crw-rw-rw-    1 root     tty        2,  24 Feb 10  2003 ptyq8
+crw-rw-rw-    1 root     tty        2,  23 Feb 10  2003 ptyq7
+crw-rw-rw-    1 root     tty        2,  22 Feb 10  2003 ptyq6
+crw-rw-rw-    1 root     tty        2,  21 Feb 10  2003 ptyq5
+crw-rw-rw-    1 root     tty        2,  20 Feb 10  2003 ptyq4
+crw-rw-rw-    1 root     tty        2,  19 Feb 10  2003 ptyq3
+crw-rw-rw-    1 root     tty        2,  18 Feb 10  2003 ptyq2
+crw-rw-rw-    1 root     tty        2,  17 Feb 10  2003 ptyq1
+crw-rw-rw-    1 root     tty        2,  16 Feb 10  2003 ptyq0
+crw-rw-rw-    1 root     tty        2,  15 Feb 10  2003 ptypf
+crw-rw-rw-    1 root     tty        3,  47 Feb 10  2003 ttyrf-
+crw-rw-rw-    1 root     tty        3,  46 Feb 10  2003 ttyre
+crw-rw-rw-    1 root     tty        3,  45 Feb 10  2003 ttyrd
+crw-rw-rw-    1 root     tty        3,  44 Feb 10  2003 ttyrc
+crw-rw-rw-    1 root     tty        3,  43 Feb 10  2003 ttyrb
+crw-rw-rw-    1 root     tty        3,  42 Feb 10  2003 ttyra
+crw-rw-rw-    1 root     tty        3,  41 Feb 10  2003 ttyr9
+crw-rw-rw-    1 root     tty        3,  40 Feb 10  2003 ttyr8
+crw-rw-rw-    1 root     tty        3,  39 Feb 10  2003 ttyr7
+crw-rw-rw-    1 root     tty        3,  38 Feb 10  2003 ttyr6
+crw-rw-rw-    1 root     tty        3,  37 Feb 10  2003 ttyr5
+crw-rw-rw-    1 root     tty        3,  36 Feb 10  2003 ttyr4
+crw-rw-rw-    1 root     tty        3,  35 Feb 10  2003 ttyr3
+crw-rw-rw-    1 root     tty        3,  34 Feb 10  2003 ttyr2
+crw-rw-rw-    1 root     tty        3,  33 Feb 10  2003 ttyr1
+crw-rw-rw-    1 root     tty        2,  47 Feb 10  2003 ptyrf
+crw-rw-rw-    1 root     tty        2,  46 Feb 10  2003 ptyre
+crw-rw-rw-    1 root     tty        2,  45 Feb 10  2003 ptyrd
+crw-rw-rw-    1 root     tty        2,  44 Feb 10  2003 ptyrc
+crw-rw-rw-    1 root     tty        2,  43 Feb 10  2003 ptyrb
+crw-rw-rw-    1 root     tty        2,  42 Feb 10  2003 ptyra
+crw-rw-rw-    1 root     tty        2,  41 Feb 10  2003 ptyr9
+crw-rw-rw-    1 root     tty        2,  40 Feb 10  2003 ptyr8
+crw-rw-rw-    1 root     tty        2,  39 Feb 10  2003 ptyr7
+crw-rw-rw-    1 root     tty        2,  38 Feb 10  2003 ptyr6
+crw-rw-rw-    1 root     tty        2,  37 Feb 10  2003 ptyr5
+crw-rw-rw-    1 root     tty        2,  36 Feb 10  2003 ptyr4
+crw-rw-rw-    1 root     tty        2,  35 Feb 10  2003 ptyr3
+crw-rw-rw-    1 root     tty        2,  34 Feb 10  2003 ptyr2
+crw-rw-rw-    1 root     tty        2,  33 Feb 10  2003 ptyr1
+crw-------    1 root     root      10,   1 Feb 13  2003 psaux
+crw-rw----    1 root     dialout  188,   9 Mar  2  2004 ttyUSB9
+crw-rw----    1 root     dialout  188,   8 Mar  2  2004 ttyUSB8
+crw-rw----    1 root     dialout  188,   7 Mar  2  2004 ttyUSB7
+crw-rw----    1 root     dialout  188,   6 Mar  2  2004 ttyUSB6
+crw-rw----    1 root     dialout  188,   5 Mar  2  2004 ttyUSB5
+crw-rw----    1 root     dialout  188,   4 Mar  2  2004 ttyUSB4
+crw-rw----    1 root     dialout  188,   3 Mar  2  2004 ttyUSB3
+crw-rw----    1 root     dialout  188,   2 Mar  2  2004 ttyUSB2
+crw-rw----    1 root     dialout  188,  12 Mar  2  2004 ttyUSB12
+crw-rw----    1 root     dialout  188,  11 Mar  2  2004 ttyUSB11
+crw-rw----    1 root     dialout  188,  10 Mar  2  2004 ttyUSB10
+crw-rw----    1 root     dialout  188,   1 Mar  2  2004 ttyUSB1
+crw-rw----    1 root     dialout  188,   0 Mar  2  2004 ttyUSB0
+crw-rw----    1 root     dialout  166,   9 Mar  2  2004 ttyACM9
+crw-rw----    1 root     dialout  166,   8 Mar  2  2004 ttyACM8
+crw-rw----    1 root     dialout  166,   7 Mar  2  2004 ttyACM7
+crw-rw----    1 root     dialout  166,   6 Mar  2  2004 ttyACM6
+crw-rw----    1 root     dialout  166,   5 Mar  2  2004 ttyACM5
+crw-rw----    1 root     dialout  166,   4 Mar  2  2004 ttyACM4
+crw-rw----    1 root     dialout  166,   3 Mar  2  2004 ttyACM3
+crw-rw----    1 root     dialout  166,   2 Mar  2  2004 ttyACM2
+crw-rw----    1 root     dialout  166,  12 Mar  2  2004 ttyACM12
+crw-rw----    1 root     dialout  166,  11 Mar  2  2004 ttyACM11
+crw-rw----    1 root     dialout  166,  10 Mar  2  2004 ttyACM10
+crw-rw----    1 root     dialout  166,   1 Mar  2  2004 ttyACM1
+crw-rw----    1 root     dialout  166,   0 Mar  2  2004 ttyACM0
+drwxr-xr-x    2 root     root         4096 Mar  2  2004 usb
+crw-rw----    1 root     dialout  188,  15 Mar  2  2004 ttyUSB15
+crw-rw----    1 root     dialout  188,  14 Mar  2  2004 ttyUSB14
+crw-rw----    1 root     dialout  188,  13 Mar  2  2004 ttyUSB13
+crw-rw----    1 root     dialout  166,  15 Mar  2  2004 ttyACM15
+crw-rw----    1 root     dialout  166,  14 Mar  2  2004 ttyACM14
+crw-rw----    1 root     dialout  166,  13 Mar  2  2004 ttyACM13
+crw-rw----    1 root     lp        99,   2 Mar  2  2004 parport2
+crw-rw----    1 root     lp        99,   1 Mar  2  2004 parport1
+crw-rw----    1 root     lp        99,   0 Mar  2  2004 parport0
+crw-rw----    1 root     audio     14,   1 Mar  5  2004 sequencer
+crw-rw----    1 root     audio     14,   8 Mar  5  2004 music
+crw-rw----    1 root     audio     14,  48 Mar  5  2004 mixer3
+crw-rw----    1 root     audio     14,  32 Mar  5  2004 mixer2
+crw-rw----    1 root     audio     14,  16 Mar  5  2004 mixer1
+crw-rw----    1 root     audio     14,   0 Mar  5  2004 mixer0
+crw-rw----    1 root     audio     14,  50 Mar  5  2004 midi03
+crw-rw----    1 root     audio     14,  34 Mar  5  2004 midi02
+crw-rw----    1 root     audio     14,  18 Mar  5  2004 midi01
+crw-rw----    1 root     audio     14,   2 Mar  5  2004 midi00
+crw-rw----    1 root     audio     14,  51 Mar  5  2004 dsp3
+crw-rw----    1 root     audio     14,  35 Mar  5  2004 dsp2
+crw-rw----    1 root     audio     14,  19 Mar  5  2004 dsp1
+crw-rw----    1 root     audio     14,   3 Mar  5  2004 dsp0
+crw-rw----    1 root     audio     14,  57 Mar  5  2004 dmmidi3
+crw-rw----    1 root     audio     14,  41 Mar  5  2004 dmmidi2
+crw-rw----    1 root     audio     14,  25 Mar  5  2004 dmmidi1
+crw-rw----    1 root     audio     14,   9 Mar  5  2004 dmmidi0
+crw-rw----    1 root     audio     14,  58 Mar  5  2004 dmfm3
+crw-rw----    1 root     audio     14,  42 Mar  5  2004 dmfm2
+crw-rw----    1 root     audio     14,  26 Mar  5  2004 dmfm1
+crw-rw----    1 root     audio     14,  10 Mar  5  2004 dmfm0
+crw-rw----    1 root     audio     14,  52 Mar  5  2004 audio3
+crw-rw----    1 root     audio     14,  36 Mar  5  2004 audio2
+crw-rw----    1 root     audio     14,  20 Mar  5  2004 audio1
+crw-rw----    1 root     audio     14,   4 Mar  5  2004 audio0
+crw-rw----    1 root     audio     14,  59 Mar  5  2004 amixer3
+crw-rw----    1 root     audio     14,  43 Mar  5  2004 amixer2
+crw-rw----    1 root     audio     14,  27 Mar  5  2004 amixer1
+crw-rw----    1 root     audio     14,  11 Mar  5  2004 amixer0
+crw-rw----    1 root     audio     14,  61 Mar  5  2004 amidi3
+crw-rw----    1 root     audio     14,  45 Mar  5  2004 amidi2
+crw-rw----    1 root     audio     14,  29 Mar  5  2004 amidi1
+crw-rw----    1 root     audio     14,  13 Mar  5  2004 amidi0
+crw-rw----    1 root     audio     14,  60 Mar  5  2004 adsp3
+crw-rw----    1 root     audio     14,  44 Mar  5  2004 adsp2
+crw-rw----    1 root     audio     14,  28 Mar  5  2004 adsp1
+crw-rw----    1 root     audio     14,  12 Mar  5  2004 adsp0
+crw-rw----    1 root     audio     14,  62 Mar  5  2004 admmidi3
+crw-rw----    1 root     audio     14,  46 Mar  5  2004 admmidi2
+crw-rw----    1 root     audio     14,  30 Mar  5  2004 admmidi1
+crw-rw----    1 root     audio     14,  14 Mar  5  2004 admmidi0
+drwxr-x---    2 root     audio        4096 Mar  5  2004 snd
+crw-rw----    1 root     audio    116,   1 Mar  5  2004 aloadSEQ
+crw-rw----    1 root     audio    116,  96 Mar  5  2004 aloadC3
+crw-rw----    1 root     audio    116,  64 Mar  5  2004 aloadC2
+crw-rw----    1 root     audio    116,  32 Mar  5  2004 aloadC1
+crw-rw----    1 root     audio    116,   0 Mar  5  2004 aloadC0
+crw-rw----    1 root     disk     171,   0 Mar  5  2004 raw1394
+crw-rw----    1 root     root      10, 134 Apr 16  2004 apm_bios
+lrwxrwxrwx    1 root     root            4 May 21  2004 stdout -> fd/1
+lrwxrwxrwx    1 root     root            4 May 21  2004 stdin -> fd/0
+lrwxrwxrwx    1 root     root            4 May 21  2004 stderr -> fd/2
+lrwxrwxrwx    1 root     root           24 May 21  2004 sndstat -> /proc/asound/oss/sndstat
+lrwxrwxrwx    1 root     root           10 May 21  2004 sequencer2 -> /dev/music
+lrwxrwxrwx    1 root     root            5 May 21  2004 mouse -> psaux
+lrwxrwxrwx    1 root     root           11 May 21  2004 mixer -> /dev/mixer0
+lrwxrwxrwx    1 root     root           11 May 21  2004 midi -> /dev/midi00
+lrwxrwxrwx    1 root     root           13 May 21  2004 fd -> /proc/self/fd
+lrwxrwxrwx    1 root     root            9 May 21  2004 dsp -> /dev/dsp0
+lrwxrwxrwx    1 root     root           11 May 21  2004 audio -> /dev/audio0
+lrwxrwxrwx    1 root     root           11 May 21  2004 amidi -> /dev/amidi0
+lrwxrwxrwx    1 root     root           10 May 21  2004 adsp -> /dev/adsp0
+lrwxrwxrwx    1 root     root           13 May 21  2004 MAKEDEV -> /sbin/MAKEDEV
+crw-rw-rw-    1 root     root       1,   5 May 24  2004 zero
+crw-rw-rw-    1 root     root       1,   8 May 24  2004 random
+crw-r-----    1 root     kmem       1,   4 May 24  2004 port
+crw-rw-rw-    1 root     root       1,   3 May 24  2004 null
+crw-r-----    1 root     kmem       1,   1 May 24  2004 mem
+crw-r-----    1 root     kmem       1,   2 May 24  2004 kmem
+crw-rw-rw-    1 root     root       1,   7 May 24  2004 full
+lrwxrwxrwx    1 root     root           11 May 24  2004 core -> /proc/kcore
+brw-rw----    1 root     disk       1,   9 May 24  2004 ram9
+brw-rw----    1 root     disk       1,   8 May 24  2004 ram8
+brw-rw----    1 root     disk       1,   7 May 24  2004 ram7
+brw-rw----    1 root     disk       1,   6 May 24  2004 ram6
+brw-rw----    1 root     disk       1,   5 May 24  2004 ram5
+brw-rw----    1 root     disk       1,   4 May 24  2004 ram4
+brw-rw----    1 root     disk       1,   3 May 24  2004 ram3
+brw-rw----    1 root     disk       1,   2 May 24  2004 ram2
+brw-rw----    1 root     disk       1,  16 May 24  2004 ram16
+brw-rw----    1 root     disk       1,  15 May 24  2004 ram15
+brw-rw----    1 root     disk       1,  14 May 24  2004 ram14
+brw-rw----    1 root     disk       1,  13 May 24  2004 ram13
+brw-rw----    1 root     disk       1,  12 May 24  2004 ram12
+brw-rw----    1 root     disk       1,  11 May 24  2004 ram11
+brw-rw----    1 root     disk       1,  10 May 24  2004 ram10
+brw-rw----    1 root     disk       1,   1 May 24  2004 ram1
+brw-rw----    1 root     disk       1,   0 May 24  2004 ram0
+lrwxrwxrwx    1 root     root            4 May 24  2004 ram -> ram1
+brw-rw----    1 root     disk       7,   7 May 24  2004 loop7
+brw-rw----    1 root     disk       7,   6 May 24  2004 loop6
+brw-rw----    1 root     disk       7,   5 May 24  2004 loop5
+brw-rw----    1 root     disk       7,   4 May 24  2004 loop4
+brw-rw----    1 root     disk       7,   3 May 24  2004 loop3
+brw-rw----    1 root     disk       7,   2 May 24  2004 loop2
+brw-rw----    1 root     disk       7,   1 May 24  2004 loop1
+brw-rw----    1 root     disk       7,   0 May 24  2004 loop0
+crw-------    1 root     root       4,   0 May 24  2004 tty0
+crw-rw----    1 root     video     29,   7 May 24  2004 fb7
+crw-rw----    1 root     video     29,   6 May 24  2004 fb6
+crw-rw----    1 root     video     29,   5 May 24  2004 fb5
+crw-rw----    1 root     video     29,   4 May 24  2004 fb4
+crw-rw----    1 root     video     29,   3 May 24  2004 fb3
+crw-rw----    1 root     video     29,   2 May 24  2004 fb2
+crw-rw----    1 root     video     29,   1 May 24  2004 fb1
+crw-rw----    1 root     video     29,   0 May 24  2004 fb0
+drwxr-xr-x    2 root     root         4096 May 24  2004 mapper
+crw-rw-rw-    1 root     tty        3,   0 Jul  2  2004 ttyp0
+drwxr-xr-x    2 root     root            0 Mar 21 11:18 pts
+drwxrwxrwt    2 root     root           40 Mar 21 11:18 shm
+cr--r--r--    1 root     root       1,   9 Mar 21 11:19 urandom
+srw-rw-rw-    1 root     root            0 Mar 21 11:19 log
+drwxr-xr-x    2 root     root         4096 Mar 21 11:19 dri
+prw-------    1 root     root            0 Mar 21 13:09 initctl
+crw-------    1 root     tty        5,   1 Mar 21 13:09 console
+crw-------    1 root     root       4,   2 Mar 21 13:09 tty2
+crw-------    1 root     root       4,   3 Mar 21 13:09 tty3
+crw-------    1 root     root       4,   4 Mar 21 13:09 tty4
+crw-------    1 root     root       4,   6 Mar 21 13:09 tty6
+crw-------    1 root     root       4,   5 Mar 21 13:09 tty5
+crw-------    1 root     root       4,   1 Mar 21 13:09 tty1
+crw-rw-rw-    1 root     tty        5,   0 Mar 23 12:42 tty
+prw-r-----    1 root     adm             0 Mar 29 07:53 xconsole
+crw-rw-rw-    1 root     tty        5,   2 Mar 29 11:25 ptmx
+
+/data:
+total 1
+drwxr-xr-x    6 root     hermes        152 Aug 14  2003 28
+
+/misc:
+total 16
+drwxrwxrwx   13 root     root        24576 Mar  8 11:09 processed_data
+
+/scratch:
+total 8
+drwx------    2 root     root         4096 Apr 22  2004 lost+found
+drwxr-xr-x    4 rmcnabb  users        4096 Mar 28 16:29 rmcnabb
+
+/tmp:
+total 324
+drwx------    2 dchitwoo dchitwoo     4096 Mar 22 08:53 ssh-WVZsQI3255
+drwx------    2 dchitwoo dchitwoo     4096 Mar 22 08:54 kde-dchitwoo
+drwx------    3 dchitwoo dchitwoo     4096 Mar 22 08:55 mcop-dchitwoo
+drwx------    2 dchitwoo dchitwoo     4096 Mar 22 08:56 ksocket-dchitwoo
+drwx------    3 dchitwoo dchitwoo     4096 Mar 22 08:58 gconfd-dchitwoo
+-rw-------    1 dchitwoo dchitwoo    63123 Mar 22 10:22 0223-0430dk_multiplehawking.pdf
+-rw-------    1 dchitwoo dchitwoo    63123 Mar 22 10:23 0223-0430dk_multiplehawking-1.pdf
+-rw-------    1 dchitwoo dchitwoo   148546 Mar 22 10:44 HWU54D LR.pdf
+drwx------    2 dchitwoo dchitwoo     4096 Mar 22 14:33 orbit-dchitwoo
+drwx------    3 rmcnabb  users        4096 Mar 28 11:16 gconfd-rmcnabb
+drwx------    2 rmcnabb  users        4096 Mar 28 11:16 orbit-rmcnabb
+drwxr-xr-x    2 dchitwoo dchitwoo     4096 Mar 29 10:36 plugtmp
+
+/etc:
+total 3188
+-rw-r--r--    1 root     root           26 Sep 25  1995 host.conf
+-rw-r--r--    1 root     root          584 Jan 20  1998 pwdb.conf
+-rw-r--r--    1 root     root        15142 Feb 17  1998 zedrc.xterm
+-rw-r--r--    1 root     root         5031 Apr  5  1998 pgp-us.conf
+-rw-r--r--    1 root     root         1856 May 28  1998 inittab
+-rw-r--r--    1 root     root         1220 Jul 24  1998 l2hpstoimg.cfg
+-rw-r--r--    1 root     root         1601 Aug  5  1998 pdmenurc
+-rw-r--r--    1 root     root          524 Aug 31  1998 system.wmmailrc
+-rw-r--r--    1 root     root        13621 Oct 11  1998 gs.Fontmap
+-rw-r--r--    1 root     root          552 Oct 13  1998 foilhtml.cfg
+-rw-r--r--    1 root     root          446 Oct 24  1998 octave.conf
+-rw-r--r--    1 root     root         1294 Oct 27  1998 lintianrc
+-rw-r--r--    1 root     root         1756 Oct 30  1998 gpm-root.conf
+-rw-r--r--    1 root     root          994 Nov 21  1998 isapnp.gone
+-rw-r--r--    1 root     root          130 Nov 25  1998 moonlightrc
+-rw-r--r--    1 root     root          449 Nov 30  1998 mailcap.order
+-rw-r--r--    1 root     root           97 Dec  5  1998 gateways
+-rw-r--r--    1 root     root          111 Jan 19  1999 magic
+-rw-r--r--    1 root     root          632 Jan 22  1999 zshenv
+-rw-r--r--    1 root     root           54 Jan 22  1999 zlogout
+-rw-r--r--    1 root     root          340 Jan 22  1999 zlogin
+-rw-r--r--    1 root     root          354 Jan 24  1999 fdmount.conf
+-rw-r--r--    1 root     root            8 Feb 20  1999 timezone.dpkg-dist
+-rw-r--r--    1 root     root         1691 Mar  3  1999 syslog.conf
+-rw-r--r--    1 root     root          594 Aug 23  1999 filter.ps
+-rw-r--r--    1 root     root          333 Aug 23  1999 filter.pcl
+-rw-r--r--    1 root     root          130 Oct  3  1999 fnrc
+-rw-r--r--    1 root     root         3231 Oct 17  1999 ae.rc
+-rw-r--r--    1 root     root          115 Nov 11  1999 exports
+-rw-r--r--    1 root     root          338 Dec  7  1999 nssnodns.conf
+-rw-r--r--    1 root     root          666 Dec 17  1999 cvs.conf.dpkg-old
+-rw-r--r--    1 root     root         3161 Jan 26  2000 pluggerrc
+-rw-r--r--    1 root     root       631716 Feb  3  2000 termcap
+-rw-r--r--    1 root     root         2563 Feb 22  2000 a2ps-site.cfg
+-rw-r--r--    1 root     root         2609 Mar  6  2000 manpath.config.orig
+-rw-r--r--    1 root     root          356 Mar  7  2000 sp.catalog
+-rw-------    1 root     root          144 Apr  3  2000 at.deny
+-rw-r--r--    1 root     root        20859 Apr  5  2000 zedxrc
+-rw-r--r--    1 root     root        16952 Apr  5  2000 zedrc
+-rw-r--r--    1 root     root        37657 Apr 29  2000 latex2html.config
+-rw-r--r--    1 root     root        22014 May  1  2000 menu.vim
+-rw-r--r--    1 root     root          297 May 27  2000 motd.dpkg-dist
+-rw-r--r--    1 root     root          534 Jun 23  2000 pam.conf
+-rw-r--r--    1 root     root         1246 Jun 26  2000 fdprm.obsolete
+-rw-r--r--    1 root     root         1518 Jul 28  2000 dhclient.conf
+-rw-r--r--    1 root     root           11 Aug 16  2000 xlock.staff
+-rw-r--r--    1 root     root          260 Oct  8  2000 zprofile
+-rw-r--r--    1 root     root           22 Oct 18  2000 networks
+-rw-r--r--    1 root     root           16 Oct 18  2000 timezone
+drwxr-xr-x    3 root     root         4096 Oct 19  2000 emacs20
+-rw-r--r--    1 root     root            7 Oct 19  2000 papersize
+-r--r-----    1 root     root          282 Oct 19  2000 sudoers
+-rw-r--r--    1 root     root          595 Oct 19  2000 paper.config
+-rw-r--r--    1 root     root          582 Oct 19  2000 gpm.conf
+-rw-r--r--    1 root     root          446 Oct 19  2000 octave2.0.conf
+-rw-r--r--    1 root     root           18 Oct 21  2000 nntpserver
+-rw-r--r--    1 root     root        11159 Oct 21  2000 pine.conf
+-rw-r--r--    1 root     root          924 Oct 21  2000 kernel-pkg.conf.dpkg-old
+drwxr-xr-x    2 root     root         4096 Oct 22  2000 ae
+-rw-r--r--    1 root     root           43 Oct 22  2000 orbitrc
+-rw-r--r--    1 root     root          864 Oct 22  2000 porttime
+-rw-r--r--    1 root     root         2580 Oct 22  2000 login.access
+-rw-r--r--    1 root     root         1244 Oct 22  2000 limits
+drwxr-xr-x    3 root     root         4096 Oct 22  2000 sound
+drwxr-xr-x    3 root     root         4096 Oct 22  2000 CORBA
+-rw-r--r--    1 root     root          249 Oct 22  2000 aliases
+-rw-r--r--    1 root     root         2741 Oct 22  2000 manpath.config.dpkg-old
+drwxr-xr-x    2 root     root         4096 Oct 22  2000 logrotate
+drwxr-xr-x    2 root     root         4096 Oct 22  2000 mh
+drwxr-xr-x    2 root     root         4096 Oct 22  2000 rpm
+-rw-rw----    1 backup   backup         17 Oct 22  2000 amandahosts
+-rw-r--r--    1 root     root       128540 Oct 23  2000 lynx.cfg.dpkg-old
+drwxr-xr-x    3 root     root         4096 Oct 24  2000 xemacs21
+drwxr-xr-x    3 root     root         4096 Oct 24  2000 jdk1.1
+drwxr-xr-x    3 root     root         4096 Oct 24  2000 irc
+-rw-r-----    1 root     root         5586 Oct 27  2000 shadow.debian.in
+-rw-r--r--    1 root     root         4325 Oct 27  2000 group.debian.in
+-rw-r--r--    1 root     root          709 Oct 27  2000 hosts.deny
+-rw-r--r--    1 root     root          683 Oct 27  2000 hosts.allow
+-rw-r--r--    1 root     root          660 Nov 13  2000 netgroup
+-rw-r--r--    1 root     root          120 Nov 22  2000 kderc.old
+-rw-------    1 root     root         5422 Dec 10  2000 smb.conf
+drwxr-xr-x    2 root     root         4096 Feb 19  2001 networking
+-rw-r--r--    1 root     root          244 Mar  3  2001 modules.dpkg-dist
+drwxr-xr-x    5 root     root         4096 Mar 13  2001 apm
+drwxr-xr-x    2 root     root         4096 Mar 13  2001 cfengine
+-rw-r--r--    1 root     root          358 Mar 29  2001 anacrontab
+-rw-r--r--    1 root     root          125 Apr  3  2001 mail.rc
+-rw-r--r--    1 root     root           43 Apr 19  2001 exptab
+drwxr-xr-x    3 root     root         4096 Apr 25  2001 vfs
+-rw-r--r--    1 root     root           51 Apr 25  2001 kernel-img.conf~
+drwxr-xr-x    2 root     root         4096 Jun 12  2001 gtk
+-rw-r--r--    1 root     root          446 Jun 14  2001 octave2.1.conf
+-rw-r--r--    1 root     root          297 Jun 29  2001 warnquota.conf
+-rw-------    1 root     root         4839 Aug 17  2001 shadow-
+drwxr-xr-x    2 root     root         4096 Aug 19  2001 openldap
+-rw-r--r--    1 root     root           10 Sep  4  2001 defaultdomain
+-rw-r--r--    1 root     root         3956 Oct  1  2001 checksecurity.conf
+-rw-r-----    1 root     shadow       4718 Oct  5  2001 shadow.new.org
+-rw-r--r--    1 root     root         9025 Oct  5  2001 passwd.new.org
+-rw-r--r--    1 root     root         4514 Oct  5  2001 group.new.org
+-rw-r--r--    1 root     root          477 Oct  5  2001 nsswitch.conf~
+-rw-r-----    1 root     shadow       4718 Oct  5  2001 shadow.org
+-rw-r--r--    1 root     root          594 Oct  5  2001 crontab.dpkg-old
+-rw-r--r--    1 root     root        10843 Oct  5  2001 passwd.debian.in
+-rw-r--r--    1 root     root          278 Oct  9  2001 yp.conf
+-rw-r--r--    1 root     root          132 Oct 10  2001 sysctl.conf
+-rw-r--r--    1 root     root           19 Jan  1  2002 libao.conf
+-rw-r--r--    1 root     root         1664 Jan  3  2002 syslog.conf.dpkg-dist
+-rw-r--r--    1 root     root          624 Jan 29  2002 mtools.conf
+-rwxr-xr-x    1 root     root          268 Feb  1  2002 rmt
+-rw-r--r--    1 root     root          119 Mar  1  2002 catdocrc
+-rw-r--r--    1 root     root          934 Mar  2  2002 exmh.conf
+-rw-r--r--    1 root     root         1378 Mar  2  2002 timidity.cfg
+-rw-r--r--    1 root     root          312 Mar  4  2002 email-addresses
+-rw-r--r--    1 root     root          526 Mar  7  2002 quotatab
+-rwxr-xr-x    1 root     root         5904 Mar 16  2002 dhclient-script
+-rw-r--r--    1 root     root          402 Mar 20  2002 jed.conf
+-rw-r--r--    1 root     root          444 Apr 15  2002 auto.misc.dpkg-dist
+-rw-r--r--    1 root     root          239 Apr 15  2002 auto.master.dpkg-dist
+-rw-r--r--    1 root     root         4622 Apr 18  2002 vnc.conf
+-rw-r--r--    1 root     root          585 Apr 23  2002 logrotate.conf
+-rw-r--r--    1 root     root         2208 Apr 27  2002 zshrc
+-rw-r--r--    1 root     root           17 Jul 17  2002 debian_version
+drwxr-xr-x    6 root     root         4096 Sep 12  2002 local
+-rw-r--r--    1 root     root          522 Oct 10  2002 ypserv.securenets
+-rw-r--r--    1 root     root          527 Oct 10  2002 yp.conf.dpkg-dist
+-rw-r--r--    1 root     root          379 Nov 19  2002 profile
+drwxr-xr-x    2 root     root         4096 Jan  7  2003 console
+-rw-r--r--    1 root     root            0 Jan  7  2003 suid.conf
+drwxr-xr-x    2 root     root         4096 Jan  7  2003 kbd
+drwxr-xr-x    2 root     root         4096 Jan  7  2003 Net
+-rw-r--r--    1 root     root         1646 Jan  7  2003 adduser.conf.dpkg-save
+-rw-r--r--    1 root     root         1660 Jan  7  2003 adduser.conf
+drwxr-xr-x    3 root     root         4096 Jan  7  2003 emacs
+-rw-r--r--    1 root     root            4 Jan  7  2003 debian_version~
+drwxr-xr-x    2 root     root         4096 Jan  7  2003 exim
+drwxr-xr-x    3 root     root         4096 Jan  7  2003 devfs
+drwxr-xr-x    2 root     root         4096 Jan  7  2003 addressbook
+drwxr-xr-x    2 root     root         4096 Jan  7  2003 apache
+drwxr-xr-x    2 root     root         4096 Jan  7  2003 autoconf2.13
+drwxr-xr-x    3 root     root         4096 Jan  7  2003 netscape4
+drwxr-xr-x    2 news     news         4096 Jan  7  2003 news
+-rw-r--r--    1 root     root          565 Jan  7  2003 motd~
+drwxr-xr-x    3 root     root         4096 Jan  7  2003 gimp
+drwxr-xr-x    5 root     root         4096 Jan  7  2003 gnome
+drwxr-xr-x    3 root     root         4096 Jan  7  2003 gdm
+-rw-r--r--    1 root     root         7405 Jan  7  2003 isapnp.conf~
+-rw-r--r--    1 root     root         7398 Jan  7  2003 isapnp.conf
+-rw-r--r--    1 root     root           79 Jan 13  2003 kernel-img.conf
+drwxr-xr-x    2 root     root         4096 Feb 10  2003 rc.boot
+drwxr-xr-x    2 root     root         4096 Feb 20  2003 systemimager.old
+-rw-r--r--    1 root     root          848 Feb 23  2003 ksysguarddrc
+-rw-r--r--    1 root     root         1702 Feb 25  2003 printcap~
+-rw-r--r--    1 root     root         1706 Feb 25  2003 printcap
+-rw-r--r--    1 root     root          166 Apr 28  2003 ld.so.conf
+-rw-r--r--    1 root     root         1007 Jun  9  2003 passwd.org
+-rw-r--r--    1 root     root          481 Jul 22  2003 nsswitch.conf
+drwxr-xr-x    2 root     root         4096 Aug  7  2003 app-defaults
+-rw-r--r--    1 root     root         4289 Sep 22  2003 dupload.conf
+-rw-r--r--    1 root     root        37036 Sep 30  2003 mime-magic
+-rw-r--r--    1 root     root         1633 Oct  2  2003 inputrc
+-rw-r--r--    1 root     root        10607 Oct  9  2003 webmagickrc
+-rw-r--r--    1 root     root           37 Oct 26  2003 issue.net
+-rw-r--r--    1 root     root           41 Oct 26  2003 issue
+-rw-r--r--    1 root     root          639 Oct 26  2003 updatedb.conf
+-rwxr-xr-x    1 root     root         1074 Nov  1  2003 auto.net
+-rw-r--r--    1 root     root         4569 Nov 15  2003 vsftpd.conf
+-rw-r--r--    1 root     root          527 Nov 18  2003 prelink.conf
+-rw-r--r--    1 root     root            6 Nov 23  2003 debian_version.dpkg-old
+-rw-r--r--    1 root     root        11689 Dec  2  2003 mediaprm
+-rw-r--r--    1 root     root         5138 Dec  7  2003 enscript.cfg
+-rw-r--r--    1 root     root           67 Dec 12  2003 csh.logout
+-rw-r--r--    1 root     root           65 Dec 12  2003 csh.login
+-rw-r--r--    1 root     root          428 Dec 12  2003 csh.cshrc
+-rw-r--r--    1 root     root         3578 Jan  6  2004 screenrc
+-rw-r--r--    1 root     root          994 Jan 11  2004 securetty
+-rw-r--r--    1 root     root         9802 Jan 11  2004 login.defs
+-rw-r--r--    1 root     root         5640 Jan 17  2004 Muttrc
+drwxr-xr-x    2 root     root         4096 Jan 17  2004 mc
+-rw-r--r--    1 root     root        10761 Jan 17  2004 gnome-vfs-mime-magic
+-rw-r--r--    1 root     root          651 Jan 19  2004 crontab
+-rw-r--r--    1 root     root         2539 Jan 20  2004 locale.alias
+-rw-r--r--    1 root     root          947 Jan 24  2004 ypserv.conf
+drwxr-xr-x    2 root     root         4096 Jan 26  2004 ODBCDataSources
+-rw-r--r--    1 root     root            0 Jan 26  2004 odbcinst.ini
+-rw-r--r--    1 root     root            0 Jan 26  2004 odbc.ini
+-rw-r--r--    1 root     root       139827 Feb  5  2004 lynx.cfg
+-rw-r--r--    1 root     root         1258 Feb  6  2004 ucf.conf
+-rw-r--r--    1 root     root         2709 Feb  7  2004 hdparm.conf
+-rw-r--r--    1 root     root           23 Feb  8  2004 scrollkeeper.conf
+-rw-r--r--    1 root     root         1489 Feb 10  2004 fam.conf
+-rw-r--r--    1 root     root         4694 Feb 10  2004 manpath.config
+-rw-r--r--    1 root     root          220 Feb 12  2004 quotagrpadmins
+-rw-r--r--    1 root     root        15958 Feb 13  2004 services
+-rw-r--r--    1 root     root          853 Feb 13  2004 rpc
+-rw-r--r--    1 root     root         2478 Feb 13  2004 protocols
+-rw-r--r--    1 root     root         4039 Feb 13  2004 wgetrc
+-rw-r--r--    1 root     root        15124 Feb 15  2004 a2ps.cfg
+-rw-r--r--    1 root     root          965 Feb 18  2004 kernel-pkg.conf
+-rw-r--r--    1 root     root         2673 Feb 19  2004 debconf.conf
+-rw-r--r--    1 root     root         2471 Feb 21  2004 modprobe.devfs
+-rw-r--r--    1 root     root          361 Mar  1  2004 libnet.cfg
+drwxr-xr-x    4 root     root         4096 Mar  1  2004 perl
+drwxr-xr-x    7 root     root         4096 Mar  2  2004 gconf
+drwxr-xr-x    2 root     root         4096 Mar  2  2004 esound
+-rw-r--r--    1 root     root          511 Mar  2  2004 group.org
+drwxr-xr-x    4 root     root         4096 Mar  2  2004 defoma
+drwxr-xr-x    2 root     root         4096 Mar  2  2004 pango
+drwxr-xr-x    2 root     root         4096 Mar  2  2004 gtk-2.0
+drwxr-xr-x    2 root     root         4096 Mar  2  2004 ldap
+drwxr-xr-x    4 root     root         4096 Mar  2  2004 gnome-vfs-2.0
+drwxr-xr-x   14 root     root         4096 Mar  2  2004 terminfo
+drwxr-xr-x    2 root     root         4096 Mar  2  2004 cron.hourly
+drwxr-xr-x    3 root     root         4096 Mar  2  2004 emacs21
+-rw-r--r--    1 root     root        37657 Mar  2  2004 latex2html.conf.dpkg-old
+drwxr-xr-x    3 root     root         4096 Mar  2  2004 dhcp3
+drwxr-xr-x    4 root     root         4096 Mar  2  2004 Xprint
+-rw-r--r--    1 root     root        17311 Mar  3  2004 mime.types
+-rw-r--r--    1 root     root        23941 Mar  4  2004 lyxrc
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 vga
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 taper
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 filerunner
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 bitchx
+-rw-r--r--    1 root     root          772 Mar  5  2004 krb5.conf
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 groff
+-rw-r--r--    1 root     root          424 Mar  5  2004 hesiod.conf
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 vfont
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 joe
+-rw-r--r--    1 root     root          343 Mar  5  2004 ntp.conf
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 imlib
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 urlview
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 xmcd
+-rw-r--r--    1 root     root         6574 Mar  5  2004 devscripts.conf
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 oaf
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 dejagnu
+drwxr-xr-x    5 root     root         4096 Mar  5  2004 mirror
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 nmh
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 elm-me+
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 af
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 fte
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 dictionaries-common
+drwxr-xr-x    2 root     root         4096 Mar  5  2004 lprng
+drwxr-xr-x    3 root     root         4096 Mar  5  2004 tkdesk
+drwxr-xr-x    6 root     root         4096 Mar  5  2004 kde2
+-rw-r--r--    1 root     root         8871 Mar  9  2004 mozpluggerrc
+drwxr-xr-x    2 root     root         4096 Mar 11  2004 jove
+drwxr-xr-x    2 root     root         4096 Mar 11  2004 python2.1
+drwxr-xr-x    2 root     root         4096 Mar 11  2004 samba
+drwxr-xr-x    4 root     root         4096 Mar 15  2004 alsa
+-rw-r--r--    1 root     root        54723 Mar 24  2004 complete.tcsh
+-rw-r--r--    1 root     root          392 Mar 28  2004 deluser.conf
+drwxr-xr-x   11 root     root         4096 Mar 29  2004 hotplug.d
+drwxr-xr-x    3 root     root         4096 Mar 30  2004 mozilla-thunderbird
+drwxr-xr-x    4 root     root         4096 Mar 30  2004 mozilla-firebird
+-rw-r--r--    1 root     root        11392 Apr  2  2004 vfontcap
+-rw-r--r--    1 root     root          717 Apr  2  2004 lilo.conf~
+-rw-r--r--    1 root     root        10112 Apr  3  2004 ltrace.conf
+-rw-r--r--    1 root     root           90 Apr  8  2004 blkid.tab.old
+-rw-r--r--    1 root     root           90 Apr  8  2004 blkid.tab
+-rw-r--r--    1 root     root         1649 Apr  8  2004 ntp.conf.dpkg-dist
+drwxr-xr-x    2 root     root         4096 Apr 16  2004 cdrecord
+drwxrwx---    3 backup   backup       4096 Apr 16  2004 amanda
+-rw-r--r--    1 root     root         2922 Apr 20  2004 reportbug.conf
+-rw-r--r--    1 root     root          449 Apr 23  2004 fstab~
+-rw-r--r--    1 root     root            6 Apr 23  2004 hostname~
+-rw-r--r--    1 root     root          213 Apr 23  2004 modprobe.conf.old
+-rw-r--r--    1 root     root          212 Apr 23  2004 modprobe.conf
+-rw-r--r--    1 root     root          833 Apr 23  2004 lilo.conf
+-rw-r--r--    1 root     root          799 Apr 23  2004 hosts
+-rw-r--r--    1 root     root         3243 May  5  2004 lftp.conf
+-rw-r--r--    1 root     root       144073 May  8  2004 bash_completion
+-rw-r--r--    1 root     root          508 May  8  2004 bash.bashrc
+drwxr-xr-x    3 root     root         4096 May 12  2004 xdg
+-rw-r--r--    1 root     root        37657 May 12  2004 latex2html.conf
+lrwxrwxrwx    1 root     root           20 May 21  2004 grub.conf -> /boot/grub/grub.conf
+-rw-r--r--    1 root     root            5 May 21  2004 hostname
+-rw-r--r--    1 root     root            0 May 21  2004 nohotplug
+drwxr-xr-x    3 root     root         4096 May 24  2004 dm
+drwxr-xr-x    2 root     root         4096 May 24  2004 security
+drwxr-xr-x    2 root     root         4096 May 24  2004 skel
+drwxr-xr-x    2 root     root         4096 May 24  2004 menu
+drwxr-xr-x    2 root     root         4096 May 24  2004 texdoctk
+drwxr-xr-x    2 root     root         4096 May 24  2004 calendar
+drwxr-xr-x    3 root     root         4096 May 24  2004 dpkg
+drwxr-xr-x    2 root     root         4096 May 24  2004 python2.3
+drwxr-xr-x    2 root     root         4096 May 24  2004 ssh
+drwxr-xr-x    2 root     root         4096 May 24  2004 cron.monthly
+drwxr-xr-x    5 root     root         4096 May 24  2004 hotplug
+drwxr-xr-x    3 root     root         4096 May 24  2004 mkinitrd
+drwxr-xr-x    2 root     root         4096 May 24  2004 jed-init.d
+drwxr-xr-x    2 root     root         4096 May 24  2004 bash_completion.d
+drwxr-xr-x    2 root     root         4096 May 24  2004 rcS.d
+drwxr-xr-x    2 root     root         4096 May 24  2004 mysql
+drwxr-xr-x    2 root     root         4096 May 24  2004 sane.d
+-rw-r--r--    1 root     root          108 May 24  2004 cvs-cron.conf
+drwxr-xr-x    2 root     root         4096 May 24  2004 xml
+drwxr-xr-x    5 root     root         4096 May 24  2004 sgml
+drwxr-xr-x   12 root     root         4096 May 24  2004 texmf
+drwxr-xr-x    2 root     root         4096 May 24  2004 gs-afpl
+-rw-r--r--    1 root     root       100800 May 24  2004 mime-magic.dat
+drwxr-xr-x    2 root     root         4096 May 24  2004 libgda
+drwxr-xr-x    3 root     root         4096 May 24  2004 modutils
+-rw-r--r--    1 root     root         6383 May 24  2004 modules.conf.old
+drwxr-xr-x    3 root     root         4096 May 24  2004 modprobe.d
+drwxrwxr-x    4 root     lpadmin      4096 May 24  2004 cups
+drwxr-xr-x    2 root     root         4096 May 25  2004 hyperlatex
+drwxr-xr-x    2 root     root         4096 May 25  2004 fonts
+drwxr-xr-x    2 root     root         4096 May 25  2004 vim
+drwxr-xr-x    6 root     root         4096 May 25  2004 kde3
+drwxr-xr-x    4 root     root         4096 May 25  2004 mozilla-firefox
+drwxr-xr-x    2 root     root         4096 May 25  2004 plan
+drwxr-xr-x    2 root     root         4096 May 25  2004 R
+drwxr-xr-x    2 root     root         4096 May 25  2004 systemimager
+drwxr-xr-x    2 root     root         4096 May 25  2004 tkcvs
+drwxr-xr-x    2 root     root         4096 May 25  2004 menu-methods
+drwxr-xr-x    2 root     root         4096 May 25  2004 zsh
+-rw-r--r--    1 root     root          201 May 25  2004 shells
+drwxr-xr-x    3 root     root         4096 May 25  2004 ggi
+drwxr-xr-x    2 root     root         4096 May 25  2004 cron.weekly
+drwxr-xr-x    2 root     root         4096 May 25  2004 gnucash
+drwxr-xr-x    2 root     root         4096 May 25  2004 openoffice
+drwxr-xr-x    4 root     root         4096 Jun  4  2004 ppp
+drwxr-xr-x    6 root     root         4096 Jun  4  2004 logcheck
+drwxr-xr-x    2 root     root         4096 Jun  4  2004 pam.d
+-rw-r--r--    1 root     root           13 Jun  4  2004 mailname
+-rw-r--r--    1 root     root         2735 Jun  4  2004 inetd.conf
+drwxr-xr-x    2 root     root         4096 Jun  4  2004 cron.d
+-rw-------    1 root     root          589 Jun 29  2004 group-
+drwxr-xr-x    2 root     root         4096 Jun 29  2004 qt3
+drwxr-xr-x    2 root     root         4096 Jul 12  2004 cron.daily
+-rw-r--r--    1 root     root         1055 Jul 13  2004 passwd-
+drwxr-xr-x    2 root     root         4096 Aug 13  2004 bonobo-activation
+drwxr-xr-x    2 root     root         4096 Aug 13  2004 mozilla
+-rw-r--r--    1 root     root        26334 Aug 13  2004 mailcap
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 logrotate.d
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 init.d
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 default
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 rc6.d
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 rc5.d
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 rc4.d
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 rc3.d
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 rc2.d
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 rc1.d
+drwxr-xr-x    2 root     root         4096 Aug 14  2004 rc0.d
+-rw-r--r--    1 root     root          597 Sep 10  2004 group
+drwxr-sr-x    6 root     smmsp        4096 Sep 22  2004 mail
+-rw-r--r--    1 root     root         6598 Oct 12 17:07 modules.conf~
+-rw-r--r--    1 root     root         6598 Oct 12 17:09 modules.conf
+-rw-r--r--    1 root     root          124 Oct 12 17:11 modules~
+-rw-r--r--    1 root     root          132 Oct 13 15:57 modules
+-rw-r--r--    1 root     root         1089 Jan  5 11:40 passwd
+lrwxrwxrwx    1 root     root           35 Jan  5 11:42 localtime -> /usr/share/zoneinfo/America/Chicago
+-rw-r--r--    1 root     root          593 Jan  5 11:43 locale.gen
+-rw-r--r--    1 root     root            8 Jan  5 11:43 environment
+drwxr-xr-x    2 root     root         4096 Jan  5 11:43 alternatives
+drwxr-xr-x    3 root     root         4096 Jan  5 14:06 apt
+drwxr-xr-x    2 root     root         4096 Feb 11 09:32 gaim
+-rw-r--r--    1 root     root        82711 Feb 11 09:32 ld.so.cache
+drwxr-xr-x   39 root     root         4096 Feb 24 13:40 X11
+-rw-r--r--    1 root     root          119 Mar 11 15:10 aumixrc
+-rw-r--r--    1 root     root           44 Mar 11 15:10 adjtime
+-rw-r--r--    1 root     root          453 Mar 11 20:34 fstab
+drwxr-xr-x    6 root     root         4096 Mar 21 11:18 network
+-rw-r--r--    1 root     root          569 Mar 21 11:19 motd
+-rw-r--r--    1 root     root           91 Mar 29 07:09 resolv.conf
+-rw-r--r--    1 root     root          926 Mar 29 11:24 mtab

@@ -1,0 +1,13 @@
+module load geant4
+module load clhep
+clhep-config --libs
+
+setenv PATH  $PATH\:$G4WORKDIR/bin/$G4SYSTEM\:$HOME/jas3-0.8.3/
+echo $PATH
+
+setenv G4VIS_BUILD_RayTracer_DRIVER 1
+setenv G4VIS_USE_RayTracer 1
+setenv G4UI_USE_TCSH 1
+
+#java -jar $G4WORKDIR/HepRApp.jar
+

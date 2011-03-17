@@ -1,0 +1,44 @@
+# $Id: GNUmakefile,v 1.1 1999/01/07 16:05:40 gunter Exp $
+# --------------------------------------------------------------
+# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# --------------------------------------------------------------
+
+G4WORKDIR := $(shell pwd)
+name := CaloSim
+G4TARGET := $(name)
+G4EXLIB := true
+
+ifndef G4INSTALL
+  G4INSTALL = /site/local/pkg/geant4/Linux-x86_64-Boron/geant4.9.2.p01
+endif
+
+CPPFLAGS += -g -O4 -Wall -Wno-unused -Woverloaded-virtual -L/usr/lib/libGLU.so.1.3 -L/usr/lib/libGLU.so.1 -L${CLHEP_LIB_DIR} -I${CLHEP_INCLUDE_DIR}
+
+.PHONY: all
+all: lib bin
+
+include $(G4INSTALL)/config/binmake.gmk
+
+
+ifdef ROOTSYS
+ifndef G4UI_USE_ROOT
+CPPFLAGS += -DG4ANALYSIS_USE_ROOT $(shell $(ROOTSYS)/bin/root-config --cflags)
+
+ROOTLIBS = $(shell $(ROOTSYS)/bin/root-config --nonew --glibs) -lMinuit # -lHtml
+ROOTLIBS := $(filter-out -lNew,$(ROOTLIBS))
+ROOTLIBS := $(filter-out -lThread,$(ROOTLIBS))
+ROOTLIBS := $(filter-out -lpthread,$(ROOTLIBS))
+
+  # LDLIBS += $(ROOTLIBS)
+LDLIBS := $(ROOTLIBS) $(LDLIBS)
+
+ifdef MY_ROOT_LIBS
+#CPPFLAGS += -L$(MY_ROOT_LIBS)/ -I$(MY_ROOT_LIBS)/ -I$(HOME)/work/mulan/include/ -L$(HOME)/work/mulan/src/
+#CPPFLAGS += -L$(MY_ROOT_LIBS)/ -I$(MY_ROOT_LIBS)/
+CPPFLAGS +=  -I$(HOME)/newg2/CaloSim/include/ -L$(HOME)/newg2/CaloSim/src/
+LDLIBS += -L$(MY_ROOT_LIBS) -lTReadout -lCLHEP -lCLHEP-Random-2.0.3.1
+#LDLIBS += -lCLHEP-1.9.2.2
+endif
+
+endif
+endif

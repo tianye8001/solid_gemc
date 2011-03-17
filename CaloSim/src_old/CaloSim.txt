@@ -1,0 +1,156 @@
+// --------------------------------------------------------------
+//      GEANT 4 - CaloSim 
+//
+// --------------------------------------------------------------
+// Simulation of the new g-2 calorimeter
+//
+// 
+// --------------------------------------------------------------
+
+#include "G4RunManager.hh"
+#include "G4UImanager.hh"
+#include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
+#include "CaloSimDetectorConstruction.hh"
+#include "CaloSimPhysicsList.hh"
+#include "CaloSimPrimaryGeneratorAction.hh"
+#include "CaloSimRunAction.hh"
+#include "CaloSimVisManager.hh"
+
+//#include "LGEventAction.hh"
+//#include "LGSteppingAction.hh"
+//#include "LGSteppingVerbose.hh"
+
+//#include "CaloSimVisManager.hh"
+// #define Visualize 1
+//#undef Visualize 
+
+#ifdef G4VIS_USE
+#include "G4VisExecutive.hh"
+#endif
+
+int main(int argc,char** argv)
+{
+  G4String outputFileName="out.root";
+  if(argc>=3) outputFileName = argv[2];
+
+  //  G4VSteppingVerbose::SetInstance(new CaloSimSteppingVerbose);
+
+  // Construct the default run manager
+  G4RunManager* runManager = new G4RunManager;
+
+  // set mandatory initialization classes
+  CaloSimDetectorConstruction* CaloSimDetector = new CaloSimDetectorConstruction(outputFileName);
+  runManager->SetUserInitialization(CaloSimDetector);
+  runManager->SetUserInitialization(new CaloSimPhysicsList);
+
+
+  //#ifdef Visualize
+  //  // Visualization, if you choose to have it!
+    //  G4VisManager* visManager = new CaloSimVisManager;
+  //  visManager->Initialize();
+  //#endif
+
+  // set mandatory user action class
+  runManager->SetUserAction(new CaloSimPrimaryGeneratorAction(CaloSimDetector));
+  runManager->SetUserAction(new CaloSimRunAction);
+
+
+  // Initialize G4 kernel
+  runManager->Initialize();
+
+  /*#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+      #endif */
+
+  // get the pointer to the UI manager and set verbosities
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  //UI->ApplyCommand("/run/verbose 0");
+  //UI->ApplyCommand("/event/verbose 0");
+  //UI->ApplyCommand("/tracking/verbose 0");
+
+
+  /* 
+#ifdef Visualize
+  UI->ApplyCommand("/vis/scene/create");
+
+  UI->ApplyCommand("/vis/open HepRepXML");
+
+  UI->ApplyCommand("/vis/drawVolume");
+  UI->ApplyCommand("/vis/viewer/refresh");
+  UI->ApplyCommand("/vis/viewer/update");
+
+
+  UI->ApplyCommand("/tracking/storeTrajectory 1");
+  UI->ApplyCommand("/vis/scene/add/trajectories");
+#endif
+  */
+
+
+  if (argc!=1)   // batch mode  
+    {
+     G4String command = "/control/execute ";
+     G4String fileName = argv[1];
+     UI->ApplyCommand(command+fileName);
+    }
+    
+  else           // interactive mode : define visualization and UI terminal
+    { 
+#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif    
+     
+      G4UIsession * session = 0;
+#ifdef G4UI_USE_TCSH
+      session = new G4UIterminal(new G4UItcsh);      
+#else
+      session = new G4UIterminal();
+#endif
+      UI->ApplyCommand("/control/execute vis.mac");     
+      session->SessionStart();
+      delete session;
+     
+#ifdef G4VIS_USE
+      delete visManager;
+#endif     
+    }
+
+
+
+  /*
+  if(argc>=3)
+  {
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UI->ApplyCommand(command+fileName);
+  }else{
+    // start a run
+    //  int numberOfEvent = 5000;
+    int numberOfEvent = 5000;
+    //#ifdef Visualize
+    //numberOfEvent = 2;
+    //runManager->BeamOn(numberOfEvent);
+    //#endif
+#ifdef G4VIS_USE
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
+#endif    
+  */
+
+
+
+  /*#ifdef Visualize
+ 
+  //UI->ApplyCommand("/vis/viewer/refresh");
+  //UI->ApplyCommand("/vis/viewer/update"); 
+  // job termination  
+  delete visManager;
+  #endif*/
+
+  delete runManager;
+  return 0;
+}
+
+
