@@ -21,14 +21,14 @@ class CaloSimPhysicsList: public G4VUserPhysicsList
     // these methods Construct particles 
     void ConstructBosons();
     void ConstructLeptons();
-  //    void ConstructMesons();
+      void ConstructMesons();
   //    void ConstructBaryons();
 
   protected:
   // these methods Construct physics processes and register them
     void ConstructGeneral();
     void ConstructEM();
-
+    void ConstructHadron();
 
 
 };

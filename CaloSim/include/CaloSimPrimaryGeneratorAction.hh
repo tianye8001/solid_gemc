@@ -3,46 +3,81 @@
 #include <stdio.h>
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4String.hh"
+#include <G4ios.hh>
+#include <assert.h>
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
 
 class CaloSimDetectorConstruction;
 class G4ParticleGun;
 class G4Event;
 class CaloSimPrimaryGeneratorMessenger;
 
-class CaloSimPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class CaloSimPrimaryGeneratorAction: public G4VUserPrimaryGeneratorAction
 {
-  public:
-    CaloSimPrimaryGeneratorAction(CaloSimDetectorConstruction*);
-    ~CaloSimPrimaryGeneratorAction();
+public:
+	CaloSimPrimaryGeneratorAction(CaloSimDetectorConstruction*);
+	~CaloSimPrimaryGeneratorAction();
 
-  public:
-  void GeneratePrimaries(G4Event* anEvent);
-  CaloSimPrimaryGeneratorMessenger* generatorMessenger;  //pointer to the Messenger
-  
-  inline void SetUseFile(G4bool usefile){fUseFile=usefile;}
-  inline void SetEnergy(G4double energy){fEnergy=energy;}
-  inline void SetAngle(G4double angle){fAngle=angle;}
-  inline void SetAngleRand(G4double anglerand){fAngleRand = anglerand;}
-  inline void SetXInit(G4double xinit){fXInit=xinit;}
-  inline void SetXInitRand(G4double xinitrand){fXInitRand = xinitrand;}
-  inline void SetYInit(G4double yinit){fYInit=yinit;}
-  inline void SetYInitRand(G4double yinitrand){fYInitRand = yinitrand;}
+public:
+	void GeneratePrimaries(G4Event* anEvent);
+	CaloSimPrimaryGeneratorMessenger* generatorMessenger; //pointer to the Messenger
 
-  inline void SetInputFile(G4String fname){fFilename = fname;}
+	bool DefineBeamParticle(G4String particleName);
+	inline void SetUseFile(G4bool usefile)
+	{
+		if (usefile) G4cout << "Set to use Gun Input file " << G4endl;
+		fUseFile = usefile;
+	}
+	inline void SetEnergy(G4double energy)
+	{
+		fEnergy = energy;
+	}
+	inline void SetAngle(G4double angle)
+	{
+		fAngle = angle;
+	}
+	inline void SetAngleRand(G4double anglerand)
+	{
+		fAngleRand = anglerand;
+	}
+	inline void SetXInit(G4double xinit)
+	{
+		fXInit = xinit;
+	}
+	inline void SetXInitRand(G4double xinitrand)
+	{
+		fXInitRand = xinitrand;
+	}
+	inline void SetYInit(G4double yinit)
+	{
+		fYInit = yinit;
+	}
+	inline void SetYInitRand(G4double yinitrand)
+	{
+		fYInitRand = yinitrand;
+	}
 
-  private:
-    G4ParticleGun* particleGun;
-    CaloSimDetectorConstruction* myDetector;
+	void SetInputFile(G4String fname);
+//	{
+//		G4cout << "Use Gun Input file " << fname << G4endl;
+//		fFilename = fname;
+//	}
 
-  G4double fEnergy, fAngle, fAngleRand, fXInit, fXInitRand, fYInit, fYInitRand;
-    G4String fFilename; 
+private:
+	G4ParticleGun* particleGun;
+	CaloSimDetectorConstruction* myDetector;
 
-    G4bool fUseFile;
+	G4double fEnergy, fAngle, fAngleRand, fXInit, fXInitRand, fYInit,
+	        fYInitRand;
+	G4String fFilename;
 
-    FILE *elecfile;
+	G4bool fUseFile;
+
+	FILE *elecfile;
 
 };
 
 #endif
-
 

@@ -3,7 +3,7 @@
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 G4LIB_BUILD_SHARED := 
-G4WORKDIR := $(shell pwd)
+G4WORKDIR := ../
 
 name := CaloSim
 G4TARGET := $(name)

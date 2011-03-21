@@ -16,7 +16,7 @@
 
 #include "G4VSensitiveDetector.hh"
 #include "G4DecayTable.hh"
-#include <fstream.h>
+#include <fstream>
 #include "CaloSimDetectorHit.hh"
 
 #include "TROOT.h"
@@ -25,7 +25,7 @@
 #include "TH3.h"
 #include "TNtuple.h"
 #include "TFile.h"
-#include <fstream.h>
+#include <fstream>
 #include "TObject.h"           // from ROOT libraries
 
 class G4Step;

@@ -19,7 +19,8 @@
 #include "G4VisAttributes.hh"
 #include "G4ios.hh"
 #include "stdio.h"
-#include <fstream.h>
+#include <fstream>
+using namespace std;
 
 G4Allocator<CaloSimDetectorHit> CaloSimDetectorHitAllocator;
 

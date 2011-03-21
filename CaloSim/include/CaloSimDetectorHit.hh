@@ -21,7 +21,7 @@
 #include "G4LorentzVector.hh"
 #include "G4Step.hh"
 
-#include <fstream.h>
+#include <fstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -40,7 +40,7 @@ public:
 
   void Draw();
   void Print();
-  void PrintToFile(ofstream *ptrToFile);
+  void PrintToFile(std::ofstream *ptrToFile);
 
 private:
   G4int         TrackNumber;

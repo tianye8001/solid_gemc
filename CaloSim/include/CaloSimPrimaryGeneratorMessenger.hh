@@ -20,6 +20,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWith3Vector.hh"
 
 class CaloSimPrimaryGeneratorAction;
 class G4UIdirectory;
@@ -32,39 +33,43 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-class CaloSimPrimaryGeneratorMessenger: public G4UImessenger {
+class CaloSimPrimaryGeneratorMessenger: public G4UImessenger
+{
 public:
-  CaloSimPrimaryGeneratorMessenger(CaloSimPrimaryGeneratorAction* myGun);
-  ~CaloSimPrimaryGeneratorMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-    
+	CaloSimPrimaryGeneratorMessenger(CaloSimPrimaryGeneratorAction* myGun);
+	~CaloSimPrimaryGeneratorMessenger();
+
+	void SetNewValue(G4UIcommand*, G4String);
+
 private:
-  CaloSimPrimaryGeneratorAction* myAction;
-  
-  G4UIdirectory*             myGunDir;
+	CaloSimPrimaryGeneratorAction* myAction;
 
-  /*  G4UIcmdWithoutParameter*   PolarizationEchoCmd;
-  G4UIcmdWithADouble* PolarizationXCmd;
-  G4UIcmdWithADouble* PolarizationYCmd;
-  G4UIcmdWithADouble* PolarizationZCmd;
-  */
-  G4UIcmdWithABool* UseFileCmd;
-  G4UIcmdWithADouble* EnergyCmd;
-  G4UIcmdWithADouble* AngleCmd;
-  G4UIcmdWithADouble* AngleRandCmd;
-  G4UIcmdWithADouble* XInitCmd;
-  G4UIcmdWithADouble* XInitRandCmd;
-  G4UIcmdWithADouble* YInitCmd;
-  G4UIcmdWithADouble* YInitRandCmd;
-  G4UIcmdWithAString* InputFileCmd;
+	G4UIdirectory* myGunDir;
 
-  /*
-  G4UIcmdWithABool* StartAtRestCmd;
-  G4UIcmdWithABool* FormatWithZCmd;
-  G4UIcmdWithADoubleAndUnit* StartZCmd;
-  */
+	/*  G4UIcmdWithoutParameter*   PolarizationEchoCmd;
+	 G4UIcmdWithADouble* PolarizationXCmd;
+	 G4UIcmdWithADouble* PolarizationYCmd;
+	 G4UIcmdWithADouble* PolarizationZCmd;
+	 */
+	G4UIcmdWithABool* UseFileCmd;
+	G4UIcmdWithADouble* EnergyCmd;
+	G4UIcmdWithADouble* AngleCmd;
+	G4UIcmdWithADouble* AngleRandCmd;
+	G4UIcmdWithADouble* XInitCmd;
+	G4UIcmdWithADouble* XInitRandCmd;
+	G4UIcmdWithADouble* YInitCmd;
+	G4UIcmdWithADouble* YInitRandCmd;
+	G4UIcmdWithAString* InputFileCmd;
 
+	//Additional command by Jin Huang
+	G4UIcmdWith3Vector* UseMagneticField;
+	G4UIcmdWithAString* InputBeamParticle;
+
+	/*
+	 G4UIcmdWithABool* StartAtRestCmd;
+	 G4UIcmdWithABool* FormatWithZCmd;
+	 G4UIcmdWithADoubleAndUnit* StartZCmd;
+	 */
 
 };
 

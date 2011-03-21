@@ -38,20 +38,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-CaloSimMagneticField::CaloSimMagneticField()
-  : G4UniformMagField(G4ThreeVector())
+CaloSimMagneticField::CaloSimMagneticField() :
+	G4UniformMagField(G4ThreeVector())
 {
-  GetGlobalFieldManager()->SetDetectorField(this);
-  GetGlobalFieldManager()->CreateChordFinder(this);
+	GetGlobalFieldManager()->SetDetectorField(this);
+	GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-CaloSimMagneticField::CaloSimMagneticField(G4ThreeVector fieldVector)
-  : G4UniformMagField(fieldVector)
+CaloSimMagneticField::CaloSimMagneticField(G4ThreeVector fieldVector) :
+	G4UniformMagField(fieldVector)
 {
-  GetGlobalFieldManager()->SetDetectorField(this);    
-  GetGlobalFieldManager()->CreateChordFinder(this);
+	GetGlobalFieldManager()->SetDetectorField(this);
+	GetGlobalFieldManager()->CreateChordFinder(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,7 @@ CaloSimMagneticField::~CaloSimMagneticField()
 //
 void CaloSimMagneticField::SetMagFieldValue(G4double fieldValue)
 {
-   SetMagFieldValue(G4ThreeVector(0,fieldValue,0));
+	SetMagFieldValue(G4ThreeVector(0, fieldValue, 0));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,26 +75,32 @@ void CaloSimMagneticField::SetMagFieldValue(G4double fieldValue)
 //
 void CaloSimMagneticField::SetMagFieldValue(G4ThreeVector fieldVector)
 {
-  // Find the Field Manager for the global field
-  G4FieldManager* fieldMgr= GetGlobalFieldManager();
-    
-  if(fieldVector!=G4ThreeVector(0.,0.,0.))
-  { 
-    SetFieldValue(fieldVector);
-    fieldMgr->SetDetectorField(this);
-  } else {
-    // If the new field's value is Zero, then it is best to
-    //  insure that it is not used for propagation.
-    G4MagneticField* magField = 0;
-    fieldMgr->SetDetectorField(magField);
-  }
+	// Find the Field Manager for the global field
+	G4FieldManager* fieldMgr = GetGlobalFieldManager();
+
+	G4cout << "SetMagnetic Field (Tesla)= " << fieldVector.x()/tesla << "\t"
+	        << fieldVector.y()/tesla  << "\t" << fieldVector.z()/tesla  << G4endl;
+
+	if (fieldVector != G4ThreeVector(0., 0., 0.))
+	{
+		SetFieldValue(fieldVector);
+		fieldMgr->SetDetectorField(this);
+	}
+	else
+	{
+		// If the new field's value is Zero, then it is best to
+		//  insure that it is not used for propagation.
+		G4MagneticField* magField = 0;
+		fieldMgr->SetDetectorField(magField);
+	}
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4FieldManager*  CaloSimMagneticField::GetGlobalFieldManager()
+G4FieldManager* CaloSimMagneticField::GetGlobalFieldManager()
 {
-  return G4TransportationManager::GetTransportationManager()->GetFieldManager();
+	return G4TransportationManager::GetTransportationManager()->GetFieldManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

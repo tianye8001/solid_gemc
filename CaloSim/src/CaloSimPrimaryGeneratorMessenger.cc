@@ -22,6 +22,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "globals.hh"
+#include "CaloSimMagneticField.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
@@ -78,6 +79,17 @@ CaloSimPrimaryGeneratorMessenger::CaloSimPrimaryGeneratorMessenger(CaloSimPrimar
   YInitRandCmd->SetParameterName("YInitRand",false);
   YInitRandCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+
+  UseMagneticField = new G4UIcmdWith3Vector("/Gun/UseMagneticField",this);
+  UseMagneticField->SetGuidance("3D magnetic field stenth in Tesla");
+  UseMagneticField->SetParameterName("Bx","By","Bz",false);
+  UseMagneticField->AvailableForStates(G4State_PreInit, G4State_Idle);
+
+  InputBeamParticle = new G4UIcmdWithAString("/Gun/InputBeamParticle",this);
+  InputBeamParticle->SetGuidance("Name of initial particle type, ex. e-");
+  InputBeamParticle->SetParameterName("InputBeamParticle",false);
+  InputBeamParticle->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   G4cout<<"done"<<G4endl;
 }
 
@@ -95,6 +107,8 @@ CaloSimPrimaryGeneratorMessenger::~CaloSimPrimaryGeneratorMessenger()
   delete YInitCmd;
   delete YInitRandCmd;
 
+  delete UseMagneticField;
+  delete InputBeamParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -124,6 +138,15 @@ void CaloSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4Strin
   else if( command == YInitRandCmd )
     { myAction->SetYInitRand(YInitRandCmd->GetNewDoubleValue(newValues));}
 
+  else if( command == UseMagneticField )
+    {
+	  G4ThreeVector field =  (UseMagneticField->GetNew3VectorValue(newValues)) * tesla;
+		  CaloSimMagneticField *fpMagField = new CaloSimMagneticField();
+		  fpMagField->SetMagFieldValue(field);
+    }
+
+  if( command == InputBeamParticle )
+    { myAction->DefineBeamParticle(newValues);}
 
   else G4cout <<"That command not found."<<G4endl;
 

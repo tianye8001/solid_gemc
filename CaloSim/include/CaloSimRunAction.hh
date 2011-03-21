@@ -21,27 +21,25 @@
 
 class G4Run;
 
-class CaloSimRunAction : public G4UserRunAction
+class CaloSimRunAction: public G4UserRunAction
 {
-  public:
-    CaloSimRunAction();
-   ~CaloSimRunAction();
+public:
+	CaloSimRunAction();
+	~CaloSimRunAction();
 
-    const 
-    G4int GetRunID() {return runID;};
+	const G4int GetRunID()
+	{
+		return runID;
+	};
 
-  public:
-  void BeginOfRunAction(const G4Run*);
-  //  void BeginOfRunAction(const G4Run*, const G4int);
-  void EndOfRunAction(const G4Run*);
+public:
+	void BeginOfRunAction(const G4Run*);
+	//  void BeginOfRunAction(const G4Run*, const G4int);
+	void EndOfRunAction(const G4Run*);
 
-  private:
-    G4int runID;
+private:
+	G4int runID;
 };
 
 #endif
-
-
-
-
 
