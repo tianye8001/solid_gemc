@@ -38,6 +38,11 @@
 #include "globals.hh"
 #include "G4SDManager.hh"
 
+
+static const G4double Shower_blockHeight = 4.0 * cm;
+static const G4double Shower_blockWidth = 4.0 * cm;
+static const G4double Shower_blockDepth = 15.0 * cm;
+
 // If you specify the output file name when you run the program, that will be the name of the root file
 // if not, this sets default to output.root
 CaloSimDetectorConstruction::CaloSimDetectorConstruction(G4String outputFile)
@@ -70,7 +75,7 @@ CaloSimDetectorConstruction::~CaloSimDetectorConstruction()
 }
 
 G4VPhysicalVolume*
-CaloSimDetectorConstruction::Construct()
+CaloSimDetectorConstruction::ConstructShowerOnly()
 {
 
 	//------------------------------------------------------ materials
@@ -165,15 +170,16 @@ CaloSimDetectorConstruction::Construct()
 	G4ThreeVector positionCaloBox = G4ThreeVector(0, 0, 0);
 
 	// these are the segments, first define how big you want your blocks
-	static const G4double blockHeight = 4.0 * cm;
+	static const G4double blockHeight = Shower_blockHeight;
 
-	static const G4double blockWidth = 4.0 * cm;
+	static const G4double blockWidth = Shower_blockWidth;
 	//  G4double blockDepth=11.0*cm;
-	static const G4double blockDepth = 20.0 * cm;
+	static const G4double blockDepth = Shower_blockDepth;
 	// set divisions in calo
-//	static const G4int nX = 48 * cm / blockWidth;
-	static const G4int nX = 8;
-	static const G4int nY = 4;
+	//	static const G4int nX = 48 * cm / blockWidth;
+	//	static const G4int nX = 48 * cm / blockWidth;
+	//	static const G4int nX = 8;
+	//	static const G4int nY = 4; -> to header file
 
 	//define calobox size relative to block sizes
 	static const G4double caloWidth = blockWidth * nX;
@@ -373,3 +379,416 @@ CaloSimDetectorConstruction::Construct()
 	return experimentalHall_phys;
 }
 
+G4VPhysicalVolume*
+CaloSimDetectorConstruction::ConstructTotoalShower()
+{
+
+	//------------------------------------------------------ materials
+
+
+	G4String name;
+
+	//makes colors for visualization
+	//--------- Set Visualization Attributes -----------------------
+	whiteSolid = new G4VisAttributes(G4Colour(1, 1, 1));
+	blackSolid = new G4VisAttributes(G4Colour(0, 0, 0));
+	redSolid = new G4VisAttributes(G4Colour(1, 0, 0));
+	greenSolid = new G4VisAttributes(G4Colour(0, 1, 0));
+	blueSolid = new G4VisAttributes(G4Colour(0, 0, 1));
+	magentaSolid = new G4VisAttributes(G4Colour(1, 0, 1));
+	cyanSolid = new G4VisAttributes(G4Colour(0, 1, 1));
+	yellowSolid = new G4VisAttributes(G4Colour(1, 1, 0));
+	whiteFrame = new G4VisAttributes(G4Colour(1, 1, 1));
+	redFrame = new G4VisAttributes(G4Colour(1, 0, 0));
+	greenFrame = new G4VisAttributes(G4Colour(0, 1, 0));
+	blueFrame = new G4VisAttributes(G4Colour(0, 0, 1));
+	magentaFrame = new G4VisAttributes(G4Colour(1, 0, 1));
+	cyanFrame = new G4VisAttributes(G4Colour(0, 1, 1));
+	yellowFrame = new G4VisAttributes(G4Colour(1, 1, 0));
+	offAtt = new G4VisAttributes();
+
+	//sets style (solid vs. wireframe)
+	whiteSolid->SetForceSolid(true);
+	blackSolid->SetForceSolid(true);
+	redSolid->SetForceSolid(true);
+	greenSolid->SetForceSolid(true);
+	blueSolid->SetForceSolid(true);
+	magentaSolid->SetForceSolid(true);
+	cyanSolid->SetForceSolid(true);
+	yellowSolid->SetForceSolid(true);
+	whiteFrame->SetForceWireframe(true);
+	redFrame->SetForceWireframe(true);
+	greenFrame->SetForceWireframe(true);
+	blueFrame->SetForceWireframe(true);
+	magentaFrame->SetForceWireframe(true);
+	cyanFrame->SetForceWireframe(true);
+	yellowFrame->SetForceWireframe(true);
+
+	//offAtt is essentially an invisible status you can use for stuff you dont want to see
+	//e.g. fibers would clog up most visualizations
+	offAtt->SetVisibility(false);
+
+	buildMaterials();
+
+	//------------------------------------------------
+	// Create Sensitive Detector Manager
+	//------------------------------------------------
+
+	G4SDManager* SDman = G4SDManager::GetSDMpointer();
+
+	G4String SDname = "CaloSim/SD";
+	CaloSimSD* aSD = new CaloSimSD(SDname, outputFileName);
+	SDman->AddNewDetector(aSD);
+
+	//  //magetic filed
+	//  CaloSimMagneticField *fpMagField = new CaloSimMagneticField();
+	//  fpMagField->SetMagFieldValue(2 * tesla);
+
+	//------------------------------------------------------ volumes
+
+	//------------------------------ experimental hall (world volume)
+	//------------------------------ beam line along x axis
+	// these are the actual widths of the objects
+	// in construction of boxes, you input the half width
+
+	G4double expHall_x = 5.0 * m;
+	G4double expHall_y = 5.0 * m;
+	G4double expHall_z = 5.0 * m;
+
+	//for example, here the actual x-y-z is 2-2-10
+	// a solid is a shape
+	G4Box* experimentalHall_box = new G4Box("expHall_box", expHall_x,
+	        expHall_y, expHall_z);
+	//a solid gets made into a logic here, a logic volume is a solid but the material is defined, here Air
+	experimentalHall_log = new G4LogicalVolume(experimentalHall_box, Air,
+	        "expHall_log", 0, 0, 0);
+
+	// a logic gets turned into a physical volume and placed here, a physical volume is a logic with position defined
+	experimentalHall_phys = new G4PVPlacement(0, G4ThreeVector(), "expHall",
+	        experimentalHall_log, 0, false, 0);
+	//this sets the hall to invisible, and makes it sensitive to particle data
+	experimentalHall_log->SetVisAttributes(offAtt);
+	experimentalHall_log->SetSensitiveDetector(aSD);
+
+	ConstructShower(experimentalHall_phys, aSD);
+	ConstructPreShower(experimentalHall_phys, aSD);
+
+	return experimentalHall_phys;
+}
+
+G4VPhysicalVolume*
+CaloSimDetectorConstruction::ConstructShower(
+        G4VPhysicalVolume* experimentalHall_phys, CaloSimSD* aSD)
+{
+	assert(experimentalHall_phys);
+	assert(aSD);
+
+	// THIS SETS UP THE CALOBOX, that is, the volume that will contain the calorimeter
+	//just a reminder, box does not equal block
+	G4ThreeVector positionCaloBox = G4ThreeVector(0, 0, 0);
+
+	// these are the segments, first define how big you want your blocks
+	static const G4double blockHeight = Shower_blockHeight;
+
+	static const G4double blockWidth = Shower_blockWidth;
+	//  G4double blockDepth=11.0*cm;
+	static const G4double blockDepth = Shower_blockDepth;
+	// set divisions in calo
+	//	static const G4int nX = 48 * cm / blockWidth;
+
+
+	//define calobox size relative to block sizes
+	static const G4double caloWidth = blockWidth * nX;
+	static const G4double caloHeight = blockHeight * nY;
+	static const G4double caloDepth = blockDepth;
+
+	// Set up the box containing the calorimeter
+	G4Box* solidCaloBox = new G4Box("caloBox", caloWidth / 2, caloHeight / 2,
+	        caloDepth / 2);
+	G4LogicalVolume* logicCaloBox = new G4LogicalVolume(solidCaloBox, Air,
+	        "CaloBoxLV");
+
+	G4VPhysicalVolume* physiCaloBox = new G4PVPlacement(0, positionCaloBox,
+	        "CaloBox", logicCaloBox, experimentalHall_phys, false, 0);
+
+	logicCaloBox->SetVisAttributes(offAtt);
+	logicCaloBox->SetSensitiveDetector(aSD);
+
+	//start to form the individual blocks
+	G4Box* solidCaloBlock = new G4Box("caloBlock", blockWidth / 2, blockHeight
+	        / 2, blockDepth / 2);
+
+	//set up logical for calo box
+	G4LogicalVolume* logicCaloBlock = new G4LogicalVolume(solidCaloBlock,
+	        Tungsten, "CaloBlockLV");
+	//     G4LogicalVolume* logicCaloBlock = new G4LogicalVolume(solidCaloBlock,Iron,"CaloBlockLV");
+	//   G4LogicalVolume* logicCaloBlock = new G4LogicalVolume(solidCaloBlock,Aluminum,"CaloBlockLV");
+
+	logicCaloBlock->SetVisAttributes(blueFrame);
+	logicCaloBlock->SetSensitiveDetector(aSD);
+
+	assert(nX * nY<100);
+	G4VPhysicalVolume* physiCaloBlock[100];
+	for (G4int xi = 0; xi < nX; xi++)
+	{
+		for (G4int yi = 0; yi < nY; yi++)
+		{
+			G4double xpos = -caloWidth / 2 + (0.5 + xi) * blockWidth;
+			G4double ypos = -caloHeight / 2 + (0.5 + yi) * blockHeight;
+
+			G4ThreeVector positionCaloBlock = G4ThreeVector(xpos, ypos, 0);
+
+			assert(xi + nX * yi<100);
+			physiCaloBlock[xi + nX * yi] = new G4PVPlacement(0,
+			        positionCaloBlock, "CaloBlock", logicCaloBlock,
+			        physiCaloBox, false, xi + yi * nX + 1);
+
+		}
+	}
+
+	//Here is one of the best parts about geant
+	//here we make a layer of glue in a BLOCK, one of the 1x1cm things, and if we make alot of layers in one block,
+	//those layers will get made in every single copy of the one block
+	// The layers of scintillator/glue
+	G4int nlayers = 40;
+	G4double layerSep = blockWidth / nlayers;
+	//  G4double layerThick= 0.5*mm;
+	G4double fiberFrac = 0.5;
+	G4double layerThick = layerSep * fiberFrac;
+
+	G4Box* solidLayer = new G4Box("Layer", layerThick / 2, blockHeight / 2,
+	        blockDepth / 2);
+
+	// **** TEST WITH TUNGSTEN FIBER
+	//  BC404=Tungsten; // TEMPORARY CHANGE TO MAKE CALO ALL TUNGSTEN 4/21
+	G4Material *glueTemp = BC404;
+	//  G4Material *glueTemp = Tungsten;
+	G4LogicalVolume* logicLayer = new G4LogicalVolume(solidLayer, glueTemp,
+	        "LayerLV");
+	logicLayer->SetVisAttributes(offAtt);
+	logicLayer->SetSensitiveDetector(aSD);
+
+	for (G4int li = 0; li < nlayers; li++)
+	{
+		G4double xPosLayer = -blockWidth / 2 + layerSep * (li + 0.5);
+		G4ThreeVector positionLayer = G4ThreeVector(xPosLayer, 0, 0);
+		//                                                                                      it knows to make copies because here the mother volume is a volume that has copies
+		G4VPhysicalVolume* physiLayer = new G4PVPlacement(0, positionLayer,
+		        logicLayer, "Layer", logicCaloBlock, false, li);
+	}
+
+	/*
+	 // These are the original fiber specifications modified *incorrectly*
+	 // for smaller effective fiber diameter (inefficiency on the outside)
+	 // I'm commenting it out and rewriting it to allow me to do it correctly
+	 // -Ron McNabb 12/14/08
+
+	 // Fibers
+	 G4double fiberDiameter=layerThick;
+	 G4int nfibers=blockHeight/fiberDiameter;
+	 //  G4double fiberSep=fiberDiameter;
+
+	 // changed fiber diameter to account for respose 11/8/08
+	 G4double fiberSep=fiberDiameter*0.94;
+	 //  G4double fiberSep=blockHeight/nfibers;
+	 */
+
+	// Fibers (updated 12/14)
+	G4double fiberFracSensitive = 1.0;// fraction of fiber radius that is sensitive
+	G4double fiberSep = layerThick;
+	G4double fiberDiameter = fiberSep * fiberFracSensitive;
+	G4int nfibers = blockHeight / fiberSep;
+
+	G4Tubs *solidFiber = new G4Tubs("FiberSolid", 0., fiberDiameter / 2,
+	        blockDepth / 2, 0., twopi);
+
+	G4LogicalVolume* logicFiber = new G4LogicalVolume(solidFiber, BC404,
+	        "FiberLV");
+
+	// ***** TEST WITH TUNGSTEN FIBERS***
+	//  G4LogicalVolume* logicFiber = new G4LogicalVolume(solidFiber,
+	// 						    Tungsten, "FiberLV");
+
+
+	logicFiber->SetVisAttributes(offAtt);
+	//         logicFiber->SetVisAttributes(redFrame);
+	logicFiber->SetSensitiveDetector(aSD);
+
+	//here we make the fibers, but we only have to make one column in one layer -
+	// that column will get copied to all the other layers in that block, and thus to all the layers everywhere in the calo
+	for (G4int fi = 0; fi < nfibers; fi++)
+	{
+		G4double yPosFiber = -blockHeight / 2 + fiberSep * (fi + 0.5);
+		G4ThreeVector positionFiber = G4ThreeVector(0, yPosFiber, 0);
+
+		G4VPhysicalVolume* physiFiber = new G4PVPlacement(0, positionFiber,
+		        logicFiber, "Fiber", logicLayer, false, fi);
+	}
+
+	return experimentalHall_phys;
+}
+
+G4VPhysicalVolume*
+CaloSimDetectorConstruction::ConstructPreShower(
+        G4VPhysicalVolume* experimentalHall_phys, CaloSimSD* aSD)
+{
+
+	assert(experimentalHall_phys);
+	assert(aSD);
+
+	// THIS SETS UP THE CALOBOX, that is, the volume that will contain the calorimeter
+	//just a reminder, box does not equal block
+
+	// these are the segments, first define how big you want your blocks
+	static const G4double blockHeight = Shower_blockHeight;
+
+	static const G4double blockWidth =Shower_blockWidth;
+	//  G4double blockDepth=11.0*cm;
+	static const G4double blockDepth =  Shower_blockWidth * nX; // match shower dementions
+	// set divisions in calo
+	//	static const G4int nX = 48 * cm / blockWidth;
+
+
+	//define calobox size relative to block sizes
+	static const G4double caloWidth = blockWidth * nX_ps;
+	static const G4double caloHeight = blockHeight * nY_ps;
+	static const G4double caloDepth = blockDepth;
+
+	// Set up the box containing the calorimeter
+	G4Box* solidCaloBox = new G4Box("caloBox_ps", caloWidth / 2, caloHeight / 2,
+	        caloDepth / 2);
+	G4LogicalVolume* logicCaloBox = new G4LogicalVolume(solidCaloBox, Air,
+	        "CaloBox_psLV");
+
+	G4ThreeVector positionCaloBox = G4ThreeVector(0, 0, -Shower_blockDepth/2-caloWidth/2);
+	G4RotationMatrix * rotCaloBox  = new G4RotationMatrix();
+	rotCaloBox->rotateY(90 * degree);
+
+	G4VPhysicalVolume* physiCaloBox = new G4PVPlacement(rotCaloBox, positionCaloBox,
+	        "CaloBox_ps", logicCaloBox, experimentalHall_phys, false, 0);
+
+	logicCaloBox->SetVisAttributes(offAtt);
+	logicCaloBox->SetSensitiveDetector(aSD);
+
+	//start to form the individual blocks
+	G4Box* solidCaloBlock = new G4Box("caloBlock_ps", blockWidth / 2, blockHeight
+	        / 2, blockDepth / 2);
+
+	//set up logical for calo box
+	G4LogicalVolume* logicCaloBlock = new G4LogicalVolume(solidCaloBlock,
+	        Tungsten, "CaloBlock_psLV");
+	//     G4LogicalVolume* logicCaloBlock = new G4LogicalVolume(solidCaloBlock,Iron,"CaloBlockLV");
+	//   G4LogicalVolume* logicCaloBlock = new G4LogicalVolume(solidCaloBlock,Aluminum,"CaloBlockLV");
+
+	logicCaloBlock->SetVisAttributes(blueFrame);
+	logicCaloBlock->SetSensitiveDetector(aSD);
+
+	assert(nX_ps * nY_ps<100);
+	G4VPhysicalVolume* physiCaloBlock[100];
+	for (G4int xi = 0; xi < nX_ps; xi++)
+	{
+		for (G4int yi = 0; yi < nY_ps; yi++)
+		{
+			G4double xpos = -caloWidth / 2 + (0.5 + xi) * blockWidth;
+			G4double ypos = -caloHeight / 2 + (0.5 + yi) * blockHeight;
+
+			G4ThreeVector positionCaloBlock = G4ThreeVector(xpos, ypos, 0);
+
+			assert(xi + nX_ps * yi<100);
+			physiCaloBlock[xi + nX_ps * yi] = new G4PVPlacement(0,
+			        positionCaloBlock, "CaloBlock_ps", logicCaloBlock,
+			        physiCaloBox, false, xi + yi * nX_ps + 1);
+
+		}
+	}
+
+	//Here is one of the best parts about geant
+	//here we make a layer of glue in a BLOCK, one of the 1x1cm things, and if we make alot of layers in one block,
+	//those layers will get made in every single copy of the one block
+	// The layers of scintillator/glue
+	G4int nlayers = 40;
+	G4double layerSep = blockWidth / nlayers;
+	//  G4double layerThick= 0.5*mm;
+	G4double fiberFrac = 0.5;
+	G4double layerThick = layerSep * fiberFrac;
+
+	G4Box* solidLayer = new G4Box("Layer_ps", layerThick / 2, blockHeight / 2,
+	        blockDepth / 2);
+
+	// **** TEST WITH TUNGSTEN FIBER
+	//  BC404=Tungsten; // TEMPORARY CHANGE TO MAKE CALO ALL TUNGSTEN 4/21
+	G4Material *glueTemp = BC404;
+	//  G4Material *glueTemp = Tungsten;
+	G4LogicalVolume* logicLayer = new G4LogicalVolume(solidLayer, glueTemp,
+	        "LayerLV");
+	logicLayer->SetVisAttributes(offAtt);
+	logicLayer->SetSensitiveDetector(aSD);
+
+	for (G4int li = 0; li < nlayers; li++)
+	{
+		G4double xPosLayer = -blockWidth / 2 + layerSep * (li + 0.5);
+		G4ThreeVector positionLayer = G4ThreeVector(xPosLayer, 0, 0);
+		//                                                                                      it knows to make copies because here the mother volume is a volume that has copies
+		G4VPhysicalVolume* physiLayer = new G4PVPlacement(0, positionLayer,
+		        logicLayer, "Layer_ps", logicCaloBlock, false, li);
+	}
+
+	/*
+	 // These are the original fiber specifications modified *incorrectly*
+	 // for smaller effective fiber diameter (inefficiency on the outside)
+	 // I'm commenting it out and rewriting it to allow me to do it correctly
+	 // -Ron McNabb 12/14/08
+
+	 // Fibers
+	 G4double fiberDiameter=layerThick;
+	 G4int nfibers=blockHeight/fiberDiameter;
+	 //  G4double fiberSep=fiberDiameter;
+
+	 // changed fiber diameter to account for respose 11/8/08
+	 G4double fiberSep=fiberDiameter*0.94;
+	 //  G4double fiberSep=blockHeight/nfibers;
+	 */
+
+	// Fibers (updated 12/14)
+	G4double fiberFracSensitive = 1.0;// fraction of fiber radius that is sensitive
+	G4double fiberSep = layerThick;
+	G4double fiberDiameter = fiberSep * fiberFracSensitive;
+	G4int nfibers = blockHeight / fiberSep;
+
+	G4Tubs *solidFiber = new G4Tubs("FiberSolid_ps", 0., fiberDiameter / 2,
+	        blockDepth / 2, 0., twopi);
+
+	G4LogicalVolume* logicFiber = new G4LogicalVolume(solidFiber, BC404,
+	        "Fiber_psLV");
+
+	// ***** TEST WITH TUNGSTEN FIBERS***
+	//  G4LogicalVolume* logicFiber = new G4LogicalVolume(solidFiber,
+	// 						    Tungsten, "FiberLV");
+
+
+	logicFiber->SetVisAttributes(offAtt);
+	//         logicFiber->SetVisAttributes(redFrame);
+	logicFiber->SetSensitiveDetector(aSD);
+
+	//here we make the fibers, but we only have to make one column in one layer -
+	// that column will get copied to all the other layers in that block, and thus to all the layers everywhere in the calo
+	for (G4int fi = 0; fi < nfibers; fi++)
+	{
+		G4double yPosFiber = -blockHeight / 2 + fiberSep * (fi + 0.5);
+		G4ThreeVector positionFiber = G4ThreeVector(0, yPosFiber, 0);
+
+		G4VPhysicalVolume* physiFiber = new G4PVPlacement(0, positionFiber,
+		        logicFiber, "Fiber_ps", logicLayer, false, fi);
+	}
+
+	return experimentalHall_phys;
+
+	return experimentalHall_phys;
+}
+
+G4VPhysicalVolume*
+CaloSimDetectorConstruction::Construct()
+{
+	//	return ConstructShowerOnly();
+	return ConstructTotoalShower();
+}
