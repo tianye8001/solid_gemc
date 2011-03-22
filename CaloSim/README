@@ -43,5 +43,14 @@ Zhiwen Zhao
 3/17/2011
 
 
+============== Update List ===========================
+
+03/21/2011 Jin Huang <jinhuang@jlab.org>
+	Added support for
+    * Set field from mac script: ex. mac/TestFile.mac
+    * Added hadron simulation, beam of pion, kaon from mac script: ex. mac/TestFile.mac
+    * Added option for preshower - shower confirguration: switch configurations at src/CaloSimDetectorConstruction.C::Construct()
+    * Script tools to convert GEMC phase space to input file and load via mac scripts: high level script at script/GEMC2CaloSimScript.C
+
 
 
