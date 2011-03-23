@@ -10,7 +10,7 @@
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphics system)
 #
-/vis/open OGL 600x600-0+0
+/vis/open OGLIX 600x600-0+0
 #
 ####/vis/open OGLSXm
 ####/vis/open HepRepXML
@@ -23,7 +23,7 @@
 #
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 #/vis/viewer/set/viewpointThetaPhi 180 0 deg
-#/vis/viewer/zoom 1.4
+/vis/viewer/zoom 2
 #
 # for drawing the tracks
 /vis/scene/add/trajectories smooth

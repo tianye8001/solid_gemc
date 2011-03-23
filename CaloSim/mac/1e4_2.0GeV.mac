@@ -10,7 +10,7 @@
 /event/verbose 0
 /tracking/verbose 0
 
-/Gun/Energy 2 GeV
+/Gun/Energy 2.0 GeV
 
 #/mygen/inputFile /scratch/charm/rmcnabb/electrons.dat
 
