@@ -41,7 +41,9 @@
 
 static const G4double Shower_blockHeight = 4.0 * cm;
 static const G4double Shower_blockWidth = 4.0 * cm;
-static const G4double Shower_blockDepth = 15.0 * cm;
+//static const G4double Shower_blockDepth = 15.0 * cm; // First Batch Run
+//static const G4double Shower_blockDepth = 25.0 * cm; // 2nd Batch Run
+static const G4double Shower_blockDepth = 15.0 * cm; // 3rd Batch Run
 
 // If you specify the output file name when you run the program, that will be the name of the root file
 // if not, this sets default to output.root
@@ -460,7 +462,7 @@ CaloSimDetectorConstruction::ConstructTotoalShower()
 	G4Box* experimentalHall_box = new G4Box("expHall_box", expHall_x,
 	        expHall_y, expHall_z);
 	//a solid gets made into a logic here, a logic volume is a solid but the material is defined, here Air
-	experimentalHall_log = new G4LogicalVolume(experimentalHall_box, Air,
+	experimentalHall_log = new G4LogicalVolume(experimentalHall_box, Vacuum,
 	        "expHall_log", 0, 0, 0);
 
 	// a logic gets turned into a physical volume and placed here, a physical volume is a logic with position defined
@@ -505,7 +507,7 @@ CaloSimDetectorConstruction::ConstructShower(
 	// Set up the box containing the calorimeter
 	G4Box* solidCaloBox = new G4Box("caloBox", caloWidth / 2, caloHeight / 2,
 	        caloDepth / 2);
-	G4LogicalVolume* logicCaloBox = new G4LogicalVolume(solidCaloBox, Air,
+	G4LogicalVolume* logicCaloBox = new G4LogicalVolume(solidCaloBox, Vacuum,
 	        "CaloBoxLV");
 
 	G4VPhysicalVolume* physiCaloBox = new G4PVPlacement(0, positionCaloBox,
@@ -642,7 +644,7 @@ CaloSimDetectorConstruction::ConstructPreShower(
 	// these are the segments, first define how big you want your blocks
 	static const G4double blockHeight = Shower_blockHeight;
 
-	static const G4double blockWidth =Shower_blockWidth;
+	static const G4double blockWidth =Shower_blockWidth /2;
 	//  G4double blockDepth=11.0*cm;
 	static const G4double blockDepth =  Shower_blockWidth * nX; // match shower dementions
 	// set divisions in calo
@@ -657,7 +659,7 @@ CaloSimDetectorConstruction::ConstructPreShower(
 	// Set up the box containing the calorimeter
 	G4Box* solidCaloBox = new G4Box("caloBox_ps", caloWidth / 2, caloHeight / 2,
 	        caloDepth / 2);
-	G4LogicalVolume* logicCaloBox = new G4LogicalVolume(solidCaloBox, Air,
+	G4LogicalVolume* logicCaloBox = new G4LogicalVolume(solidCaloBox, Vacuum,
 	        "CaloBox_psLV");
 
 	G4ThreeVector positionCaloBox = G4ThreeVector(0, 0, -Shower_blockDepth/2-caloWidth/2);
