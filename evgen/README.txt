@@ -1,3 +1,5 @@
+== PVDIS event generator ==========================================================================
+
 FAST HOWTO COMPILE THIS GENERATOR
 
 tested on ifarml6 (64 bit)
@@ -75,3 +77,20 @@ setenv LIBRARY_PATH /home/zana/lib:${ROOTSYS}/lib
      -g 2-1-0          : specify if particle in output is a geantino ( geantino-> 1 ; charged geantino-> 2 ; normal->0 (default) )
  --- 
 
+== SIDIS event generator ==========================================================================
+tested on ifarm64
+
+1. get lhapdf and compile
+http://www.hepforge.org/archive/lhapdf/lhapdf-5.8.5.tar.gz
+./configure --prefix=/home/zwzhao/apps/Linux_CentOS5.3-x86_64-gcc4.1.2/lhapdf CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran
+make
+make install
+setenv LHAPDF /home/zwzhao/apps/Linux_CentOS5.3-x86_64-gcc4.1.2/lhapdf/lib
+setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
+download http://www.hepforge.org/archive/lhapdf/pdfsets/5.8.5/cteq6m.LHpdf and put it at $LHAPDF/share/lhapdf
+
+2. compile collider
+cd collider
+source  /apps/root/PRO/setroot_CUE
+make
+run "./collider" to see all running options

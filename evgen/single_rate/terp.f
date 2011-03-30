@@ -40,7 +40,10 @@ C     THAN OR EQUAL TO XIN, SET I1 AND EXIT LOOP.
 C     ---------------------------------------------------------------
 60    CONTINUE
       DO 90 I = 1,NPTS
-      IF(XIN-X(I)) 70,80,90
+C      IF(XIN-X(I)) 70,80,90
+      if (XIN-X(I) .LT. 0) GOTO 70
+      if (XIN-X(I) .EQ. 0) GOTO 80
+      if (XIN-X(I) .GT. 0) GOTO 90
 
 C     ---------------------------------------------------------------
 C     XIN IS LESS THAN X(I).

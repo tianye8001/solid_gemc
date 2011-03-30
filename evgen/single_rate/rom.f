@@ -24,7 +24,10 @@ C  ROMBERG METHOD OF INTEGRATION
       IV=L+1
     2 W(IU,IV)=(4.**(IV-1)*W(IU+1,IV-1)-W(IU,IV-1))/(4.**(IV-1)-1.)
       E=(W(IU,IV)-W(IU,IV-1))/W(IU,IV)
-      IF(ABS(E)-EPS) 3,3,4
+C      IF(ABS(E)-EPS) 3,3,4
+      if (ABS(E)-EPS .LT. 0) GOTO 3
+      if (ABS(E)-EPS .EQ. 0) GOTO 3
+      if (ABS(E)-EPS .GT. 0) GOTO 4
     3 ANS=W(1,IV)
       RETURN
     5 PRINT 100
