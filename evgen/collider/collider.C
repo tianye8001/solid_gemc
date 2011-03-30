@@ -45,6 +45,7 @@ int main(Int_t argc, char *argv[]){
 
   if (argc != 7) {
     cout << "usage: ./collider #ele_mom #ion_mom #target #particle #fileno #events" << endl;
+    cout << "both mom are in GeV, set ion_mom=0 for fix target" << endl;
     cout << "#target_flag = 1 for proton and 2 for deuteron 3 for 3he" << endl;
     cout << "#particle_flag = 1 for pion and 2 for kaon" << endl;
     cout << "#fileno is the file number of output, used for batch" << endl;
