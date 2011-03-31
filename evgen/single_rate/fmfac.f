@@ -67,6 +67,7 @@ C     -----------------------------------------------------------------
       IMPLICIT REAL*8 (A-H,O-Z)
       REAL*8 ME,MT,MTF
       REAL*8 K,KN,KP,MP
+      integer*8 ig
       COMMON /ROSEMASS/ME,MT,MTF
       COMMON /ROSEFMFACCONSTANT/ITARGT
       common /ROSEklgcom/ig,rmod,imod,nklg
