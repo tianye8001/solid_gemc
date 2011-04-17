@@ -178,12 +178,12 @@ int main (int argc, char **argv) {
     input_chain.SetBranchAddress("W",&W);
     input_chain.SetBranchAddress("y",&y);
     input_chain.SetBranchAddress("crs",&crs);
-    input_chain.SetBranchAddress("f1",&f1);
-    input_chain.SetBranchAddress("f2",&f2);
-    input_chain.SetBranchAddress("f1gz",&f1gz);
-    input_chain.SetBranchAddress("f3gz",&f3gz);
-    input_chain.SetBranchAddress("g1gz",&g1gz);
-    input_chain.SetBranchAddress("g5gz",&g5gz);
+    input_chain.SetBranchAddress("F1",&f1);
+    input_chain.SetBranchAddress("F2",&f2);
+    input_chain.SetBranchAddress("F1gZ",&f1gz);
+    input_chain.SetBranchAddress("F3gZ",&f3gz);
+    input_chain.SetBranchAddress("g1gZ",&g1gz);
+    input_chain.SetBranchAddress("g5gZ",&g5gz);
     input_chain.SetBranchAddress("Q2",&Q2);
     input_chain.SetBranchAddress("eta_gZ",&eta_gZ);
     input_chain.SetBranchAddress("rate",&rate);
@@ -225,7 +225,11 @@ int main (int argc, char **argv) {
   
       if (phi >=phi_min && phi <=phi_max && theta >= theta_min && theta <= theta_max) {  
 	
+#ifdef USE_SOLLUND
 	OUT << "1" << " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
+#else
+	OUT << "1" << " \t " << weight <<  " \t " << "2"  << " \t " << "1"  << " \t " << "0"  << " \t " << "0" << " \t "  << x << " \t " << y  << " \t " << W  << " \t " << Q2  << " \t " << nu << endl;
+#endif
 	OUT << " \t " << "1" << " \t " << charge << " \t " << "1" << " \t " << particle_id << " \t " << "0" << " \t " << "0" << " \t " << px << " \t " << py << " \t " << pz << " \t " << Ef << " \t " << mass << " \t " << vx  << " \t " << vy << " \t " << vz << endl; 
 
       }

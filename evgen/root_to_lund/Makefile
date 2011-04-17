@@ -14,6 +14,7 @@ all: $(EXEC)
 
 root2lund : roottolund.o
 	$(CC) $^ $(ROOTCFLAGS) $(ROOTLIBS)  -o $@ 
+	$(CC) $^ $(ROOTCFLAGS) $(ROOTLIBS) -DUSE_SOLLUND -o root2sollund
 
 roottolund.o : roottolund.C
 	$(CC)  -c $(CCFLAGS) $(ROOTCFLAGS) $< -o $@
