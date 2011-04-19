@@ -5,7 +5,7 @@
 ROOTLIBS      = $(shell root-config --libs)
 ROOTGLIBS     = $(shell root-config --glibs)
 CXX           = g++
-CXXFLAGS      = -Wall -frtti -fno-exceptions -fPIC \
+CXXFLAGS      = -Wall -g -frtti -fno-exceptions -fPIC \
                    -DLINUXVERS -I$(ROOTSYS)/include -I$(LHAPDF)/include -O
 
 O=collider

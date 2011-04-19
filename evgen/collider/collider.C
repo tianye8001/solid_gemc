@@ -43,13 +43,14 @@ int main(Int_t argc, char *argv[]){
   Double_t bpt_m=4.694;
   Double_t bpt_p=4.661;
 
-  if (argc != 7) {
-    cout << "usage: ./collider #ele_mom #ion_mom #target #particle #fileno #events" << endl;
+  if (argc != 8) {
+    cout << "usage: ./collider #ele_mom #ion_mom #target #particle #fileno #events config" << endl;
     cout << "both mom are in GeV, set ion_mom=0 for fix target" << endl;
     cout << "#target_flag = 1 for proton and 2 for deuteron 3 for 3he" << endl;
     cout << "#particle_flag = 1 for pion and 2 for kaon" << endl;
     cout << "#fileno is the file number of output, used for batch" << endl;
     cout << "#events is number of event in each file" << endl;
+    cout << "config is 'EIC' or 'SoLID' which needs ion_mom=0" << endl;
   }else{
     //initialize
     Double_t momentum_ele = atof(argv[1]);
@@ -57,6 +58,7 @@ int main(Int_t argc, char *argv[]){
     Int_t target_flag = atoi(argv[3]);
     Int_t particle_flag = atoi(argv[4]);
     Int_t number_of_events = atoi(argv[6]);
+    string config = argv[7];
     
     Int_t fileno = atoi(argv[5]);
 
@@ -99,6 +101,11 @@ int main(Int_t argc, char *argv[]){
       cout << "particle_flag is wrong +-1 and +-2" << endl;
       return 0;
     }
+    
+    if (config != "EIC" && config != "SoLID"){
+      cout << "not supported config" << endl;
+      return 0;
+    }    
      
     //create filename
     filename.Form("_%d_%d_1_%d.root",Int_t(momentum_ele),Int_t(momentum_ion),Int_t(fileno));
@@ -300,15 +307,17 @@ int main(Int_t argc, char *argv[]){
 
     Double_t dxs_all[3][4];
     
-    while(count[0] < number_of_events || count[1] < number_of_events || count[2] < number_of_events || count[3] < number_of_events){
-      
+    bool exitcondition=true;
+    while(exitcondition){
+ 
       nsim ++;
       
       theta_gen = acos(gRandom->Uniform(cos(150/180.*3.1415926),1.));
       phi_gen = gRandom->Uniform(0.,2.*PI);
 
-      mom_gen = gRandom->Uniform(0.7,momentum_ele + momentum_ion);
-      mom_gen = gRandom->Uniform(0.7,momentum_ele *3.);
+//       mom_gen = gRandom->Uniform(0.7,momentum_ele + momentum_ion);
+      if (config=="EIC") mom_gen = gRandom->Uniform(0.7,momentum_ele * 3.);
+      else if (config=="SoLID") mom_gen = gRandom->Uniform(0.7,momentum_ele);
       
       // mom_gen = 10.196474;
 //       theta_gen = 0.7361853;
@@ -337,10 +346,7 @@ int main(Int_t argc, char *argv[]){
        Q2 = - (*P4_q)*(*P4_q);
        W = (*P4_ini_ele + *P4_ini_ion - *P4_fin_ele)*(*P4_ini_ele + *P4_ini_ion - *P4_fin_ele);
        Wp = (*P4_ini_ele + *P4_ini_ion - *P4_fin_ele - *P4_fin_had)*(*P4_ini_ele + *P4_ini_ion - *P4_fin_ele - *P4_fin_had);
-       
-       
-
-       
+              
        if (Q2 >=1.0 && W>= 2.3*2.3 &&Wp>= 1.6*1.6){
 	 s = (*P4_ini_ele + *P4_ini_ion )*(*P4_ini_ele + *P4_ini_ion);
 	 nu = (*P4_ini_ion) * (*P4_q)/mass_target;
@@ -358,12 +364,10 @@ int main(Int_t argc, char *argv[]){
 	 *lrz_P4_q = *P4_q;
 	 *lrz_P4_h = *P4_fin_had;
 	 *lrz_P4_ef = *P4_fin_ele;
-
+	 
 	 lrz_P4_ef->Boost(vnboost);
 	 lrz_P4_h->Boost(vnboost); 
 	 lrz_P4_q->Boost(vnboost);
-
-	
 
 // 	 *lrz_P4_ei = *P4_ini_ele;
 	 // *lrz_P4_ion = *P4_ini_ion;
@@ -384,14 +388,11 @@ int main(Int_t argc, char *argv[]){
 	 
 	 pt = p3_fin_had.Perp(p3_q);
 
-	 
-
-	 if (z>0.2&&z<0.8&&y>0.05&&y<0.8 && ((count[0]<number_of_events&&pt<=1.0&&Q2<=10.) 
+	 if ( (config=="EIC" && z>0.2&&z<0.8&&y>0.05&&y<0.8 && ((count[0]<number_of_events&&pt<=1.0&&Q2<=10.) 
 					     || (count[1]<number_of_events&&pt>1.0&&Q2<=10.)
 					     || (count[2]<number_of_events&&pt<=1.0&&Q2>10.)
-					     || (count[3]<number_of_events&&pt>1.0&&Q2>10.))
-	     ){
-	  
+					     || (count[3]<number_of_events&&pt>1.0&&Q2>10.)) ) || 
+	      (config=="SoLID" && z>0.3&&z<0.7 && ((count[0]<number_of_events&&pt<=1.0&&Q2<=10.) || (count[1]<number_of_events&&pt>1.0&&Q2<=10.))) ){
 	 
 	 theta_q =p3_q.Theta();
 	 phi_q = p3_q.Phi();
@@ -419,8 +420,6 @@ int main(Int_t argc, char *argv[]){
 	 phi_had = P4_fin_had->Phi();
 	 
 	 jacoF = Jacobian(mom_ele,theta_ele,phi_ele,mom_had,theta_had,phi_had,mom_pro,energy_pro,momentum_ele,mass_hadron);
-	 
-	 
 	 
 	 if (pt<0.8){
 	   //first method 	 
@@ -513,6 +512,7 @@ int main(Int_t argc, char *argv[]){
 	       decay_part = exp(-2.5/sin(theta_had)*mass_hadron/(1.24*mom_had*3.0));
 	     }
 	   }
+	   
 	   dxs_hp = decay_part * dxs_hp; 
 	   dxs_hm = decay_part * dxs_hm;
 
@@ -524,33 +524,41 @@ int main(Int_t argc, char *argv[]){
 	   }else{
 	     dxs_hm = 0.;
 	   }
-	   
+
 	   if ((dxs_hp+dxs_hm)!=0){
 	     if (Q2<=10.&&pt<=1.0){
 	       t1->Fill();
-	       count[0] ++;
+	       count[0] ++;//cout << 0 << " " << count[0] << endl;
 	     }
 	     if (Q2<=10.&&pt>1.0){
 	       t2->Fill();
-	       count[1] ++;
+	       count[1] ++;//cout << 1 << " " << count[1] << endl;
 	     }
 	     if (Q2>10.&&pt<=1.0){
 	       t3->Fill();
-	       count[2] ++;
+	       count[2] ++;//cout << 2 << " " << count[2] << endl;
 	     }
 	     if (Q2>10.&&pt>1.0){
 	       t4->Fill();
-	       count[3] ++;
+	       count[3] ++;//cout << 3 << " " << count[3] <<  endl;
 	     }
 	   }
-	   
+	   //cout << nsim << endl;
 	 
 	 }
        }
-       //if () goto abc;
+       ///judging exitcondition
+      if (config=="EIC") {
+	if (count[0] < number_of_events || count[1] < number_of_events || count[2] < number_of_events || count[3] < number_of_events) exitcondition=true;
+	else exitcondition=false;
+      } else if (config=="SoLID") {
+	if (count[0] < number_of_events || count[1] < number_of_events) exitcondition=true;
+	else exitcondition=false;
+      } 
+      
     }
     cout << count[0] << "\t" << count[1] << "\t" << count[2] << "\t" << count[3] << endl;
-  abc:
+
     file1->Write();
     file1->Close();
     file2->Write();
