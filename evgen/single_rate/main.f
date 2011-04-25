@@ -11,21 +11,91 @@
       real theta_min_deg,theta_max_deg
       real mom_min_mev,mom_max_mev
 
+      real x_min,xmax
+      real q2_min,q2_max
+
+      real cos_theta_min_deg,cos_theta_max_deg
+
+      real par1,par2,par3,par4
+
+      integer option
+
       integer i,j
 
       real theta,mom,theta_deg,mom_mev
 
-      Lumi = 1000000.0 ! 10^39  luminosity /cm^2/s (* nb) 10^-9*10^-28*10^4
-      ebeam = 4.4 ! GeV
-      
-      mom_min = 3.5 ! GeV
-      mom_max = 4.5 ! GeV
-      
-      theta_min_deg = 15.0 ! deg
-      theta_max_deg = 20.0 ! deg
+  !DEFINE BUFFER HOLDS THE COMMAND LINE ARGUMENT
+      CHARACTER *100 BUFFER  
+
+  !GET THE PARAMETERS FROM THE COMMAND LINE ARGUMENT
+      CALL GETARG(1,BUFFER)
+      READ(BUFFER,*) option
+      CALL GETARG(2,BUFFER)
+      READ(BUFFER,*) Lumi
+      CALL GETARG(3,BUFFER)
+      READ(BUFFER,*) ebeam
+      CALL GETARG(4,BUFFER)
+      READ(BUFFER,*) par1
+      CALL GETARG(5,BUFFER)
+      READ(BUFFER,*) par2
+      CALL GETARG(6,BUFFER)
+      READ(BUFFER,*) par3
+      CALL GETARG(7,BUFFER)
+      READ(BUFFER,*) par4
+
+      if (option.eq.1) then
+! 	print*,"use mom and theta as variables"
+	mom_min=par1
+	mom_max=par2
+	theta_min_deg=par3
+	theta_max_deg=par4
+      else if (option.eq.2) then
+! 	print*,"use x and Q2 as variables"
+	x_min=par1
+	x_max=par2
+	q2_min=par3
+	q2_max=par4
+	mom_min=ebeam-(q2_max/x_min)/2./0.94
+	mom_max=ebeam-(q2_min/x_max)/2./0.94
+	if (mom_min.le.0.) then 
+	  print*,"mom_min ",mom_min
+	endif
+	if (mom_max.ge.ebeam) then
+	  print*,ebeam,"mom_max ",mom_max
+	endif
+	cos_theta_min_deg=1.-1./(2.*ebeam*(ebeam/q2_min-
+     >     1./2./0.94/x_max))
+	cos_theta_max_deg=1.-1./(2.*ebeam*(ebeam/q2_max-
+     >     1./2./0.94/x_min))
+	if (cos_theta_min_deg.ge.cos(9/180.*3.1415926)) then ! Solis cut less than 9 degree
+	  print*,"cos_theta_min_deg ",cos_theta_min_deg
+	  theta_min_deg=9.
+	else 
+	  theta_min_deg=acos(cos_theta_min_deg)/3.1415926*180.
+	endif
+	if (cos_theta_max_deg.le.cos(24/180.*3.1415926)) then ! Solis cut larger than 24 degree
+	  print*,"cos_theta_max_deg ",cos_theta_max_deg
+	  theta_max_deg=24.
+	else 
+	 theta_max_deg=acos(cos_theta_max_deg)/3.1415926*180.
+	endif
+      else 
+	  print*,"wrong option"
+      endif
+
+      print*,mom_min,",",mom_max,",",theta_min_deg,",",theta_max_deg
+
+!       Lumi = 1000000.0 ! 10^39  luminosity /cm^2/s (* nb) 10^-9*10^-28*10^4
+!       ebeam = 4.4 ! GeV
+!       
+!       mom_min = 3.5 ! GeV
+!       mom_max = 4.5 ! GeV
+!       
+!       theta_min_deg = 15.0 ! deg
+!       theta_max_deg = 20.0 ! deg
       
       ebeam_mev = ebeam * 1000.0
-      mom_min_mev = mon_min * 1000.0
+      mom_min_mev = mom_min * 1000.0
       mom_max_mev = mom_max * 1000.0
 
       theta_min = theta_min_deg/180.0*3.1415926
@@ -138,14 +208,20 @@
      c     *2*3.1415926*(mom_max-mom_min)*Lumi/1000000.
 
 
-      print*,"Electron from whitlow   :",xs_ele1,"MHz"
-      print*,"Electron from qfs       :",xs_ele2,"MHz"
-      print*,"Positive Pion from wiser:",xs_pip,"MHz"
-      print*,"Negative Pion from wiser:",xs_pim,"MHz"
-      print*,"Proton from wiser       :",xs_p,"MHz"
-      print*,"Positive Kaon from wiser:",xs_kp,"MHz"
-      print*,"Negative Kaon from wiser:",xs_km,"MHz"
-      
-      print*,xs_ele2,",",xs_pip,",",xs_pim,",",xs_p,",",xs_kp,",",xs_km
+!       print*,"Electron from whitlow   :",xs_ele1,"MHz"
+!       print*,"Electron from qfs       :",xs_ele2,"MHz"
+!       print*,"Positive Pion from wiser:",xs_pip,"MHz"
+!       print*,"Negative Pion from wiser:",xs_pim,"MHz"
+!       print*,"Proton from wiser       :",xs_p,"MHz"
+!       print*,"Positive Kaon from wiser:",xs_kp,"MHz"
+!       print*,"Negative Kaon from wiser:",xs_km,"MHz"
 
+      print*,xs_ele1," ",xs_ele2
+
+      open(unit=11,file='ele1.dat',status='unknown')
+      open(unit=12,file='ele2.dat',status='unknown')
+
+      write(11,*) xs_ele1*1000000.
+      write(12,*) xs_ele2*1000000.
+         
       end
