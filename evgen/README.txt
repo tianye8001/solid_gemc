@@ -19,8 +19,8 @@ by default is going to write the desired library in /home/${user}/lib
 Remember to add this directory (or the one that you will choose) to your $LD_LIBRARY_PATH and $LIBRARY_PATH
 
 for example:
-setenv LD_LIBRARY_PATH /home/zana/lib:${LD_LIBRARY_PATH}
-setenv LIBRARY_PATH /home/zana/lib:${LIBRARY_PATH}
+setenv LD_LIBRARY_PATH /home/${USER}/lib:${LD_LIBRARY_PATH}
+setenv LIBRARY_PATH /home/${USER}/lib:${LIBRARY_PATH}
 
 2) The Generator itself (thanks Seamus)
 I added the possibility to specify the input file and output file
@@ -52,15 +52,15 @@ make
 
 ENVIRONMENT VARIABLES FOR COMPILING (example in bash):
 If you are using root 5.28 like me seems you need to put some extra environment for your compiler for the "include" 
-LD_LIBRARY_PATH=/home/zana/lib:$LD_LIBRARY_PATH; export LD_LIBRARY_PATH
-LIBRARY_PATH=/home/zana/lib:${ROOTSYS}/lib:$LIBRARY_PATH; export LIBRARY_PATH
-C_INCLUDE_PATH=/home/zana/include:${ROOTSYS}/include:$C_INCLUDE_PATH; export C_INCLUDE_PATH
-CPLUS_INCLUDE_PATH=/home/zana/include:${ROOTSYS}/include:$CPLUS_INCLUDE_PATH; export CPLUS_INCLUDE_PATH
+LD_LIBRARY_PATH=/home/${USER}/lib:$LD_LIBRARY_PATH; export LD_LIBRARY_PATH
+LIBRARY_PATH=/home/${USER}/lib:${ROOTSYS}/lib:$LIBRARY_PATH; export LIBRARY_PATH
+C_INCLUDE_PATH=/home/${USER}/include:${ROOTSYS}/include:$C_INCLUDE_PATH; export C_INCLUDE_PATH
+CPLUS_INCLUDE_PATH=/home/${USER}/include:${ROOTSYS}/include:$CPLUS_INCLUDE_PATH; export CPLUS_INCLUDE_PATH
 
 (csh example)
-setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:/home/zana/lib:${LD_LIBRARY_PATH}
-setenv CPLUS_INCLUDE_PATH /home/zana/include:${ROOTSYS}/include 
-setenv LIBRARY_PATH /home/zana/lib:${ROOTSYS}/lib
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:/home/${USER}/lib:${LD_LIBRARY_PATH}
+setenv CPLUS_INCLUDE_PATH /home/${USER}/include:${ROOTSYS}/include 
+setenv LIBRARY_PATH /home/${USER}/lib:${ROOTSYS}/lib
 
 
  root2lund : This Program translate the output from eicRate in LUND format and Filter the scattered electron angles
@@ -82,10 +82,10 @@ tested on ifarm64
 
 1. get lhapdf and compile
 http://www.hepforge.org/archive/lhapdf/lhapdf-5.8.5.tar.gz
-./configure --prefix=/home/zwzhao/apps/Linux_CentOS5.3-x86_64-gcc4.1.2/lhapdf CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran
+./configure --prefix=/home/${USER}/apps/Linux_CentOS5.3-x86_64-gcc4.1.2/lhapdf CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran
 make
 make install
-setenv LHAPDF /home/zwzhao/apps/Linux_CentOS5.3-x86_64-gcc4.1.2/lhapdf
+setenv LHAPDF /home/${USER}/apps/Linux_CentOS5.3-x86_64-gcc4.1.2/lhapdf
 setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
 download http://www.hepforge.org/archive/lhapdf/pdfsets/5.8.5/cteq6m.LHpdf and put it at $LHAPDF/share/lhapdf
 
@@ -94,3 +94,16 @@ cd collider
 source  /apps/root/PRO/setroot_CUE
 make
 run "./collider" to see all running options
+
+== inclusive rate calculation used by SIDIS ==========================================================================
+
+cd single_rate and type make
+
+you use scattering e- mommentum and theta as variables
+./main 1 Lumi beam mom_min mom_max theta_min theta_max
+or you can x and Q2 as variables  
+./main 2 Lumi beam x_min x_max Q2_min Q2_max
+
+calc_rate.C calls on main to generate a rate plot
+
+
