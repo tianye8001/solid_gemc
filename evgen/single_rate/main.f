@@ -89,7 +89,8 @@
 	  print*,"wrong option"
       endif
 
-      print*,"mom_min ",mom_min,"mom_max,",mom_max,"theta_min_deg,",theta_min_deg,"theta_max_deg,",theta_max_deg
+      print*,"mom_min",mom_min,"mom_max",mom_max,"theta_min_deg"
+     c            ,theta_min_deg,"theta_max_deg",theta_max_deg
 
 !       Lumi = 1000000.0 ! 10^39  luminosity /cm^2/s (* nb) 10^-9*10^-28*10^4
 !       ebeam = 4.4 ! GeV
@@ -145,7 +146,7 @@
             xs_ele2 = xs_ele2 + dxs_ele2*sin(theta)
 
 !    wiser code somehow doesn't take step as 0 if min=max,but it will ignore any other value, 0.1 here is a placeholder
-       
+
 !     calculate proton rate using wiser
             call wiser(5,target,ebeam_mev,mom_mev,0.1,mom_mev,
      c           theta_deg,0.1 
