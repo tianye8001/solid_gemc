@@ -99,11 +99,20 @@ run "./collider" to see all running options
 
 cd single_rate and type make
 
-you use scattering e- mommentum and theta as variables
-./main 1 Lumi beam mom_min mom_max theta_min theta_max
-or you can x and Q2 as variables  
-./main 2 Lumi beam x_min x_max Q2_min Q2_max
+you use choose option 1 to use scattering e- mommentum and theta as variables
+./main target(0 hydrogen,1 deuteron) Lumi(1e33 Hz/cm2) beam(GeV) 1 mom_min(GeV) mom_max(GeV) theta_min(deg) theta_max(deg)
+
+or you choose option 2 to use Q2 and x as variables  
+./main target(0 hydrogen,1 deuteron) Lumi(1e33 Hz/cm2) beam(GeV) option(2) x_min x_max Q2_min(GeV2) Q2_max(GeV2)
+this is not a complete feature. actuall cross section is all calculated in mom,theta bin, so a x,Q2 square bin will define ranges for mom,theta, then calculate in the coverted mom,theta bin square bin. But the actual coversion should be a quare, it only falls within the suqare, so it will be overestimate.
 
 calc_rate.C calls on main to generate a rate plot
+
+The code is based on some previous code, refer to 
+"Software for estimating (e,e'), (e,pion) cross sections (10/22/2000) source code     instruction(html)"
+at http://hallaweb.jlab.org/physics/experiments/he3/A1n/
+
+
+
 
 
