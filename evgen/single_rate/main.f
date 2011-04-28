@@ -79,7 +79,7 @@
 	else 
 	  theta_min_deg=acos(cos_theta_min_deg)/3.1415926*180.
 	endif
-	if (cos_theta_max_deg.le.-1.)) then
+	if (cos_theta_max_deg.le.-1.) then
 	  print*,"cos_theta_max_deg ",cos_theta_max_deg
 	  theta_max_deg=180.
 	else 
