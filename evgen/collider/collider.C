@@ -47,7 +47,7 @@ int main(Int_t argc, char *argv[]){
     cout << "usage: ./collider #ele_mom #ion_mom #target #particle #fileno #events config" << endl;
     cout << "both mom are in GeV, set ion_mom=0 for fix target" << endl;
     cout << "#target_flag = 1 for proton and 2 for deuteron 3 for 3he" << endl;
-    cout << "#particle_flag = 1 for pion and 2 for kaon" << endl;
+    cout << "#particle_flag = 1 for pion+, -1 for pion- and 2 for kaon+, -2 for kaon-" << endl;
     cout << "#fileno is the file number of output, used for batch" << endl;
     cout << "#events is number of event in each file" << endl;
     cout << "config is 'EIC' or 'SoLID' which needs ion_mom=0" << endl;
@@ -312,12 +312,17 @@ int main(Int_t argc, char *argv[]){
  
       nsim ++;
       
-      theta_gen = acos(gRandom->Uniform(cos(150/180.*3.1415926),1.));
       phi_gen = gRandom->Uniform(0.,2.*PI);
 
 //       mom_gen = gRandom->Uniform(0.7,momentum_ele + momentum_ion);
-      if (config=="EIC") mom_gen = gRandom->Uniform(0.7,momentum_ele * 3.);
-      else if (config=="SoLID") mom_gen = gRandom->Uniform(0.7,momentum_ele);
+      if (config=="EIC") {
+	      theta_gen = acos(gRandom->Uniform(cos(150/180.*3.1415926),1.));
+	      mom_gen = gRandom->Uniform(0.7,momentum_ele * 3.);
+      }
+      else if (config=="SoLID") {
+	theta_gen = acos(gRandom->Uniform(cos(24/180.*3.1415926),cos(9/180.*3.1415926)));
+	mom_gen = gRandom->Uniform(0.7,momentum_ele);
+      }
       
       // mom_gen = 10.196474;
 //       theta_gen = 0.7361853;
@@ -544,6 +549,8 @@ int main(Int_t argc, char *argv[]){
 	     }
 	   }
 	   //cout << nsim << endl;
+	   
+	   cout << count[0] << "\t" << count[1] << "\t" << count[2] << "\t" << count[3] << "\r";
 	 
 	 }
        }
