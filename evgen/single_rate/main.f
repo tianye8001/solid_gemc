@@ -119,9 +119,9 @@
       ! assume 2-pi coverage in azimuthal angle
       do i=1,100
          do j=1,100
-            theta = theta_min + (theta_max-theta_min)/100.0*(i+0.5)
+            theta = theta_min + (theta_max-theta_min)/100.0*(i-1+0.5)
             theta_deg = theta *180.0/3.1415926
-            mom = mom_min + (mom_max-mom_min)*j/100.0*(j+0.5)
+            mom = mom_min + (mom_max-mom_min)/100.0*(j-1+0.5)
             mom_mev = mom*1000.0
             
 ! whitlow code somehow doesn't stepsize none 0
