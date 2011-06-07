@@ -21,55 +21,32 @@ $detector{"rmax"} = $rmax;
 use Getopt::Long;
 use Math::Trig;
 
-#the virtual baffle volume
-sub make_baffle
-{
- $detector{"name"}        = "$DetectorName";
- $detector{"mother"}      = "root";
- $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 115*cm";
- $detector{"rotation"}    = "0*deg 0*deg 0*deg";
- $detector{"color"}       = "00ff00";
- $detector{"type"}        = "Tube";
- my $Rin        = 0;
- my $Rout       = 142;
- my $Dz         = 75+4.5;
- $detector{"dimensions"}  = "$Rin*cm $Rout*cm $Dz*cm 0*deg 360*deg";
- $detector{"material"}    = "Vacuum";
- $detector{"mfield"}      = "no";
- $detector{"ncopy"}       = 1;
- $detector{"pMany"}       = 1;
- $detector{"exist"}       = 1;
- $detector{"visible"}     = 0;
- $detector{"style"}       = 1;
- $detector{"sensitivity"} = "no";
- $detector{"hit_type"}    = "";
- $detector{"identifiers"} = $detector{"name"};
-
- print_det(\%detector, $file);
-}
-make_baffle();
-
 #6 plates, 9cm thick,every 30cm, 30 slits per plate, 20 blocks per slit
 
 my $color_baffle="00C0C0";
-my $material_baffle="Kryptonite";
+
+ my $material_baffle="Kryptonite";
+# my $sensitivity_baffle="FLUX";
+# my $hit_baffle="FLUX";
+
+#my $material_baffle="Lead";
 my $sensitivity_baffle="no";
 my $hit_baffle="";
-# Kryptonite
-# FLUX
+
+
 sub make_baffle_plate_inner
 {
  my $Nplate  = 6;
- my @PlateZ  = (-75,-45,-15,15,45,75); #(30,60,90,120,150,180)+10 in absolute coordinate
+ my @PlateZ  = (40,70,100,130,160,190);
  my @Rin  = (3.89,14.,19.,23.9,28.9,33.8);
  my @Rout = (3.9,15.30,26.6,37.9,49.2,60.4);
  my $Dz   = 9.0/2.;
 
  for(my $n=1; $n<=$Nplate; $n++)
  {
-    $detector{"name"}        = "$DetectorName\_plate_inner_$n";
-    $detector{"mother"}      = "$DetectorName" ;
+    my $n_c     = cnumber($n-1, 1);
+    $detector{"name"}        = "$DetectorName\_plateinner$n_c";
+    $detector{"mother"}      = "root" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
@@ -85,7 +62,7 @@ sub make_baffle_plate_inner
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "$sensitivity_baffle";
     $detector{"hit_type"}    = "$hit_baffle";
-    $detector{"identifiers"} = $detector{"name"};
+    $detector{"identifiers"} = "";
 
     print_det(\%detector, $file);
  }
@@ -95,15 +72,16 @@ make_baffle_plate_inner();
 sub make_baffle_plate_outer
 {
  my $Nplate  = 6;
- my @PlateZ  = (-75,-45,-15,15,45,75); #(30,60,90,120,150,180)+10 in absolute coordinate
+ my @PlateZ  = (40,70,100,130,160,190);
  my @Rin  = (34.7,54.3,73.8,93.3,112.8,132.0);
  my $Rout = 142; #coil edge is at 142cm
  my $Dz   = 9.0/2.;
 
  for(my $n=1; $n<=$Nplate; $n++)
  {
-    $detector{"name"}        = "$DetectorName\_plate_outer_$n";
-    $detector{"mother"}      = "$DetectorName" ;
+	my $n_c     = cnumber($n-1, 1);
+    $detector{"name"}        = "$DetectorName\_plateouter$n_c";
+    $detector{"mother"}      = "root" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
@@ -119,7 +97,7 @@ sub make_baffle_plate_outer
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "$sensitivity_baffle";
     $detector{"hit_type"}    = "$hit_baffle";
-    $detector{"identifiers"} = $detector{"name"};
+    $detector{"identifiers"} = "";
 
     print_det(\%detector, $file);
  }
@@ -261,26 +239,33 @@ my @x =( #Rin     Rout   SPhi    DPhi
  my $Nplate  = 6;
  my $Nslit  = 30;
  my $Nblock  = 20;
-#  my @PlateZ  = (30,60,90,120,150,180);
- my @PlateZ  = (-75,-45,-15,15,45,75);
+ my @PlateZ  = (40,70,100,130,160,190);
  my $PlateDz   = 9.0/2;
+ my @offset =(-5.6, -4.4, -3.3, -2.1, -0.9, 0.1);
 
  for(my $n=1; $n<=$Nplate; $n++){
 	my $n_c     = cnumber($n-1, 1);
-  for(my $i=1; $i<=1; $i++){
+  for(my $i=1; $i<=$Nslit; $i++){  # making all slit, copy the 1st
+	my $slit_rotation = ($i-1)*12-$offset[$n-1];
 	my $i_c     = cnumber($i-1, 10);
 	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c";
-	$detector{"mother"}      = "$DetectorName";
+	$detector{"mother"}      = "root";
 	$detector{"description"} = $detector{"name"};
 	$detector{"pos"}         = "0*cm 0*cm $PlateZ[$n-1]*cm";
-	$detector{"rotation"}    = "0*deg 0*deg 0*deg";
+	$detector{"rotation"}    = "0*deg 0*deg $slit_rotation*deg";
 	$detector{"color"}       = "$color_baffle";
-	$detector{"type"}        = "Tube";
-	my $Rin  = 0;
-	my $Rout = $x[$n-1][77];
-	my $Sphi = $x[$n-1][2];
- 	my $Dphi = 12;
-	$detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $Sphi*deg $Dphi*deg";
+	if ($i==1){
+	  $detector{"type"}        = "Tube";
+	  my $Rin  = 0;
+	  my $Rout = $x[$n-1][77];
+	  my $Sphi = $x[$n-1][2];
+	  my $Dphi = 12;
+	  $detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $Sphi*deg $Dphi*deg";
+	}
+	else{
+	  $detector{"type"}        = "CopyOf $DetectorName\_plate$n_c.slit01";
+	  $detector{"dimensions"}  = "0*mm";
+	}
 	$detector{"material"}    = "Vacuum";
 	$detector{"mfield"}      = "no";
 	$detector{"ncopy"}       = $i;
@@ -290,12 +275,13 @@ my @x =( #Rin     Rout   SPhi    DPhi
 	$detector{"style"}       = 0;
 	$detector{"sensitivity"} = "no";
 	$detector{"hit_type"}    = "";
- 	$detector{"identifiers"} = $detector{"name"};
+ 	$detector{"identifiers"} = "";
 	print_det(\%detector, $file);
-    for(my $j=1; $j<=$Nblock; $j++){
+    }
+    for(my $j=1; $j<=$Nblock; $j++){ # making blocks within the first slit
 	my $j_c     = cnumber($j-1, 10);
-	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c.block$j_c";
-	$detector{"mother"}      = "$DetectorName\_plate$n_c.slit$i_c";
+	$detector{"name"}        = "$DetectorName\_plate$n_c.slit01.block$j_c";
+	$detector{"mother"}      = "$DetectorName\_plate$n_c.slit01";
 	$detector{"description"} = $detector{"name"};
 	$detector{"pos"}         = "0*cm 0*cm 0*cm";
 	$detector{"rotation"}    = "0*deg 0*deg 0*deg";
@@ -303,80 +289,55 @@ my @x =( #Rin     Rout   SPhi    DPhi
 	$detector{"type"}        = "Tube";
 	my $Rin  = $x[$n-1][($j-1)*4+0];
 	my $Rout = $x[$n-1][($j-1)*4+1];
-	my $Sphi = $x[$n-1][($j-1)*4+2]+($i-1)*12;
+	my $Sphi = $x[$n-1][($j-1)*4+2];
  	my $Dphi = $x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2];
 	$detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $Sphi*deg $Dphi*deg";
 	$detector{"material"}    = "$material_baffle";
 	$detector{"mfield"}      = "no";
-	$detector{"ncopy"}       = ($n-1)*$Nplate+($i-1)*$Nslit+$j;
+	$detector{"ncopy"}       = $j;
 	$detector{"pMany"}       = 1;
 	$detector{"exist"}       = 1;
 	$detector{"visible"}     = 1;
 	$detector{"style"}       = 1;
 	$detector{"sensitivity"} = "$sensitivity_baffle";
 	$detector{"hit_type"}    = "$hit_baffle";
- 	$detector{"identifiers"} = $detector{"name"};
+ 	$detector{"identifiers"} = "";
 	print_det(\%detector, $file);
       }
-    }
-    for(my $i=2; $i<=$Nslit; $i++){
-	my $slit_rotation = ($i-1)*12;
-	my $i_c     = cnumber($i-1, 10);
-	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c";
-	$detector{"mother"}      = "$DetectorName";
-	$detector{"description"} = $detector{"name"};
-	$detector{"pos"}         = "0*cm 0*cm $PlateZ[$n-1]*cm";
-	$detector{"rotation"}    = "0*deg 0*deg $slit_rotation*deg";
-	$detector{"color"}       = "$color_baffle";
-	$detector{"type"}        = "CopyOf $DetectorName\_plate$n_c.slit01";
-	$detector{"dimensions"}  = "0*mm";
-	$detector{"material"}    = "Vacuum";
-	$detector{"mfield"}      = "no";
-	$detector{"ncopy"}       = $i;
-	$detector{"pMany"}       = 1;
-	$detector{"exist"}       = 1;
-	$detector{"visible"}     = 0;
-	$detector{"style"}       = 0;
-	$detector{"sensitivity"} = "no";
-	$detector{"hit_type"}    = "";
- 	$detector{"identifiers"} = $detector{"name"};
-	print_det(\%detector, $file);
-    }
   }
-
-#  for(my $n=1; $n<=$Nplate; $n++){
-#   for(my $i=1; $i<=$Nslit; $i++){
-#     for(my $j=1; $j<=$Nblock; $j++){# 
-# 	my $n_c     = cnumber($n-1, 1);
-# 	my $i_c     = cnumber($i-1, 10);
-# 	my $j_c     = cnumber($j-1, 10);
-# 
-# 	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c.block$j_c";
-# 	$detector{"mother"}      = "$DetectorName";
-# 	$detector{"description"} = $detector{"name"};
-# 	$detector{"pos"}         = "0*cm 0*cm $PlateZ[$n-1]*cm";
-# 	$detector{"rotation"}    = "0*deg 0*deg 0*deg";
-# 	$detector{"color"}       = "$color_baffle";
-# 	$detector{"type"}        = "Tube";
-# 	my $Rin  = $x[$n-1][($j-1)*4+0];
-# 	my $Rout = $x[$n-1][($j-1)*4+1];
-# 	my $Sphi = $x[$n-1][($j-1)*4+2]+($i-1)*12;
-#  	my $Dphi = $x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2];
-# 	$detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $Sphi*deg $Dphi*deg";
-# 	$detector{"material"}    = "$material_baffle";
-# 	$detector{"mfield"}      = "no";
-# 	$detector{"ncopy"}       = ($n-1)*$Nplate+($i-1)*$Nslit+$j;
-# 	$detector{"pMany"}       = 1;
-# 	$detector{"exist"}       = 1;
-# 	$detector{"visible"}     = 1;
-# 	$detector{"style"}       = 1;
-# 	$detector{"sensitivity"} = "$hit_baffle";
-# 	$detector{"hit_type"}    = "$hit_baffle";
-#  	$detector{"identifiers"} = $detector{"name"};
-# 
-# 	print_det(\%detector, $file);
-#      }
-#    }
-#  }
 }
 make_baffle_blocks();
+
+sub make_baffle_plate_observer
+{
+ my $Nplate  = 1;
+ my @PlateZ  = (105+105);
+ my @Rin = (60);
+ my @Rout = (150);
+ my $Dz   = 9.0/2.;
+
+ for(my $n=1; $n<=$Nplate; $n++)
+ {
+    $detector{"name"}        = "$DetectorName\_plate_observer";
+    $detector{"mother"}      = "root" ;
+    $detector{"description"} = $detector{"name"};
+    $detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
+    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+    $detector{"color"}      = "ff0000";
+    $detector{"type"}       = "Tube";
+    $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz*cm 0*deg 360*deg";
+    $detector{"material"}   = "$material_baffle";
+    $detector{"mfield"}     = "no";
+    $detector{"ncopy"}      = $n;
+    $detector{"pMany"}       = 1;
+    $detector{"exist"}       = 1;
+    $detector{"visible"}     = 1;
+    $detector{"style"}       = 0;
+    $detector{"sensitivity"} = "$sensitivity_baffle";
+    $detector{"hit_type"}    = "$hit_baffle";
+    $detector{"identifiers"} = "";
+
+    print_det(\%detector, $file);
+ }
+}
+# make_baffle_plate_observer();
