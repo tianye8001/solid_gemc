@@ -354,7 +354,7 @@ int main( int argc, char **argv )
 		splash->showMessage("Starting GUI...");
 		gemc_gui.processEvents();
 		
-		gemcMainWidget gemcW(runManager, visManager, &gemcOpt);
+		gemcMainWidget gemcW(runManager, visManager, &gemcOpt, event_action->SeDe_Map );
 		gemcW.Hall_Map = &Hall_Map;
 		gemcW.MMats = &MMats;
 		
