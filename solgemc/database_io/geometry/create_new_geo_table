@@ -28,7 +28,6 @@ echo
 echo Checking if table $table already exists...
 
 set out = `mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < tmp.txt | grep Field | awk '{print $2}'`
-#set out = `mysql -h improv.unh.edu -u $GEMC_USER  < tmp.txt | grep Field | awk '{print $2}'`
 echo
 
 
@@ -44,18 +43,3 @@ else
   sed "s/db_geometry/$database/" tmp2.txt > tmp3.txt
   mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < tmp3.txt
   set out = `mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < tmp.txt | grep Field | awk '{print $2}'`
-#  mysql -h improv.unh.edu -u $GEMC_USER -p < tmp3.txt
-#  set out = `mysql -h improv.unh.edu -u $GEMC_USER -p < tmp.txt | grep Field | awk '{print $2}'`
-
-
-  if($out == "Type") then
-    echo Table $table created.
-  else
-    echo Table cannot be created.
-  endif
-endif
-rm -f tmp3.txt tmp2.txt tmp.txt
-
-
-
-

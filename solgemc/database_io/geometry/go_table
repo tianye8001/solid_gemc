@@ -41,6 +41,7 @@ else
   end
 
   mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < $command
+#  mysql -h $GEMC_HOST -u $GEMC_USER < $command
 
 
 endif

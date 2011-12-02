@@ -25,6 +25,7 @@ echo  "use $database ;"    > tmp.txt
 echo  "describe $table;"  >> tmp.txt
 #set out = `mysql -h clasdb.jlab.org -u $GEMC_USER < tmp.txt | grep Field | awk '{print $2}'`
 set out = `mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < tmp.txt | grep Field | awk '{print $2}'`
+#set out = `mysql -h $GEMC_HOST -u $GEMC_USER < tmp.txt | grep Field | awk '{print $2}'`
 
 
 if($out == "Type") then

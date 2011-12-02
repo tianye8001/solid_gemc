@@ -70,9 +70,9 @@ PH_output sbsgem_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	ly_in = Lpos[0].y();
 	lz_in = Lpos[0].z();
 
-	lx_out = Lpos[size-1].x();
-	ly_out = Lpos[size-1].y();
-	lz_out = Lpos[size-1].z();
+	lx_out = Lpos[nsteps-1].x();
+	ly_out = Lpos[nsteps-1].y();
+	lz_out = Lpos[nsteps-1].z();
 
 	// entrance and exit time
 	double time_in = 0;
@@ -80,7 +80,7 @@ PH_output sbsgem_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	vector<G4double> times = aHit->GetTime();
 
 	time_in = times[0];
-	time_out = times[size-1];
+	time_out = times[nsteps-1];
 
 	// Energy of the track
 	double Ene = aHit->GetE();
