@@ -3,7 +3,7 @@ from init_env import init_environment
 
 import os
 
-env = init_environment("evio qt4 geant4 clhep")
+env = init_environment("evio qt4 geant4 clhep xercesc")
 
 # Get GEMC path
 gemcpath = os.environ['GEMC']+'/'
