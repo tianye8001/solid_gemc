@@ -28,6 +28,7 @@ Modified the random number generator to TRandom2 class (chosen for period and sp
  
 This Makefile has been tested in ifarml6 (64 bit) at Jefferson Lab today 12/03/2010
 
+Root must have been built with OpenGL enabled. Note that the scripts supplied for installing GEMC build Root with OpenGL disabled.
 
 
 cd eicRate_20101102/
