@@ -125,7 +125,7 @@ void SolPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 		particleGun->GeneratePrimaryVertex(anEvent);
 		if(GEN_VERBOSITY > 3)
 		    cout << hd_msg << " Particle Number:  " << p << ", id=" << pdef << "(" << Particle->GetParticleName() << ")" 
-			<< "  Vertex=" << beam_vrt << "cm,  momentum=" << pmom/GeV << " GeV" << endl;
+			<< "  Vertex=" << beam_vrt/cm << "cm,  momentum=" << pmom/GeV << " GeV" << endl;
 	    }
 	}
     }
