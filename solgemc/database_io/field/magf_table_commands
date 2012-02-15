@@ -7,7 +7,7 @@ create table user_geometry.magnetic_fields (
   swim_method   VARCHAR(40),
   description   VARCHAR(100),
  PRIMARY KEY  (`name`)
-)ENGINE=NDBCLUSTER;
+)
 LOAD DATA LOCAL INFILE 'magnetic_fields.txt'  into TABLE magnetic_fields;
 
 
