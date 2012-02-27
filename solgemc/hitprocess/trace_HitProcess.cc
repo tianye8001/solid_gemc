@@ -94,6 +94,9 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	out.raws.push_back(p.y());
 	out.raws.push_back(p.z());
 
+	int id  = out.identity[0].id;
+	out.dgtz.push_back(id);
+
 	return out;
 }
 
