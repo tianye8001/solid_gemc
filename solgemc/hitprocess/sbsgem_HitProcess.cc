@@ -97,30 +97,30 @@ PH_output sbsgem_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	// Energy of the track
 	double Ene = aHit->GetE();
 
-	out.raws.push_back(Etot);
-	out.raws.push_back(x);
-	out.raws.push_back(y);
-	out.raws.push_back(z);
-	out.raws.push_back(lx_in);
-	out.raws.push_back(ly_in);
-	out.raws.push_back(lz_in);
-	out.raws.push_back(time_in);
-	out.raws.push_back(lx_out);
-	out.raws.push_back(ly_out);
-	out.raws.push_back(lz_out);
-	out.raws.push_back(time_out);
+	out.raws.push_back(Etot/MeV);
+	out.raws.push_back(x/mm);
+	out.raws.push_back(y/mm);
+	out.raws.push_back(z/mm);
+	out.raws.push_back(lx_in/mm);
+	out.raws.push_back(ly_in/mm);
+	out.raws.push_back(lz_in/mm);
+	out.raws.push_back(time_in/ns);
+	out.raws.push_back(lx_out/mm);
+	out.raws.push_back(ly_out/mm);
+	out.raws.push_back(lz_out/mm);
+	out.raws.push_back(time_out/ns);
 
 	out.raws.push_back((double) aHit->GetPID());
-	out.raws.push_back(aHit->GetVert().getX());
-	out.raws.push_back(aHit->GetVert().getY());
-	out.raws.push_back(aHit->GetVert().getZ());
-	out.raws.push_back(Ene);
+	out.raws.push_back(aHit->GetVert().getX()/mm);
+	out.raws.push_back(aHit->GetVert().getY()/mm);
+	out.raws.push_back(aHit->GetVert().getZ()/mm);
+	out.raws.push_back(Ene/MeV);
 
 	out.raws.push_back(aHit->GetTId());
 	out.raws.push_back(weight);
-	out.raws.push_back(p.x());
-	out.raws.push_back(p.y());
-	out.raws.push_back(p.z());
+	out.raws.push_back(p.x()/MeV);
+	out.raws.push_back(p.y()/MeV);
+	out.raws.push_back(p.z()/MeV);
 
 	int id  = out.identity[0].id;
 	out.dgtz.push_back(id);

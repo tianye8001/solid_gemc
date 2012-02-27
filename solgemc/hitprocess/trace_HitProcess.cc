@@ -44,7 +44,9 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	// Get Total Energy deposited
 	double Etot = 0;
 	vector<G4double> Edep = aHit->GetEdep();
-	for(int s=0; s<nsteps; s++) Etot = Etot + Edep[s];
+	for(int s=0; s<nsteps; s++){
+	    Etot = Etot + Edep[s];
+	}
 	
 	// average global, local positions of the hit
 	double x, y, z;
@@ -71,28 +73,28 @@ PH_output trace_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 	// Energy of the track
 	double Ene = aHit->GetE();
 
-	out.raws.push_back(Etot);
-	out.raws.push_back(x);
-	out.raws.push_back(y);
-	out.raws.push_back(z);
-	out.raws.push_back(lx);
-	out.raws.push_back(ly);
-	out.raws.push_back(lz);
-	out.raws.push_back(time);
+	out.raws.push_back(Etot/MeV);
+	out.raws.push_back(x/mm);
+	out.raws.push_back(y/mm);
+	out.raws.push_back(z/mm);
+	out.raws.push_back(lx/mm);
+	out.raws.push_back(ly/mm);
+	out.raws.push_back(lz/mm);
+	out.raws.push_back(time/ns);
 	out.raws.push_back((double) aHit->GetPID());
-	out.raws.push_back(aHit->GetVert().getX());
-	out.raws.push_back(aHit->GetVert().getY());
-	out.raws.push_back(aHit->GetVert().getZ());
-	out.raws.push_back(Ene);
+	out.raws.push_back(aHit->GetVert().getX()/mm);
+	out.raws.push_back(aHit->GetVert().getY()/mm);
+	out.raws.push_back(aHit->GetVert().getZ()/mm);
+	out.raws.push_back(Ene/MeV);
 	out.raws.push_back((double) aHit->GetmPID());
-	out.raws.push_back(aHit->GetmVert().getX());
-	out.raws.push_back(aHit->GetmVert().getY());
-	out.raws.push_back(aHit->GetmVert().getZ());
+	out.raws.push_back(aHit->GetmVert().getX()/mm);
+	out.raws.push_back(aHit->GetmVert().getY()/mm);
+	out.raws.push_back(aHit->GetmVert().getZ()/mm);
 	out.raws.push_back(aHit->GetTId());
 	out.raws.push_back(weight);
-	out.raws.push_back(p.x());
-	out.raws.push_back(p.y());
-	out.raws.push_back(p.z());
+	out.raws.push_back(p.x()/MeV);
+	out.raws.push_back(p.y()/MeV);
+	out.raws.push_back(p.z()/MeV);
 
 	int id  = out.identity[0].id;
 	out.dgtz.push_back(id);
