@@ -222,6 +222,9 @@ int main( int argc, char **argv )
 	msg = " Retrieving gemc Materials Map...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, G4Material*> MMats = DefineMaterials();
+
+	// Add in our own materials
+	AddSolGEMCMaterial(MMats);
 	
 	///< magnetic Field Map
 	msg = " Retrieving gemc Magnetic Fields Map...";
