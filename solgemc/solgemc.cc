@@ -111,6 +111,7 @@
 
 #include "addopts.h"
 #include "solidhp.h"
+#include "SolMaterial.hh"
 
 int main( int argc, char **argv )
 {
