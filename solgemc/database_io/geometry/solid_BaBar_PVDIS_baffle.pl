@@ -25,11 +25,11 @@ use Math::Trig;
 
 my $color_baffle="00C0C0";
 
- my $material_baffle="Kryptonite";
+# my $material_baffle="Kryptonite";
 # my $sensitivity_baffle="FLUX";
 # my $hit_baffle="FLUX";
 
-#my $material_baffle="Lead";
+my $material_baffle="Lead";
 my $sensitivity_baffle="no";
 my $hit_baffle="";
 
@@ -37,7 +37,8 @@ my $hit_baffle="";
 sub make_baffle_plate_inner
 {
  my $Nplate  = 6;
- my @PlateZ  = (40,70,100,130,160,190);
+# my @PlateZ  = (40,70,100,130,160,190);
+ my @PlateZ  = (40,68,96,124,152,180);
  my @Rin  = (3.89,14.,19.,23.9,28.9,33.8);
  my @Rout = (3.9,15.30,26.6,37.9,49.2,60.4);
  my $Dz   = 9.0/2.;
@@ -72,7 +73,8 @@ make_baffle_plate_inner();
 sub make_baffle_plate_outer
 {
  my $Nplate  = 6;
- my @PlateZ  = (40,70,100,130,160,190);
+ #my @PlateZ  = (40,70,100,130,160,190);
+ my @PlateZ  = (40,68,96,124,152,180);
  my @Rin  = (34.7,54.3,73.8,93.3,112.8,132.0);
  my $Rout = 142; #coil edge is at 142cm
  my $Dz   = 9.0/2.;
@@ -239,7 +241,8 @@ my @x =( #Rin     Rout   SPhi    DPhi
  my $Nplate  = 6;
  my $Nslit  = 30;
  my $Nblock  = 20;
- my @PlateZ  = (40,70,100,130,160,190);
+ #my @PlateZ  = (40,70,100,130,160,190);
+ my @PlateZ  = (40,68,96,124,152,180);
  my $PlateDz   = 9.0/2;
  my @offset =(-5.6, -4.4, -3.3, -2.1, -0.9, 0.1);
 
