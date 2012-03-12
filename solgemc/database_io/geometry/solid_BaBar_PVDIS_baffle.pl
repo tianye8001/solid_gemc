@@ -259,9 +259,9 @@ my @x =( #Rin     Rout   SPhi    DPhi
 	$detector{"color"}       = "$color_baffle";
 	if ($i==1){
 	  $detector{"type"}        = "Tube";
-	  my $Rin  = 0;
+	  my $Rin  = $x[$n-1][0];
 	  my $Rout = $x[$n-1][77];
-	  my $Sphi = $x[$n-1][2];
+	  my $Sphi = 0;
 	  my $Dphi = 12;
 	  $detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $Sphi*deg $Dphi*deg";
 	}
@@ -292,8 +292,17 @@ my @x =( #Rin     Rout   SPhi    DPhi
 	$detector{"type"}        = "Tube";
 	my $Rin  = $x[$n-1][($j-1)*4+0];
 	my $Rout = $x[$n-1][($j-1)*4+1];
-	my $Sphi = $x[$n-1][($j-1)*4+2];
- 	my $Dphi = $x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2];
+	my $Sphi = $x[$n-1][($j-1)*4+2]-174.92;
+#	my $Sphi = $x[$n-1][($j-1)*4+2];
+	my $Dphi = $x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2];
+
+	# switch handedness
+#	my $temp= 12.0 - ($x[$n-1][($j-1)*4+2]-174.92);
+# 	my $Dphi = ( $x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2] );
+#	my $Sphi = $temp - $Dphi;
+
+	print "$Sphi $Dphi ", $Sphi + $Dphi, "\n";
+
 	$detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $Sphi*deg $Dphi*deg";
 	$detector{"material"}    = "$material_baffle";
 	$detector{"mfield"}      = "no";
