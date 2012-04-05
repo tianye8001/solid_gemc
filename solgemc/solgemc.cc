@@ -1,41 +1,3 @@
-/// \mainpage
-/// \htmlonly <center><img src="gemc_logo.gif" width="130"></center>\endhtmlonly
-/// \section overview Overview
-/// gemc (<b>GE</b>ant4 <b>M</b>onte<b>C</b>arlo) is a simulation
-/// software based on <a href="http://geant4.web.cern.ch/geant4/"> Geant4 </a>.\n\n
-/// The simulation parameters are external to the software:\n
-/// Geometry, Materials, Fields, Banks definitions are stored in an external database.\n
-/// The Factory Method is used for the Hit Processes/Digitization Routines and for the Input/Output formats.\n
-/// \section database The Database
-/// gemc supports <i> mysql </i> as the external database. \n
-/// The informations stored in the database determine:
-/// - The Geometry.
-/// - Sensitive Detectors definitions (including Thresholds, Time Window, Production Cut).
-/// - The Hit Process Factories.
-/// - The Bank Output Format.
-/// - The Magnetic Fields definitions.
-/// \section software Software Requirement:
-/// - geant4 (simulation libraries)
-/// - clhep  (random generators, physics vectors, geometry and linear algebra libraries)
-/// - qt4 (graphic libraries)
-/// - mysql
-/// - scons (build system)
-/// \section platforms Platforms Supported:
-/// - Windows Vista (32, 64)
-/// - Linux (32, 64)
-/// - Mac OS X
-/// \section docs Documentation:
-/// - <a href="http://clasweb.jlab.org/wiki/index.php/CLAS12_Software"> Clas12 Software Wiki </a>
-/// - <a href="http://www.jlab.org/ccc/mail_archives/SOFTWARE/gemc_software"> gemc list archives </a>
-/// - <a href="https://clas12svn.jlab.org/repos/trunk/clas12/gemc/production/"> gemc repository </a>
-/// \image html gemc_logo.gif
-/// \n\n
-/// \author \n &copy; Maurizio Ungaro
-/// \author e-mail: ungaro@jlab.org\n\n\n
-/// \file gemc.cc
-/// Defines the gemc main( int argc, char **argv )
-/// \author \n &copy; Maurizio Ungaro
-/// \author e-mail: ungaro@jlab.org\n\n\n
 
 // %%%%%%%%%%
 // G4 headers
@@ -44,7 +6,6 @@
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4VisExecutive.hh"
-
 #include "G4PhysListFactory.hh"
 #include "G4VModularPhysicsList.hh"
 #include "G4PropagatorInField.hh"
@@ -73,21 +34,20 @@
 #include "MOutputBaseClass.h"
 #include "MPHBaseClass.h"
 #include "MPhysicsList.h"
-#include "SolidNoPhysicsList.h"
 #include "MPrimaryGeneratorAction.h"
-#include "SolPrimaryGeneratorAction.h"
 #include "MSteppingAction.h"
 #include "Output_Register.h"
 #include "usage.h"
 #include "run_conditions.h"
+#include "material_factory.h"
 
 /////////////////////////
 /// <b> Main Program </b>
 /////////////////////////
 ///  -# Sets the gemc_opts\n
-///  -# Starts QT engine if USE_QT=1
-///  -# Starts CLHEP random engine
-///  -# Instantiates Run Manager
+///  -# Starts QT application if USE_QT=1
+///  -# Starts the CLHEP random engine
+///  -# Instantiates the Geant4 Run Manager
 ///  -# Builds detector map object from database
 ///  -# Builds Processes Routines Map
 ///  -# Builds Materials Map
@@ -95,7 +55,7 @@
 ///  -# Initialize Physics List
 ///  -# Initialize Generator
 ///  -# Initialize Event Action
-///  -# Initialize User Interface
+///  -# Initialize G4Qt User Interface if USE_QT>0
 ///  -# Initialize Visualization Manager if USE_QT>0
 
 
@@ -112,12 +72,13 @@
 #include "addopts.h"
 #include "solidhp.h"
 #include "SolMaterial.hh"
+#include "SolidNoPhysicsList.h"
+#include "SolPrimaryGeneratorAction.h"
 
 int main( int argc, char **argv )
 {
 	
 	gemc_opts gemcOpt;
-	AddOpts(gemcOpt);
 	gemcOpt.Set(argc, argv);
 	string hd_msg    = gemcOpt.args["LOG_MSG"].args + " Init: >> " ;
 	
@@ -200,17 +161,18 @@ int main( int argc, char **argv )
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	G4RunManager *runManager = new G4RunManager;
 	
-	///< Detector Map
+	
+  ///< Detector Map
 	msg = " Retrieving gemc Detector Map...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, detector> Hall_Map = read_detector(gemcOpt, RunConditions);
 	
-	///< Process Hit Map
+	
+  ///< Process Hit Map
 	msg = " Building gemc Process Hit Factory...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, MPHB_Factory> MProcessHit_Map = HitProcess_Map(gemcOpt.args["HIT_PROCESS_LIST"].args);
 	AddSoLIDHP(MProcessHit_Map);
-	
 	
 	
 	///< Bank Map
@@ -218,19 +180,24 @@ int main( int argc, char **argv )
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, MBank> MBank_Map = read_banks(gemcOpt, MProcessHit_Map);
 	
+  
 	///< Materials Map
 	msg = " Retrieving gemc Materials Map...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
-	map<string, G4Material*> MMats = DefineMaterials();
-
-	// Add in our own materials
+	//map<string, G4Material*> MMats = DefineMaterials();
+  map<string, materialFactory> factoriesMap = registerMaterialFactories();
+  materials *selectedFactory = getMaterialFactory(&factoriesMap, gemcOpt.args["MATERIALSDB"].args);
+	map<string, G4Material*> MMats = selectedFactory->initMaterials();
+  
 	AddSolGEMCMaterial(MMats);
-	
+  
 	///< magnetic Field Map
 	msg = " Retrieving gemc Magnetic Fields Map...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, MagneticField> FieldMap = get_magnetic_Fields(gemcOpt);
 	
+  
+  
 	///< Build G4 Physical Volumes: MDetectorConstruction
 	MDetectorConstruction* ExpHall = new MDetectorConstruction(gemcOpt);
 	ExpHall->Hall_Map = &Hall_Map;
@@ -238,6 +205,7 @@ int main( int argc, char **argv )
 	ExpHall->FieldMap = &FieldMap;
 	runManager->SetUserInitialization(ExpHall);
 	
+  
 	///< Physics List
 	string phys_list = gemcOpt.args["USE_PHYSICSL"].args  ;
 	msg = " Initializing Physics List " + phys_list + "...";
@@ -252,8 +220,8 @@ int main( int argc, char **argv )
 		physics = new MPhysicsList(gemcOpt);
 		runManager->SetUserInitialization(physics);
 	} else if(phys_list == "noint" ) {
-	    	physics = new SolidNoPhysicsList(gemcOpt);
-		runManager->SetUserInitialization(physics);
+	        physics = new SolidNoPhysicsList(gemcOpt);
+	        runManager->SetUserInitialization(physics);
 	} else {
 		if(factory.IsReferencePhysList(phys_list))
 				phys = factory.GetReferencePhysList(phys_list);
@@ -280,16 +248,16 @@ int main( int argc, char **argv )
 	int commaplace = gemcOpt.args["INPUT_GEN_FILE"].args.find_first_of(',');
 	string fform = gemcOpt.args["INPUT_GEN_FILE"].args.substr(0,commaplace);
 
-	G4VUserPrimaryGeneratorAction* gen_action;
+	G4VUserPrimaryGeneratorAction* gen_action = new MPrimaryGeneratorAction(&gemcOpt);
+
 	if( fform == "SOLLUND" ){
-		gen_action = new SolPrimaryGeneratorAction(&gemcOpt);
+	    gen_action = new SolPrimaryGeneratorAction(&gemcOpt);
 	} else {
-		gen_action = new MPrimaryGeneratorAction(&gemcOpt);
+	    gen_action = new MPrimaryGeneratorAction(&gemcOpt);
 	}
-
-
 	runManager->SetUserAction(gen_action);
 	
+  
 	///< Event Action
 	msg = " Initializing Event Action...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
@@ -297,6 +265,7 @@ int main( int argc, char **argv )
 	event_action->SetEvtNumber((int) gemcOpt.args["EVN"].arg);     ///< Sets event number from OPTION
 	runManager->SetUserAction(event_action);
 	
+  
 	///< Stepping Action
 	msg = " Initializing Stepping Action...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
@@ -304,27 +273,30 @@ int main( int argc, char **argv )
 	runManager->SetUserAction(SteppingAction);
 	
 	///< User Interface manager
-	G4UImanager* UImanager = G4UImanager::GetUIpointer();
-	G4UIsession * session1 = NULL;
-	G4UIsession * session2 = NULL;
+	// need UIQt to see Qt Open GL - have to comment line 136 of visualization/OpenGL/src/G4OpenGLQtViewer.cc
 	msg = " Initializing User Interface...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
-	// need to Qt start session
-	if(use_qt) session1 = new G4UIQt(argc,argv);
-	// starting G4UIterminal anyway for log messages on screen
-	if(!use_qt)
-		session2 = new G4UIterminal();
-	
+  G4UIsession *session = NULL;
+	if(use_qt) 
+    session = new G4UIQt(argc,argv);
+		
 	///< Vis Manager
-	G4VisManager* visManager;
-	visManager = new G4VisExecutive;
-	visManager->Initialize();
-	
+  G4VisManager *visManager = NULL;
+  if(use_qt)
+  {
+    visManager = new G4VisExecutive;
+    visManager->Initialize();
+	}
+  
 	///< Initialize G4 kernel
 	msg = " Initializing Run Manager...\n";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	runManager->Initialize();
-	
+
+  // Getting UI manager, restoring G4Out to cout
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  UImanager->SetCoutDestination(NULL);
+
 	///< Output File: registering output type, output process factory,
 	///< sensitive detectors into Event Action
 	msg = " Initializing Output Action...";
@@ -343,6 +315,7 @@ int main( int argc, char **argv )
 	for(it = ExpHall->SeDe_Map.begin(); it != ExpHall->SeDe_Map.end(); it++)
 		it->second->MProcessHit_Map = &MProcessHit_Map;
 	
+
 	msg = " Executing initial directives...\n";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	vector<string> init_commands = init_dmesg(gemcOpt);
@@ -354,21 +327,19 @@ int main( int argc, char **argv )
 	
 	if(use_qt)
 	{
-		//     session->SessionStart(); //  not needed anymore
-		splash->showMessage("Starting GUI...");
+    splash->showMessage("Starting GUI...");
 		gemc_gui.processEvents();
 		
-		gemcMainWidget gemcW(runManager, visManager, &gemcOpt, event_action->SeDe_Map );
+		gemcMainWidget gemcW(runManager, visManager, &gemcOpt, ExpHall->SeDe_Map);
 		gemcW.Hall_Map = &Hall_Map;
-		gemcW.MMats = &MMats;
+    gemcW.SeDe_Map = ExpHall->SeDe_Map;
+		gemcW.MMats    = &MMats;
 		
-		gemcW.setWindowTitle( " gemc" );
+		gemcW.setWindowTitle( "solgemc" );
 		
 		gemcW.show();
 		splash->finish(&gemcW);
 
-		// 		UImanager->SetCoutDestination(session2);
-		
 		msg = " Executing initial visual directives...\n";
 		splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 		vector<string> init_vcommands = init_dvmesg(gemcOpt, visManager);
@@ -385,8 +356,14 @@ int main( int argc, char **argv )
 			sprintf(command, "/run/beamOn %d", (int) gemcOpt.args["N"].arg);
 			UImanager->ApplyCommand(command);
 		}
-		
+
 		return gemc_gui.exec();
+		// deleting the visManager and runManager is now taken care 
+		// in the gemc_quit slot
+		// since qApp->quit() also calls an exit 
+		cout << " >> Exiting gemc qApp." << endl;
+		delete visManager;
+    if(session != NULL) delete session;
 	}
 	else
 	{
@@ -399,13 +376,8 @@ int main( int argc, char **argv )
 		if(exec_macro != "/control/execute no") UImanager->ApplyCommand(exec_macro.c_str());
 	}
 	
-	delete runManager;
-	delete session1;
-	delete session2;
-	
-	if(use_qt)
-		delete visManager;
-	return 1;
+	delete runManager;	
+  return 1;
 }
 
 
