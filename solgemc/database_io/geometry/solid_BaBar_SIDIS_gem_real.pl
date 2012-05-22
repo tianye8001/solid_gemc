@@ -84,9 +84,16 @@ my $DetectorMother="root";
 sub make_gem
 {
  my $Nplate  = 6;
- my @PlateZ  = (175.-350, 200.-350,  231.-350,  282.-350,  355.-350,   442.-350,);
- my @Rin  = (50,28,31.5,39,50,64);
- my @Rout = (80,93,107.5,135,98,122);
+ # Proton configuration
+# my @PlateZ  = (175.-350, 200.-350,  231.-350,  282.-350,  355.-350,   442.-350,);
+# my @Rin  = (50,28,31.5,39,50,64);
+# my @Rout = (80,93,107.5,135,98,122);
+
+ # 3He configuration
+ my @PlateZ  = (197.-350, 250.-350,  290.-350,  352.-350,  435.-350,   592.-350,);
+ my @Rin  = (46,28,31.5,39,49,67);
+ my @Rout = (76,93,107.5,135,95,127);
+
 # total thickness
 #  my $Dz   = 15.955/2;
 my $Dz   = 9.781/2; 
@@ -98,6 +105,11 @@ my $Dz   = 9.781/2;
  my @layer_thickness = (0.12,0.003,0.12,0.05,0.005,3,0.005,0.05,0.005,2,0.005,0.05,0.005,2,0.005,0.05,0.005,2,0.01,0.05,0.12,0.003,0.12);
 #  my @material = ("Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum");
  my @material = ("NEMAG10","NOMEX","NEMAG10","Kapton","Copper","GEMgas","Copper","Kapton","Copper","GEMgas","Copper","Kapton","Copper","GEMgas","Copper","Kapton","Copper","GEMgas","Copper","Kapton","NEMAG10","NOMEX","NEMAG10");
+
+  my @sens = ("no","no","no","no","no","TRACE","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no","no");
+  my @hitt = ("","","","","","TRACE","","","","","","","","","","","","","","","","","");
+
+
  my $color_NEMAG10 = "00ff00";
  my $color_NOMEX = "ffse14";
  my $color_Copper = "ffe731";
@@ -155,9 +167,14 @@ my $Dz   = 9.781/2;
 	$detector{"exist"}       = 1;
 	$detector{"visible"}     = 1;
 	$detector{"style"}       = 1;
-	$detector{"sensitivity"} = "FLUX";
-	$detector{"hit_type"}    = "FLUX";
-	my $id=1000000+$n*100000+$i;
+#	$detector{"sensitivity"} = "FLUX";
+#	$detector{"hit_type"}    = "FLUX";
+
+	$detector{"sensitivity"} = "$sens[$i-1]";
+	$detector{"hit_type"}    = "$hitt[$i-1]";
+
+	#my $id=1000000+$n*100000+$i;
+	my $id=$n*100+$i;
 	$detector{"identifiers"} = "id manual $id";
 	print_det(\%detector, $file);
     }

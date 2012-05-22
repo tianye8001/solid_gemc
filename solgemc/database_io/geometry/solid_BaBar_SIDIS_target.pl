@@ -148,7 +148,7 @@ sub make_beam_exit_SIDIS
  my @Rmin1  = (0.,0.,0.,0.);
  my @Rmax1 = (1.80,1.70,35.0,1.7);
  my @Rmin2  = (0.,0.,0.,0.);
- my @Rmax2 = (37.,36.,35.,1.7);
+ my @Rmax2 = (25.,24.,23.,1.7);
  my @Dz   = (290.,290.,0.1,0.0125);
  my @name = ("B3PP","B3PV","B3DM","B3W1"); 
  my @mother=("$DetectorMother","$DetectorName\_B3PP","$DetectorName\_B3PV","$DetectorName\_B3PV");

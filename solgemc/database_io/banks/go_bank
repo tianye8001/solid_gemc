@@ -39,9 +39,9 @@ foreach b ($banks)
 	@ i += 1
 end
 	
-#mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < bank_table_commands
-#echo mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < bank_table_commands
-mysql -h $GEMC_HOST -u $GEMC_USER < bank_table_commands
-echo mysql -h $GEMC_HOST -u $GEMC_USER < bank_table_commands
+mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < bank_table_commands
+echo mysql -h $GEMC_HOST -u $GEMC_USER -p$GEMC_PASS < bank_table_commands
+#mysql -h $GEMC_HOST -u $GEMC_USER < bank_table_commands
+#echo mysql -h $GEMC_HOST -u $GEMC_USER < bank_table_commands
 
 rm bank_table_commands

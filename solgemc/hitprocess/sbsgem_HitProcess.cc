@@ -130,6 +130,7 @@ PH_output sbsgem_HitProcess :: ProcessHit(MHit* aHit, gemc_opts Opt){
 
 vector<identifier>  sbsgem_HitProcess :: ProcessID(vector<identifier> id, G4Step* aStep, detector Detector, gemc_opts Opt)
 {
+    id[id.size()-1].id_sharing = 1.0;
     return id;
 }
 

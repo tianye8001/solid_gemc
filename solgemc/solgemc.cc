@@ -40,6 +40,8 @@
 #include "usage.h"
 #include "run_conditions.h"
 #include "material_factory.h"
+#include "parameter_factory.h"
+
 
 /////////////////////////
 /// <b> Main Program </b>
@@ -161,13 +163,26 @@ int main( int argc, char **argv )
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	G4RunManager *runManager = new G4RunManager;
 	
-	
   ///< Detector Map
 	msg = " Retrieving gemc Detector Map...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, detector> Hall_Map = read_detector(gemcOpt, RunConditions);
-	
-	
+  
+	///< Materials Map
+	msg = " Material factory selected: " + gemcOpt.args["MATERIALSDB"].args;
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
+  map<string, materialFactory> materialFactoriesMap = registerMaterialFactories();
+  materials *materialSelectedFactory = getMaterialFactory(&materialFactoriesMap, gemcOpt.args["MATERIALSDB"].args);
+	map<string, G4Material*> mats = materialSelectedFactory->initMaterials(RunConditions, gemcOpt);
+	AddSolGEMCMaterial(mats);
+
+  ///< Parameters Map
+	msg = " Parameter factory selected: " + gemcOpt.args["PARAMETERSDB"].args;
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
+  map<string, parameterFactory> parameterFactoriesMap = registerParameterFactories();
+  parameters *parameterSelectedFactory = getParameterFactory(&parameterFactoriesMap, gemcOpt.args["PARAMETERSDB"].args);
+	map<string, double> gParameters = parameterSelectedFactory->initParameters(RunConditions, gemcOpt);
+  
   ///< Process Hit Map
 	msg = " Building gemc Process Hit Factory...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
@@ -179,18 +194,7 @@ int main( int argc, char **argv )
 	msg = " Retrieving gemc Banks Map...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, MBank> MBank_Map = read_banks(gemcOpt, MProcessHit_Map);
-	
-  
-	///< Materials Map
-	msg = " Retrieving gemc Materials Map...";
-	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
-	//map<string, G4Material*> MMats = DefineMaterials();
-  map<string, materialFactory> factoriesMap = registerMaterialFactories();
-  materials *selectedFactory = getMaterialFactory(&factoriesMap, gemcOpt.args["MATERIALSDB"].args);
-	map<string, G4Material*> MMats = selectedFactory->initMaterials();
-  
-	AddSolGEMCMaterial(MMats);
-  
+
 	///< magnetic Field Map
 	msg = " Retrieving gemc Magnetic Fields Map...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
@@ -201,7 +205,7 @@ int main( int argc, char **argv )
 	///< Build G4 Physical Volumes: MDetectorConstruction
 	MDetectorConstruction* ExpHall = new MDetectorConstruction(gemcOpt);
 	ExpHall->Hall_Map = &Hall_Map;
-	ExpHall->MMats    = &MMats;
+	ExpHall->mats    = &mats;
 	ExpHall->FieldMap = &FieldMap;
 	runManager->SetUserInitialization(ExpHall);
 	
@@ -248,7 +252,8 @@ int main( int argc, char **argv )
 	int commaplace = gemcOpt.args["INPUT_GEN_FILE"].args.find_first_of(',');
 	string fform = gemcOpt.args["INPUT_GEN_FILE"].args.substr(0,commaplace);
 
-	G4VUserPrimaryGeneratorAction* gen_action = new MPrimaryGeneratorAction(&gemcOpt);
+	G4VUserPrimaryGeneratorAction* gen_action;
+	MPrimaryGeneratorAction* dummygen_action = new MPrimaryGeneratorAction(&gemcOpt);
 
 	if( fform == "SOLLUND" ){
 	    gen_action = new SolPrimaryGeneratorAction(&gemcOpt);
@@ -261,7 +266,7 @@ int main( int argc, char **argv )
 	///< Event Action
 	msg = " Initializing Event Action...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
-	MEventAction* event_action = new MEventAction(gemcOpt);
+	MEventAction* event_action = new MEventAction(gemcOpt, gParameters);
 	event_action->SetEvtNumber((int) gemcOpt.args["EVN"].arg);     ///< Sets event number from OPTION
 	runManager->SetUserAction(event_action);
 	
@@ -309,6 +314,7 @@ int main( int argc, char **argv )
 	event_action->MProcessHit_Map = &MProcessHit_Map;
 	event_action->SeDe_Map        = ExpHall->SeDe_Map;
 	event_action->MBank_Map       = &MBank_Map;
+	event_action->gen_action      = dummygen_action;
 	
 	///< passing output process factory to sensitive detectors
 	map<string, MSensitiveDetector*>::iterator it;
@@ -332,8 +338,8 @@ int main( int argc, char **argv )
 		
 		gemcMainWidget gemcW(runManager, visManager, &gemcOpt, ExpHall->SeDe_Map);
 		gemcW.Hall_Map = &Hall_Map;
-    gemcW.SeDe_Map = ExpHall->SeDe_Map;
-		gemcW.MMats    = &MMats;
+		gemcW.SeDe_Map = ExpHall->SeDe_Map;
+		gemcW.mats    = &mats;
 		
 		gemcW.setWindowTitle( "solgemc" );
 		

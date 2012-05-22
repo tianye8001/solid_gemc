@@ -3,6 +3,6 @@
 # Hits are defined in the SDId table    
 # This script reload the content of clas12_hits_def.txt into the SDId table     
 
-#mysql -h $GEMC_HOST  -u $GEMC_USER -p$GEMC_PASS < hit_table_commands
-mysql -h $GEMC_HOST  -u $GEMC_USER < hit_table_commands
+mysql -h $GEMC_HOST  -u $GEMC_USER -p$GEMC_PASS < hit_table_commands
+#mysql -h $GEMC_HOST  -u $GEMC_USER < hit_table_commands
 

@@ -13,7 +13,7 @@ rpath = env['LIBPATH']
 
 
 # Include Path
-incpath = ['.',gemcpath, gemcpath+'src', gemcpath+'gui/src', gemcpath+'materials', 'src', 'gui/src']
+incpath = ['.',gemcpath, gemcpath+'src', gemcpath+'gui/src', gemcpath+'materials', gemcpath+'parameters', 'src', 'gui/src']
 env.Append(CPPPATH = incpath)
 
 # Sources

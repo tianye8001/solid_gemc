@@ -120,6 +120,10 @@ void SolPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
 		beam_vrt = G4ThreeVector(Vx*cm, Vy*cm, Vz*cm);
 		particleGun->SetParticlePosition(beam_vrt);
 
+		// polarization
+		beam_pol = G4ThreeVector( 0.0, 0.0, 0.0 );
+		particleGun->SetParticlePolarization(beam_pol);
+		
 		// Primary particle generated int the middle of Time window
 		particleGun->SetParticleTime(TWINDOW/2);
 		particleGun->GeneratePrimaryVertex(anEvent);
