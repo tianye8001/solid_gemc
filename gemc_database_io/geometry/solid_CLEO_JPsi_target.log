@@ -1,0 +1,3 @@
+use user_geometry_1;
+LOAD DATA LOCAL INFILE 'solid_CLEO_JPsi_target.txt' into TABLE solid_CLEO_JPsi_target;
+update solid_CLEO_JPsi_target set time=NOW() where time=0;

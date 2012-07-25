@@ -1,0 +1,3 @@
+use user_geometry_1;
+LOAD DATA LOCAL INFILE 'solid_CLEO_PVDIS_baffle.txt' into TABLE solid_CLEO_PVDIS_baffle;
+update solid_CLEO_PVDIS_baffle set time=NOW() where time=0;

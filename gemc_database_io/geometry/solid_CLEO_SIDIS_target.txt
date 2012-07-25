@@ -1,0 +1,5 @@
+CLEO_SIDIS_target_TRGB	root	CLEO_SIDIS_target_TRGB	0*cm 0*cm -350*cm	0*deg 0*deg 0*deg	FF0000	Tube	0*cm 1.01*cm 20.02*cm 0*deg 360*deg	Vacuum	no	1	1	1	1	1	no			1	1000000
+CLEO_SIDIS_target_TCEL	CLEO_SIDIS_target_TRGB	CLEO_SIDIS_target_TCEL	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	FF0000	Tube	0.9*cm 1*cm 20*cm 0*deg 360*deg	Glass_GE180	no	1	1	1	1	1	no			1	1000000
+CLEO_SIDIS_target_TLHE	CLEO_SIDIS_target_TRGB	CLEO_SIDIS_target_TLHE	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	FF0000	Tube	0*cm 0.9*cm 20*cm 0*deg 360*deg	He3_10amg	no	1	1	1	1	1	no			1	1000000
+CLEO_SIDIS_target_TLW1	CLEO_SIDIS_target_TRGB	CLEO_SIDIS_target_TLW1	0*cm 0*cm -20.006*cm	0*deg 0*deg 0*deg	FF0000	Tube	0*cm 0.9*cm 0.006*cm 0*deg 360*deg	Glass_GE180	no	1	1	1	1	1	no			1	1000000
+CLEO_SIDIS_target_TLW2	CLEO_SIDIS_target_TRGB	CLEO_SIDIS_target_TLW2	0*cm 0*cm 20.006*cm	0*deg 0*deg 0*deg	FF0000	Tube	0*cm 0.9*cm 0.006*cm 0*deg 360*deg	Glass_GE180	no	1	1	1	1	1	no			1	1000000

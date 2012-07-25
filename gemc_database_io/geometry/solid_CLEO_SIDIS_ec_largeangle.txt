@@ -1,0 +1,1 @@
+CLEO_SIDIS_ec_largeangle	root	CLEO_SIDIS_ec_largeangle	0*cm 0*cm -90*cm	0*deg 0*deg 0*deg	0000ff	Cons	62*cm 140*cm 75*cm 140*cm 25*cm 0*deg 360*deg	Kryptonite	no	1	1	1	1	1	FLUX	FLUX	id manual 3200000	1	1000000

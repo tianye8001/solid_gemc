@@ -1,0 +1,3 @@
+use user_geometry_1;
+LOAD DATA LOCAL INFILE 'solid_CLEO_PVDIS_beamline.txt' into TABLE solid_CLEO_PVDIS_beamline;
+update solid_CLEO_PVDIS_beamline set time=NOW() where time=0;

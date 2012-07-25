@@ -1,0 +1,3 @@
+use user_geometry_1;
+LOAD DATA LOCAL INFILE 'solid_CLEO_SIDIS_ec_forwardangle.txt' into TABLE solid_CLEO_SIDIS_ec_forwardangle;
+update solid_CLEO_SIDIS_ec_forwardangle set time=NOW() where time=0;

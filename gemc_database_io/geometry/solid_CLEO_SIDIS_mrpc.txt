@@ -1,0 +1,1 @@
+CLEO_SIDIS_mrpc_BaBar_SIDIS_mrpc	root	CLEO_SIDIS_mrpc_BaBar_SIDIS_mrpc	0*cm 0*cm 400*cm	0*deg 0*deg 0*deg	ff0000	Cons	99*cm 201*cm 99*cm 201*cm 0.5*cm 0*deg 360*deg	Scintillator	no	1	1	1	1	1	FLUX	FLUX	id manual 4000000	1	1000000

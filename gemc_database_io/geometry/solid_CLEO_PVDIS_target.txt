@@ -1,0 +1,6 @@
+CLEO_PVDIS_target_TACH	root	CLEO_PVDIS_target_TACH	0*cm 0*cm 10*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 5*cm 25*cm 0*deg 360*deg	Aluminum	no	1	1	1	1	1	no			1	1000000
+CLEO_PVDIS_target_TACV	CLEO_PVDIS_target_TACH	CLEO_PVDIS_target_TACV	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 4.95*cm 24.95*cm 0*deg 360*deg	Vacuum	no	1	1	1	1	1	no			1	1000000
+CLEO_PVDIS_target_TAW1	CLEO_PVDIS_target_TACH	CLEO_PVDIS_target_TAW1	0*cm 0*cm -24.975*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 1.22*cm 0.025*cm 0*deg 360*deg	Vacuum	no	1	1	1	1	1	no			1	1000000
+CLEO_PVDIS_target_TAW2	CLEO_PVDIS_target_TACH	CLEO_PVDIS_target_TAW2	0*cm 0*cm 24.975*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 1.5*cm 0.025*cm 0*deg 360*deg	Vacuum	no	1	1	1	1	1	no			1	1000000
+CLEO_PVDIS_target_TALU	CLEO_PVDIS_target_TACV	CLEO_PVDIS_target_TALU	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 1.918*cm 20*cm 0*deg 360*deg	Aluminum	no	1	1	1	1	1	no			1	1000000
+CLEO_PVDIS_target_TAH2	CLEO_PVDIS_target_TALU	CLEO_PVDIS_target_TAH2	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 1.9*cm 19.982*cm 0*deg 360*deg	LH2	no	1	1	1	1	1	no			1	1000000

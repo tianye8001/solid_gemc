@@ -1,0 +1,3 @@
+use user_geometry_1;
+LOAD DATA LOCAL INFILE 'solid_CLEO_SIDIS_cherenkov_heavygas.txt' into TABLE solid_CLEO_SIDIS_cherenkov_heavygas;
+update solid_CLEO_SIDIS_cherenkov_heavygas set time=NOW() where time=0;
