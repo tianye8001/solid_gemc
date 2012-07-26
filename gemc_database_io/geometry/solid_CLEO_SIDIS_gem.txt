@@ -1,6 +1,0 @@
-CLEO_SIDIS_gem_1	root	CLEO_SIDIS_gem_1	0*cm 0*cm -175*cm	0*deg 0*deg 0*deg	44ee11	Tube	46*cm 87*cm 0.4*cm 0*deg 360*deg	GEMgas	no	1	1	1	1	1	FLUX	FLUX	id manual 1100000	1	1000000
-CLEO_SIDIS_gem_2	root	CLEO_SIDIS_gem_2	0*cm 0*cm -155*cm	0*deg 0*deg 0*deg	44ee11	Tube	25*cm 97*cm 0.4*cm 0*deg 360*deg	GEMgas	no	2	1	1	1	1	FLUX	FLUX	id manual 1200000	1	1000000
-CLEO_SIDIS_gem_3	root	CLEO_SIDIS_gem_3	0*cm 0*cm -135*cm	0*deg 0*deg 0*deg	44ee11	Tube	28*cm 107*cm 0.4*cm 0*deg 360*deg	GEMgas	no	3	1	1	1	1	FLUX	FLUX	id manual 1300000	1	1000000
-CLEO_SIDIS_gem_4	root	CLEO_SIDIS_gem_4	0*cm 0*cm -120*cm	0*deg 0*deg 0*deg	44ee11	Tube	30*cm 114*cm 0.4*cm 0*deg 360*deg	GEMgas	no	4	1	1	1	1	FLUX	FLUX	id manual 1400000	1	1000000
-CLEO_SIDIS_gem_5	root	CLEO_SIDIS_gem_5	0*cm 0*cm 5*cm	0*deg 0*deg 0*deg	44ee11	Tube	46*cm 94*cm 0.4*cm 0*deg 360*deg	GEMgas	no	5	1	1	1	1	FLUX	FLUX	id manual 1500000	1	1000000
-CLEO_SIDIS_gem_6	root	CLEO_SIDIS_gem_6	0*cm 0*cm 92*cm	0*deg 0*deg 0*deg	44ee11	Tube	58*cm 117*cm 0.4*cm 0*deg 360*deg	GEMgas	no	6	1	1	1	1	FLUX	FLUX	id manual 1600000	1	1000000

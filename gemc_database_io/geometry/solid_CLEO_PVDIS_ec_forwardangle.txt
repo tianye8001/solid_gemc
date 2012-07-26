@@ -1,1 +1,0 @@
-CLEO_PVDIS_ec_forwardangle	root	CLEO_PVDIS_ec_forwardangle	0*cm 0*cm 345*cm	0*deg 0*deg 0*deg	0000ff	Cons	118*cm 261*cm 118*cm 261*cm 25*cm 0*deg 360*deg	Kryptonite	no	1	1	1	1	1	FLUX	FLUX	id manual 3100000	1	1000000

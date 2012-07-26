@@ -1,3 +1,0 @@
-use user_geometry_1;
-LOAD DATA LOCAL INFILE 'solid_CLEO_PVDIS_target.txt' into TABLE solid_CLEO_PVDIS_target;
-update solid_CLEO_PVDIS_target set time=NOW() where time=0;

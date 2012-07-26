@@ -1,5 +1,0 @@
-CLEO_JPsi_target_TACH	root	CLEO_JPsi_target_TACH	0*cm 0*cm -350*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 2*cm 8*cm 0*deg 360*deg	Air	no	1	1	1	1	1	no			1	1000000
-CLEO_JPsi_target_TACL	CLEO_JPsi_target_TACH	CLEO_JPsi_target_TACL	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	ff0000	Tube	1.8872*cm 1.905*cm 7.5102*cm 0*deg 360*deg	Aluminum	no	1	1	1	1	1	no			1	1000000
-CLEO_JPsi_target_TAW1	CLEO_JPsi_target_TACH	CLEO_JPsi_target_TAW1	0*cm 0*cm -7.5051*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 1.8872*cm 0.0051*cm 0*deg 360*deg	Aluminum	no	1	1	1	1	1	no			1	1000000
-CLEO_JPsi_target_TAW2	CLEO_JPsi_target_TACH	CLEO_JPsi_target_TAW2	0*cm 0*cm 7.5051*cm	0*deg 0*deg 0*deg	ff0000	Tube	0*cm 1.8872*cm 0.0051*cm 0*deg 360*deg	Aluminum	no	1	1	1	1	1	no			1	1000000
-CLEO_JPsi_target_TALH	CLEO_JPsi_target_TACH	CLEO_JPsi_target_TALH	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	00ff00	Tube	0*cm 1.8872*cm 7.5*cm 0*deg 360*deg	LH2	no	1	1	1	1	1	no			1	1000000

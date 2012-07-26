@@ -1,1 +1,0 @@
-CLEO_SIDIS_absorber_forwarangle	root	CLEO_SIDIS_absorber_forwarangle	0*cm 0*cm 140*cm	0*deg 0*deg 0*deg	003300	Cons	16*cm 55*cm 19*cm 65*cm 40*cm 0*deg 360*deg	Tungsten	no	1	1	1	1	1	no			1	1000000

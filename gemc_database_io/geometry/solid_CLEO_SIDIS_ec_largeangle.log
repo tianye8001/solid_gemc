@@ -1,3 +1,0 @@
-use user_geometry_1;
-LOAD DATA LOCAL INFILE 'solid_CLEO_SIDIS_ec_largeangle.txt' into TABLE solid_CLEO_SIDIS_ec_largeangle;
-update solid_CLEO_SIDIS_ec_largeangle set time=NOW() where time=0;

@@ -1,8 +1,0 @@
-CLEO_PVDIS_beamline_BMP1	root	CLEO_PVDIS_beamline_BMP1	0*cm 0*cm -345*cm	0*deg 0*deg 0*deg	808080	Tube	0*cm 1.25*cm 330*cm 0*deg 360*deg	Aluminum	no	1	1	1	1	1	no			1	1000000
-CLEO_PVDIS_beamline_BMV1	CLEO_PVDIS_beamline_BMP1	CLEO_PVDIS_beamline_BMV1	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	808080	Tube	0*cm 1.22*cm 330*cm 0*deg 360*deg	Vacuum	no	2	1	1	1	1	no			1	1000000
-CLEO_PVDIS_beamline_BMD1	CLEO_PVDIS_beamline_BMV1	CLEO_PVDIS_beamline_BMD1	0*cm 0*cm -329.9*cm	0*deg 0*deg 0*deg	808080	Tube	0*cm 1.22*cm 0.1*cm 0*deg 360*deg	Kryptonite	no	3	1	1	1	1	no			1	1000000
-CLEO_PVDIS_beamline_BMW1	CLEO_PVDIS_beamline_BMV1	CLEO_PVDIS_beamline_BMW1	0*cm 0*cm 329.9875*cm	0*deg 0*deg 0*deg	808080	Tube	0*cm 1.22*cm 0.0125*cm 0*deg 360*deg	G4_Be	no	4	1	1	1	1	no			1	1000000
-CLEO_PVDIS_beamline_B3PP	root	CLEO_PVDIS_beamline_B3PP	0*cm 0*cm 267.5*cm	0*deg 0*deg 0*deg	808080	Cons	0*cm 1.5*cm 0*cm 29*cm 232.5*cm 0*deg 360*deg	Aluminum	no	1	1	1	1	1	no			1	1000000
-CLEO_PVDIS_beamline_B3PV	CLEO_PVDIS_beamline_B3PP	CLEO_PVDIS_beamline_B3PV	0*cm 0*cm 0*cm	0*deg 0*deg 0*deg	808080	Cons	0*cm 1.4*cm 0*cm 28.9*cm 232.5*cm 0*deg 360*deg	Vacuum	no	2	1	1	1	1	no			1	1000000
-CLEO_PVDIS_beamline_B3DM	CLEO_PVDIS_beamline_B3PV	CLEO_PVDIS_beamline_B3DM	0*cm 0*cm 232.4*cm	0*deg 0*deg 0*deg	808080	Cons	0*cm 28.9*cm 0*cm 28.9*cm 0.1*cm 0*deg 360*deg	Kryptonite	no	3	1	1	1	1	no			1	1000000
-CLEO_PVDIS_beamline_B3W1	CLEO_PVDIS_beamline_B3PV	CLEO_PVDIS_beamline_B3W1	0*cm 0*cm -232.4875*cm	0*deg 0*deg 0*deg	808080	Cons	0*cm 1.4*cm 0*cm 1.4*cm 0.0125*cm 0*deg 360*deg	G4_Be	no	4	1	1	1	1	no			1	1000000
