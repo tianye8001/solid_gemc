@@ -39,7 +39,7 @@ my $DetectorMother="root";
 
 sub make_ec_forwardangle
 {
- my $material="Kryptonite";
+ my $material="Lead";
  my $color="0000ff";
 #  my $z=775-350;
 #   my $z=765-350;

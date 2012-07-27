@@ -6,7 +6,7 @@ use lib ("$ENV{GEMC}/database_io");
 use geo;
 use geo qw($pi);
 
-my $DetectorName = 'CLEO_PVDIS_ec_forwardangle';
+my $DetectorName = 'CLEO_PVDIS_ec_forwardangle_kill';
 
 my $envelope = "solid_$DetectorName";
 my $file     = "solid_$DetectorName.txt";
@@ -55,7 +55,7 @@ my $DetectorMother="root";
 
 sub make_ec_forwardangle
 {
- my $material="Lead";
+ my $material="Kryptonite";
  my $color="0000ff";
 #  my $z=350;
   my $z=345;

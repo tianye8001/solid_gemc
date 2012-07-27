@@ -6,7 +6,7 @@ use lib ("$ENV{GEMC}/database_io");
 use geo;
 use geo qw($pi);
 
-my $DetectorName = 'CLEO_PVDIS_ec_forwardangle';
+my $DetectorName = 'CLEO_SIDIS_ec_largeangle_kill';
 
 my $envelope = "solid_$DetectorName";
 my $file     = "solid_$DetectorName.txt";
@@ -23,42 +23,26 @@ use Math::Trig;
 
 my $DetectorMother="root";
 
-# C  -------------- Hodoscope 7 Full Absorber - preshower
-# HOD9SLATS       1
-# HOD9MEDIUM   638
-# HOD9MOTHER  'SOLE' 
-# HOD9IDTYPE     42
-# HOD9GATE       50.
-# HOD9THRES       0
-# C 
-# HOD9SHAP    'CONE'
-# HOD9SIZE1   4.    110. 237.  114. 242.  
-# HOD9TYPE        1
-# HOD9POSX        0.
-# HOD9POSY        0.
-# HOD9POSZ       320.0
-# C  
-# C  ---  Shower
-# HOD10SLATS       1
-# HOD10MEDIUM   638
-# HOD10MOTHER  'SOLE' 
-# HOD10IDTYPE     42
-# HOD10GATE       50.
-# HOD10THRES       0
-# C 
-# HOD10SHAP    'CONE'
-# HOD10SIZE1   11.    114. 242.  122. 258.
-# HOD10TYPE        1
-# HOD10POSX        0.
-# HOD10POSY        0.
-# HOD10POSZ       335.0
+# HOD3SLATS       1
+# HOD3MEDIUM    654
+# HOD3MOTHER   'HALL' 
+# HOD3IDTYPE       42
+# HOD3GATE       80.
+# HOD3THRES       0
+# HOD3SHAP      'CONE'
+# HOD3SIZE1      11.  82.00  134. 89. 141.  
+# HOD3TYPE        1
+# HOD3POSX        0.
+# HOD3POSY        0.
+# HOD3POSZ        295.5
 
-sub make_ec_forwardangle
+sub make_ec_largeangle
 {
- my $material="Lead";
+ my $material="Kryptonite";
  my $color="0000ff";
-#  my $z=350;
-  my $z=345;
+#  my $z=295.5-350;
+#  my $z=-40.5;
+ my $z=-90;
 
     $detector{"name"}        = "$DetectorName";
     $detector{"mother"}      = "$DetectorMother" ;
@@ -67,14 +51,20 @@ sub make_ec_forwardangle
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = $color;
     $detector{"type"}       = "Cons";
-#     my $Rmin1 = 110;
-#     my $Rmax1 = 265;
-#     my $Rmin2 = 110;
-#     my $Rmax2 = 265;
-    my $Rmin1 = 118;
-    my $Rmax1 = 261;
-    my $Rmin2 = 118;
-    my $Rmax2 = 261;
+#     my $Rmin1 = 82;
+#     my $Rmax1 = 134;
+#     my $Rmin2 = 89;
+#     my $Rmax2 = 141;
+#     my $Dz    = 11;
+#     my $Rmin1 = 82;
+#     my $Rmax1 = 141;
+#     my $Rmin2 = 82;
+#     my $Rmax2 = 141;
+#     my $Dz    = 15;
+    my $Rmin1 = 62;
+    my $Rmax1 = 140;
+    my $Rmin2 = 75;
+    my $Rmax2 = 140;
     my $Dz    = 25;
     my $Sphi  = 0;
     my $Dphi  = 360;
@@ -88,7 +78,7 @@ sub make_ec_forwardangle
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "FLUX";
     $detector{"hit_type"}    = "FLUX";
-    $detector{"identifiers"} = "id manual 3100000";
+    $detector{"identifiers"} = "id manual 3200000";
     print_det(\%detector, $file);
 }
-make_ec_forwardangle();
+make_ec_largeangle();

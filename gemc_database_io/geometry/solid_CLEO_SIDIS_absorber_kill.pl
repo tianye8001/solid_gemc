@@ -6,7 +6,7 @@ use lib ("$ENV{GEMC}/database_io");
 use geo;
 use geo qw($pi);
 
-my $DetectorName = 'CLEO_SIDIS_ec_largeangle';
+my $DetectorName = 'CLEO_SIDIS_absorber_kill';
 
 my $envelope = "solid_$DetectorName";
 my $file     = "solid_$DetectorName.txt";
@@ -23,49 +23,23 @@ use Math::Trig;
 
 my $DetectorMother="root";
 
-# HOD3SLATS       1
-# HOD3MEDIUM    654
-# HOD3MOTHER   'HALL' 
-# HOD3IDTYPE       42
-# HOD3GATE       80.
-# HOD3THRES       0
-# HOD3SHAP      'CONE'
-# HOD3SIZE1      11.  82.00  134. 89. 141.  
-# HOD3TYPE        1
-# HOD3POSX        0.
-# HOD3POSY        0.
-# HOD3POSZ        295.5
-
-sub make_ec_largeangle
+sub make_absorber
 {
- my $material="Lead";
- my $color="0000ff";
-#  my $z=295.5-350;
-#  my $z=-40.5;
- my $z=-90;
+ my $material="Kryptonite";
+ my $z=140;
 
-    $detector{"name"}        = "$DetectorName";
+    $detector{"name"}        = "$DetectorName\_forwarangle";
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $z*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = $color;
+    $detector{"color"}      = "003300";
     $detector{"type"}       = "Cons";
-#     my $Rmin1 = 82;
-#     my $Rmax1 = 134;
-#     my $Rmin2 = 89;
-#     my $Rmax2 = 141;
-#     my $Dz    = 11;
-#     my $Rmin1 = 82;
-#     my $Rmax1 = 141;
-#     my $Rmin2 = 82;
-#     my $Rmax2 = 141;
-#     my $Dz    = 15;
-    my $Rmin1 = 62;
-    my $Rmax1 = 140;
-    my $Rmin2 = 75;
-    my $Rmax2 = 140;
-    my $Dz    = 25;
+    my $Rmin1 = 16;
+    my $Rmax1 = 55;
+    my $Rmin2 = 19;
+    my $Rmax2 = 65;
+    my $Dz    = 40;
     my $Sphi  = 0;
     my $Dphi  = 360;
     $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
@@ -76,9 +50,9 @@ sub make_ec_largeangle
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
-    $detector{"sensitivity"} = "FLUX";
-    $detector{"hit_type"}    = "FLUX";
-    $detector{"identifiers"} = "id manual 3200000";
+    $detector{"sensitivity"} = "no";
+    $detector{"hit_type"}    = "";
+    $detector{"identifiers"} = "";
     print_det(\%detector, $file);
 }
-make_ec_largeangle();
+make_absorber();
