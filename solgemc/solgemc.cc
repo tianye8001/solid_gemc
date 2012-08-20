@@ -11,6 +11,8 @@
 #include "G4PropagatorInField.hh"
 #include "G4TransportationManager.hh"
 
+#include "G4GDMLParser.hh"
+
 #include "G4UIQt.hh"
 #include "G4Qt.hh"
 
@@ -209,6 +211,7 @@ int main( int argc, char **argv )
 	ExpHall->FieldMap = &FieldMap;
 	runManager->SetUserInitialization(ExpHall);
 	
+
   
 	///< Physics List
 	string phys_list = gemcOpt.args["USE_PHYSICSL"].args  ;
@@ -330,6 +333,17 @@ int main( int argc, char **argv )
 
 	string exec_macro = "/control/execute " + gemcOpt.args["EXEC_MACRO"].args;
 
+
+		// Write out GDML
+		G4GDMLParser parser;
+		G4VPhysicalVolume* pWorld = 
+		G4TransportationManager::GetTransportationManager()->
+		GetNavigatorForTracking()->GetWorldVolume();
+		// Make sure file does not exist first.  if it does
+		// remove it so we can overwrite it
+		unlink("solgemc.gdml");
+		parser.Write("solgemc.gdml", pWorld);
+		
 	
 	if(use_qt)
 	{
