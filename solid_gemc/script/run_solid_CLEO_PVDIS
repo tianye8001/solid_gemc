@@ -1,11 +1,11 @@
 #!/bin/sh
-/home/zwzhao/solid/gemc/production/gemc \
+$GEMC_bin \
 -gcard=solid_CLEO_PVDIS.gcard \
 -DBHOST=$GEMC_HOST \
 -USE_PHYSICSL=FTFP_BERT \
 -HALL_MATERIAL=Vacuum \
 -RECORD_PASSBY=1 \
--FIELD_DIR=/home/zwzhao/solid/field \
+-FIELD_DIR=$GEMC_field \
 -HALL_FIELD=solenoid_CLEO \
 -BEAM_P="e-, 11*GeV, 0*deg, 0*deg" \
 -BEAM_V="(0, 0, -500)cm" \

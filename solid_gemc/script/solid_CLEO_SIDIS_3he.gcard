@@ -14,7 +14,7 @@
 <!-- option: 	-->
         <option name="DBUSER"          value="soliduser" />
         <option name="DBPSWD"          value="ilovesolid" />
-        <option name="DATABASE"        value="user_geometry_1" />
-        <option name="BANK_DATABASE"   value="user_banks_1" />
+        <option name="DATABASE"        value="solid_geometry" />
+        <option name="BANK_DATABASE"   value="solid_banks" />
 </gcard>
 
