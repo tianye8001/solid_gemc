@@ -1,0 +1,20 @@
+<gcard>
+
+<!-- geometry: 	-->
+        <sqltable name="solid_CLEO_solenoid_kill"/>
+        <sqltable name="solid_CLEO_SIDIS_target"/>
+        <sqltable name="solid_CLEO_SIDIS_beamline"/>
+        <sqltable name="solid_CLEO_SIDIS_gem"/>
+        <sqltable name="solid_CLEO_SIDIS_ec_largeangle_thin"/>
+        <sqltable name="solid_CLEO_SIDIS_absorber_kill"/>
+        <sqltable name="solid_CLEO_SIDIS_cherenkov_lightgas"/> 
+        <sqltable name="solid_CLEO_SIDIS_cherenkov_heavygas"/>
+        <sqltable name="solid_CLEO_SIDIS_mrpc"/> 
+        <sqltable name="solid_CLEO_SIDIS_ec_forwardangle_thin"/>
+<!-- option: 	-->
+        <option name="DBUSER"          value="soliduser" />
+        <option name="DBPSWD"          value="ilovesolid" />
+        <option name="DATABASE"        value="user_geometry_1" />
+        <option name="BANK_DATABASE"   value="user_banks_1" />
+</gcard>
+
