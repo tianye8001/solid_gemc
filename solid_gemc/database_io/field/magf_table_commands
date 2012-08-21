@@ -1,4 +1,4 @@
-use user_geometry_1;
+use solid_geometry;
 drop table if exists magnetic_fields;
 create table magnetic_fields (
 name VARCHAR(40) UNIQUE,
