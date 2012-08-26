@@ -21,16 +21,16 @@ char hstname[100];
 sprintf(hstname,"gen_mom");
 hgen_mom=new TH1F(hstname,hstname,110,0,11);    
 sprintf(hstname,"gen_theta");
-hgen_theta=new TH1F(hstname,hstname,200,0,40);    
+hgen_theta=new TH1F(hstname,hstname,250,0,50);    
 sprintf(hstname,"gen");
-hgen=new TH2F(hstname,hstname,200,0,40,110,0,11);
+hgen=new TH2F(hstname,hstname,250,0,50,110,0,11);
 for(int i=0;i<n;i++){
    sprintf(hstname,"acceptance_mom_%i",i);
    hacceptance_mom[i]=new TH1F(hstname,hstname,110,0,11);
    sprintf(hstname,"acceptance_theta_%i",i);
-   hacceptance_theta[i]=new TH1F(hstname,hstname,200,0,40); 
+   hacceptance_theta[i]=new TH1F(hstname,hstname,250,0,50); 
    sprintf(hstname,"acceptance_%i",i);
-   hacceptance[i]=new TH2F(hstname,hstname,200,0,40,110,0,11);   
+   hacceptance[i]=new TH2F(hstname,hstname,250,0,50,110,0,11);   
    sprintf(hstname,"hit_%i",i);
    hhit[i]=new TH2F(hstname,hstname,1200,-600,600,500,0,500);  
 }
@@ -157,7 +157,7 @@ TCanvas *c_gen = new TCanvas("gen","gen",600,600);
 hgen->Draw("colz");
 
 TCanvas *c_hit = new TCanvas("hit","hit",1800,800);
-c_hit->Divide(4,2);
+c_hit->Divide(5,2);
 for(int k=0;k<n;k++){
 c_hit->cd(k+1);
 gPad->SetLogz(1);

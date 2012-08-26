@@ -1,16 +1,17 @@
 ===2012_08_21 Zhiwen Zhao ====
-shoot chargedgeantino into SoLID and look for the hits on various detectors like EC and GEM, if there is a hit, this event from is considered detected and the generated particle P and theta is recorded.
-target length effect is counted automatically.
+use the special physicslist no with option "USE_PHYSICSL=no"
 
-in solid_CLEO_SIDIS_3he.gcard
+shoot electron from target position over target length into SoLID and look for the hits on various detectors like EC and GEM, if there is a hit, this event is considered detected and the generated particle P and theta is recorded.
+
+in *.gcard
 use "kill" type of solenoid, absorber, baffle etc which have material "Kryptonite" to make sure particles can get blocked.
 use "thin" type of EC which has material "Kryptonite" and only a thin slice at front end. This is to avoid hits appear on both front and back end when "Kryptonite" is used. 
 
-modify run_solid_CLEO_SIDIS_3he and solid_CLEO_SIDIS_3he.gcard to fit your program env and database you want to use.
+modify run_* and *.gcard to fit your program env and database you want to use.
 
-run run_solid_CLEO_SIDIS_3he to generate the evio, use gemc_evio2root to convert to root
+run run_* to generate the evio, use gemc_evio2root to convert to root
 
-use acceptance.C("gemc_output_rootfile") to plot and generate output rootfile
+use acceptance.C("gemc_rootfile") to plot and generate output rootfile
 
 In the output root file, acceptance in P VS theta histograms are stored as
 acceptance_0 GEM plane 1 
@@ -23,3 +24,5 @@ acceptance_6 EC largeangle
 acceptance_7 EC forwardangle
 acceptance_8 CC lightgas
 acceptance_9 CC heavygas
+
+where P is from 0 to 11 GeV, 0.1GeV per bin, theta is from 0 to 50 degree, 0.2 degree per bin 

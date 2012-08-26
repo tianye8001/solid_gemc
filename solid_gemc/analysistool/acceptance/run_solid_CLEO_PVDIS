@@ -2,16 +2,17 @@
 $GEMC_bin \
 -gcard=solid_CLEO_PVDIS.gcard \
 -DBHOST=$GEMC_HOST \
--USE_PHYSICSL=FTFP_BERT \
+-USE_PHYSICSL=no \
+-MATERIALSDB=CPP \
 -HALL_MATERIAL=Vacuum \
 -RECORD_PASSBY=1 \
 -FIELD_DIR=$GEMC_field \
 -HALL_FIELD=solenoid_CLEO \
--BEAM_P="chargedgeantino, 5.5*GeV, 25*deg, 0*deg" \
+-BEAM_P="e-, 5.5*GeV, 25*deg, 0*deg" \
 -SPREAD_P="5.5*GeV, 25*deg, 180*deg" \
 -BEAM_V="(0, 0, 10)cm" \
 -SPREAD_V="(0.1, 20)cm" \
--N=2e5 \
+-N=3e5 \
 -OUTPUT="evio,acceptance_solid_CLEO_PVDIS.evio" \
 -USE_QT=0
 
