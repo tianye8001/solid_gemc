@@ -2,18 +2,17 @@
 $GEMC_bin \
 -gcard=solid_CLEO_SIDIS_3he.gcard \
 -DBHOST=$GEMC_HOST \
--USE_PHYSICSL=no \
--MATERIALSDB=CPP \
 -HALL_MATERIAL=Vacuum \
 -RECORD_PASSBY=1 \
 -FIELD_DIR=$GEMC_field \
 -HALL_FIELD=solenoid_CLEO \
--BEAM_P="e-, 5.5*GeV, 20*deg, 0*deg" \
+-SCALE_FIELD="solenoid_CLEO, -1" \
+-BEAM_P="chargedgeantino, 5.5*GeV, 20*deg, 0*deg" \
 -SPREAD_P="5.5*GeV, 20*deg, 180*deg" \
 -BEAM_V="(0, 0, -350)cm" \
 -SPREAD_V="(0.1, 20)cm" \
 -N=3e5 \
--OUTPUT="evio,acceptance_solid_CLEO_SIDIS_3he.evio" \
+-OUTPUT="evio,acceptance_solid_CLEO_SIDIS_3he_negative.evio" \
 -USE_QT=0
 
 #-HIT_VERBOSITY=100 \
