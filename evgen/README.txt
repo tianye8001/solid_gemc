@@ -82,17 +82,21 @@ setenv LIBRARY_PATH /home/${USER}/lib:${ROOTSYS}/lib
 tested on ifarm64
 
 1. get lhapdf and compile
-http://www.hepforge.org/archive/lhapdf/lhapdf-5.8.5.tar.gz
-./configure --prefix=/home/${USER}/apps/Linux_CentOS5.3-x86_64-gcc4.1.2/lhapdf CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran
+mkdir lhapdf
+wget http://www.hepforge.org/archive/lhapdf/lhapdf-5.8.5.tar.gz
+tar zxf lhapdf-5.8.5.tar.gz
+cd lhapdf-5.8.5
+./configure --prefix=/WhereverYourDir/lhapdf CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran
 make
 make install
-setenv LHAPDF /home/${USER}/apps/Linux_CentOS5.3-x86_64-gcc4.1.2/lhapdf
-setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
-download http://www.hepforge.org/archive/lhapdf/pdfsets/5.8.5/cteq6m.LHpdf and put it at $LHAPDF/share/lhapdf
+cd ../share/lhapdf
+wget http://www.hepforge.org/archive/lhapdf/pdfsets/5.8.5/cteq6m.LHpdf
 
-2. compile collider
+2. compile and run "collider"
 cd collider
 source  /apps/root/PRO/setroot_CUE
+setenv LHAPDF /WhereverYourDir/lhapdf
+setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
 make
 run "./collider" to see all running options
 
@@ -112,8 +116,4 @@ calc_rate.C calls on main to generate a rate plot
 The code is based on some previous code, refer to 
 "Software for estimating (e,e'), (e,pion) cross sections (10/22/2000) source code     instruction(html)"
 at http://hallaweb.jlab.org/physics/experiments/he3/A1n/
-
-
-
-
 
