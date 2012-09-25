@@ -86,7 +86,7 @@ mkdir lhapdf
 wget http://www.hepforge.org/archive/lhapdf/lhapdf-5.8.5.tar.gz
 tar zxf lhapdf-5.8.5.tar.gz
 cd lhapdf-5.8.5
-./configure --prefix=/WhereverYourDir/lhapdf CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran
+./configure --prefix=/PathOflhapdf CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran
 make
 make install
 cd ../share/lhapdf
@@ -95,7 +95,7 @@ wget http://www.hepforge.org/archive/lhapdf/pdfsets/5.8.5/cteq6m.LHpdf
 2. compile and run "collider"
 cd collider
 source  /apps/root/PRO/setroot_CUE
-setenv LHAPDF /WhereverYourDir/lhapdf
+setenv LHAPDF /PathOflhapdf
 setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
 make
 run "./collider" to see all running options
