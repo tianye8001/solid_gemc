@@ -2,7 +2,7 @@
 #setenv JLAB_ROOT /home/zwzhao/apps/jlab_software  #setup basic enviroment variables for gemc on local installation
 #source $JLAB_ROOT/ce/jlab.csh                     #setup basic enviroment variables for gemc on local installation
 source  /site/12gev_phys/ce/jlab.csh               #setup basic enviroment variables on ifarm
-setenv SoLID_GEMC /home/zwzhao/solid/solid_svn/solid/solid_gemc #solid_gemc location where you download from SoLID SVN
+setenv SoLID_GEMC /home/zwzhao/solid/solid_svn/solid/solid_gemc #solid_gemc location where you download from SoLID SVN (modify this to your path)
 setenv GEMC_bin $JLAB_SOFTWARE/gemc/gemc               #gemc binary code path
 #setenv GEMC_field /home/zwzhao/solid/field        #location of GEMC field map on local installation
 setenv GEMC_field /u/group/halla/www/hallaweb/html/12GeV/SoLID/download/field       #location of GEMC field map on ifarm
