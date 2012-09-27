@@ -1,16 +1,17 @@
 #!/bin/tcsh
-setenv JLAB_ROOT /usr/local/jlab_software         #setup basic enviroment variables for gemc on local rpm installation
-source /usr/local/jlab_software/ce/jlab.csh       #setup basic enviroment variables for gemc on local rpm installation
-#source  /site/12gev_phys/ce/jlab.csh             #setup basic enviroment variables on ifarm
+#setenv JLAB_ROOT /home/zwzhao/apps/jlab_software  #setup basic enviroment variables for gemc on local installation
+#source $JLAB_ROOT/ce/jlab.csh                     #setup basic enviroment variables for gemc on local installation
+source  /site/12gev_phys/ce/jlab.csh               #setup basic enviroment variables on ifarm
 setenv SoLID_GEMC /home/zwzhao/solid/solid_svn/solid/solid_gemc #solid_gemc location where you download from SoLID SVN
-setenv GEMC_bin /home/zwzhao/solid/gemc/production/gemc  #gemc binary code path
-setenv GEMC_field /home/zwzhao/solid/field        #location of GEMC field map       
-setenv GEMC_HOST 127.0.0.1          #use this after ssh tunneling if your system is NOT on jlab network
-#setenv GEMC_HOST soliddb.jlab.org  #use this if your system is on jlab network
+setenv GEMC_bin $JLAB_SOFTWARE/gemc/gemc               #gemc binary code path
+#setenv GEMC_field /home/zwzhao/solid/field        #location of GEMC field map on local installation
+setenv GEMC_field /u/group/halla/www/hallaweb/html/12GeV/SoLID/download/field       #location of GEMC field map on ifarm
+#setenv GEMC_HOST 127.0.0.1          #use this after ssh tunneling if your system is NOT on jlab network
+setenv GEMC_HOST soliddb.jlab.org  #use this if your system is on jlab network
 setenv GEMC_DB solid_geometry       #the official detector database
 setenv GEMC_BANK solid_banks        #the official output bank info
-#setenv GEMC_DB   test              #user geometry for test or any other
-#setenv GEMC_BANK test              #user banks for test or any other
+#setenv GEMC_DB   test              #user geometry for test
+#setenv GEMC_BANK test              #user banks for test
 setenv GEMC_USER soliduser          #this user only can read database, used for run simulation
 setenv GEMC_PASS ilovesolid         #readonly user password
 #setenv GEMC_USER soliddev          #this user can read and write, used for update database
