@@ -32,7 +32,7 @@ sub make_mrpc
 #  my $z=398;
  my $z=400;
 
-    $detector{"name"}        = "$DetectorName\_BaBar_SIDIS_mrpc";
+    $detector{"name"}        = "$DetectorName";
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $z*cm";
