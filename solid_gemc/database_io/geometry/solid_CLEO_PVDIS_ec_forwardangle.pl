@@ -55,7 +55,7 @@ my $DetectorMother="root";
 
 sub make_ec_forwardangle
 {
- my $material="Lead";
+ my $material="LgTF1";
  my $color="0000ff";
 #  my $z=350;
   my $z=345;

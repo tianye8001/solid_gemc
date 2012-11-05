@@ -38,7 +38,7 @@ my $DetectorMother="root";
 
 sub make_ec_largeangle
 {
- my $material="Lead";
+ my $material="LgTF1";
  my $color="0000ff";
 #  my $z=295.5-350;
 #  my $z=-40.5;
@@ -82,3 +82,4 @@ sub make_ec_largeangle
     print_det(\%detector, $file);
 }
 make_ec_largeangle();
+
