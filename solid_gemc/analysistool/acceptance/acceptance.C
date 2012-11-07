@@ -2,7 +2,7 @@ void acceptance(string input_filename)
 {
 gROOT->Reset();
 gStyle->SetPalette(1);
-gStyle->SetOptStat(0);
+gStyle->SetOptStat(1);
 
 const double DEG=180./3.1415926;
 
@@ -15,7 +15,7 @@ TH1F *hgen_mom,*hgen_theta;
 TH2F *hgen;
 TH1F *hacceptance_mom[n],*hacceptance_theta[n];
 TH2F *hacceptance[n];
-TH2F *hhit[n];
+TH2F *hhit_rz[n],*hhit_xy[n];
 
 char hstname[100];
 sprintf(hstname,"gen_mom");
@@ -31,8 +31,10 @@ for(int i=0;i<n;i++){
    hacceptance_theta[i]=new TH1F(hstname,hstname,250,0,50); 
    sprintf(hstname,"acceptance_%i",i);
    hacceptance[i]=new TH2F(hstname,hstname,250,0,50,110,0,11);   
-   sprintf(hstname,"hit_%i",i);
-   hhit[i]=new TH2F(hstname,hstname,1200,-600,600,500,0,500);  
+   sprintf(hstname,"hit_rz_%i",i);
+   hhit_rz[i]=new TH2F(hstname,hstname,1200,-600,600,500,0,500);  
+   sprintf(hstname,"hit_xy_%i",i);
+   hhit_xy[i]=new TH2F(hstname,hstname,500,0,500,500,0,500);     
 }
 
   TFile *file=new TFile(input_filename.c_str());
@@ -139,7 +141,8 @@ for (Int_t i=0;i<nevent;i++) {
        hacceptance_theta[hit_id]->Fill(theta);       
        hacceptance[hit_id]->Fill(theta,mom);
        double r=sqrt(*(flux_x+j)**2+*(flux_y+j)**2);
-       hhit[hit_id]->Fill(*(flux_z+j)/10,r/10);
+       hhit_rz[hit_id]->Fill(*(flux_z+j)/10,r/10);
+       hhit_xy[hit_id]->Fill(*(flux_x+j)/10,*(flux_y+j)/10);       
        
 //        if (hit_id==7 && theta >17) cout << *(flux_vz+j)/10 << " " << r/10 << " " << theta << " " << mom << endl;
 //       cout << *(flux_vz+j)/10 <<  " " << r << endl;
@@ -156,12 +159,20 @@ file->Close();
 TCanvas *c_gen = new TCanvas("gen","gen",600,600);
 hgen->Draw("colz");
 
-TCanvas *c_hit = new TCanvas("hit","hit",1800,800);
-c_hit->Divide(5,2);
+TCanvas *c_hit_rz = new TCanvas("hit_rz","hit_rz",1800,800);
+c_hit_rz->Divide(5,2);
 for(int k=0;k<n;k++){
-c_hit->cd(k+1);
+c_hit_rz->cd(k+1);
 gPad->SetLogz(1);
-hhit[k]->Draw("colz");
+hhit_rz[k]->Draw("colz");
+}
+
+TCanvas *c_hit_xy = new TCanvas("hit_xy","hit_xy",1800,800);
+c_hit_xy->Divide(5,2);
+for(int k=0;k<n;k++){
+c_hit_xy->cd(k+1);
+gPad->SetLogz(1);
+hhit_xy[k]->Draw("colz");
 }
 
 TCanvas *c_acceptance_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
@@ -175,6 +186,7 @@ char hsttitle[80];
 sprintf(hsttitle,"acceptance at GEM plane %i;theta (degree);P (GeV)",k+1);
 hacceptance[k]->SetTitle(hsttitle);
 }
+c_acceptance_gem->SaveAs("acceptance_gem.png");
 
 TCanvas *c_acceptance_gem_1D = new TCanvas("acceptance_gem_1D","acceptance_gem_1D",1800,800);
 c_acceptance_gem_1D->Divide(2,6);
@@ -201,6 +213,7 @@ if (k==6) sprintf(hsttitle,"acceptance at EC largeangle;theta (degree);P (GeV)")
 if (k==7) sprintf(hsttitle,"acceptance at EC forwardangle;theta (degree);P (GeV)");
 hacceptance[k]->SetTitle(hsttitle);
 }
+c_acceptance_ec->SaveAs("acceptance_ec.png");
 
 TCanvas *c_acceptance_ec_1D = new TCanvas("acceptance_ec_1D","acceptance_ec_1D",1800,800);
 c_acceptance_ec_1D->Divide(2,2);
@@ -227,6 +240,7 @@ if (k==8) sprintf(hsttitle,"acceptance at CC lightgas;theta (degree);P (GeV)");
 if (k==9) sprintf(hsttitle,"acceptance at CC heavygas;theta (degree);P (GeV)");
 hacceptance[k]->SetTitle(hsttitle);
 }
+c_acceptance_cc->SaveAs("acceptance_cc.png");
 
 TCanvas *c_acceptance_cc_1D = new TCanvas("acceptance_cc_1D","acceptance_cc_1D",1800,800);
 c_acceptance_cc_1D->Divide(2,2);
