@@ -76,9 +76,9 @@ sub make_ec_largeangle
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
-    $detector{"sensitivity"} = "FLUX";
-    $detector{"hit_type"}    = "FLUX";
-    $detector{"identifiers"} = "id manual 3200000";
+    $detector{"sensitivity"} = "no";
+    $detector{"hit_type"}    = "no";
+    $detector{"identifiers"} = "";
     print_det(\%detector, $file);
 }
 make_ec_largeangle();
