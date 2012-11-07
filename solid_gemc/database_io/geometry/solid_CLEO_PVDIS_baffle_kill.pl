@@ -21,45 +21,52 @@ $detector{"rmax"} = $rmax;
 use Getopt::Long;
 use Math::Trig;
 
+my $DetectorMother="root";
 
 #6 plates, 9cm thick,every 30cm, 30 slits per plate, 20 blocks per slit
 
 my $color_baffle="00C0C0";
+
+my $material_baffle_within="Air";
 my $material_baffle="Kryptonite";
-#my $material_baffle="Vacuum";
 my $sensitivity_baffle="no";
 my $hit_baffle="";
-# Kryptonite
-# FLUX
+
+# In PVDIS PAC34 proposal, page 35 (http://hallaweb.jlab.org/collab/PAC/PAC34/PR-09-012-pvdis.pdf). It's mentioned that the baffle position is 30,60,90,120,150,180cm relative to BaBar solenoid coil center at 0. But it's actually relative to the target center which is at 10cm as seen on the Fig 3.3 on page 31.
+# Later on, it seems Eugene has further tweaked them to 30,58,86,114,142,170. refer to http://hallaweb.jlab.org/12GeV/SoLID/download/sim/geant3/solid_comgeant_pvdis/pvdis_02_01_p_14_01/fort.22
+
+my $targetoff=10; # target offset in cm
+
+ my $Nplate  = 6;
+ my @PlateZ  = (30+$targetoff,58+$targetoff,86+$targetoff,114+$targetoff,142+$targetoff,170+$targetoff);
+ my $Dz   = 9.0/2.;
+
 sub make_baffle_plate_inner
 {
- my $Nplate  = 6;
- my @PlateZ  = (40, 70, 100, 130, 160, 190); #(30,60,90,120,150,180)+10 in absolute coordinate
- my @Rin  = (0.20,  12.,  19.,    23.9,  28.9, 33.8);
- my @Rout = ( 0.40, 12.52, 24.65, 36.77, 48.89, 61.01,);
-my $Dz   = 9.0/2.;
+ my @Rin  = (3.89,14.,19.,23.9,28.9,33.8);
+ my @Rout = (3.9,15.3,26.6,37.9,49.2,60.4);
 
  for(my $n=1; $n<=$Nplate; $n++)
  {
-    $detector{"name"}        = "cleopvdis_plate_inner_$n";
-    $detector{"mother"}      = "root" ;
+    my $n_c     = cnumber($n-1, 1);
+    $detector{"name"}        = "$DetectorName\_plateinner$n_c";
+    $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = "$color_baffle";
     $detector{"type"}       = "Tube";
-#    $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz*cm 0*deg 360*deg";
-    $detector{"dimensions"} = "0.0*cm $Rout[$n-1]*cm $Dz*cm 0*deg 360*deg";
+    $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz*cm 0*deg 360*deg";
     $detector{"material"}   = "$material_baffle";
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "$sensitivity_baffle";
     $detector{"hit_type"}    = "$hit_baffle";
-    $detector{"identifiers"} = $detector{"name"};
+    $detector{"identifiers"} = "";
 
     print_det(\%detector, $file);
  }
@@ -68,268 +75,294 @@ make_baffle_plate_inner();
 
 sub make_baffle_plate_outer
 {
- my $Nplate  = 6;
-
- my @PlateZ  = (42, 70, 100, 130, 160, 190); #(30,60,90,120,150,180)+10 in absolute coordinate
- my @Rin  = (41.31, 62.32, 83.32, 104.33, 125.34, 142.00);
- my $Rout = 145; #coil edge is at 142cm
- my $Dz   = 9.0/2.;
+ my @Rin  = (34.8,54.3,73.9,93.4,112.8,132.1);
+my @Rout = (42,62,82,102,120,140);
 
  for(my $n=1; $n<=$Nplate; $n++)
  {
-    $detector{"name"}        = "cleopvdis_plate_outer_$n";
-    $detector{"mother"}      = "root" ;
+    my $n_c     = cnumber($n-1, 1);
+    $detector{"name"}        = "$DetectorName\_plateouter$n_c";
+    $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = "$color_baffle";
     $detector{"type"}       = "Tube";
-    $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout*cm $Dz*cm 0*deg 360*deg";
+    $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz*cm 0*deg 360*deg";
     $detector{"material"}   = "$material_baffle";
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "$sensitivity_baffle";
     $detector{"hit_type"}    = "$hit_baffle";
-    $detector{"identifiers"} = $detector{"name"};
-
+    $detector{"identifiers"} = "";
     print_det(\%detector, $file);
  }
 }
 make_baffle_plate_outer();
 
+sub make_baffle_plate   #viutral container for baffle plate
+{
+ my @Rin = (3.9,15.3,26.6,37.9,49.2,60.4);
+ my @Rout  = (34.7,54.3,73.8,93.3,112.8,132.0);
 
+ for(my $n=1; $n<=$Nplate; $n++)
+ {
+    my $n_c     = cnumber($n-1, 1);
+    $detector{"name"}        = "$DetectorName\_plate$n_c";
+    $detector{"mother"}      = "$DetectorMother";
+    $detector{"description"} = $detector{"name"};
+    $detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
+    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+    $detector{"color"}      = "000000";
+    $detector{"type"}       = "Tube";
+    $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz*cm 0*deg 360*deg";
+    $detector{"material"}   = "$material_baffle_within";
+    $detector{"mfield"}     = "no";
+    $detector{"ncopy"}      = 1;
+    $detector{"pMany"}       = 1;
+    $detector{"exist"}       = 1;
+    $detector{"visible"}     = 0;
+    $detector{"style"}       = 1;
+    $detector{"sensitivity"} = "no";
+    $detector{"hit_type"}    = "";
+    $detector{"identifiers"} = "";
+    print_det(\%detector, $file);
+ }
+}
+make_baffle_plate();
 
 #making buffle blocks, palte by plate, slit by slit,block by block
 sub make_baffle_blocks
 {
-    my @x =(
-	[   0.404026, 2.449437, 0.000000, 3.648214,
-	2.449437, 4.494848, 0.000000, 4.516071,
-	4.494848, 6.540259, 0.000000, 5.062500,
-	6.540259, 8.585670, 0.000000, 5.158929,
-	8.585670, 10.631081, 0.000000, 5.142857,
-	10.631081, 12.676492, 0.000000, 5.175000,
-	12.676492, 14.721903, 0.000000, 5.464286,
-	14.721903, 16.767314, 0.000000, 5.914286,
-	16.767314, 18.812725, 0.000000, 6.171429,
-	18.812725, 20.858136, 0.000000, 6.332143,
-	20.858136, 22.903547, 0.000000, 6.428571,
-	22.903547, 24.948958, 0.000000, 6.750000,
-	24.948958, 26.994369, 0.000000, 7.135714,
-	26.994369, 29.039780, 0.000000, 7.392857,
-	29.039780, 31.085191, 0.000000, 7.457143,
-	31.085191, 33.130602, 0.000000, 7.810714,
-	33.130602, 35.176013, 0.000000, 7.842857,
-	35.176013, 37.221424, 0.000000, 8.260714,
-	37.221424, 39.266835, 0.000000, 8.100000,
-	39.266835, 41.312246, 0.000000, 7.650000,
-	],
-	[   12.524813, 15.014496, 0.729643, 4.111071,
-	15.014496, 17.504179, 0.903214, 4.766786,
-	17.504179, 19.993862, 1.012500, 5.306786,
-	19.993862, 22.483545, 1.031786, 5.563929,
-	22.483545, 24.973228, 1.028571, 5.535000,
-	24.973228, 27.462911, 1.035000, 5.682857,
-	27.462911, 29.952594, 1.092857, 6.017143,
-	29.952594, 32.442277, 1.182857, 6.570000,
-	32.442277, 34.931960, 1.234286, 6.859286,
-	34.931960, 37.421643, 1.266429, 7.097143,
-	37.421643, 39.911326, 1.285714, 7.206429,
-	39.911326, 42.401009, 1.350000, 7.530000,
-	42.401009, 44.890691, 1.427143, 7.785000,
-	44.890691, 47.380374, 1.478571, 8.003571,
-	47.380374, 49.870057, 1.491429, 8.067429,
-	49.870057, 52.359740, 1.562143, 8.336143,
-	52.359740, 54.849423, 1.568571, 8.360571,
-	54.849423, 57.339106, 1.652143, 8.678143,
-	57.339106, 59.828789, 1.620000, 8.550000,
-	59.828789, 62.318472, 1.530000, 8.212500,
-	],
-	[   24.645600, 27.579555, 1.459286, 4.573929,
-	27.579555, 30.513510, 1.806429, 5.017500,
-	30.513510, 33.447465, 2.025000, 5.551071,
-	33.447465, 36.381420, 2.063571, 5.968929,
-	36.381420, 39.315375, 2.057143, 5.927143,
-	39.315375, 42.249330, 2.070000, 6.190714,
-	42.249330, 45.183285, 2.185714, 6.570000,
-	45.183285, 48.117240, 2.365714, 7.225714,
-	48.117240, 51.051194, 2.468571, 7.547143,
-	51.051194, 53.985149, 2.532857, 7.862143,
-	53.985149, 56.919104, 2.571429, 7.984286,
-	56.919104, 59.853059, 2.700000, 8.310000,
-	59.853059, 62.787014, 2.854286, 8.434286,
-	62.787014, 65.720969, 2.957143, 8.614286,
-	65.720969, 68.654924, 2.982857, 8.677714,
-	68.654924, 71.588879, 3.124286, 8.861571,
-	71.588879, 74.522834, 3.137143, 8.878286,
-	74.522834, 77.456789, 3.304286, 9.095571,
-	77.456789, 80.390744, 3.240000, 9.000000,
-	80.390744, 83.324699, 3.060000, 8.775000,
-	],
-	[   36.766387, 40.144614, 2.188929, 5.036786,
-	40.144614, 43.522841, 2.709643, 5.268214,
-	43.522841, 46.901068, 3.037500, 5.795357,
-	46.901068, 50.279295, 3.095357, 6.373929,
-	50.279295, 53.657522, 3.085714, 6.319286,
-	53.657522, 57.035749, 3.105000, 6.698571,
-	57.035749, 60.413975, 3.278571, 7.122857,
-	60.413975, 63.792202, 3.548571, 7.881429,
-	63.792202, 67.170429, 3.702857, 8.235000,
-	67.170429, 70.548656, 3.799286, 8.627143,
-	70.548656, 73.926883, 3.857143, 8.762143,
-	73.926883, 77.305110, 4.050000, 9.090000,
-	77.305110, 80.683337, 4.281429, 9.083571,
-	80.683337, 84.061564, 4.435714, 9.225000,
-	84.061564, 87.439791, 4.474286, 9.288000,
-	87.439791, 90.818018, 4.686429, 9.387000,
-	90.818018, 94.196244, 4.705714, 9.396000,
-	94.196244, 97.574471, 4.956429, 9.513000,
-	97.574471, 100.952698, 4.860000, 9.450000,
-	100.952698, 104.330925, 4.590000, 9.337500,
-	],
-	[   48.887174, 52.709673, 2.918571, 5.499643,
-	52.709673, 56.532172, 3.612857, 5.518929,
-	56.532172, 60.354671, 4.050000, 6.039643,
-	60.354671, 64.177170, 4.127143, 6.778929,
-	64.177170, 67.999669, 4.114286, 6.711429,
-	67.999669, 71.822167, 4.140000, 7.206429,
-	71.822167, 75.644666, 4.371429, 7.675714,
-	75.644666, 79.467165, 4.731429, 8.537143,
-	79.467165, 83.289664, 4.937143, 8.922857,
-	83.289664, 87.112163, 5.065714, 9.392143,
-	87.112163, 90.934662, 5.142857, 9.540000,
-	90.934662, 94.757161, 5.400000, 9.870000,
-	94.757161, 98.579660, 5.708571, 9.732857,
-	98.579660, 102.402158, 5.914286, 9.835714,
-	102.402158, 106.224657, 5.965714, 9.898286,
-	106.224657, 110.047156, 6.248571, 9.912429,
-	110.047156, 113.869655, 6.274286, 9.913714,
-	113.869655, 117.692154, 6.608571, 9.930429,
-	117.692154, 121.514653, 6.480000, 9.900000,
-	121.514653, 125.337152, 6.120000, 9.900000,
-	],
-	[   61.007961, 65.057563, 3.648214, 5.962500,
-	65.057563, 69.107165, 4.516071, 5.769643,
-	69.107165, 73.156767, 5.062500, 6.283929,
-	73.156767, 77.206369, 5.158929, 7.183929,
-	77.206369, 81.255971, 5.142857, 7.103571,
-	81.255971, 85.305573, 5.175000, 7.714286,
-	85.305573, 89.355175, 5.464286, 8.228571,
-	89.355175, 93.404777, 5.914286, 9.192857,
-	93.404777, 97.454379, 6.171429, 9.610714,
-	97.454379, 101.503981, 6.332143, 10.157143,
-	101.503981, 105.553582, 6.428571, 10.317857,
-	105.553582, 109.603184, 6.750000, 10.650000,
-	109.603184, 113.652786, 7.135714, 10.382143,
-	113.652786, 117.702388, 7.392857, 10.446429,
-	117.702388, 121.751990, 7.457143, 10.508571,
-	121.751990, 125.801592, 7.810714, 10.437857,
-	125.801592, 129.851194, 7.842857, 10.431429,
-	129.851194, 133.900796, 8.260714, 10.347857,
-	133.900796, 137.950398, 8.100000, 10.350000,
-	137.950398, 142.000000, 7.650000, 10.462500,
-	],
-    );
+my @x =( #Rin     Rout   SPhi    DPhi
+#1 plate
+[	 3.90 ,   5.44 ,  176.26 , 183.00 ,
+	 5.44 ,   6.98 ,  176.44 , 182.13 ,
+	 6.98 ,   8.52 ,  176.61 , 181.67 ,
+	 8.52 ,  10.06 ,  176.75 , 181.78 ,
+	10.06 ,  11.60 ,  176.89 , 181.90 ,
+	11.60 ,  13.14 ,  177.03 , 182.01 ,
+	13.14 ,  14.68 ,  177.18 , 182.12 ,
+	14.68 ,  16.22 ,  177.32 , 182.24 ,
+	16.22 ,  17.76 ,  177.46 , 182.35 ,
+	17.76 ,  19.30 ,  177.60 , 182.46 ,
+	19.30 ,  20.84 ,  177.74 , 182.58 ,
+	20.84 ,  22.38 ,  177.88 , 182.69 ,
+	22.38 ,  23.92 ,  178.02 , 182.80 ,
+	23.92 ,  25.46 ,  178.16 , 182.92 ,
+	25.46 ,  27.00 ,  178.30 , 183.03 ,
+	27.00 ,  28.54 ,  178.44 , 183.15 ,
+	28.54 ,  30.08 ,  178.58 , 183.26 ,
+	30.08 ,  31.62 ,  178.72 , 183.37 ,
+	31.62 ,  33.16 ,  178.86 , 183.49 ,
+	33.16 ,  34.70 ,  179.00 , 183.60 	],
+#2 plate
+[	15.30 ,  17.25 ,  175.93 , 182.78 ,
+	17.25 ,  19.20 ,  176.14 , 182.56 ,
+	19.20 ,  21.15 ,  176.35 , 182.36 ,
+	21.15 ,  23.10 ,  176.58 , 182.19 ,
+	23.10 ,  25.05 ,  176.81 , 182.05 ,
+	25.05 ,  27.00 ,  177.06 , 181.93 ,
+	27.00 ,  28.95 ,  177.28 , 181.98 ,
+	28.95 ,  30.90 ,  177.46 , 182.12 ,
+	30.90 ,  32.85 ,  177.64 , 182.26 ,
+	32.85 ,  34.80 ,  177.82 , 182.41 ,
+	34.80 ,  36.75 ,  178.00 , 182.55 ,
+	36.75 ,  38.70 ,  178.18 , 182.70 ,
+	38.70 ,  40.65 ,  178.35 , 182.84 ,
+	40.65 ,  42.60 ,  178.53 , 182.98 ,
+	42.60 ,  44.55 ,  178.71 , 183.13 ,
+	44.55 ,  46.50 ,  178.89 , 183.27 ,
+	46.50 ,  48.45 ,  179.07 , 183.41 ,
+	48.45 ,  50.40 ,  179.25 , 183.56 ,
+	50.40 ,  52.35 ,  179.42 , 183.70 ,
+	52.35 ,  54.30 ,  179.60 , 183.84 	],
+#3 plate    
+      [ 26.60 ,  28.96 ,  175.71 , 182.49 ,                    
+	28.96 ,  31.32 ,  175.95 , 182.40 ,                   
+	31.32 ,  33.68 ,  176.20 , 182.32 ,                   
+	33.68 ,  36.04 ,  176.46 , 182.27 ,                   
+	36.04 ,  38.40 ,  176.73 , 182.23 ,                   
+	38.40 ,  40.76 ,  177.02 , 182.22 ,                   
+	40.76 ,  43.12 ,  177.31 , 182.22 ,                   
+	43.12 ,  45.48 ,  177.62 , 182.23 ,                   
+	45.48 ,  47.84 ,  177.93 , 182.28 ,                   
+	47.84 ,  50.20 ,  178.15 , 182.46 ,                   
+	50.20 ,  52.56 ,  178.36 , 182.63 ,                   
+	52.56 ,  54.92 ,  178.58 , 182.81 ,                   
+	54.92 ,  57.28 ,  178.80 , 182.98 ,                   
+	57.28 ,  59.64 ,  179.01 , 183.16 ,                   
+	59.64 ,  62.00 ,  179.23 , 183.33 ,                   
+	62.00 ,  64.36 ,  179.45 , 183.51 ,                   
+	64.36 ,  66.72 ,  179.67 , 183.68 ,                   
+	66.72 ,  69.08 ,  179.88 , 183.85 ,                   
+	69.08 ,  71.44 ,  180.10 , 184.03 ,                   
+	71.44 ,  73.80 ,  180.32 , 184.21	],                  
+#4 plate
+      [ 37.90  , 40.67  , 175.38 , 182.05 ,
+	40.67  , 43.44  , 175.66 , 182.04 ,
+	43.44  , 46.21  , 175.95 , 182.04 ,
+	46.21  , 48.98  , 176.25 , 182.05 ,
+	48.98  , 51.75  , 176.57 , 182.08 ,
+	51.75  , 54.52  , 176.89 , 182.13 ,
+	54.52  , 57.29  , 177.22 , 182.19 ,
+	57.29  , 60.06  , 177.57 , 182.27 ,
+	60.06  , 62.83  , 177.92 , 182.36 ,
+	62.83  , 65.60  , 178.29 , 182.47 ,
+	65.60  , 68.37  , 178.66 , 182.66 ,
+	68.37  , 71.14  , 178.90 , 182.84 ,
+	71.14  , 73.91  , 179.15 , 183.02 ,
+	73.91  , 76.68  , 179.39 , 183.22 ,
+	76.68  , 79.45  , 179.65 , 183.42 ,
+	79.45  , 82.22  , 179.90 , 183.62 ,
+	82.22  , 84.99  , 180.16 , 183.84 ,
+	84.99  , 87.76  , 180.43 , 184.06 ,
+	87.76  , 90.53  , 180.71 , 184.28 ,
+	90.53  , 93.30  , 180.98 , 184.51	],
+#5 plate
+      [ 49.20  , 52.38  , 175.06 , 181.61 ,
+	52.38  , 55.56  , 175.37 , 181.64 ,
+	55.56  , 58.74  , 175.70 , 181.70 ,
+	58.74  , 61.92  , 176.04 , 181.76 ,
+	61.92  , 65.10  , 176.39 , 181.84 ,
+	65.10  , 68.28  , 176.76 , 181.94 ,
+	68.28  , 71.46  , 177.13 , 182.05 ,
+	71.46  , 74.64  , 177.52 , 182.17 ,
+	74.64  , 77.82  , 177.91 , 182.31 ,
+	77.82  , 81.00  , 178.32 , 182.46 ,
+	81.00  , 84.18  , 178.75 , 182.63 ,
+	84.18  , 87.36  , 179.20 , 182.85 ,
+	87.36  , 90.54  , 179.48 , 183.06 ,
+	90.54  , 93.72  , 179.76 , 183.28 ,
+	93.72  , 96.90  , 180.05 , 183.51 ,
+	96.90  ,100.08  , 180.35 , 183.75 ,
+	100.08 ,103.26  , 180.65 , 183.99 ,
+	103.26 ,106.44  , 180.96 , 184.24 ,
+	106.44 ,109.62  , 181.27 , 184.49 ,
+	109.62 ,112.80  , 181.59 , 184.75	],
+#6 plate
+      [ 60.40  , 63.98  , 174.92 , 181.35 ,
+	63.98  , 67.56  , 175.27 , 181.43 ,
+	67.56  , 71.14  , 175.63 , 181.52 ,
+	71.14  , 74.72  , 176.00 , 181.63 ,
+	74.72  , 78.30  , 176.38 , 181.75 ,
+	78.30  , 81.88  , 176.78 , 181.88 ,
+	81.88  , 85.46  , 177.18 , 182.02 ,
+	85.46  , 89.04  , 177.60 , 182.18 ,
+	89.04  , 92.62  , 178.03 , 182.35 ,
+	92.62  , 96.20  , 178.47 , 182.53 ,
+	96.20  , 99.78  , 178.92 , 182.73 ,
+	99.78  ,103.36  , 179.39 , 182.94 ,
+	103.36 , 106.94 ,  179.88,  183.19,
+	106.94 , 110.52 ,  180.20,  183.43,
+	110.52 , 114.10 ,  180.52,  183.69,
+	114.10 , 117.68 ,  180.84,  183.94,
+	117.68 , 121.26 ,  181.17,  184.21,
+	121.26 , 124.84 ,  181.51,  184.48,
+	124.84 , 128.42 ,  181.86,  184.76,
+	128.42 , 132.00 ,  182.21,  185.04	]
+);
 
-    my $Nplate  = 6;
-    my $Nslit  = 30;
+ my $Nslit  = 30;
+ my $Nblock  = 20;
+ my @offset =(-5.6, -4.4, -3.3, -2.1, -0.9, 0.1);  #according to Seamus, it's substraction 
 
-    my $Nblock  = 20;
- my @PlateZ  = (40, 70, 100, 130, 160, 190); #(30,60,90,120,150,180)+10 in absolute coordinate
-    my $PlateDz   = 9.0/2;
+ for(my $n=1; $n<=$Nplate; $n++){
+	my $n_c     = cnumber($n-1, 1);
+  for(my $i=1; $i<=$Nslit; $i++){  # making all slits
+	my $slit_rotation = ($i-1)*12-$offset[$n-1]; #note the minus sign here
+	my $i_c     = cnumber($i-1, 10);
+	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c";
+	$detector{"mother"}      = "$DetectorName\_plate$n_c";
+	$detector{"description"} = $detector{"name"};
+	$detector{"pos"}         = "0*cm 0*cm 0*cm";
+	$detector{"rotation"}    = "0*deg 0*deg $slit_rotation*deg";
+	$detector{"color"}       = "000000";
+	$detector{"type"}        = "Tube";
+	my $Rin  = $x[$n-1][0];
+	my $Rout = $x[$n-1][77];
+	my $Sphi = $x[$n-1][2];
+	my $Dphi = 12;
+	$detector{"dimensions"}  = "$Rin*cm $Rout*cm $Dz*cm $Sphi*deg $Dphi*deg";
+	$detector{"material"}    = "$material_baffle_within";
+	$detector{"mfield"}      = "no";
+	$detector{"ncopy"}       = 1;
+	$detector{"pMany"}       = 1;
+	$detector{"exist"}       = 1;
+	$detector{"visible"}     = 0;
+	$detector{"style"}       = 0;
+	$detector{"sensitivity"} = "no";
+	$detector{"hit_type"}    = "";
+ 	$detector{"identifiers"} = "";
+	print_det(\%detector, $file);
+    
+      for(my $j=1; $j<=$Nblock; $j++){ # making blocks within slits
+	my $j_c     = cnumber($j-1, 10);
+	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c.block$j_c";
+	$detector{"mother"}      = "$DetectorName\_plate$n_c.slit$i_c";
+	$detector{"description"} = $detector{"name"};
+	$detector{"pos"}         = "0*cm 0*cm 0*cm";
+	$detector{"rotation"}    = "0*deg 0*deg 0*deg";
+	$detector{"color"}       = "$color_baffle";
+	$detector{"type"}        = "Tube";
+	my $Rin  = $x[$n-1][($j-1)*4+0];
+	my $Rout = $x[$n-1][($j-1)*4+1];
+	my $Sphi = $x[$n-1][($j-1)*4+2];
+ 	my $Dphi = $x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2];
+	$detector{"dimensions"}  = "$Rin*cm $Rout*cm $Dz*cm $Sphi*deg $Dphi*deg";
+	$detector{"material"}    = "$material_baffle";
+	$detector{"mfield"}      = "no";
+	$detector{"ncopy"}       = 1;
+	$detector{"pMany"}       = 1;
+	$detector{"exist"}       = 1;
+	$detector{"visible"}     = 1;
+	$detector{"style"}       = 1;
+	$detector{"sensitivity"} = "$sensitivity_baffle";
+	$detector{"hit_type"}    = "$hit_baffle";
+ 	$detector{"identifiers"} = "";
+	print_det(\%detector, $file);
+      }
 
-    for(my $n=0; $n<$Nplate; $n++){
-	for(my $j=0; $j<$Nblock; $j++){
-	    my $j_c     = cnumber($j, 10);
-	    my $n_c     = cnumber($n, 1);
-	    my $i_c     = cnumber(0, 10);
-
-	    $detector{"name"}        = "cleopvdis_plate$n_c.block$j_c";
-	    $detector{"mother"}      = "root";
-	    $detector{"description"} = $detector{"name"};
-	    $detector{"pos"}         = "0*cm 0*cm $PlateZ[$n]*cm";
-	    $detector{"rotation"}    = "0*deg 0*deg 0*deg";
-	    $detector{"color"}       = "ff8800";
-	    $detector{"type"}        = "Tube";
-	    my $Rin  = $x[$n][0+$j*4];
-	    my $Rout = $x[$n][1+$j*4];
-	    my $Sphi = 0.0;
-	    my $Dphi = 360.0;
-
-	    $detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $Sphi*deg $Dphi*deg";
-	    $detector{"material"}    = "Vacuum";
-	    $detector{"mfield"}      = "no";
-	    $detector{"ncopy"}       = 1;
-	    $detector{"pMany"}       = 1;
-	    $detector{"exist"}       = 1;
-	    $detector{"visible"}     = 0;
-	    $detector{"style"}       = 0;
-	    $detector{"sensitivity"} = "no";
-	    $detector{"hit_type"}    = "";
-	    $detector{"identifiers"} = $detector{"name"};
-	    print_det(\%detector, $file);
-
-	    ################################################3
-
-	    $detector{"name"}        = "cleopvdis_plate$n_c.slit$i_c.block$j_c";
-	    $detector{"mother"}      = "cleopvdis_plate$n_c.block$j_c";
-	    $detector{"description"} = $detector{"name"};
-	    $detector{"pos"}         = "0*cm 0*cm 0*cm";
-	    $detector{"rotation"}    = "0*deg 0*deg 0*deg";
-	    $detector{"color"}       = "$color_baffle";
-	    $detector{"type"}        = "Tube";
-
-	    $Sphi = $x[$n][$j*4+2];
-	    $Dphi = $x[$n][$j*4+3];
-
-	    my $startphi = $Sphi + $Dphi;
-	    my $stopphi  = $Sphi + 360.0/$Nslit;
-	    my $phidiff  = $stopphi-$startphi;
-
-	    $detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $startphi*deg $phidiff*deg";
-	    $detector{"material"}    = "$material_baffle";
-	    $detector{"mfield"}      = "no";
-	    $detector{"ncopy"}       = 0;
-	    $detector{"pMany"}       = 1;
-	    $detector{"exist"}       = 1;
-	    $detector{"visible"}     = 1;
-	    $detector{"style"}       = 1;
-	    $detector{"sensitivity"} = "$sensitivity_baffle";
-	    $detector{"hit_type"}    = "$hit_baffle";
-	    $detector{"identifiers"} = $detector{"name"};
-	    print_det(\%detector, $file);
-
-
-	    for(my $i=1; $i<$Nslit; $i++){
-		my $slit_rotation = 360.0*$i/$Nslit;
-		my $i_c     = cnumber($i, 10);
-		$detector{"name"}        = "cleopvdis_plate$n_c.slit$i_c.block$j_c";
-		$detector{"mother"}        = "cleopvdis_plate$n_c.block$j_c";
-		$detector{"description"} = $detector{"name"};
-		$detector{"pos"}         = "0*cm 0*cm 0*cm";
-		$detector{"rotation"}    = "0*deg 0*deg $slit_rotation*deg";
-		$detector{"color"}       = "$color_baffle";
-		$detector{"type"}        = "CopyOf cleopvdis_plate$n_c.slit01.block$j_c";
-		$detector{"dimensions"}  = "0*mm";
-		$detector{"material"}    = "Vacuum";
-		$detector{"mfield"}      = "no";
-		$detector{"ncopy"}       = $i;
-		$detector{"pMany"}       = 1;
-		$detector{"exist"}       = 1;
-		$detector{"visible"}     = 1;
-		$detector{"style"}       = 1;
-		$detector{"sensitivity"} = "no";
-		$detector{"hit_type"}    = "";
-		$detector{"identifiers"} = $detector{"name"};
-		print_det(\%detector, $file);
-	    }
-	}
     }
+  }
+
+#  for(my $n=1; $n<=$Nplate; $n++){
+#   for(my $i=1; $i<=$Nslit; $i++){
+#     for(my $j=1; $j<=$Nblock; $j++){# 
+# 	my $n_c     = cnumber($n-1, 1);
+# 	my $i_c     = cnumber($i-1, 10);
+# 	my $j_c     = cnumber($j-1, 10);
+# 
+# 	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c.block$j_c";
+# 	$detector{"mother"}      = "$DetectorName";
+# 	$detector{"description"} = $detector{"name"};
+# 	$detector{"pos"}         = "0*cm 0*cm $PlateZ[$n-1]*cm";
+# 	$detector{"rotation"}    = "0*deg 0*deg 0*deg";
+# 	$detector{"color"}       = "$color_baffle";
+# 	$detector{"type"}        = "Tube";
+# 	my $Rin  = $x[$n-1][($j-1)*4+0];
+# 	my $Rout = $x[$n-1][($j-1)*4+1];
+# 	my $Sphi = $x[$n-1][($j-1)*4+2]+($i-1)*12;
+#  	my $Dphi = $x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2];
+# 	$detector{"dimensions"}  = "$Rin*cm $Rout*cm $PlateDz*cm $Sphi*deg $Dphi*deg";
+# 	$detector{"material"}    = "$material_baffle";
+# 	$detector{"mfield"}      = "no";
+# 	$detector{"ncopy"}       = ($n-1)*$Nplate+($i-1)*$Nslit+$j;
+# 	$detector{"pMany"}       = 1;
+# 	$detector{"exist"}       = 1;
+# 	$detector{"visible"}     = 1;
+# 	$detector{"style"}       = 1;
+# 	$detector{"sensitivity"} = "$hit_baffle";
+# 	$detector{"hit_type"}    = "$hit_baffle";
+#  	$detector{"identifiers"} = $detector{"name"};
+# 
+# 	print_det(\%detector, $file);
+#      }
+#    }
+#  }
 }
-
-
 make_baffle_blocks();
