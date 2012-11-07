@@ -1,0 +1,13 @@
+here is an example how to use it.
+
+run "run_solid_CLEO_SIDIS_3he"
+this shoots beam into target and output detector hits in evio format
+
+run "gemc_evio2root background_solid_CLEO_SIDIS_3he_5e7.evio background_solid_CLEO_SIDIS_3he_5e7.root"
+this converts evio to root format
+
+in root, run ".x root2hit.C("background_solid_CLEO_SIDIS_3he_5e7.root")"
+this converts hits in flux bank into a txt file to reduce size.
+
+in root, run ".x background.C("background_solid_CLEO_SIDIS_3he_5e7.txt",5e7)"
+this plot histograms showing hits
