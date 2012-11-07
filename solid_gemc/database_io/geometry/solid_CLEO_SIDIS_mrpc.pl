@@ -64,7 +64,7 @@ sub make_mrpc
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "FLUX";
     $detector{"hit_type"}    = "FLUX";
-    $detector{"identifiers"} = "id manual 4000000";
+    $detector{"identifiers"} = "id manual 4100000";
     print_det(\%detector, $file);
 }
 make_mrpc();
