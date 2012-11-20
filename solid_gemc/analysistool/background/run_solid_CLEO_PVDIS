@@ -2,6 +2,7 @@
 gemc \
 -gcard=solid_CLEO_PVDIS.gcard \
 -DBHOST=$GEMC_HOST \
+-HIT_PROCESS_LIST=solid \
 -HALL_MATERIAL=Air \
 -USE_PHYSICSL=QGSP_BERT_HP \
 -RECORD_PASSBY=1 \
