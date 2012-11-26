@@ -1,5 +1,5 @@
 #!/bin/sh
-$GEMC_bin \
+gemc \
 -gcard=solid_CLEO_PVDIS.gcard \
 -DBHOST=$GEMC_HOST \
 -USE_PHYSICSL=FTFP_BERT \
