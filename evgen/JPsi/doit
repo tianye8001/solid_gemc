@@ -1,0 +1,3 @@
+#!/bin/sh
+g++ -O2 -Wall -fPIC -pthread -m64 -I$ROOTSYS/include/root -c -g simu_p.C
+g++ -O2 -m64 simu_p.o -L$ROOTSYS/lib/root -lCore -lCint -lRIO -lNet -lHist -lGraf -lGraf3d -lGpad -lTree -lRint -lPostscript -lMatrix -lPhysics -lMathCore -lThread -lGui -pthread -lm -ldl -rdynamic -ggdb -lgfortran -O2 -lEG -lGed -lHtml -lThread -lGeom -o simu_p
