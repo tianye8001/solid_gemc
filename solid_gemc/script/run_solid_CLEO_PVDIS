@@ -13,7 +13,7 @@ gemc \
 -HIT_VERBOSITY=100 \
 -OUT_VERBOSITY=5 \
 -geometry=1000x1000 \
--EXEC_MACRO=/home/zwzhao/solid/solid_svn/solid/gemc_tool/script/solid_slice.vis \
+-EXEC_MACRO=$SoLID_GEMC/script/solid_slice.vis \
 -USE_QT=1
 
 # -geometry=1000x1000 \
