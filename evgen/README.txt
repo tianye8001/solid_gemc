@@ -1,14 +1,10 @@
-== PVDIS event generator ==========================================================================
+== inclusive event generator used by PVDIS ====================================
 
 FAST HOWTO COMPILE THIS GENERATOR
 
-tested on ifarml6 (64 bit)
-ifarml6> echo $ROOTSYS
-/u/apps/root/PRO/root
-
+tested on ifarm1101 (CentOS 5 x64) on 2012/12/20
 
 1) first you need a working version of cteq C interface library (http://desy.de/~znagy/hep-programs/cteq-pdf/)
-
 
 cd cteq-pdf-1.0.4/
 ./configure
@@ -21,15 +17,23 @@ Remember to add this directory (or the one that you will choose) to your $LD_LIB
 for example:
 setenv LD_LIBRARY_PATH /home/${USER}/lib:${LD_LIBRARY_PATH}
 setenv LIBRARY_PATH /home/${USER}/lib:${LIBRARY_PATH}
+or 
+setenv LD_LIBRARY_PATH /home/${USER}/lib
+setenv LIBRARY_PATH /home/${USER}/lib
 
 2) The Generator itself (thanks Seamus)
 I added the possibility to specify the input file and output file
 Modified the random number generator to TRandom2 class (chosen for period and speed, see http://root.cern.ch/root/html/TRandom.html). The seed now is randomly generated too, so that different parallel simulation could point to the same input file (easier for scripting and parallel processing)
+
+setup root env
  
-This Makefile has been tested in ifarml6 (64 bit) at Jefferson Lab today 12/03/2010
+setenv ROOTSYS /apps/root/5.28-00c-64bit
+setenv PATH ${ROOTSYS}/bin:${PATH}
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
+#setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:${LD_LIBRARY_PATH}
 
-Root must have been built with OpenGL enabled. Note that the scripts supplied for installing GEMC build Root with OpenGL disabled.
-
+Use the root at /apps/root/5.28-00c-64bit, other root might have some problem
+(Root must have been built with OpenGL enabled. Note that the scripts supplied for installing GEMC build Root with OpenGL disabled.)
 
 cd eicRate_20101102/
 make
