@@ -2,7 +2,7 @@ void acceptance(string input_filename)
 {
 gROOT->Reset();
 gStyle->SetPalette(1);
-gStyle->SetOptStat(1);
+gStyle->SetOptStat(0);
 
 const double DEG=180./3.1415926;
 
@@ -10,19 +10,21 @@ char output_filename[80];
 sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.find(".")).c_str());
 TFile *outputfile=new TFile(output_filename, "recreate");
 
-const int n=10;
+const int n=2;
 TH1F *hgen_mom,*hgen_theta;
 TH2F *hgen;
-TH1F *hacceptance_mom[n],*hacceptance_theta[n];
-TH2F *hacceptance[n];
-TH2F *hhit_rz[n],*hhit_xy[n];
-
 char hstname[100];
 sprintf(hstname,"gen_mom");
 hgen_mom=new TH1F(hstname,hstname,110,0,11);    
 sprintf(hstname,"gen_theta");
 hgen_theta=new TH1F(hstname,hstname,250,0,50);    
 sprintf(hstname,"gen");
+
+TH2F *hacceptance_forwardangle,*hacceptance_largeangle;
+
+TH1F *hacceptance_mom[n],*hacceptance_theta[n];
+TH2F *hacceptance[n];
+TH2F *hhit_rz[n],*hhit_xy[n];
 hgen=new TH2F(hstname,hstname,250,0,50,110,0,11);
 for(int i=0;i<n;i++){
    sprintf(hstname,"acceptance_mom_%i",i);
@@ -99,6 +101,43 @@ Int_t nevent = (Int_t)Tflux->GetEntries();
 Int_t nselected = 0;
 cout << nevent << endl;
 
+///radius cut standard as particles can travel 30cm in Z before leave calorimeter
+///SIDIS largeangle EC outerradius is at 140cm
+double rout_cut=1000,rin_cut=0;
+if (input_filename.find("PVDIS",0) != string::npos){  //not used yet
+//   rout_cut = 237;  //target at 10,ec front at 320 with angle 37.4
+//   rin_cut = 0;  //as the detector edge
+//   cout << " PVDIS rcut " << rin_cut << " " << rout_cut <<  endl;
+}
+else if (input_filename.find("SIDIS_3he",0) != string::npos){  // only applys to LAEC
+  rout_cut=126.3;   //target at -350,ec front at -65 with angle 23.9
+  rin_cut=80;   //cut at the actual edge
+  cout << " SIDIS_3he rcut " << rin_cut << " " << rout_cut <<  endl;
+}
+else if (input_filename.find("SIDIS_proton",0) != string::npos){  // only applys to LAEC
+  rout_cut=126.3; //target at -350,ec front at -65 with angle 23.9
+  rin_cut=80;   //cut at the actual edge
+  cout << " SIDIS_proton rcut " << rin_cut << " " << rout_cut <<  endl;
+}
+else if (input_filename.find("JPsi",0) != string::npos){  // only applys to LAEC
+//   rout_cut=127.1;   //target at -360,ec front at -65 with angle 23.3    
+  rout_cut=126.3;   //target at -350,ec front at -65 with angle 23.9
+//   rout_cut=125.9;   //target at -340,ec front at -65 with angle 24.6
+//   rout_cut=125.3;   //target at -330,ec front at -65 with angle 25.3    
+//   rout_cut=124.9;   //target at -320,ec front at -65 with angle 26.1
+//   rout_cut=124.3;   //target at -310,ec front at -65 with angle 26.9
+//      rout_cut=124.0;   //target at -305,ec front at -65 with angle 27.3
+//      rout_cut=123.9;   //target at -300,ec front at -65 with angle 27.8
+//      rout_cut=123.8;   //target at -295,ec front at -65 with angle 28.3
+//   rout_cut=123.2;   //target at -290,ec front at -65 with angle 28.7
+//      rout_cut=122.6;   //target at -280,ec front at -65 with angle 29.7
+//      rout_cut=121.7;   //target at -270,ec front at -65 with angle 30.7
+//   rout_cut=120.1;   //target at -250,ec front at -65 with angle 33.0
+  rin_cut=80;   //cut at the actual edge  
+  cout << " JPsi rcut " << rin_cut << " " << rout_cut <<  endl;
+}
+else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
+
    
 for (Int_t i=0;i<nevent;i++) {
   
@@ -119,30 +158,44 @@ for (Int_t i=0;i<nevent;i++) {
     for (Int_t j=0;j<flux_nfluxhit;j++) {
 //       cout << flux_evn<< " " << flux_nfluxhit << " " << *(flux_ID+j) << " " << *(flux_pid+j) << " " << *(flux_mpid+j) << " " <<  *(flux_Edep+j) << " " << *(flux_E+j) << " " << *(flux_x+j) << " " << *(flux_y+j) << " " << *(flux_z+j) << " " << *(flux_vx+j) << " " << *(flux_vy+j) << " " << *(flux_vz+j)  << " " << *(flux_px+j) << " " << *(flux_py+j) << " " << *(flux_pz+j) << endl;
       
-    int Detector_ID=*(flux_ID+j)/1000000;
-    int SubDetector_ID=(*(flux_ID+j)%1000000)/100000;
-    int channel_ID=(*(flux_ID+j)%1000000)%100000;
+    int detector_ID=*(flux_ID+j)/1000000;
+    int subdetector_ID=(*(flux_ID+j)%1000000)/100000;
+    int subsubdetector_ID=((*(flux_ID+j)%1000000)%100000)/10000;
 //     cout << Detector_ID << " " << SubDetector_ID << " "  << channel_ID << endl;
-     
-    int hit_id=0;
-    if (Detector_ID==1) hit_id=SubDetector_ID-1;
-    else if (Detector_ID==3 && SubDetector_ID==2) hit_id=6;
-    else if (Detector_ID==3 && SubDetector_ID==1) hit_id=7;    
-    else if (Detector_ID==2 && SubDetector_ID==1) hit_id=8;
-    else if (Detector_ID==2 && SubDetector_ID==2) hit_id=9;    
-    else {
-//       cout << "wrong flux_ID " << *(flux_ID+j) << endl; 
-      continue;      
-    }
-    
+
+    int hit_id=-1;
+     switch (detector_ID){
+	case 3:     
+		    switch (subdetector_ID){
+			case 1:   
+				  switch (subsubdetector_ID){
+				    case 1: hit_id=0; break;
+				    default: break;
+				  }
+				  break;
+			case 2:
+				  switch (subsubdetector_ID){
+				    case 1: hit_id=1; break;
+				    default: break;
+				  }
+				  break;
+			default: break;
+		    }
+		    break;
+	default: break;
+      }         
+      if (hit_id==-1) continue;  //skip other subsubdetector
+             
 //       double theta=atan((sqrt((*(flux_x+j))**2+(*(flux_y+j))**2)/(*(flux_z+j)-*gen_vz)))*DEG;
 
-       hacceptance_mom[hit_id]->Fill(mom);
-       hacceptance_theta[hit_id]->Fill(theta);       
-       hacceptance[hit_id]->Fill(theta,mom);
        double r=sqrt(*(flux_x+j)**2+*(flux_y+j)**2);
        hhit_rz[hit_id]->Fill(*(flux_z+j)/10,r/10);
        hhit_xy[hit_id]->Fill(*(flux_x+j)/10,*(flux_y+j)/10);       
+       if ((detector_ID==3 && subdetector_ID==2) && (r/10 < rin_cut || rout_cut < r/10)) continue;
+	 //r cut only applys to LAEC
+	hacceptance_mom[hit_id]->Fill(mom);
+	hacceptance_theta[hit_id]->Fill(theta);       
+	hacceptance[hit_id]->Fill(theta,mom);
        
 //        if (hit_id==7 && theta >17) cout << *(flux_vz+j)/10 << " " << r/10 << " " << theta << " " << mom << endl;
 //       cout << *(flux_vz+j)/10 <<  " " << r << endl;
@@ -156,11 +209,17 @@ for (Int_t i=0;i<nevent;i++) {
 }
 file->Close();
 
+for(int i=0;i<n;i++){
+hacceptance[i]->Divide(hgen);
+hacceptance_mom[i]->Divide(hgen_mom);
+hacceptance_theta[i]->Divide(hgen_theta);
+}
+
 TCanvas *c_gen = new TCanvas("gen","gen",600,600);
 hgen->Draw("colz");
 
 TCanvas *c_hit_rz = new TCanvas("hit_rz","hit_rz",1800,800);
-c_hit_rz->Divide(5,2);
+c_hit_rz->Divide(2,1);
 for(int k=0;k<n;k++){
 c_hit_rz->cd(k+1);
 gPad->SetLogz(1);
@@ -168,92 +227,48 @@ hhit_rz[k]->Draw("colz");
 }
 
 TCanvas *c_hit_xy = new TCanvas("hit_xy","hit_xy",1800,800);
-c_hit_xy->Divide(5,2);
+c_hit_xy->Divide(2,1);
 for(int k=0;k<n;k++){
 c_hit_xy->cd(k+1);
 gPad->SetLogz(1);
 hhit_xy[k]->Draw("colz");
 }
 
-TCanvas *c_acceptance_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
-c_acceptance_gem->Divide(2,3);
-for(int k=0;k<6;k++){
-c_acceptance_gem->cd(k+1);
-hacceptance[k]->Divide(hacceptance[k],hgen);
-hacceptance[k]->Scale(100);
-hacceptance[k]->Draw("colz");
-char hsttitle[80];
-sprintf(hsttitle,"acceptance at GEM plane %i;theta (degree);P (GeV)",k+1);
-hacceptance[k]->SetTitle(hsttitle);
-}
-c_acceptance_gem->SaveAs("acceptance_gem.png");
+// TCanvas *c_acceptance_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
+// c_acceptance_gem->Divide(2,3);
+// for(int k=0;k<6;k++){
+// c_acceptance_gem->cd(k+1);
+// hacceptance[k]->Draw("colz");
+// char hsttitle[80];
+// sprintf(hsttitle,"acceptance at GEM plane %i;theta (degree);P (GeV)",k+1);
+// hacceptance[k]->SetTitle(hsttitle);
+// }
+// c_acceptance_gem->SaveAs("acceptance_gem.png");
 
-TCanvas *c_acceptance_gem_1D = new TCanvas("acceptance_gem_1D","acceptance_gem_1D",1800,800);
-c_acceptance_gem_1D->Divide(2,6);
-for(int k=0;k<6;k++){
-c_acceptance_gem_1D->cd(k+1);
-hacceptance_mom[k]->Divide(hacceptance_mom[k],hgen_mom);
-hacceptance_mom[k]->Scale(100);
-hacceptance_mom[k]->Draw();
-c_acceptance_gem_1D->cd(6+k+1);
-hacceptance_theta[k]->Divide(hacceptance_theta[k],hgen_theta);
-hacceptance_theta[k]->Scale(100);
-hacceptance_theta[k]->Draw();
-}
+// TCanvas *c_acceptance_gem_1D = new TCanvas("acceptance_gem_1D","acceptance_gem_1D",1800,800);
+// c_acceptance_gem_1D->Divide(2,6);
+// for(int k=0;k<6;k++){
+// c_acceptance_gem_1D->cd(k+1);
+// hacceptance_mom[k]->Draw();
+// c_acceptance_gem_1D->cd(6+k+1);
+// hacceptance_theta[k]->Draw();
+// }
 
-TCanvas *c_acceptance_ec = new TCanvas("acceptance_ec","acceptance_ec",1800,800);
-c_acceptance_ec->Divide(2,1);
-for(int k=6;k<8;k++){
-c_acceptance_ec->cd(k-6+1);
-hacceptance[k]->Divide(hacceptance[k],hgen);
-hacceptance[k]->Scale(100);
-hacceptance[k]->Draw("colz");
-char hsttitle[80];
-if (k==6) sprintf(hsttitle,"acceptance at EC largeangle;theta (degree);P (GeV)");
-if (k==7) sprintf(hsttitle,"acceptance at EC forwardangle;theta (degree);P (GeV)");
-hacceptance[k]->SetTitle(hsttitle);
-}
-c_acceptance_ec->SaveAs("acceptance_ec.png");
+hacceptance_forwardangle=(TH2F*) hacceptance[0]->Clone("acceptance_forwardangle");
+hacceptance_largeangle=(TH2F*) hacceptance[1]->Clone("acceptance_largeangle");
 
-TCanvas *c_acceptance_ec_1D = new TCanvas("acceptance_ec_1D","acceptance_ec_1D",1800,800);
-c_acceptance_ec_1D->Divide(2,2);
-for(int k=6;k<8;k++){
-c_acceptance_ec_1D->cd(k-6+1);
-hacceptance_mom[k]->Divide(hacceptance_mom[k],hgen_mom);
-hacceptance_mom[k]->Scale(100);
-hacceptance_mom[k]->Draw();
-c_acceptance_ec_1D->cd(2+k-6+1);
-hacceptance_theta[k]->Divide(hacceptance_theta[k],hgen_theta);
-hacceptance_theta[k]->Scale(100);
-hacceptance_theta[k]->Draw();
-}
+TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1800,800);
+c_acceptance->Divide(2,1);
+c_acceptance->cd(1);
+hacceptance_forwardangle->SetNameTitle("acceptance_forwardangle","acceptance at forwardangle;theta (degree);P (GeV)");
+hacceptance_forwardangle->Draw("colz");
+c_acceptance->cd(2);
+hacceptance_largeangle->SetNameTitle("acceptance_largeangle","acceptance at largeangle;theta (degree);P (GeV)");
+hacceptance_largeangle->Draw("colz");
+c_acceptance->SaveAs("acceptance.png");
 
-TCanvas *c_acceptance_cc = new TCanvas("acceptance_cc","acceptance_cc",1800,800);
-c_acceptance_cc->Divide(2,1);
-for(int k=8;k<10;k++){
-c_acceptance_cc->cd(k-8+1);
-hacceptance[k]->Divide(hacceptance[k],hgen);
-hacceptance[k]->Scale(100);
-hacceptance[k]->Draw("colz");
-char hsttitle[80];
-if (k==8) sprintf(hsttitle,"acceptance at CC lightgas;theta (degree);P (GeV)");
-if (k==9) sprintf(hsttitle,"acceptance at CC heavygas;theta (degree);P (GeV)");
-hacceptance[k]->SetTitle(hsttitle);
-}
-c_acceptance_cc->SaveAs("acceptance_cc.png");
-
-TCanvas *c_acceptance_cc_1D = new TCanvas("acceptance_cc_1D","acceptance_cc_1D",1800,800);
-c_acceptance_cc_1D->Divide(2,2);
-for(int k=8;k<10;k++){
-c_acceptance_cc_1D->cd(k-8+1);
-hacceptance_mom[k]->Divide(hacceptance_mom[k],hgen_mom);
-hacceptance_mom[k]->Scale(100);
-hacceptance_mom[k]->Draw();
-c_acceptance_cc_1D->cd(2+k-8+1);
-hacceptance_theta[k]->Divide(hacceptance_theta[k],hgen_theta);
-hacceptance_theta[k]->Scale(100);
-hacceptance_theta[k]->Draw();
-}
+hacceptance_forwardangle->SetDirectory(outputfile);
+hacceptance_largeangle->SetDirectory(outputfile);
 
 outputfile->Write();
 outputfile->Flush();
