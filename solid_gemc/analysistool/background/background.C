@@ -615,7 +615,7 @@ for(int k=8;k<16;k++){
 //   hniel_neutron->Fill(log10(Ek),niel);
 // }
 
-gSystem->Load("../niel/niel_fun_cc.so"); 
+gSystem->Load("../niel/niel_fun_lib.so"); 
 //   TNiel niel_proton("niel/niel_proton.txt");
 //   TNiel niel_electron("niel/niel_electron.txt");
 //   TNiel niel_pions("niel/niel_pions.txt");
