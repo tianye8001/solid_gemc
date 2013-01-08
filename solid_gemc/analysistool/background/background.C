@@ -14,7 +14,7 @@
 #include <TPaveText.h>
 #include <TText.h>
 #include <TSystem.h>
-#include "niel/niel_fun.h"
+#include "../niel/niel_fun.h"
 
 using namespace std;
 
@@ -615,11 +615,11 @@ for(int k=8;k<16;k++){
 //   hniel_neutron->Fill(log10(Ek),niel);
 // }
 
-gSystem->Load("niel/niel_fun_cc.so"); 
+gSystem->Load("../niel/niel_fun_cc.so"); 
 //   TNiel niel_proton("niel/niel_proton.txt");
 //   TNiel niel_electron("niel/niel_electron.txt");
 //   TNiel niel_pions("niel/niel_pions.txt");
-TNiel niel_neutron("niel/niel_neutron.txt");
+TNiel niel_neutron("../niel/niel_neutron.txt");
 TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",420, -10,4);
 for(int i=0;i<420;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(14./420.)-10))));
 TCanvas *c_niel_neutron = new TCanvas("niel_neutron","niel_neutron",600,600);
