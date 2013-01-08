@@ -27,7 +27,7 @@ gStyle->SetOptStat(111111);
 const double DEG=180./3.1415926;
 
 char output_filename[80];
-sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.find(".")).c_str());
+sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
 TFile *outputfile=new TFile(output_filename, "recreate");
 
 const int n=18; // number of detector
@@ -163,6 +163,70 @@ while (!input.eof()){
       default:      hpid->Fill(10); break;      
     }
     
+//     int detector_ID=*(flux_ID+j)/1000000;
+//     int subdetector_ID=(*(flux_ID+j)%1000000)/100000;
+//     int subsubchannel_ID=((*(flux_ID+j)%1000000)%100000)/10000;
+// //     cout << Detector_ID << " " << SubDetector_ID << " "  << channel_ID << endl;
+// 
+//     
+//         int hit_id;
+//      switch (detector_ID){
+// 	case 1:     
+// 		    switch (subdetector_ID){
+// 			case 1: hit_id=0; break;
+// 			case 2: hit_id=1; break;
+// 			case 3: hit_id=2; break;
+// 			case 4: hit_id=3; break;
+// 			case 5: hit_id=4; break;
+// 			case 6: hit_id=5; break;
+// 			default: cout << "wrong flux_ID " << *(flux_ID+j) << endl; break;
+// 		    }
+// 		    break;
+// 	case 2:      
+// 		    switch (subdetector_ID){
+// 			case 1: hit_id=6; break;
+// 			case 2: hit_id=7; break;
+// 		      default: cout << "wrong flux_ID " << *(flux_ID+j) << endl; break;
+// 		    }
+// 		    break;
+// 	case 3:     
+// 		    switch (subdetector_ID){
+// 			case 1:   
+// 				  switch (subsubdetector_ID){
+// 				    case 1: hit_id=8; break;
+// 				    case 2: hit_id=9; break;
+// 				    case 3: hit_id=10; break;
+// 				    case 4: hit_id=11; break;
+// 				    default: cout << "wrong flux_ID " << *(flux_ID+j) << endl; break;
+// 				  }
+// 				  break;
+// 			case 2:
+// 				  switch (subsubdetector_ID){
+// 				    case 1: hit_id=12; break;
+// 				    case 2: hit_id=13; break;
+// 				    case 3: hit_id=14; break;
+// 				    case 4: hit_id=15; break;
+// 				    default: cout << "wrong flux_ID " << *(flux_ID+j) << endl; break;
+// 				  }
+// 				  break;
+// 			default: cout << "wrong flux_ID " << *(flux_ID+j) << endl; break;
+// 		    }
+// 		    break;
+// 	case 4:     
+// 		    switch (subdetector_ID){
+// 			case 1:   
+// 				  switch (subsubdetector_ID){
+// 				    case 1: hit_id=16; break;
+// 				    case 0: hit_id=17; break;
+// 				    default: cout << "wrong flux_ID " << *(flux_ID+j) << endl; break;
+// 				  }
+// 				  break;
+// 			default: cout << "wrong flux_ID " << *(flux_ID+j) << endl; break;
+// 		    }
+// 		    break;
+// 	default: cout << "wrong flux_ID " << *(flux_ID+j) << endl; break;
+//       }   
+      
 //     cout << flux_ID << endl;    
     int detector_ID=flux_ID/100000;
     if ( (detector_ID<11 || detector_ID >16) && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=41 )    
@@ -219,8 +283,6 @@ while (!input.eof()){
     double r=sqrt(pow(flux_x,2)+pow(flux_y,2));    
     double P=sqrt(pow(flux_px,2)+pow(flux_py,2)+pow(flux_pz,2));
     double M=sqrt(pow(flux_E,2)-pow(P,2));
-    
-//     if(par==2) cout << M << endl;
 	  
     ///geant4 or gemc problem, misidentify photon and electron
       if(par!=1){
@@ -243,8 +305,28 @@ while (!input.eof()){
 	}
       }
       
-      if ( flux_pid != 22 && abs(flux_pid) !=11 && flux_pid !=2112 ) { continue;} ///anything except photon and electron and neutron
+      if ( flux_pid != 22 && abs(flux_pid) !=11 && flux_pid !=2112 ) { continue;} ///cut anything except photon and electron and neutron
 
+
+      double hit_phi=fabs(atan(flux_y/flux_x)/3.1416*180);
+      if (flux_x > 0 && flux_y > 0) hit_phi=hit_phi;
+      else if (flux_x < 0 && flux_y > 0) hit_phi=180-hit_phi;
+      else if (flux_x < 0 && flux_y < 0) hit_phi=180+hit_phi;    
+      else if (flux_x > 0 && flux_y < 0) hit_phi=360-hit_phi;
+      else cout << " flux wrong? " << flux_x << " " <<  flux_y << endl; 
+      
+      double arearatio_cutStraightPhoton=1;
+      bool cutStraightPhoton=false;   //cut away straight photon due to PVDIS baffle problem
+      if(input_filename.find("PVDIS",0) != string::npos){ 
+	  if (par==1){
+	    arearatio_cutStraightPhoton=1./2.;  //cut 180 degree away in total, 1/2 of azimuth left
+	    for(int i=0;i<30;i++){
+	      if(fabs(hit_phi-(4.5+i*12))<3) cutStraightPhoton=true;
+	    }
+	  }
+      }      
+      if (cutStraightPhoton) continue;
+      
       double Ek;
       if (par==1) Ek=flux_E;
       else Ek=flux_E-sqrt(pow(flux_E,2)-pow(P,2));
@@ -264,7 +346,7 @@ while (!input.eof()){
       hElog_R[hit_id][0]->Fill(log10(flux_E/1e3),r/10.);
       hEklog_R[hit_id][0]->Fill(log10(Ek/1e3),r/10.);
       //100MeV cut used for photon in later calorimeter simulation
-      if(flux_E<100) hEklog_R_cut[hit_id][0]->Fill(log10(Ek/1e3),r/10.);      
+      if(flux_E<100) hEklog_R_cut[hit_id][0]->Fill(log10(Ek/1e3),r/10.);   
     }
     
     hPlog[hit_id][par]->Fill(log10(P/1e3));
@@ -284,7 +366,7 @@ while (!input.eof()){
       hvertex[hit_id][par]->Fill(flux_vz/10.,flux_vy/10.);
       if (par==1 || par==2) hvertex[hit_id][0]->Fill(flux_vz/10.,flux_vy/10.);      
 
-      double area=2*3.1415926*r*50.; // in mm2, every bin in R is 5cm
+      double area=2*3.1415926*r*50.*arearatio_cutStraightPhoton; // in mm2, every bin in R is 5cm
       double kHz=1e-3;    
       double weight=(current/Nevent)*kHz/area;
 	
@@ -390,6 +472,16 @@ for(int l=0;l<m;l++){
 for(int k=0;k<n;k++){
   c_Elog->cd(l*n+k+1);
   hElog[k][l]->Draw();  
+}
+}
+
+TCanvas *c_Eklog = new TCanvas("Eklog","Eklog",1800,900);
+c_Eklog->Divide(n,m);
+gPad->SetLogy(1);
+for(int l=0;l<m;l++){
+for(int k=0;k<n;k++){
+  c_Eklog->cd(l*n+k+1);
+  hEklog[k][l]->Draw();  
 }
 }
 

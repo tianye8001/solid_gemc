@@ -9,7 +9,7 @@ void root2hit(string input_filename){
 char output_filename[80];
 // sprintf (output_filename, "%s_fluxT.txt",path);
 // sprintf (output_filename, "%s.txt",path);
-sprintf(output_filename, "%s.txt",input_filename.substr(0,input_filename.find(".")).c_str());
+sprintf(output_filename, "%s.txt",input_filename.substr(0,input_filename.rfind(".")).c_str());
 ofstream output(output_filename);
 
 // char input_filename[80]
