@@ -1,0 +1,56 @@
+============= what it does ====================
+The code is doing a simulation for Calorimeter Scifi
+
+=============how to compile =====================
+you need to 
+1. have a standard build of geant4 with openGL and setup its environment. (I used version 4.9.3.p02 with instruction http://geant4.slac.stanford.edu/installation/)
+2. have compat-gcc-*-c++* package installed (I use compat-gcc-34-c++-3.4.6-20.fc14.x86_64 on my fedora 14 x64 system) and make sure the include directory in GNUmakefile is correct
+3. then you can type "make", binary will be in bin/*
+
+============== how to run =========================
+1. interactive mode, 
+just run "CaloSim", it will use mac/vis.mac to create openGL graphic windows
+
+2. batch mode
+eg. "CaloSim mac/100_2GeV.mac out.root"
+
+3. options
+besides standard geant4 options, there are some addtional option control particle gun. 
+use "ls /Gun" after start interactive mode to see them
+
+4. turn field on/off
+  in CaloSimDetectorConstruction.cc, comment/uncomment line 
+  "fpMagField->SetMagFieldValue(2*tesla);"
+
+5. change radiation material
+   in CaloSimDetectorConstruction.cc, modify the line
+   "G4LogicalVolume* logicCaloBlock = new G4LogicalVolume(solidCaloBlock,Tungsten,"CaloBlockLV");"
+
+============== script ==============================
+in script directory, find some script used to view resulting root files
+
+
+============== doc ================================
+CaloSim.pdf from original authur
+
+
+============== old stuff ===========================
+we may dig out useful stuff from old mac, old scripts, old src.
+
+
+--------------
+Zhiwen Zhao
+3/17/2011
+
+
+============== Update List ===========================
+
+03/21/2011 Jin Huang <jinhuang@jlab.org>
+	Added support for
+    * Set field from mac script: ex. mac/TestFile.mac
+    * Added hadron simulation, beam of pion, kaon from mac script: ex. mac/TestFile.mac
+    * Added option for preshower - shower confirguration: switch configurations at src/CaloSimDetectorConstruction.C::Construct()
+    * Script tools to convert GEMC phase space to input file and load via mac scripts: high level script at script/GEMC2CaloSimScript.C
+
+
+

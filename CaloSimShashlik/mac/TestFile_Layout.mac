@@ -1,0 +1,52 @@
+#
+# Macro file for the initialization phase of "exampleN02.cc"
+# when runing in interactive mode
+#
+# Sets some default verbose
+#
+# run with /control/execute mac/TestFile_Layout.mac
+#
+/control/verbose 2
+/run/verbose 2
+
+
+/particle/list
+/process/list
+
+
+# /Gun/InputBeamParticle mu-
+/Gun/InputBeamParticle e-
+# /Gun/InputBeamParticle pi-
+# /Gun/InputBeamParticle kaon-
+
+/Gun/UseFile 1
+# /Gun/inputFile script/acceptance_solid_CLEO_SIDIS_3he_edge_test_1e6.root.Test.dat
+/Gun/inputFile script/acceptance_solid_CLEO_SIDIS_3he_edge_test_1e6.root.CriticalTest.dat
+
+/Gun/UseMagneticField 0 0 1.5
+# /Gun/UseMagneticField 0 0 0
+
+
+
+
+#
+/vis/open OGL 600x600-0+0
+
+/vis/drawVolume
+
+/vis/viewer/set/projection p
+/vis/viewer/set/viewpointThetaPhi -0 -0 deg
+
+/vis/scene/add/trajectories smooth
+
+/vis/scene/add/hits
+
+/vis/scene/endOfEventAction accumulate
+
+#
+# /run/beamOn 6
+
+/vis/ogl/set/printMode pixmap
+/vis/ogl/printEPS
+
+

@@ -1,0 +1,38 @@
+#
+# Macro file for the initialization phase of "exampleN02.cc"
+# when runing in interactive mode
+#
+# Sets some default verbose
+#
+# run with /control/execute mac/TestFile.mac
+#
+/control/verbose 0
+/run/verbose 0
+
+
+/particle/list
+/process/list
+
+
+# /Gun/InputBeamParticle e-
+/Gun/InputBeamParticle mu-
+# /Gun/InputBeamParticle kaon-
+
+/Gun/UseFile 1
+# /Gun/inputFile script/electron_BaBar.track.dat
+# /Gun/inputFile script/Illustration.track.dat
+/Gun/inputFile script/solid_BaBar_PVDIS_electron.root.dat
+
+# /Gun/UseMagneticField 0 0 1.5
+/Gun/UseMagneticField 0 0 0
+
+
+
+
+#
+/run/beamOn 200000
+
+# /vis/ogl/set/printMode pixmap
+# /vis/ogl/printEPS
+
+

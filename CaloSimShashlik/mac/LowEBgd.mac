@@ -1,0 +1,32 @@
+#
+# Macro file for running mulan quietly
+#
+#
+# Sets some default verbose
+# run with /control/execute mac/LowEBgd.mac
+
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+/particle/list
+/process/list
+
+/Gun/InputBeamParticle e-
+
+/Gun/Energy 0 
+/Gun/EnergySpread 20 
+
+/Gun/Angle	10
+/Gun/AngleRand	10
+
+/Gun/UseMagneticField 0 0 1.5
+
+
+/run/beamOn 12000
+
+
+
+
+

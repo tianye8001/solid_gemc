@@ -1,0 +1,30 @@
+#
+# Macro file for running mulan quietly
+#
+#
+# Sets some default verbose
+#
+
+/control/verbose 0
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+
+/Gun/Energy 1.5 GeV
+
+#/mygen/inputFile /scratch/charm/rmcnabb/electrons.dat
+
+
+#/mygen/Energy 2.0
+
+#/mygen/Angle 5
+
+#/run/setCut 1
+
+
+/run/beamOn 1000
+
+
+
+
+
