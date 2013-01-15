@@ -1,3 +1,32 @@
+------------------------------------------------------------------ 
+New for CaloSimShashlik
+- Jin Huang <jinhuang@jlab.org>
+------------------------------------------------------------------
+
+CaloSimShashlik is based on CaloSim, and simulate for Shashlik-type calorimeters. Here are a few instruction to use CaloSimShashlik:
+
+•	CaloSimShashlik/include/Config.h specify the configuration for calorimeter, e.g. how many layers are in the module. It was varied a lot to search for the optimal configuration for SoLID. I also use it in the analysis script to keep simulation and reconstruction synced. 
+•	CaloSimShashlik/src/CaloSimDetectorConstruction.cc contain the construction of detectors. The main switch is CaloSimDetectorConstruction::Construct(), which lead to several different designs, e.g. Hexagon layout
+•	The input track can be from a text file or from a random range, depending on the command. Examples are 
+o	Text input : CaloSimShashlik/mac/TestFile.mac 
+Each line of the text file represent one event, follow the format of sscanf(buffer, "%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n", &X0, &Y0, &Z0, &XP0, &YP0, &ZP0, &E, &theta);
+o	Flat random range : CaloSimShashlik/mac/LowEBgdElec.mac , which cover kinematic energy range of minimal to 20GeV, polar angle of 10 to 10+10 degrees. 
+•	The output out.root contains two trees, which is synced to each other. I usually do T->AddFriend(ntuple) to use both. TTree T is defined in CaloSimSD::CaloSimSD(), in which there are two species of arrays
+o	block* is arrays of the calorimeter modules
+o	*layer is arrays of the longitudinal layers
+
+o	*WEdep* is energy deposition in absorber, currently the material is lead
+o	*fiberEdep* is the energy deposition in the scintillator
+o	*glueEdep* is the energy deposition between scintillator and absorbers, currently the gap is filled with air.
+o	*fiberPhotons* is the expected photos at the output of WLS fiber, parameterized from a CLEO NIM paper. It is also generated using a Poisson distribution to simulate statistical fluctuations. 
+
+This code was compiled with geant4.9.4. And the first thing a new user can try after installation: (1) run the compiled code, CaloSimShashlik, and a GUI will show up. (2) run mac/TestFile.mac to open an event display (need to change the initial track file though). For batch runs: CaloSimShashlik <*.mac> <*.root>
+
+
+------------------------------------------------------------------ 
+From the old CaloSim 
+------------------------------------------------------------------
+
 ============= what it does ====================
 The code is doing a simulation for Calorimeter Scifi
 
