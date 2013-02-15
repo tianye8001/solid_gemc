@@ -73,11 +73,12 @@ int main (Int_t argc, char *argv[])
 // 	break;
 //       }
 //     }
-    Int_t nevents=500000; //number of events
+    Int_t nevents=1000000; //number of events
     Double_t Ebeam=11.0; // Beam Energy
     char *acceptance_root_file;
+    char *output_root_file;
     if (argc==1){
-    cout << "./simu_p -n[nevents] -b[Ebeam] -c[acceptance_root_file]" << endl;
+    cout << "./simu_p -n[nevents as integer like 1000000] -b[Ebeam in GeV] -c[acceptance_root_file produced by acceptance.C from SoLID_GEMC] -o[output_root_file]" << endl;
     }
     else{
 
@@ -92,33 +93,30 @@ int main (Int_t argc, char *argv[])
       case 'c':
 	acceptance_root_file = &argv[i][2]; 
 	break;	
+      case 'o':
+	output_root_file = &argv[i][2];
+	break;	
       default:
 	cout << "Warning!!!! Unknown option: " << &argv[i][1] << endl;
+	return 0;
 	break;
       }
     }
 
     Double_t mass[10];
     
-//     TFile *file1 = new TFile("./acceptance/accep.root");
+//     TFile *file1 = new TFile("accep.root");
 //     TH2F *hf = (TH2F*)file1->Get("h2");
 //     TH2F *hl = (TH2F*)file1->Get("h3"); 
     
-//     TFile *file1 = new TFile("/home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/acceptance/CLEO_JPsi_340/acceptance_solid_CLEO_JPsi_negative_output.root");    
-//     TFile *file1 = new TFile("/home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/acceptance/CLEO_JPsi_350/acceptance_solid_CLEO_JPsi_negative_output.root");    
-//     TFile *file1 = new TFile("/home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/acceptance/CLEO_JPsi_360/acceptance_solid_CLEO_JPsi_negative_output.root");    
     TFile *file1 = new TFile(acceptance_root_file);    
     if (file1->IsZombie()) {
        cout << "Error opening file" << acceptance_root_file << endl;
        return 0;
-//        exit(-1);
     }
-    else cout << "open file " << acceptance_root_file << endl;
-    
+    else cout << "open file " << acceptance_root_file << endl;    
     TH1F *hf = (TH1F*)file1->Get("acceptance_forwardangle");
     TH1F *hl = (TH1F*)file1->Get("acceptance_largeangle");
-//     TH2F *hf = (TH2F*)file1->Get("acceptance_6");
-//     TH2F *hl = (TH2F*)file1->Get("acceptance_3");
     
 
     TLorentzVector *pBeam = new TLorentzVector(0.,0.,Ebeam,sqrt(Ebeam*Ebeam+mass_e*mass_e));
@@ -146,7 +144,7 @@ int main (Int_t argc, char *argv[])
     TLorentzVector *p4_je1 = new TLorentzVector(0.,0.,0.,0.);
     TLorentzVector *p4_je2 = new TLorentzVector(0.,0.,0.,0.);
         
-    TFile *file = new TFile("temp_p.root","RECREATE");
+    TFile *file = new TFile(output_root_file,"RECREATE");
     TTree *T = new TTree("T","T");
     T->SetDirectory(file);
     
@@ -226,6 +224,10 @@ int main (Int_t argc, char *argv[])
     T->Branch("accep_je2",&accep_je2,"data/D");
     T->Branch("accep_p",&accep_p,"data/D");
 
+    Double_t accep_e_both,accep_p_both;
+    T->Branch("accep_e_both",&accep_e_both,"data/D");
+    T->Branch("accep_p_both",&accep_p_both,"data/D");        
+    
     Double_t A = 0.94;
     Double_t b = -0.97;
     Double_t alpha = 1./137.;
@@ -244,9 +246,11 @@ int main (Int_t argc, char *argv[])
       
 
       //sample electron's angle and momentum
-      p_e = gRandom->Uniform(0.5,3.0);
-      theta_e = acos(gRandom->Uniform(0.85,cos(8./180.*3.1415926)));
-      phi_e = gRandom->Uniform(0.,2.*3.141596);
+//       p_e = gRandom->Uniform(0.5,3.0);
+      p_e = gRandom->Uniform(0.,3.0);      
+//       theta_e = acos(gRandom->Uniform(0.85,cos(8./180.*3.1415926)));
+      theta_e = acos(gRandom->Uniform(cos(40./180.*3.1415926),cos(0./180.*3.1415926))); //random selection in solid angle need to go with cos(theta)    
+      phi_e = gRandom->Uniform(0.,2.*3.1415926);
       
       p4_ep->SetPxPyPzE(p_e*sin(theta_e)*cos(phi_e),p_e*sin(theta_e)*sin(phi_e),p_e*cos(theta_e),sqrt(p_e*p_e+mass_e*mass_e));
       *pq = *pBeam - *p4_ep;
@@ -255,13 +259,14 @@ int main (Int_t argc, char *argv[])
       *ps1 = *ps - *p4_ep;
 
       // ps1->SetPxPyPzE(0,0,11,sqrt(11*11+mass_p*mass_p)+mass_jpsi);
-      
+
       //judge whether the event pass the kinematics
       if (ps1->M2() > pow(mass_jpsi+mass_p,2)){
 	flag_kin1 = 1;
 	//sample proton solid angle;
-	theta_p = acos(gRandom->Uniform(0.85,cos(8./180.*3.1415926)));
-	phi_p = gRandom->Uniform(0.,2.*3.141596);
+// 	theta_p = acos(gRandom->Uniform(0.85,cos(8./180.*3.1415926)));
+	theta_p = acos(gRandom->Uniform(cos(40./180.*3.1415926),cos(0./180.*3.1415926))); //random selection in solid angle need to go with cos(theta)    
+	phi_p = gRandom->Uniform(0.,2.*3.1415926);
 	
 	TVector3 p3_p(sin(theta_p)*cos(phi_p),sin(theta_p)*sin(phi_p),cos(theta_p));
 	Double_t aa = (ps1->M2()+mass_p*mass_p-mass_jpsi*mass_jpsi)/2.;
@@ -413,6 +418,7 @@ int main (Int_t argc, char *argv[])
 		  bin=hf->FindBin(theta_e,p_e);  
 		  hf->GetBinXYZ(bin,binx,biny,binz);
 		  accep_e = hf->GetBinContent(binx,biny);
+		  accep_e_both = hf->GetBinContent(binx,biny) + hl->GetBinContent(binx,biny);
 
 		  bin=hf->FindBin(theta_je1,p_je1);
 		  hf->GetBinXYZ(bin,binx,biny,binz);
@@ -425,11 +431,14 @@ int main (Int_t argc, char *argv[])
 		  bin=hf->FindBin(theta_p,p_p);  
 		  hf->GetBinXYZ(bin,binx,biny,binz);
 		  accep_p = hf->GetBinContent(binx,biny);
+		  accep_p_both = hf->GetBinContent(binx,biny) + hl->GetBinContent(binx,biny);  
 		  
-		  if (accep_e>0.&&accep_je1>0.&&accep_je2>0.) flag_accep=1;
-		  if (flag_accep>0.&&flag_kin1>0.&&flag_kin2>0.){
+// 		  if (accep_e>0.&&accep_je1>0.&&accep_je2>0.) flag_accep=1;
+// 		  if (5<theta_e && theta_e<40 && 5<theta_je1 && theta_je1<40 && 5<theta_je2 && theta_je2<40 ) flag_accep=1;
+// 		  if (flag_accep>0.&&flag_kin1>0.&&flag_kin2>0.){
+		  if (flag_kin1>0.&&flag_kin2>0.){		    
 		    T->Fill();
-		    if (neve1%1000==0) cout << neve1 << endl;
+		    if (neve1%100000==0) cout << neve1 << endl;
 		    neve1++;
 		    if (neve1 > nevents){
 		      qflag = 0;
