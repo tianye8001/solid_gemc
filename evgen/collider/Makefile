@@ -4,9 +4,10 @@
 # 
 ROOTLIBS      = $(shell root-config --libs)
 ROOTGLIBS     = $(shell root-config --glibs)
+ROOTINC       = $(shell root-config --incdir)
 CXX           = g++
 CXXFLAGS      = -Wall -g -frtti -fno-exceptions -fPIC \
-                   -DLINUXVERS -I$(ROOTSYS)/include -I$(LHAPDF)/include -O
+                   -DLINUXVERS -I$(ROOTINC) -I$(LHAPDF)/include -O
 
 O=collider
 
