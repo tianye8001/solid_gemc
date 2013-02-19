@@ -83,7 +83,7 @@ setenv LIBRARY_PATH /home/${USER}/lib:${ROOTSYS}/lib
  --- 
 
 == SIDIS event generator ==========================================================================
-tested on ifarm64
+tested on ifarm1101
 
 1. get lhapdf and compile
 mkdir lhapdf
@@ -98,7 +98,10 @@ wget http://www.hepforge.org/archive/lhapdf/pdfsets/5.8.5/cteq6m.LHpdf
 
 2. compile and run "collider"
 cd collider
-source  /apps/root/PRO/setroot_CUE
+setenv ROOTSYS /apps/root/5.28-00c-64bit
+setenv PATH ${ROOTSYS}/bin:${PATH}
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
+#setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:${LD_LIBRARY_PATH}
 setenv LHAPDF /PathOflhapdf
 setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
 make
