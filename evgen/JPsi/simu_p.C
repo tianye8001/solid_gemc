@@ -330,7 +330,7 @@ int main (Int_t argc, char *argv[])
 		  *pt = *p4_recoil - *pTarget;
 		  t = -pt->M2();
 		  
-		  R = pow((a*mass_jpsi*mass_jpsi-Q2)/(a*mass_jpsi*mass_jpsi),n) -1;
+		  R = pow((a*mass_jpsi*mass_jpsi+Q2)/(a*mass_jpsi*mass_jpsi),n) -1;
 		  theta_q = pq->Theta()/3.1415926*180.;
 		  q = pq->P();
 		  W = sqrt(pow(mass_p + pq->E(),2)-pow(pq->P(),2));
