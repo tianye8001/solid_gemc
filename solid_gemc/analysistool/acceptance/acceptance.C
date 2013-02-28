@@ -20,7 +20,7 @@ sprintf(hstname,"gen_theta");
 hgen_theta=new TH1F(hstname,hstname,250,0,50);    
 sprintf(hstname,"gen");
 
-TH2F *hacceptance_forwardangle,*hacceptance_largeangle;
+TH2F *hacceptance_forwardangle,*hacceptance_largeangle,*hacceptance_overall;
 
 TH1F *hacceptance_mom[n],*hacceptance_theta[n];
 TH2F *hacceptance[n];
@@ -121,13 +121,13 @@ else if (input_filename.find("SIDIS_proton",0) != string::npos){  // only applys
 }
 else if (input_filename.find("JPsi",0) != string::npos){  // only applys to LAEC
 //   rout_cut=127.1;   //target at -360,ec front at -65 with angle 23.3    
-  rout_cut=126.3;   //target at -350,ec front at -65 with angle 23.9
+//   rout_cut=126.3;   //target at -350,ec front at -65 with angle 23.9
 //   rout_cut=125.9;   //target at -340,ec front at -65 with angle 24.6
 //   rout_cut=125.3;   //target at -330,ec front at -65 with angle 25.3    
 //   rout_cut=124.9;   //target at -320,ec front at -65 with angle 26.1
 //   rout_cut=124.3;   //target at -310,ec front at -65 with angle 26.9
 //      rout_cut=124.0;   //target at -305,ec front at -65 with angle 27.3
-//      rout_cut=123.9;   //target at -300,ec front at -65 with angle 27.8
+     rout_cut=123.9;   //target at -300,ec front at -65 with angle 27.8
 //      rout_cut=123.8;   //target at -295,ec front at -65 with angle 28.3
 //   rout_cut=123.2;   //target at -290,ec front at -65 with angle 28.7
 //      rout_cut=122.6;   //target at -280,ec front at -65 with angle 29.7
@@ -256,15 +256,23 @@ hhit_xy[k]->Draw("colz");
 
 hacceptance_forwardangle=(TH2F*) hacceptance[0]->Clone("acceptance_forwardangle");
 hacceptance_largeangle=(TH2F*) hacceptance[1]->Clone("acceptance_largeangle");
+hacceptance_overall=(TH2F*) hacceptance_largeangle->Clone();
+hacceptance_overall->Add(hacceptance_forwardangle);
 
-TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1800,800);
-c_acceptance->Divide(2,1);
+TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",500,900);
+c_acceptance->Divide(1,3);
 c_acceptance->cd(1);
+gPad->SetLogy(1);
 hacceptance_forwardangle->SetNameTitle("acceptance_forwardangle","acceptance at forwardangle;theta (degree);P (GeV)");
 hacceptance_forwardangle->Draw("colz");
 c_acceptance->cd(2);
+gPad->SetLogy(1);
 hacceptance_largeangle->SetNameTitle("acceptance_largeangle","acceptance at largeangle;theta (degree);P (GeV)");
 hacceptance_largeangle->Draw("colz");
+c_acceptance->cd(3);
+gPad->SetLogy(1);
+hacceptance_overall->SetNameTitle("acceptance","acceptance;theta (degree);P (GeV)");
+hacceptance_overall->Draw("colz");
 c_acceptance->SaveAs("acceptance.png");
 
 hacceptance_forwardangle->SetDirectory(outputfile);
