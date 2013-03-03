@@ -12,7 +12,7 @@ void proj(char *file){
 //   Double_t range_P= 3.-0.5;  // e mom range  
   Double_t time = 50*3600*24;  //50 days in seconds
   Double_t eff = 0.85;
-  Double_t overall_NOneve = cov *lumi * br * range_angle * range_P * eff * time; 
+  Double_t overall_NOneve = cov *lumi * br * range_angle * range_P * eff * time;  
 
   TChain *T = new TChain("T","T");
   T->AddFile(file);
@@ -55,9 +55,9 @@ const int n=13;
 ///4 fold 
 char *weight[n]={
 "",
-"dxs","dxs*weight","dxs*weight*weight_decay","dxs*weight*weight_decay*accep_je1*(p_je1>0.5)*accep_je2*(p_je1>0.5)*accep_e*(p_e>0.5)*accep_p*(p_p>0.5)*%f",
-"dxs_2g","dxs_2g*weight","dxs_2g*weight*weight_decay","dxs_2g*weight*weight_decay*accep_je1*(p_je1>0.5)*accep_je2*(p_je1>0.5)*accep_e*(p_e>0.5)*accep_p*(p_p>0.5)*%f",
-"dxs_23g","dxs_23g*weight","dxs_23g*weight*weight_decay","dxs_23g*weight*weight_decay*accep_je1*(p_je1>0.5)*accep_je2*(p_je1>0.5)*accep_e*(p_e>0.5)*accep_p*(p_p>0.5)*%f"
+"dxs","dxs*weight","dxs*weight*weight_decay","dxs*weight*weight_decay*accep_je1*accep_je2*accep_e*accep_p*%f",
+"dxs_2g","dxs_2g*weight","dxs_2g*weight*weight_decay","dxs_2g*weight*weight_decay*accep_je1*accep_je2*accep_e*accep_p*%f",
+"dxs_23g","dxs_23g*weight","dxs_23g*weight*weight_decay","dxs_23g*weight*weight_decay*accep_je1*accep_je2*accep_e*accep_p*%f"
 };
   
 ///psudo 4 fold with W cut 
@@ -101,23 +101,33 @@ char *weight[n]={
     }     
 //   c_ThetaP_2g->SaveAs("ThetaP_2g.png");
 
+    TCanvas *c_ThetaP_2g_final = new TCanvas("ThetaP_2g_final","ThetaP_2g_final",1000,800);
+    c_ThetaP_2g_final->Divide(2,2);   
+    for (Int_t i=8;i<9;i++){
+	for (Int_t j=0;j<4;j++){
+	  c_ThetaP_2g_final->cd(j+1);
+	  gPad->SetLogz(1);
+	  hThetaP[i][j]->Draw("colz");
+	}
+    }  
+
 TCanvas *c = new TCanvas("c","c",1800,700);
 c->Divide(3,1);   
 c->cd(1);
 gPad->SetLogz();	
-T->Project("hWt(60,0,6,60,3.5,5)","W:(t-tmin)","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e*(p_e>0.5)");
+T->Project("hWt(60,0,6,60,3.5,5)","W:(t-tmin)","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e");
 hWt->Draw("colz");
 // c->cd(2);
 // gPad->SetLogz();	
-// T->Project("hWKeq(50,7,12,60,3.5,5)","W:Keq","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e*(p_e>0.5)");
+// T->Project("hWKeq(50,7,12,60,3.5,5)","W:Keq","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e");
 // hWKeq->Draw("colz");
 c->cd(2);
 gPad->SetLogz();	
-T->Project("htheta_je1_je2(80,0,40,80,0,40)","theta_je1:theta_je2","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e*(p_e>0.5)");
+T->Project("htheta_je1_je2(80,0,40,80,0,40)","theta_je1:theta_je2","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e");
 htheta_je1_je2->Draw("colz");
 c->cd(3);
 gPad->SetLogz();	
-T->Project("htheta_e_je1(80,0,40,80,0,40)","theta_e:theta_je1","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e*(p_e>0.5)");
+T->Project("htheta_e_je1(80,0,40,80,0,40)","theta_e:theta_je1","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e");
 htheta_e_je1->Draw("colz");
 
 /*

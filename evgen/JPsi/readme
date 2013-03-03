@@ -1,0 +1,46 @@
+= how to use it = 
+compile simu_p.C by
+make O=simu_p
+or 
+doit
+
+run by
+simu_p -n[nevents as integer like 1000000] -b[Ebeam in GeV] -c[acceptance_root_file produced by acceptance.C from SoLID_GEMC] -o[output_root_file]
+
+Other macro is for analysis the results from simu_p
+proj.C plots results
+compare.C compare total detected events (FOM) from different simulation files.
+plot_acceptance.C compare acceptance from different simulation files
+
+output root file has a tree "T"
+
+= how it works =
+
+refer to PAC39 proposal for the crossection formula
+
+There are three models, t-channel "dxs", 2g model "dxs_2g", "dxs_23g", they are in unit of nb/GeV
+
+scattered electon p,theta,phi and recoil proton theta, phi are degree of freedom, their range is defined in the code
+
+The similation throw events evenly in the ranges of the 5 degee of freedom and only keep the events with right kinematics 
+
+the output number of events is defined in command line option, the throw number of events are stored as "neve"
+
+"weight" is for weighting of two possible kinematic solutions, "weight_decay" is for for JPsi decay weight
+
+acceptance is read from acceptance root file which are just histograms from simulation code, they are recorded in "accep_*" 
+
+= history =
+
+current code is based on Xin's code with changes
+1. correct a bug to have +Q2 in definition of R which is related to JPsi decay only
+2. modify to read acceptance root file from code "acceptance" with SoLID GEMC
+
+Xin Qian's code used for PAC39 proposal in dir "forzhiwen"
+
+Xin Qian's very early code in dir "xqian" which has only t-channel model and different way to handle decay etc
+
+accep.root is for acceptance from Geant3 with BaBar made by Xin and used for PAC39 proposal
+
+
+
