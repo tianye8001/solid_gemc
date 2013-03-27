@@ -71,7 +71,7 @@ my $DetectorMother="root";
 # Rin(58,65,67,85)
 # Rout(127,144,155,265)
 
-my $material_gas="CCGas"; # currently CF gas used for clas12
+my $material_gas="G4_CARBON_DIOXIDE";
 
 sub make_frontchamber
 {
@@ -106,8 +106,8 @@ sub make_frontchamber_window_front
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "58.1*cm 126.9*cm 0.02*cm 0*deg 360*deg";
- $detector{"material"}    = "Aluminum";
+ $detector{"dimensions"}  = "58.1*cm 126.9*cm 0.005*cm 0*deg 360*deg";
+ $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
@@ -130,8 +130,8 @@ sub make_frontchamber_window_back
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "65.1*cm 143.9*cm 0.02*cm 0*deg 360*deg";
- $detector{"material"}    = "Aluminum";
+ $detector{"dimensions"}  = "65.1*cm 143.9*cm 0.01*cm 0*deg 360*deg";
+ $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
@@ -178,8 +178,8 @@ sub make_backchamber_window_front
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "65.1*cm 143.9*cm 0.02*cm 0*deg 360*deg";
- $detector{"material"}    = "Aluminum";
+ $detector{"dimensions"}  = "65.1*cm 143.9*cm 0.005*cm 0*deg 360*deg";
+ $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
@@ -202,8 +202,8 @@ sub make_backchamber_window_back
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "85.1*cm 264.9*cm 0.02*cm 0*deg 360*deg";
- $detector{"material"}    = "Aluminum";
+ $detector{"dimensions"}  = "85.1*cm 264.9*cm 0.01*cm 0*deg 360*deg";
+ $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;

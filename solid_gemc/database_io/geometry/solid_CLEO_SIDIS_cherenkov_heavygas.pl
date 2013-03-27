@@ -67,7 +67,7 @@ sub make_chamber_window_front
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "86*cm 265*cm 0.02*cm 0*deg 360*deg";
+ $detector{"dimensions"}  = "86*cm 265*cm 0.05*cm 0*deg 360*deg";
  $detector{"material"}    = "Aluminum";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -91,7 +91,7 @@ sub make_chamber_window_back
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "98*cm 265*cm 0.02*cm 0*deg 360*deg";
+ $detector{"dimensions"}  = "98*cm 265*cm 0.5*cm 0*deg 360*deg";
  $detector{"material"}    = "Aluminum";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
