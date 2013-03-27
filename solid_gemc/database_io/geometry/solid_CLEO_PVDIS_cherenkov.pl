@@ -68,11 +68,11 @@ sub make_backchamber_window_front
  $detector{"name"}        = "$DetectorName\_backchamber_window_front";
  $detector{"mother"}      = "$DetectorName\_backchamber";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 194.02*cm";
+ $detector{"pos"}         = "0*cm 0*cm 194.0025*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "65.1*cm 143.9*cm 0.005*cm 0*deg 360*deg";
+ $detector{"dimensions"}  = "65.1*cm 143.9*cm 0.0025*cm 0*deg 360*deg";
  $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -92,11 +92,11 @@ sub make_backchamber_window_back
  $detector{"name"}        = "$DetectorName\_backchamber_window_back";
  $detector{"mother"}      = "$DetectorName\_backchamber";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 300.98*cm";
+ $detector{"pos"}         = "0*cm 0*cm 300.995*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "85.1*cm 264.9*cm 0.01*cm 0*deg 360*deg";
+ $detector{"dimensions"}  = "85.1*cm 264.9*cm 0.005*cm 0*deg 360*deg";
  $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -133,7 +133,7 @@ sub make_detector_lightout
  my $Sphi  = 0;
  my $Dphi  = 360;
  $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"material"}    = "Vacuum";
+ $detector{"material"}    = "Kryptonite";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
