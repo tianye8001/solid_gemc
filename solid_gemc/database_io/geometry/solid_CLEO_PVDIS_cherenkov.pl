@@ -48,7 +48,7 @@ sub make_backchamber
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Polycone";
- $detector{"dimensions"}  = "0*deg 360*deg 4 65*cm 67*cm 85*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
+ $detector{"dimensions"}  = "0*deg 360*deg 4 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
  $detector{"material"}    = $material_gas;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
