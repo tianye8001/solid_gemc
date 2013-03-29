@@ -22,8 +22,9 @@
 // gemc headers
 // %%%%%%%%%%%%%
 #include "HitProcess_MapRegister.h"
-#include "detector_factory.h"
+#include "detector.h"
 #include "gemc_MainGui.h"
+#include "images/CLAS12_cad.h"
 #include "MagneticField.h"
 #include "MBankdefs.h"
 #include "MDetectorConstruction.h"
@@ -39,13 +40,12 @@
 #include "material_factory.h"
 #include "parameter_factory.h"
 #include "string_utilities.h"
-#include "utils.h"
 
 /////////////////////////
 /// <b> Main Program </b>
 /////////////////////////
 ///  -# Sets the gemc_opts\n
-///  -# Starts QT application if USE_GUI=1
+///  -# Starts QT application if USE_QT=1
 ///  -# Starts the CLHEP random engine
 ///  -# Instantiates the Geant4 Run Manager
 ///  -# Builds detector map object from database
@@ -55,13 +55,13 @@
 ///  -# Initialize Physics List
 ///  -# Initialize Generator
 ///  -# Initialize Event Action
-///  -# Initialize G4Qt User Interface if USE_GUI>0
-///  -# Initialize Visualization Manager if USE_GUI>0
+///  -# Initialize G4Qt User Interface if USE_QT>0
+///  -# Initialize Visualization Manager if USE_QT>0
 
 
-// get_pid is useful only on the farm to set the seed
-// can set to zero in Windows environment
-// ideally we'd want __get_pid();
+// get_pid is useful only on the farm
+// don't need it in Windows environment
+// (but, why _getpid is not found?)
 #ifdef _MSC_VER
 #include <stdio.h>	
 #include <process.h>
@@ -80,29 +80,36 @@ int main( int argc, char **argv )
 	
 	gemc_opts gemcOpt;
 	gemcOpt.Set(argc, argv);
-	double use_gui = gemcOpt.args["USE_GUI"].arg;
+	string hd_msg    = gemcOpt.args["LOG_MSG"].args + " Init: >> " ;
 	
-	// Initializing QT application
-	QApplication gemc_gui( argc, argv, (bool) use_gui );
-
-	// Initializing gemc splash class
-	// This class will log initialization messages
-	// This class will show a splashscreen if use_gui is non zero
-	gui_splash gemc_splash(use_gui, gemcOpt.args["QTSTYLE"].args, gemcOpt.args["LOG_MSG"].args + " Init: >> " );
-	gemc_splash.message(gemcOpt.args["LOG_MSG"].args + " Initializing GEant4 MonteCarlo");
-
+	cout << endl << hd_msg  << " Geant4 MonteCarlo" << endl;
+	double use_qt = gemcOpt.args["USE_QT"].arg;
 	
+	///< Initializing QT application
+	QApplication gemc_gui( argc, argv, (bool) use_qt );
+	// setting style if different than defulat "no"
+	string guistyle = gemcOpt.args["QTSTYLE"].args;
+	if(guistyle == "QPlastiqueStyle")	 gemc_gui.setStyle(new  QPlastiqueStyle);
+	if(guistyle == "QCleanlooksStyle") gemc_gui.setStyle(new  QCleanlooksStyle);
+	if(guistyle == "QWindowsStyle")	   gemc_gui.setStyle(new  QWindowsStyle);
+	if(guistyle == "QMotifStyle")	     gemc_gui.setStyle(new  QMotifStyle);
+
+	QPixmap *splash_i = NULL;
+	QSplashScreen *splash = NULL;
+	
+
 #ifdef Q_OS_MAC
 //
 // If you are on a Mac, add the gemc.app/Contents/plugins directory to the list of paths
 // that are searched for dynamic plugins.
 //
-	QDir dir(QApplication::applicationDirPath());	
+	QDir dir(QApplication::applicationDirPath());
 	dir.cdUp();
 	dir.cd("PlugIns");
-	QApplication::setLibraryPaths(QStringList(dir.absolutePath()));
-	
-	
+	QStringList dir_list(QLibraryInfo::location(QLibraryInfo::PluginsPath));
+	dir_list.append(dir.absolutePath());
+	QApplication::setLibraryPaths(dir_list);	
+
 //  To print the path that is searched for plugins, uncomment:
 //
 //	foreach (QString path, gemc_gui.libraryPaths())
@@ -110,95 +117,151 @@ int main( int argc, char **argv )
 #endif
 
 	
-	// random seed initialization
+	///< Initializing Splash Screen
+	if(use_qt)
+	{
+		splash_i = new QPixmap(CLAS12_cad);
+		splash   = new QSplashScreen(*splash_i);
+		splash->show();
+		gemc_gui.processEvents();
+	}
+	
+	string msg;
+	
+	///< Initializing the CLHEP Random engine
+	msg = " Setting CLHEP Random Engine...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
+	// CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 	CLHEP::HepRandom::setTheEngine(new CLHEP::MTwistEngine);
+	string RAND = gemcOpt.args["RANDOM"].args;
 	G4int seed;
 	
-	if(gemcOpt.args["RANDOM"].args=="TIME")
+	if(RAND=="TIME")
 	{
-		gemc_splash.message(" Initializing CLHEP Random Engine from local time " \
-		                   + stringify((double) time(NULL)) \
-											 + ", cpu clock "        \
-											 + stringify((double) clock())    \
-											 + " and process id "    \
-											 + stringify(getpid()) + ".");
-		seed = (G4int) ( (double) time(NULL)- (double) clock()-getpid() );
+		msg = " Initializing CLHEP Random Engine from time, cpu clock and process id...";
+		seed = time(NULL)-clock()-getpid() ;
 	}
 	else
 	{
-		seed = atoi(gemcOpt.args["RANDOM"].args.c_str());
-		gemc_splash.message(" Initializing CLHEP Random Engine from user defined seed.");
+		seed = atoi(RAND.c_str());
+		msg = " Initializing CLHEP Random Engine from user seed...";
 	}
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
+	char seeds[100];
+	sprintf(seeds, "%d", seed);
+	msg = " Random Seed Initialized to: " ;
+	msg.append(seeds);
+
 	CLHEP::HepRandom::setTheSeed(seed);
-	gemc_splash.message(" Seed initialized to: " + stringify(seed));
-		
-	// Construct the default G4 run manager
-	gemc_splash.message(" Instantiating Run Manager...");	
+	
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
+	
+	///< Reading the gcard file
+	if(gemcOpt.args["gcard"].args != "no")
+	{
+		msg = " Opening GCARD file " + gemcOpt.args["gcard"].args + "...";
+		if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
+	}
+	run_conditions RunConditions(gemcOpt);
+	
+  
+  ///< Creating the sim_condition map to save to the output
+  map<string, string> sim_condition;
+  // filling gcard option content
+  for(map<string, opts>::iterator it = gemcOpt.args.begin(); it != gemcOpt.args.end(); it++)
+  {
+  	string key = "option: " + it->first;
+  	if(it->second.type == 0) sim_condition[key] = stringify(it->second.arg);
+    else                     sim_condition[key] = it->second.args;
+  }
+  // filling detectors from gcard
+  for(unsigned int i=0; i<RunConditions.gTab_Vec.size(); i++)
+  {
+  	string key = "detector: " + RunConditions.gTab_Vec[i];
+    sim_condition[key] = "is present";
+  }
+  // filling rotation, position modifications from gcard 
+  for(map<string, gcard_detector>::iterator it = RunConditions.gDet_Map.begin(); it != RunConditions.gDet_Map.end(); it++)
+  {
+  	if(it->second.get_position().mag2() != 0)
+  	{
+    	string key = "local shift for " + it->first;
+    	sim_condition[key] = "(" + stringify(it->second.get_position().x()/mm) + ", " 
+                             	 + stringify(it->second.get_position().y()/mm) + ", " 
+                             	 + stringify(it->second.get_position().z()/mm) + ")mm"; 
+  	}
+    
+  	if(it->second.get_vrotation().mag2() != 0)
+  	{
+    	string key = "local rotation for " + it->first;
+    	sim_condition[key] = "(" + stringify(it->second.get_vrotation().x()/degree) + ", " 
+                               + stringify(it->second.get_vrotation().y()/degree) + ", " 
+                               + stringify(it->second.get_vrotation().z()/degree) + ")deg"; 
+  	}
+  }
+  
+	///< Construct the default G4 run manager
+	msg = " Instantiating Run Manager...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	G4RunManager *runManager = new G4RunManager;
 	
-	// Initializing run_condition class
-	gemc_splash.message(" Instantiating Run Conditions...");	
-	runConditions runConds(gemcOpt);
-
-  // GEMC Detector Map
-	gemc_splash.message(" Retrieving gemc Detector Map...");
-	// Initializing Detector Factory
-	map<string, detectorFactoryMap> dFactory = registerDetectorFactory();
-	cout << check_factory_existance(dFactory, runConds) << endl;
-	// Building detector with factory
-	map<string, detector> hallMap = build_detector(dFactory, gemcOpt, runConds);
-
-	  
-	// Initialize Materials Map Factory
-	gemc_splash.message(" Material factory selected: " + gemcOpt.args["MATERIALSDB"].args);
+	
+  ///< Detector Map
+	msg = " Retrieving gemc Detector Map...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
+	map<string, detector> Hall_Map = read_detector(gemcOpt, RunConditions);
+  
+	///< Materials Map
+	msg = " Material factory selected: " + gemcOpt.args["MATERIALSDB"].args;
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
   map<string, materialFactory> materialFactoriesMap = registerMaterialFactories();
   materials *materialSelectedFactory = getMaterialFactory(&materialFactoriesMap, gemcOpt.args["MATERIALSDB"].args);
-	map<string, G4Material*> mats = materialSelectedFactory->initMaterials(runConds, gemcOpt);
+	map<string, G4Material*> mats = materialSelectedFactory->initMaterials(RunConditions, gemcOpt);
 	AddSolGEMCMaterial(mats);
 
-  // Initialize Parameters Map Factory
-	gemc_splash.message(" Parameter factory selected: " + gemcOpt.args["PARAMETERSDB"].args);
+  ///< Parameters Map
+	msg = " Parameter factory selected: " + gemcOpt.args["PARAMETERSDB"].args;
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
   map<string, parameterFactory> parameterFactoriesMap = registerParameterFactories();
   parameters *parameterSelectedFactory = getParameterFactory(&parameterFactoriesMap, gemcOpt.args["PARAMETERSDB"].args);
-	map<string, double> gParameters = parameterSelectedFactory->initParameters(runConds, gemcOpt);
-  	
- // Creating the sim_condition map to save to the output
-	gemc_splash.message(" Writing simulation parameters in the output...");
-	
-	// filling gcard option content
-  map<string, string> sim_condition = gemcOpt.getOptMap();
+	map<string, double> gParameters = parameterSelectedFactory->initParameters(RunConditions, gemcOpt);
+  // filling parameters map in sim. condition map 
+ 	for(map<string, double>::iterator it = gParameters.begin(); it != gParameters.end(); it++)
+  {
+    string key = "parameter: " + it->first;
+		sim_condition[key] = stringify(it->second);
+  }	
   
-	// adding detectors 
-	MergeMaps(sim_condition, runConds.getDetectorConditionsMap());
-	
-	// adding parameters 
-	MergeMaps(sim_condition, getParMap(gParameters));
-
-  // Process Hit Map
-	gemc_splash.message(" Building gemc Process Hit Factory...");
+  ///< Process Hit Map
+	msg = " Building gemc Process Hit Factory...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, MPHB_Factory> MProcessHit_Map = HitProcess_Map(gemcOpt.args["HIT_PROCESS_LIST"].args);
 	AddSoLIDHP(MProcessHit_Map);
 	
-	// Bank Map
-	gemc_splash.message(" Retrieving gemc Banks Map...");
+	///< Bank Map
+	msg = " Retrieving gemc Banks Map...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, MBank> MBank_Map = read_banks(gemcOpt, MProcessHit_Map);
 		
 	///< magnetic Field Map
-	gemc_splash.message(" Retrieving gemc Magnetic Fields Map...");
+	msg = " Retrieving gemc Magnetic Fields Map...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	map<string, MagneticField> FieldMap = get_magnetic_Fields(gemcOpt);
+	
   
-	// Build the detector
-	gemc_splash.message(" Building Detector...");
+  
+	///< Build G4 Physical Volumes: MDetectorConstruction
 	MDetectorConstruction* ExpHall = new MDetectorConstruction(gemcOpt);
-	ExpHall->hallMap  = &hallMap;
-	ExpHall->mats     = &mats;
+	ExpHall->Hall_Map = &Hall_Map;
+	ExpHall->mats    = &mats;
 	ExpHall->FieldMap = &FieldMap;
 	runManager->SetUserInitialization(ExpHall);
 	
   
 	///< Physics List
 	string phys_list = gemcOpt.args["USE_PHYSICSL"].args  ;
-	gemc_splash.message(" Initializing Physics List " + phys_list + "...");
+	msg = " Initializing Physics List " + phys_list + "...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 
 	G4VUserPhysicsList* physics = NULL;
 	G4VModularPhysicsList* phys = NULL;
@@ -208,13 +271,10 @@ int main( int argc, char **argv )
 	{
 		physics = new MPhysicsList(gemcOpt);
 		runManager->SetUserInitialization(physics);
-	}
-	else if(phys_list == "noint" )
-	{
-	       physics = new SolidNoPhysicsList(gemcOpt);
-	       runManager->SetUserInitialization(physics);
-	}
-	else {
+	} else if( phys_list == "noint" ) {
+	    physics = new SolidNoPhysicsList(gemcOpt);
+	    runManager->SetUserInitialization(physics);
+	} else {
 		if(factory.IsReferencePhysList(phys_list))
 				phys = factory.GetReferencePhysList(phys_list);
 
@@ -224,7 +284,7 @@ int main( int argc, char **argv )
 	}
 
 	// need to use flags for both these here
-	// physics->SetDefaultCutValue(0.1*mm);
+	//  	physics->SetDefaultCutValue(0.1*mm);
 	
 	// Setting Max step for all the simulation. This is historically needed to limit 
 	// the step in magnetic field in vacuum
@@ -232,10 +292,10 @@ int main( int argc, char **argv )
 	if(max_step != 0)
 		G4TransportationManager::GetTransportationManager()->GetPropagatorInField()->SetLargestAcceptableStep(max_step);
 	
-	// Generator
-	gemc_splash.message(" Initializing Primary Generator Action...");
+	///< Generator
+	msg = " Initializing Primary Generator Action...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 
-	 // parse output file format
 	int commaplace = gemcOpt.args["INPUT_GEN_FILE"].args.find_first_of(',');
 	string fform = gemcOpt.args["INPUT_GEN_FILE"].args.substr(0,commaplace);
 
@@ -249,44 +309,50 @@ int main( int argc, char **argv )
 	}
 
 	runManager->SetUserAction(gen_action);
+	
   
-	// Event Action
-	gemc_splash.message(" Initializing Event Action...");
+	///< Event Action
+	msg = " Initializing Event Action...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	MEventAction* event_action = new MEventAction(gemcOpt, gParameters);
 	event_action->SetEvtNumber((int) gemcOpt.args["EVN"].arg);     ///< Sets event number from OPTION
 	runManager->SetUserAction(event_action);
 	
   
-	// Stepping Action
-	gemc_splash.message(" Initializing Stepping Action...");
+	///< Stepping Action
+	msg = " Initializing Stepping Action...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	MSteppingAction* SteppingAction = new MSteppingAction(gemcOpt);
 	runManager->SetUserAction(SteppingAction);
 	
 	///< User Interface manager
-	gemc_splash.message(" Initializing User Interface...");
+	// need UIQt to see Qt Open GL - have to comment line 136 of visualization/OpenGL/src/G4OpenGLQtViewer.cc
+	msg = " Initializing User Interface...";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
   G4UIsession *session = NULL;
-	if(use_gui) 
+	if(use_qt) 
     session = new G4UIQt(argc,argv);
 		
 	///< Vis Manager
   G4VisManager *visManager = NULL;
-  if(use_gui)
+  if(use_qt)
   {
     visManager = new G4VisExecutive;
     visManager->Initialize();
 	}
   
-	// Initialize G4 kernel
-	gemc_splash.message(" Initializing Run Manager...\n");
+	///< Initialize G4 kernel
+	msg = " Initializing Run Manager...\n";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	runManager->Initialize();
 
   // Getting UI manager, restoring G4Out to cout
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   UImanager->SetCoutDestination(NULL);
 
-	// Output File: registering output type, output process factory,
-	// sensitive detectors into Event Action
-	gemc_splash.message(" Initializing Output Action...");
+	///< Output File: registering output type, output process factory,
+	///< sensitive detectors into Event Action
+	msg = " Initializing Output Action...";
 	MOutputs MOutput(gemcOpt);
 	map<string, MOutput_Factory> MProcessOutput_Map = Output_Map();
 
@@ -311,41 +377,39 @@ int main( int argc, char **argv )
 		it->second->MProcessHit_Map = &MProcessHit_Map;
 	
 
-	gemc_splash.message(" Executing initial directives...\n");
+	msg = " Executing initial directives...\n";
+	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 	vector<string> init_commands = init_dmesg(gemcOpt);
 	for(unsigned int i=0; i<init_commands.size(); i++)
 		UImanager->ApplyCommand(init_commands[i].c_str());
+
 	string exec_macro = "/control/execute " + gemcOpt.args["EXEC_MACRO"].args;
 
-	// Write out GDML
 	G4GDMLParser parser;
 	G4VPhysicalVolume* pWorld =
 	    G4TransportationManager::GetTransportationManager()->
 	    GetNavigatorForTracking()->GetWorldVolume();
-	// Make sure file does not exist first.  if it does
-	// remove it so we can overwrite it
-	unlink("solgemc.gdml");
-	parser.Write("solgemc.gdml", pWorld);
 
+	  unlink("solgemc.gdml");
+	  parser.Write("solgemc.gdml", pWorld);
 	
-	if(use_gui)
+	if(use_qt)
 	{
-		gemc_splash.message("Starting GUI...");
+    splash->showMessage("Starting GUI...");
 		gemc_gui.processEvents();
 		
 		gemcMainWidget gemcW(runManager, visManager, &gemcOpt, ExpHall->SeDe_Map);
-		gemcW.hallMap  = &hallMap;
+		gemcW.Hall_Map = &Hall_Map;
     gemcW.SeDe_Map = ExpHall->SeDe_Map;
-		gemcW.mats     = &mats;
+		gemcW.mats    = &mats;
 		
 		gemcW.setWindowTitle( "solgemc" );
 		
 		gemcW.show();
-		
-		// splash can finish once gemcW is up
-		gemc_splash.splash->finish(&gemcW);
+		splash->finish(&gemcW);
 
-		gemc_splash.message(" Executing initial visual directives...\n");
+		msg = " Executing initial visual directives...\n";
+		splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
 		vector<string> init_vcommands = init_dvmesg(gemcOpt, visManager);
 		for(unsigned int i=0; i<init_vcommands.size(); i++)
 		{
