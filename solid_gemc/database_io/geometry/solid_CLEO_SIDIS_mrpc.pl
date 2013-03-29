@@ -23,48 +23,79 @@ use Math::Trig;
 
 my $DetectorMother="root";
 
-my $material="Scintillator"; # only an approximation
+# MRPC structure
+# 0.8mm PCB + 4.2mm glass + 1.6mm PCB + 4.2mm glass + 0.8mm PCB
 
 sub make_mrpc
-{
- my $color="ff0000";
-#  my $z=728-350;
-#  my $z=398;
+{ 
  my $z=400;
 
-    $detector{"name"}        = "$DetectorName";
+ my $Nlayer = 5;
+ my @layer_thickness = (0.08,0.42,0.16,0.42,0.08);
+ my @material = ("PCBoardM","G4_GLASS_PLATE","PCBoardM","G4_GLASS_PLATE");
+ my $color="ff0000";
+
+    $detector{"name"}        = "$DetectorName\_$n";
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $z*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = "$color";
-    $detector{"type"}       = "Cons";
-#     my $Rmin1 = 105;
-#     my $Rmax1 = 194;
-#     my $Rmin2 = 106;
-#     my $Rmax2 = 195;
-#     my $Rmin1 = 115;
-#     my $Rmax1 = 195;
-#     my $Rmin2 = 115;
-#     my $Rmax2 = 195;
-    my $Rmin1 = 99;
-    my $Rmax1 = 201;
-    my $Rmin2 = 99;
-    my $Rmax2 = 201;
-    my $Dz    = 0.5;
-    my $Sphi  = 0;
-    my $Dphi  = 360;
-    $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
-    $detector{"material"}   = "$material";
+    $detector{"color"}      = "111111";
+    $detector{"type"}       = "Tube";
+    my $Rmin = 96;
+    my $Rmax = 207;
+    my $Dz   = 1.16/2; # total thickness
+    $detector{"dimensions"}  = "$Rmin*cm $Rmax*cm $Dz*cm 0*deg 360*deg";
+    $detector{"material"}   = "Vacuum";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
-    $detector{"style"}       = 1;
-    $detector{"sensitivity"} = "FLUX";
-    $detector{"hit_type"}    = "FLUX";
-    $detector{"identifiers"} = "id manual 4100000";
+    $detector{"style"}       = 0;
+    $detector{"sensitivity"} = "no";
+    $detector{"hit_type"}    = "";
+    $detector{"identifiers"} = "";
     print_det(\%detector, $file);
+
+    for(my $i=1; $i<=$Nlayer; $i++)
+    {
+	my $layerZ = -$Dz;
+	for(my $k=1; $k<=$i-1; $k++)
+	{	
+	   $layerZ = $layerZ+$layer_thickness[$k-1];
+	}
+	$layerZ = $layerZ+$layer_thickness[$i-1]/2;
+	
+	my $DlayerZ=$layer_thickness[$i-1]/2;
+
+	$detector{"name"}        = "$DetectorName\_$i";
+	$detector{"mother"}      = "$DetectorName";
+	$detector{"description"} = $detector{"name"};
+	$detector{"pos"}        = "0*cm 0*cm $layerZ*mm";
+	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
+	$detector{"color"}      = "$color";
+	$detector{"type"}       = "Tube";
+	$detector{"dimensions"} = "$Rmin*cm $Rmax*cm $DlayerZ*mm 0*deg 360*deg";
+	$detector{"material"}   = "$material[$i-1]";
+	$detector{"mfield"}     = "no";
+	$detector{"ncopy"}      = 1;
+	$detector{"pMany"}       = 1;
+	$detector{"exist"}       = 1;
+	$detector{"visible"}     = 1;
+	$detector{"style"}       = 1;
+	if ($i==2 || $i==4){
+	  $detector{"sensitivity"} = "FLUX";
+	  $detector{"hit_type"}    = "FLUX";
+	  $detector{"identifiers"} = "id manual $id";
+	}
+	else{
+	  $detector{"sensitivity"} = "no";
+	  $detector{"hit_type"}    = "";
+	  $detector{"identifiers"} = "";
+	}
+	print_det(\%detector, $file);
+    }
+ }
 }
 make_mrpc();
