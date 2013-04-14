@@ -1,6 +1,6 @@
 #!/bin/sh
 gemc \
--gcard=solid_CLEO_PVDIS.gcard \
+-gcard=$SoLID_GEMC/script/solid_CLEO_PVDIS.gcard \
 -DBHOST=$GEMC_HOST \
 -USE_PHYSICSL=FTFP_BERT \
 -HALL_MATERIAL=Vacuum \
