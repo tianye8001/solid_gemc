@@ -21,8 +21,14 @@ else
   endif
   echo "use database $database"
 
-  # creates files. Should match the tables name above
-  ./$tables".pl"
+  # Create files. Use script specified in third arg, or 
+  # default to <table-name>.pl 
+  set script = "$3"
+  echo "script $script"
+  if("$script" =="") then
+    ./$tables".pl"
+  else
+    ./$script
 
   # Remaking the tables
   foreach t ($tables)
