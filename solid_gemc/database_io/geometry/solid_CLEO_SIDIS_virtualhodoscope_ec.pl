@@ -54,37 +54,6 @@ sub make_forwardangle_front
 }
 make_forwardangle_front();
 
-sub make_forwardangle_shield
-{
- $detector{"name"}        = "$DetectorName\_forwardangle_shield";
- $detector{"mother"}      = "root";
- $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 403.8*cm";
- $detector{"rotation"}    = "0*deg 0*deg 0*deg";
- $detector{"color"}       = "CC6633";
- $detector{"type"}        = "Cons";
-  my $Rmin1 = 100;
-  my $Rmax1 = 215;
-  my $Rmin2 = 100;
-  my $Rmax2 = 215;
-  my $Dz    = 0.6;
-  my $Sphi  = 0;
-  my $Dphi  = 360;
- $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"material"}    = "Lead";
- $detector{"mfield"}      = "no";
- $detector{"ncopy"}       = 1;
- $detector{"pMany"}       = 1;
- $detector{"exist"}       = 1;
- $detector{"visible"}     = 1;
- $detector{"style"}       = 0;
- $detector{"sensitivity"} = "no";
- $detector{"hit_type"}    = "";
- $detector{"identifiers"} = "";
- print_det(\%detector, $file);
-}
-make_forwardangle_shield();
-
 sub make_forwardangle_middle
 {
  $detector{"name"}        = "$DetectorName\_forwardangle_middle";
@@ -188,9 +157,9 @@ sub make_largeangle_front
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 75;
+  my $Rmin1 = 76;
   my $Rmax1 = 140;
-  my $Rmin2 = 75;
+  my $Rmin2 = 76;
   my $Rmax2 = 140;
   my $Dz    = 0.1;
   my $Sphi  = 0;
@@ -210,37 +179,6 @@ sub make_largeangle_front
 }
 make_largeangle_front();
 
-sub make_largeangle_shield
-{
- $detector{"name"}        = "$DetectorName\_largeangle_shield";
- $detector{"mother"}      = "root";
- $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm -66.2*cm";
- $detector{"rotation"}    = "0*deg 0*deg 0*deg";
- $detector{"color"}       = "CC6633";
- $detector{"type"}        = "Cons";
-  my $Rmin1 = 75;
-  my $Rmax1 = 140;
-  my $Rmin2 = 75;
-  my $Rmax2 = 140;
-  my $Dz    = 0.6;
-  my $Sphi  = 0;
-  my $Dphi  = 360;
- $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"material"}    = "Lead";
- $detector{"mfield"}      = "no";
- $detector{"ncopy"}       = 1;
- $detector{"pMany"}       = 1;
- $detector{"exist"}       = 1;
- $detector{"visible"}     = 1;
- $detector{"style"}       = 0;
- $detector{"sensitivity"} = "no";
- $detector{"hit_type"}    = "";
- $detector{"identifiers"} = "";
- print_det(\%detector, $file);
-}
-make_largeangle_shield();
-
 sub make_largeangle_middle
 {
  $detector{"name"}        = "$DetectorName\_largeangle_middle";
@@ -250,9 +188,9 @@ sub make_largeangle_middle
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 75;
+  my $Rmin1 = 76;
   my $Rmax1 = 140;
-  my $Rmin2 = 75;
+  my $Rmin2 = 76;
   my $Rmax2 = 140;
   my $Dz    = 0.1;
   my $Sphi  = 0;
@@ -281,10 +219,10 @@ sub make_largeangle_inner
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 74;
-  my $Rmax1 = 74.1;
-  my $Rmin2 = 87;
-  my $Rmax2 = 87.1;
+  my $Rmin1 = 75;
+  my $Rmax1 = 75.1;
+  my $Rmin2 = 88;
+  my $Rmax2 = 88.1;
   my $Dz    = 25;
   my $Sphi  = 0;
   my $Dphi  = 360;
@@ -312,9 +250,9 @@ sub make_largeangle_rear
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 88;
+  my $Rmin1 = 89;
   my $Rmax1 = 140;
-  my $Rmin2 = 88;
+  my $Rmin2 = 89;
   my $Rmax2 = 140;
   my $Dz    = 0.1;
   my $Sphi  = 0;
