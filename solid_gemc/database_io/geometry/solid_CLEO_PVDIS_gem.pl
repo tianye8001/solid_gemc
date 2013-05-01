@@ -108,6 +108,92 @@ my $DetectorMother="root";
 
 # on p56 of pac34 proposal, the z location are 155,185,295,310cm, but it seems Eugene later tweaked a bit togther with baffle. refer to http://hallaweb.jlab.org/12GeV/SoLID/download/sim/geant3/solid_comgeant_pvdis/pvdis_02_01_p_14_01/fort.22
 
+# simple GEM with only gas
+# sub make_gem
+# {
+#  my $Nplate  = 4;
+# # my @PlateZ  = (155,185,295,310);  # as on p56 of pac34 proposal
+# # my @PlateZ  = (157.5,185.5,297,306); # as in Eugen's code
+# #  my @PlateZ  = (157.5,185.5,306,321);  # change for last two planes further back as Cherenkov needs 10cm more
+# #  my @Rin  = (55,65,105,115);
+# #  my @Rout = (115,140,200,215);
+#  my @PlateZ = (157.5,185.5,306,315);
+# #cover target center at 10cm from 21 to 36 degree
+# #  my @Rin = (56,67,113,117);
+# #  my @Rout = (108,129,215,222);
+# #  my $Dz   = 0.5;
+# #cover 40cm long full target with center at 10cm from 21 to 36 degree
+#  my @Rin = (48,59,105,109);
+#  my @Rout = (122,143,230,237);
+#  my $Dz   = 0.4;
+#  my $material="GEMgas"; 
+#  my $color="44ee11";
+# 
+#  for(my $n=1; $n<=$Nplate; $n++)
+#  {
+#     my $n_c     = cnumber($n-1, 1);
+#     $detector{"name"}        = "$DetectorName\_$n_c";
+#     $detector{"mother"}      = "$DetectorMother" ;
+#     $detector{"description"} = $detector{"name"};
+#     $detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
+#     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+#     $detector{"color"}      = "$color";
+#     $detector{"type"}       = "Tube";
+#     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz*cm 0*deg 360*deg";
+#     $detector{"material"}   = "$material";
+#     $detector{"mfield"}     = "no";
+#     $detector{"ncopy"}      = 1;
+#     $detector{"pMany"}       = 1;
+#     $detector{"exist"}       = 1;
+#     $detector{"visible"}     = 1;
+#     $detector{"style"}       = 1;
+#     $detector{"sensitivity"} = "FLUX";
+#     $detector{"hit_type"}    = "FLUX";
+#     my $id=1000000+$n*100000;
+#     $detector{"identifiers"} = "id manual $id";
+#     print_det(\%detector, $file);
+#  }
+# }
+# make_gem();
+
+#  * Describe the single GEM Chamber module (similar to COMPASS)
+#  * see: "Construction Of GEM Detectors for the COMPASS experiment", CERN Tech Note TA1/00-03
+#  *
+#  * Consist of 15 layers of different size, material and position
+#  *
+#  *
+#  * HoneyComb
+#  *  0   NEMA G10 120 um
+#  *  1   NOMEX    3 mm  #should be 3um?
+#  *  2   NEMA G10 120 um
+#  * Drift Cathode
+#  *  3   Copper 5 um    #should exchange with 4?
+#  *  4   Kapton 50 um   #should exchange with 3?
+#  *  5   Air 3 mm
+#  * GEM0
+#  *  6   Copper 5 um
+#  *  7   Kapton 50 um
+#  *  8   Copper 5 um
+#  *  9   Air 2 mm
+#  * GEM1
+#  * 10   Copper 5 um
+#  * 11   Kapton 50 um
+#  * 12   Copper 5 um
+#  * 13   Air 2 mm
+#  * GEM2
+#  * 14   Copper 5 um
+#  * 15   Kapton 50 um
+#  * 16   Copper 5 um
+#  * 17   Air 2 mm 
+#  * Readout Board
+#  * 18   Copper 10 um
+#  * 19   Kapton 50 um
+#  * 20   G10 120 um + 60 um (assume 60 um glue as G10)    # not implmented yet
+#  * Honeycomb
+#  * 21   NEMA G10 120 um
+#  * 22   NOMEX    3 mm       #should be 3um?
+#  * 23   NEMA G10 120 um
+
 sub make_gem
 {
  my $Nplate  = 4;
@@ -117,35 +203,89 @@ sub make_gem
 #  my @Rin  = (55,65,105,115);
 #  my @Rout = (115,140,200,215);
  my @PlateZ = (157.5,185.5,306,315);
- my @Rin = (56,67,113,117);
- my @Rout = (108,129,215,222);
- my $Dz   = 0.5;
- my $material="GEMgas"; 
+#cover target center at 10cm from 21 to 36 degree
+#  my @Rin = (56,67,113,117);
+#  my @Rout = (108,129,215,222);
+#  my $Dz   = 0.5;
+#cover 40cm long full target with center at 10cm from 21 to 36 degree
+ my @Rin = (48,59,105,109);
+ my @Rout = (122,143,230,237);
+ my $Dz   = 0.9781/2; 
  my $color="44ee11";
+
+ my $Nlayer = 23;
+ my @layer_thickness = (0.012,0.0003,0.012,0.005,0.0005,0.3,0.0005,0.005,0.0005,0.2,0.0005,0.005,0.0005,0.2,0.0005,0.005,0.0005,0.2,0.001,0.005,0.012,0.0003,0.012);
+#  my @material = ("Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum","Vacuum");
+ my @material = ("NEMAG10","NOMEX","NEMAG10","Kapton","Copper","GEMgas","Copper","Kapton","Copper","GEMgas","Copper","Kapton","Copper","GEMgas","Copper","Kapton","Copper","GEMgas","Copper","Kapton","NEMAG10","NOMEX","NEMAG10");
+#  my $color_NEMAG10 = "00ff00";
+#  my $color_NOMEX = "ffse14";
+#  my $color_Copper = "ffe731";
+#  my $color_Kapton = "1a4fff";
+#  my $color_Air = "ff33fc";
+#  my @color = ($color_NEMAG10,$color_NOMEX,$color_NEMAG10,$color_Kapton,$color_Copper,$color_Air,$color_Copper,$color_Kapton,$color_Copper,$color_Air,$color_Copper,$color_Kapton,$color_Copper,$color_Air,$color_Copper,$color_Kapton,$color_Copper,$color_Air,$color_Copper,$color_Kapton,$color_NEMAG10,$color_NOMEX,$color_NEMAG10);
+#  my @color =  ("44ee11","44ee23","45ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11","44ee11");
 
  for(my $n=1; $n<=$Nplate; $n++)
  {
-    my $n_c     = cnumber($n-1, 1);
-    $detector{"name"}        = "$DetectorName\_$n_c";
+    $detector{"name"}        = "$DetectorName\_$n";
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = "$color";
+    $detector{"color"}      = "111111";
     $detector{"type"}       = "Tube";
     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz*cm 0*deg 360*deg";
-    $detector{"material"}   = "$material";
+    $detector{"material"}   = "Vacuum";
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
-    $detector{"style"}       = 1;
-    $detector{"sensitivity"} = "FLUX";
-    $detector{"hit_type"}    = "FLUX";
-    my $id=1000000+$n*100000;
-    $detector{"identifiers"} = "id manual $id";
+    $detector{"style"}       = 0;
+    $detector{"sensitivity"} = "no";
+    $detector{"hit_type"}    = "";
+    $detector{"identifiers"} = "";
     print_det(\%detector, $file);
+
+    for(my $i=1; $i<=$Nlayer; $i++)
+    {
+	my $layerZ = -$Dz;
+	for(my $k=1; $k<=$i-1; $k++)
+	{	
+	   $layerZ = $layerZ+$layer_thickness[$k-1];
+	}
+	$layerZ = $layerZ+$layer_thickness[$i-1]/2;
+	
+	my $DlayerZ=$layer_thickness[$i-1]/2;
+
+	$detector{"name"}        = "$DetectorName\_$n\_$i";
+	$detector{"mother"}      = "$DetectorName\_$n";
+	$detector{"description"} = $detector{"name"};
+	$detector{"pos"}        = "0*cm 0*cm $layerZ*cm";
+	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
+	$detector{"color"}      = "$color";
+	$detector{"type"}       = "Tube";
+	$detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $DlayerZ*cm 0*deg 360*deg";
+	$detector{"material"}   = "$material[$i-1]";
+	$detector{"mfield"}     = "no";
+	$detector{"ncopy"}      = 1;
+	$detector{"pMany"}       = 1;
+	$detector{"exist"}       = 1;
+	$detector{"visible"}     = 1;
+	$detector{"style"}       = 1;
+	if ($i==6 || $i==10){
+	  $detector{"sensitivity"} = "FLUX";
+	  $detector{"hit_type"}    = "FLUX";
+	  my $id=1000000+$n*100000;
+	  $detector{"identifiers"} = "id manual $id";
+	}
+	else{
+	  $detector{"sensitivity"} = "no";
+	  $detector{"hit_type"}    = "";
+	  $detector{"identifiers"} = "";
+	}
+	print_det(\%detector, $file);
+    }
  }
 }
 make_gem();

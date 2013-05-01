@@ -46,7 +46,7 @@ sub make_target_PVDIS_target
  my @Dz   = (25.,24.95,0.025,0.025,20.,19.982);
  my @name = ("$DetectorName\_TACH","$DetectorName\_TACV","$DetectorName\_TAW1","$DetectorName\_TAW2","$DetectorName\_TALU","$DetectorName\_TAH2"); 
  my @mother=("$DetectorMother","$DetectorName\_TACH","$DetectorName\_TACH","$DetectorName\_TACH","$DetectorName\_TACV","$DetectorName\_TALU");
- my @mat  = ("Aluminum","Vacuum","Vacuum","Vacuum","Aluminum","LH2");
+ my @mat  = ("Aluminum","Vacuum","Vacuum","Vacuum","Aluminum","LD2");
 
  for(my $n=1; $n<=$NUM; $n++)
  {
