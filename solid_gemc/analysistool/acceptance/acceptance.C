@@ -360,13 +360,16 @@ else{
 TCanvas *c_acceptance_all = new TCanvas("acceptance_all","acceptance_all",500,900);
 c_acceptance_all->Divide(1,3);
 c_acceptance_all->cd(1);
-gPad->SetLogy(1);
+gPad->SetLogy();
+gPad->SetGrid();
 hacceptance_forwardangle->Draw("colz");
 c_acceptance_all->cd(2);
-gPad->SetLogy(1);
+gPad->SetLogy();
+gPad->SetGrid();
 hacceptance_largeangle->Draw("colz");
 c_acceptance_all->cd(3);
-gPad->SetLogy(1);
+gPad->SetLogy();
+gPad->SetGrid();
 hacceptance_overall->Draw("colz");
 c_acceptance_all->SaveAs("acceptance_all.png");
 }
