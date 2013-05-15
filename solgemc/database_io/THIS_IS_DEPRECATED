@@ -1,0 +1,10 @@
+Don't use the contents of the directory.  They are here for historical purposed but are no longer in general use
+
+
+You can find the repository for these here:
+
+https://jlabsvn.jlab.org/svnroot/solid/solid_gemc
+
+through
+
+svn checkout https://jlabsvn.jlab.org/svnroot/solid/solid_gemc
