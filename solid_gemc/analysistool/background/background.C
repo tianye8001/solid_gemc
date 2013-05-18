@@ -8,6 +8,7 @@
 #include <TChain.h>
 #include <TH1.h>
 #include <TH2.h>
+#include <TH3.h>
 #include <TF1.h>
 #include <TLorentzVector.h>
 #include <TROOT.h>
@@ -16,7 +17,7 @@
 #include <TPaveText.h>
 #include <TText.h>
 #include <TSystem.h>
-#include "../niel/niel_fun.h"
+// #include "/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_fun.h"
 
 using namespace std;
 
@@ -32,34 +33,65 @@ char output_filename[80];
 sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
 TFile *outputfile=new TFile(output_filename, "recreate");
 
-const int n=18; // number of detector
+const int n=20; // number of detector
 const int m=11; //number of particles
 
 char *label[m]={"photon+electron+positron","photon","electron+positron","neutron","proton","pip","pim","Kp","Km","Kl","other"};
 
 TH2F *hhits[n][m],*hvertex[n][m];
-TH1F *hfluxR[n][m],*hEflux[n][m];
+TH1F *hfluxR[n][m];
+TH1F *hfluxPhi[n][m],*hfluxPhi_target[n][m],*hfluxPhi_other[n][m];
+TH1F *hEfluxR[n][m];
+TH1F *hEfluxPhi[n][m],*hEfluxPhi_target[n][m],*hEfluxPhi_other[n][m];
+TH2F *hflux_x_y[n][m],*hEflux_x_y[n][m];
 TH1F *hPlog[n][m],*hElog[n][m],*hEklog[n][m];
 TH1F *hEdeplog[n][m];
 TH1F *hfluxEklog_cut[n][m],*hfluxEklog_cut_niel[n][m];
 TH2F *hElog_R[n][m];
-TH2F *hEklog_R[n][m];
-TH2F *hEklog_R_cut[n][m];
+TH2F *hEklog_R[n][m],*hEklog_R_high[n][m],*hEklog_R_low[n][m];
+TH3F *hEklog_R_Phi[n][m];
 
 for(int k=0;k<n;k++){
   for(int l=0;l<m;l++){
    char hstname[100];
    sprintf(hstname,"hits_%i_%i",k,l);
-   hhits[k][l]=new TH2F(hstname,hstname,120,-300,300,120,-300,300);
+   hhits[k][l]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);
    sprintf(hstname,"vertex_%i_%i",k,l);
    hvertex[k][l]=new TH2F(hstname,hstname,5000,-500,500,400,-400,400);
+   
    sprintf(hstname,"fluxR_%i_%i",k,l);
    hfluxR[k][l]=new TH1F(hstname,hstname,60,0,300);
    hfluxR[k][l]->SetTitle(";R (cm);flux (kHz/mm2)");
-   sprintf(hstname,"Eflux_%i_%i",k,l);
-   hEflux[k][l]=new TH1F(hstname,hstname,60,0,300);
-   hEflux[k][l]->SetTitle(";R (cm);Eflux (GeV/10cm2/s)");
-
+   sprintf(hstname,"EfluxR_%i_%i",k,l);
+   hEfluxR[k][l]=new TH1F(hstname,hstname,60,0,300);
+   hEfluxR[k][l]->SetTitle(";R (cm);Eflux (GeV/10cm2/s)");
+   
+   sprintf(hstname,"fluxPhi_%i_%i",k,l);   
+   hfluxPhi[k][l]=new TH1F(hstname,hstname,96,0,24);
+   hfluxPhi[k][l]->SetTitle(";#phi (deg);flux (kHz/deg)");   
+   sprintf(hstname,"fluxPhi_target_%i_%i",k,l);   
+   hfluxPhi_target[k][l]=new TH1F(hstname,hstname,96,0,24);
+   hfluxPhi_target[k][l]->SetTitle(";#phi (deg);flux (kHz/deg)");   
+   sprintf(hstname,"fluxPhi_other_%i_%i",k,l);   
+   hfluxPhi_other[k][l]=new TH1F(hstname,hstname,96,0,24);
+   hfluxPhi_other[k][l]->SetTitle(";#phi (deg);flux (kHz/deg)");    
+   sprintf(hstname,"EfluxPhi_%i_%i",k,l);   
+   hEfluxPhi[k][l]=new TH1F(hstname,hstname,96,0,24);
+   hEfluxPhi[k][l]->SetTitle(";#phi (deg);Eflux (GeV/deg/s)");   
+   sprintf(hstname,"EfluxPhi_target_%i_%i",k,l);   
+   hEfluxPhi_target[k][l]=new TH1F(hstname,hstname,96,0,24);
+   hEfluxPhi_target[k][l]->SetTitle(";#phi (deg);Eflux (GeV/deg/s)");   
+   sprintf(hstname,"EfluxPhi_other_%i_%i",k,l);   
+   hEfluxPhi_other[k][l]=new TH1F(hstname,hstname,96,0,24);
+   hEfluxPhi_other[k][l]->SetTitle(";#phi (deg);Eflux (GeV/deg/s)");
+   
+   sprintf(hstname,"flux_x_y_%i_%i",k,l);
+   hflux_x_y[k][l] = new TH2F(hstname, hstname, 600, -300, 300,600, -300, 300);
+   hflux_x_y[k][l]->SetTitle("flux (kHz/mm2);x (cm));y (cm)");
+   sprintf(hstname,"Eflux_x_y_%i_%i",k,l);
+   hEflux_x_y[k][l] = new TH2F(hstname, hstname, 600, -300, 300,600, -300, 300);
+   hEflux_x_y[k][l]->SetTitle("Eflux (GeV/10cm2/s);x (cm));y (cm)");
+   
     sprintf(hstname,"Plog_%i_%i",k,l);
     hPlog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
     hPlog[k][l]->SetTitle(";log(P) GeV;counts");        
@@ -72,23 +104,30 @@ for(int k=0;k<n;k++){
     sprintf(hstname,"Edeplog_%i_%i",k,l);
     hEdeplog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
     hEdeplog[k][l]->SetTitle(";log(Edep) GeV;counts");    
-    
-    sprintf(hstname,"fluxEklog_cut_%i_%i",k,l);
-    hfluxEklog_cut[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-    hfluxEklog_cut[k][l]->SetTitle("at 10cm most inner part;log(Ek) MeV;flux (kHz/cm2)");    
-    sprintf(hstname,"fluxEklog_cut_niel_%i_%i",k,l);
-    hfluxEklog_cut_niel[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-    hfluxEklog_cut_niel[k][l]->SetTitle("with 1MeV neutron fluence equivalent NIEL at 10cm most inner part;log(Ek) MeV;flux (kHz/cm2)*niel");
- 
+
     sprintf(hstname,"Elog_R_%i_%i",k,l);
     hElog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 50,-6,1.3);
     hElog_R[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");    
     sprintf(hstname,"Eklog_R_%i_%i",k,l);
     hEklog_R[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 50,-6,1.3);    
     hEklog_R[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");
-    sprintf(hstname,"Eklog_R_cut_%i_%i",k,l);
-    hEklog_R_cut[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 50,-6,1.3); 
-    hEklog_R_cut[k][l]->SetTitle("with cut E < 100MeV;R (cm);log(Ek) (GeV)");
+    sprintf(hstname,"Eklog_R_high_%i_%i",k,l);
+    hEklog_R_high[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 50,-6,1.3);    
+    hEklog_R_high[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");
+    sprintf(hstname,"Eklog_R_low_%i_%i",k,l);
+    hEklog_R_low[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 50,-6,1.3);    
+    hEklog_R_low[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");
+    sprintf(hstname,"Eklog_R_Phi_%i_%i",k,l);
+    hEklog_R_Phi[k][l] = new TH3F(hstname, hstname, 48,0,12,300, 0, 300, 50,-6,1.3);    
+    hEklog_R_Phi[k][l]->SetTitle(";Phi (deg);R (cm);log(Ek) (GeV)");
+
+    sprintf(hstname,"fluxEklog_cut_%i_%i",k,l);
+    hfluxEklog_cut[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
+    hfluxEklog_cut[k][l]->SetTitle("at 10cm most inner part;log(Ek) MeV;flux (kHz/cm2)");    
+    sprintf(hstname,"fluxEklog_cut_niel_%i_%i",k,l);
+    hfluxEklog_cut_niel[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
+    hfluxEklog_cut_niel[k][l]->SetTitle("with 1MeV neutron fluence equivalent NIEL at 10cm most inner part;log(Ek) MeV;flux (kHz/cm2)*niel");
+    
  } 
 }
 TH1F *hpid=new TH1F("pid","pid",21,-10.5,10.5);
@@ -112,9 +151,9 @@ if (input_filename.find("PVDIS",0) != string::npos){
   current=50e-6/1.6e-19;  //50uA
   cout << " PVDIS " << current << " " << Nevent <<  endl;  
 }
-else if (input_filename.find("SIDIS_3he",0) != string::npos){
+else if (input_filename.find("SIDIS_He3",0) != string::npos){
   current=15e-6/1.6e-19;   //15uA
-  cout << " SIDIS_3he " << current << " " << Nevent <<  endl;  
+  cout << " SIDIS_He3 " << current << " " << Nevent <<  endl;  
 }
 else if (input_filename.find("SIDIS_proton",0) != string::npos){
   current=100e-9/1.6e-19;   //100nA
@@ -126,7 +165,7 @@ else if (input_filename.find("JPsi",0) != string::npos){
 }
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
-char rate_filename[100];
+char rate_filename[1000];
 TFile *ratefile;
 TTree *T;
 bool Is_eDIS=false;
@@ -134,21 +173,35 @@ double rate,theta,pf,W,Q2;
 bool Is_other=false;
 if (input_filename.find("other",0) != string::npos) {
   Is_other=true;
+  
+  if (input_filename.find("_eDIS_",0) != string::npos) {Is_eDIS=true;}  
 
-  if (input_filename.find("_eDIS_",0) != string::npos) {
-    sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_eDIS_1e6.root");
-    Is_eDIS=true;
+  if (input_filename.find("SIDIS_He3",0) != string::npos){
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_p_1e6.root");
   }
-  if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_pip_1e6.root");
-  if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_pim_1e6.root");
-  if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_pi0_1e6.root");
-  if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_eES_1e6.root");
-  if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_Kp_1e6.root");
-  if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_Km_1e6.root");
-  if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_Ks_1e6.root");
-  if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_Kl_1e6.root");
-  if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"../../../evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_3he_p_1e6.root");
 
+  if (input_filename.find("PVDIS_LD2",0) != string::npos){
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_p_1e6.root");
+  }
+  
   ratefile=new TFile(rate_filename);  
   if (ratefile->IsZombie()) {
     cout << "Error opening ratefile" << rate_filename << endl;
@@ -172,16 +225,21 @@ int yescounter=0,Ek_nocounter=0,rate_nocounter=0;
 int ratecounter=0;
 int backscat_counter=0;
 int counter_actualphoton=0,counter_acutalother=0;
-int counter_hit[n]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+// int counter_hit[n]={0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 
+int count_SC_front=0,count_SC=0,count_SC_back=0;
+int count_SC_act=0,count_SC_inact=0;
+  
 Int_t flux_evn_pre,flux_ID_pre,flux_pid_pre,flux_E_pre;
 
-  int count_SC_front=0,count_SC=0,count_SC_back=0;
-  int count_SC_act=0,count_SC_inact=0;
-  
 Int_t flux_evn,flux_nfluxhit,flux_ID,flux_pid,flux_mpid;
 Float_t flux_Edep,flux_E,flux_x,flux_y,flux_z,flux_vx,flux_vy,flux_vz,flux_px,flux_py,flux_pz;
+// cout << "ok" << endl;
 while (!input.eof()){
+  evncounter++;
+//   cout << evncounter << "\r";
+//   if (evncounter>10) break;
+
   input >> flux_evn>> flux_nfluxhit >> flux_ID >> flux_pid >> flux_mpid >>  flux_Edep >> flux_E >> flux_x >> flux_y >> flux_z >> flux_vx >> flux_vy >> flux_vz  >> flux_px >> flux_py >> flux_pz;
   
 //   if (flux_nfluxhit>300) {cout << flux_evn << endl; break;}
@@ -201,6 +259,8 @@ while (!input.eof()){
 //    if (flux_ID==2) count_SC_back++;
   
 //    if (flux_ID==4100000 && flux_pid==22 && flux_Edep !=0)  cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;
+  
+//   cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;
   
     if (flux_ID_pre==flux_ID && flux_pid_pre==flux_pid && fabs(flux_E_pre-flux_E)<1e-3)  cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;
     else {flux_ID_pre=flux_ID,flux_pid_pre=flux_pid,flux_E_pre=flux_E;}
@@ -299,9 +359,13 @@ while (!input.eof()){
 //     cout << flux_ID << endl;    
     int detector_ID=flux_ID/100000;
     if ( (detector_ID<11 || detector_ID >16) && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=41)    
+//     if ( (detector_ID<11 || detector_ID >16) && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=211 && detector_ID!=41)        
     {
       cout << "wrong flux_ID "  << flux_evn  << " " << flux_nfluxhit << " " << flux_ID << endl;
-      continue;
+     
+      cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;
+      
+            continue;
     }
     
     int subdetector_ID=flux_ID/10000; 
@@ -314,8 +378,15 @@ while (!input.eof()){
 	case 14:     hit_id=3; break;
 	case 15:     hit_id=4; break;    
 	case 16:     hit_id=5; break;
-	case 21:     hit_id=6; break;
-	case 22:     hit_id=7; break;	
+	case 21:     if (subdetector_ID==210) hit_id=6;
+		     else if (subdetector_ID==211) hit_id=18;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break;
+// 	case 211:    hit_id=18; break;     
+	case 22:     if (subdetector_ID==220) hit_id=7;
+		     else if (subdetector_ID==221) hit_id=19;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break;
 	case 31:     if (subdetector_ID==311) hit_id=8;
 		     else if (subdetector_ID==312) hit_id=9;
 		     else if (subdetector_ID==313) hit_id=10;
@@ -358,24 +429,24 @@ while (!input.eof()){
 //       if ( flux_pid != 22 && abs(flux_pid) !=11 && flux_pid !=2112 ) { continue;} ///cut anything except photon and electron and neutron
 
 
-      double hit_phi=fabs(atan(flux_y/flux_x)/3.1416*180);
-      if (flux_x > 0 && flux_y > 0) hit_phi=hit_phi;
-      else if (flux_x < 0 && flux_y > 0) hit_phi=180-hit_phi;
-      else if (flux_x < 0 && flux_y < 0) hit_phi=180+hit_phi;    
-      else if (flux_x > 0 && flux_y < 0) hit_phi=360-hit_phi;
+      double phi=fabs(atan(flux_y/flux_x)/3.1416*180);
+      if (flux_x > 0 && flux_y > 0) phi=phi;
+      else if (flux_x < 0 && flux_y > 0) phi=180-phi;
+      else if (flux_x < 0 && flux_y < 0) phi=180+phi;    
+      else if (flux_x > 0 && flux_y < 0) phi=360-phi;
       else cout << " flux wrong? " << flux_x << " " <<  flux_y << endl; 
       
-      double arearatio_cutStraightPhoton=1;
-      bool cutStraightPhoton=false;   //cut away straight photon due to PVDIS baffle problem
-      if(input_filename.find("PVDIS",0) != string::npos){ 
-	  if (par==1){
-	    arearatio_cutStraightPhoton=1./2.;  //cut 180 degree away in total, 1/2 of azimuth left
-	    for(int i=0;i<30;i++){
-	      if(fabs(hit_phi-(4.5+i*12))<3) cutStraightPhoton=true;
-	    }
-	  }
-      }      
-      if (cutStraightPhoton) continue;
+//       double arearatio_cutStraightPhoton=1;
+//       bool cutStraightPhoton=false;   //cut away straight photon due to PVDIS baffle problem
+//       if(input_filename.find("PVDIS",0) != string::npos){ 
+// 	  if (par==1){
+// 	    arearatio_cutStraightPhoton=1./2.;  //cut 180 degree away in total, 1/2 of azimuth left
+// 	    for(int i=0;i<30;i++){
+// 	      if(fabs(phi-(4.5+i*12))<3) cutStraightPhoton=true;
+// 	    }
+// 	  }
+//       }      
+//       if (cutStraightPhoton) continue;
 
     double r=sqrt(pow(flux_x,2)+pow(flux_y,2));    
     double P=sqrt(pow(flux_px,2)+pow(flux_py,2)+pow(flux_pz,2));
@@ -426,101 +497,95 @@ while (!input.eof()){
   if (true){
 //   if ( !Is_other || (Is_other && P > 100) ){
 //     cout << flux_pid << " " << par << endl;
-      hhits[hit_id][par]->Fill(flux_x/10.,flux_y/10.);
-      if (par==1 || par==2) hhits[hit_id][0]->Fill(flux_x/10.,flux_y/10.);      
       hvertex[hit_id][par]->Fill(flux_vz/10.,flux_vy/10.);
-      if (par==1 || par==2) hvertex[hit_id][0]->Fill(flux_vz/10.,flux_vy/10.);     
       
-      if ((hit_id==8 && flux_vz/10. > 402) || (hit_id==12 && flux_vz/10. > -66.9)) {backscat_counter++; continue;}
-      
-      double area=2*3.1415926*r*10.*arearatio_cutStraightPhoton; // in mm2, every bin in R is 1cm
-      double kHz=1e-3;    
-      double weight;
-      
-      if (Is_other) {
-	T->GetEntry(flux_evn); 
-	weight=rate*kHz/area;
-	
-	if (Is_eDIS && (W<2 || Q2 <1)){  /// cut for eDIS
-// 	if (theta/3.1415926*180 <5 || pf <0.5 ) {
-// 	  cout << "rate " << rate << " theta " << theta/3.1415926*180 << " pf " << pf << endl;
-// 	cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;  
-	
-	  rate_nocounter++;  
-	  continue;
-	}	  
-	
-	if (rate > 0) {if (flux_evn != flux_evn_pre) ratecounter++;}
+      ///cut away the back scattering from lead
+      if (input_filename.find("PVDIS",0) != string::npos) {  //PVDIS case
+	  if (hit_id==8 && flux_vz/10. > 318.2) {backscat_counter++; continue;}
       }
-      else weight=(current/Nevent)*kHz/area;
+      if (input_filename.find("PVDIS",0) == string::npos) {  //non-PVDIS case
+	  if ((hit_id==8 && flux_vz/10. > 403.2) || (hit_id==12 && flux_vz/10. > -66.8)) {backscat_counter++; continue;}
+      }
 
-      if (par==1 || par==2) {
-	hPlog[hit_id][0]->Fill(log10(P/1e3),weight);
-	hElog[hit_id][0]->Fill(log10(flux_E/1e3),weight);
-	hEklog[hit_id][0]->Fill(log10(Ek/1e3),weight);
-	hEdeplog[hit_id][0]->Fill(log10(flux_Edep/1e3),weight);      
-	hElog_R[hit_id][0]->Fill(log10(flux_E/1e3),r/10.,weight);
-	hEklog_R[hit_id][0]->Fill(log10(Ek/1e3),r/10.,weight);
-	if(Ek<100) hEklog_R_cut[hit_id][0]->Fill(r/10,log10(Ek/1e3));      
+      double thisrate;
+      double weight,weightR,weightPhi;
+      double area,areaR,areaPhi;
+
+      area=1.;      /// in no 
+      areaR=2*3.1415926*r*1.; /// in mm2
+      areaPhi=1.;  /// in any deg      
+      if (Is_other) {
+	T->GetEntry(flux_evn-1);
+// 	cout << flux_evn << " " << pf << " " << theta << endl;
+	thisrate=rate;
+	if (Is_eDIS && (W<2)) continue; /// cut for eDIS
       }
+      else thisrate=current/Nevent;
+      weight=thisrate/1e3/area;
+      weightR=thisrate/1e3/areaR;
+      weightPhi=thisrate/1e3/areaPhi;     
+
+      hhits[hit_id][par]->Fill(flux_x/10.,flux_y/10.);      
       hPlog[hit_id][par]->Fill(log10(P/1e3),weight);
       hElog[hit_id][par]->Fill(log10(flux_E/1e3),weight);
       hEklog[hit_id][par]->Fill(log10(Ek/1e3),weight);
       hEdeplog[hit_id][par]->Fill(log10(flux_Edep/1e3),weight);          
-      hElog_R[hit_id][par]->Fill(r/10.,log10(flux_E/1e3),weight);
-      hEklog_R[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weight);
-      if(Ek<100) hEklog_R_cut[hit_id][par]->Fill(r/10,log10(Ek/1e3));
+      hElog_R[hit_id][par]->Fill(r/10.,log10(flux_E/1e3),weightR/10.); ///in 1cm bin
+      hEklog_R[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.); ///in 1cm bin
+      
+      if (phi-int(phi/12)*12<6) hEklog_R_high[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin
+      else hEklog_R_low[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin            
+      
+      hEklog_R_Phi[hit_id][par]->Fill(phi-int(phi/12)*12,r/10.,log10(Ek/1e3),weight/30.);  // due to phi cover 12 degree, this will overlap 30 sector together, so we need to divide rate by 30
+//       hEklog_R_Phi[hit_id][par]->Fill(phi,r/10.,log10(Ek/1e3),weight);    
               
-	if (hit_id<6 || hit_id==17){
-// 	  if (flux_Edep>0) { //gem and mrpc required non-zero energy deposit
-	  if (flux_Edep>26e-6) { //gem and mrpc required non-zero energy deposit
-	    hfluxR[hit_id][par]->Fill(r/10.,weight/5.);   ///for rate in 5cm bin
-	    if (par==1 || par==2) hfluxR[hit_id][0]->Fill(r/10.,weight/5.);
-	  }
-	}
-	else { //other just counting
-	  hfluxR[hit_id][par]->Fill(r/10.,weight/5.);  ///for rate in 5cm bin
-	  if (par==1 || par==2) hfluxR[hit_id][0]->Fill(r/10.,weight/5.);
-	}
+	if (hit_id<6 && flux_Edep<26e-6){} //gem required >26eV energy deposit in first 2 gas layer
+	else if (hit_id==17 && flux_Edep<1e-100){} //mrpc required >0 energy deposit glass
+	else {  // all other just counting
+	    hfluxR[hit_id][par]->Fill(r/10.,weightR/50.);   ///in 5cm bin
+	    hEfluxR[hit_id][par]->Fill(r/10.,weightR*Ek/50.*1e3); ///in 5cm bin and from mm2 to 10cm2
+
+		///divide rate by 15 because it's 24 degree	    
+	    hfluxPhi[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi/15);	    	    
+	    hEfluxPhi[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi*Ek/15);    
+	    if(-10. < flux_vz/10. && flux_vz/10. < 30. && fabs(flux_vx/10.)<5. && fabs(flux_vy/10.)< 5.){
+		hfluxPhi_target[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi/15); 
+		hEfluxPhi_target[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi*Ek/15);
+	    }	
+	    else{
+		hfluxPhi_other[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi/15);	      
+		hEfluxPhi_other[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi*Ek/15); 
+	    }      
+	    
+	    hflux_x_y[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight/100.); //in 1cm2 bin	    
+	    hEflux_x_y[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight*Ek/100.*10.); ///in 1cm2 bin and from 1cm to 10cm	    
+	  }	
 	
-/*    double rcut;  //in cm
-    if ((input_filename.find("SIDIS",0) != string::npos) || (input_filename.find("JPsi",0) != string::npos) ){
-      if(subdetector_ID==311 || subdetector_ID==312 || subdetector_ID==314) rcut=100+10;
-      else if (subdetector_ID==321 || subdetector_ID==322) rcut=75+10;
-      else rcut=0;          
-    }
-    else if (input_filename.find("PVDIS",0) != string::npos){
-      if(subdetector_ID==311 || subdetector_ID==312 || subdetector_ID==314) rcut=118+10;
-      else rcut=0;
-    }  
-    else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;} */   
+//     double rcut;  //in cm
+//     if ((input_filename.find("SIDIS",0) != string::npos) || (input_filename.find("JPsi",0) != string::npos) ){
+//       if(subdetector_ID==311 || subdetector_ID==312 || subdetector_ID==314) rcut=100+10;
+//       else if (subdetector_ID==321 || subdetector_ID==322) rcut=75+10;
+//       else rcut=0;          
+//     }
+//     else if (input_filename.find("PVDIS",0) != string::npos){
+//       if(subdetector_ID==311 || subdetector_ID==312 || subdetector_ID==314) rcut=118+10;
+//       else rcut=0;
+//     }  
+//     else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}  
     
 //     if (r/10<rcut){
 //      hfluxEklog_cut[hit_id][par]->Fill(log10(Ek),weight);       
 //      if (par==1 || par==2) hfluxEklog_cut[hit_id][0]->Fill(log10(Ek),weight);  
 //     }
 
-     hfluxEklog_cut[hit_id][par]->Fill(log10(Ek),(current/Nevent)*kHz/(3.1416*(pow(261.,2.)-pow(118.,2.))));
-     if (par==1 || par==2) hfluxEklog_cut[hit_id][0]->Fill(log10(Ek),(current/Nevent)*kHz/(3.1416*(pow(261.,2.)-pow(118.,2.))));
-
-	area=area/10/100;  //in 10cm2
-  //       weight = (current/Nevent)*(flux_E/1e3)/area;
-// 	weight = (current/Nevent)*(P/1e3)/area;
-
-      if (Is_other) {
-	T->GetEntry(flux_evn); 
-	weight=rate*(Ek/1e3)/area;
-// 	cout << "rate " << rate << endl;	
-      }
-      else weight=(current/Nevent)*(Ek/1e3)/area;
-
-      	if (par==1 || par==2) hEflux[hit_id][0]->Fill(r/10.,weight);
-	hEflux[hit_id][par]->Fill(r/10.,weight);
+//      hfluxEklog_cut[hit_id][par]->Fill(log10(Ek),(current/Nevent)/(3.1416*(pow(261.,2.)-pow(118.,2.))));
+      
 
     }
     
     flux_evn_pre = flux_evn;
 //      if (yescounter >100) break;
+    
 }
 
 cout << "count_SC_act " << count_SC_act << " count_SC_inact " << count_SC_inact << endl;
@@ -529,6 +594,29 @@ cout << "yescounter " << yescounter << " Ek_nocounter " << Ek_nocounter << " rat
 cout << "counter_actualphoton " << counter_actualphoton << " counter_acutalother " << counter_acutalother << endl;
 cout << "ratecounter " << ratecounter << endl;
 cout << "backscat_counter " << backscat_counter << endl;
+
+for(int k=0;k<n;k++){
+   hhits[k][0]->Add(hhits[k][1],hhits[k][2]);
+   hvertex[k][0]->Add(hvertex[k][1],hvertex[k][2]);
+   hfluxR[k][0]->Add(hfluxR[k][1],hfluxR[k][2]);
+   hfluxPhi[k][0]->Add(hfluxPhi[k][1],hfluxPhi[k][2]);
+   hfluxPhi_target[k][0]->Add(hfluxPhi_target[k][1],hfluxPhi_target[k][2]);      
+   hfluxPhi_other[k][0]->Add(hfluxPhi_other[k][1],hfluxPhi_other[k][2]);      
+   hEfluxR[k][0]->Add(hEfluxR[k][1],hEfluxR[k][2]);
+   hEfluxPhi[k][0]->Add(hEfluxPhi[k][1],hEfluxPhi[k][2]);
+   hEfluxPhi_target[k][0]->Add(hEfluxPhi_target[k][1],hEfluxPhi_target[k][2]);
+   hEfluxPhi_other[k][0]->Add(hEfluxPhi_other[k][1],hEfluxPhi_other[k][2]);   
+   hflux_x_y[k][0]->Add(hflux_x_y[k][1],hflux_x_y[k][2]);
+   hEflux_x_y[k][0]->Add(hEflux_x_y[k][1],hEflux_x_y[k][2]);   
+   hPlog[k][0]->Add(hPlog[k][1],hPlog[k][2]);
+   hElog[k][0]->Add(hElog[k][1],hElog[k][2]);
+   hEklog[k][0]->Add(hEklog[k][1],hEklog[k][2]);
+   hEdeplog[k][0]->Add(hEdeplog[k][1],hEdeplog[k][2]);
+   hfluxEklog_cut[k][0]->Add(hfluxEklog_cut[k][1],hfluxEklog_cut[k][2]);
+   hfluxEklog_cut_niel[k][0]->Add(hfluxEklog_cut_niel[k][1],hfluxEklog_cut_niel[k][2]);
+   hElog_R[k][0]->Add(hElog_R[k][1],hElog_R[k][2]);
+   hEklog_R[k][0]->Add(hEklog_R[k][1],hEklog_R[k][2]);
+}
       
 TCanvas *c_pid = new TCanvas("pid","pid",900,900);
 gPad->SetLogy(1);
@@ -623,8 +711,8 @@ for(int k=0;k<n;k++){
 
 // gStyle->SetOptStat(0);
 
-TCanvas *c_fluxR_gem = new TCanvas("fluxR_gem","fluxR_gem",900,900);
 int color[6]={2,1,3,4,7,6};
+TCanvas *c_fluxR_gem = new TCanvas("fluxR_gem","fluxR_gem",900,900);
 gPad->SetLogy(1);  
 for(int k=0;k<6;k++){
   hfluxR[k][0]->SetLineColor(color[k]);
@@ -633,6 +721,17 @@ for(int k=0;k<6;k++){
   hfluxR[k][0]->SetMinimum(0.01);  
   if (k==0) hfluxR[k][0]->Draw();
   else hfluxR[k][0]->Draw("same");
+}
+
+TCanvas *c_fluxPhi_gem = new TCanvas("fluxPhi_gem","fluxPhi_gem",900,900);
+gPad->SetLogy(1);  
+for(int k=0;k<6;k++){
+  hfluxPhi[k][0]->SetLineColor(color[k]);
+  hfluxPhi[k][0]->SetMarkerColor(color[k]);  
+  hfluxPhi[k][0]->SetMaximum(100);
+  hfluxPhi[k][0]->SetMinimum(0.01);  
+  if (k==0) hfluxPhi[k][0]->Draw();
+  else hfluxPhi[k][0]->Draw("same");
 }
 
 TCanvas *c_fluxR_cherenkov = new TCanvas("fluxR_cherenkov","fluxR_cherenkov",1200,600);
@@ -680,7 +779,6 @@ for(int k=16;k<18;k++){
   }
 }
 
-
 TCanvas *c_Eklog_R_mrpc = new TCanvas("Eklog_R_mrpc","Eklog_R_mrpc",300,900);
 c_Eklog_R_mrpc->Divide(2,m);
 for(int k=16;k<18;k++){
@@ -714,92 +812,122 @@ text->SetTextColor(i+1);
 text->SetTextSize(0.024);
 }
 
-TCanvas *c_Eflux_ec = new TCanvas("Eflux_ec","Eflux_ec",1600,900);
-c_Eflux_ec->Divide(4,2);
+TCanvas *c_fluxPhi_ec = new TCanvas("fluxPhi_ec","fluxPhi_ec",1600,900);
+c_fluxPhi_ec->Divide(4,2);
 for(int k=8;k<16;k++){
-  c_Eflux_ec->cd(k-7);
-  gPad->SetLogy(1);
+  c_fluxPhi_ec->cd(k-7);
+  gPad->SetLogy(1);  
   for(int l=0;l<m;l++){
-    hEflux[k][l]->SetMinimum(1e0);
-    hEflux[k][l]->SetMaximum(1e8);
-    hEflux[k][l]->SetLineColor(l+1);
-    if (l==0) hEflux[k][l]->Draw();
-    else hEflux[k][l]->Draw("same");
+    hfluxPhi[k][l]->SetMinimum(1e-7);
+    hfluxPhi[k][l]->SetMaximum(1e7);    
+    hfluxPhi[k][l]->SetLineColor(l+1);
+    if (l==0) hfluxPhi[k][l]->Draw();
+    else hfluxPhi[k][l]->Draw("same");
   }
 }
 
-gSystem->Load("../niel/niel_fun_lib.so"); 
-//   TNiel niel_proton("niel/niel_proton.txt");
-//   TNiel niel_electron("niel/niel_electron.txt");
-//   TNiel niel_pions("niel/niel_pions.txt");
-TNiel niel_neutron("../niel/niel_neutron.txt");
-TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",50, -6,1.3);
-for(int i=0;i<420;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(14./420.)-10))));
-TCanvas *c_niel_neutron = new TCanvas("niel_neutron","niel_neutron",600,600);
-gPad->SetLogy(1);
-hniel_neutron->Draw();
+TCanvas *c_EfluxR_ec = new TCanvas("EfluxR_ec","EfluxR_ec",1600,900);
+c_EfluxR_ec->Divide(4,2);
+for(int k=8;k<16;k++){
+  c_EfluxR_ec->cd(k-7);
+  gPad->SetLogy(1);
+  for(int l=0;l<m;l++){
+    hEfluxR[k][l]->SetMinimum(1e0);
+    hEfluxR[k][l]->SetMaximum(1e8);
+    hEfluxR[k][l]->SetLineColor(l+1);
+    if (l==0) hEfluxR[k][l]->Draw();
+    else hEfluxR[k][l]->Draw("same");
+  }
+}
 
-hfluxEklog_cut_niel[8][3]->Multiply(hfluxEklog_cut[8][3],hniel_neutron);
-hfluxEklog_cut_niel[11][3]->Multiply(hfluxEklog_cut[11][3],hniel_neutron);
-hfluxEklog_cut_niel[12][3]->Multiply(hfluxEklog_cut[12][3],hniel_neutron);
-hfluxEklog_cut_niel[15][3]->Multiply(hfluxEklog_cut[15][3],hniel_neutron);
+TCanvas *c_EfluxPhi_ec = new TCanvas("EfluxPhi_ec","EfluxPhi_ec",1600,900);
+c_EfluxPhi_ec->Divide(4,2);
+for(int k=8;k<16;k++){
+  c_EfluxPhi_ec->cd(k-7);
+  gPad->SetLogy(1);
+  for(int l=0;l<m;l++){
+//     hEfluxPhi[k][l]->SetMinimum(1e0);
+//     hEfluxPhi[k][l]->SetMaximum(1e8);
+    hEfluxPhi[k][l]->SetLineColor(l+1);
+    if (l==0) hEfluxPhi[k][l]->Draw();
+    else hEfluxPhi[k][l]->Draw("same");
+  }
+}
 
-cout << hfluxEklog_cut_niel[8][3]->Integral() << endl;
-cout << hfluxEklog_cut_niel[11][3]->Integral() << endl;
-cout << hfluxEklog_cut_niel[12][3]->Integral() << endl;
-cout << hfluxEklog_cut_niel[15][3]->Integral() << endl;
 
-TCanvas *c_neutron_ec = new TCanvas("neutron_ec","neutron_ec",1600,900);
-c_neutron_ec->Divide(4,2);
-c_neutron_ec->cd(1);
-gPad->SetLogy(1);
-// hfluxR[8][3]->SetLineColor(1);
-hfluxR[8][3]->Draw();
-// hfluxR[11][3]->SetLineColor(2);
-hfluxR[11][3]->Draw("same");
-c_neutron_ec->cd(2);
-gPad->SetLogy(1);
-// hEklog[8][3]->SetLineColor(1);
-hEklog[8][3]->Draw();
-// hEklog[11][3]->SetLineColor(2);
-hEklog[11][3]->Draw("same");
-c_neutron_ec->cd(3);
-gPad->SetLogy(1);
-hfluxEklog_cut[8][3]->SetLineColor(1);
-hfluxEklog_cut[8][3]->Draw();
-hfluxEklog_cut[11][3]->SetLineColor(2);
-hfluxEklog_cut[11][3]->Draw("same");
-c_neutron_ec->cd(4);
-gPad->SetLogy(1);
-hfluxEklog_cut_niel[8][3]->SetLineColor(1);
-hfluxEklog_cut_niel[8][3]->Draw();
-hfluxEklog_cut_niel[11][3]->SetLineColor(2);
-hfluxEklog_cut_niel[11][3]->Draw("same");
-c_neutron_ec->cd(5);
-gPad->SetLogy(1);
-// hfluxR[12][3]->SetLineColor(1);
-hfluxR[12][3]->Draw();
-// hfluxR[15][3]->SetLineColor(2);
-hfluxR[15][3]->Draw("same");
-c_neutron_ec->cd(6);
-gPad->SetLogy(1);
-// hEklog[12][3]->SetLineColor(1);
-hEklog[12][3]->Draw();
-// hEklog[15][3]->SetLineColor(2);
-hEklog[15][3]->Draw("same");
-c_neutron_ec->cd(7);
-gPad->SetLogy(1);
-hfluxEklog_cut[12][3]->SetLineColor(1);
-hfluxEklog_cut[12][3]->Draw();
-hfluxEklog_cut[15][3]->SetLineColor(2);
-hfluxEklog_cut[15][3]->Draw("same");
-c_neutron_ec->cd(8);
-gPad->SetLogy(1);
-hfluxEklog_cut_niel[12][3]->SetLineColor(1);
-hfluxEklog_cut_niel[12][3]->Draw();
-hfluxEklog_cut_niel[15][3]->SetLineColor(2);
-hfluxEklog_cut_niel[15][3]->Draw("same");
+// gSystem->Load("../niel/niel_fun_lib.so"); 
+// //   TNiel niel_proton("niel/niel_proton.txt");
+// //   TNiel niel_electron("niel/niel_electron.txt");
+// //   TNiel niel_pions("niel/niel_pions.txt");
+// TNiel niel_neutron("../niel/niel_neutron.txt");
+// TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",50, -6,1.3);
+// for(int i=0;i<420;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(14./420.)-10))));
+// TCanvas *c_niel_neutron = new TCanvas("niel_neutron","niel_neutron",600,600);
+// gPad->SetLogy(1);
+// hniel_neutron->Draw();
+// 
+// hfluxEklog_cut_niel[8][3]->Multiply(hfluxEklog_cut[8][3],hniel_neutron);
+// hfluxEklog_cut_niel[11][3]->Multiply(hfluxEklog_cut[11][3],hniel_neutron);
+// hfluxEklog_cut_niel[12][3]->Multiply(hfluxEklog_cut[12][3],hniel_neutron);
+// hfluxEklog_cut_niel[15][3]->Multiply(hfluxEklog_cut[15][3],hniel_neutron);
+// 
+// cout << hfluxEklog_cut_niel[8][3]->Integral() << endl;
+// cout << hfluxEklog_cut_niel[11][3]->Integral() << endl;
+// cout << hfluxEklog_cut_niel[12][3]->Integral() << endl;
+// cout << hfluxEklog_cut_niel[15][3]->Integral() << endl;
+// 
+// TCanvas *c_neutron_ec = new TCanvas("neutron_ec","neutron_ec",1600,900);
+// c_neutron_ec->Divide(4,2);
+// c_neutron_ec->cd(1);
+// gPad->SetLogy(1);
+// // hfluxR[8][3]->SetLineColor(1);
+// hfluxR[8][3]->Draw();
+// // hfluxR[11][3]->SetLineColor(2);
+// hfluxR[11][3]->Draw("same");
+// c_neutron_ec->cd(2);
+// gPad->SetLogy(1);
+// // hEklog[8][3]->SetLineColor(1);
+// hEklog[8][3]->Draw();
+// // hEklog[11][3]->SetLineColor(2);
+// hEklog[11][3]->Draw("same");
+// c_neutron_ec->cd(3);
+// gPad->SetLogy(1);
+// hfluxEklog_cut[8][3]->SetLineColor(1);
+// hfluxEklog_cut[8][3]->Draw();
+// hfluxEklog_cut[11][3]->SetLineColor(2);
+// hfluxEklog_cut[11][3]->Draw("same");
+// c_neutron_ec->cd(4);
+// gPad->SetLogy(1);
+// hfluxEklog_cut_niel[8][3]->SetLineColor(1);
+// hfluxEklog_cut_niel[8][3]->Draw();
+// hfluxEklog_cut_niel[11][3]->SetLineColor(2);
+// hfluxEklog_cut_niel[11][3]->Draw("same");
+// c_neutron_ec->cd(5);
+// gPad->SetLogy(1);
+// // hfluxR[12][3]->SetLineColor(1);
+// hfluxR[12][3]->Draw();
+// // hfluxR[15][3]->SetLineColor(2);
+// hfluxR[15][3]->Draw("same");
+// c_neutron_ec->cd(6);
+// gPad->SetLogy(1);
+// // hEklog[12][3]->SetLineColor(1);
+// hEklog[12][3]->Draw();
+// // hEklog[15][3]->SetLineColor(2);
+// hEklog[15][3]->Draw("same");
+// c_neutron_ec->cd(7);
+// gPad->SetLogy(1);
+// hfluxEklog_cut[12][3]->SetLineColor(1);
+// hfluxEklog_cut[12][3]->Draw();
+// hfluxEklog_cut[15][3]->SetLineColor(2);
+// hfluxEklog_cut[15][3]->Draw("same");
+// c_neutron_ec->cd(8);
+// gPad->SetLogy(1);
+// hfluxEklog_cut_niel[12][3]->SetLineColor(1);
+// hfluxEklog_cut_niel[12][3]->Draw();
+// hfluxEklog_cut_niel[15][3]->SetLineColor(2);
+// hfluxEklog_cut_niel[15][3]->Draw("same");
 
 outputfile->Write();
 outputfile->Flush();
+
 }
