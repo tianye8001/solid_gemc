@@ -25,7 +25,7 @@ setenv LIBRARY_PATH /home/${USER}/lib
 I added the possibility to specify the input file and output file
 Modified the random number generator to TRandom2 class (chosen for period and speed, see http://root.cern.ch/root/html/TRandom.html). The seed now is randomly generated too, so that different parallel simulation could point to the same input file (easier for scripting and parallel processing)
 
-setup root env
+setup root env after cteq env
  
 setenv ROOTSYS /apps/root/5.28-00c-64bit
 setenv PATH ${ROOTSYS}/bin:${PATH}
@@ -49,6 +49,11 @@ It requires at the moment the file PolQuarkDist_fine.txt in the running director
      -h (or -help) print this message 
 
 
+To run it, set env like
+setenv ROOTSYS /apps/root/5.28-00c-64bit
+setenv PATH ${ROOTSYS}/bin:${PATH}
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
+setenv LD_LIBRARY_PATH /home/${USER}/lib:${LD_LIBRARY_PATH}
 
 3) Changing output from root format to lund format
 
