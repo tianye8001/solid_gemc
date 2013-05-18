@@ -77,9 +77,24 @@ Int_t nevent = (Int_t)Tflux->GetEntries();
 Int_t nselected = 0;
 cout << nevent << endl;
 
+  Int_t counter;
+  Int_t countd = 1;
+  cout << "|___________________|" << endl;
+  cout << "|" << flush;
+
 for (Int_t i=0;i<nevent;i++) {
-  cout << i << "\r";
+//   cout << i << "\r";
   
+      Double_t id = i;
+    Double_t neventd = nevent;
+    if(floor(id/neventd*20) == countd){   
+      cout << "=" << flush;
+      countd++;
+      if(countd == 20){
+	cout << "|" << endl;
+      }
+    }
+    
 //       if (i==3483533 || i==14267810 || i==14974234 || i== 17797556) continue;
       //3487436
   //   Tgen->GetEntry(i);
