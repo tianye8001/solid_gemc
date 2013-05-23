@@ -174,7 +174,7 @@ else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
    
 for (Int_t i=0;i<nevent;i++) {
   
-  cout << i << "\r";
+//   cout << i << "\r";
 //   cout << i << "\n";
   double theta=0,mom=0;  
   Tgen->GetEntry(i);  

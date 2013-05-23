@@ -2,6 +2,7 @@
 gemc \
 -gcard=solid_CLEO_PVDIS.gcard \
 -DBHOST=$GEMC_HOST \
+-HIT_PROCESS_LIST=solid \
 -HALL_MATERIAL=Vacuum \
 -RECORD_PASSBY=1 \
 -FIELD_DIR=$GEMC_field \
@@ -9,10 +10,12 @@ gemc \
 -BEAM_P="chargedgeantino, 5.5*GeV, 25*deg, 0*deg" \
 -SPREAD_P="5.5*GeV, 25*deg, 180*deg" \
 -BEAM_V="(0, 0, 10)cm" \
--SPREAD_V="(0.1, 20)cm" \
--N=3e5 \
--OUTPUT="evio,acceptance_solid_CLEO_PVDIS_positive.evio" \
+-SPREAD_V="(0.7, 20)cm" \
+-N=1e6 \
+-OUTPUT="evio,positive.evio" \
 -USE_QT=0
+
+gemc_evio2root positive.evio acceptance_solid_CLEO_PVDIS_positive_SCALEMIN1.4MAX1.4_cutinner.root
 
 # -N=1e5 \
 # -OUTPUT="evio,acceptance_solid_CLEO_PVDIS.evio" \
