@@ -8,8 +8,7 @@ use geo qw($pi);
 
 my $DetectorName = 'gem';
 
-my $envelope = "solid_$DetectorName";
-my $file     = "solid_$DetectorName.txt";
+my $file     = "solid_CLEO_PVDIS_gem_sbsgem.txt";
 
 my $rmin      = 1;
 my $rmax      = 1000000;
