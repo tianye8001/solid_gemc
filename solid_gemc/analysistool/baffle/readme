@@ -1,0 +1,18 @@
+== get baffle == 
+enter root, then run
+.x makebaf5.C_zwzhao+
+
+it requires solout_CLEO_LD2_120d_nobaf_11GeV.root at  http://hallaweb.jlab.org/12GeV/SoLID/download/baffle/
+It outputs the baffle opening in terminal, (NOT baffle blocks)
+
+== plot baffle ==
+
+baffle_plot.C can plot baffle blocks
+yu need to copy paste the baffle output from makebaf5.C into the code 
+
+== get ApvErr ==
+use  eDIS as input to run gemc with baffle to obtain root file
+then enter root, run it like
+pvdis_FOM.C("baffleCLEOv8_SCALEMIN1.4MAX1.4_cutinner.root")
+
+
