@@ -3,6 +3,7 @@
 <!-- geometry: 	-->
         <sqltable name="solid_CLEO_solenoid"/>
         <sqltable name="solid_CLEO_SIDIS_target"/>
+        <sqltable name="solid_CLEO_SIDIS_target_collimator"/>
         <sqltable name="solid_CLEO_SIDIS_beamline"/>
         <sqltable name="solid_CLEO_SIDIS_gem"/>
         <sqltable name="solid_CLEO_SIDIS_ec_largeangle"/>
@@ -13,6 +14,7 @@
         <sqltable name="solid_CLEO_SIDIS_ec_forwardangle"/>
         <sqltable name="solid_CLEO_SIDIS_virtualhodoscope_ec"/>
         <sqltable name="solid_CLEO_SIDIS_virtualhodoscope_mrpc"/>
+        <sqltable name="solid_CLEO_SIDIS_virtualhodoscope_cher"/>
 <!-- option: 	-->
         <option name="DBUSER"          value="soliduser" />
         <option name="DBPSWD"          value="ilovesolid" />
