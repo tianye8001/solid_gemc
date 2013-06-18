@@ -41,7 +41,7 @@ CaloSimPrimaryGeneratorMessenger::CaloSimPrimaryGeneratorMessenger(
 	UseFileCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
 	InputFileCmd = new G4UIcmdWithAString("/Gun/inputFile", this);
-	InputFileCmd->SetGuidance("Name of the muon input file");
+	InputFileCmd->SetGuidance("Name of the particle input file");
 	InputFileCmd->SetParameterName("inputFile", false);
 	InputFileCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
@@ -175,13 +175,13 @@ void CaloSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,
 		fpMagField->SetMagFieldValue(field);
 	}
 
-	if (command == InputBeamParticle)
+	else if (command == InputBeamParticle)
 	{
 		myAction->DefineBeamParticle(newValues);
 	}
 
 	else
-		G4cout << "That command not found." << G4endl;
+		G4cout << "That command is not found." << G4endl;
 
 }
 
