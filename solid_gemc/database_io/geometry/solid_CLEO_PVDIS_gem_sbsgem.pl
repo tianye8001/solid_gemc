@@ -65,9 +65,9 @@ sub make_gem
 
  my $Nplate  = 4;
 
-  my @PlateZ  = (154,184,295,310);
- my @Rin  = (55,65,105,115);
- my @Rout = (115,140,200,215);
+ my @PlateZ = (157.5,185.5,306,315);
+ my @Rin = (48,59,105,109);
+ my @Rout = (122,143,230,237);
 #  my $Dz   = 0.48;
 #  my $material="DCgas";
 #  my $color="44ee11";
