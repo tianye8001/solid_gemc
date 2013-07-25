@@ -8,7 +8,7 @@ setenv ROOT_VERSION 5.32
 setenv QT_VERSION 4.8.1
 setenv GEMC_VERSION 1.7
 source  /site/12gev_phys/ce/jlab.csh               #setup basic enviroment variables on ifarm
-setenv SoLID_GEMC /home/zwzhao/solid/solid_svn/solid/solid_gemc #solid_gemc location where you download from SoLID SVN (modify this to your path)
+setenv SoLID_GEMC solid_gemc_path #solid_gemc location where you download from SoLID SVN (modify this to your path)
 setenv GEMC_field /u/group/halla/www/hallaweb/html/12GeV/SoLID/download/field       #location of GEMC field map on ifarm
 setenv GEMC_HOST soliddb.jlab.org   #use this if your system is on jlab network
 setenv GEMC_DB solid_geometry       #the official detector database
