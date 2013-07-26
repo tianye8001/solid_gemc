@@ -2,11 +2,11 @@
 #this is just an example script to setup SoLID GEMC on local machine
 #modify the variables to your path and source it to setup
 #by default, gemc is its current production version by default in jlab.csh, to run the production version for SoLID gemc, we need to specify its version by set the env variables explicitly, currently its gemc version 1.7
-setenv GEANT4_VERSION 4.9.5.p01
-setenv CLHEP_VERSION 2.1.2.0
-setenv ROOT_VERSION 5.32
-setenv QT_VERSION 4.8.1
-setenv GEMC_VERSION 1.7
+setenv GEANT4_VERSION 4.9.6.p01
+setenv CLHEP_VERSION 2.1.3.1
+setenv ROOT_VERSION 5.34.05
+setenv QT_VERSION 4.8.4
+setenv GEMC_VERSION 1.8
 setenv JLAB_ROOT jlab_root_path  #setup basic enviroment variables for gemc on local installation (modify this to your path)
 source $JLAB_ROOT/ce/jlab.csh    
 setenv SoLID_GEMC solid_gemc_path #solid_gemc location where you download from SoLID SVN (modify this to your path)
