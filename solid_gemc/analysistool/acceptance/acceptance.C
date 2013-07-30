@@ -13,7 +13,7 @@ else if (input_filename.find("SIDIS_proton",0) != string::npos) s_SIDIS_proton=t
 else if (input_filename.find("JPsi",0) != string::npos) Is_JPsi=true;
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
-char output_filename[80];
+char output_filename[200];
 sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
 TFile *outputfile=new TFile(output_filename, "recreate");
 
