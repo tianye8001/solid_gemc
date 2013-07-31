@@ -1,8 +1,8 @@
-== inclusive event generator used by PVDIS ====================================
+== inclusive event generator used by PVDIS ======================================================
+
+tested on ifarm1102 with CentOS6.2 x64 on 2013/07/31
 
 FAST HOWTO COMPILE THIS GENERATOR
-
-tested on ifarm1101 (CentOS 5 x64) on 2012/12/20
 
 1) first you need a working version of cteq C interface library (http://desy.de/~znagy/hep-programs/cteq-pdf/)
 
@@ -12,28 +12,18 @@ make
 make install
 
 by default is going to write the desired library in /home/${user}/lib
-Remember to add this directory (or the one that you will choose) to your $LD_LIBRARY_PATH and $LIBRARY_PATH
-
-for example:
-setenv LD_LIBRARY_PATH /home/${USER}/lib:${LD_LIBRARY_PATH}
-setenv LIBRARY_PATH /home/${USER}/lib:${LIBRARY_PATH}
-or 
-setenv LD_LIBRARY_PATH /home/${USER}/lib
-setenv LIBRARY_PATH /home/${USER}/lib
 
 2) The Generator itself (thanks Seamus)
 I added the possibility to specify the input file and output file
 Modified the random number generator to TRandom2 class (chosen for period and speed, see http://root.cern.ch/root/html/TRandom.html). The seed now is randomly generated too, so that different parallel simulation could point to the same input file (easier for scripting and parallel processing)
 
-setup root env after cteq env
- 
-setenv ROOTSYS /apps/root/5.28-00c-64bit
-setenv PATH ${ROOTSYS}/bin:${PATH}
-setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
-#setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:${LD_LIBRARY_PATH}
+setup env (do this before compilation and running the code)
 
-Use the root at /apps/root/5.28-00c-64bit, other root might have some problem
-(Root must have been built with OpenGL enabled. Note that the scripts supplied for installing GEMC build Root with OpenGL disabled.)
+setenv LD_LIBRARY_PATH /home/${USER}/lib
+setenv LIBRARY_PATH /home/${USER}/lib
+source /apps/root/5.34.01/setroot_CUE
+ 
+(root must have been built with OpenGL enabled. Note that the scripts supplied for installing GEMC build root with OpenGL disabled.)
 
 cd eicRate_20101102/
 make
@@ -47,13 +37,6 @@ It requires at the moment the file PolQuarkDist_fine.txt in the running director
      -i (or -input) inputfile    input file name with correct flags (default input.dat)  
      -o (or -output) outputfile output file name with correct flags (default output.root)
      -h (or -help) print this message 
-
-
-To run it, set env like
-setenv ROOTSYS /apps/root/5.28-00c-64bit
-setenv PATH ${ROOTSYS}/bin:${PATH}
-setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
-setenv LD_LIBRARY_PATH /home/${USER}/lib:${LD_LIBRARY_PATH}
 
 3) Changing output from root format to lund format
 
@@ -112,7 +95,7 @@ setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
 make
 run "./collider" to see all running options
 
-== inclusive rate calculation used by SIDIS ==========================================================================
+== inclusive rate calculation used by SIDIS=========================================================
 
 cd single_rate and type make
 
@@ -128,4 +111,12 @@ calc_rate.C calls on main to generate a rate plot
 The code is based on some previous code, refer to 
 "Software for estimating (e,e'), (e,pion) cross sections (10/22/2000) source code     instruction(html)"
 at http://hallaweb.jlab.org/physics/experiments/he3/A1n/
+
+== JPsi (decay to electron and position) generator ================================================
+
+see readme in JPsi
+
+== Bethe-heitler electron and position production used by TCS ====================================
+
+see readme in genTCS
 
