@@ -38,6 +38,16 @@ It requires at the moment the file PolQuarkDist_fine.txt in the running director
      -o (or -output) outputfile output file name with correct flags (default output.root)
      -h (or -help) print this message 
 
+refer to the content of input files under output dir for input options.
+
+Besides root tree output, it can produce text output files at the same time which can be used as direct input for later detector simulation. There are two type of text files
+1. lund format for vanilla GEMC to use as input which has NO rate information 
+2. solund format for solgemc use as input which has rate information.
+
+The output root tree structure is described in output/README
+
+If you have root tree output, but no lund/solund output. No need to rerun eicRate, just do the conversion with root_to_lund below
+
 3) Changing output from root format to lund format
 
 cd root_to_lund/
