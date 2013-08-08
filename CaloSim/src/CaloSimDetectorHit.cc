@@ -48,7 +48,7 @@ CaloSimDetectorHit::~CaloSimDetectorHit() {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void CaloSimDetectorHit::SetDecayVolID(G4Step *thisStep)
+void CaloSimDetectorHit::SetDecayVolID(G4Step */*thisStep*/)
 {
   
   return;
@@ -85,7 +85,7 @@ const CaloSimDetectorHit& CaloSimDetectorHit::operator=(const CaloSimDetectorHit
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-int CaloSimDetectorHit::operator==(const CaloSimDetectorHit& right) const
+int CaloSimDetectorHit::operator==(const CaloSimDetectorHit& /*right*/) const
 {
   return 0;
 }
@@ -151,6 +151,7 @@ void CaloSimDetectorHit::Print() // this goes to the screen for user to watch
     G4cerr <<G4endl;
   }
 }
+
 void CaloSimDetectorHit::PrintToFile(ofstream *file)
 { // to the output file specified by CaloSimDetectorSD
 

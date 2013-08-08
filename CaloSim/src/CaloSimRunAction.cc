@@ -57,7 +57,7 @@ void CaloSimRunAction::BeginOfRunAction(const G4Run* aRun)
 
   if (G4VVisManager::GetConcreteInstance())
     {
-      G4UImanager* UI = G4UImanager::GetUIpointer();
+//      G4UImanager* UI = G4UImanager::GetUIpointer();
       // UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
   //  G4cout<<"CaloSimRunAction::BeginOfRunAction ended."<<G4endl;
@@ -68,7 +68,8 @@ void CaloSimRunAction::BeginOfRunAction(const G4Run* aRun)
 void CaloSimRunAction::EndOfRunAction(const G4Run*)
 {
   //  G4cout<<"CaloSimRunAction::EndOfRunAction"<<G4endl;
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+//  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
+//  assert(pVVisManager);
   
   if(G4VVisManager::GetConcreteInstance())
   {

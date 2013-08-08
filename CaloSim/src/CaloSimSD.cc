@@ -19,10 +19,11 @@
 #include "G4String.hh"
 #include "stdio.h"
 #include "math.h"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 CaloSimSD::CaloSimSD(G4String name, G4String outputFileName = NULL) :
-	G4VSensitiveDetector(name)
+		G4VSensitiveDetector(name)
 {
 	G4cout << "CaloSimSD instantiating...";
 	G4String HCname = name;
@@ -35,27 +36,79 @@ CaloSimSD::CaloSimSD(G4String name, G4String outputFileName = NULL) :
 	//  G4String outputFileName="test.root";
 	rootFile = new TFile(outputFileName, "RECREATE");
 
-	ntuple
-	        = new TNtuple("ntuple",
+	ntuple =
+	        new TNtuple("ntuple",
 	                "ROOT Ntuple for G4 data",
 	                // 		       "evtIndex:vtxE:initX:initY:initZ:caloX:caloY:caloZ:initPX:initPY:initPZ:caloEdep:fiberEdep:glueEdep:WEdep:b01:b02:b03:b04:b05:b06:b07:b08:b09:b10:b11:b12:b13:b14:b15:b16:b17:b18:b19:b20:b21:b22:b23:b24:b25:v01:v02:v03:v04:v05:v06:v07:v08:v09:v10:v11:v12:v13:v14:v15:h01:h02:h03:h04:h05:h06:h07:h08:h09:h10:h11:h12:h13:h14:h15:totalEdep:diffX:diffY:diffZ:startOut");
 	                "evtIndex:vtxE:initX:initY:initZ:caloX:caloY:caloZ:initPX:initPY:initPZ:caloEdep:fiberEdep:glueEdep:WEdep:totalEdep:ratioEdep:diffX:diffY:diffZ:startOut:b01:b02:b03:b04:b05:b06:b07:b08:b09:b10:b11:b12:b13:b14:b15:b16:b17:b18:b19:b20:v01:v02:v03:v04:v05:v06:v07:v08:v09:v10:v11:v12:v13:v14:v15:v16:v17:v18:v19:v20:h01:h02:h03:h04:h05:h06:h07:h08:h09:h10:h11:h12:h13:h14:h15:h16:caloEdep_ps:fiberEdep_ps:glueEdep_ps:WEdep_ps:totalEdep_ps:ratioEdep_ps");
 
-	G4int xbins = 200;
-	G4double xmax = 200.;
-	Int_t ybins = 320;
-	G4double ymax = 160;
-	EvsFiber = new TH2D("EvsFiber", "EvsFiber", xbins, 0, xmax, ybins, 0, ymax);
-	EvsFiber->SetOption("colz");
+	T = new TTree("T", "ROOT Ntuple for G4 data");
 
-	hHit_XY = new TH2F("Hit_XY", "Hit_XY", 600, -150, 150, 400, -100, 100);
-	hHit_XZ = new TH2F("Hit_XZ", "Hit_XZ", 600, -150, 150, 600, -300, 300);
-	hHit_YZ = new TH2F("Hit_YZ", "Hit_YZ", 400, -100, 100, 600, -300, 300);
+	T->Branch("Theta", &myTheta, "Theta/D");
+
+	T->Branch("NBlockHit", &NBlockHit, "NBlockHit/I");
+	NBlockHit = nblock;
+
+	T->Branch("NBlockHitLayer", &NBlockHitLayer, "NBlockHitLayer/I");
+	NBlockHitLayer = nblock * nScintlayer;
+
+	T->Branch("NHitLayer", &NHitLayer, "NHitLayer/I");
+	NHitLayer = nScintlayer;
+
+	T->Branch("blockID", blockID, "blockID[NBlockHit]/I");
+	T->Branch("layerID", layerID, "layerID[NHitLayer]/I");
+
+	T->Branch("blockX", blockX, "blockX[NBlockHit]/D");
+	T->Branch("blockY", blockY, "blockY[NBlockHit]/D");
+
+	T->Branch("blockWEdep", blockWEdep, "blockWEdep[NBlockHit]/D");
+	T->Branch("blockglueEdep", blockglueEdep, "blockglueEdep[NBlockHit]/D");
+	T->Branch("blockfiberEdep", blockfiberEdep, "blockfiberEdep[NBlockHit]/D");
+	T->Branch("blockfiberEdep_PS", blockfiberEdep_PS,
+	        "blockfiberEdep_PS[NBlockHit]/D");
+
+	// disabled to save file size
+//	T->Branch("blockglueEdepLayer",blockglueEdepLayer,"blockglueEdepLayer[NBlockHitLayer]/D");
+//	T->Branch("blockfiberEdepLayer",blockfiberEdepLayer,"blockfiberEdepLayer[NBlockHitLayer]/D");
+
+	T->Branch("glueEdepLayer", glueEdepLayer, "glueEdepLayer[NHitLayer]/D");
+	T->Branch("fiberEdepLayer", fiberEdepLayer, "fiberEdepLayer[NHitLayer]/D");
+	T->Branch("fiberEdepIonizingLayer", fiberEdepIonizingLayer,
+	        "fiberEdepIonizingLayer[NHitLayer]/D");
+	T->Branch("WEdepLayer", WEdepLayer, "WEdepLayer[NHitLayer]/D");
+
+	T->Branch("blockfiberPhotons", blockfiberPhotons,
+	        "blockfiberPhotons[NBlockHit]/D");
+	T->Branch("fiberPhotonsLayer", fiberPhotonsLayer,
+	        "fiberPhotonsLayer[NHitLayer]/D");
+
+//	G4int xbins = 200;
+//	G4double xmax = 200.;
+//	Int_t ybins = 320;
+//	G4double ymax = 160;
+//	EvsFiber = new TH2D("EvsFiber", "EvsFiber", xbins, 0, xmax, ybins, 0, ymax);
+//	EvsFiber->SetOption("colz");
+
+	hHit_XY = new TH2F("Hit_XY", "Hit_XY", 600, -300, 300, 400, -300, 300);
+	hHit_XZ = new TH2F("Hit_XZ", "Hit_XZ", 600, -300, 300, 600, -0,
+	        ShashlikBlockDepth);
+	hHit_YZ = new TH2F("Hit_YZ", "Hit_YZ", 400, -300, 300, 600, -0,
+	        ShashlikBlockDepth);
+
+//	hStep_Layer = new TH2F("hStep_Layer", "Step size in layer", 1000,0,4);
+//	hStep_Fiber = new TH2F("hStep_Fiber", "Step size in Fiber", 1000,0,4);
+
 	hHit_XY->SetOption("colz");
 	hHit_XZ->SetOption("colz");
 	hHit_YZ->SetOption("colz");
 
 	evtIndex = -1;
+
+	for (int i = 0; i < nblock; i++)
+	{
+		blockX[i] = 0;
+		blockY[i] = 0;
+	}
 
 }
 
@@ -90,11 +143,10 @@ void CaloSimSD::Initialize(G4HCofThisEvent* HCE)
 	Prim4VecSet = false;
 
 	fEnteredCalo = 0;
-
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-G4bool CaloSimSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
+G4bool CaloSimSD::ProcessHits(G4Step* aStep, G4TouchableHistory* /*ROhist*/)
 {
 	/////////////////////////////////////////////////////////////////////
 	// This function is called when a particle takes a step in a       //
@@ -128,15 +180,38 @@ G4bool CaloSimSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 	{
 		creatorProcessName = creatorProcess->GetProcessName();
 	}
+
+//	G4cout << "CaloSimSD::ProcessHits - Step print:"<<G4endl;
+//
+//	G4cout << "\t particleName = \t"<<particleName<<G4endl;
+//	G4cout << "\t volumeName = \t"<<volumeName<<G4endl;
+//	G4cout << "\t stepProcessName = \t"<<stepProcessName<<G4endl;
+//	G4cout << "\t creatorProcessName = \t"<<creatorProcessName<<G4endl;
+//	G4cout << "\t step size = \t"<<aStep->GetStepLength()/mm<<" mm"<<G4endl;
+
 	CaloSimDetectorHit* newHit = new CaloSimDetectorHit();
 	// these numbers we know right away
 	newHit->SetTrackNumber(aStep->GetTrack()->GetTrackID());
 	newHit->SetEdep(aStep->GetTotalEnergyDeposit());
+	newHit->SetEdepIonizing(
+	        aStep->GetTotalEnergyDeposit()
+	                - aStep->GetNonIonizingEnergyDeposit());
 	newHit->SetParticleMom(aStep->GetPreStepPoint()->GetMomentum());
 	newHit->SetHitPosition(aStep->GetPreStepPoint()->GetPosition());
 	newHit->SetHitVol(volumeName);
 	newHit->SetParticleEnergy(aStep->GetTrack()->GetKineticEnergy());
 	newHit->SetVertexPos(aStep->GetTrack()->GetVertexPosition());
+
+//	if (aStep->GetNonIonizingEnergyDeposit())
+//	{
+//		G4cout<<"--> Found Non-Ionizing hit "<<aStep->GetNonIonizingEnergyDeposit()<<G4endl;
+//	}
+
+//	G4cout<<"newHit->GetHitPosition() = "
+//			<<newHit->GetHitPosition().x()<<", "
+//			<<newHit->GetHitPosition().y()<<", "
+//			<<newHit->GetHitPosition().z()
+//			<<G4endl;
 
 	// set the names of process used in this step, and
 	// process that created the current particle
@@ -162,38 +237,57 @@ G4bool CaloSimSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
 	if (!strcmp(volumeName, "Fiber"))
 	{
 
-		hitBlock
-		        = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(2);
-		hitLayer
-		        = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(1);
-		hitFiber
-		        = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(0);
+		hitBlock = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(
+		        2);
+		hitLayer = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(
+		        1);
+		hitFiber = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(
+		        0);
 
+		assert(hitFiber==0);
+		// Shashlik Mod
 	}
 
-	if (!strcmp(volumeName, "Layer"))
+	if (!strcmp(volumeName, "Layer") or !strcmp(volumeName, "phrej_Scint")
+	        or !strcmp(volumeName, "Leading_Scint")
+//			or !strcmp(volumeName, "Backend_Scint")
+	        )
 	{
 
-		hitBlock
-		        = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(1);
-		hitLayer
-		        = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(0);
+		hitBlock = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(
+		        1);
+		hitLayer = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(
+		        0);
 
 		//   G4cout<< volumeName << "  LAYER: " << hitLayer << " FIBER: " << hitFiber
 		//	<< "  BLOCK: "  << hitBlock << G4endl;
 
 	}
 
+	if (!strcmp(volumeName, "CaloBlock"))
+	{
+
+		hitBlock = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(
+		        0);
+
+	}
+
 	if (!strcmp(volumeName, "SVert"))
 	{
-		hitSVert
-		        = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(0);
+		hitSVert = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(
+		        0);
+
+		assert(0);
+		// disabled
 	}
 
 	if (!strcmp(volumeName, "SHoriz"))
 	{
 		hitSHoriz = aStep->GetPreStepPoint()->GetTouchable()->GetReplicaNumber(
 		        0);
+
+		assert(0);
+		// disabled
 	}
 
 	newHit->SetSVert(hitSVert);
@@ -223,12 +317,16 @@ void CaloSimSD::EndOfEvent(G4HCofThisEvent* HCE)
 	// other leaves and branches in the tree.                         //
 	////////////////////////////////////////////////////////////////////
 
+	// std::cerr<<"End Of Event ..."<<G4endl;
+
 	// evtIndex is incremented in Initialize() fcn. Starts with 0, not 1.
 	if (G4double(G4int(evtIndex / 100)) == (evtIndex / 100.))
 		G4cout << "Doing ProcessEventHC on event " << evtIndex << G4endl;
 
 	ProcessEventHC(HCE);
 }
+
+double CaloSimSD::Theta = 0;
 
 void CaloSimSD::ProcessEventHC(G4HCofThisEvent* hitCollections)
 {
@@ -244,6 +342,7 @@ void CaloSimSD::ProcessEventHC(G4HCofThisEvent* hitCollections)
 
 	G4double totalEdep = 0;
 	G4double fiberEdep = 0;
+	G4double fiberEdepIonizing = 0;
 	G4double glueEdep = 0;
 	G4double WEdep = 0;
 
@@ -252,13 +351,43 @@ void CaloSimSD::ProcessEventHC(G4HCofThisEvent* hitCollections)
 	G4double glueEdep_ps = 0;
 	G4double WEdep_ps = 0;
 
-	G4double b[200] =
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	// std::cerr<<"Init Process ..."<<G4endl;
 
-	G4double h[160] =
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-	G4double v[200] =
-	{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	G4double b[nblock + 100] =
+	{ 0 };
+
+	G4double h[nblock + 100] =
+	{ 0 };
+	G4double v[nblock + 100] =
+	{ 0 };
+
+	for (int i = 0; i < nblock; i++)
+	{
+		b[i] = h[i] = v[i] = 0;
+
+		blockWEdep[i] = blockglueEdep[i] = blockfiberEdep[i] =
+		        blockfiberEdep_PS[i] = blockfiberPhotons[i] = 0;
+
+		blockID[i] = i;
+		for (int j = 0; j < nScintlayer; j++)
+		{
+			assert(i*nScintlayer + j<NBlockHitLayer);
+			blockglueEdepLayer[i * nScintlayer + j] = 0;
+			blockfiberEdepLayer[i * nScintlayer + j] = 0;
+			blockfiberPhotonsLayer[i * nScintlayer + j] = 0;
+		}
+	}
+	for (int j = 0; j < nScintlayer; j++)
+	{
+		layerID[j] = j;
+		glueEdepLayer[j] = 0;
+		fiberEdepLayer[j] = 0;
+		fiberEdepIonizingLayer[j] = 0;
+		WEdepLayer[j] = 0;
+		fiberPhotonsLayer[j] = 0;
+	}
+
+	// std::cerr<<"Start Process ..."<<G4endl;
 
 	CaloSimHitsCollection *aHitCollWithinThisEvent;
 
@@ -266,15 +395,15 @@ void CaloSimSD::ProcessEventHC(G4HCofThisEvent* hitCollections)
 	G4int NCollections = hitCollections->GetNumberOfCollections();
 	for (G4int n = 0; n < NCollections; n++)
 	{
-		aHitCollWithinThisEvent
-		        = (CaloSimHitsCollection*) hitCollections->GetHC(n);
+		aHitCollWithinThisEvent =
+		        (CaloSimHitsCollection*) hitCollections->GetHC(n);
 		G4int EntriesWithinHitColl = aHitCollWithinThisEvent->entries();
 
 		// loop over the hits within the hit collections
 		for (G4int ent = 0; ent < EntriesWithinHitColl; ent++)
 		{
 			//    G4cout<<"Starting entry "<<ent<<" of "<<EntriesWithinHitColl<<G4endl;
-			G4int thisType = (*aHitCollWithinThisEvent)[ent]->GetParticleType();
+//			G4int thisType = (*aHitCollWithinThisEvent)[ent]->GetParticleType();
 			G4String thisProcess =
 			        (*aHitCollWithinThisEvent)[ent]->GetStepProcName();
 			G4String thisVolume =
@@ -282,88 +411,106 @@ void CaloSimSD::ProcessEventHC(G4HCofThisEvent* hitCollections)
 			G4int trackID = (*aHitCollWithinThisEvent)[ent]->GetTrackNumber();
 
 			G4double edep = (*aHitCollWithinThisEvent)[ent]->GetEdep();
+			G4double edep_ionizing =
+			        (*aHitCollWithinThisEvent)[ent]->GetEdepIonizing();
 
+			G4int block = (*aHitCollWithinThisEvent)[ent]->GetBlock();
+			G4int layer = (*aHitCollWithinThisEvent)[ent]->GetLayer();
+			assert(block<nblock && block>=0);
+			assert(layer<nScintlayer && layer>=0);
+
+			G4ThreeVector hitpos =
+			        (*aHitCollWithinThisEvent)[ent]->GetHitPosition();
+
+//			// std::cerr<<"Test Process ..."<<G4endl;
+
+			if (!strcmp(thisVolume, "CaloBlock"))
+			{
+				WEdep = WEdep + edep;
+
+				blockWEdep[block] += edep;
+
+				G4int Wlayer = floor(
+				        (hitpos.z() - (phrej_Scint + leading_Pb + leading_Scint
+				                + front_spt_plate)) / layerSep) + 1;
+				if (Wlayer < 0)
+					Wlayer = 0;
+
+				if (Wlayer < nScintlayer && Wlayer >= 0)
+					WEdepLayer[Wlayer] += edep;
+				else
+					G4cout << "Error Wlayer = " << Wlayer << G4endl;
+
+			}
 			if (!strcmp(thisVolume, "Layer"))
 			{
 				glueEdep = glueEdep + edep;
 				totalEdep = totalEdep + edep;
+
+				assert(block<nblock);
+				blockglueEdep[block] += edep;
+
+				assert(block*nScintlayer+layer<nblock*nScintlayer);
+				blockglueEdepLayer[block * nScintlayer + layer] += edep;
+
+				assert(layer<nScintlayer);
+				glueEdepLayer[layer] += edep;
+
 			}
-			if (!strcmp(thisVolume, "CaloBlock"))
-				WEdep = WEdep + edep;
-			if (!strcmp(thisVolume, "Fiber"))
+			if (!strcmp(thisVolume, "Fiber")
+			        or !strcmp(thisVolume, "phrej_Scint")
+			        or !strcmp(thisVolume, "Leading_Scint")
+//					or !strcmp(thisVolume, "Backend_Scint")
+			        )
 			{
+				const G4double photon = Edep2Photon(edep, hitpos);
+
+				if (!strcmp(thisVolume, "phrej_Scint"))
+					assert(layer == 0);
+
+				if (!strcmp(thisVolume, "Leading_Scint"))
+					assert(layer == 1);
+
+//				if (!strcmp(thisVolume, "Backend_Scint"))
+//					assert(layer == nScintlayer-1);
+
 				fiberEdep = fiberEdep + edep;
 				totalEdep = totalEdep + edep;
-			}
+				fiberEdepIonizing = fiberEdepIonizing + edep_ionizing;
 
-			if (!strcmp(thisVolume, "Layer_ps"))
-			{
-				glueEdep_ps = glueEdep_ps + edep;
-				totalEdep_ps = totalEdep_ps + edep;
-			}
-			if (!strcmp(thisVolume, "CaloBlock_ps"))
-				WEdep_ps = WEdep_ps + edep;
-			if (!strcmp(thisVolume, "Fiber_ps"))
-			{
-				fiberEdep_ps = fiberEdep_ps + edep;
-				totalEdep_ps = totalEdep_ps + edep;
-			}
+				assert(block<nblock);
 
-			G4int sv = 0;
-			if (!strcmp(thisVolume, "SVert"))
-			{
-				//G4cout<<trackID<<G4endl;
-				//G4cout<<particleName<<G4endl;
-				sv = (*aHitCollWithinThisEvent)[ent]->GetSVert();
-				v[sv - 1] = v[sv - 1] + edep;
-				//v[sv-1]+=1;
-				//G4cout<<"Vert "<<sv<<G4endl;
-			}
+				if (layer == 1)
+					blockfiberEdep_PS[block] += edep;
+				else if (layer > 1)
+					blockfiberEdep[block] += edep;
+				blockfiberPhotons[block] += photon;
 
-			G4int sh = 0;
-			if (!strcmp(thisVolume, "SHoriz"))
-			{
-				sh = (*aHitCollWithinThisEvent)[ent]->GetSHoriz();
-				//G4cout<<"horiz "<<sh<<G4endl;
-				h[sh - 1] = h[sh - 1] + edep;
-				//h[sh-1]+=1;
-				//	G4cout<<h[sh-1]/GeV<<G4endl;
-			}
+				assert(block*nScintlayer+layer<nblock*nScintlayer);
+				blockfiberEdepLayer[block * nScintlayer + layer] += edep;
+				blockfiberPhotonsLayer[block * nScintlayer + layer] += photon;
 
-			G4int block = 0;
+				assert(layer<nScintlayer);
+				fiberEdepLayer[layer] += edep;
+				fiberEdepIonizingLayer[layer] += edep_ionizing;
+				fiberPhotonsLayer[layer] += photon;
+
+			}
+//			// std::cerr<<"Test Process ..."<<G4endl;
+
 			//if(!strcmp(thisVolume,"Fiber") || !strcmp(thisVolume,"Layer")){
-			if (!strcmp(thisVolume, "Fiber"))
-			{ // Use only the fiber energy
-				block = (*aHitCollWithinThisEvent)[ent]->GetBlock();
-				b[block - 1] = b[block - 1] + edep;
+//			if (!strcmp(thisVolume, "Fiber"))
+//			{ // Use only the fiber energy
+//				b[block - 1] = b[block - 1] + edep;
 
-				//G4cout << "block = "  << block << "\n";
-				//G4cout << thisVolume << " " << edep << " " << block << "\n";
-			}
-
-			// histogram fiber energy
-			G4int layer = 0;
-			G4int fiber = 0;
-			if (!strcmp(thisVolume, "Fiber"))
-			{
-				block = (*aHitCollWithinThisEvent)[ent]->GetBlock();
-				layer = (*aHitCollWithinThisEvent)[ent]->GetLayer();
-				fiber = (*aHitCollWithinThisEvent)[ent]->GetFiber();
-
-				G4int blockY = (block - 1) / 5;
-				G4int blockX = (block - 1) - (blockY * 5);
-				G4int fx = 40 * blockX + layer;
-				G4int fy = 80 * blockY + fiber;
-
-				EvsFiber->SetBinContent(fx, fy, edep + EvsFiber->GetBinContent(
-				        fx, fy));
-
-			}
+			//G4cout << "block = "  << block << "\n";
+			//G4cout << thisVolume << " " << edep << " " << block << "\n";
+//			}
 
 			pos = (*aHitCollWithinThisEvent)[ent]->GetHitPosition();
-			hHit_XY->Fill(pos.x(), pos.y());
-			hHit_XZ->Fill(pos.x(), pos.z());
-			hHit_YZ->Fill(pos.y(), pos.z());
+			hHit_XY->Fill(pos.x(), pos.y(), edep);
+			hHit_XZ->Fill(pos.x(), pos.z(), edep);
+			hHit_YZ->Fill(pos.y(), pos.z(), edep);
 
 			//       totalEdep=totalEdep+edep;
 
@@ -385,26 +532,26 @@ void CaloSimSD::ProcessEventHC(G4HCofThisEvent* hitCollections)
 			 caloPos = (*aHitCollWithinThisEvent)[ent]->GetVertexPos();
 			 }*/
 
-			if (trackID == 1 && (!strcmp(thisVolume, "CaloBlock") || !strcmp(
-			        thisVolume, "Layer") || !strcmp(thisVolume, "Fiber"))
-			        && fEnteredCalo == 0)
-			{
-
-				//G4cout<<thisVolume<<G4endl;
-				caloPos = (*aHitCollWithinThisEvent)[ent]->GetHitPosition();
-				diffPos = caloPos - vtxPos;
-				fEnteredCalo = 1;
-			}
-
-		}
+//			if (trackID == 1 && (!strcmp(thisVolume, "CaloBlock") || !strcmp(
+//			        thisVolume, "Layer") || !strcmp(thisVolume, "Fiber"))
+//			        && fEnteredCalo == 0)
+//			{
+//
+//				//G4cout<<thisVolume<<G4endl;
+//				caloPos = (*aHitCollWithinThisEvent)[ent]->GetHitPosition();
+//				diffPos = caloPos - vtxPos;
+//				fEnteredCalo = 1;
+//			}
+		} // 		for (G4int ent = 0; ent < EntriesWithinHitColl; ent++)
 
 	}
+
+	// std::cerr<<"Ending Process ..."<<G4endl;
 
 	G4double caloX = caloPos.x();
 	G4double caloY = caloPos.y();
 	G4double caloZ = caloPos.z();
-	//G4cout<<"caloX= "<<caloX/cm+7.5<<"   caloY= "<<caloY/cm+7.5<<"   caloZ= "<<caloZ/cm<<G4endl;
-
+//	G4cout<<"caloX= "<<caloX/cm+7.5<<"   caloY= "<<caloY/cm+7.5<<"   caloZ= "<<caloZ/cm<<G4endl;
 
 	G4double initX = vtxPos.x();
 	G4double initY = vtxPos.y();
@@ -423,28 +570,60 @@ void CaloSimSD::ProcessEventHC(G4HCofThisEvent* hitCollections)
 	G4double caloEdep_ps = fiberEdep_ps + glueEdep_ps + WEdep_ps;
 	G4double ratioEdep_ps = fiberEdep_ps / WEdep_ps;
 
+	// std::cerr<<"ntpars ..."<<G4endl;
 	Float_t ntpars[200] =
 	{ evtIndex, vtxE / GeV, initX / cm, initY / cm, initZ / cm, caloX / cm,
 	        caloY / cm, caloZ / cm, initPX, initPY, initPZ, caloEdep / GeV,
 	        fiberEdep / GeV, glueEdep / GeV, WEdep / GeV, totalEdep / GeV,
-	        ratioEdep / GeV, diffX / cm, diffY / cm, diffZ / cm, fStartOut,
-	        b[0] / GeV, b[1] / GeV, b[2] / GeV, b[3] / GeV, b[4] / GeV, b[5]
-	                / GeV, b[6] / GeV, b[7] / GeV, b[8] / GeV, b[9] / GeV,
-	        b[10] / GeV, b[11] / GeV, b[12] / GeV, b[13] / GeV, b[14] / GeV,
+	        ratioEdep / GeV, diffX / cm, diffY / cm, diffZ / cm, fStartOut, b[0]
+	                / GeV, b[1] / GeV, b[2] / GeV, b[3] / GeV, b[4] / GeV, b[5]
+	                / GeV, b[6] / GeV, b[7] / GeV, b[8] / GeV, b[9] / GeV, b[10]
+	                / GeV, b[11] / GeV, b[12] / GeV, b[13] / GeV, b[14] / GeV,
 	        b[15] / GeV, b[16] / GeV, b[17] / GeV, b[18] / GeV, b[19] / GeV,
 	        v[0] / GeV, v[1] / GeV, v[2] / GeV, v[3] / GeV, v[4] / GeV, v[5]
-	                / GeV, v[6] / GeV, v[7] / GeV, v[8] / GeV, v[9] / GeV,
-	        v[10] / GeV, v[11] / GeV, v[12] / GeV, v[13] / GeV, v[14] / GeV,
+	                / GeV, v[6] / GeV, v[7] / GeV, v[8] / GeV, v[9] / GeV, v[10]
+	                / GeV, v[11] / GeV, v[12] / GeV, v[13] / GeV, v[14] / GeV,
 	        v[15] / GeV, v[16] / GeV, v[17] / GeV, v[18] / GeV, v[19] / GeV,
 	        h[0] / GeV, h[1] / GeV, h[2] / GeV, h[3] / GeV, h[4] / GeV, h[5]
-	                / GeV, h[6] / GeV, h[7] / GeV, h[8] / GeV, h[9] / GeV,
-	        h[10] / GeV, h[11] / GeV, h[12] / GeV, h[13] / GeV, h[14] / GeV,
-	        h[15] / GeV,
-	        caloEdep_ps / GeV, fiberEdep_ps / GeV, glueEdep_ps / GeV, WEdep_ps / GeV, totalEdep_ps / GeV,
-	        	        ratioEdep_ps / GeV
-	};
+	                / GeV, h[6] / GeV, h[7] / GeV, h[8] / GeV, h[9] / GeV, h[10]
+	                / GeV, h[11] / GeV, h[12] / GeV, h[13] / GeV, h[14] / GeV,
+	        h[15] / GeV, caloEdep_ps / GeV, fiberEdep_ps / GeV, glueEdep_ps
+	                / GeV, WEdep_ps / GeV, totalEdep_ps / GeV, ratioEdep_ps
+	                / GeV };
+	// std::cerr<<"Done ntpars ..."<<G4endl;
 
+	assert(ntuple);
 	ntuple->Fill(ntpars);
+	// std::cerr<<"Done ntuple ..."<<G4endl;
+
+	assert(NBlockHit<=nblock);
+	assert(NBlockHitLayer<=nblock*nScintlayer);
+	assert(NHitLayer<=nScintlayer);
+
+	myTheta = Theta;
+
+	// process photon numbers
+
+	for (int i = 0; i < nblock; i++)
+	{
+
+		blockfiberPhotons[i] = RndGen.Poisson(blockfiberPhotons[i]);
+
+		for (int j = 0; j < nScintlayer; j++)
+		{
+			blockfiberPhotonsLayer[i * nScintlayer + j] = RndGen.Poisson(
+			        blockfiberPhotonsLayer[i * nScintlayer + j]);
+		}
+	}
+	for (int j = 0; j < nScintlayer; j++)
+	{
+		fiberPhotonsLayer[j] = RndGen.Poisson(fiberPhotonsLayer[j]);
+	}
+
+	assert(T);
+	T->Fill();
+
+	// std::cerr<<"Done Process ..."<<G4endl;
 
 	/*
 	 fprintf(outfile, "%d\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\t",
@@ -456,6 +635,10 @@ void CaloSimSD::ProcessEventHC(G4HCofThisEvent* hitCollections)
 	 }
 	 fprintf(outfile, "\n");
 	 */
+
+	G4cout << "Sampling ratio = " << fiberEdep / (fiberEdep + glueEdep + WEdep)
+	        << ", " << fiberEdepIonizing / (fiberEdep + glueEdep + WEdep)
+	        << " (Ionizing)" << G4endl;
 }
 
 G4int CaloSimSD::GetParticleType(G4String particleName, G4int parentID)

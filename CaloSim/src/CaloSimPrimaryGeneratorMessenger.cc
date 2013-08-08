@@ -50,6 +50,11 @@ CaloSimPrimaryGeneratorMessenger::CaloSimPrimaryGeneratorMessenger(
 	EnergyCmd->SetParameterName("Energy", false);
 	EnergyCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
+	EnergySpreadCmd = new G4UIcmdWithADouble("/Gun/EnergySpread", this);
+	EnergySpreadCmd->SetGuidance("Energy Spread of electron beam, sampled in log scale.");
+	EnergySpreadCmd->SetParameterName("EnergySpread", false);
+	EnergySpreadCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+
 	AngleCmd = new G4UIcmdWithADouble("/Gun/Angle", this);
 	AngleCmd->SetGuidance("Starting Angle of electron beam. 0 = perp to face");
 	AngleCmd->SetParameterName("Angle", false);
@@ -100,6 +105,7 @@ CaloSimPrimaryGeneratorMessenger::~CaloSimPrimaryGeneratorMessenger()
 	delete UseFileCmd;
 	delete InputFileCmd;
 	delete EnergyCmd;
+	delete EnergySpreadCmd;
 	delete AngleCmd;
 	delete AngleRandCmd;
 	delete XInitCmd;
@@ -128,11 +134,17 @@ void CaloSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,
 	else if (command == EnergyCmd)
 	{
 		myAction->SetEnergy(EnergyCmd->GetNewDoubleValue(newValues));
-		printf("\n Energy: %f\n", EnergyCmd->GetNewDoubleValue(newValues));
+		printf("\n Energy: %f GeV\n", EnergyCmd->GetNewDoubleValue(newValues));
+	}
+	else if (command == EnergySpreadCmd)
+	{
+		myAction->SetEnergySpread(EnergySpreadCmd->GetNewDoubleValue(newValues));
+		printf("\n Energy Spread: Energy -> Energy + %f GeV\n", EnergySpreadCmd->GetNewDoubleValue(newValues));
 	}
 	else if (command == AngleCmd)
 	{
 		myAction->SetAngle(AngleCmd->GetNewDoubleValue(newValues));
+		printf("\n SetAngle:  %f Deg\n", AngleCmd->GetNewDoubleValue(newValues));
 	}
 	else if (command == AngleRandCmd)
 	{
