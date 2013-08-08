@@ -51,6 +51,7 @@ private:
   G4int         SVertHit;
   G4int         ParticleType;
   G4double      Edep;
+  G4double      Edep_Ionizing;
   G4ThreeVector ParticleMomentum;
   G4double      ParticleEnergy;
   G4double      LocalTime;
@@ -75,6 +76,7 @@ public:
   inline void SetSHoriz(G4int sh) { SHorizHit = sh; };
   inline void SetParticleType(G4int id) {ParticleType = id;};
   inline void SetEdep        (G4double ed)  { Edep = ed; };
+  inline void SetEdepIonizing        (G4double ed)  { Edep_Ionizing = ed; };
   inline void SetParticleMom(G4ThreeVector pxpypz) {ParticleMomentum = pxpypz;};
   inline void SetParticleEnergy (G4double pE)   { ParticleEnergy = pE; };
   inline void SetLocalTime     (G4double time) { LocalTime = time; };
@@ -97,6 +99,7 @@ public:
   G4int GetSHoriz(){ return SHorizHit;};
   G4int GetParticleType() { return ParticleType; };
   G4double GetEdep()      { return Edep; };      
+  G4double GetEdepIonizing()      { return Edep_Ionizing; };
   G4ThreeVector GetParticleMom() { return ParticleMomentum; };
   G4double GetParticleEnergy()   { return ParticleEnergy; };
   inline G4double GetLocalTime()          { return LocalTime; };

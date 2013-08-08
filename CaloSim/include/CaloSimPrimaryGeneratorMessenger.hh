@@ -53,6 +53,7 @@ private:
 	 */
 	G4UIcmdWithABool* UseFileCmd;
 	G4UIcmdWithADouble* EnergyCmd;
+	G4UIcmdWithADouble* EnergySpreadCmd;
 	G4UIcmdWithADouble* AngleCmd;
 	G4UIcmdWithADouble* AngleRandCmd;
 	G4UIcmdWithADouble* XInitCmd;

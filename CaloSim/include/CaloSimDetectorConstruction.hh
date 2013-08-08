@@ -5,10 +5,12 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class CaloSimSD;
 
+#include "G4String.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4VisAttributes.hh"
+#include "Config.h"
 
 class CaloSimDetectorConstruction: public G4VUserDetectorConstruction
 {
@@ -18,19 +20,19 @@ public:
 	~CaloSimDetectorConstruction();
 
 	G4VPhysicalVolume* Construct();
-	G4VPhysicalVolume* ConstructShowerOnly();
-	G4VPhysicalVolume* ConstructTotoalShower();
-	G4VPhysicalVolume*
-	ConstructShower(G4VPhysicalVolume* experimentalHall_phys, CaloSimSD* aSD);
-	G4VPhysicalVolume
-	        *
-	        ConstructPreShower(G4VPhysicalVolume* experimentalHall_phys,
-	                CaloSimSD* aSD);
+//	G4VPhysicalVolume* ConstructShowerOnly();
+//	G4VPhysicalVolume* ConstructTotoalShower();
+	G4VPhysicalVolume* ConstructShowerShashlik();
+	G4VPhysicalVolume* ConstructShowerShashlikLayout(G4String layout_file);
+	G4VPhysicalVolume* ConstructShowerShashlikHexagon();
 
-	enum
-	{
-		nX = 12, nY = 4, nX_ps = 1, nY_ps = nY
-	}; // number of shower elements
+//	G4VPhysicalVolume*
+//	ConstructShower(G4VPhysicalVolume* experimentalHall_phys, CaloSimSD* aSD);
+//	G4VPhysicalVolume
+//	        *
+//	        ConstructPreShower(G4VPhysicalVolume* experimentalHall_phys,
+//	                CaloSimSD* aSD);
+
 private:
 
 	void buildMaterials();
@@ -74,7 +76,9 @@ private:
 	G4Element *elNi; // Nickel,    atomic no. 28
 	G4Element *elSn; // Tin,       atomic no. 50
 	G4Element *elW; // Tungsten,  atomic no. 74
+	G4Element *elPb; //
 	G4Element *elAu; // Gold,      atomic no. 79
+	G4Element *elCu; // Copper,      atomic no. 29
 
 
 	//
@@ -86,11 +90,13 @@ private:
 	G4Material *BC408;
 	G4Material *Iron;
 	G4Material *Lead;
+	G4Material *LeadH;
 	G4Material *Mylar;
 	G4Material *SSteel;
 	G4Material *Sulfur;
 	G4Material *Tin;
 	G4Material *Tungsten;
+	G4Material *Copper;
 
 	// Gases
 	G4Material *Air;
@@ -116,6 +122,11 @@ private:
 	G4VisAttributes *offAtt;
 	G4VisAttributes *TargetVisAtt;
 
+	G4Material* PbGl;
+	G4Element* O;
+	G4Element* Si;
+	G4Element* Pb;
+	G4Material* SiO2;
 };
 
 #endif

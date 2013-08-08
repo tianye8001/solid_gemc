@@ -27,7 +27,7 @@ public:
 	CaloSimRunAction();
 	~CaloSimRunAction();
 
-	const G4int GetRunID()
+	G4int GetRunID() const
 	{
 		return runID;
 	};

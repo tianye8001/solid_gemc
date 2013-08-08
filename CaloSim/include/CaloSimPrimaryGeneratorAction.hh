@@ -24,7 +24,7 @@ public:
 	void GeneratePrimaries(G4Event* anEvent);
 	CaloSimPrimaryGeneratorMessenger* generatorMessenger; //pointer to the Messenger
 
-	bool DefineBeamParticle(G4String particleName);
+	bool DefineBeamParticle(G4String particleName = "e-");
 	inline void SetUseFile(G4bool usefile)
 	{
 		if (usefile) G4cout << "Set to use Gun Input file " << G4endl;
@@ -33,6 +33,12 @@ public:
 	inline void SetEnergy(G4double energy)
 	{
 		fEnergy = energy;
+	}
+	inline void SetEnergySpread(G4double energy)
+	{
+		assert(energy>=0);
+		if (energy<1e-6) energy = 1e-6;
+		fEnergySpread = energy;
 	}
 	inline void SetAngle(G4double angle)
 	{
@@ -69,13 +75,15 @@ private:
 	G4ParticleGun* particleGun;
 	CaloSimDetectorConstruction* myDetector;
 
-	G4double fEnergy, fAngle, fAngleRand, fXInit, fXInitRand, fYInit,
+	G4double fEnergy, fEnergySpread, fAngle, fAngleRand, fXInit, fXInitRand, fYInit,
 	        fYInitRand;
 	G4String fFilename;
 
 	G4bool fUseFile;
 
 	FILE *elecfile;
+
+	G4int evcnt;
 
 };
 
