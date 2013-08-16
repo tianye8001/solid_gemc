@@ -1,10 +1,12 @@
-== inclusive event generator used by PVDIS ======================================================
+== inclusive event generator ======================================================
 
-tested on ifarm1102 with CentOS6.2 x64 on 2013/07/31
+tested on ifarm1102 with CentOS6.2 x64 on 2013/07/31 by Zhiwen Zhao
 
 FAST HOWTO COMPILE THIS GENERATOR
 
-1) first you need a working version of cteq C interface library (http://desy.de/~znagy/hep-programs/cteq-pdf/)
+1) first you need a working version of cteq C interface library 
+   orginal at http://desy.de/~znagy/hep-programs/cteq-pdf/
+   local copy in evgen/cteq-pdf-1.0.4/
 
 cd cteq-pdf-1.0.4/
 ./configure
@@ -13,8 +15,8 @@ make install
 
 by default is going to write the desired library in /home/${user}/lib
 
-2) The Generator itself (thanks Seamus)
-I added the possibility to specify the input file and output file
+2) The Generator itself (by Seamus Riordan)
+Lorenzo Zana added the possibility to specify the input file and output file
 Modified the random number generator to TRandom2 class (chosen for period and speed, see http://root.cern.ch/root/html/TRandom.html). The seed now is randomly generated too, so that different parallel simulation could point to the same input file (easier for scripting and parallel processing)
 
 setup env (do this before compilation and running the code)
@@ -105,7 +107,7 @@ setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
 make
 run "./collider" to see all running options
 
-== inclusive rate calculation used by SIDIS=========================================================
+== inclusive rate calculation used for SIDIS proposal ==============================================
 
 cd single_rate and type make
 
