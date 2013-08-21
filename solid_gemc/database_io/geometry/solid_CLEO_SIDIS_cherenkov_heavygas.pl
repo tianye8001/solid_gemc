@@ -43,7 +43,7 @@ sub make_chamber
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Polycone";
- $detector{"dimensions"}  = "0*deg 360*deg 2 86*cm 98*cm 265*cm 265*cm 306*cm 396*cm";
+ $detector{"dimensions"}  = "0*deg 360*deg 2 86*cm 98*cm 265*cm 265*cm 316*cm 406*cm";
  $detector{"material"}    = $material_gas;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -63,7 +63,7 @@ sub make_chamber_window_front
  $detector{"name"}        = "$DetectorName\_chamber_window_front";
  $detector{"mother"}      = "$DetectorName\_chamber";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 306.025*cm";
+ $detector{"pos"}         = "0*cm 0*cm 316.025*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Tube";
@@ -87,7 +87,7 @@ sub make_chamber_window_back
  $detector{"name"}        = "$DetectorName\_chamber_window_back";
  $detector{"mother"}      = "$DetectorName\_chamber";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 395.75*cm";
+ $detector{"pos"}         = "0*cm 0*cm 405.75*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Tube";
@@ -117,7 +117,7 @@ sub make_lightout
  $detector{"name"}        = "$DetectorName\_lightout";
  $detector{"mother"}      = "$DetectorName\_chamber";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 315*cm";
+ $detector{"pos"}         = "0*cm 0*cm 325*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
@@ -129,7 +129,7 @@ sub make_lightout
  my $Sphi  = 0;
  my $Dphi  = 360;
  $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"material"}    = "Kryptonite";
+ $detector{"material"}    = "Vacuum";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;

@@ -241,7 +241,7 @@ sub make_lightout
  my $Sphi  = 0;
  my $Dphi  = 360;
  $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"material"}    = "Kryptonite";
+ $detector{"material"}    = "Vacuum";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
