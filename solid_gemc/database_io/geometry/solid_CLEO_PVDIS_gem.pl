@@ -202,14 +202,17 @@ sub make_gem
 #  my @PlateZ  = (157.5,185.5,306,321);  # change for last two planes further back as Cherenkov needs 10cm more
 #  my @Rin  = (55,65,105,115);
 #  my @Rout = (115,140,200,215);
- my @PlateZ = (157.5,185.5,306,315);
+#  my @PlateZ = (157.5,185.5,306,315);
+ my @PlateZ = (157.5,185.5,190,306,315);
 #cover target center at 10cm from 21 to 36 degree
 #  my @Rin = (56,67,113,117);
 #  my @Rout = (108,129,215,222);
 #  my $Dz   = 0.5;
 #cover 40cm long full target with center at 10cm from 21 to 36 degree
- my @Rin = (48,59,105,109);
- my @Rout = (122,143,230,237);
+#  my @Rin = (48,59,105,109);
+#  my @Rout = (122,143,230,237);
+ my @Rin = (48,59,65,105,109);
+ my @Rout = (122,143,143,230,237);
  my $Dz   = 0.9781/2; 
  my $color="44ee11";
 
