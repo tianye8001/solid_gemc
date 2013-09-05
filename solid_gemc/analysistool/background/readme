@@ -29,20 +29,20 @@ this converts hits in flux bank into a txt file to reduce file size.
 at this step, don't use a root version compiled by GEMC installation method which has a lot things disabled not working with this script
 use root from /apps/root on CUE or compile one from source yourself
 
+******* niel not working for now as 2013/09/04******
 compile packacge niel to have niel_fun_lib.so
 
 in root, run 
 .L ../niel/niel_fun_lib.so
+****************************************************
+
 .L background.C+
 background("background_solid_CLEO_SIDIS_3he_5e7.txt",5e7)
 or 
 background("background_solid_CLEO_SIDIS_3he_other_pip_1e6.txt",1e6)
 
+
 this plot histograms showing hits and store them in background_solid_CLEO_SIDIS_3he_5e7_output.root or background_solid_CLEO_SIDIS_3he_other_pip_1e6_output.root
-
-
-
-
 
 
 2012 by Zhiwen Zhao
