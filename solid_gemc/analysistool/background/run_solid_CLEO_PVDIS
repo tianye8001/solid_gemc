@@ -10,7 +10,7 @@ gemc \
 -HALL_FIELD=solenoid_CLEO \
 -BEAM_P="e-, 11*GeV, 0*deg, 0*deg" \
 -BEAM_V="(0, 0, -400)cm" \
--SPREAD_V="(0.1, 0)cm" \
+-SPREAD_V="(0.35, 0)cm" \
 -N=5e6 \
 -OUTPUT="evio,background_solid_CLEO_PVDIS_5e6.evio" \
 -USE_QT=0
