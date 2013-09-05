@@ -33,11 +33,12 @@ char output_filename[80];
 sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
 TFile *outputfile=new TFile(output_filename, "recreate");
 
-const int n=20; // number of detector
+const int n=25; // number of detector
 const int m=11; //number of particles
 
 char *label[m]={"photon+electron+positron","photon","electron+positron","neutron","proton","pip","pim","Kp","Km","Kl","other"};
 
+TH1F *hvertexZ[n][m];
 TH2F *hhits[n][m],*hvertex[n][m];
 TH1F *hfluxR[n][m];
 TH1F *hfluxPhi[n][m],*hfluxPhi_target[n][m],*hfluxPhi_other[n][m];
@@ -57,7 +58,9 @@ for(int k=0;k<n;k++){
    sprintf(hstname,"hits_%i_%i",k,l);
    hhits[k][l]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);
    sprintf(hstname,"vertex_%i_%i",k,l);
-   hvertex[k][l]=new TH2F(hstname,hstname,5000,-500,500,400,-400,400);
+   hvertex[k][l]=new TH2F(hstname,hstname,5000,-500,500,800,0,400);
+   sprintf(hstname,"vertexZ_%i_%i",k,l);   
+   hvertexZ[k][l]=new TH1F(hstname,hstname,5000,-500,500);   
    
    sprintf(hstname,"fluxR_%i_%i",k,l);
    hfluxR[k][l]=new TH1F(hstname,hstname,60,0,300);
@@ -106,19 +109,19 @@ for(int k=0;k<n;k++){
     hEdeplog[k][l]->SetTitle(";log(Edep) GeV;counts");    
 
     sprintf(hstname,"Elog_R_%i_%i",k,l);
-    hElog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 50,-6,1.3);
+    hElog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);
     hElog_R[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");    
     sprintf(hstname,"Eklog_R_%i_%i",k,l);
-    hEklog_R[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 50,-6,1.3);    
+    hEklog_R[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 200,-6,1.3);    
     hEklog_R[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");
     sprintf(hstname,"Eklog_R_high_%i_%i",k,l);
-    hEklog_R_high[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 50,-6,1.3);    
+    hEklog_R_high[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 200,-6,1.3);    
     hEklog_R_high[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");
     sprintf(hstname,"Eklog_R_low_%i_%i",k,l);
-    hEklog_R_low[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 50,-6,1.3);    
+    hEklog_R_low[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 200,-6,1.3);    
     hEklog_R_low[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");
     sprintf(hstname,"Eklog_R_Phi_%i_%i",k,l);
-    hEklog_R_Phi[k][l] = new TH3F(hstname, hstname, 48,0,12,300, 0, 300, 50,-6,1.3);    
+    hEklog_R_Phi[k][l] = new TH3F(hstname, hstname, 48,0,12,300, 0, 300, 200,-6,1.3);    
     hEklog_R_Phi[k][l]->SetTitle(";Phi (deg);R (cm);log(Ek) (GeV)");
 
     sprintf(hstname,"fluxEklog_cut_%i_%i",k,l);
@@ -165,11 +168,11 @@ else if (input_filename.find("JPsi",0) != string::npos){
 }
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
-char rate_filename[1000];
+char rate_filename[500];
 TFile *ratefile;
 TTree *T;
 bool Is_eDIS=false;
-double rate,theta,pf,W,Q2;
+double rate,theta,pf,W,Q2,x;
 bool Is_other=false;
 if (input_filename.find("other",0) != string::npos) {
   Is_other=true;
@@ -201,10 +204,36 @@ if (input_filename.find("other",0) != string::npos) {
     if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Kl_1e6.root");
     if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_p_1e6.root");
   }
+
+  if (input_filename.find("PVDIS_LH2",0) != string::npos){
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_p_1e6.root");
+  }
+  
+  if (input_filename.find("JPsi_LH2",0) != string::npos){
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_p_1e6.root");
+  }  
   
   ratefile=new TFile(rate_filename);  
   if (ratefile->IsZombie()) {
-    cout << "Error opening ratefile" << rate_filename << endl;
+    cout << "Error opening ratefile " << rate_filename << endl;
     exit(-1);
   }
   else cout << "open file " << rate_filename << endl;
@@ -215,6 +244,7 @@ if (input_filename.find("other",0) != string::npos) {
   T->SetBranchAddress("pf",&pf);  
   T->SetBranchAddress("W",&W);  
   T->SetBranchAddress("Q2",&Q2);    
+  T->SetBranchAddress("x",&x);  
 
   cout << " other background " <<  endl;  
 }
@@ -262,8 +292,8 @@ while (!input.eof()){
   
 //   cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;
   
-    if (flux_ID_pre==flux_ID && flux_pid_pre==flux_pid && fabs(flux_E_pre-flux_E)<1e-3)  cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;
-    else {flux_ID_pre=flux_ID,flux_pid_pre=flux_pid,flux_E_pre=flux_E;}
+//     if (flux_ID_pre==flux_ID && flux_pid_pre==flux_pid && fabs(flux_E_pre-flux_E)<1e-3)  cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;
+//     else {flux_ID_pre=flux_ID,flux_pid_pre=flux_pid,flux_E_pre=flux_E;}
   
       switch (flux_pid){
       case 22:     hpid->Fill(0); break;
@@ -358,7 +388,7 @@ while (!input.eof()){
       
 //     cout << flux_ID << endl;    
     int detector_ID=flux_ID/100000;
-    if ( (detector_ID<11 || detector_ID >16) && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=41)    
+    if ( detector_ID !=11 && detector_ID !=12 &&  detector_ID !=13 && detector_ID !=14 && detector_ID !=15 && detector_ID !=16 && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=41)    
 //     if ( (detector_ID<11 || detector_ID >16) && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=211 && detector_ID!=41)        
     {
       cout << "wrong flux_ID "  << flux_evn  << " " << flux_nfluxhit << " " << flux_ID << endl;
@@ -372,17 +402,34 @@ while (!input.eof()){
 
     int hit_id;
      switch (detector_ID){
-	case 11:     hit_id=0; break;
-	case 12:     hit_id=1; break;
-	case 13:     hit_id=2; break;
-	case 14:     hit_id=3; break;
-	case 15:     hit_id=4; break;    
-	case 16:     hit_id=5; break;
+	case 11:     if (subdetector_ID==110) hit_id=0;
+		     else if (subdetector_ID==111) hit_id=20;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break; 
+	case 12:     if (subdetector_ID==120) hit_id=1;
+		     else if (subdetector_ID==121) hit_id=21;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break; 
+	case 13:     if (subdetector_ID==130) hit_id=2;
+		     else if (subdetector_ID==131) hit_id=22;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break; 
+	case 14:     if (subdetector_ID==140) hit_id=3;
+		     else if (subdetector_ID==141) hit_id=23;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break; 
+	case 15:     if (subdetector_ID==150) hit_id=4;
+		     else if (subdetector_ID==151) hit_id=24;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break; 
+	case 16:     if (subdetector_ID==160) hit_id=5;
+		     else if (subdetector_ID==161) hit_id=25;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break;
 	case 21:     if (subdetector_ID==210) hit_id=6;
 		     else if (subdetector_ID==211) hit_id=18;
 		     else cout << "wrong flux_ID " << flux_ID << endl;		      
-		     break;
-// 	case 211:    hit_id=18; break;     
+		     break; 
 	case 22:     if (subdetector_ID==220) hit_id=7;
 		     else if (subdetector_ID==221) hit_id=19;
 		     else cout << "wrong flux_ID " << flux_ID << endl;		      
@@ -448,7 +495,7 @@ while (!input.eof()){
 //       }      
 //       if (cutStraightPhoton) continue;
 
-    double r=sqrt(pow(flux_x,2)+pow(flux_y,2));    
+    double r=sqrt(pow(flux_x,2)+pow(flux_y,2));            
     double P=sqrt(pow(flux_px,2)+pow(flux_py,2)+pow(flux_pz,2));
 //     double M;
 //     if (par==1) M=0;
@@ -496,16 +543,45 @@ while (!input.eof()){
 //     if(1<flux_E ) {      
   if (true){
 //   if ( !Is_other || (Is_other && P > 100) ){
-//     cout << flux_pid << " " << par << endl;
-      hvertex[hit_id][par]->Fill(flux_vz/10.,flux_vy/10.);
       
       ///cut away the back scattering from lead
       if (input_filename.find("PVDIS",0) != string::npos) {  //PVDIS case
+// 	  if (r/10.<110 || 265<r/10.) {backscat_counter++; continue;}
 	  if (hit_id==8 && flux_vz/10. > 318.2) {backscat_counter++; continue;}
       }
       if (input_filename.find("PVDIS",0) == string::npos) {  //non-PVDIS case
-	  if ((hit_id==8 && flux_vz/10. > 403.2) || (hit_id==12 && flux_vz/10. > -66.8)) {backscat_counter++; continue;}
+// 	  if ((hit_id==8 && flux_vz/10. > 403.2) || (hit_id==12 && flux_vz/10. > -66.8)) {backscat_counter++; continue;}
+	  if ((hit_id==8 && flux_vz/10. > 423.2) || (hit_id==12 && flux_vz/10. > -66.8)){
+	    backscat_counter++; 
+//        cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;     
+	    continue;    
+	  }
       }
+
+      ///cut away beamline and its shielding
+//       if (input_filename.find("PVDIS",0) != string::npos) {  //PVDIS case
+// 	  if (flux_vz/10. > 44 && flux_vz/10. < 140 && sqrt(flux_vx/10.*flux_vx/10.+flux_vy/10.*flux_vy/10.) < tan(9.5/180.*3.1415926)*(flux_vz/10.-44)) {
+// // 	    cout << flux_vz/10. << " " << sqrt(flux_vx/10.*flux_vx/10.+flux_vy/10.*flux_vy/10.) << endl;
+// 	    continue;	    
+// 	  }
+// 	  if(flux_vz/10. >= 140 && flux_vz/10. <= 150 && sqrt(flux_vx/10.*flux_vx/10.+flux_vy/10.*flux_vy/10.) < 41) {
+// // 	    cout << flux_vz/10. << " " << sqrt(flux_vx/10.*flux_vx/10.+flux_vy/10.*flux_vy/10.) << endl;	    
+// 	    continue;	    
+// 	  }
+//       }      
+
+      ///cut first baffle 4cm
+/*      if (input_filename.find("PVDIS",0) != string::npos) {  //PVDIS case
+	  if(flux_vz/10. >= 35.5 && flux_vz/10. <= 44.5 && sqrt(flux_vx/10.*flux_vx/10.+flux_vy/10.*flux_vy/10.) < 4) {
+// 	    cout << flux_vz/10. << " " << sqrt(flux_vx/10.*flux_vx/10.+flux_vy/10.*flux_vy/10.) << endl;	    
+	    continue;	    
+	  }
+      } */     
+      
+//     cout << flux_pid << " " << par << endl;
+//       hvertex[hit_id][par]->Fill(flux_vz/10.,flux_vy/10.);
+      hvertex[hit_id][par]->Fill(flux_vz/10.,sqrt(flux_vx/10.*flux_vx/10.+flux_vy/10.*flux_vy/10.));
+      hvertexZ[hit_id][par]->Fill(flux_vz/10.);      
 
       double thisrate;
       double weight,weightR,weightPhi;
@@ -518,7 +594,10 @@ while (!input.eof()){
 	T->GetEntry(flux_evn-1);
 // 	cout << flux_evn << " " << pf << " " << theta << endl;
 	thisrate=rate;
+// 	thisrate=1;	
+	if (input_filename.find("JPsi",0) != string::npos) thisrate=rate*1.2; ///use 1e37 while it should 1.2e37, may change later
 	if (Is_eDIS && (W<2)) continue; /// cut for eDIS
+// 	if (Is_eDIS && (x<0.65)) continue; /// cut for eDIS	
       }
       else thisrate=current/Nevent;
       weight=thisrate/1e3/area;
