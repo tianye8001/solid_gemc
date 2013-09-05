@@ -51,14 +51,15 @@ my $targetoff=10;
 
 sub make_beam_entrance
 {
- my $NUM  = 4;
- my @z    = (-675+330,0.,-329.9,329.9875);
- my @Rin  = (0.,0.0,0.0,0.0);
- my @Rout = (1.25,1.22,1.22,1.22);
- my @Dz   = (330,330,0.1,0.0125);
- my @name = ("BMP1","BMV1","BMD1","BMW1"); 
- my @mother = ("$DetectorMother","$DetectorName\_BMP1","$DetectorName\_BMV1","$DetectorName\_BMV1"); 
- my @mat  = ("Aluminum","Vacuum","Vacuum","G4_Be");
+ my $NUM  = 2;
+ my @z    = (-687+330,0.);
+ my @Rin  = (0.,0.);
+ my @Rout = (30,29.95);
+ my @Dz   = (330,330);
+ my @name = ("BMP1","BMV1"); 
+ my @mother = ("$DetectorMother","$DetectorName\_BMP1"); 
+ my @mat  = ("Aluminum","Vacuum");
+ my @color = ("0000ff","808080");
 
  for(my $n=1; $n<=$NUM; $n++)
  {
@@ -67,12 +68,12 @@ sub make_beam_entrance
     $detector{"description"} = "$DetectorName\_$name[$n-1]";
     $detector{"pos"}        = "0*cm 0*cm $z[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = "808080";
+    $detector{"color"}      = $color[$n-1];
     $detector{"type"}       = "Tube";
     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
@@ -80,7 +81,6 @@ sub make_beam_entrance
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "";
     $detector{"identifiers"} = "";
-
     print_det(\%detector, $file);
  }
 }
@@ -88,17 +88,11 @@ make_beam_entrance();
 
 sub make_beam_exit
 {
- my $NUM  = 4;
-#  my @z    = (35+232.5,0.,232.4,-232.4875);
- my @z    = (45+232.5,0.,232.4,-232.4875);
- my @Rmin1  = (0.,0.,0.,0.);
- my @Rmax1 = (1.5,1.4,28.9,1.4);
- my @Rmin2  = (0.,0.,0.,0.);
- my @Rmax2 = (29.,28.9,28.9,1.4);
- my @Dz   = (232.5,232.5,0.1,0.0125);
- my @name = ("B3PP","B3PV","B3DM","B3W1"); 
- my @mother=("$DetectorMother","$DetectorName\_B3PP","$DetectorName\_B3PV","$DetectorName\_B3PV");
- my @mat  = ("Aluminum","Vacuum","Vacuum","G4_Be");
+ my $NUM  = 2;
+ my @name = ("B3PP","B3PV"); 
+ my @mother=("$DetectorMother","$DetectorName\_B3PP");
+ my @mat  = ("Aluminum","Vacuum");
+ my @color = ("0000ff","808080");
 
  for(my $n=1; $n<=$NUM; $n++)
  {
@@ -106,14 +100,15 @@ sub make_beam_exit
     $detector{"name"}        = "$DetectorName\_$name[$n-1]";
     $detector{"mother"}      = "$mother[$n-1]" ;
     $detector{"description"} = $detector{"name"};
-    $detector{"pos"}        = "0*cm 0*cm $z[$n-1]*cm";
+    $detector{"pos"}        = "0*cm 0*cm 0*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = "808080";
-    $detector{"type"}       = "Cons";
-    $detector{"dimensions"} = "$Rmin1[$n-1]*cm $Rmax1[$n-1]*cm $Rmin2[$n-1]*cm $Rmax2[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
+    $detector{"color"}      = $color[$n-1];
+    $detector{"type"}       = "Polycone";
+    if ($n==1) {$detector{"dimensions"} = "0*deg 360*deg 3 0*cm 0*cm 0*cm 5*cm 19*cm 19*cm 47*cm 110*cm 550*cm";}
+    if ($n==2) {$detector{"dimensions"} = "0*deg 360*deg 3 0*cm 0*cm 0*cm 4.95*cm 18.95*cm 18.95*cm 47*cm 110*cm 550*cm";}
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
@@ -121,7 +116,6 @@ sub make_beam_exit
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "";
     $detector{"identifiers"} = "";
-
     print_det(\%detector, $file);
  }
 }
