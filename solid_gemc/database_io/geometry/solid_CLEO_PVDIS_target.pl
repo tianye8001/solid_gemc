@@ -39,14 +39,16 @@ my $targetoff=10;
 
 sub make_target_PVDIS_target
 {
+# 120um windows, 15mil wall, 4cm radius?
  my $NUM  = 6;
- my @z    = (0.+$targetoff,0.,-24.975,24.975,0.,0.);
+ my @z    = (0.+$targetoff,0.,-39.98,39.98,0.,0.);
  my @Rin  = (0.,0.,0.,0.,0.,0.);
- my @Rout = (5.,4.95,1.22,1.5,1.918,1.9);
- my @Dz   = (25.,24.95,0.025,0.025,20.,19.982);
+ my @Rout = (3,2.9,2.9,2.9,2.538,2.5);
+ my @Dz   = (40,39.96,0.02,0.02,20.012,20.);
  my @name = ("$DetectorName\_TACH","$DetectorName\_TACV","$DetectorName\_TAW1","$DetectorName\_TAW2","$DetectorName\_TALU","$DetectorName\_TAH2"); 
  my @mother=("$DetectorMother","$DetectorName\_TACH","$DetectorName\_TACH","$DetectorName\_TACH","$DetectorName\_TACV","$DetectorName\_TALU");
- my @mat  = ("Aluminum","Vacuum","Vacuum","Vacuum","Aluminum","LD2");
+ my @mat  = ("Vacuum","Vacuum","Vacuum","Vacuum","Aluminum","LD2");
+ my @color = ("0000ff","808080","0000ff","0000ff","0000ff","ff0000");
 
  for(my $n=1; $n<=$NUM; $n++)
  {
@@ -56,7 +58,7 @@ sub make_target_PVDIS_target
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $z[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = "ff0000";
+    $detector{"color"}      = $color[$n-1];
     $detector{"type"}       = "Tube";
     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
