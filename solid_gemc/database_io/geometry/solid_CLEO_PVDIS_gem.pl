@@ -196,7 +196,7 @@ my $DetectorMother="root";
 
 sub make_gem
 {
- my $Nplate  = 4;
+ my $Nplate  = 5;
 # my @PlateZ  = (155,185,295,310);  # as on p56 of pac34 proposal
 # my @PlateZ  = (157.5,185.5,297,306); # as in Eugen's code
 #  my @PlateZ  = (157.5,185.5,306,321);  # change for last two planes further back as Cherenkov needs 10cm more
