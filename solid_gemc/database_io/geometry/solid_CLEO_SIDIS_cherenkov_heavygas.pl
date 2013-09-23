@@ -43,7 +43,7 @@ sub make_chamber
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Polycone";
- $detector{"dimensions"}  = "0*deg 360*deg 2 86*cm 98*cm 265*cm 265*cm 316*cm 406*cm";
+ $detector{"dimensions"}  = "0*deg 360*deg 2 83*cm 96*cm 265*cm 265*cm 306*cm 406*cm";
  $detector{"material"}    = $material_gas;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -63,11 +63,11 @@ sub make_chamber_window_front
  $detector{"name"}        = "$DetectorName\_chamber_window_front";
  $detector{"mother"}      = "$DetectorName\_chamber";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 316.025*cm";
+ $detector{"pos"}         = "0*cm 0*cm 306.025*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "86*cm 265*cm 0.025*cm 0*deg 360*deg";
+ $detector{"dimensions"}  = "83.1*cm 264.9*cm 0.025*cm 0*deg 360*deg";
  $detector{"material"}    = "Aluminum";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -91,7 +91,7 @@ sub make_chamber_window_back
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "98*cm 265*cm 0.25*cm 0*deg 360*deg";
+ $detector{"dimensions"}  = "96*cm 265*cm 0.25*cm 0*deg 360*deg";
  $detector{"material"}    = "Aluminum";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -117,7 +117,7 @@ sub make_lightout
  $detector{"name"}        = "$DetectorName\_lightout";
  $detector{"mother"}      = "$DetectorName\_chamber";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 325*cm";
+ $detector{"pos"}         = "0*cm 0*cm 315*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";

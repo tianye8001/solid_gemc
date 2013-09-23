@@ -28,14 +28,15 @@ my $DetectorMother="root";
 
 sub make_mrpc
 { 
- my $z=400;
+#  my $z=400;
+ my $z=410;
 
  my $Nlayer = 5;
  my @layer_thickness = (0.08,0.42,0.16,0.42,0.08);
- my @material = ("PCBoardM","G4_GLASS_PLATE","PCBoardM","G4_GLASS_PLATE");
+ my @material = ("PCBoardM","G4_GLASS_PLATE","PCBoardM","G4_GLASS_PLATE","PCBoardM");
  my $color="ff0000";
 
-    $detector{"name"}        = "$DetectorName\_$n";
+    $detector{"name"}        = "$DetectorName";
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm $z*cm";
@@ -43,7 +44,7 @@ sub make_mrpc
     $detector{"color"}      = "111111";
     $detector{"type"}       = "Tube";
     my $Rmin = 96;
-    my $Rmax = 207;
+    my $Rmax = 210;
     my $Dz   = 1.16/2; # total thickness
     $detector{"dimensions"}  = "$Rmin*cm $Rmax*cm $Dz*cm 0*deg 360*deg";
     $detector{"material"}   = "Vacuum";
@@ -87,7 +88,7 @@ sub make_mrpc
 	if ($i==2 || $i==4){
 	  $detector{"sensitivity"} = "FLUX";
 	  $detector{"hit_type"}    = "FLUX";
-	  $detector{"identifiers"} = "id manual $id";
+	  $detector{"identifiers"} = "id manual 4100000";
 	}
 	else{
 	  $detector{"sensitivity"} = "no";
@@ -96,6 +97,5 @@ sub make_mrpc
 	}
 	print_det(\%detector, $file);
     }
- }
 }
 make_mrpc();

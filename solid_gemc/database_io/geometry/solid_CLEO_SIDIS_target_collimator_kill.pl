@@ -23,9 +23,10 @@ use Math::Trig;
 
 my $DetectorMother="root";
 
+my $material="Kryptonite";
+
 sub make_upstream
 {
- my $material="Kryptonite";
  my $z=-355;
 
     $detector{"name"}        = "$DetectorName\_upstream";
@@ -35,10 +36,10 @@ sub make_upstream
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = "003300";
     $detector{"type"}       = "Cons";
-    my $Rmin1 = 1.2;
-    my $Rmax1 = 4.9;
-    my $Rmin2 = 2.4;
-    my $Rmax2 = 9.8;
+    my $Rmin1 = 1.3;
+    my $Rmax1 = 2.7;
+    my $Rmin2 = 2.6;
+    my $Rmax2 = 5.4;
     my $Dz    = 5;
     my $Sphi  = 0;
     my $Dphi  = 360;
@@ -59,8 +60,7 @@ make_upstream();
 
 sub make_downstream
 {
- my $material="Kryptonite";
- my $z=-300;
+ my $z=-315;
 
     $detector{"name"}        = "$DetectorName\_downstream";
     $detector{"mother"}      = "$DetectorMother" ;
@@ -69,10 +69,10 @@ sub make_downstream
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = "003300";
     $detector{"type"}       = "Cons";
-    my $Rmin1 = 5.5;
-    my $Rmax1 = 21.9;
-    my $Rmin2 = 6.8;
-    my $Rmax2 = 26.8;
+    my $Rmin1 = 1.3;
+    my $Rmax1 = 2.7;
+    my $Rmin2 = 2.6;
+    my $Rmax2 = 5.4;
     my $Dz    = 5;
     my $Sphi  = 0;
     my $Dphi  = 360;

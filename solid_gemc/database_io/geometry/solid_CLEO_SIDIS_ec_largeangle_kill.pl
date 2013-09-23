@@ -36,13 +36,16 @@ my $DetectorMother="root";
 # HOD3POSY        0.
 # HOD3POSZ        295.5
 
+ my $material="Kryptonite";
+ my $material_shield="Kryptonite";
+
 sub make_ec_largeangle
 {
- my $material="Kryptonite";
  my $color="0000ff";
 #  my $z=295.5-350;
 #  my $z=-40.5;
- my $z=-40;
+#  my $z=-40;
+   my $z=0;
 
     $detector{"name"}        = "$DetectorName";
     $detector{"mother"}      = "$DetectorMother" ;
@@ -50,7 +53,7 @@ sub make_ec_largeangle
     $detector{"pos"}        = "0*cm 0*cm $z*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = $color;
-    $detector{"type"}       = "Cons";
+    $detector{"type"}        = "Polycone";
 #     my $Rmin1 = 82;
 #     my $Rmax1 = 134;
 #     my $Rmin2 = 89;
@@ -61,14 +64,15 @@ sub make_ec_largeangle
 #     my $Rmin2 = 82;
 #     my $Rmax2 = 141;
 #     my $Dz    = 15;
-    my $Rmin1 = 76;
-    my $Rmax1 = 140;
-    my $Rmin2 = 89;
-    my $Rmax2 = 140;
-    my $Dz    = 25;
-    my $Sphi  = 0;
-    my $Dphi  = 360;
-    $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
+#     my $Rmin1 = 76;
+#     my $Rmax1 = 140;
+#     my $Rmin2 = 89;
+#     my $Rmax2 = 140;
+#     my $Dz    = 25;
+#     my $Sphi  = 0;
+#     my $Dphi  = 360;
+#     $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
+    $detector{"dimensions"}  = "0*deg 360*deg 3 83*cm 83*cm 89*cm 140*cm 140*cm 140*cm -65*cm -40*cm -15*cm";
     $detector{"material"}   = "$material";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
@@ -93,15 +97,15 @@ sub make_ec_largeangle_shield
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 76;
+  my $Rmin1 = 83;
   my $Rmax1 = 140;
-  my $Rmin2 = 76;
+  my $Rmin2 = 83;
   my $Rmax2 = 140;
   my $Dz    = 0.56;
   my $Sphi  = 0;
   my $Dphi  = 360;
  $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"material"}    = "Kryptonite";
+ $detector{"material"}    = $material_shield;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;

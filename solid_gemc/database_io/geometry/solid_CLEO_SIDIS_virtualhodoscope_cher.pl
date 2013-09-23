@@ -64,9 +64,9 @@ sub make_hg_front
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 86;
+  my $Rmin1 = 83;
   my $Rmax1 = 265;
-  my $Rmin2 = 86;
+  my $Rmin2 = 83;
   my $Rmax2 = 265;
   my $Dz    = 0.001;
   my $Sphi  = 0;

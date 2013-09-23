@@ -36,7 +36,7 @@ sub make_target
  my @z    = (0.-350,0.,0.,-20.006,20.006);
  my @Rin  = (0.0,0.9,0.0,0.0,0.0);
  my @Rout = (1.01,1.0,0.9,0.9,0.9);
- my @Dz   = (20.02,20.0,20.0,0.006,0.006);
+ my @Dz   = (20.012,20.0,20.0,0.006,0.006);
  my @name = ("TRGB","TCEL","TLHE","TLW1","TLW2"); 
  my @mother = ("$DetectorMother","$DetectorName\_TRGB","$DetectorName\_TRGB","$DetectorName\_TRGB","$DetectorName\_TRGB");
  my @mat  = ("Vacuum","Glass_GE180","He3_10amg","Glass_GE180","Glass_GE180");

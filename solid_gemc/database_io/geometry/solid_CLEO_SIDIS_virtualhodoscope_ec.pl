@@ -26,16 +26,16 @@ my $DetectorMother="root";
 sub make_forwardangle_front
 {
  $detector{"name"}        = "$DetectorName\_forwardangle_front";
- $detector{"mother"}      = "root";
+ $detector{"mother"}      = $DetectorMother;
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 403*cm";
+ $detector{"pos"}         = "0*cm 0*cm 413*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 100;
-  my $Rmax1 = 215;
-  my $Rmin2 = 100;
-  my $Rmax2 = 215;
+  my $Rmin1 = 90;
+  my $Rmax1 = 265;
+  my $Rmin2 = 90;
+  my $Rmax2 = 265;
   my $Dz    = 0.1;
   my $Sphi  = 0;
   my $Dphi  = 360;
@@ -57,16 +57,16 @@ make_forwardangle_front();
 sub make_forwardangle_middle
 {
  $detector{"name"}        = "$DetectorName\_forwardangle_middle";
- $detector{"mother"}      = "root";
+ $detector{"mother"}      = $DetectorMother;
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 404.6*cm";
+ $detector{"pos"}         = "0*cm 0*cm 414.6*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 100;
-  my $Rmax1 = 215;
-  my $Rmin2 = 100;
-  my $Rmax2 = 215;
+  my $Rmin1 = 90;
+  my $Rmax1 = 265;
+  my $Rmin2 = 90;
+  my $Rmax2 = 265;
   my $Dz    = 0.1;
   my $Sphi  = 0;
   my $Dphi  = 360;
@@ -88,16 +88,16 @@ make_forwardangle_middle();
 sub make_forwardangle_inner
 {
  $detector{"name"}        = "$DetectorName\_forwardangle_inner";
- $detector{"mother"}      = "root";
+ $detector{"mother"}      = $DetectorMother;
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 430*cm";
+ $detector{"pos"}         = "0*cm 0*cm 440*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 99;
-  my $Rmax1 = 99.1;
-  my $Rmin2 = 99;
-  my $Rmax2 = 99.1;
+  my $Rmin1 = 96;
+  my $Rmax1 = 96.1;
+  my $Rmin2 = 96;
+  my $Rmax2 = 96.1;
   my $Dz    = 25;
   my $Sphi  = 0;
   my $Dphi  = 360;
@@ -119,16 +119,16 @@ make_forwardangle_inner();
 sub make_forwardangle_rear
 {
  $detector{"name"}        = "$DetectorName\_forwardangle_rear";
- $detector{"mother"}      = "root";
+ $detector{"mother"}      = $DetectorMother;
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 456*cm";
+ $detector{"pos"}         = "0*cm 0*cm 466*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 100;
-  my $Rmax1 = 215;
-  my $Rmin2 = 100;
-  my $Rmax2 = 215;
+  my $Rmin1 = 90;
+  my $Rmax1 = 265;
+  my $Rmin2 = 90;
+  my $Rmax2 = 265;
   my $Dz    = 0.1;
   my $Sphi  = 0;
   my $Dphi  = 360;
@@ -151,16 +151,16 @@ make_forwardangle_rear();
 sub make_largeangle_front
 {
  $detector{"name"}        = "$DetectorName\_largeangle_front";
- $detector{"mother"}      = "root";
+ $detector{"mother"}      = $DetectorMother;
  $detector{"description"} = $detector{"name"};
  $detector{"pos"}         = "0*cm 0*cm -67*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 76;
-  my $Rmax1 = 140;
-  my $Rmin2 = 76;
-  my $Rmax2 = 140;
+  my $Rmin1 = 75;
+  my $Rmax1 = 144;
+  my $Rmin2 = 75;
+  my $Rmax2 = 144;
   my $Dz    = 0.1;
   my $Sphi  = 0;
   my $Dphi  = 360;
@@ -182,16 +182,16 @@ make_largeangle_front();
 sub make_largeangle_middle
 {
  $detector{"name"}        = "$DetectorName\_largeangle_middle";
- $detector{"mother"}      = "root";
+ $detector{"mother"}      = $DetectorMother;
  $detector{"description"} = $detector{"name"};
  $detector{"pos"}         = "0*cm 0*cm -65.4*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 76;
-  my $Rmax1 = 140;
-  my $Rmin2 = 76;
-  my $Rmax2 = 140;
+  my $Rmin1 = 75;
+  my $Rmax1 = 144;
+  my $Rmin2 = 75;
+  my $Rmax2 = 144;
   my $Dz    = 0.1;
   my $Sphi  = 0;
   my $Dphi  = 360;
@@ -213,7 +213,7 @@ make_largeangle_middle();
 sub make_largeangle_inner
 {
  $detector{"name"}        = "$DetectorName\_largeangle_inner";
- $detector{"mother"}      = "root";
+ $detector{"mother"}      = $DetectorMother;
  $detector{"description"} = $detector{"name"};
  $detector{"pos"}         = "0*cm 0*cm -40*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
@@ -244,16 +244,16 @@ make_largeangle_inner();
 sub make_largeangle_rear
 {
  $detector{"name"}        = "$DetectorName\_largeangle_rear";
- $detector{"mother"}      = "root";
+ $detector{"mother"}      = $DetectorMother;
  $detector{"description"} = $detector{"name"};
  $detector{"pos"}         = "0*cm 0*cm -14*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
   my $Rmin1 = 89;
-  my $Rmax1 = 140;
+  my $Rmax1 = 144;
   my $Rmin2 = 89;
-  my $Rmax2 = 140;
+  my $Rmax2 = 144;
   my $Dz    = 0.1;
   my $Sphi  = 0;
   my $Dphi  = 360;

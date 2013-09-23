@@ -28,3 +28,5 @@ set database = $1
 ./go_table solid_CLEO_SIDIS_virtualhodoscope_ec $database
 ./go_table solid_CLEO_SIDIS_virtualhodoscope_mrpc $database
 ./go_table solid_CLEO_SIDIS_virtualhodoscope_cher $database
+./go_table solid_CLEO_SIDIS_virtualhodoscope_gem $database
+
