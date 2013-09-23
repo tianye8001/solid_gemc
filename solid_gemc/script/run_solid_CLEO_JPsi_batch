@@ -1,6 +1,6 @@
 #!/bin/sh
 gemc \
--gcard=$SoLID_GEMC/script/solid_CLEO_PVDIS.gcard \
+-gcard=solid_CLEO_JPsi.gcard \
 -DBHOST=$GEMC_HOST \
 -USE_PHYSICSL=FTFP_BERT \
 -HALL_MATERIAL=Vacuum \
@@ -14,11 +14,11 @@ gemc \
 -OUT_VERBOSITY=5 \
 -N=10 \
 -OUTPUT="txt,out.txt" \
--USE_QT=1
+-USE_QT=0
 
 # -geometry=1000x1000 \
 # -EXEC_MACRO=$GEMC/macros/solid_slice.vis \
-# -USE_QT=1
+# -USE_QT=1 
 
 # -CHECK_OVERLAPS=1 \
 # -USE_QT=0

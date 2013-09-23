@@ -1,5 +1,4 @@
 <gcard>
-
 <!-- geometry: 	-->
         <sqltable name="solid_CLEO_solenoid"/>
         <sqltable name="solid_CLEO_SIDIS_target"/>

@@ -1,10 +1,9 @@
 <gcard>
-
 <!-- geometry: 	-->
     <sqltable name="solid_CLEO_solenoid"/>
-    <sqltable name="solid_CLEO_PVDIS_target"/>
+    <sqltable name="solid_CLEO_PVDIS_target_enclosure"/>
     <sqltable name="solid_CLEO_PVDIS_beamline"/>
-    <sqltable name="solid_CLEO_PVDIS_baffle"/>
+    <sqltable name="solid_CLEO_PVDIS_baffle_babarbafflemore1_enclosure"/>
     <sqltable name="solid_CLEO_PVDIS_cherenkov"/>
     <sqltable name="solid_CLEO_PVDIS_gem"/>
     <sqltable name="solid_CLEO_PVDIS_ec_forwardangle"/>
