@@ -6,7 +6,7 @@ Dominant channel generally is EM which mean electrons and photons. neutrons can 
 
 here is an example how to run it.
 
-run "run_solid_CLEO_SIDIS_3he"
+run "run_solid_CLEO_SIDIS_He3"
 this shoots beam into target and output detector hits in evio format
 
 = other background =
@@ -16,14 +16,14 @@ use eicRate to generate eDIS,pip,pim,pi0,eES,Kp,Km,Ks,Kl,p in root and lund form
 use the root file to obtain the "rate" later in background.C because GEMC is not propagting it into output stream yet.
 
 use the lund format as input to gemc to see how particles travels through air and hit on detectors
-edit "run_solid_CLEO_SIDIS_3he_other" with write input file and run it to produce hits in SoLID with evio output
+edit "run_solid_CLEO_SIDIS_He3_other" with write input file and run it to produce hits in SoLID with evio output
 
 = background.C= 
 
-run "gemc_evio2root background_solid_CLEO_SIDIS_3he_5e7.evio background_solid_CLEO_SIDIS_3he_5e7.root"
+run "gemc_evio2root background_solid_CLEO_SIDIS_He3_5e7.evio background_solid_CLEO_SIDIS_He3_5e7.root"
 this converts evio to root format
 
-in root, run ".x root2hit.C("background_solid_CLEO_SIDIS_3he_5e7.root")"
+in root, run ".x root2hit.C("background_solid_CLEO_SIDIS_He3_5e7.root")"
 this converts hits in flux bank into a txt file to reduce file size.
 
 at this step, don't use a root version compiled by GEMC installation method which has a lot things disabled not working with this script
@@ -37,12 +37,11 @@ in root, run
 ****************************************************
 
 .L background.C+
-background("background_solid_CLEO_SIDIS_3he_5e7.txt",5e7)
+background("background_solid_CLEO_SIDIS_He3_5e7.txt",5e7)
 or 
-background("background_solid_CLEO_SIDIS_3he_other_pip_1e6.txt",1e6)
+background("background_solid_CLEO_SIDIS_He3_other_pip_1e6.txt",1e6)
 
-
-this plot histograms showing hits and store them in background_solid_CLEO_SIDIS_3he_5e7_output.root or background_solid_CLEO_SIDIS_3he_other_pip_1e6_output.root
+this plot histograms showing hits and store them in background_solid_CLEO_SIDIS_He3_5e7_output.root or background_solid_CLEO_SIDIS_He3_other_pip_1e6_output.root
 
 
 2012 by Zhiwen Zhao
