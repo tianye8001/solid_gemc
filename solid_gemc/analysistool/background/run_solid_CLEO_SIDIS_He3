@@ -1,22 +1,22 @@
 #!/bin/sh
 gemc \
--gcard=solid_CLEO_PVDIS_nobaffle.gcard \
+-gcard=solid_CLEO_SIDIS_He3.gcard \
 -DBHOST=$GEMC_HOST \
 -HIT_PROCESS_LIST=solid \
 -HALL_MATERIAL=Air \
--USE_PHYSICSL=QGSP_BERT_HP \
+-USE_PHYSICSL=QGSP_BERT \
 -RECORD_PASSBY=1 \
 -FIELD_DIR=$GEMC_field \
 -HALL_FIELD=solenoid_CLEO \
 -BEAM_P="e-, 11*GeV, 0*deg, 0*deg" \
 -BEAM_V="(0, 0, -400)cm" \
--SPREAD_V="(0.1, 0)cm" \
--N=5e6 \
--OUTPUT="evio,background_solid_CLEO_PVDIS_nobaffle_5e6.evio" \
+-SPREAD_V="(0.21, 0)cm" \
+-N=1e6
+-OUTPUT="evio,out.evio"
 -USE_QT=0
 
-# -N=5e6 \
-# -OUTPUT="evio,background_solid_CLEO_PVDIS_nobaffle_5e6.evio" \
+# -N=1e5 \
+# -OUTPUT="evio,background_solid_CLEO_SIDIS_3he_2e7.evio" \
 # -USE_QT=0
 
 # -geometry=1000x1000 \
