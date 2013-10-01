@@ -33,7 +33,7 @@ char output_filename[80];
 sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
 TFile *outputfile=new TFile(output_filename, "recreate");
 
-const int n=25; // number of detector
+const int n=26; // number of detector
 const int m=11; //number of particles
 
 char *label[m]={"photon+electron+positron","photon","electron+positron","neutron","proton","pip","pim","Kp","Km","Kl","other"};
@@ -44,7 +44,7 @@ TH1F *hfluxR[n][m];
 TH1F *hfluxPhi[n][m],*hfluxPhi_target[n][m],*hfluxPhi_other[n][m];
 TH1F *hEfluxR[n][m];
 TH1F *hEfluxPhi[n][m],*hEfluxPhi_target[n][m],*hEfluxPhi_other[n][m];
-TH2F *hflux_x_y[n][m],*hEflux_x_y[n][m];
+TH2F *hflux_x_y[n][m],*hflux_x_y_high[n][m],*hflux_x_y_low[n][m],*hEflux_x_y[n][m];
 TH1F *hPlog[n][m],*hElog[n][m],*hEklog[n][m];
 TH1F *hEdeplog[n][m];
 TH1F *hfluxEklog_cut[n][m],*hfluxEklog_cut_niel[n][m];
@@ -61,6 +61,7 @@ for(int k=0;k<n;k++){
    hvertex[k][l]=new TH2F(hstname,hstname,5000,-500,500,800,0,400);
    sprintf(hstname,"vertexZ_%i_%i",k,l);   
    hvertexZ[k][l]=new TH1F(hstname,hstname,5000,-500,500);   
+   hvertexZ[k][l]->SetTitle(";vertex Z (cm);");
    
    sprintf(hstname,"fluxR_%i_%i",k,l);
    hfluxR[k][l]=new TH1F(hstname,hstname,60,0,300);
@@ -91,6 +92,12 @@ for(int k=0;k<n;k++){
    sprintf(hstname,"flux_x_y_%i_%i",k,l);
    hflux_x_y[k][l] = new TH2F(hstname, hstname, 600, -300, 300,600, -300, 300);
    hflux_x_y[k][l]->SetTitle("flux (kHz/mm2);x (cm));y (cm)");
+   sprintf(hstname,"flux_x_y_high_%i_%i",k,l);
+   hflux_x_y_high[k][l] = new TH2F(hstname, hstname, 600, -300, 300,600, -300, 300);
+   hflux_x_y_high[k][l]->SetTitle("flux (kHz/mm2);x (cm));y (cm)");
+   sprintf(hstname,"flux_x_y_low_%i_%i",k,l);
+   hflux_x_y_low[k][l] = new TH2F(hstname, hstname, 600, -300, 300,600, -300, 300);
+   hflux_x_y_low[k][l]->SetTitle("flux (kHz/mm2);x (cm));y (cm)");   
    sprintf(hstname,"Eflux_x_y_%i_%i",k,l);
    hEflux_x_y[k][l] = new TH2F(hstname, hstname, 600, -300, 300,600, -300, 300);
    hEflux_x_y[k][l]->SetTitle("Eflux (GeV/10cm2/s);x (cm));y (cm)");
@@ -171,10 +178,13 @@ else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 char rate_filename[500];
 TFile *ratefile;
 TTree *T;
-bool Is_eDIS=false;
 double rate,theta,pf,W,Q2,x;
+
+bool Is_eDIS=false;
+bool Is_pip=false,Is_pim=false,Is_pi0=false,Is_Kp=false,Is_Km=false,Is_Ks=false,Is_Kl=false,Is_p=false;
 bool Is_other=false;
-if (input_filename.find("other",0) != string::npos) {
+bool Is_real=false;
+if (input_filename.find("_other_",0) != string::npos) {
   Is_other=true;
   
   if (input_filename.find("_eDIS_",0) != string::npos) {Is_eDIS=true;}  
@@ -248,7 +258,21 @@ if (input_filename.find("other",0) != string::npos) {
 
   cout << " other background " <<  endl;  
 }
-else cout << "EM background " <<  endl;
+else if(input_filename.find("_real_",0) != string::npos || input_filename.find("_actual_",0) != string::npos) {
+  Is_real=true;
+  if (Nevent!=1000000) {cout << "real for 1M events only" << endl; exit(-1);}
+    if (input_filename.find("_pip_",0) != string::npos) {Is_pip=true;}
+    if (input_filename.find("_pim_",0) != string::npos) {Is_pim=true;}
+    if (input_filename.find("_pi0_",0) != string::npos) {Is_pi0=true;}
+    if (input_filename.find("_Kp_",0) != string::npos) {Is_Kp=true;}
+    if (input_filename.find("_Km_",0) != string::npos) {Is_Km=true;}    
+    if (input_filename.find("_Ks_",0) != string::npos) {Is_Ks=true;}    
+    if (input_filename.find("_Kl_",0) != string::npos) {Is_Kl=true;}        
+    if (input_filename.find("_p_",0) != string::npos) {Is_p=true;} 
+    
+    cout << " real background " <<  endl;
+}
+else  cout << "EM background " <<  endl;
 
 int evncounter=0;
 int yescounter=0,Ek_nocounter=0,rate_nocounter=0;
@@ -267,11 +291,13 @@ Float_t flux_Edep,flux_E,flux_x,flux_y,flux_z,flux_vx,flux_vy,flux_vz,flux_px,fl
 // cout << "ok" << endl;
 while (!input.eof()){
   evncounter++;
-//   cout << evncounter << "\r";
+//   cout << evncounter << endl;
 //   if (evncounter>10) break;
 
   input >> flux_evn>> flux_nfluxhit >> flux_ID >> flux_pid >> flux_mpid >>  flux_Edep >> flux_E >> flux_x >> flux_y >> flux_z >> flux_vx >> flux_vy >> flux_vz  >> flux_px >> flux_py >> flux_pz;
   
+// cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;
+
 //   if (flux_nfluxhit>300) {cout << flux_evn << endl; break;}
 //     if (!(flux_pid == 22 && fabs(flux_E-0.510999)<0.00001) ) {nocounter++; continue;}
   
@@ -400,6 +426,29 @@ while (!input.eof()){
     
     int subdetector_ID=flux_ID/10000; 
 
+///=========    hit_id and pid defination ==============
+//   hitid =0 - 5  GEM plane 1 - 6
+//         6       LGCC  PMT
+//         18      LGCC  front
+//         7       HGCC  PMT         
+//         19      HGCC  front
+//         8 - 11  FAEC front,middle,inner,rear 
+//         12 -15  LAEC front,middle,inner,rear 
+//         16 - 17 MRPC front,within
+//         20 - 25  GEM plane 1 - 6 front
+//   pid =0   photon+electron+positron
+//        1   photon    
+//        2   electron + positron
+//        3   neutron
+//        4   proton
+//        5   pip
+//        6   pim
+//        7   Kp
+//        8   Km
+//        9   Kl
+//       10   other    
+///=======================================================    
+
     int hit_id;
      switch (detector_ID){
 	case 11:     if (subdetector_ID==110) hit_id=0;
@@ -453,7 +502,7 @@ while (!input.eof()){
 	default:     cout << "wrong flux_ID " << flux_ID <<  endl; break;
       }    
 
-      
+
     int par;
     if(flux_pid==22) par=1;  //photon    
     else if (abs(flux_pid)==11) par=2; //electron or positron
@@ -465,7 +514,7 @@ while (!input.eof()){
     else if(flux_pid==-321)  par=8;  //Km
     else if(flux_pid==130)  par=9;  //Kl    
     else par=10;  //all other
-    
+
 //   if (flux_vz<2000) {  
 // if (flux_vz<-3700 || -3300<flux_vz) continue;
     
@@ -551,7 +600,7 @@ while (!input.eof()){
       }
       if (input_filename.find("PVDIS",0) == string::npos) {  //non-PVDIS case
 // 	  if ((hit_id==8 && flux_vz/10. > 403.2) || (hit_id==12 && flux_vz/10. > -66.8)) {backscat_counter++; continue;}
-	  if ((hit_id==8 && flux_vz/10. > 423.2) || (hit_id==12 && flux_vz/10. > -66.8)){
+	  if ((hit_id==8 && flux_vz/10. > 413.2) || (hit_id==12 && flux_vz/10. > -66.8)){
 	    backscat_counter++; 
 //        cout << " " <<  flux_evn<< " " <<  flux_nfluxhit << " " <<  flux_ID << " " <<  flux_pid << " " <<  flux_mpid << " " <<   flux_Edep << " " <<  flux_E << " " <<  flux_x << " " <<  flux_y << " " <<  flux_z << " " <<  flux_vx << " " <<  flux_vy << " " <<  flux_vz  << " " <<  flux_px << " " <<  flux_py << " " <<  flux_pz << endl;     
 	    continue;    
@@ -599,6 +648,12 @@ while (!input.eof()){
 	if (Is_eDIS && (W<2)) continue; /// cut for eDIS
 // 	if (Is_eDIS && (x<0.65)) continue; /// cut for eDIS	
       }
+      else if (Is_real){
+	if (Is_pip || Is_pim || Is_pi0) thisrate=155000.;
+	if (Is_Kp || Is_Km) thisrate=3500.;
+	if (Is_Ks || Is_Kl) thisrate=1750.;
+	if (Is_p) thisrate=27000.;
+      }
       else thisrate=current/Nevent;
       weight=thisrate/1e3/area;
       weightR=thisrate/1e3/areaR;
@@ -637,6 +692,8 @@ while (!input.eof()){
 	    }      
 	    
 	    hflux_x_y[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight/100.); //in 1cm2 bin	    
+	    if (phi-int(phi/12)*12<6) hflux_x_y_high[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight/100.);
+	    else hflux_x_y_low[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight/100.);    
 	    hEflux_x_y[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight*Ek/100.*10.); ///in 1cm2 bin and from 1cm to 10cm	    
 	  }	
 	
@@ -686,6 +743,8 @@ for(int k=0;k<n;k++){
    hEfluxPhi_target[k][0]->Add(hEfluxPhi_target[k][1],hEfluxPhi_target[k][2]);
    hEfluxPhi_other[k][0]->Add(hEfluxPhi_other[k][1],hEfluxPhi_other[k][2]);   
    hflux_x_y[k][0]->Add(hflux_x_y[k][1],hflux_x_y[k][2]);
+   hflux_x_y_high[k][0]->Add(hflux_x_y_high[k][1],hflux_x_y_high[k][2]);
+   hflux_x_y_low[k][0]->Add(hflux_x_y_low[k][1],hflux_x_y_low[k][2]);   
    hEflux_x_y[k][0]->Add(hEflux_x_y[k][1],hEflux_x_y[k][2]);   
    hPlog[k][0]->Add(hPlog[k][1],hPlog[k][2]);
    hElog[k][0]->Add(hElog[k][1],hElog[k][2]);
