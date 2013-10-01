@@ -18,7 +18,7 @@ use the root file to obtain the "rate" later in background.C because GEMC is not
 use the lund format as input to gemc to see how particles travels through air and hit on detectors
 edit "run_solid_CLEO_SIDIS_3he_other" with write input file and run it to produce hits in SoLID with evio output
 
-= background.C=
+= background.C= 
 
 run "gemc_evio2root background_solid_CLEO_SIDIS_3he_5e7.evio background_solid_CLEO_SIDIS_3he_5e7.root"
 this converts evio to root format
