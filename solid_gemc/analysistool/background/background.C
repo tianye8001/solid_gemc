@@ -48,7 +48,8 @@ TH2F *hflux_x_y[n][m],*hflux_x_y_high[n][m],*hflux_x_y_low[n][m],*hEflux_x_y[n][
 TH1F *hPlog[n][m],*hElog[n][m],*hEklog[n][m];
 TH1F *hEdeplog[n][m];
 TH1F *hfluxEklog_cut[n][m],*hfluxEklog_cut_niel[n][m];
-TH2F *hElog_R[n][m];
+TH2F *hP_R[n][m];
+TH2F *hPlog_R[n][m].*hElog_R[n][m];
 TH2F *hEklog_R[n][m],*hEklog_R_high[n][m],*hEklog_R_low[n][m];
 TH3F *hEklog_R_Phi[n][m];
 
@@ -115,6 +116,10 @@ for(int k=0;k<n;k++){
     hEdeplog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
     hEdeplog[k][l]->SetTitle(";log(Edep) GeV;counts");    
 
+    sprintf(hstname,"P_R_%i_%i",k,l);
+    hP_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 1100,0,11);    
+    sprintf(hstname,"Plog_R_%i_%i",k,l);
+    hPlog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);    
     sprintf(hstname,"Elog_R_%i_%i",k,l);
     hElog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);
     hElog_R[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");    
@@ -156,12 +161,16 @@ if (!input.good()) {cout << "can't open file " << endl; return;}
 //   
 // }
   
+bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_He3_window=false;  
 double current;
 if (input_filename.find("PVDIS",0) != string::npos){
+  Is_PVDIS=true;
   current=50e-6/1.6e-19;  //50uA
   cout << " PVDIS " << current << " " << Nevent <<  endl;  
 }
 else if (input_filename.find("SIDIS_He3",0) != string::npos){
+  if (input_filename.find("SIDIS_He3_window",0) != string::npos) Is_SIDIS_He3_window=true;
+  else Is_SIDIS_He3=true;
   current=15e-6/1.6e-19;   //15uA
   cout << " SIDIS_He3 " << current << " " << Nevent <<  endl;  
 }
@@ -260,7 +269,7 @@ if (input_filename.find("_other_",0) != string::npos) {
 }
 else if(input_filename.find("_real_",0) != string::npos || input_filename.find("_actual_",0) != string::npos) {
   Is_real=true;
-  if (Nevent!=1000000) {cout << "real for 1M events only" << endl; exit(-1);}
+  if (Nevent!=1000000) {cout << "real for 1e6 events only" << endl; exit(-1);}
     if (input_filename.find("_pip_",0) != string::npos) {Is_pip=true;}
     if (input_filename.find("_pim_",0) != string::npos) {Is_pim=true;}
     if (input_filename.find("_pi0_",0) != string::npos) {Is_pi0=true;}
@@ -649,10 +658,28 @@ while (!input.eof()){
 // 	if (Is_eDIS && (x<0.65)) continue; /// cut for eDIS	
       }
       else if (Is_real){
-	if (Is_pip || Is_pim || Is_pi0) thisrate=155000.;
-	if (Is_Kp || Is_Km) thisrate=3500.;
-	if (Is_Ks || Is_Kl) thisrate=1750.;
-	if (Is_p) thisrate=27000.;
+	if(Is_PVDIS){
+	  if (Is_pip || Is_pim || Is_pi0) thisrate=155000.;
+	  if (Is_Kp || Is_Km) thisrate=3500.;
+	  if (Is_Ks || Is_Kl) thisrate=1750.;
+	  if (Is_p) thisrate=27000.;
+	}
+	else if(Is_SIDIS_He3_window){
+	  if (Is_pip) thisrate=134.;
+	  if (Is_pim) thisrate=136.;
+	  if (Is_pi0) thisrate=136.;	  
+	  if (Is_Kp || Is_Km) thisrate=0.;
+	  if (Is_Ks || Is_Kl) thisrate=0.;
+	  if (Is_p) thisrate=23.;  
+	}
+	else if(Is_SIDIS_He3){
+	  if (Is_pip) thisrate=241.;
+	  if (Is_pim) thisrate=183.;
+	  if (Is_pi0) thisrate=212.;	  
+	  if (Is_Kp || Is_Km) thisrate=0.;
+	  if (Is_Ks || Is_Kl) thisrate=0.;
+	  if (Is_p) thisrate=37.;  
+	}
       }
       else thisrate=current/Nevent;
       weight=thisrate/1e3/area;
@@ -664,6 +691,8 @@ while (!input.eof()){
       hElog[hit_id][par]->Fill(log10(flux_E/1e3),weight);
       hEklog[hit_id][par]->Fill(log10(Ek/1e3),weight);
       hEdeplog[hit_id][par]->Fill(log10(flux_Edep/1e3),weight);          
+      hPlog_R[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.); ///in 1cm bin            
+      hPlog_R[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.); ///in 1cm bin      
       hElog_R[hit_id][par]->Fill(r/10.,log10(flux_E/1e3),weightR/10.); ///in 1cm bin
       hEklog_R[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.); ///in 1cm bin
       
@@ -752,6 +781,8 @@ for(int k=0;k<n;k++){
    hEdeplog[k][0]->Add(hEdeplog[k][1],hEdeplog[k][2]);
    hfluxEklog_cut[k][0]->Add(hfluxEklog_cut[k][1],hfluxEklog_cut[k][2]);
    hfluxEklog_cut_niel[k][0]->Add(hfluxEklog_cut_niel[k][1],hfluxEklog_cut_niel[k][2]);
+   hP_R[k][0]->Add(hP_R[k][1],hP_R[k][2]);   
+   hPlog_R[k][0]->Add(hPlog_R[k][1],hPlog_R[k][2]);   
    hElog_R[k][0]->Add(hElog_R[k][1],hElog_R[k][2]);
    hEklog_R[k][0]->Add(hEklog_R[k][1],hEklog_R[k][2]);
 }
