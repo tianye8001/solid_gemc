@@ -49,7 +49,7 @@ TH1F *hPlog[n][m],*hElog[n][m],*hEklog[n][m];
 TH1F *hEdeplog[n][m];
 TH1F *hfluxEklog_cut[n][m],*hfluxEklog_cut_niel[n][m];
 TH2F *hP_R[n][m];
-TH2F *hPlog_R[n][m].*hElog_R[n][m];
+TH2F *hPlog_R[n][m],*hElog_R[n][m];
 TH2F *hEklog_R[n][m],*hEklog_R_high[n][m],*hEklog_R_low[n][m];
 TH3F *hEklog_R_Phi[n][m];
 
