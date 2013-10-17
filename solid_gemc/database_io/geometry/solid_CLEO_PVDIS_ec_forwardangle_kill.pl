@@ -53,10 +53,12 @@ my $DetectorMother="root";
 # HOD10POSY        0.
 # HOD10POSZ       335.0
 
+ my $color="0000ff";
+ my $material="Kryptonite";
+ my $material_shield="Kryptonite";
+
 sub make_ec_forwardangle
 {
- my $material="Kryptonite";
- my $color="0000ff";
 #  my $z=350;
   my $z=345;
 
@@ -96,7 +98,7 @@ sub make_ec_forwardangle_shield
  $detector{"description"} = $detector{"name"};
  $detector{"pos"}         = "0*cm 0*cm 318.8*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
- $detector{"color"}       = "CC6633";
+ $detector{"color"}       = $color;
  $detector{"type"}        = "Cons";
   my $Rmin1 = 110;
   my $Rmax1 = 265;
@@ -106,7 +108,7 @@ sub make_ec_forwardangle_shield
   my $Sphi  = 0;
   my $Dphi  = 360;
  $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"material"}    = "Kryptonite";
+ $detector{"material"}    = $material_shield;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;

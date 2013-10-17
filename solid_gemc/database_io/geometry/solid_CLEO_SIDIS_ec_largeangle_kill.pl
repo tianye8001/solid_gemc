@@ -36,12 +36,12 @@ my $DetectorMother="root";
 # HOD3POSY        0.
 # HOD3POSZ        295.5
 
+ my $color="0000ff";
  my $material="Kryptonite";
  my $material_shield="Kryptonite";
 
 sub make_ec_largeangle
 {
- my $color="0000ff";
 #  my $z=295.5-350;
 #  my $z=-40.5;
 #  my $z=-40;
@@ -95,7 +95,7 @@ sub make_ec_largeangle_shield
  $detector{"description"} = $detector{"name"};
  $detector{"pos"}         = "0*cm 0*cm -66.2*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
- $detector{"color"}       = "CC6633";
+ $detector{"color"}       = $color;
  $detector{"type"}        = "Cons";
   my $Rmin1 = 83;
   my $Rmax1 = 140;
