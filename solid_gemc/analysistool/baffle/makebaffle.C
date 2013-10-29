@@ -26,7 +26,8 @@ double targ_len = 0.4;//
 double targ_z   = 0.1;//
 
 // double xmin  = 0.0;
-double xmin  = 0.35;
+double xmin  = 0.55;
+// double xmin  = 0.35;
 double xmax  = 0.8; // x = 0.8 is about the W2 < 4 cutoff
 // double pmin  = 0.8;
 double pmin  = 1.5;

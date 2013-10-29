@@ -6,7 +6,7 @@ use lib ("$ENV{GEMC}/database_io");
 use geo;
 use geo qw($pi);
 
-my $DetectorName = 'CLEO_PVDIS_baffle_3.5deg_kill';
+my $DetectorName = 'CLEO_PVDIS_baffle_0p35x3p5deg_kill';
 
 my $envelope = "solid_$DetectorName";
 my $file     = "solid_$DetectorName.txt";
