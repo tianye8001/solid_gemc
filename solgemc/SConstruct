@@ -18,7 +18,8 @@ env.Append(CPPPATH = incpath)
 
 # Sources
 gemc_sources = Split("""solgemc.cc
-			src/SolPrimaryGeneratorAction.cc""")
+			src/SolPrimaryGeneratorAction.cc
+			src/SolEventAction.cc""")
 
 # Physics
 phys_sources = Split("""physics/SolidNoPhysicsList.cc

@@ -74,11 +74,25 @@
 #include "SolMaterial.hh"
 #include "SolidNoPhysicsList.h"
 #include "SolPrimaryGeneratorAction.h"
+#include "SolEventAction.h"
 
 int main( int argc, char **argv )
 {
 	
-	gemc_opts gemcOpt;
+        gemc_opts gemcOpt;
+
+	gemcOpt.args["SAVE_RAND_FILE"].args  = "";
+	gemcOpt.args["SAVE_RAND_FILE"].help  = "File name for saving random numbers for selected events\n";
+	gemcOpt.args["SAVE_RAND_FILE"].name  = "File for saving random numbers";
+	gemcOpt.args["SAVE_RAND_FILE"].type  = 1;
+	gemcOpt.args["SAVE_RAND_FILE"].ctgr  = "control";
+
+	gemcOpt.args["RESTORE_RAND_FILE"].args  = "";
+	gemcOpt.args["RESTORE_RAND_FILE"].help  = "File name for restoring random numbers for selected events\n";
+	gemcOpt.args["RESTORE_RAND_FILE"].name  = "File for restoring random numbers";
+	gemcOpt.args["RESTORE_RAND_FILE"].type  = 1;
+	gemcOpt.args["RESTORE_RAND_FILE"].ctgr  = "control";
+
 	gemcOpt.Set(argc, argv);
 	string hd_msg    = gemcOpt.args["LOG_MSG"].args + " Init: >> " ;
 	
@@ -279,7 +293,7 @@ int main( int argc, char **argv )
 				phys = factory.GetReferencePhysList(phys_list);
 
 		if(!phys) phys = factory.ReferencePhysList();
-			
+
 		runManager->SetUserInitialization(phys);
 	}
 
@@ -314,7 +328,7 @@ int main( int argc, char **argv )
 	///< Event Action
 	msg = " Initializing Event Action...";
 	if(use_qt) splash->showMessage(msg.c_str()); gemc_gui.processEvents(); cout << hd_msg << msg << endl;
-	MEventAction* event_action = new MEventAction(gemcOpt, gParameters);
+	SolEventAction* event_action = new SolEventAction(gemcOpt, gParameters);
 	event_action->SetEvtNumber((int) gemcOpt.args["EVN"].arg);     ///< Sets event number from OPTION
 	runManager->SetUserAction(event_action);
 	
