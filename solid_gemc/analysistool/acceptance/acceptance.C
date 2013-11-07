@@ -282,9 +282,13 @@ for (Int_t i=0;i<nevent;i++) {
        if ((detector_ID==3 && subdetector_ID==2) && (r/10 < rin_cut_LA || rout_cut_LA < r/10)) continue;
        if ((detector_ID==3 && subdetector_ID==1) && (r/10 < rin_cut_FA || rout_cut_FA < r/10)) continue;    
        
-//        ///DIRC cut
+       ///DIRC cut
 //        double x=*(flux_x+j)/10,y=*(flux_y+j)/10;
-//        if ( (detector_ID==3 && subdetector_ID==1) && ((fabs(x)<98 && fabs(y) <98) || fabs(x)>181 || fabs(y)>181) ) continue;  // 4 side case
+//         if (detector_ID==3 && subdetector_ID==1) {
+// 	  if ((fabs(x)<98 && fabs(y) <98) || fabs(x)>181 || fabs(y)>181) continue;  // 4 side
+//           if ( (y>-98 && y<196+sqrt(3)*x && y<196-sqrt(3)*x) || (y<-181 || y>362+sqrt(3)*x || y>362-sqrt(3)*x) ) continue;  // 3 side, y=196+-196/sqrt(3)*x
+// 	  if (fabs(y)<98 || fabs(y)>181) continue;  // 2 side, up and down
+// 	}
        
 	hflux[hit_id]->Fill(theta,mom);
         hflux_vertexZ[hit_id]->Fill(theta,*(flux_vz+j)/10);
