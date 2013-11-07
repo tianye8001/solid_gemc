@@ -13,10 +13,9 @@ run run_* to generate the evio, use gemc_evio2root to convert to root
 
 use acceptance.C("gemc_rootfile") to plot and generate output rootfile
 
-In the output root file, acceptance in P VS theta histograms are stored as acceptance_largeangle and 
-acceptance_forwardangle
+In the output root file, acceptance in P VS theta histograms are stored as "acceptance_largeangle" and 
+"acceptance_forwardangle"
 
-where P is from 0 to 11 GeV, 0.1GeV per bin, theta is from 0 to 50 degree, 0.2 degree per bin 
-
-modified 2013_01_07 Zhiwen Zhao
+updated 2013_11_07 Zhiwen Zhao
+updated 2013_01_07 Zhiwen Zhao
 created 2012_08_21 Zhiwen Zhao 

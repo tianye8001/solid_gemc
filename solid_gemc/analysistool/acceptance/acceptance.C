@@ -47,7 +47,7 @@ TH2F *hacceptance_forwardangle,*hacceptance_largeangle,*hacceptance_overall;
 
 const int n=2;
 
-TH2F *hgen=new TH2F("gen","gen",100,0,50,1100,0,11);
+TH2F *hgen=new TH2F("gen","gen",250,0,50,220,0,11);   
 TH2F *hgen_vertexZ=new TH2F("gen_vertexZ","gen_vertexZ",350,15,50,50,-15,35);
 TH2F *hgen_vertexR=new TH2F("gen_vertexR","gen_vertexR",350,15,50,50,0,1);
 
@@ -61,39 +61,39 @@ TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);
 for(int i=0;i<n;i++){
      char hstname[100];  
    sprintf(hstname,"flux_mom_%i",i);
-   hflux_mom[i]=new TH1F(hstname,hstname,1100,0,11);
+   hflux_mom[i]=new TH1F(hstname,hstname,220,0,11);
    sprintf(hstname,"flux_theta_%i",i);
-   hflux_theta[i]=new TH1F(hstname,hstname,100,0,50); 
+   hflux_theta[i]=new TH1F(hstname,hstname,250,0,50); 
    sprintf(hstname,"flux_%i",i);
-   hflux[i]=new TH2F(hstname,hstname,100,0,50,1100,0,11);   
-   hflux[i]->SetTitle("particles detected by EC;vertex angle (deg);P (GeV)");
+   hflux[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);     
+   hflux[i]->SetTitle("particles detected by EC;vertex Theta (deg);P (GeV)");
    sprintf(hstname,"flux_vertexZ_%i",i);
    hflux_vertexZ[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
-   hflux_vertexZ[i]->SetTitle("particles detected by EC;vertex angle (deg);vertex Z (cm)");   
+   hflux_vertexZ[i]->SetTitle("particles detected by EC;vertex Theta (deg);vertex Z (cm)");   
    sprintf(hstname,"flux_vertexR_%i",i);
    hflux_vertexR[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
-   hflux_vertexR[i]->SetTitle("particles detected by EC;vertex angle (deg);vertex R (cm)");      
+   hflux_vertexR[i]->SetTitle("particles detected by EC;vertex Theta (deg);vertex R (cm)");      
   
    sprintf(hstname,"acceptance_mom_%i",i);
-   hacceptance_mom[i]=new TH1F(hstname,hstname,1100,0,11);
+   hacceptance_mom[i]=new TH1F(hstname,hstname,220,0,11);
    sprintf(hstname,"acceptance_theta_%i",i);
-   hacceptance_theta[i]=new TH1F(hstname,hstname,100,0,50); 
+   hacceptance_theta[i]=new TH1F(hstname,hstname,250,0,50); 
    sprintf(hstname,"acceptance_%i",i);
-   hacceptance[i]=new TH2F(hstname,hstname,100,0,50,1100,0,11);   
-   hacceptance[i]->SetTitle("acceptance;vertex angle (deg);P (GeV)");   
+   hacceptance[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);   
+   hacceptance[i]->SetTitle("acceptance;vertex Theta (deg);P (GeV)");   
    sprintf(hstname,"acceptance_vertexZ_%i",i);
    hacceptance_vertexZ[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
-   hacceptance_vertexZ[i]->SetTitle("acceptance;vertex angle (deg);vertex Z (cm)");      
+   hacceptance_vertexZ[i]->SetTitle("acceptance;vertex Theta (deg);vertex Z (cm)");      
    sprintf(hstname,"acceptance_vertexR_%i",i);
    hacceptance_vertexR[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
-   hacceptance_vertexR[i]->SetTitle("acceptance;vertex angle (deg);vertex R (cm)");         
+   hacceptance_vertexR[i]->SetTitle("acceptance;vertex Theta (deg);vertex R (cm)");         
    
    sprintf(hstname,"hit_rMom_%i",i);
-   hhit_rMom[i]=new TH2F(hstname,hstname,300,0,300,1100,0,11);  
+   hhit_rMom[i]=new TH2F(hstname,hstname,300,0,300,220,0,11);  
    sprintf(hstname,"hit_phidiffMom_%i",i);
-   hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,1100,0,11);  
+   hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,220,0,11);  
    sprintf(hstname,"hit_thetadiffMom_%i",i);
-   hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,1100,0,11);  
+   hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,220,0,11);  
    
    sprintf(hstname,"hit_xy_%i",i);
    hhit_xy[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);     
@@ -285,8 +285,8 @@ for (Int_t i=0;i<nevent;i++) {
        ///DIRC cut
 //        double x=*(flux_x+j)/10,y=*(flux_y+j)/10;
 //         if (detector_ID==3 && subdetector_ID==1) {
-// 	  if ((fabs(x)<98 && fabs(y) <98) || fabs(x)>181 || fabs(y)>181) continue;  // 4 side
-//           if ( (y>-98 && y<196+sqrt(3)*x && y<196-sqrt(3)*x) || (y<-181 || y>362+sqrt(3)*x || y>362-sqrt(3)*x) ) continue;  // 3 side, y=196+-196/sqrt(3)*x
+// // 	  if ((fabs(x)<98 && fabs(y) <98) || fabs(x)>181 || fabs(y)>181) continue;  // 4 side
+// //           if ( (y>-98 && y<196+sqrt(3)*x && y<196-sqrt(3)*x) || (y<-181 || y>362+sqrt(3)*x || y>362-sqrt(3)*x) ) continue;  // 3 side, y=196+-sqrt(3)*x,y=362+-sqrt(3)*x
 // 	  if (fabs(y)<98 || fabs(y)>181) continue;  // 2 side, up and down
 // 	}
        
@@ -469,12 +469,12 @@ c_hit_xy->SaveAs(Form("%s_%s",the_filename,"hit_xy.png"));
 // }
 
 hacceptance_forwardangle=(TH2F*) hacceptance[0]->Clone("acceptance_forwardangle");
-hacceptance_forwardangle->SetNameTitle("acceptance_forwardangle","acceptance at forwardangle;theta (degree);P (GeV)");
+hacceptance_forwardangle->SetNameTitle("acceptance_forwardangle","acceptance at forwardangle;vertex Theta (degree);P (GeV)");
 hacceptance_largeangle=(TH2F*) hacceptance[1]->Clone("acceptance_largeangle");
-hacceptance_largeangle->SetNameTitle("acceptance_largeangle","acceptance at largeangle;theta (degree);P (GeV)");
+hacceptance_largeangle->SetNameTitle("acceptance_largeangle","acceptance at largeangle;vertex Theta (degree);P (GeV)");
 hacceptance_overall=(TH2F*) hacceptance_largeangle->Clone();
 hacceptance_overall->Add(hacceptance_forwardangle);
-hacceptance_overall->SetNameTitle("acceptance","acceptance;theta (degree);P (GeV)");
+hacceptance_overall->SetNameTitle("acceptance","acceptance;vertex Theta (degree);P (GeV)");
 
 // gStyle->SetOptStat(0);
 

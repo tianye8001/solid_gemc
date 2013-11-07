@@ -10,7 +10,7 @@ gemc \
 -SPREAD_P="5.5*GeV, 20*deg, 180*deg" \
 -BEAM_V="(0, 0, -350)cm" \
 -SPREAD_V="(0.21, 20)cm" \
--N=5e5 \
+-N=1e6 \
 -OUTPUT="evio,acceptance_solid_CLEO_SIDIS_3he_positive.evio" \
 -USE_QT=0
 
