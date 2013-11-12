@@ -16,7 +16,7 @@ use eicRate to generate eDIS,pip,pim,pi0,eES,Kp,Km,Ks,Kl,p in root and lund form
 use the root file to obtain the "rate" later in background.C because GEMC is not propagting it into output stream yet.
 
 use the lund format as input to gemc to see how particles travels through air and hit on detectors
-edit "run_solid_CLEO_SIDIS_He3_other" with write input file and run it to produce hits in SoLID with evio output
+edit "run_solid_CLEO_SIDIS_He3_other" with right input file and run it to produce hits in SoLID with evio output
 
 = background.C= 
 
