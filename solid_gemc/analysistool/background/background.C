@@ -39,7 +39,7 @@ const int m=11; //number of particles
 char *label[m]={"photon+electron+positron","photon","electron+positron","neutron","proton","pip","pim","Kp","Km","Kl","other"};
 
 TH1F *hvertexZ[n][m];
-TH2F *hhits[n][m],*hvertex[n][m];
+TH2F *hhitXY[n][m],*hvertex[n][m];
 TH1F *hfluxR[n][m];
 TH1F *hfluxPhi[n][m],*hfluxPhi_target[n][m],*hfluxPhi_other[n][m];
 TH1F *hEfluxR[n][m];
@@ -48,16 +48,18 @@ TH2F *hflux_x_y[n][m],*hflux_x_y_high[n][m],*hflux_x_y_low[n][m],*hEflux_x_y[n][
 TH1F *hPlog[n][m],*hElog[n][m],*hEklog[n][m];
 TH1F *hEdeplog[n][m];
 TH1F *hfluxEklog_cut[n][m],*hfluxEklog_cut_niel[n][m];
-TH2F *hP_R[n][m];
-TH2F *hPlog_R[n][m],*hElog_R[n][m];
+TH2F *hP_Theta[n][m],*hP_Theta_high[n][m],*hP_Theta_low[n][m];
+TH2F *hP_R[n][m],*hP_R_high[n][m],*hP_R_low[n][m];
+TH2F *hPlog_R[n][m],*hPlog_R_high[n][m],*hPlog_R_low[n][m];
+TH2F *hElog_R[n][m];
 TH2F *hEklog_R[n][m],*hEklog_R_high[n][m],*hEklog_R_low[n][m];
 TH3F *hEklog_R_Phi[n][m];
 
 for(int k=0;k<n;k++){
   for(int l=0;l<m;l++){
    char hstname[100];
-   sprintf(hstname,"hits_%i_%i",k,l);
-   hhits[k][l]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);
+   sprintf(hstname,"hitXY_%i_%i",k,l);
+   hhitXY[k][l]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);
    sprintf(hstname,"vertex_%i_%i",k,l);
    hvertex[k][l]=new TH2F(hstname,hstname,5000,-500,500,800,0,400);
    sprintf(hstname,"vertexZ_%i_%i",k,l);   
@@ -116,13 +118,40 @@ for(int k=0;k<n;k++){
     hEdeplog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
     hEdeplog[k][l]->SetTitle(";log(Edep) GeV;counts");    
 
+    sprintf(hstname,"P_Theta_%i_%i",k,l);
+    hP_Theta[k][l]=new TH2F(hstname,hstname,100, 0, 50, 1100,0,11);    
+    hP_Theta[k][l]->SetTitle("rate(kHz)/0.5deg/10MeV;Theta (deg);P (GeV)");    
+    sprintf(hstname,"P_Theta_high_%i_%i",k,l);
+    hP_Theta_high[k][l]=new TH2F(hstname,hstname,100, 0, 50, 1100,0,11);    
+    hP_Theta_high[k][l]->SetTitle("rate(kHz)/0.5deg/10MeV;Theta (deg);P (GeV)");        
+    sprintf(hstname,"P_Theta_low_%i_%i",k,l);
+    hP_Theta_low[k][l]=new TH2F(hstname,hstname,100, 0, 50, 1100,0,11);    
+    hP_Theta_low[k][l]->SetTitle("rate(kHz)/0.5deg/10MeV;Theta (deg);P (GeV)"); 
+    
     sprintf(hstname,"P_R_%i_%i",k,l);
     hP_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 1100,0,11);    
+    hP_R[k][l]->SetTitle(";R (cm);P (GeV)");    
+    sprintf(hstname,"P_R_high_%i_%i",k,l);
+    hP_R_high[k][l]=new TH2F(hstname,hstname,300, 0, 300, 1100,0,11);    
+    hP_R_high[k][l]->SetTitle(";R (cm);P (GeV)");        
+    sprintf(hstname,"P_R_low_%i_%i",k,l);
+    hP_R_low[k][l]=new TH2F(hstname,hstname,300, 0, 300, 1100,0,11);    
+    hP_R_low[k][l]->SetTitle(";R (cm);P (GeV)");        
+    
     sprintf(hstname,"Plog_R_%i_%i",k,l);
     hPlog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);    
+    hPlog_R[k][l]->SetTitle(";R (cm);log(P) (GeV)");      
+    sprintf(hstname,"Plog_high_R_%i_%i",k,l);
+    hPlog_R_high[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);    
+    hPlog_R_high[k][l]->SetTitle(";R (cm);log(P) (GeV)");          
+    sprintf(hstname,"Plog_R_low_%i_%i",k,l);
+    hPlog_R_low[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);    
+    hPlog_R_low[k][l]->SetTitle(";R (cm);log(P) (GeV)");          
+    
     sprintf(hstname,"Elog_R_%i_%i",k,l);
-    hElog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);
-    hElog_R[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");    
+    hElog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);    
+    hElog_R[k][l]->SetTitle(";R (cm);log(E) (GeV)");    
+    
     sprintf(hstname,"Eklog_R_%i_%i",k,l);
     hEklog_R[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 200,-6,1.3);    
     hEklog_R[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");
@@ -132,6 +161,7 @@ for(int k=0;k<n;k++){
     sprintf(hstname,"Eklog_R_low_%i_%i",k,l);
     hEklog_R_low[k][l] = new TH2F(hstname, hstname, 300, 0, 300, 200,-6,1.3);    
     hEklog_R_low[k][l]->SetTitle(";R (cm);log(Ek) (GeV)");
+    
     sprintf(hstname,"Eklog_R_Phi_%i_%i",k,l);
     hEklog_R_Phi[k][l] = new TH3F(hstname, hstname, 48,0,12,300, 0, 300, 200,-6,1.3);    
     hEklog_R_Phi[k][l]->SetTitle(";Phi (deg);R (cm);log(Ek) (GeV)");
@@ -163,23 +193,28 @@ if (!input.good()) {cout << "can't open file " << endl; return;}
   
 bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_He3_window=false;  
 double current;
+double target_center;  //in mm
 if (input_filename.find("PVDIS",0) != string::npos){
   Is_PVDIS=true;
   current=50e-6/1.6e-19;  //50uA
+  target_center=100;  //in mm
   cout << " PVDIS " << current << " " << Nevent <<  endl;  
 }
 else if (input_filename.find("SIDIS_He3",0) != string::npos){
   if (input_filename.find("SIDIS_He3_window",0) != string::npos) Is_SIDIS_He3_window=true;
   else Is_SIDIS_He3=true;
   current=15e-6/1.6e-19;   //15uA
+  target_center=-3500;  //in mm  
   cout << " SIDIS_He3 " << current << " " << Nevent <<  endl;  
 }
 else if (input_filename.find("SIDIS_proton",0) != string::npos){
   current=100e-9/1.6e-19;   //100nA
+  target_center=-3500;  //in mm  
   cout << " SIDIS_proton " << current << " " << Nevent <<  endl;  
 }
 else if (input_filename.find("JPsi",0) != string::npos){
   current=3e-6/1.6e-19;   //3uA
+  target_center=-3000;  //in mm  
   cout << " JPsi " << current << " " << Nevent <<  endl;  
 }
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
@@ -553,7 +588,8 @@ while (!input.eof()){
 //       }      
 //       if (cutStraightPhoton) continue;
 
-    double r=sqrt(pow(flux_x,2)+pow(flux_y,2));            
+    double r=sqrt(pow(flux_x,2)+pow(flux_y,2));  
+    double Theta=atan(r/(flux_z-target_center))*DEG;
     double P=sqrt(pow(flux_px,2)+pow(flux_py,2)+pow(flux_pz,2));
 //     double M;
 //     if (par==1) M=0;
@@ -642,12 +678,13 @@ while (!input.eof()){
       hvertexZ[hit_id][par]->Fill(flux_vz/10.);      
 
       double thisrate;
-      double weight,weightR,weightPhi;
-      double area,areaR,areaPhi;
+      double weight,weightR,weightPhi,weightTheta;
+      double area,areaR,areaPhi,areaTheta;
 
-      area=1.;      /// in no 
+      area=1.;      /// in 
       areaR=2*3.1415926*r*1.; /// in mm2
       areaPhi=1.;  /// in any deg      
+      areaTheta=2*3.1415926*r*(flux_z*(tan((Theta+0.25)/DEG)-tan((Theta-0.25)/DEG))); ///0.5deg width
       if (Is_other) {
 	T->GetEntry(flux_evn-1);
 // 	cout << flux_evn << " " << pf << " " << theta << endl;
@@ -668,15 +705,17 @@ while (!input.eof()){
 	  if (Is_pip) thisrate=134.;
 	  if (Is_pim) thisrate=136.;
 	  if (Is_pi0) thisrate=136.;	  
-	  if (Is_Kp || Is_Km) thisrate=0.;
+	  if (Is_Kp) thisrate=3.0;
+	  if (Is_Km) thisrate=0.;
 	  if (Is_Ks || Is_Kl) thisrate=0.;
 	  if (Is_p) thisrate=23.;  
 	}
 	else if(Is_SIDIS_He3){
 	  if (Is_pip) thisrate=241.;
 	  if (Is_pim) thisrate=183.;
-	  if (Is_pi0) thisrate=212.;	  
-	  if (Is_Kp || Is_Km) thisrate=0.;
+	  if (Is_pi0) thisrate=212.;  
+	  if (Is_Kp) thisrate=5.9;
+	  if (Is_Km) thisrate=0.;
 	  if (Is_Ks || Is_Kl) thisrate=0.;
 	  if (Is_p) thisrate=37.;  
 	}
@@ -684,20 +723,30 @@ while (!input.eof()){
       else thisrate=current/Nevent;
       weight=thisrate/1e3/area;
       weightR=thisrate/1e3/areaR;
-      weightPhi=thisrate/1e3/areaPhi;     
+      weightPhi=thisrate/1e3/areaPhi;
+      weightTheta=thisrate/1e3/areaTheta;     
 
-      hhits[hit_id][par]->Fill(flux_x/10.,flux_y/10.);      
+      hhitXY[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight); 
       hPlog[hit_id][par]->Fill(log10(P/1e3),weight);
       hElog[hit_id][par]->Fill(log10(flux_E/1e3),weight);
       hEklog[hit_id][par]->Fill(log10(Ek/1e3),weight);
       hEdeplog[hit_id][par]->Fill(log10(flux_Edep/1e3),weight);          
-      hPlog_R[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.); ///in 1cm bin            
+      hP_Theta[hit_id][par]->Fill(Theta,P/1e3,weightTheta); ///in 0.5deg bin      
+      hP_R[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.); ///in 1cm bin            
       hPlog_R[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.); ///in 1cm bin      
       hElog_R[hit_id][par]->Fill(r/10.,log10(flux_E/1e3),weightR/10.); ///in 1cm bin
       hEklog_R[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.); ///in 1cm bin
       
-      if (phi-int(phi/12)*12<6) hEklog_R_high[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin
-      else hEklog_R_low[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin            
+      if (phi-int(phi/12)*12<6) {
+	hP_R_high[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.*2.); /// in 1cm bin	
+	hPlog_R_high[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.*2.); /// in 1cm bin	
+	hEklog_R_high[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin	
+      }
+      else {
+	hP_R_low[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.*2.); /// in 1cm bin	
+	hPlog_R_low[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.*2.); /// in 1cm bin	
+	hEklog_R_low[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin	
+      }
       
       hEklog_R_Phi[hit_id][par]->Fill(phi-int(phi/12)*12,r/10.,log10(Ek/1e3),weight/30.);  // due to phi cover 12 degree, this will overlap 30 sector together, so we need to divide rate by 30
 //       hEklog_R_Phi[hit_id][par]->Fill(phi,r/10.,log10(Ek/1e3),weight);    
@@ -761,7 +810,7 @@ cout << "ratecounter " << ratecounter << endl;
 cout << "backscat_counter " << backscat_counter << endl;
 
 for(int k=0;k<n;k++){
-   hhits[k][0]->Add(hhits[k][1],hhits[k][2]);
+   hhitXY[k][0]->Add(hhitXY[k][1],hhitXY[k][2]);
    hvertex[k][0]->Add(hvertex[k][1],hvertex[k][2]);
    hfluxR[k][0]->Add(hfluxR[k][1],hfluxR[k][2]);
    hfluxPhi[k][0]->Add(hfluxPhi[k][1],hfluxPhi[k][2]);
@@ -781,10 +830,19 @@ for(int k=0;k<n;k++){
    hEdeplog[k][0]->Add(hEdeplog[k][1],hEdeplog[k][2]);
    hfluxEklog_cut[k][0]->Add(hfluxEklog_cut[k][1],hfluxEklog_cut[k][2]);
    hfluxEklog_cut_niel[k][0]->Add(hfluxEklog_cut_niel[k][1],hfluxEklog_cut_niel[k][2]);
-   hP_R[k][0]->Add(hP_R[k][1],hP_R[k][2]);   
-   hPlog_R[k][0]->Add(hPlog_R[k][1],hPlog_R[k][2]);   
-   hElog_R[k][0]->Add(hElog_R[k][1],hElog_R[k][2]);
+   hP_Theta[k][0]->Add(hP_Theta[k][1],hP_Theta[k][2]);
+   hP_Theta_high[k][0]->Add(hP_Theta_high[k][1],hP_Theta_high[k][2]);   
+   hP_Theta_low[k][0]->Add(hP_Theta_low[k][1],hP_Theta_low[k][2]);         
+   hP_R[k][0]->Add(hP_R[k][1],hP_R[k][2]);
+   hP_R_high[k][0]->Add(hP_R_high[k][1],hP_R_high[k][2]);   
+   hP_R_low[k][0]->Add(hP_R_low[k][1],hP_R_low[k][2]);      
+   hPlog_R[k][0]->Add(hPlog_R[k][1],hPlog_R[k][2]);
+   hPlog_R_high[k][0]->Add(hPlog_R_high[k][1],hPlog_R_high[k][2]);
+   hPlog_R_low[k][0]->Add(hPlog_R_low[k][1],hPlog_R_low[k][2]);   
    hEklog_R[k][0]->Add(hEklog_R[k][1],hEklog_R[k][2]);
+   hEklog_R_high[k][0]->Add(hEklog_R_high[k][1],hEklog_R_high[k][2]);
+   hEklog_R_low[k][0]->Add(hEklog_R_low[k][1],hEklog_R_low[k][2]);   
+   hElog_R[k][0]->Add(hElog_R[k][1],hElog_R[k][2]);   
 }
       
 TCanvas *c_pid = new TCanvas("pid","pid",900,900);
@@ -803,7 +861,7 @@ c_hits->Divide(n,m);
 for(int l=0;l<m;l++){
 for(int k=0;k<n;k++){
   c_hits->cd(l*n+k+1);    
-  hhits[k][l]->Draw("colz");
+  hhitXY[k][l]->Draw("colz");
 }
 }
 
