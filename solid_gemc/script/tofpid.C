@@ -1,6 +1,6 @@
 {  
 // double d=245;    //(300-65)/cos(16.28/180*3.1415926)=255cm   TCS LA
-double d=750;       //(350+405)/cos(7.5/180*3.1415926)=770cm  SIDIS FA
+double d=770;       //(350+415)/cos(7.5/180*3.1415926)=770cm  SIDIS FA
   
 const double M_pi=0.140,M_k=0.494,M_p=0.938;
 TF1 *ppi=new TF1("ppi","[2]/30./(x/sqrt(x*x+[0]*[0]))-[2]/30./(x/sqrt(x*x+[1]*[1]))",0,10);
