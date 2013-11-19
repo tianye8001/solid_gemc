@@ -706,7 +706,7 @@ while (!input.eof()){
 	  if (Is_pim) thisrate=136.;
 	  if (Is_pi0) thisrate=136.;	  
 	  if (Is_Kp) thisrate=3.0;
-	  if (Is_Km) thisrate=0.;
+	  if (Is_Km) thisrate=3.4;
 	  if (Is_Ks || Is_Kl) thisrate=0.;
 	  if (Is_p) thisrate=23.;  
 	}
@@ -715,7 +715,7 @@ while (!input.eof()){
 	  if (Is_pim) thisrate=183.;
 	  if (Is_pi0) thisrate=212.;  
 	  if (Is_Kp) thisrate=5.9;
-	  if (Is_Km) thisrate=0.;
+	  if (Is_Km) thisrate=3.7;
 	  if (Is_Ks || Is_Kl) thisrate=0.;
 	  if (Is_p) thisrate=37.;  
 	}
