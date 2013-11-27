@@ -333,7 +333,7 @@ int main(Int_t argc, char *argv[]){
 			     mom_gen*cos(theta_gen)
 			     ,sqrt(mom_gen*mom_gen+mass_e*mass_e));
 
-      theta_gen = acos(gRandom->Uniform(-1.,1.));
+      theta_gen = acos(gRandom->Uniform(cos(30/180.*3.1415926),cos(7/180.*3.1415926))));
       phi_gen = gRandom->Uniform(0.,2.*PI);
       //      mom_gen = gRandom->Uniform(0.7,momentum_ele + momentum_ion);
       mom_gen = gRandom->Uniform(0.5,6);
