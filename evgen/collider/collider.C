@@ -320,8 +320,8 @@ int main(Int_t argc, char *argv[]){
 	      mom_gen = gRandom->Uniform(0.7,momentum_ele * 3.);
       }
       else if (config=="SoLID") {
-	theta_gen = acos(gRandom->Uniform(cos(24/180.*3.1415926),cos(9/180.*3.1415926)));
-	mom_gen = gRandom->Uniform(0.7,momentum_ele);
+	theta_gen = acos(gRandom->Uniform(cos(30/180.*3.1415926),cos(7/180.*3.1415926)));
+	mom_gen = gRandom->Uniform(0.5,momentum_ele);
       }
       
       // mom_gen = 10.196474;
@@ -336,7 +336,7 @@ int main(Int_t argc, char *argv[]){
       theta_gen = acos(gRandom->Uniform(-1.,1.));
       phi_gen = gRandom->Uniform(0.,2.*PI);
       //      mom_gen = gRandom->Uniform(0.7,momentum_ele + momentum_ion);
-      mom_gen = gRandom->Uniform(0.7,10);
+      mom_gen = gRandom->Uniform(0.5,6);
       
        // theta_gen = 1.8588846;
 //        phi_gen = 0.8115906;

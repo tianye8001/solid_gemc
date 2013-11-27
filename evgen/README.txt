@@ -107,6 +107,21 @@ setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
 make
 run "./collider" to see all running options
 
+3. analysis result
+mkdir analysis   (parallel with rootfiles generated from collider code)
+
+copy generate_weight.C generate_plot.C into the analysis directory
+also copy acceptance rootfile into analysis directory
+
+root[] .x generate_weight.C
+---->this will add two branches weight_hp, weight_hm in each file, they are xs in nbar for each event.
+
+phase space in this script should be changed to be the same as that in collider.C code
+
+root[] .x generate_plot.C("pion",1,0)
+
+flag is explained in the code.
+
 == inclusive rate calculation used for SIDIS proposal ==============================================
 
 cd single_rate and type make
