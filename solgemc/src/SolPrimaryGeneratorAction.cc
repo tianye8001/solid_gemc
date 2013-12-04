@@ -7,12 +7,14 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 #include "G4UnitsTable.hh"
+#include "G4RunManager.hh"
 
 // %%%%%%%%%%%%%
 // gemc headers
 // %%%%%%%%%%%%%
 #include "SolPrimaryGeneratorAction.h"
 #include "detector.h"
+#include "SolEventAction.h"
 
 // %%%%%%%%%%%
 // C++ headers
@@ -89,11 +91,26 @@ void SolPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent){
     // index, charge, type, particle id, parent, daughter, p_x, p_y, p_z, p_t, mass, x vertex, y vertex, z vertex
     // type is 1 for particles in the detector
     if(gformat == "SOLLUND" && !gif.eof()) {
-	double tmp, px, py, pz;
-	int NPART, pdef, type, parent, daughter;
-	gif >> NPART >> weight >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp >> tmp;
+	double tmp[5], px, py, pz;
+	int itmp[4], NPART, pdef, type, parent, daughter;
+
+	((SolEventAction*)(G4RunManager::GetRunManager()->GetUserEventAction()))->SaveInput().str ("");
+	((SolEventAction*)(G4RunManager::GetRunManager()->GetUserEventAction()))->SaveInput().clear();
+
+	gif >> NPART >> weight >> itmp[0] >> itmp[1] >> itmp[2] >> itmp[3] >> tmp[0] >> tmp[1] >> tmp[2] >> tmp[3] >> tmp[4];
+	((SolEventAction*)(G4RunManager::GetRunManager()->GetUserEventAction()))->SaveInput() 
+	  << NPART << " " << weight << " " << itmp[0] 
+	  << " " << itmp[1] << " " << itmp[2] << " " << itmp[3] 
+	  << " " << tmp[0] << " " << tmp[1] << " " << tmp[2] 
+	  << " " << tmp[3] << " " << tmp[4] << endl;
 	for(int p=0; p<NPART; p++) {
-	    gif >> tmp >> tmp >> type >> pdef >> parent >> daughter >> px >> py >> pz >> tmp >> tmp >> Vx >> Vy >> Vz;
+	    gif >> itmp[0] >> tmp[0] >> type >> pdef >> parent >> daughter >> px >> py >> pz >> tmp[1] >> tmp[2] >> Vx >> Vy >> Vz;
+	    ((SolEventAction*)(G4RunManager::GetRunManager()->GetUserEventAction()))->SaveInput()
+	      << " " << itmp[0] << " " << tmp[0] << " " << type 
+	      << " " << pdef << " " << parent << " " << daughter 
+	      << " " << px << " " << py << " " << pz << " " << tmp[1] 
+	      << " " << tmp[2] << " " << Vx << " " << Vy << " " << Vz
+	      << endl;
 	    if(type == 1) {
 		// Primary Particle
 		Particle = particleTable->FindParticle(pdef);

@@ -29,14 +29,17 @@ class SolEventAction : public MEventAction
     
  private:
   stringstream fSaveRand;
+  stringstream fSaveInput;
   bool fSaveMe;
   std::ofstream* fSaveRandFile;
+  std::ofstream* fSaveInputFile;
   std::ifstream* fRestoreRandFile;
 
  public:
   void BeginOfEventAction(const G4Event*);            ///< Routine at the start of each event
   void EndOfEventAction(const G4Event*);              ///< Routine at the end of each event
   void SaveMe() {fSaveMe = true;}
+  stringstream& SaveInput() {return fSaveInput;}
 };
 
 #endif

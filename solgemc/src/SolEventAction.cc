@@ -9,12 +9,18 @@ SolEventAction::SolEventAction(gemc_opts opts, map<string, double> gpars)
   : MEventAction (opts, gpars),
     fSaveMe (false),
     fSaveRandFile (NULL),
+    fSaveInputFile (NULL),
     fRestoreRandFile (NULL)
 {
   string saverandfilename = gemcOpt.args["SAVE_RAND_FILE"].args;
   if (saverandfilename != "")
     {
       fSaveRandFile = new ofstream (saverandfilename.c_str());
+    }
+  string saveinputfilename = gemcOpt.args["SAVE_INPUT_FILE"].args;
+  if (saveinputfilename != "")
+    {
+      fSaveInputFile = new ofstream (saveinputfilename.c_str());
     }
   string restorerandfilename = gemcOpt.args["RESTORE_RAND_FILE"].args;
   if (restorerandfilename != "")
@@ -29,6 +35,11 @@ SolEventAction::~SolEventAction()
     {
       fSaveRandFile->close();
       delete fSaveRandFile;
+    }
+  if (fSaveInputFile != NULL)
+    {
+      fSaveInputFile->close();
+      delete fSaveInputFile;
     }
   if (fRestoreRandFile != NULL)
     {
@@ -56,6 +67,11 @@ void SolEventAction::BeginOfEventAction(const G4Event* evt)
       fSaveRand.clear();
       CLHEP::HepRandom::saveFullState (fSaveRand);
     }
+  if (fSaveInputFile != NULL)
+    {
+      fSaveMe = false;
+    }
+
 }
 
 void SolEventAction::EndOfEventAction(const G4Event* evt)
@@ -64,5 +80,9 @@ void SolEventAction::EndOfEventAction(const G4Event* evt)
   if (fSaveRandFile != NULL && fSaveMe)
     {
       *fSaveRandFile << fSaveRand.str();
+    }
+  if (fSaveInputFile != NULL && fSaveMe)
+    {
+      *fSaveInputFile << fSaveInput.str();
     }
 }
