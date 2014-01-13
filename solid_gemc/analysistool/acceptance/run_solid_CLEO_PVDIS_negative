@@ -10,13 +10,17 @@ gemc \
 -SCALE_FIELD="solenoid_CLEO, -1" \
 -BEAM_P="chargedgeantino, 5.5*GeV, 25*deg, 0*deg" \
 -SPREAD_P="5.5*GeV, 25*deg, 180*deg" \
--BEAM_V="(0, 0, 10)cm" \
--SPREAD_V="(0.7, 20)cm" \
+-BEAM_V="(0., 0., 10)cm" \
+-SPREAD_V="(0.3536, 20)cm" \
 -N=1e6 \
 -OUTPUT="evio,negative.evio" \
 -USE_QT=0
 
-gemc_evio2root negative.evio acceptance_solid_CLEO_PVDIS_negative_SCALEMIN1.4MAX1.4_cutinner.root
+gemc_evio2root negative.evio acceptance_solid_CLEO_PVDIS_negative_0.5x5degblock.root
+
+rm -f negative.evio
+
+
 
 # -N=1e5 \
 # -OUTPUT="evio,acceptance_solid_CLEO_PVDIS.evio" \

@@ -2,9 +2,14 @@
 <!-- geometry: 	-->
     <sqltable name="solid_CLEO_solenoid_kill"/>
     <sqltable name="solid_CLEO_PVDIS_ec_forwardangle_kill"/>
-    <sqltable name="solid_CLEO_PVDIS_absorber_kill"/>
     <sqltable name="solid_CLEO_PVDIS_virtualhodoscope_ec"/>
-    <sqltable name="solid_CLEO_PVDIS_baffle_inspection"/>
+<!--    <sqltable name="solid_CLEO_PVDIS_virtualhodoscope_gem"/> -->
+    <sqltable name="solid_CLEO_PVDIS_virtualhodoscope_cher"/>
+    <sqltable name="solid_CLEO_PVDIS_baffle_observer"/>
+    <sqltable name="solid_CLEO_PVDIS_baffle_kill"/>
+    <sqltable name="solid_CLEO_PVDIS_ec_forwardangle_block_0p5x5deg_kill"/>
+<!--    <sqltable name="solid_CLEO_PVDIS_ec_forwardangle_block_kill"/> -->
+<!--    <sqltable name="solid_CLEO_PVDIS_baffle_babarbafflemore1_kill"/> -->
 <!-- option: 	-->
         <option name="DBUSER"          value="soliduser" />
         <option name="DBPSWD"          value="ilovesolid" />
