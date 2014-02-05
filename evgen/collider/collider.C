@@ -491,7 +491,7 @@ int main(Int_t argc, char *argv[]){
 	     dxs_temp[7] = dxs_temp[1]-dxs_temp[6]/0.8/0.8;
 	     	     
 	     dxs_hp = dxs_temp[4]/pt/pt + dxs_temp[5];
-	     dxs_hm = dxs_temp[6]/pt/pt + dxs_temp[6];
+	     dxs_hm = dxs_temp[6]/pt/pt + dxs_temp[7];
 
 	     dilute[0] = ((dxs_all[1][0] + K[0]*dxs_all[2][0])/(dxs_all[1][1] + K[0]*dxs_all[2][1])+dxs_all[0][0]/dxs_all[0][1])/2.;
 	     dilute[1] = ((dxs_all[1][2] + K[1]*dxs_all[2][2])/(dxs_all[1][3] + K[1]*dxs_all[2][3])+dxs_all[0][2]/dxs_all[0][3])/2.;
