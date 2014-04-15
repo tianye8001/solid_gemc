@@ -27,13 +27,15 @@ gROOT->Reset();
 gStyle->SetPalette(1);
 gStyle->SetOptStat(111111);
 
+// gSystem->Load("../../../CaloSimShashlik/response/FastResponse_C.so");
+
 const double DEG=180./3.1415926;
 
 char output_filename[80];
 sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
 TFile *outputfile=new TFile(output_filename, "recreate");
 
-const int n=26; // number of detector
+const int n=29; // number of detector
 const int m=11; //number of particles
 
 char *label[m]={"photon+electron+positron","photon","electron+positron","neutron","proton","pip","pim","Kp","Km","Kl","other"};
@@ -458,7 +460,7 @@ while (!input.eof()){
       
 //     cout << flux_ID << endl;    
     int detector_ID=flux_ID/100000;
-    if ( detector_ID !=11 && detector_ID !=12 &&  detector_ID !=13 && detector_ID !=14 && detector_ID !=15 && detector_ID !=16 && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=41)    
+    if ( detector_ID !=11 && detector_ID !=12 &&  detector_ID !=13 && detector_ID !=14 && detector_ID !=15 && detector_ID !=16 && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=41 && detector_ID!=51)    
 //     if ( (detector_ID<11 || detector_ID >16) && detector_ID !=31 && detector_ID !=32 && detector_ID!=21 && detector_ID!=22 && detector_ID!=211 && detector_ID!=41)        
     {
       cout << "wrong flux_ID "  << flux_evn  << " " << flux_nfluxhit << " " << flux_ID << endl;
@@ -541,8 +543,13 @@ while (!input.eof()){
 		     break;
 	case 41:     if (subdetector_ID==411) hit_id=16;
 		     else if (subdetector_ID==410) hit_id=17;
+		     else if (subdetector_ID==412) hit_id=26;
 		     else cout << "wrong flux_ID " << flux_ID << endl;		      
 		     break;
+	case 51:     if (subdetector_ID==511) hit_id=27;
+		     else if (subdetector_ID==510) hit_id=28;
+		     else cout << "wrong flux_ID " << flux_ID << endl;		      
+		     break;		     
 	default:     cout << "wrong flux_ID " << flux_ID <<  endl; break;
       }    
 
@@ -692,7 +699,7 @@ while (!input.eof()){
 // 	thisrate=1;	
 	if (input_filename.find("JPsi",0) != string::npos) thisrate=rate*1.2; ///use 1e37 while it should 1.2e37, may change later
 	if (Is_eDIS && (W<2)) continue; /// cut for eDIS
-// 	if (Is_eDIS && (x<0.65)) continue; /// cut for eDIS	
+// 	if (Is_eDIS && (W<2||Q2<1)) continue; /// cut for eDIS	
       }
       else if (Is_real){
 	if(Is_PVDIS){
@@ -707,7 +714,7 @@ while (!input.eof()){
 	  if (Is_pi0) thisrate=136.;	  
 	  if (Is_Kp) thisrate=3.0;
 	  if (Is_Km) thisrate=3.4;
-	  if (Is_Ks || Is_Kl) thisrate=0.;
+	  if (Is_Ks || Is_Kl) thisrate=1.53;
 	  if (Is_p) thisrate=23.;  
 	}
 	else if(Is_SIDIS_He3){
@@ -716,7 +723,7 @@ while (!input.eof()){
 	  if (Is_pi0) thisrate=212.;  
 	  if (Is_Kp) thisrate=5.9;
 	  if (Is_Km) thisrate=3.7;
-	  if (Is_Ks || Is_Kl) thisrate=0.;
+	  if (Is_Ks || Is_Kl) thisrate=2.4;
 	  if (Is_p) thisrate=37.;  
 	}
       }
@@ -752,7 +759,12 @@ while (!input.eof()){
 //       hEklog_R_Phi[hit_id][par]->Fill(phi,r/10.,log10(Ek/1e3),weight);    
               
 	if (hit_id<6 && flux_Edep<26e-6){} //gem required >26eV energy deposit in first 2 gas layer
-	else if (hit_id==17 && flux_Edep<1e-100){} //mrpc required >0 energy deposit glass
+	else if ((hit_id==17 || hit_id==26) && flux_Edep<1e-10){
+// 	  cout <<"flux_Edep " << flux_Edep << endl;  
+	} //mrpc required >0 energy deposit
+	else if (hit_id==28 && flux_Edep<1e-10){
+// 	  cout <<"flux_Edep " << flux_Edep << endl;  	  
+	} //spd required >0 energy deposit
 	else {  // all other just counting
 	    hfluxR[hit_id][par]->Fill(r/10.,weightR/50.);   ///in 5cm bin
 	    hEfluxR[hit_id][par]->Fill(r/10.,weightR*Ek/50.*1e3); ///in 5cm bin and from mm2 to 10cm2
