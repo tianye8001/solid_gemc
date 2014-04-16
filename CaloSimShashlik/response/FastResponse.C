@@ -20,7 +20,7 @@ using namespace std;
 //! \param[in] particle names, pi, p, e, gamma
 //! \param[in] E_Kine kinematic in GeV
 //! \return Energy deposition in shower. Stocastically generated shower response
-double FastResponse(const TString & particle,const TString & section, const double E_Kine)
+double FastResponse(const TString & particle,const TString & section, const double E_Kine) //input in GeV
 {
 	// from G4 simulation of Shashlik configuration of 0.5mm Pb+1.5mm Scint.
 	static const double E_calibration = 3.88271;
@@ -85,8 +85,8 @@ double FastResponse(const TString & particle,const TString & section, const doub
 	TH1D* h1 = h2->ProjectionX("proj", bin, bin);
 
 	double scintillator_e_dep=0.;	
-	if (section == "PS") scintillator_e_dep = h1->GetRandom();
-	else if (section == "S") scintillator_e_dep = h1->GetRandom() * E_total * E_calibration;
+	if (section == "PS") scintillator_e_dep = h1->GetRandom()/1e3;  //result in GeV
+	else if (section == "S") scintillator_e_dep = h1->GetRandom() * E_total * E_calibration; //result in GeV
 	else cout << "FastResponse - Error - " << "unsupported section " << section  << endl;
 
 	return scintillator_e_dep;
