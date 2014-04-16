@@ -20,7 +20,7 @@ using namespace std;
 //! \param[in] particle names, pi, p, e, gamma
 //! \param[in] E_Kine kinematic in GeV
 //! \return Energy deposition in shower. Stocastically generated shower response
-double FastResponse(const TString & particle, const double E_Kine)
+double FastResponse(const TString & particle,const TString & section, const double E_Kine)
 {
 	// from G4 simulation of Shashlik configuration of 0.5mm Pb+1.5mm Scint.
 	static const double E_calibration = 3.88271;
@@ -71,7 +71,11 @@ double FastResponse(const TString & particle, const double E_Kine)
 		cout <<"FastResponse - INFO - openned "<<data_file<<endl;
 	}
 
-	TH2F * h2 = (TH2F *) file->GetObjectChecked("EDepShowerOverE_Dist", "TH2F");
+	TH2F * h2;
+	if (section == "PS") h2 = (TH2F *) file->GetObjectChecked("EDepPreshower_Dist", "TH2F");	
+	else if (section == "S") h2 = (TH2F *) file->GetObjectChecked("EDepShowerOverE_Dist", "TH2F");
+	else cout << "FastResponse - Error - " << "unsupported section " << section  << endl;
+	
 	assert(h2);
 
 	const double log_Ek = TMath::Log10(E_Kine);
@@ -80,10 +84,12 @@ double FastResponse(const TString & particle, const double E_Kine)
 
 	TH1D* h1 = h2->ProjectionX("proj", bin, bin);
 
-	const double scintillator_e_dep = h1->GetRandom() * E_total;
-	const double shower_E_calibrated = scintillator_e_dep * E_calibration;
+	double scintillator_e_dep=0.;	
+	if (section == "PS") scintillator_e_dep = h1->GetRandom();
+	else if (section == "S") scintillator_e_dep = h1->GetRandom() * E_total * E_calibration;
+	else cout << "FastResponse - Error - " << "unsupported section " << section  << endl;
 
-	return shower_E_calibrated;
+	return scintillator_e_dep;
 
 }
 
