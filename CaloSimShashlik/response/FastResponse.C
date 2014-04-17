@@ -25,7 +25,10 @@ using namespace std;
 double FastResponse(const TString & particle,const TString & section, const TString & depositiontype, const double E_Kine)
 {
 	// from G4 simulation of Shashlik configuration of 0.5mm Pb+1.5mm Scint.
+	//shower calibration by a constant
 	static const double E_calibration = 3.88271;
+	//preshower calibration by a formula
+	//38.9 MeV + 2.549 * ps_raw
 
 	const char * data_file = NULL;
 
@@ -89,7 +92,7 @@ double FastResponse(const TString & particle,const TString & section, const TStr
 	double scintillator_Edep=0.,whole_Edep=0.;		
 	if (section == "PS") {
 	  scintillator_Edep = h1->GetRandom()/1e3;  //result in GeV
-	  whole_Edep = 0;  //result in GeV  /// need update	  	  
+	  whole_Edep = (38.9+2.549*h1->GetRandom())/1e3;  //result in GeV	  	  
 	}
 	else if (section == "S") {
 	  scintillator_Edep = h1->GetRandom() * E_total; //result in GeV
