@@ -18,9 +18,11 @@ using namespace std;
 
 //! Get a quick response model for Shashlik calorimeter for a particle before entering shower + preshwoer
 //! \param[in] particle names, pi, p, e, gamma
+//! \param[in] section PS or S
+//! \param[in] depositiontype scint or whole
 //! \param[in] E_Kine kinematic in GeV
 //! \return Energy deposition in shower. Stocastically generated shower response
-double FastResponse(const TString & particle,const TString & section, const double E_Kine) //input in GeV
+double FastResponse(const TString & particle,const TString & section, const TString & depositiontype, const double E_Kine)
 {
 	// from G4 simulation of Shashlik configuration of 0.5mm Pb+1.5mm Scint.
 	static const double E_calibration = 3.88271;
@@ -84,12 +86,23 @@ double FastResponse(const TString & particle,const TString & section, const doub
 
 	TH1D* h1 = h2->ProjectionX("proj", bin, bin);
 
-	double scintillator_e_dep=0.;	
-	if (section == "PS") scintillator_e_dep = h1->GetRandom()/1e3;  //result in GeV
-	else if (section == "S") scintillator_e_dep = h1->GetRandom() * E_total * E_calibration; //result in GeV
+	double scintillator_Edep=0.,whole_Edep=0.;		
+	if (section == "PS") {
+	  scintillator_Edep = h1->GetRandom()/1e3;  //result in GeV
+	  whole_Edep = 0;  //result in GeV  /// need update	  	  
+	}
+	else if (section == "S") {
+	  scintillator_Edep = h1->GetRandom() * E_total; //result in GeV
+	  whole_Edep = h1->GetRandom() * E_total * E_calibration; //result in GeV
+	}
 	else cout << "FastResponse - Error - " << "unsupported section " << section  << endl;
 
-	return scintillator_e_dep;
+	double Edep=0;
+	if (depositiontype == "scint") Edep=scintillator_Edep;
+	else if (depositiontype == "whole") Edep=whole_Edep;
+	else cout << "FastResponse - Error - " << "unsupported depositiontype " << depositiontype  << endl;	
+
+	return Edep;
 
 }
 
