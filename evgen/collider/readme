@@ -1,0 +1,38 @@
+SIDIS event generator
+
+1. get lhapdf and compile
+mkdir lhapdf
+wget http://www.hepforge.org/archive/lhapdf/lhapdf-5.8.5.tar.gz
+tar zxf lhapdf-5.8.5.tar.gz
+cd lhapdf-5.8.5
+./configure --prefix=/PathOflhapdf CC=/usr/bin/gcc CXX=/usr/bin/g++ FC=/usr/bin/gfortran
+make
+make install
+cd ../share/lhapdf
+wget http://www.hepforge.org/archive/lhapdf/pdfsets/5.8.5/cteq6m.LHpdf
+
+2. compile and run "collider"
+cd collider
+setenv ROOTSYS /apps/root/5.28-00c-64bit
+setenv PATH ${ROOTSYS}/bin:${PATH}
+setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
+#setenv LD_LIBRARY_PATH ${ROOTSYS}/lib:${LD_LIBRARY_PATH}
+setenv LHAPDF /PathOflhapdf
+setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
+make
+run "./collider" to see all running options
+
+3. analysis result
+mkdir analysis   (parallel with rootfiles generated from collider code)
+
+copy generate_weight.C generate_plot.C into the analysis directory
+also copy acceptance rootfile into analysis directory
+
+root[] .x generate_weight.C
+---->this will add two branches weight_hp, weight_hm in each file, they are xs in nbar for each event.
+
+phase space in this script should be changed to be the same as that in collider.C code
+
+root[] .x generate_plot.C("pion",1,0)
+
+flag is explained in the code.

@@ -1,0 +1,25 @@
+inclusive rate calculation 
+
+eDIS rate is from whitlow and qfs, hadron rates are from wiser
+
+used for SIDIS proposal
+
+type "make" to compile
+
+you use choose option 1 to use scattering e- mommentum and theta as variables
+./main target(0 hydrogen,1 deuteron) Lumi(1e33 Hz/cm2) beam(GeV) option(1) bin mom_min(GeV) mom_max(GeV) theta_min(deg) theta_max(deg)
+
+or you choose option 2 to use Q2 and x as variables  
+./main target(0 hydrogen,1 deuteron) Lumi(1e33 Hz/cm2) beam(GeV) option(2) bin x_min x_max Q2_min(GeV2) Q2_max(GeV2)
+this is not a complete feature. actuall cross section is all calculated in mom,theta bin, so a x,Q2 square bin will define ranges for mom,theta, then calculate in the coverted mom,theta bin square bin. But the actual coversion should be a quare, it only falls within the suqare, so it will be overestimate.
+
+the parameter "bin" can be 1 or n.
+If it's 1, the code only calculates rate at 1 point, the central of momentum and angle range.
+If it's n, the code calculates n*n points within momentum and angle range and sum to get total rate
+
+calc_rate.C calls on main to generate a rate plot
+
+The code is based on some previous code, refer to 
+"Software for estimating (e,e'), (e,pion) cross sections (10/22/2000) source code     instruction(html)"
+at http://hallaweb.jlab.org/physics/experiments/he3/A1n/
+
