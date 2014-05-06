@@ -6,7 +6,7 @@ setenv JLAB_ROOT /home/zwzhao/apps/jlab_root #setup basic enviroment variables f
 setenv JLAB_VERSION 1.0
 source $JLAB_ROOT/$JLAB_VERSION/ce/jlab.csh       #setup basic enviroment variables for gemc on local installation
 setenv SoLID_GEMC /home/zwzhao/solid/solid_svn/solid/solid_gemc #solid_gemc location where you download from SVN, modify this to your path!!!
-setenv GEMC_FIELD $SoLID_GEMC/field     #location of GEMC field map, change this to your path!!!
+setenv GEMC_FIELD $SoLID_GEMC/database_io/field     #location of GEMC field map, change this to your path!!!
 setenv GEMC_HOST soliddb.jlab.org   #use this if your system is on jlab network
 #setenv GEMC_HOST 127.0.0.1       #use this if you are tunnleing to access mysql server
 setenv GEMC_DB solid_geometry       #the official detector database
