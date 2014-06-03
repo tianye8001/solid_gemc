@@ -6,6 +6,7 @@
 #include <TChain.h>
 #include <TH1.h>
 #include <TH2.h>
+#include <TH3.h>
 #include <TF1.h>
 #include <TLorentzVector.h>
 #include <TROOT.h>
@@ -14,13 +15,45 @@
 
 using namespace std;
 
-void anaGrape(string input_filedir){
-
+void anaGrape(string input_filedir,string detector=""){
 //  set_style();
 // gROOT->Reset();
 gStyle->SetPalette(1);
 gStyle->SetOptStat(1000011);
 //   gStyle->SetOptStat(1);
+
+TH3F *hacceptance_PThetaPhi_positive,*hacceptance_PThetaPhi_negative;
+if (detector=="CLAS12"){
+//   TFile *acceptancefile=new TFile("clas12_acceptance_pipele.root");
+//   TFile *acceptancefile=new TFile("clas12_acceptance_pipele_largebin.root");
+  TFile *acceptancefile=new TFile("../clasev_acceptance.root");
+  
+  hacceptance_PThetaPhi_positive=(TH3F*) acceptancefile->Get("acceptance_PThetaPhi_pip");  
+  hacceptance_PThetaPhi_negative=(TH3F*) acceptancefile->Get("acceptance_PThetaPhi_ele");
+  
+//   TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1200,900);
+//   c_acceptance->Divide(2,1);
+//   c_acceptance->cd(1);
+//   hacceptance_PThetaPhi_positive->Draw();
+//   c_acceptance->cd(2);
+//   hacceptance_PThetaPhi_negative->Draw();  
+  
+//   target.SetPxPyPzE(0.,0.,0.,0.938);  
+//   Pmax=3; 
+//   smin=10;
+//   smax=25;
+//   etamin=0.;  
+//   etamax=0.5;
+//   tmin=0;    
+//   tmax=4;
+//   index=4; 
+//   thetamin=0;    
+//   thetamax=60;  
+//resolution mom 1%, theta 1mr, phi 4mr   
+//   resolution_p[0]=0.01;resolution_theta[0]=1e-3;resolution_phi[0]=4e-3;
+//   resolution_p[1]=0.05;resolution_theta[1]=10e-3;resolution_phi[1]=5e-3;   
+}
+else {cout << "wrong detector" << endl;}
   
 //   TFile *acceptancefile=new TFile("accep.root");
 // TH2F *h2_acc=(TH2F*) acceptancefile->Get("h2");
@@ -44,22 +77,8 @@ sprintf(output_filename, "%s.root",input_filedir.c_str());
   
 TFile *outputfile=new TFile(output_filename, "recreate");
 
-TH2F *hang_dist_scat_e = new TH2F("hang_dist_scat_e","",100,-40.,40,100,-180.,180.);
-TH2F *hang_dist_scat_p = new TH2F("hang_dist_scat_p","",100,-40.,40,100,-180.,180.);
-
 TH2F *hepscat = new TH2F("hepscat","",50,-1.0,1.0,60,-1.0,1.0);
 TH2F *hemscat = new TH2F("hemscat","",50,-1.0,1.0,60,-1.0,1.0);
-
-TH2F *hlepIM_2D = new TH2F("hlepIM_2D","",400,0.0,4.0,400,0.0,4.0);
-
-TH1F *hlepIM = new TH1F("hlepIM","",400,0.0,4.0);
-
-TH1F *hlepIM_count = new TH1F("hlepIM_count","",400,0.0,4.0);
-
-TH1F *hlepIM2 = new TH1F("hlepIM2","",100,2.8,3.8);
-
-TH2F *hlepIM_W = new TH2F("hlepIM_W","",400,0.0,4.0,40,2,6);
-TH2F *hlepIM2_W = new TH2F("hlepIM2_W","",100,2.8,3.8,40,2,6);
 
 TH1F *hW = new TH1F("W","",50,4,4.5);
 TH1F *hWstat = new TH1F("Wstat","",50,4,4.5);
@@ -83,28 +102,49 @@ TH2F *htminW = new TH2F("tminW","tminW",50,4,4.5,600,0,6);
 TH2F *htmaxW = new TH2F("tmaxW","tmaxW",50,4,4.5,600,0,6);
 TH1F *ht = new TH1F("\t","\t",600,0,6);
 
-TH2F *hThetaP[4][4];
-for(int k=0;k<4;k++){
-  for(int l=0;l<4;l++){
-   char hstname[100];
-   sprintf(hstname,"ThetaP_%i_%i",k,l);
-   hThetaP[k][l]=new TH2F(hstname,hstname,300,0,30,8000,0,8);
-  }  
+TH2F *hlepIM_W = new TH2F("hlepIM_W",";e+ e- Inv Mass (GeV);W (GeV)",80,0,4.0,40,2,6); 
+
+const int m=4;
+
+TH1F *hlepIM1[m],*hlepIM2[m],*hlepIM[m];
+TH2F *hlepIM_2D[m];
+TH2F *hThetaP[4][m],*hThetaPhi[4][m];
+for(int k=0;k<m;k++){
+  char hstname[100];
+  for(int l=0;l<4;l++){  
+   sprintf(hstname,"ThetaP_%i_%i",l,k);
+   hThetaP[l][k]=new TH2F(hstname,";#theta_{lab} (deg);P (GeV)",180,0,180,800,0,8);
+   sprintf(hstname,"ThetaPhi_%i_%i",l,k);
+   hThetaPhi[l][k]=new TH2F(hstname,";#theta_{lab} (deg);#phi_{lab} (deg)",180,0,180,100,-180.,180.);   
+  }
+    
+  sprintf(hstname,"hlepIM_2D_%i",k);
+  hlepIM_2D[k] = new TH2F(hstname,";e+ e-(1st) Inv Mass (GeV);e+ e-(2nd) Inv Mass (GeV)",80,0,4.0,80,0,4.0);   
+  
+  sprintf(hstname,"hlepIM1_%i",k);
+  hlepIM1[k] = new TH1F(hstname,";e+ e- Inv Mass (GeV);",80,0,4.0);   
+  sprintf(hstname,"hlepIM2_%i",k);
+  hlepIM2[k] = new TH1F(hstname,";e+ e- Inv Mass (GeV);",80,0,4.0);   
+  sprintf(hstname,"hlepIM_%i",k);
+  hlepIM[k] = new TH1F(hstname,";e+ e- Inv Mass (GeV);",80,0,4.0);
 }
 
+double weight[m];
+
 Double_t pi1 = TMath::Pi();
+//   cout << pi1 << endl;
 
 Double_t D2R = 3.1415/180.;
+
+Double_t DEG = 180./3.1415;
    
 char input_filename[80];
 sprintf(input_filename, "%s/grp.root",input_filedir.c_str());
 
   TChain *h11 = new TChain("h11");
   h11->Add(input_filename);
-
-  TChain *eff = new TChain("h1");
-  eff->Add(input_filename);
-
+  TChain *h1 = new TChain("h1");
+  h1->Add(input_filename);
 
   Double_t xsec[20];
 
@@ -127,37 +167,36 @@ sprintf(input_filename, "%s/grp.root",input_filedir.c_str());
   Float_t sta[20];
   Float_t npy[20]; 
 
+  h1->SetBranchStatus("*",0);
 
-  eff->SetBranchStatus("*",0);
+  h1->SetBranchStatus("px",1);
+  h1->SetBranchAddress("px",&px);
+  h1->SetBranchStatus("py",1);
+  h1->SetBranchAddress("py",&py);
+  h1->SetBranchStatus("pz",1);
+  h1->SetBranchAddress("pz",&pz);
+  h1->SetBranchStatus("pe",1);
+  h1->SetBranchAddress("pe",&pe);
+  h1->SetBranchStatus("pm",1);
+  h1->SetBranchAddress("pm",&pm);
+  h1->SetBranchStatus("kf",1);
+  h1->SetBranchAddress("kf",&kf);
+  h1->SetBranchStatus("sta",1);
+  h1->SetBranchAddress("sta",&sta);
+  h1->SetBranchStatus("npy",1);
+  h1->SetBranchAddress("npy",&npy);
 
-  eff->SetBranchStatus("px",1);
-  eff->SetBranchAddress("px",&px);
-  eff->SetBranchStatus("py",1);
-  eff->SetBranchAddress("py",&py);
-  eff->SetBranchStatus("pz",1);
-  eff->SetBranchAddress("pz",&pz);
-  eff->SetBranchStatus("pe",1);
-  eff->SetBranchAddress("pe",&pe);
-  eff->SetBranchStatus("pm",1);
-  eff->SetBranchAddress("pm",&pm);
-  eff->SetBranchStatus("kf",1);
-  eff->SetBranchAddress("kf",&kf);
-  eff->SetBranchStatus("sta",1);
-  eff->SetBranchAddress("sta",&sta);
-  eff->SetBranchStatus("npy",1);
-  eff->SetBranchAddress("npy",&npy);
-
-//   cout << pi1 << endl;
-
-  Int_t nevent = eff->GetEntries();
+  Int_t nevent = h1->GetEntries();
 
   cout << nevent << endl;
   TLorentzVector kp, prot, ep, em, ki, targ;
 
-  Double_t effXsec = xsec[0]/(double)nevent;
+  Double_t effxsec = xsec[0]/(double)nevent;
 
   Bool_t scatPhiBool, scat_e_calo;
 
+  int counter1=0,counter2=0,counter3=0,counter4=0,counter5=0;
+  
   Int_t counter;
   Int_t countd = 1;
   cout << "|___________________|" << endl;
@@ -165,7 +204,6 @@ sprintf(input_filename, "%s/grp.root",input_filedir.c_str());
   
   for(Int_t i=0; i < nevent; i++){
 //     for(Int_t i=0; i < 1000; i++){
-
     Double_t id = i;
     Double_t neventd = nevent;
     if(floor(id/neventd*20) == countd){
@@ -177,30 +215,33 @@ sprintf(input_filename, "%s/grp.root",input_filedir.c_str());
       }
     }
 
-    eff->GetEvent(i);
+    h1->GetEvent(i);
 
-    if(i<10) {
+    if(i<3) {
       for (Int_t j=0; j < 14; j++) {
 	cout << j << "\t"  << px[j] <<  "\t"  << py[j] <<  "\t"  << pz[j] <<  "\t"  << pe[j] <<  "\t"  << pm[j] <<  "\t"  << kf[j] <<  "\t"  << sta[j] <<  "\t"  << npy[j] << endl; 
       }
       cout << "******************************"<< endl;
     }
-    
-    
+        
     ki.SetXYZT(px[1],py[1],pz[1],pe[1]);
     targ.SetXYZT(px[0],py[0],pz[0],pe[0]);
-// cout <<  ki.P() << " " << targ.P() << endl;
+    prot.SetXYZT(px[10],py[10],pz[10],pe[10]);    
     kp.SetXYZT(px[11],py[11],pz[11],pe[11]);
-    prot.SetXYZT(px[10],py[10],pz[10],pe[10]);
     ep.SetXYZT(px[12],py[12],pz[12],pe[12]);
     em.SetXYZT(px[13],py[13],pz[13],pe[13]);
-
+// cout <<  ki.P() << " " << targ.P() << endl;
+    
     ki.RotateY(pi1);
+    targ.RotateY(pi1);    
+    prot.RotateY(pi1);    
     kp.RotateY(pi1);
-    prot.RotateY(pi1);
     ep.RotateY(pi1);
     em.RotateY(pi1);
     
+    double InvM_epm1=(ep+em).M();
+    double InvM_epm2=(ep+kp).M();	
+	  
     double Q2=-(ki-kp).M2();
     double W=(ki-kp+targ).M();
 //         double W=(prot+ep+em).M();    
@@ -237,13 +278,7 @@ sprintf(input_filename, "%s/grp.root",input_filedir.c_str());
       //  hang_dist_scat_e->Fill(-(180.0 -kp.Theta()/D2R), kp.Phi()/D2R);
       //  hang_dist_scat_p->Fill(180.0 - prot.Theta()/D2R, prot.Phi()/D2R);
 
-    int index=0;
-    hThetaP[0][index]->Fill(kp.Theta()/D2R,kp.P(),effXsec);
-    hThetaP[1][index]->Fill(em.Theta()/D2R,em.P(),effXsec);
-    hThetaP[2][index]->Fill(ep.Theta()/D2R,ep.P(),effXsec);
-    hThetaP[3][index]->Fill(prot.Theta()/D2R,prot.P(),effXsec);    
-    
-    // h2 is solid forward angle acceptance, h3 is largeangle
+   // h2 is solid forward angle acceptance, h3 is largeangle
 // 	double accet_cut=0;
 // 	bool kp_accept_forwardangle=h2_acc->GetBinContent(h2_acc->FindBin(kp.Theta()/D2R,kp.P())) > accet_cut;
 // 	bool kp_accept_largeangle=h3_acc->GetBinContent(h3_acc->FindBin(kp.Theta()/D2R,kp.P())) > accet_cut;	
@@ -264,202 +299,237 @@ sprintf(input_filename, "%s/grp.root",input_filedir.c_str());
 // 	  if (conf_4fold && (kp_accept_forwardangle && (ep_accept_forwardangle || ep_accept_largeangle) && (em_accept_forwardangle || em_accept_largeangle) && prot_accept_forwardangle) && othercut)  cut=true;
 // 	  if (conf_3fold_NOp && (kp_accept_forwardangle && (ep_accept_forwardangle || ep_accept_largeangle) && (em_accept_forwardangle || em_accept_largeangle)) && othercut) cut=true;
 // 	  if (conf_3fold_NOe && ((ep_accept_forwardangle || ep_accept_largeangle) && (em_accept_forwardangle || em_accept_largeangle) && prot_accept_forwardangle) && othercut) cut=true;
-	  
-	  	bool triggercut = true;
-	  	bool cut = true;
-	      
-	  if (cut){     
-	    index=1;
-	    hThetaP[0][index]->Fill(kp.Theta()/D2R,kp.P(),effXsec);
-	    hThetaP[1][index]->Fill(em.Theta()/D2R,em.P(),effXsec);
-	    hThetaP[2][index]->Fill(ep.Theta()/D2R,ep.P(),effXsec);
-	    hThetaP[3][index]->Fill(prot.Theta()/D2R,prot.P(),effXsec); 
-
-	  if (triggercut) {
-	    // cout << 1 << endl;
-	    index=2;
-	    hThetaP[0][index]->Fill(kp.Theta()/D2R,kp.P(),effXsec);
-	    hThetaP[1][index]->Fill(em.Theta()/D2R,em.P(),effXsec);
-	    hThetaP[2][index]->Fill(ep.Theta()/D2R,ep.P(),effXsec);
-	    hThetaP[3][index]->Fill(prot.Theta()/D2R,prot.P(),effXsec); 
+    
+      double pr_mom=prot.P(),e1_mom=em.P(),e2_mom=kp.P(),p_mom=ep.P();
+      double pr_theta=prot.Theta()*DEG,e1_theta=em.Theta()*DEG,e2_theta=kp.Theta()*DEG,p_theta=ep.Theta()*DEG;
+      double pr_phi=prot.Phi()*DEG,e1_phi=em.Phi()*DEG,e2_phi=kp.Phi()*DEG,p_phi=ep.Phi()*DEG;      
 	
-	  hang_dist_scat_e->Fill(kp.Theta()/D2R, kp.Phi()/D2R);
-	  hang_dist_scat_p->Fill(prot.Theta()/D2R, prot.Phi()/D2R);
+      int whichone=0;      
+      double acc=0;      
+      double acc_proton=0,acc_electron1=0,acc_electron2=0,acc_positron=0;
+      if (detector=="CLAS12"){
+	  //note CLAS12 phi (0,360), TCS sim phi (-180,180) 	
+	  acc_proton=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(pr_phi+180,pr_theta,pr_mom));
+	  acc_positron=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(p_phi+180,p_theta,p_mom));
+	  acc_electron1=hacceptance_PThetaPhi_negative->GetBinContent(hacceptance_PThetaPhi_negative->FindBin(e1_phi+180,e1_theta,e1_mom));	  
+	  acc_electron2=hacceptance_PThetaPhi_negative->GetBinContent(hacceptance_PThetaPhi_negative->FindBin(e2_phi+180,e2_theta,e2_mom));	  	  
 	  
-	  double InvM_epm=(ep+em).M();
+// 	  if (acc_proton > 0) cout << "acc_proton " << acc_proton << endl;
+// 	  if (acc_positron > 0) cout << "acc_positron " << acc_positron << endl;
+// 	  if (acc_electron1 > 0) cout << "acc_electron1 " << acc_electron1 << endl;
+// 	  if (acc_electron2 > 0) cout << "acc_electron2 " << acc_electron2 << endl; 
 
-	  hlepIM_2D->Fill(InvM_epm,(ep+kp).M(),effXsec);
-	  
-	  hlepIM->Fill(InvM_epm, effXsec);
-	  
-	  //      pb = 1e-36 cm2, lumi 1e37/cm2/s, 50 days, 0.85 eff
-	  double count_convert = 1e-36*1e37*24*3600*50*0.85;
-	  
-	  hlepIM_count->Fill(InvM_epm, effXsec*count_convert);
+// 	  //cut away unsure low acceptance		  
+// 	  if (acc_proton < 0.9) acc_proton=0;
+// 	  if (acc_positron < 0.9) acc_positron=0;
+// 	  if (acc_electron1 < 0.9) acc_electron1=0;
+// 	  if (acc_electron2 < 0.9) acc_electron2=0; 
+	    	  
+	  //for with both electron
+	  if ((acc_electron1>0 && 5<e1_theta && e1_theta<36 && e1_mom < 4.9) && (acc_electron2>0 && 5<e2_theta && e2_theta<36 && e2_mom < 4.9)) {whichone=1;} // both in main detector 
+	  else if ((acc_electron1>0 && 5<e1_theta && e1_theta<36 && e1_mom < 4.9) && 2.5<e2_theta && e2_theta <4.5) {acc_electron2=1.;whichone=2;}
+	  else if ((acc_electron2>0 && 5<e2_theta && e2_theta<36 && e2_mom < 4.9) && 2.5<e1_theta && e1_theta <4.5) {acc_electron1=1.;whichone=3;}
+	  else {acc_electron1=0; acc_electron2=0; whichone=4;}
+ 
+	  if (p_theta>36 || p_mom > 4.9) acc_positron=0; //lepton has no detection at central detector
+	  if (pr_theta>36 && pr_mom > 1) acc_proton=0;
+	  if (pr_theta<36 && pr_mom > 4) acc_proton=0;
 
-	  hlepIM2->Fill(InvM_epm, effXsec);
+	  acc=acc_proton*acc_positron*acc_electron1*acc_electron2;
 	  
-	  hlepIM_W->Fill(InvM_epm, W,effXsec);
-	  hlepIM2_W->Fill(InvM_epm, W, effXsec);
-
-	  if ( 3.0 < InvM_epm && InvM_epm < 3.25 ) {
-	    hW->Fill(W,effXsec);
-	    hWstat->Fill(W,effXsec*count_convert);
-	    
-	    hQ2W->Fill(W,Q2,effXsec);
-	    htW->Fill(W,t-tmin,effXsec);    
-	    htminW->Fill(W,tmin,effXsec);    
-	    htmaxW->Fill(W,tmax,effXsec);
-	    ht->Fill(t-tmin,effXsec);	    
-
-	    index=3;
-	    hThetaP[0][index]->Fill(kp.Theta()/D2R,kp.P(),effXsec);
-	    hThetaP[1][index]->Fill(em.Theta()/D2R,em.P(),effXsec);
-	    hThetaP[2][index]->Fill(ep.Theta()/D2R,ep.P(),effXsec);
-	    hThetaP[3][index]->Fill(prot.Theta()/D2R,prot.P(),effXsec);	
+	  if (acc>0){
+	    if (whichone==1) {counter1++; acc=0;}  //don't count both in main detector
+	    else if (whichone==2) counter2++;
+	    else if (whichone==3) counter3++;
+	    else cout << "something wrong" << endl;
 	  }
+	  else {
+	    if (whichone==4) counter4++;
+	    else counter5++;
+	  }
+// 	  if (acc==0 && whichone!=4) cout << "kkkkkkkkkkkkkk" << endl;
+	  
+// 	  if (e_theta<=36) res_index_electron=0;
+// 	  if (e_theta >36) res_index_electron=1;
+// 	  if (p_theta<=36) res_index_positron=0;
+// 	  if (p_theta >36) res_index_positron=1;
+// 	  if (pr_theta<=36) res_index_proton=0;
+// 	  if (pr_theta >36) res_index_proton=1;
+	   
+      }
+      else {cout << "wrong detector" << endl;}
+      
+      //      pb = 1e-36 cm2, lumi 1e35/cm2/s, 120 days, 0.85 eff
+      double count_convert = 1e-36*1e35*3600*24*120*0.85;
+      
+      weight[0]=1;
+      weight[1]=acc;
+      weight[2]=acc*effxsec;
+      weight[3]=acc*effxsec*count_convert;      
+	      
+      for(Int_t k=0; k < m; k++){  
+	if(k>0 && acc==0) continue;
+	    hThetaP[0][k]->Fill(e2_theta,e2_mom,weight[k]);
+	    hThetaP[1][k]->Fill(e1_theta,e1_mom,weight[k]);
+	    hThetaP[2][k]->Fill(p_theta,p_mom,weight[k]);
+	    hThetaP[3][k]->Fill(pr_theta,pr_mom,weight[k]);
+
+	    hThetaPhi[0][k]->Fill(e2_theta,e2_phi,weight[k]);
+	    hThetaPhi[1][k]->Fill(e1_theta,e1_phi,weight[k]);
+	    hThetaPhi[2][k]->Fill(p_theta,p_phi,weight[k]);
+	    hThetaPhi[3][k]->Fill(pr_theta,pr_phi,weight[k]);
+
+	  hlepIM_2D[k]->Fill(InvM_epm1,InvM_epm2,weight[k]);
+	  
+	  hlepIM1[k]->Fill(InvM_epm1,weight[k]);
+	  hlepIM2[k]->Fill(InvM_epm2,weight[k]);
+	  if (whichone==2) hlepIM[k]->Fill(InvM_epm1,weight[k]);
+	  else if (whichone==3) hlepIM[k]->Fill(InvM_epm2,weight[k]);
+      }
+      
+	if ( 3.0 < InvM_epm1 && InvM_epm1 < 3.25 ) {
+	  hW->Fill(W,weight[2]);	  
+	  hWstat->Fill(W,weight[2]);	  
+	  hlepIM_W->Fill(InvM_epm1,W,weight[2]);
+	  hlepIM_W->Fill(InvM_epm2,W,weight[2]);	  	  	  	  
+	  hQ2W->Fill(W,Q2,weight[2]);
+	  htW->Fill(W,t-tmin,weight[2]);    
+	  htminW->Fill(W,tmin,weight[2]);    
+	  htmaxW->Fill(W,tmax,weight[2]);
+	  ht->Fill(t-tmin,weight[2]);	    
+	}
 		
-	  //      hkpth->Fill(180.0 -kp.Theta()/D2R, effXsec);
-	  //   hprth->Fill(180.0 -prot.Theta()/D2R, effXsec);
-	  hkpth->Fill(kp.Theta()/D2R, effXsec);
-	  hprth->Fill(prot.Theta()/D2R, effXsec);
+	  //      hkpth->Fill(180.0 -kp.Theta()/D2R, effxsec);
+	  //   hprth->Fill(180.0 -prot.Theta()/D2R, effxsec);
+// 	  hkpth->Fill(kp.Theta()/D2R, effxsec);
+// 	  hprth->Fill(prot.Theta()/D2R, effxsec);
+// 
+// 	  hkpph->Fill(kp.Phi()/D2R, effxsec);
+// 	  hprph->Fill(prot.Phi()/D2R, effxsec);
+// 	  hkpp->Fill(kp.Vect().Mag(), effxsec);
+// 	  hprp->Fill(prot.Vect().Mag(), effxsec);
+// 
+// 	  hepscat->Fill(sin(ep.Theta())*cos(ep.Phi()), sin(ep.Theta())*sin(ep.Phi()));
+// 	  hemscat->Fill(sin(em.Theta())*cos(em.Phi()), sin(em.Theta())*sin(em.Phi()));   
 
-	  hkpph->Fill(kp.Phi()/D2R, effXsec);
-	  hprph->Fill(prot.Phi()/D2R, effXsec);
-	  hkpp->Fill(kp.Vect().Mag(), effXsec);
-	  hprp->Fill(prot.Vect().Mag(), effXsec);
-
-	  hepscat->Fill(sin(ep.Theta())*cos(ep.Phi()), sin(ep.Theta())*sin(ep.Phi()));
-	  hemscat->Fill(sin(em.Theta())*cos(em.Phi()), sin(em.Theta())*sin(em.Phi()));
-      }      
-    }
 //      cout << i << "\r"; 
 //      cout << i << endl; 
   }
   
-  TCanvas *can1 = new TCanvas("can1","",900,900);
-  hang_dist_scat_e->SetMarkerColor(kRed);
-  hang_dist_scat_e->SetLineColor(kRed);
-  hang_dist_scat_e->GetXaxis()->SetTitle("#theta_{lab} (deg)");
-  hang_dist_scat_e->GetYaxis()->SetTitle("#phi_{lab} (deg)");
-  hang_dist_scat_e->Draw();
-  hang_dist_scat_p->SetMarkerColor(kBlue);
-  hang_dist_scat_p->SetLineColor(kBlue);
-  hang_dist_scat_p->Draw("same");
+  cout << counter1 << " " << counter2 << " " << counter3 << " " << counter4 << " " << counter5 << endl;
 
-  TCanvas *can2 = new TCanvas("can2","",1200,900);
-  hlepIM->GetXaxis()->SetTitle("e+ e- Inv Mass (GeV)");
-  hlepIM->GetYaxis()->SetTitle("d#sigma (pb/10 MeV)");
-  hlepIM->Draw();
-  
-  TCanvas *can12 = new TCanvas("can12","",1200,900);
-  gStyle->SetOptStat(0);  
-  gStyle->SetTitleSize(0.1,"X");
-  gStyle->SetTitleSize(0.1,"Y");
-  can12->SetFillColor(10);
-  hlepIM_count->SetTitle("BH event counts VS e+ e- Inv Mass");
-  hlepIM_count->GetXaxis()->SetTitle("e+ e- Inv Mass (GeV)");
-  hlepIM_count->GetYaxis()->SetTitle("counts /50 MeV for 50 days");
-//   hlepIM_count->SetTitleSize(0.1);
-  hlepIM_count->Rebin(5);  
-  hlepIM_count->Draw();
-  hlepIM_count->SetLineWidth(3.5);
-
-  TCanvas *can_lepIM_2D = new TCanvas("can_lepIM_2D","can_lepIM_2D",1200,900);
-  hlepIM_2D->GetXaxis()->SetTitle("e+ e-(10th) Inv Mass (GeV)");
-  hlepIM_2D->GetYaxis()->SetTitle("e+ e-(8th) Inv Mass (GeV)");
-  hlepIM_2D->Draw("colz");
-
-  TCanvas *can3 = new TCanvas("can3","",1200,900);
-  hlepIM2->GetXaxis()->SetTitle("e+ e- Inv Mass (GeV)");
-  hlepIM2->GetYaxis()->SetTitle("d#sigma (pb/10 MeV)");
-  hlepIM2->Draw();
-  
-  TCanvas *can22 = new TCanvas("can22","",1200,900);
-  hlepIM_W->GetXaxis()->SetTitle("e+ e- Inv Mass (GeV)");
-  hlepIM_W->GetYaxis()->SetTitle("W");
-  hlepIM_W->Draw("colz");
-
-  TCanvas *can33 = new TCanvas("can33","",1200,900);
-  hlepIM2_W->GetXaxis()->SetTitle("e+ e- Inv Mass (GeV)");
-  hlepIM2_W->GetYaxis()->SetTitle("W"); 
-  hlepIM2_W->Draw("colz");  
-  
-  TCanvas *c_W = new TCanvas("W","W",1200,900);
-  hW->GetXaxis()->SetTitle("W");
-  hW->GetYaxis()->SetTitle("d#sigma (pb/10 MeV)");
-  hW->Draw();   
-  
-  TCanvas *c_Wstat = new TCanvas("Wstat","Wstat",1200,900);
-  hWstat->GetXaxis()->SetTitle("Wstat");
-  hWstat->GetYaxis()->SetTitle("number of event per day/ 10MeV");
-  hWstat->Draw();   
-  
   TCanvas *c_ThetaP = new TCanvas("ThetaP","ThetaP",1200,900);
-  c_ThetaP->Divide(4,4);
-  for(int k=0;k<4;k++){
+  c_ThetaP->Divide(4,m-2);
+  for(int k=0;k<m-2;k++){
     for(int l=0;l<4;l++){
       gPad->SetLogz(1);
       c_ThetaP->cd(k*4+l+1);
-      hThetaP[k][l]->Draw("colz");
+      hThetaP[l][k]->Draw("colz");
     }
   }
   
-  TCanvas *c_kinematics = new TCanvas("kinematics","kinematics",1200,800);
-  c_kinematics->Divide(2,2);  
-  c_kinematics->cd(1);
+  TCanvas *c_ThetaPhi = new TCanvas("ThetaPhi","ThetaPhi",1200,900);
+  c_ThetaPhi->Divide(4,m-2);
+  for(int k=0;k<m-2;k++){
+    for(int l=0;l<4;l++){
+      gPad->SetLogz(1);
+      c_ThetaPhi->cd(k*4+l+1);
+      hThetaPhi[l][k]->Draw("colz");
+    }
+  }  
+  
+  TCanvas *c_lepIM = new TCanvas("lepIM","lepIM",1200,900);
+  c_lepIM->Divide(4,m-2);
+  for(int k=0;k<m-2;k++){
+      c_lepIM->cd(k*4+1);
+      hlepIM1[k]->Draw();
+      c_lepIM->cd(k*4+2);
+      hlepIM2[k]->Draw();
+      c_lepIM->cd(k*4+3);
+      hlepIM[k]->Draw();
+      c_lepIM->cd(k*4+4);
+      gPad->SetLogz(1);
+      hlepIM_2D[k]->Draw("colz");   
+  }
+  
+  
+  TCanvas *c_lepIM_xsec = new TCanvas("lepIM_xsec","lepIM_xsec",900,900);
+  hlepIM[2]->SetTitle(";e+ e- Inv Mass (GeV);d#sigma (pb)");  
+  hlepIM[2]->Draw();
+
+  TCanvas *c_lepIM_count = new TCanvas("lepIM_count","lepIM_count",900,900);
+  hlepIM[3]->SetTitle(";e+ e- Inv Mass (GeV);count of (lumi 1e35/cm2/s 120 days 85% eff)");    
+  hlepIM[3]->Draw();
+
+  cout << "BH " <<  hlepIM[3]->Integral();
+/*  
+  
+//   TCanvas *can12 = new TCanvas("can12","",1200,900);
+//   gStyle->SetOptStat(0);  
+//   gStyle->SetTitleSize(0.1,"X");
+//   gStyle->SetTitleSize(0.1,"Y");
+//   can12->SetFillColor(10);
+//   hlepIM_count->SetTitle("BH event counts VS e+ e- Inv Mass");
+//   hlepIM_count->GetXaxis()->SetTitle("e+ e- Inv Mass (GeV)");
+//   hlepIM_count->GetYaxis()->SetTitle("counts /50 MeV for 50 days");
+// //   hlepIM_count->SetTitleSize(0.1);
+//   hlepIM_count->Rebin(5);  
+//   hlepIM_count->Draw();
+//   hlepIM_count->SetLineWidth(3.5);
+
+  TCanvas *can = new TCanvas("can","can",1200,900);
+  can->Divide(3,2);  
+  can->cd(1);
+  hW->GetXaxis()->SetTitle("W");
+  hW->GetYaxis()->SetTitle("d#sigma (pb/10 MeV)");
+  hW->Draw();  
+  can->cd(2);
+  hWstat->GetXaxis()->SetTitle("Wstat");
+  hWstat->GetYaxis()->SetTitle("number of event per day/ 10MeV");
+  hWstat->Draw();   
+  can->cd(3);
   hQ2W->Draw("colz");
-  c_kinematics->cd(2);
+  can->cd(4);
   htW->Draw("colz");
-  c_kinematics->cd(3);
+  can->cd(5);
   htminW->Draw("colz");
   htmaxW->Draw("colz same");  
-  c_kinematics->cd(4);
-  ht->Draw(); 
-
+  can->cd(6);
+  ht->Draw();
   
-  TCanvas *can4 = new TCanvas("can4","",1200,800);
-  can4->Divide(3,2);
+//   TCanvas *can4 = new TCanvas("can4","can4",1200,800);
+//   can4->Divide(3,2);
+//   can4->cd(1);
+//   hkpth->GetXaxis()->SetTitle("scattered electron #theta_{SHRS} (deg)");
+//   hkpth->Draw();
+//   can4->cd(4);
+//   hprth->GetXaxis()->SetTitle("recoiling proton #theta_{HRS} (deg)");
+//   hprth->Draw();
+//   can4->cd(2);
+//   hkpph->GetXaxis()->SetTitle("scattered electron #phi_{lab} (deg)");
+//   hkpph->Draw();
+//   can4->cd(5);
+//   hprph->GetXaxis()->SetTitle("recoiling proton #phi_{lab} (deg)");
+//   hprph->Draw();
+//   can4->cd(3);
+//   hkpp->GetXaxis()->SetTitle("scattered electron momentum (GeV)");
+//   hkpp->Draw();
+//   can4->cd(6);
+//   hprp->GetXaxis()->SetTitle("recoiling proton momentum (GeV)");
+//   hprp->Draw();
+//   
+//   TCanvas *can5 = new TCanvas("can5","",900,900);
+//   hemscat->SetMarkerColor(kRed);
+//   hepscat->SetMarkerColor(kBlue);
+//   hepscat->GetXaxis()->SetTitle("x_{lab}");
+//   hepscat->GetXaxis()->SetTitle("y_{lab}");
+//   hepscat->Draw();
+//   hemscat->Draw("same");
 
-  can4->cd(1);
-  hkpth->GetXaxis()->SetTitle("scattered electron #theta_{SHRS} (deg)");
-  hkpth->Draw();
- 
-
-  can4->cd(4);
-  hprth->GetXaxis()->SetTitle("recoiling proton #theta_{HRS} (deg)");
-  hprth->Draw();
-
-
-  can4->cd(2);
-  hkpph->GetXaxis()->SetTitle("scattered electron #phi_{lab} (deg)");
-  hkpph->Draw();
-
-  can4->cd(5);
-  hprph->GetXaxis()->SetTitle("recoiling proton #phi_{lab} (deg)");
-  hprph->Draw();
-
-  can4->cd(3);
-  hkpp->GetXaxis()->SetTitle("scattered electron momentum (GeV)");
-  hkpp->Draw();
-
-  can4->cd(6);
-  hprp->GetXaxis()->SetTitle("recoiling proton momentum (GeV)");
-  hprp->Draw();
-
-  TCanvas *can5 = new TCanvas("can5","",900,900);
-  hemscat->SetMarkerColor(kRed);
-  hepscat->SetMarkerColor(kBlue); 
-
-  hepscat->GetXaxis()->SetTitle("x_{lab}");
-  hepscat->GetXaxis()->SetTitle("y_{lab}");
-  hepscat->Draw();
-  hemscat->Draw("same");
-
-  cout << "BH 3-3.25 GeV " <<  hlepIM2->Integral(20,45) << endl;  //pure sum to count , no width
-  cout << "BH 1.3-1.55 GeV " <<  hlepIM->Integral(130,155) << endl;  //pure sum to count , no width  
+//   cout << "BH 3-3.25 GeV " <<  hlepIM2->Integral(20,45) << endl;  //pure sum to count , no width
+  cout << "BH 1.3-1.55 GeV " <<  hlepIM[3]->Integral(130,155) << endl;  //pure sum to count , no width  
      
 outputfile->Write();
 outputfile->Flush();      
-
+*/
 }
