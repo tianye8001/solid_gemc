@@ -26,7 +26,7 @@ my $DetectorMother="root";
 # target offset in cm
 # my $targetoff=-350-10;
 # my $targetoff=-350;
-my $targetoff=-300;
+my $targetoff=-315;
 
 # C --     Target  ==================================
 # C
