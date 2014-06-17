@@ -18,6 +18,8 @@
 #include <TText.h>
 #include <TSystem.h>
 // #include "/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_fun.h"
+// #include "/home/zwzhao/solid/solid_svn/solid/CaloSimShashlik/response/FastResponse.C"
+#include "FastResponse.C"
 
 using namespace std;
 
@@ -27,7 +29,8 @@ gROOT->Reset();
 gStyle->SetPalette(1);
 gStyle->SetOptStat(111111);
 
-// gSystem->Load("../../../CaloSimShashlik/response/FastResponse_C.so");
+// gSystem->Load("/home/zwzhao/solid/solid_svn/solid/CaloSimShashlik/response/FastResponse_C.so");
+gSystem->Load("FastResponse_C.so");
 
 const double DEG=180./3.1415926;
 
@@ -45,10 +48,12 @@ TH2F *hhitXY[n][m],*hvertex[n][m];
 TH1F *hfluxR[n][m];
 TH1F *hfluxPhi[n][m],*hfluxPhi_target[n][m],*hfluxPhi_other[n][m];
 TH1F *hEfluxR[n][m];
+TH1F *hEdepR_Preshower[n][m],*hEdepR_Shower[n][m];
+TH1F *hEdepR_Preshower_high[n][m],*hEdepR_Shower_high[n][m];
+TH1F *hEdepR_Preshower_low[n][m],*hEdepR_Shower_low[n][m];
 TH1F *hEfluxPhi[n][m],*hEfluxPhi_target[n][m],*hEfluxPhi_other[n][m];
 TH2F *hflux_x_y[n][m],*hflux_x_y_high[n][m],*hflux_x_y_low[n][m],*hEflux_x_y[n][m];
 TH1F *hPlog[n][m],*hElog[n][m],*hEklog[n][m];
-TH1F *hEdeplog[n][m];
 TH1F *hfluxEklog_cut[n][m],*hfluxEklog_cut_niel[n][m];
 TH2F *hP_Theta[n][m],*hP_Theta_high[n][m],*hP_Theta_low[n][m];
 TH2F *hP_R[n][m],*hP_R_high[n][m],*hP_R_low[n][m];
@@ -72,9 +77,29 @@ for(int k=0;k<n;k++){
    hfluxR[k][l]=new TH1F(hstname,hstname,60,0,300);
    hfluxR[k][l]->SetTitle(";R (cm);flux (kHz/mm2)");
    sprintf(hstname,"EfluxR_%i_%i",k,l);
-   hEfluxR[k][l]=new TH1F(hstname,hstname,60,0,300);
-   hEfluxR[k][l]->SetTitle(";R (cm);Eflux (GeV/10cm2/s)");
-   
+   hEfluxR[k][l]=new TH1F(hstname,hstname,30,0,300);
+   hEfluxR[k][l]->SetTitle(";R (cm);Eflux (1e3*GeV/100cm2/s)");
+
+   sprintf(hstname,"EdepR_Preshower_%i_%i",k,l);
+   hEdepR_Preshower[k][l]=new TH1F(hstname,hstname,30,0,300);
+   hEdepR_Preshower[k][l]->SetTitle("Preshower;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+   sprintf(hstname,"EdepR_Shower_%i_%i",k,l);
+   hEdepR_Shower[k][l]=new TH1F(hstname,hstname,30,0,300);
+   hEdepR_Shower[k][l]->SetTitle("Shower;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+   sprintf(hstname,"EdepR_Preshower_high_%i_%i",k,l);
+   hEdepR_Preshower_high[k][l]=new TH1F(hstname,hstname,30,0,300);
+   hEdepR_Preshower_high[k][l]->SetTitle("Preshower_high;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+   sprintf(hstname,"EdepR_Shower_high_%i_%i",k,l);
+   hEdepR_Shower_high[k][l]=new TH1F(hstname,hstname,30,0,300);
+   hEdepR_Shower_high[k][l]->SetTitle("Shower_high;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+   sprintf(hstname,"EdepR_Preshower_low_%i_%i",k,l);
+   hEdepR_Preshower_low[k][l]=new TH1F(hstname,hstname,30,0,300);
+   hEdepR_Preshower_low[k][l]->SetTitle("Preshower_low;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+   sprintf(hstname,"EdepR_Shower_low_%i_%i",k,l);
+   hEdepR_Shower_low[k][l]=new TH1F(hstname,hstname,30,0,300);
+   hEdepR_Shower_low[k][l]->SetTitle("Shower_low;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+  
+      
    sprintf(hstname,"fluxPhi_%i_%i",k,l);   
    hfluxPhi[k][l]=new TH1F(hstname,hstname,96,0,24);
    hfluxPhi[k][l]->SetTitle(";#phi (deg);flux (kHz/deg)");   
@@ -116,9 +141,6 @@ for(int k=0;k<n;k++){
     sprintf(hstname,"Eklog_%i_%i",k,l);
     hEklog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
     hEklog[k][l]->SetTitle(";log(Ek) GeV;counts");    
-    sprintf(hstname,"Edeplog_%i_%i",k,l);
-    hEdeplog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-    hEdeplog[k][l]->SetTitle(";log(Edep) GeV;counts");    
 
     sprintf(hstname,"P_Theta_%i_%i",k,l);
     hP_Theta[k][l]=new TH2F(hstname,hstname,100, 0, 50, 1100,0,11);    
@@ -737,22 +759,57 @@ while (!input.eof()){
       hPlog[hit_id][par]->Fill(log10(P/1e3),weight);
       hElog[hit_id][par]->Fill(log10(flux_E/1e3),weight);
       hEklog[hit_id][par]->Fill(log10(Ek/1e3),weight);
-      hEdeplog[hit_id][par]->Fill(log10(flux_Edep/1e3),weight);          
       hP_Theta[hit_id][par]->Fill(Theta,P/1e3,weightTheta); ///in 0.5deg bin      
       hP_R[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.); ///in 1cm bin            
       hPlog_R[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.); ///in 1cm bin      
       hElog_R[hit_id][par]->Fill(r/10.,log10(flux_E/1e3),weightR/10.); ///in 1cm bin
       hEklog_R[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.); ///in 1cm bin
       
+      double energy_depo_Preshower=0,energy_depo_Shower=0;   
+      if (hit_id==8 || hit_id==12){	    	  
+	  if(flux_pid==22) {
+	    energy_depo_Preshower=FastResponse("gamma","PS","scint",Ek/1e3);  //photon    
+	    energy_depo_Shower=FastResponse("gamma","S","scint",Ek/1e3);		    
+	  }
+	  else if (abs(flux_pid)==11) {
+	    energy_depo_Preshower=FastResponse("e","PS","scint",Ek/1e3); //electron or positron
+	    energy_depo_Shower=FastResponse("e","S","scint",Ek/1e3);		    
+	  }		  
+      //     else if(flux_pid==2112) energy_depo_Preshower=3;  //neutron
+	  else if(flux_pid==2212) {
+	    energy_depo_Preshower=FastResponse("p","PS","scint",Ek/1e3);  //proton    
+	    energy_depo_Shower=FastResponse("p","S","scint",Ek/1e3);		    
+	  }		  
+	  else if(abs(flux_pid)==211)  {
+	    energy_depo_Preshower=FastResponse("pi","PS","scint",Ek/1e3);  //pip or pim
+	    energy_depo_Shower=FastResponse("pi","S","scint",Ek/1e3);		    
+	  }		  
+      //     else if(flux_pid==321)  energy_depo_Preshower=7;  //Kp    
+      //     else if(flux_pid==-321)  energy_depo_Preshower=8;  //Km
+      //     else if(flux_pid==130)  energy_depo_Preshower=9;  //Kl    
+	  else energy_depo_Preshower=0;  //all other	    
+// 	    cout << "flux_pid " << flux_pid << " energy_depo " << energy_depo << endl;    
+	  hEdepR_Preshower[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2	    
+	  hEdepR_Shower[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2	  
+      }      
+      
       if (phi-int(phi/12)*12<6) {
 	hP_R_high[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.*2.); /// in 1cm bin	
 	hPlog_R_high[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.*2.); /// in 1cm bin	
 	hEklog_R_high[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin	
+	if (hit_id==8 || hit_id==12){
+	  hEdepR_Preshower_high[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	    
+	  hEdepR_Shower_high[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	  
+	}
       }
       else {
 	hP_R_low[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.*2.); /// in 1cm bin	
 	hPlog_R_low[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.*2.); /// in 1cm bin	
 	hEklog_R_low[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin	
+	if (hit_id==8 || hit_id==12){
+	  hEdepR_Preshower_low[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	    
+	  hEdepR_Shower_low[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	  
+	}	
       }
       
       hEklog_R_Phi[hit_id][par]->Fill(phi-int(phi/12)*12,r/10.,log10(Ek/1e3),weight/30.);  // due to phi cover 12 degree, this will overlap 30 sector together, so we need to divide rate by 30
@@ -767,8 +824,9 @@ while (!input.eof()){
 	} //spd required >0 energy deposit
 	else {  // all other just counting
 	    hfluxR[hit_id][par]->Fill(r/10.,weightR/50.);   ///in 5cm bin
-	    hEfluxR[hit_id][par]->Fill(r/10.,weightR*Ek/50.*1e3); ///in 5cm bin and from mm2 to 10cm2
-
+	    hEfluxR[hit_id][par]->Fill(r/10.,Ek/1e3*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2
+	    
+	    
 		///divide rate by 15 because it's 24 degree	    
 	    hfluxPhi[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi/15);	    	    
 	    hEfluxPhi[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi*Ek/15);    
@@ -829,6 +887,13 @@ for(int k=0;k<n;k++){
    hfluxPhi_target[k][0]->Add(hfluxPhi_target[k][1],hfluxPhi_target[k][2]);      
    hfluxPhi_other[k][0]->Add(hfluxPhi_other[k][1],hfluxPhi_other[k][2]);      
    hEfluxR[k][0]->Add(hEfluxR[k][1],hEfluxR[k][2]);
+   hEdepR_Preshower[k][0]->Add(hEdepR_Preshower[k][1],hEdepR_Preshower[k][2]);
+   hEdepR_Shower[k][0]->Add(hEdepR_Shower[k][1],hEdepR_Shower[k][2]);      
+   hEdepR_Preshower_high[k][0]->Add(hEdepR_Preshower_high[k][1],hEdepR_Preshower_high[k][2]);
+   hEdepR_Shower_high[k][0]->Add(hEdepR_Shower_high[k][1],hEdepR_Shower_high[k][2]);      
+   hEdepR_Preshower_low[k][0]->Add(hEdepR_Preshower_low[k][1],hEdepR_Preshower_low[k][2]);
+   hEdepR_Shower_low[k][0]->Add(hEdepR_Shower_low[k][1],hEdepR_Shower_low[k][2]);     
+   
    hEfluxPhi[k][0]->Add(hEfluxPhi[k][1],hEfluxPhi[k][2]);
    hEfluxPhi_target[k][0]->Add(hEfluxPhi_target[k][1],hEfluxPhi_target[k][2]);
    hEfluxPhi_other[k][0]->Add(hEfluxPhi_other[k][1],hEfluxPhi_other[k][2]);   
@@ -839,7 +904,6 @@ for(int k=0;k<n;k++){
    hPlog[k][0]->Add(hPlog[k][1],hPlog[k][2]);
    hElog[k][0]->Add(hElog[k][1],hElog[k][2]);
    hEklog[k][0]->Add(hEklog[k][1],hEklog[k][2]);
-   hEdeplog[k][0]->Add(hEdeplog[k][1],hEdeplog[k][2]);
    hfluxEklog_cut[k][0]->Add(hfluxEklog_cut[k][1],hfluxEklog_cut[k][2]);
    hfluxEklog_cut_niel[k][0]->Add(hfluxEklog_cut_niel[k][1],hfluxEklog_cut_niel[k][2]);
    hP_Theta[k][0]->Add(hP_Theta[k][1],hP_Theta[k][2]);
@@ -924,16 +988,6 @@ for(int l=0;l<m;l++){
 for(int k=0;k<n;k++){
   c_Eklog->cd(l*n+k+1);
   hEklog[k][l]->Draw();  
-}
-}
-
-TCanvas *c_Edeplog = new TCanvas("Edeplog","Edeplog",1800,900);
-c_Edeplog->Divide(n,m);
-gPad->SetLogy(1);
-for(int l=0;l<m;l++){
-for(int k=0;k<n;k++){
-  c_Edeplog->cd(l*n+k+1);
-  hEdeplog[k][l]->Draw();  
 }
 }
 
@@ -1064,6 +1118,31 @@ for(int k=8;k<16;k++){
     else hfluxPhi[k][l]->Draw("same");
   }
 }
+
+// TCanvas *c_EdepR_Preshower_ec = new TCanvas("EdepR_Preshower_ec","EdepR_Preshower_ec",1600,900);
+// c_EdepR_Preshower_ec->Divide(2,1);
+// { int k=8;
+//   c_EdepR_Preshower_ec->cd(1);
+//   gPad->SetLogy(1);
+//   for(int l=0;l<m;l++){
+// //     hEdepR_Preshower[k][l]->SetMinimum(1e0);
+// //     hEdepR_Preshower[k][l]->SetMaximum(1e8);
+//     hEdepR_Preshower[k][l]->SetLineColor(l+1);
+//     if (l==0) hEdepR_Preshower[k][l]->Draw();
+//     else hEdepR_Preshower[k][l]->Draw("same");
+//   }
+// }
+// { int k=12;
+//   c_EdepR_Preshower_ec->cd(2);
+//   gPad->SetLogy(1);
+//   for(int l=0;l<m;l++){
+// //     hEdepR_Preshower[k][l]->SetMinimum(1e0);
+// //     hEdepR_Preshower[k][l]->SetMaximum(1e8);
+//     hEdepR_Preshower[k][l]->SetLineColor(l+1);
+//     if (l==0) hEdepR_Preshower[k][l]->Draw();
+//     else hEdepR_Preshower[k][l]->Draw("same");
+//   }
+// }
 
 TCanvas *c_EfluxR_ec = new TCanvas("EfluxR_ec","EfluxR_ec",1600,900);
 c_EfluxR_ec->Divide(4,2);
