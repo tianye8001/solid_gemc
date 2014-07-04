@@ -11,7 +11,7 @@ make install
 cd ../share/lhapdf
 wget http://www.hepforge.org/archive/lhapdf/pdfsets/5.8.5/cteq6m.LHpdf
 
-2. compile and run "collider"
+2. compile and run
 cd collider
 setenv ROOTSYS /apps/root/5.28-00c-64bit
 setenv PATH ${ROOTSYS}/bin:${PATH}
@@ -20,19 +20,43 @@ setenv LD_LIBRARY_PATH ${ROOTSYS}/lib
 setenv LHAPDF /PathOflhapdf
 setenv LD_LIBRARY_PATH ${LHAPDF}/lib:${LD_LIBRARY_PATH}
 make
+
+3. running the code
+setup the same env 
 run "./collider" to see all running options
 
-3. analysis result
-mkdir analysis   (parallel with rootfiles generated from collider code)
-
-copy generate_weight.C generate_plot.C into the analysis directory
+4. analysis result
 also copy acceptance rootfile into analysis directory
 
-root[] .x generate_weight.C
----->this will add two branches weight_hp, weight_hm in each file, they are xs in nbar for each event.
-
-phase space in this script should be changed to be the same as that in collider.C code
+generate weight with correct normlization
+root[] .x generate_weight.C("rootfile");
 
 root[] .x generate_plot.C("pion",1,0)
-
 flag is explained in the code.
+
+
+================ from Min Huang ============
+
+In general, use perl scripts to run the code or generate file list 
+
+Makefile: $ make O=(C code name without '.C')
+eg, skim.C, you make it as make O=skim
+
+
+
+/simulation
+    collider_new.C  // generate simulation events, with all the kinematic variables, cross section info
+    
+
+/projection/skim
+    skim.C  // cut each data file from /simulation to pieces in each z, pt bins
+
+/projection
+    makebin.C // use rootfiles in each z,pt bin to make Q2, x bins. Apply cross section in this step, and try to have almost same number of events in each bin, the number of events is decided by the uncertainty we want to achieve. 
+   This code will generate files in /out_rootfiles_p/m, and database_p/m
+
+   get_results.C // get the average value of kinematic variables and uncertainty of angular asymmetry info of each bin. 
+   Generate files in /results
+
+ /plot
+   make plots.
