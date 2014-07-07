@@ -256,8 +256,32 @@ if (input_filename.find("_other_",0) != string::npos) {
   Is_other=true;
   
   if (input_filename.find("_eDIS_",0) != string::npos) {Is_eDIS=true;}  
-
-  if (input_filename.find("SIDIS_He3",0) != string::npos){
+  
+  if (input_filename.find("SIDIS_He3_window_upstream",0) != string::npos){
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_p_1e6.root");
+  }  
+  else if (input_filename.find("SIDIS_He3_window_downstream",0) != string::npos){
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_p_1e6.root");
+  }
+  else if (input_filename.find("SIDIS_He3",0) != string::npos){
     if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_eDIS_1e6.root");
     if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pip_1e6.root");
     if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pim_1e6.root");
@@ -268,8 +292,8 @@ if (input_filename.find("_other_",0) != string::npos) {
     if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Ks_1e6.root");
     if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Kl_1e6.root");
     if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_p_1e6.root");
-  }
-
+  }  
+  
   if (input_filename.find("PVDIS_LD2",0) != string::npos){
     if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_eDIS_1e6.root");
     if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pip_1e6.root");
@@ -617,7 +641,7 @@ while (!input.eof()){
 //       }      
 //       if (cutStraightPhoton) continue;
 
-    double r=sqrt(pow(flux_x,2)+pow(flux_y,2));  
+    double r=sqrt(pow(flux_x,2)+pow(flux_y,2));  //in mm
     double Theta=atan(r/(flux_z-target_center))*DEG;
     double P=sqrt(pow(flux_px,2)+pow(flux_py,2)+pow(flux_pz,2));
 //     double M;
