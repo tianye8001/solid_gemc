@@ -9,12 +9,18 @@ gStyle->SetPadRightMargin(0.32);
 
 int region_index;
 if (region=="SIDIS_FA") region_index=0;
-else if (region=="SIDIS_LA") region_index=1;
+// else if (region=="SIDIS_LA") region_index=1;
+else if (region=="SIDIS_LA") {cout << "trigger only for FA" << endl; exit(-1);}
 else {cout << "need option for FA or LA region" << endl; exit(-1);}
 
+// int det[2]={8,12};  //detecor ID
+// double Rmin[2]={90,80};
+// double Rmax[2]={230,140};
+
 int det[2]={8,12};  //detecor ID
-double Rmin[2]={90,80};
-double Rmax[2]={230,140};
+double Rmin[2]={105,80};
+double Rmax[2]={235,140};
+
 // int det[2]={18,12};  //detecor ID
 // double Rmin[2]={58,80};
 // double Rmax[2]={127,140};
@@ -23,20 +29,21 @@ double factor=1.;  //PVDIS need this factor 2 because rate calculation is for 2p
 
 const int m=5;
 char* input_filename[m]={
-  "background_solid_CLEO_SIDIS_He3_other_pi0_1e6_output.root",
 // "background_solid_CLEO_SIDIS_He3_other_eDIS_1e6_output.root",
-"background_solid_CLEO_SIDIS_He3_other_pim_1e6_output.root",
-"background_solid_CLEO_SIDIS_He3_other_pip_1e6_output.root",
-"background_solid_CLEO_SIDIS_He3_other_pi0_1e6_output.root",
-"background_solid_CLEO_SIDIS_He3_other_p_1e6_output.root"
+// "background_solid_CLEO_SIDIS_He3_other_pim_1e6_output.root",
+// "background_solid_CLEO_SIDIS_He3_other_pip_1e6_output.root",
+// "background_solid_CLEO_SIDIS_He3_other_pi0_1e6_output.root",
+// "background_solid_CLEO_SIDIS_He3_other_p_1e6_output.root"
   
+// "background_solid_CLEO_SIDIS_He3_other_eDIS_1e6_output.root_Q21",
 // "background_solid_CLEO_SIDIS_He3_sum_actual_pi0_1e6_output.root",  
-// // "background_solid_CLEO_SIDIS_He3_other_eDIS_1e6_output.root_Q21",
-// // "background_solid_CLEO_SIDIS_He3_other_eDIS_1e6_output.root",
-// "background_solid_CLEO_SIDIS_He3_sum_actual_pim_1e6_output.root",
-// "background_solid_CLEO_SIDIS_He3_sum_actual_pip_1e6_output.root",
-// "background_solid_CLEO_SIDIS_He3_sum_actual_pi0_1e6_output.root",
-// "background_solid_CLEO_SIDIS_He3_sum_actual_p_1e6_output.root"
+//     "background_solid_CLEO_SIDIS_He3_window_downstream_other_eDIS_1e6_output.root",
+  "background_solid_CLEO_SIDIS_He3_window_upstream_other_eDIS_1e6_output.root",
+// "background_solid_CLEO_SIDIS_He3_other_eDIS_1e6_output.root",  
+"background_solid_CLEO_SIDIS_He3_sum_actual_pim_1e6_output.root",
+"background_solid_CLEO_SIDIS_He3_sum_actual_pip_1e6_output.root",
+"background_solid_CLEO_SIDIS_He3_sum_actual_pi0_1e6_output.root",
+"background_solid_CLEO_SIDIS_He3_sum_actual_p_1e6_output.root"
 
 // "background_solid_CLEO_SIDIS_He3_window_upstream_actual_pi0_1e6_output.root",  
 // // "background_solid_CLEO_SIDIS_He3_other_eDIS_1e6_output.root",
@@ -268,7 +275,6 @@ for (int i=0;i<Ntrigline;i++){
 int pid[m]={2,6,5,1,4};
 char *label[m]={"e(DIS)","#pi^{-}(DIS)","#pi^{+}(DIS)","#gamma(#pi^{0}(DIS))","p(DIS)"};
 // char *label[m]={"e(EM)","#pi^{-}(EM)","#pi^{+}(EM)","#gamma(EM)","p(EM)"};
-// double cal[m]={1,1,1,1,1};
 double mass[m]={0.0005,0.1396,0.1396,0.,0.938};
 int color[m]={1,2,4,6,30};
 
@@ -298,7 +304,6 @@ for(int i=0;i<m;i++){
   sprintf(hstname,"fluxR_%i_%i",det[region_index],pid[i]);
   cout << hstname << endl;
   hfluxR[j][i]=(TH1F*) input->Get(hstname); 
-//   hfluxR[j][i]->Scale(cal[i]);         
   c_fluxR_ec->cd(j+1);
   gPad->SetLogy(1);    
   hfluxR[j][i]->SetLineColor(color[i]);
@@ -311,15 +316,12 @@ for(int i=0;i<m;i++){
   sprintf(hstname,"%s_%i_%i","Eklog_R",det[region_index],pid[i]);  
   cout << hstname << endl;
   hEklog_R[j][i]=(TH2F*) input->Get(hstname);  
-//   hEklog_R[j][i]->Scale(cal[i]);      
   c_Eklog_R_ec->cd(j*m+i+1);
   gPad->SetLogz(1);
   if (i!=3) hEklog_R[j][i]->SetAxisRange(-3,1.1,"Y");  
   hEklog_R[j][i]->Draw("colz");
   
   hfluxR_proj[j][i]= (TH1F*) hEklog_R[j][i]->ProjectionX();
-  hfluxR_proj[j][i]->Scale(1/5.);  
-  hfluxR_proj[j][i]->Rebin(5);
   c_fluxR_ec_proj->cd(j+1);
   gPad->SetLogy(1);      
   hfluxR_proj[j][i]->SetLineColor(color[i]);
@@ -400,8 +402,6 @@ for(int i=0;i<m;i++){
   c_fluxR_ec_proj->cd(j+1);
   gPad->SetLogy(1);  
   hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX();
-  hfluxR_trig[j][i]->Scale(1/5.);  //change from 1cm to 5cm bin
-  hfluxR_trig[j][i]->Rebin(5); //change from 1cm to 5cm bin
   hfluxR_trig[j][i]->SetLineStyle(7);  
   hfluxR_trig[j][i]->SetLineColor(color[i]);
   hfluxR_trig[j][i]->SetMinimum(1e-7);
