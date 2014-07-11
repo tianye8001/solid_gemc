@@ -6,6 +6,8 @@ gROOT->Reset();
 gStyle->SetPalette(1);
 gStyle->SetOptStat(0);
 gStyle->SetPadRightMargin(0.32);  
+
+double Rmin=110,Rmax=265; //in cm, range of EC for trigger
   
 //   const int m=16;
 // char* input_filename[m]={
@@ -95,12 +97,12 @@ char* input_filename[m]={
 // "background_solid_CLEO_PVDIS_LD2_other_pi0_1e6_output.root",
 // "background_solid_CLEO_PVDIS_LD2_other_p_1e6_output.root",
 
-// "background_solid_CLEO_PVDIS_LD2_real_pi0_1e6_output.root",
-"background_solid_CLEO_PVDIS_LD2_other_eDIS_1e6_output.root",
+"background_solid_CLEO_PVDIS_LD2_real_pi0_1e6_output.root",
+// "background_solid_CLEO_PVDIS_LD2_other_eDIS_1e6_output.root",
 "background_solid_CLEO_PVDIS_LD2_real_pim_1e6_output.root",
 "background_solid_CLEO_PVDIS_LD2_real_pip_1e6_output.root",
-"background_solid_CLEO_PVDIS_LD2_other_pi0_1e6_output.root",
-// "background_solid_CLEO_PVDIS_LD2_real_pi0_1e6_output.root",
+// "background_solid_CLEO_PVDIS_LD2_other_pi0_1e6_output.root",
+"background_solid_CLEO_PVDIS_LD2_real_pi0_1e6_output.root",
 "background_solid_CLEO_PVDIS_LD2_real_p_1e6_output.root",
 
 // "background_solid_CLEO_PVDIS_LD2_other_eDIS_1e6_output.root",
@@ -368,8 +370,8 @@ for(int i=0;i<m;i++){
   hEklog_R[j][i]->Draw("colz");
   
   hfluxR_proj[j][i]= (TH1F*) hEklog_R[j][i]->ProjectionX();
-  hfluxR_proj[j][i]->Scale(1/5.);  
-  hfluxR_proj[j][i]->Rebin(5);
+//   hfluxR_proj[j][i]->Scale(1/5.);  
+//   hfluxR_proj[j][i]->Rebin(5);
   c_fluxR_ec_proj->cd(j+1);
   gPad->SetLogy(1);      
   hfluxR_proj[j][i]->SetLineColor(color[i]);
@@ -428,8 +430,8 @@ for(int i=0;i<m;i++){
   hEklog_R_trig[j][i]->Draw("colz"); 
   
   hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX();
-  hfluxR_trig[j][i]->Scale(1/5.);  
-  hfluxR_trig[j][i]->Rebin(5);
+//   hfluxR_trig[j][i]->Scale(1/5.);  
+//   hfluxR_trig[j][i]->Rebin(5);
   c_fluxR_ec_proj->cd(j+1);
   gPad->SetLogy(1);
   hfluxR_trig[j][i]->SetLineStyle(7);  
@@ -468,7 +470,7 @@ for(int j=0;j<n;j++){
       double sum_R[5]={0,0,0,0,0},sum_R_trig[5]={0,0,0,0,0};
       for(int k=1;k<nbins;k++){
 	double r=hfluxR_proj[j][i]->GetBinCenter(k);
-	if (r < 110 || 265< r) continue;
+	if (r < Rmin || Rmax< r) continue;
 // 	if (hfluxR_proj[j][i]->GetBinCenter(k) < 60 || 150< hfluxR_proj[j][i]->GetBinCenter(k)) continue;
 	double thisrate=2*3.1415926*hfluxR_proj[j][i]->GetBinCenter(k)*binwidth*100*hfluxR_proj[j][i]->GetBinContent(k);
 	double thisrate_trig=2*3.1415926*hfluxR_trig[j][i]->GetBinCenter(k)*binwidth*100*hfluxR_trig[j][i]->GetBinContent(k);
@@ -481,8 +483,9 @@ for(int j=0;j<n;j++){
 	  }
 	}
       }
-      rate_total[j][i]=sum/2.;
-      rate_total_trig[j][i]=sum_trig/2.;      
+      ///high and low area only takes half of full azimuthal
+      rate_total[j][i]=sum/2.;               
+      rate_total_trig[j][i]=sum_trig/2.;     
       for (int l=0;l<5;l++){
 	rate_R[j][i][l]= sum_R[l]/2.;
 	rate_R_trig[j][i][l]= sum_R_trig[l]/2.;  
