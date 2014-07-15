@@ -4,6 +4,8 @@
 //Note: Basically the same as Xin Qian's "collider" //
 //      but the model is coded in "SIDIS.h"         //
 //  -- Zhihong Ye, 06/10/2014                       //
+//  GetSoLID_V2.C -- The same as GetSoLID.C but only//
+//  creates one output root file.                   //
 //////////////////////////////////////////////////////
 #include <TROOT.h>
 #include "TApplication.h"
@@ -28,7 +30,7 @@ int main(Int_t argc, char *argv[]){
 		cout << "#fileno is the file number of output, used for batch" << endl;
 		cout << "#events is number of event in each file" << endl;
 		cout << "config is 'EIC' or 'SoLID' which needs ion_mom=0" << endl;
-		return 0;
+	    return 0;
 	}
 	else{
 		/*Inputs&Output{{{*/
@@ -78,44 +80,25 @@ int main(Int_t argc, char *argv[]){
 		}    
 
 		//create filename
-		filename.Form("_%d_%d_1_%d.root",Int_t(momentum_ele),Int_t(momentum_ion),Int_t(fileno));
+		filename.Form("_%d_%d_%d.root",Int_t(momentum_ele),Int_t(momentum_ion),Int_t(fileno));
 		filename = prefix + filename;
 		TFile *file1 = new TFile(filename,"RECREATE");
 		TTree *t1 = new TTree("T","T");
 		t1->SetDirectory(file1);
-
-		filename.Form("_%d_%d_2_%d.root",Int_t(momentum_ele),Int_t(momentum_ion),Int_t(fileno));
-		filename = prefix + filename;
-		TFile *file2 = new TFile(filename,"RECREATE");
-		TTree *t2 = new TTree("T","T");
-		t2->SetDirectory(file2);
-
-		filename.Form("_%d_%d_3_%d.root",Int_t(momentum_ele),Int_t(momentum_ion),Int_t(fileno));
-		filename = prefix + filename;
-		TFile *file3 = new TFile(filename,"RECREATE");
-		TTree *t3 = new TTree("T","T");
-		t3->SetDirectory(file3);
-
-		filename.Form("_%d_%d_4_%d.root",Int_t(momentum_ele),Int_t(momentum_ion),Int_t(fileno));
-		filename = prefix + filename;
-		TFile *file4 = new TFile(filename,"RECREATE");
-		TTree *t4 = new TTree("T","T");
-		t4->SetDirectory(file4);
 		/*}}}*/
 
 		/*Define{{{*/
 		Double_t theta_gen= 0.0 , phi_gen = 0.0, mom_gen = 0.0;
 
-		Int_t count[4] = {0,0,0,0};
+		Int_t count = 0;
 
 		Double_t mom_gen_ele,mom_gen_had;
 		Double_t theta_gen_ele,theta_gen_had;
 		Double_t phi_gen_ele,phi_gen_had;
 		Double_t theta_q, theta_s,phi_h,phi_s,mom_ele,mom_had,theta_ele, theta_had,phi_ele,phi_had;
 		Double_t dxs_hm,dxs_hp,dilute_hp,dilute_hm,weight_hp,weight_hm;
-
 		Int_t nsim = 0;
-	
+		
 		double electron_phase_space= 0.0, hadron_phase_space= 0.0, Phase_space= 0.0;
 		if(config=="SoLID" ){
 			electron_phase_space=(cos(7/DEG) - cos(30/DEG))*2*PI*(momentum_ele-0.5);   // theta: 7~30 degree,  2pi phi coverage, 0.5~11 GeV Momentum coverage 	
@@ -123,8 +106,7 @@ int main(Int_t argc, char *argv[]){
 			Phase_space=electron_phase_space*hadron_phase_space;           //electron*hadron phase space eg, for electron: delta_cos_theta*delta_phi*delta_energy
 		}
 		cout<<" -- For Config="<<config<<" Phase_space: "<<electron_phase_space<<"	"<<hadron_phase_space<<"	"<<Phase_space<<endl;
-
-		/*}}}*/
+	/*}}}*/
 
 		/*New Branches{{{*/
 		t1->Branch("Q2",&Q2,"data/D");
@@ -156,96 +138,19 @@ int main(Int_t argc, char *argv[]){
 		t1->Branch("phi_had",&phi_had,"phi_had/D");
 		t1->Branch("phi_gen_had",&phi_gen_had,"phi_gen_had/D");
 		t1->Branch("nsim",&nsim,"nsim/I");
-		t1->Branch("dilute_p",&dilute_hp,"data/D");
-		t1->Branch("dilute_m",&dilute_hm ,"data/D");
+		t1->Branch("dilute_hp",&dilute_hp,"dilute_hp/D");
+		t1->Branch("dilute_hm",&dilute_hm,"dilute_hm/D");
+		t1->Branch("weight_hp",&weight_hp,"weight_hp/D");
+		t1->Branch("weight_hm",&weight_hm,"weight_hm/D");
 
-
-		t2->Branch("Q2",&Q2,"data/D");
-		t2->Branch("W",&W,"data/D");
-		t2->Branch("Wp",&Wp,"data/D");
-		t2->Branch("x",&x,"data/D");
-		t2->Branch("y",&y,"data/D");
-		t2->Branch("z",&z,"data/D");
-		t2->Branch("nu",&nu,"data/D");
-		t2->Branch("s",&s,"data/D");
-		t2->Branch("pt",&pt,"data/D");
-		t2->Branch("theta_q",&theta_q,"data/D");
-		t2->Branch("theta_s",&theta_s,"data/D");
-		t2->Branch("phi_h",&phi_h,"data/D");
-		t2->Branch("phi_s",&phi_s,"data/D");
-		t2->Branch("jacoF",&jacoF,"jacoF/D");
-		t2->Branch("dxs_hm",&dxs_hm,"dxs_hm/D");
-		t2->Branch("dxs_hp",&dxs_hp,"dxs_hp/D");
-		t2->Branch("mom_ele",&mom_ele,"mom_ele/D");
-		t2->Branch("mom_had",&mom_had,"mom_had/D");
-		t2->Branch("theta_ele",&theta_ele,"theta_ele/D");
-		t2->Branch("theta_had",&theta_had,"theta_had/D");
-		t2->Branch("phi_ele",&phi_ele,"phi_ele/D");
-		t2->Branch("phi_had",&phi_had,"phi_had/D");
-		t2->Branch("nsim",&nsim,"nsim/I");
-		t2->Branch("dilute_p",&dilute_hp ,"data/D");
-		t2->Branch("dilute_m",&dilute_hm ,"data/D");
-
-		t3->Branch("Q2",&Q2,"data/D");
-		t3->Branch("W",&W,"data/D");
-		t3->Branch("Wp",&Wp,"data/D");
-		t3->Branch("x",&x,"data/D");
-		t3->Branch("y",&y,"data/D");
-		t3->Branch("z",&z,"data/D");
-		t3->Branch("nu",&nu,"data/D");
-		t3->Branch("s",&s,"data/D");
-		t3->Branch("pt",&pt,"data/D");
-		t3->Branch("theta_q",&theta_q,"data/D");
-		t3->Branch("theta_s",&theta_s,"data/D");
-		t3->Branch("phi_h",&phi_h,"data/D");
-		t3->Branch("phi_s",&phi_s,"data/D");
-		t3->Branch("jacoF",&jacoF,"jacoF/D");
-		t3->Branch("dxs_hm",&dxs_hm,"dxs_hm/D");
-		t3->Branch("dxs_hp",&dxs_hp,"dxs_hp/D");
-		t3->Branch("mom_ele",&mom_ele,"mom_ele/D");
-		t3->Branch("mom_had",&mom_had,"mom_had/D");
-		t3->Branch("theta_ele",&theta_ele,"theta_ele/D");
-		t3->Branch("theta_had",&theta_had,"theta_had/D");
-		t3->Branch("phi_ele",&phi_ele,"phi_ele/D");
-		t3->Branch("phi_had",&phi_had,"phi_had/D");
-		t3->Branch("nsim",&nsim,"nsim/I");
-		t3->Branch("dilute_p",&dilute_hp ,"data/D");
-		t3->Branch("dilute_m",&dilute_hm ,"data/D");
-
-		t4->Branch("Q2",&Q2,"data/D");
-		t4->Branch("W",&W,"data/D");
-		t4->Branch("Wp",&Wp,"data/D");
-		t4->Branch("x",&x,"data/D");
-		t4->Branch("y",&y,"data/D");
-		t4->Branch("z",&z,"data/D");
-		t4->Branch("nu",&nu,"data/D");
-		t4->Branch("s",&s,"data/D");
-		t4->Branch("pt",&pt,"data/D");
-		t4->Branch("theta_q",&theta_q,"data/D");
-		t4->Branch("theta_s",&theta_s,"data/D");
-		t4->Branch("phi_h",&phi_h,"data/D");
-		t4->Branch("phi_s",&phi_s,"data/D");
-		t4->Branch("jacoF",&jacoF,"jacoF/D");
-		t4->Branch("dxs_hm",&dxs_hm,"dxs_hm/D");
-		t4->Branch("dxs_hp",&dxs_hp,"dxs_hp/D");
-		t4->Branch("mom_ele",&mom_ele,"mom_ele/D");
-		t4->Branch("mom_had",&mom_had,"mom_had/D");
-		t4->Branch("theta_ele",&theta_ele,"theta_ele/D");
-		t4->Branch("theta_had",&theta_had,"theta_had/D");
-		t4->Branch("phi_ele",&phi_ele,"phi_ele/D");
-		t4->Branch("phi_had",&phi_had,"phi_had/D");
-		t4->Branch("nsim",&nsim,"nsim/I");
-		t4->Branch("dilute_p",&dilute_hp ,"data/D");
-		t4->Branch("dilute_m",&dilute_hm ,"data/D");
 		/*}}}*/
 
 		//Only initialize once here
 		SIDIS *sidis = new SIDIS();
 		sidis->SetLAPDF();
 		//sidis->Print();
-
-		bool exitcondition=true;	
-		while(exitcondition){
+        
+		while(count<number_of_events){
 			nsim ++;
 
 			/*Generator{{{*/
@@ -280,74 +185,37 @@ int main(Int_t argc, char *argv[]){
 			x=sidis->x; y=sidis->y; z=sidis->z; Q2=sidis->Q2; W=sidis->W; Wp=sidis->Wp;
 			s=sidis->s; nu=sidis->nu; pt=sidis->pt; gamma=sidis->gamma; epsilon=sidis->epsilon;
 			jacoF=sidis->jacoF;
-
+			
 			/*Get XS{{{*/
-			if (Q2 >=1.0 && W>= 2.3 &&Wp>= 1.6 &&
-					( (config=="EIC" && z>0.2&&z<0.8&&y>0.05&&y<0.8
-					        && ((count[0]<number_of_events&&pt<=1.0&&Q2<=10.) 
-							|| (count[1]<number_of_events&&pt>1.0&&Q2<=10.)
-							|| (count[2]<number_of_events&&pt<=1.0&&Q2>10.)
-							|| (count[3]<number_of_events&&pt>1.0&&Q2>10.)) )
-				    ||(config=="SoLID" && z>0.3&&z<0.7 
-					        && ((count[0]<number_of_events&&pt<=1.0&&Q2<=10.) 
-							|| (count[1]<number_of_events&&pt>1.0&&Q2<=10.))) )){
-
+			if( (Q2 >=1.0 &&Q2<=10.&& W>= 2.3 &&Wp>= 1.6) && (count<number_of_events) &&
+					( (config=="EIC"   && z>0.2&&z<0.8 &&y>0.05&&y<0.8 ) || 
+					  (config=="SoLID" && z>0.3&&z<0.7 ) )){
 
 				sidis->CalcXS();
 				dxs_hp = sidis->GetXS_HP();
 				dxs_hm = sidis->GetXS_HM();
 				dilute_hp = sidis->GetDilute_HP();
 				dilute_hm = sidis->GetDilute_HM();
-			
+				
 				//warning: output unit is nbarn   //if calculate rate, should be translate to cm^-2     1nbarn=10^-33 cm^-2
 				weight_hp=dxs_hp*Phase_space/number_of_events;   
 				weight_hm=dxs_hm*Phase_space/number_of_events;
-			
+	
 				if ((dxs_hp+dxs_hm)!=0){
-					if (Q2<=10.&&pt<=1.0){
-						t1->Fill();
-						count[0] ++;//cout << 0 << " " << count[0] << endl;
-					}
-					if (Q2<=10.&&pt>1.0){
-						t2->Fill();
-						count[1] ++;//cout << 1 << " " << count[1] << endl;
-					}
-					if (Q2>10.&&pt<=1.0){
-						t3->Fill();
-						count[2] ++;//cout << 2 << " " << count[2] << endl;
-					}
-					if (Q2>10.&&pt>1.0){
-						t4->Fill();
-						count[3] ++;//cout << 3 << " " << count[3] <<  endl;
-					}
+					t1->Fill();	
+					count++;
+					cerr << count << "\r" ;
 				}
-				cout << count[0] << "\t" << count[1] << "\t" << count[2] << "\t" << count[3] << "\r";
-				//cout << nsim << endl;
 			}
-		/*}}}*/
+			/*}}}*/
+		}
+		cout << count << "\r";
 
-		//judging exitcondition
-		if (config=="EIC") {
-			if (count[0] < number_of_events || count[1] < number_of_events 
-					|| count[2] < number_of_events || count[3] < number_of_events) exitcondition=true;
-			else exitcondition=false;
-		} else if (config=="SoLID") {
-			if (count[0] < number_of_events || count[1] < number_of_events) exitcondition=true;
-			else exitcondition=false;
-		} 
+		file1->Write();
+		file1->Close();
+		delete sidis;
 	}
-		cout << count[0] << "\t" << count[1] << "\t" << count[2] << "\t" << count[3] << endl;
 
-	file1->Write();
-	file1->Close();
-	file2->Write();
-	file2->Close();
-	file3->Write();
-	file3->Close();
-	file4->Write();
-	file4->Close();
-	delete sidis;
-}
-
-return 0;
+	return 0;
 } 
+
