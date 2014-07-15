@@ -23,7 +23,7 @@
 <option name="BEAM_V"   value="(0,0,10)cm"/>
 <option name="SPREAD_V" value="(0.3,20)cm"/>
 
-<option name="N" value="1"/>
+<option name="N" value="1000"/>
 <option name="OUTPUT" value="evio,output.evio"/>
 <option name="USE_GUI"  value="0"/>
 

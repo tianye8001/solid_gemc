@@ -4,11 +4,11 @@ use warnings;
 our %configuration;
 our %parameters;
 
-sub define_solid_ec_hit
+sub define_solidec_hit
 {
 	# uploading the hit definition
 	my %hit = init_hit();
-	$hit{"name"}            = "solid_ec";
+	$hit{"name"}            = "solidec";
 	$hit{"description"}     = "solid ec hit definition";
 	$hit{"identifiers"}     = "id";
 	$hit{"signalThreshold"} = "0.5*MeV";

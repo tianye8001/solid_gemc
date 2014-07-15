@@ -18,7 +18,7 @@ make_ec_forwardangle_shield();
 make_ec_forwardangle_preshower();
 }
 
-my $ec_sen="solid_ec";
+my $ec_sen="solidec";
 
  my $color="0000ff";
  my $material_abs="Lead";

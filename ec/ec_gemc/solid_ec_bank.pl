@@ -15,11 +15,11 @@ our %configuration;
 # i for integers
 # d for doubles
 
-sub define_solid_ec_bank
+sub define_solidec_bank
 {
 	# uploading the hit definition
-	my $bankId = 100;
-	my $bankname = "solid_ec";
+	my $bankId = 300;
+	my $bankname = "solidec";
 	
 	insert_bank_variable(\%configuration, $bankname, "bankid", $bankId, "Di", "$bankname bank ID");
 	insert_bank_variable(\%configuration, $bankname, "id",           1, "Di", "id number");
