@@ -1,0 +1,471 @@
+#include <iostream> 
+#include <fstream>
+#include <cmath> 
+#include <math.h> 
+#include <TCanvas.h>
+#include <TFile.h>
+#include <TLine.h>
+#include <TTree.h>
+#include <TChain.h>
+#include <TH1.h>
+#include <TH2.h>
+#include <TH3.h>
+#include <TH3F.h>
+#include <TF1.h>
+#include <TLorentzVector.h>
+#include <TROOT.h>
+#include <TGraphErrors.h>
+#include <TGraph.h>
+#include <TStyle.h>
+#include <TMinuit.h>
+#include <TPaveText.h>
+#include <TText.h>
+#include <TSystem.h>
+#include <TArc.h>
+
+using namespace std;
+
+void GetLAEC(TString input_filename)
+{
+	gROOT->Reset();
+	gStyle->SetPalette(1);
+	gStyle->SetOptStat(0);
+	const double DEG=180./3.1415926;
+
+	TString input_png = input_filename;
+	input_png.ReplaceAll(".root","_zhit.png");
+
+	/*Set Branch{{{*/
+	TFile *file=new TFile(input_filename.Data());
+	if (file->IsZombie()) {
+		cout << "Error opening file" << input_filename << endl;
+		exit(-1);
+	}
+	else cout << "open file " << input_filename << endl;
+
+	TTree *Tgen = (TTree*) file->Get("genT");
+	Int_t gen_evn,gen_ngen;
+	Int_t gen_id_array[1000];
+	Int_t *gen_id=gen_id_array;
+	Float_t gen_px_array[1000],gen_py_array[1000],gen_pz_array[1000],gen_p_array[1000],
+			gen_phi_array[1000],gen_theta_array[1000],gen_vx_array[1000],gen_vy_array[1000],gen_vz_array[1000];
+	Float_t *gen_px=gen_px_array,*gen_py=gen_py_array,*gen_pz=gen_pz_array,*gen_p=gen_p_array,
+			*gen_phi=gen_phi_array,*gen_theta=gen_theta_array,*gen_vx=gen_vx_array,
+			*gen_vy=gen_vy_array,*gen_vz=gen_vz_array;
+	Tgen->SetBranchAddress("evn",&gen_evn);
+	Tgen->SetBranchAddress("ngen",&gen_ngen);
+	Tgen->SetBranchAddress("id",gen_id);
+	Tgen->SetBranchAddress("px",gen_px);
+	Tgen->SetBranchAddress("py",gen_py);
+	Tgen->SetBranchAddress("pz",gen_pz);
+	Tgen->SetBranchAddress("p",gen_p);
+	Tgen->SetBranchAddress("phi",gen_phi);
+	Tgen->SetBranchAddress("theta",gen_theta);
+	Tgen->SetBranchAddress("vx",gen_vx);
+	Tgen->SetBranchAddress("vy",gen_vy);
+	Tgen->SetBranchAddress("vz",gen_vz);
+
+	TTree *Tflux = (TTree*) file->Get("fluxT");
+	Int_t flux_evn,flux_nfluxhit;
+	Int_t flux_ID_array[1000],flux_pid_array[1000],flux_mpid_array[1000];
+	Int_t *flux_ID=flux_ID_array,*flux_pid=flux_pid_array,*flux_mpid=flux_mpid_array;
+	Float_t flux_Edep_array[1000],flux_E_array[1000],flux_x_array[1000],flux_y_array[1000],flux_z_array[1000],
+			flux_lx_array[1000],flux_ly_array[1000],flux_lz_array[1000],flux_t_array[1000],flux_px_array[1000],
+			flux_py_array[1000],flux_pz_array[1000],flux_vx_array[1000],flux_vy_array[1000],flux_vz_array[1000],
+			flux_mvx_array[1000],flux_mvy_array[1000],flux_mvz_array[1000];
+	Float_t *flux_Edep=flux_Edep_array,*flux_E=flux_E_array,*flux_x=flux_x_array,*flux_y=flux_y_array,
+			*flux_z=flux_z_array,*flux_lx=flux_lx_array,*flux_ly=flux_ly_array,*flux_lz=flux_lz_array,
+			*flux_t=flux_t_array,*flux_px=flux_px_array,*flux_py=flux_py_array,*flux_pz=flux_pz_array,
+			*flux_vx=flux_vx_array,*flux_vy=flux_vy_array,*flux_vz=flux_vz_array,*flux_mvx=flux_mvx_array,
+			*flux_mvy=flux_mvy_array,*flux_mvz=flux_mvz_array;
+	Tflux->SetBranchAddress("evn",&flux_evn);
+	Tflux->SetBranchAddress("nfluxhit",&flux_nfluxhit);
+	Tflux->SetBranchAddress("ID",flux_ID);
+	Tflux->SetBranchAddress("Edep",flux_Edep);
+	Tflux->SetBranchAddress("E",flux_E);
+	Tflux->SetBranchAddress("x",flux_x);
+	Tflux->SetBranchAddress("y",flux_y);
+	Tflux->SetBranchAddress("z",flux_z);
+	Tflux->SetBranchAddress("lx",flux_lx);
+	Tflux->SetBranchAddress("ly",flux_ly);
+	Tflux->SetBranchAddress("lz",flux_lz);
+	Tflux->SetBranchAddress("t",flux_t);
+	Tflux->SetBranchAddress("pid",flux_pid);
+	Tflux->SetBranchAddress("mpid",flux_mpid);
+	Tflux->SetBranchAddress("px",flux_px);
+	Tflux->SetBranchAddress("py",flux_py);
+	Tflux->SetBranchAddress("pz",flux_pz);
+	Tflux->SetBranchAddress("vx",flux_vx);
+	Tflux->SetBranchAddress("vy",flux_vy);
+	Tflux->SetBranchAddress("vz",flux_vz);
+	Tflux->SetBranchAddress("mvx",flux_mvx);
+	Tflux->SetBranchAddress("mvy",flux_mvy);
+	Tflux->SetBranchAddress("mvz",flux_mvz);
+
+	// Int_t nevent = (Int_t)Tgen->GetEntries();
+	Int_t nevent = (Int_t)Tflux->GetEntries();
+	cout << nevent << endl;
+	/*End Set Branch}}}*/
+	
+	/* EC Electron Trigger{{{*/
+	const int Ntrigline=6,Ntriglinebin=21;
+	int region_index;
+//	if (input_filename.Contains("SIDIS_FA")) region_index=0;
+//	else if (input_filename.Contains("SIDIS_LA")) region_index=1;
+//	else {cout << "need option for FA or LA region" << endl; exit(-1);}
+    region_index = 0;
+
+	int det[2]={8,12};  //detecor ID
+	double Rmin[2]={90,80};
+	double Rmax[2]={230,140};
+
+	TFile *file_trig_cut[2][Ntrigline][2];//[Det_ID][Cut_ID][PID], Det_DC: 0->FA, 1->LA, PID: 0->e, 1->pi
+	// Radius(cm)  P Threshold (GeV)
+	//   90 - 105      5.0    
+	// 105 - 115      4.0    
+	// 115 - 130      3.0    
+	// 130 - 150      2.0    
+	// 150 - 200      1.0 
+	// 200 - 230      2.0 
+	// 6 point cut, right on Q2=1 line and field bend line
+	double trig_cut_range_R[Ntrigline+1]={0,105,115,130,150,200,300};
+
+	file_trig_cut[0][0][0]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH4.4.root");
+	file_trig_cut[0][0][1]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH4.4.root");
+	file_trig_cut[0][1][0]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH3.5.root");
+	file_trig_cut[0][1][1]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH3.5.root");
+	file_trig_cut[0][2][0]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH2.6.root");
+	file_trig_cut[0][2][1]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH2.6.root");
+	file_trig_cut[0][3][0]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root");
+	file_trig_cut[0][3][1]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root");
+	file_trig_cut[0][4][0]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_Trig0.9.root");
+	file_trig_cut[0][4][1]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_Trig0.9.root");
+	file_trig_cut[0][5][0]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root");
+	file_trig_cut[0][5][1]=new TFile("triggerfile/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root");
+
+	///Large Angle Trigger   has no radial dependence
+	for (int i=0;i<Ntrigline;i++){
+		file_trig_cut[1][i][0]=new TFile("cut1GeV_innerbackground/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunElectron_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root");
+		file_trig_cut[1][i][1]=new TFile("cut1GeV_innerbackground/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunPion_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root");
+	}
+
+
+	char *gr_trig_cut_ele_name[2][Ntrigline],*gr_trig_cut_pi_name[2][Ntrigline];
+	for(int j=0;j<2;j++){
+		for(int i=0;i<Ntrigline;i++){
+			gr_trig_cut_ele_name[j][i]="Graph";
+			gr_trig_cut_pi_name[j][i]="Graph";    
+		}  
+	}
+
+	double trig_cut[2][Ntrigline][Ntriglinebin+2][6];
+	TGraphErrors *gr_trig_cut_ele[2][Ntrigline],*gr_trig_cut_pi[2][Ntrigline];
+	for (int j=0;j<2;j++){
+		for (int i=0;i<Ntrigline;i++){  
+			gr_trig_cut_ele[j][i]=(TGraphErrors*) file_trig_cut[j][i][0]->Get(gr_trig_cut_ele_name[j][i]);
+			gr_trig_cut_pi[j][i]=(TGraphErrors*) file_trig_cut[j][i][1]->Get(gr_trig_cut_pi_name[j][i]);
+			double binwidth=gr_trig_cut_ele[j][i]->GetX()[1]-gr_trig_cut_ele[j][i]->GetX()[0];
+			if (j==1) { //add one more point for LA to become 21 points like FA
+				gr_trig_cut_ele[j][i]->SetPoint(20,gr_trig_cut_ele[j][i]->GetX()[19]+binwidth,gr_trig_cut_ele[j][i]->GetY()[19]);
+				gr_trig_cut_pi[j][i]->SetPoint(20,gr_trig_cut_pi[j][i]->GetX()[19]+binwidth,gr_trig_cut_pi[j][i]->GetY()[19]);    
+			}
+			for (int k=0;k<Ntriglinebin;k++){ //set any point with eff <0.01 as 0
+				if (gr_trig_cut_ele[j][i]->GetY()[k]<0.01) gr_trig_cut_ele[j][i]->SetPoint(k,gr_trig_cut_ele[j][i]->GetX()[k],0.);
+				if (gr_trig_cut_pi[j][i]->GetY()[k]<0.01) gr_trig_cut_pi[j][i]->SetPoint(k,gr_trig_cut_pi[j][i]->GetX()[k],0.);
+			}
+			trig_cut[j][i][0][0]=trig_cut_range_R[i];
+			trig_cut[j][i][0][1]=trig_cut_range_R[i+1];
+			trig_cut[j][i][0][2]=0.;
+			trig_cut[j][i][0][3]=gr_trig_cut_ele[j][i]->GetX()[0]-binwidth/2;
+			trig_cut[j][i][0][4]=0.;
+			trig_cut[j][i][0][5]=0.;
+		//	cout << j << " " << i << " " << 0 << " " << gr_trig_cut_ele_name[j][i] << "\t" << gr_trig_cut_ele[j][i]->GetX()[0] << "\t" << gr_trig_cut_ele[j][i]->GetY()[0] << "\t" << gr_trig_cut_pi_name[j][i] << "\t" << gr_trig_cut_pi[j][i]->GetX()[0] << "\t" << gr_trig_cut_pi[j][i]->GetY()[0] << endl;
+			for (int k=0;k<Ntriglinebin;k++){
+				trig_cut[j][i][k+1][0]=trig_cut_range_R[i];
+				trig_cut[j][i][k+1][1]=trig_cut_range_R[i+1];
+				trig_cut[j][i][k+1][2]=gr_trig_cut_ele[j][i]->GetX()[k]-binwidth/2;
+				trig_cut[j][i][k+1][3]=gr_trig_cut_ele[j][i]->GetX()[k]+binwidth/2;
+				trig_cut[j][i][k+1][4]=gr_trig_cut_ele[j][i]->GetY()[k];
+				trig_cut[j][i][k+1][5]=gr_trig_cut_pi[j][i]->GetY()[k];
+		//		cout << j << " " << i << " " << k+1 << " " << gr_trig_cut_ele_name[j][i] << "\t" << gr_trig_cut_ele[j][i]->GetX()[k] << "\t" << gr_trig_cut_ele[j][i]->GetY()[k] << "\t" << gr_trig_cut_pi_name[j][i] << "\t" << gr_trig_cut_pi[j][i]->GetX()[k] << "\t" << gr_trig_cut_pi[j][i]->GetY()[k] << endl;
+			}
+			trig_cut[j][i][Ntriglinebin+1][0]=trig_cut_range_R[i];
+			trig_cut[j][i][Ntriglinebin+1][1]=trig_cut_range_R[i+1];
+			trig_cut[j][i][Ntriglinebin+1][2]=gr_trig_cut_ele[j][i]->GetX()[Ntriglinebin-1]+binwidth/2;
+			trig_cut[j][i][Ntriglinebin+1][3]=11.;
+			trig_cut[j][i][Ntriglinebin+1][4]=gr_trig_cut_ele[j][i]->GetY()[Ntriglinebin-1];
+			trig_cut[j][i][Ntriglinebin+1][5]=gr_trig_cut_pi[j][i]->GetY()[Ntriglinebin-1];
+		//	cout << j << " " << i << " " << Ntriglinebin+1 << " " << gr_trig_cut_ele_name[j][i] << "\t" << gr_trig_cut_ele[j][i]->GetX()[Ntriglinebin-1] << "\t" << gr_trig_cut_ele[j][i]->GetY()[Ntriglinebin-1] << "\t" << gr_trig_cut_pi_name[j][i] << "\t" << gr_trig_cut_pi[j][i]->GetX()[Ntriglinebin-1] << "\t" << gr_trig_cut_pi[j][i]->GetY()[Ntriglinebin-1] << endl;
+		gr_trig_cut_ele[j][i]->Delete();
+		gr_trig_cut_pi[j][i]->Delete();
+		}
+	}
+	cout << "here is the trig value" << endl;
+	for (int j=1;j<2;j++){
+		for (int i=0;i<Ntrigline;i++){  
+			for (int k=0;k<Ntriglinebin+2;k++){
+				for (int l=0;l<6;l++){
+					 //cut[Det_ID][Cut_ID][Data_Point][Cut_Info]
+					cout << trig_cut[j][i][k][l] << "\t\t";
+				}
+				cout << endl;      
+			}
+		}
+	}
+	/*}}}*/
+
+	/*Define LAEC{{{*/
+	//In each segmentation, 40 slides, each slides has 2.5cm width, 0.3cm between two slides.
+	const double R_Min = 80.0;//cm, LAEC front, back = 96cm
+	const double R_Max = 140.0;//cm, Originally 264.9cm but EC only has 230.
+	const int LAEC_Module = 30; //30 module around the circle
+	const int LAEC_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
+    const int LAEC_Mom_Bin = 23;
+
+	double LAEC_R[LAEC_Slide];//Center location of each slide
+	double LAEC_In_G[LAEC_Module][LAEC_Slide];// Number of photons going into the device
+	double LAEC_In_E[LAEC_Module][LAEC_Slide];// Number of electrons going into the device
+	double LAEC_Out_G[LAEC_Module][LAEC_Slide];// Number of photons going into the device
+	double LAEC_Out_E[LAEC_Module][LAEC_Slide];// Number of electrons going into the device
+
+	for(int i=0;i<LAEC_Slide;i++){//I just want to initialize everything
+		LAEC_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
+		for(int j=0;j<LAEC_Module;j++){
+			LAEC_In_G[j][i] =0.;
+			LAEC_In_E[j][i] =0.;
+			LAEC_Out_G[j][i] =0.;
+			LAEC_Out_E[j][i] =0.;
+		}
+	}
+	double LAEC_Threshold = 2.00; //GeV for EC cut, the cut could be tight if using Jin's curves
+	double Trig_Threshold = 0.95; //GeV for EC cut
+	
+	//Other Definition	
+	const int Electron = 11;
+	const int Gamma = 22;
+	const int Beam = 0;
+	const int Neutron = 2112;
+	const int Neutrino1 = 12;//Nu_e
+	const int Neutrino2 = 14;//Nu_Mu
+	const int Neutrino3 = 16;//Nu_Tao
+
+	const int VP_LAEC=3210000;
+	const double Z_LAEC =-67.0; //cm
+	 
+	double r = -1000.0;//cm
+	int Slide_ID = 0;
+	int Module_ID = 0;
+	/*}}}*/
+
+	/*Read in each event{{{*/
+	//Int_t nselected = 1e5;
+	Int_t nselected = nevent;
+	double In_G = 0, In_E = 0, Out_G = 0, Out_E = 0;
+	double Count_High = 0, Count_Low = 0;
+	int Count_Ep =0, Count_Em=0, Count_Both=0;
+	double Count_Cut_Ep =0, Count_Cut_Em=0;
+	double fmom_old = 0.0;
+	int Double_Count = 0;
+	int FirstOne0 = 0; //incoming electron with E<1GeV
+	int FirstOne1 = 0; //incoming electron with E>1GeV
+	int FirstOne2 = 0; //incoming electron with R-dependence E-cut
+	int FirstOne3 = 0; //incoming electron with R-dependence E-cut by slides
+	int FirstOne4 = 0; //outgoing Gamma with R-dependence E-cut by slides
+	int FirstOne5 = 0; //outgoing positron with R-dependence E-cut
+	cerr<<"++++++++++++++++ "<<endl;
+	for(Int_t i=0;i<nselected;i++){
+		cout<<i<<"\r";
+
+		Tgen->GetEntry(i);
+		if(1){
+			Tflux->GetEntry(i);
+			FirstOne0 = 0;
+			FirstOne1 = 0;
+			FirstOne2 = 0;
+			FirstOne3 = 0;
+			FirstOne5 = 0;
+			//Double_Count = 0;
+			int ID_Pick = VP_LAEC;
+			double EC_Cut_Max = 0.0;
+			double EC_Cut = 0.0;
+			for (Int_t j=0;j<flux_nfluxhit;j++) {
+				r=sqrt(pow(*(flux_x+j),2)+pow(*(flux_y+j),2))/10.;//cm
+					if(r > R_Max||r<R_Min) continue;//The radius of a mrpc sector is 210cm;
+
+				double fmom=sqrt(pow(*(flux_px+j),2)+pow(*(flux_py+j),2)+pow(*(flux_pz+j),2))/1e3;//GeV
+				if(*(flux_pz+j)<-1e-19)continue;
+				//	if(fmom<1e-9) continue;
+
+				if(*(flux_ID+j)==ID_Pick&&fmom>=0.9){//#Eelectrons going out 
+
+					//Selct the right Cut	
+					//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
+					EC_Cut = -1.0;
+					for(int k=0;k<LAEC_Slide;k++){//LAEC, use trig_cut[1][....]
+						for(int l=0;l<LAEC_Mom_Bin;l++){
+							if(r>trig_cut[1][k][l][0]&&r<=trig_cut[1][k][l][1]){
+								if(fmom>trig_cut[1][k][l][2]&&fmom<=trig_cut[1][k][l][3]){
+									EC_Cut =trig_cut[1][k][l][4]; 
+									Slide_ID = k;
+									//	cerr<<Form("---%d R=%f, E=%f, Cut=%f", i, r, fmom, EC_Cut)<<endl;
+								}
+							}
+						}
+					}
+					if(EC_Cut<-1e-9||EC_Cut>1){
+						//	cerr<<"---- I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, fmom)<<endl;
+						//	return;
+						EC_Cut = 0.0;
+					}
+				}
+				if(EC_Cut>EC_Cut_Max)
+					EC_Cut_Max = EC_Cut;
+			}
+
+			for (Int_t j=0;j<flux_nfluxhit;j++) {
+				r=sqrt(pow(*(flux_x+j),2)+pow(*(flux_y+j),2))/10.;//cm
+					if(r > R_Max||r<R_Min) continue;//The radius of a mrpc sector is 210cm;
+
+				double fmom=sqrt(pow(*(flux_px+j),2)+pow(*(flux_py+j),2)+pow(*(flux_pz+j),2))/1e3;//GeV
+				if(*(flux_pz+j)<-1e-19)continue;
+				//	if(fmom<1e-9) continue;
+
+				if(*(flux_ID+j)==ID_Pick&&fmom>=0.9){//#Eelectrons going out 
+					//Low Energy Electron <2GeV
+					if((*(flux_pid+j)==Electron||*(flux_pid+j)==-Electron)&& fmom<LAEC_Threshold){//#Eelectrons going out 
+						if(FirstOne0<1)
+							Count_Low+=1.0;
+						FirstOne0 ++;;
+					}
+					//High Energy Electron >2GeV
+					if(abs(*(flux_pid+j))==Electron&& fmom>=LAEC_Threshold){//#Eelectrons going out 
+						if(FirstOne1<1)
+							Count_High+=1.0;
+						FirstOne1 ++;;
+
+						Count_Both++;
+						if(*(flux_pid+j)==Electron)
+							Count_Em++;
+						if(*(flux_pid+j)==-Electron)
+							Count_Ep++;
+					}
+					//High Energy Electron with EC R-Cut 
+					if((*(flux_pid+j)==Electron) && EC_Cut_Max>=0.1){//#Eelectrons going out 
+						//Count_Em++;
+						if(FirstOne2<1)
+							Count_Cut_Em+=EC_Cut_Max;
+						FirstOne2 ++;;
+					}
+
+					//High Energy Positron with EC R-Cut 
+					if((*(flux_pid+j)==-Electron) && EC_Cut_Max>=0.1){//#Eelectrons going out 
+						//Count_Ep++;
+						if(FirstOne3<1)
+							Count_Cut_Ep+=EC_Cut_Max;
+						FirstOne3 ++;
+					}
+
+					//Count by slides
+					double hit_y = *(flux_y+j), hit_x = *(flux_x+j);	
+					double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
+					Module_ID = (int) hit_phi/(360./LAEC_Module);
+
+					if(abs(*(flux_pid+j))==Electron && EC_Cut_Max>=0.1){//#Eelectrons going out 
+						if(FirstOne4<1)
+							LAEC_In_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+						FirstOne4 ++;;
+					}
+
+					if(*(flux_pid+j)==Gamma && EC_Cut_Max>=0.1){//#Photons going in
+						if(FirstOne5<1)
+							LAEC_In_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+						FirstOne5 ++;;
+					}
+
+				}
+				if((FirstOne2>=1) && (FirstOne3>=1))
+					cerr<<" Oh! Double Counting !!!  "<< ++Double_Count<<endl;
+			}
+		}
+	}
+	/*End Read in each event}}}*/
+	
+	/*Count_Rate_Ractor{{{*/
+			double Count_To_Rate = 0.0;
+			if(input_filename.Contains("pi0")){
+				Count_To_Rate = 212.0/1e3; //Count to KHz
+				if(input_filename.Contains("up")||input_filename.Contains("down")){
+					Count_To_Rate = 136.0/1e3;//Count to KHz
+				}
+			}
+			else if(input_filename.Contains("pip")){
+				Count_To_Rate = 241.0/1e3; //Count to KHz
+				if(input_filename.Contains("up")||input_filename.Contains("down")){
+					Count_To_Rate = 134.0/1e3;//Count to KHz
+				}
+			}
+			else if(input_filename.Contains("pim")){
+				Count_To_Rate = 183.0/1e3; //Count to KHz
+				if(input_filename.Contains("up")||input_filename.Contains("down")){
+					Count_To_Rate = 136.0/1e3;//Count to KHz
+				}
+			}
+			else if(input_filename.Contains("Kp")){
+				Count_To_Rate = 5.9/1e3; //Count to KHz
+				if(input_filename.Contains("up")||input_filename.Contains("down")){
+					Count_To_Rate = 3.0/1e3;//Count to KHz
+				}
+			}
+			else if(input_filename.Contains("Km")){
+				Count_To_Rate = 3.7/1e3;//Count to KHz
+				if(input_filename.Contains("up")||input_filename.Contains("down")){
+					Count_To_Rate = 3.4/1e3;//Count to KHz
+				}
+			}
+			else if(input_filename.Contains("Ks")||input_filename.Contains("Kl")){
+				Count_To_Rate = 2.4/1e3;//Count to KHz
+				if(input_filename.Contains("up")||input_filename.Contains("down")){
+					Count_To_Rate = 1.53/1e3;//Count to KHz
+				}
+			}
+			else if(input_filename.Contains("p")){
+				Count_To_Rate = 37./1e3;//Count to KHz
+				if(input_filename.Contains("up")||input_filename.Contains("down")){
+					Count_To_Rate = 23.0/1e3;//Count to KHz
+				}
+			}
+			else
+				Count_To_Rate = 1.0; //Count to MHz for 15uA electron events;
+			/*}}}*/
+
+	/*Output Results{{{*/
+			cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;
+
+	TString input_out = input_filename;
+	input_out.ReplaceAll(".root",".out");
+	ofstream outfile(Form("LAEC_%s",input_out.Data()));
+	for(int k=0;k<LAEC_Slide;k++){
+		for(int l=0;l<LAEC_Module;l++){
+			 In_G +=LAEC_In_G[l][k];
+			 In_E +=LAEC_In_E[l][k];
+			 Out_E +=LAEC_Out_E[l][k];
+			 Out_G +=LAEC_Out_G[l][k];
+		}
+	}
+	cerr<<" ====== In_E = "<< In_E*Count_To_Rate<<endl;
+	cerr<<" ====== In_G = "<< In_G*Count_To_Rate<<endl;
+	cerr<<" ====== Out_E = "<< Out_E*Count_To_Rate<<endl;
+	cerr<<" ====== Out_G = "<< Out_G*Count_To_Rate<<endl;
+
+	cerr<< Form("&&&& N (P<1GeV) = %d, N (P>1.0GeV) = %d, 1GeV Cut N = (-)%d / (+)%d /(+-)%d",
+		   	(int)(Count_Low), (int)(Count_High), (int)(Count_Em), (int)(Count_Ep), (int)(Count_Both))<<endl;
+	cerr<< Form("                                        R-Cut Cut N = (-)%d / (+)%d /(+-)%d", (int)(Count_Cut_Em),
+		   	(int)(Count_Cut_Ep), (int)(In_E))<<endl;
+
+	outfile<<" ====== In_E = "<< In_E*Count_To_Rate<<endl;
+	outfile<<" ====== In_G = "<< In_G*Count_To_Rate<<endl;
+	outfile<<" ====== Out_E = "<< Out_E*Count_To_Rate<<endl;
+	outfile<<" ====== Out_G = "<< Out_G*Count_To_Rate<<endl;
+    /*}}}*/
+
+}
