@@ -66,7 +66,7 @@ int main(Int_t argc, char *argv[]){
 
 		//define output file
 		TString filename,prefix;
-		prefix="collider";
+		prefix="sidis";
 
 		Double_t mass_target;
 		if (target_flag ==1){
@@ -181,7 +181,7 @@ int main(Int_t argc, char *argv[]){
 		Double_t phi_gen_ele,phi_gen_had;
 		Double_t mom_pro,energy_pro;
 		Double_t mom_ini_ele,energy_ini_ele;
-		Double_t jacoF,dxs_hp,dxs_hm,phase_hp,phase_hm,dfff_hp,dfff_hm;
+		Double_t jacoF,dxs_hp,dxs_hm,phase_hp,phase_hm,dfff_hp,dfff_hm,weight_hp,weight_hm;
 		Int_t nsim = 0;
 		Double_t dilute[2];
 		mom_ini_ele = fabs(momentum_ele);
@@ -189,7 +189,16 @@ int main(Int_t argc, char *argv[]){
 
 		mom_pro = fabs(momentum_ion);
 		energy_pro = sqrt(momentum_ion*momentum_ion + mass_target*mass_target);
-        /*}}}*/
+
+		double electron_phase_space= 0.0, hadron_phase_space= 0.0, Phase_space= 0.0;
+		if(config=="SoLID" ){
+			electron_phase_space=(cos(7/DEG) - cos(30/DEG))*2*PI*(momentum_ele-0.5);   // theta: 7~30 degree,  2pi phi coverage, 0.5~11 GeV Momentum coverage 	
+			hadron_phase_space=(cos(7/DEG) - cos(30/DEG))*2*PI*(6-0.5);  //theta, 7~30 degree,  2pi phi coverage, 0.5~6 GeV Momentum coverage
+			Phase_space=electron_phase_space*hadron_phase_space;           //electron*hadron phase space eg, for electron: delta_cos_theta*delta_phi*delta_energy
+		}
+		cout<<" -- For Config="<<config<<" Phase_space: "<<electron_phase_space<<"	"<<hadron_phase_space<<"	"<<Phase_space<<endl;
+
+		/*}}}*/
 
 		/*New Branches{{{*/
 		t1->Branch("Q2",&Q2,"data/D");
@@ -449,6 +458,7 @@ int main(Int_t argc, char *argv[]){
 					//jacoF = 1.0;
 
 					if (pt<0.8){
+						/*pt<0.8{{{*/
 						//first method 	 
 						bpt_p = 1./(0.2+z*z*0.25);// <pt^2> = 0.2 GeV^2 (quark internal momentum)
 						bpt_m = bpt_p; // <kt^2> = 0.25 GeV^2 (struck quark internal momentum)
@@ -460,9 +470,10 @@ int main(Int_t argc, char *argv[]){
 
 						dilute[0] = dxs_all[0][0]/dxs_all[0][1];
 						dilute[1] = dxs_all[0][2]/dxs_all[0][3];
-
+                        /*}}}*/
 					}
 					else{
+						/*pt>0.8{{{*/
 						// this part is to generate factor K
 						//make sure the DXS is the same at PT= 0.8 GeV
 						//calculating the TMD part
@@ -520,9 +531,11 @@ int main(Int_t argc, char *argv[]){
 							dilute[0] = ((dxs_all[1][0] + K[0]*dxs_all[2][0])/(dxs_all[1][1] + K[0]*dxs_all[2][1])+dxs_all[0][0]/dxs_all[0][1])/2.;
 							dilute[1] = ((dxs_all[1][2] + K[1]*dxs_all[2][2])/(dxs_all[1][3] + K[1]*dxs_all[2][3])+dxs_all[0][2]/dxs_all[0][3])/2.;
 						}
+						/*}}}*/
 					}
 
 					// try to take care of the decay
+					/*Decay{{{*/
 					Double_t decay_part;
 					if (abs(particle_flag)==1){
 						if (theta_had>155./180.*3.1415926){
@@ -553,6 +566,10 @@ int main(Int_t argc, char *argv[]){
 					}else{
 						dxs_hm = 0.;
 					}
+					//warning: output unit is nbarn   //if calculate rate, should be translate to cm^-2     1nbarn=10^-33 cm^-2
+					weight_hp=dxs_hp*Phase_space/number_of_events;   
+					weight_hm=dxs_hm*Phase_space/number_of_events;
+
 
 					if ((dxs_hp+dxs_hm)!=0){
 						if (Q2<=10.&&pt<=1.0){
@@ -573,7 +590,7 @@ int main(Int_t argc, char *argv[]){
 						}
 					}
 					//cout << nsim << endl;
-
+                    /*}}}*/  
 					cout << count[0] << "\t" << count[1] << "\t" << count[2] << "\t" << count[3] << "\r";
 
 				}
