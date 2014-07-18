@@ -18,7 +18,7 @@ our %configuration;
 sub define_solid_gem_bank
 {
 	# uploading the hit definition
-	my $bankId = 200;
+	my $bankId = 100;
 	my $bankname = "solid_gem";
 	
 	insert_bank_variable(\%configuration, $bankname, "bankid", $bankId, "Di", "$bankname bank ID");
