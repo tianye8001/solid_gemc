@@ -80,8 +80,9 @@ solid_PVDIS_ec_forwardangle_real();
 # require "solid_PVDIS_virtualplane_gem.pl";
 # solid_PVDIS_virtualplane_gem();
 
-# Hit definition
-# Execute only when there are changes
+
+#hit and bank definition Execute only when there are changes
+#hit
 require "./solid_ec_hit.pl";
 define_solid_ec_hit();
 
