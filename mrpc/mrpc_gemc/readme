@@ -1,0 +1,3 @@
+./solid_SIDIS_mrpc.pl config_solid_SIDIS_mrpc.dat
+solid_gemc solid_SIDIS_mrpc.gcard
+evio2root -INPUTF=output.evio -B=solid_SIDIS_mrpc -BANK_VERBOSITY=100
