@@ -1,0 +1,3 @@
+./solid_SIDIS_cc.pl config_solid_SIDIS_cc.dat
+solid_gemc solid_SIDIS_cc.gcard
+evio2root -INPUTF=output.evio -B=solid_SIDIS_cc -BANK_VERBOSITY=100
