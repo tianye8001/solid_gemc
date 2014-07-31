@@ -1,3 +1,0 @@
-./solid_PVDIS_ec_forwardangle.pl config_solid_PVDIS_ec_forwardangle.dat
-solid_gemc solid_PVDIS_ec_forwardangle.gcard
-evio2root -INPUTF=output.evio -B=solid_PVDIS_ec_forwardangle -BANK_VERBOSITY=100
