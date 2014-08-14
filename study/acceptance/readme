@@ -1,0 +1,30 @@
+This tries to study acceptane and record the results in some histograms
+
+shoot particles from target position over target length into the detector and look for the hits on various detectors, if there is a hit, this event is considered detected and the generated particle P and theta, phi are recorded.
+
+geantino can be used to test neutron particle
+chargedgeantino(+1 particle) can be used to test positive particle
+chargedgeantino(+1 particle) and flip field by gemc option SCALE_FIELD="field_name, -1" can be used to test negative particle
+Use real particle to include decay effect
+
+In geometry, use only vaccum and "Kryptonite" as material to make sure particles can get blocked and use virtualplane in front of detectors to see particle hits by GEMC built-in flux bank with "true info" turned on
+
+When analyzing results, include fiducial cuts to choose good detector areas
+
+here is how to use it
+1. run simulation with the gcard included like "gemc a,gcard"
+2. convert output from evio to root like "eveio2root -INPUTF=a.gcard"
+3. analyze results and output pictures and histgrams in another root file like "root 'acceptance.C+("a.root")' "
+
+A good acceptance needs large enough statistics to prevents any artifucal structures like holes.
+
+In the output root file, acceptance in P, theta, phi histograms are stored.
+By definition, acceptance of a particle should be 0 or 1 if all degree of freedom are taken into consideration, including particle 3 momentum and particle 3 vertex.
+Here we only record results in 3 momentum and integral over 3 vertex with a assumption that particles are evenly distributed over their 3 vertex, thus we have acceptance value between 0 and 1
+
+For solid_PVDIS, histogram "acceptance_forwardangle" is in P and Theta
+For solid_SIDIS_He3, solid_JPsi, histogram "acceptance_largeangle" and "acceptance_forwardangle" are in P and Theta
+For solid_SIDIS_NH3, histogram "acceptance_largeangle_3D" and "acceptance_forwardangle_3D" are in P, Theta and Phi
+
+
+created 2014_08_14 by Zhiwen Zhao 

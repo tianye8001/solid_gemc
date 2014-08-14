@@ -24,9 +24,9 @@
 <option name="BEAM_P"   value="e-,5.5*GeV,20*deg,0*deg"/>
 <option name="SPREAD_P" value="5.5*GeV,20*deg,180*deg"/>
 <option name="BEAM_V"   value="(0,0,-350)cm"/>
-<option name="SPREAD_V" value="(0.21,20)cm"/>
+<option name="SPREAD_V" value="(0.21,1.423)cm"/>
 
-<option name="N" value="1e4"/>
+<option name="N" value="1e6"/>
 <option name="OUTPUT" value="evio,solid_SIDIS_NH3_electron.evio"/>
 <option name="USE_GUI"  value="0"/>
 

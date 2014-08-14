@@ -1,0 +1,560 @@
+#include <iostream> 
+#include <fstream>
+#include <cmath> 
+#include <math.h> 
+#include <TCanvas.h>
+#include <TFile.h>
+#include <TTree.h>
+#include <TChain.h>
+#include <TH1.h>
+#include <TH2.h>
+#include <TH3.h>
+#include <TF1.h>
+#include <TLorentzVector.h>
+#include <TROOT.h>
+#include <TStyle.h>
+#include <TMinuit.h>
+#include <TPaveText.h>
+#include <TText.h>
+#include <TSystem.h>
+#include <TArc.h>
+
+using namespace std;
+
+void acceptance(string input_filename)
+{
+gROOT->Reset();
+gStyle->SetPalette(1);
+gStyle->SetOptStat(0);
+
+const double DEG=180./3.1415926;
+
+bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi=false;
+if (input_filename.find("PVDIS",0) != string::npos) Is_PVDIS=true;
+else if (input_filename.find("SIDIS_He3",0) != string::npos) Is_SIDIS_He3=true;
+else if (input_filename.find("SIDIS_NH3",0) != string::npos) Is_SIDIS_NH3=true;
+else if (input_filename.find("JPsi",0) != string::npos) Is_JPsi=true;
+else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
+
+char the_filename[200];
+sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_str());
+
+char output_filename[200];
+sprintf(output_filename, "%s_output.root",the_filename);
+TFile *outputfile=new TFile(output_filename, "recreate");
+
+TH2F *hacceptance_forwardangle,*hacceptance_largeangle,*hacceptance_overall;
+
+const int n=2;
+
+TH2F *hgen=new TH2F("gen","gen",250,0,50,220,0,11);   
+TH2F *hgen_vertexZ=new TH2F("gen_vertexZ","gen_vertexZ",350,15,50,50,-15,35);
+TH2F *hgen_vertexR=new TH2F("gen_vertexR","gen_vertexR",350,15,50,50,0,1);
+
+TH1F *hflux_mom[n],*hflux_theta[n];
+TH2F *hflux[n],*hflux_vertexZ[n],*hflux_vertexR[n];
+TH1F *hacceptance_mom[n],*hacceptance_theta[n];
+TH2F *hacceptance[n],*hacceptance_vertexZ[n],*hacceptance_vertexR[n];
+TH2F *hhit_rMom[n],*hhit_xy[n];
+TH2F *hhit_phidiffMom[n],*hhit_thetadiffMom[n];
+TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);  
+for(int i=0;i<n;i++){
+     char hstname[100];  
+   sprintf(hstname,"flux_mom_%i",i);
+   hflux_mom[i]=new TH1F(hstname,hstname,220,0,11);
+   sprintf(hstname,"flux_theta_%i",i);
+   hflux_theta[i]=new TH1F(hstname,hstname,250,0,50); 
+   sprintf(hstname,"flux_%i",i);
+   hflux[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);     
+   hflux[i]->SetTitle("particles detected by EC;vertex Theta (deg);P (GeV)");
+   sprintf(hstname,"flux_vertexZ_%i",i);
+   hflux_vertexZ[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
+   hflux_vertexZ[i]->SetTitle("particles detected by EC;vertex Theta (deg);vertex Z (cm)");   
+   sprintf(hstname,"flux_vertexR_%i",i);
+   hflux_vertexR[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
+   hflux_vertexR[i]->SetTitle("particles detected by EC;vertex Theta (deg);vertex R (cm)");      
+  
+   sprintf(hstname,"acceptance_mom_%i",i);
+   hacceptance_mom[i]=new TH1F(hstname,hstname,220,0,11);
+   sprintf(hstname,"acceptance_theta_%i",i);
+   hacceptance_theta[i]=new TH1F(hstname,hstname,250,0,50); 
+   sprintf(hstname,"acceptance_%i",i);
+   hacceptance[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);   
+   hacceptance[i]->SetTitle("acceptance;vertex Theta (deg);P (GeV)");   
+   sprintf(hstname,"acceptance_vertexZ_%i",i);
+   hacceptance_vertexZ[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
+   hacceptance_vertexZ[i]->SetTitle("acceptance;vertex Theta (deg);vertex Z (cm)");      
+   sprintf(hstname,"acceptance_vertexR_%i",i);
+   hacceptance_vertexR[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
+   hacceptance_vertexR[i]->SetTitle("acceptance;vertex Theta (deg);vertex R (cm)");         
+   
+   sprintf(hstname,"hit_rMom_%i",i);
+   hhit_rMom[i]=new TH2F(hstname,hstname,300,0,300,220,0,11);  
+   sprintf(hstname,"hit_phidiffMom_%i",i);
+   hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,220,0,11);  
+   sprintf(hstname,"hit_thetadiffMom_%i",i);
+   hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,220,0,11);  
+   
+   sprintf(hstname,"hit_xy_%i",i);
+   hhit_xy[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);     
+}
+
+const int Nplate=22;
+TH2F *hbaffleplate[Nplate],*hbaffleplate_observer[Nplate];
+for (int i=0;i<Nplate;i++){
+  hbaffleplate[i]=new TH2F(Form("baffleplate_%i", i),Form("baffleplate_%i", i),300,-150,150,300,-150,150);
+  hbaffleplate_observer[i]=new TH2F(Form("hbaffleplate_observer_%i", i),Form("hbaffleplate_observer_%i", i),300,-150,150,300,-150,150);  
+}
+
+  TFile *file=new TFile(input_filename.c_str());
+    if (file->IsZombie()) {
+       cout << "Error opening file" << input_filename << endl;
+       exit(-1);
+    }
+    else cout << "open file " << input_filename << endl;
+
+TTree *tree_header = (TTree*) file->Get("header");
+vector <int> *evn=0,*evn_type=0;
+vector <double> *beamPol=0;
+vector <int> *var1=0,*var2=0,*var3=0,*var4=0,*var5=0,*var6=0,*var7=0,*var8=0;
+tree_header->SetBranchAddress("evn",&evn);
+tree_header->SetBranchAddress("evn_type",&evn_type);
+tree_header->SetBranchAddress("beamPol",&beamPol);
+tree_header->SetBranchAddress("var1",&var1);
+tree_header->SetBranchAddress("var2",&var2);
+tree_header->SetBranchAddress("var3",&var3);
+tree_header->SetBranchAddress("var4",&var4);
+tree_header->SetBranchAddress("var5",&var5);
+tree_header->SetBranchAddress("var6",&var6);
+tree_header->SetBranchAddress("var7",&var7);
+tree_header->SetBranchAddress("var8",&var8);
+
+TTree *tree_generated = (TTree*) file->Get("generated");
+vector <int> *gen_pid=0;
+vector <double> *gen_px=0,*gen_py=0,*gen_pz=0,*gen_vx=0,*gen_vy=0,*gen_vz=0;
+tree_generated->SetBranchAddress("pid",&gen_pid);
+tree_generated->SetBranchAddress("px",&gen_px);
+tree_generated->SetBranchAddress("py",&gen_py);
+tree_generated->SetBranchAddress("pz",&gen_pz);
+tree_generated->SetBranchAddress("vx",&gen_vx);
+tree_generated->SetBranchAddress("vy",&gen_vy);
+tree_generated->SetBranchAddress("vz",&gen_vz);
+
+TTree *tree_flux = (TTree*) file->Get("flux");
+vector<int> *flux_id=0,*flux_hitn=0;
+vector<int> *flux_pid=0,*flux_mpid=0,*flux_tid=0,*flux_mtid=0,*flux_otid=0;
+vector<double> *flux_trackE=0,*flux_totEdep=0,*flux_avg_x=0,*flux_avg_y=0,*flux_avg_z=0,*flux_avg_lx=0,*flux_avg_ly=0,*flux_avg_lz=0,*flux_px=0,*flux_py=0,*flux_pz=0,*flux_vx=0,*flux_vy=0,*flux_vz=0,*flux_mvx=0,*flux_mvy=0,*flux_mvz=0,*flux_avg_t=0;
+tree_flux->SetBranchAddress("hitn",&flux_hitn);
+tree_flux->SetBranchAddress("id",&flux_id);
+tree_flux->SetBranchAddress("pid",&flux_pid);
+tree_flux->SetBranchAddress("mpid",&flux_mpid);
+tree_flux->SetBranchAddress("tid",&flux_tid);
+tree_flux->SetBranchAddress("mtid",&flux_mtid);
+tree_flux->SetBranchAddress("otid",&flux_otid);
+tree_flux->SetBranchAddress("trackE",&flux_trackE);
+tree_flux->SetBranchAddress("totEdep",&flux_totEdep);
+tree_flux->SetBranchAddress("avg_x",&flux_avg_x);
+tree_flux->SetBranchAddress("avg_y",&flux_avg_y);
+tree_flux->SetBranchAddress("avg_z",&flux_avg_z);
+tree_flux->SetBranchAddress("avg_lx",&flux_avg_lx);
+tree_flux->SetBranchAddress("avg_ly",&flux_avg_ly);
+tree_flux->SetBranchAddress("avg_lz",&flux_avg_lz);
+tree_flux->SetBranchAddress("px",&flux_px);
+tree_flux->SetBranchAddress("py",&flux_py);
+tree_flux->SetBranchAddress("pz",&flux_pz);
+tree_flux->SetBranchAddress("vx",&flux_vx);
+tree_flux->SetBranchAddress("vy",&flux_vy);
+tree_flux->SetBranchAddress("vz",&flux_vz);
+tree_flux->SetBranchAddress("mvx",&flux_mvx);
+tree_flux->SetBranchAddress("mvy",&flux_mvy);
+tree_flux->SetBranchAddress("mvz",&flux_mvz);
+tree_flux->SetBranchAddress("avg_t",&flux_avg_t);
+
+// cout << tree_flux->GetEntries() << " " << tree_header->GetEntries() << " " << tree_generated->GetEntries() << endl;
+
+int nevent = (int)tree_generated->GetEntries();
+int nselected = 0;
+cout << "nevent " << nevent << endl;
+
+///radius cut standard as particles can travel 30cm in Z before leave calorimeter
+///SIDIS largeangle EC outerradius is at 140cm
+double rout_cut_FA,rin_cut_FA,rout_cut_LA,rin_cut_LA;
+if (Is_PVDIS){
+  rout_cut_FA = 250;  //target at 10,ec front at 320 back at 370 with angle 36
+  rin_cut_FA = 110;  //as the detector edge
+  cout << " PVDIS rcut " << rin_cut_FA << " " << rout_cut_FA <<  endl;
+}
+else if (Is_SIDIS_He3 || Is_SIDIS_NH3){
+  rout_cut_FA=220;     //target at -350,ec front at 415 with angle 15
+  rin_cut_FA=98;   //cut at the actual edge 
+  rout_cut_LA=127;   //target at -350,ec front at -65 with angle 24
+  rin_cut_LA=83;   //cut at the actual edge
+  cout << " SIDIS_He3 and SIDIS_NH3 rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
+}
+else if (Is_JPsi){
+    rout_cut_FA=220;     //target at -350,ec front at 405 with angle 15
+    rin_cut_FA=98;   	//cut at the actual edge
+  
+//   rout_cut_LA=127.1;   //target at -360,ec front at -65 with angle 23.3    
+//   rout_cut_LA=126.3;   //target at -350,ec front at -65 with angle 23.9
+//   rout_cut_LA=125.9;   //target at -340,ec front at -65 with angle 24.6
+//   rout_cut_LA=125.3;   //target at -330,ec front at -65 with angle 25.3    
+  rout_cut_LA=124.9;   //target at -320,ec front at -65 with angle 26.1
+//   rout_cut_LA=124.3;   //target at -310,ec front at -65 with angle 26.9
+//      rout_cut_LA=124.0;   //target at -305,ec front at -65 with angle 27.3
+//      rout_cut_LA=123.9;   //target at -300,ec front at -65 with angle 27.8
+//      rout_cut_LA=123.8;   //target at -295,ec front at -65 with angle 28.3
+//   rout_cut_LA=123.2;   //target at -290,ec front at -65 with angle 28.7
+//      rout_cut_LA=122.6;   //target at -280,ec front at -65 with angle 29.7
+//      rout_cut_LA=121.7;   //target at -270,ec front at -65 with angle 30.7
+//   rout_cut_LA=120.1;   //target at -250,ec front at -65 with angle 33.0
+  rin_cut_LA=83;   //cut at the actual edge  
+  cout << " JPsi rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
+}
+else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
+
+   
+for (Int_t i=0;i<nevent;i++) { 
+  cout << i << "\r";
+//   cout << i << "\n";
+
+  tree_header->GetEntry(i);
+  
+  tree_generated->GetEntry(i);  
+  
+  int pid_gen=0;
+  double theta_gen=0,phi_gen=0,p_gen=0,px_gen=0,py_gen=0,pz_gen=0,vx_gen=0,vy_gen=0,vz_gen=0;      
+  for (int j=0;j<gen_pid->size();j++) {
+//       cout << gen_pid->at(j) << " " << gen_px->at(j) << " " << gen_py->at(j) << " " << gen_pz->at(j) << " " << gen_vx->at(j) << " " << gen_vy->at(j) << " " << gen_vz->at(j) << endl; 
+      pid_gen=gen_pid->at(j);
+      px_gen=gen_px->at(j)/1e3;    	//in MeV, convert to GeV
+      py_gen=gen_py->at(j)/1e3;		//in MeV, convert to GeV
+      pz_gen=gen_pz->at(j)/1e3;      	//in MeV, convert to GeV
+      vx_gen=gen_vx->at(j)/1e1;    	//in mm, convert to cm
+      vy_gen=gen_vy->at(j)/1e1;		//in mm, convert to cm
+      vz_gen=gen_vz->at(j)/1e1;     	//in mm, convert to cm
+      p_gen=sqrt(px_gen*px_gen+py_gen*py_gen+pz_gen*pz_gen);
+      theta_gen=acos(pz_gen/p_gen)*DEG;  	//in deg
+      phi_gen=atan2(py_gen,px_gen)*DEG;     	//in deg
+            
+      hgen->Fill(theta_gen,p_gen);
+      hgen_vertexZ->Fill(theta_gen,vz_gen);
+      hgen_vertexR->Fill(theta_gen,sqrt(vx_gen*vx_gen+vy_gen*vy_gen));      
+  }  
+  
+    tree_flux->GetEntry(i);    
+    
+    int counter_hit[2]={0,0};
+//   int counter[n]={0,0,0,0,0,0,0,0,0,0};  
+    for (Int_t j=0;j<flux_hitn->size();j++) {
+//       cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
+    
+    int detector_ID=flux_id->at(j)/1000000;
+    int subdetector_ID=(flux_id->at(j)%1000000)/100000;
+    int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
+//     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID << endl;  
+    
+//     if (detector_ID==0 && subsubdetector_ID==0) hbaffleplate[subdetector_ID-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);
+//     if (detector_ID==0 && subsubdetector_ID==1) hbaffleplate_observer[subdetector_ID-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);
+    if (flux_id->at(j)<100) hbaffleplate_observer[flux_id->at(j)-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);    
+
+       double r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));
+       hhit_rz->Fill(flux_avg_z->at(j)/10,r/10);
+    
+    int hit_id=-1;
+    if (flux_id->at(j)==3110000) hit_id=0;
+    if (flux_id->at(j)==3210000) hit_id=1;    
+    if (hit_id==-1) continue;  //skip other subsubdetector
+
+    counter_hit[hit_id]++;
+    
+    double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);  
+    double hit_phi=atan2(py_gen,px_gen)*DEG;
+//     double hit_phi=fabs(atan(hit_y/hit_x)*DEG);
+//     if (hit_y>0 && hit_x>0) hit_phi=hit_phi;
+//     if (hit_y>0 && hit_x<0) hit_phi=180-hit_phi;
+//     if (hit_y<0 && hit_x<0) hit_phi=180+hit_phi;
+//     if (hit_y<0 && hit_x>0) hit_phi=360-hit_phi;    
+      
+    double hit_theta=atan((r/10-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;
+    hhit_phidiffMom[hit_id]->Fill(hit_phi-phi_gen,p_gen);
+    hhit_thetadiffMom[hit_id]->Fill(hit_theta-theta_gen,p_gen);
+    hhit_rMom[hit_id]->Fill(r/10,p_gen);   
+    
+     hhit_xy[hit_id]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);    
+    
+//     if(mom > 1.4) continue;
+                   
+       if ((detector_ID==3 && subdetector_ID==2) && (r/10 < rin_cut_LA || rout_cut_LA < r/10)) continue;
+       if ((detector_ID==3 && subdetector_ID==1) && (r/10 < rin_cut_FA || rout_cut_FA < r/10)) continue;    
+       if (flux_pid->at(j)!= pid_gen) {cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; continue;}
+       
+       ///DIRC cut
+//        double x=flux_avg_x->at(j)/10,y=flux_avg_y->at(j)/10;
+//         if (detector_ID==3 && subdetector_ID==1) {
+// // 	  if ((fabs(x)<98 && fabs(y) <98) || fabs(x)>181 || fabs(y)>181) continue;  // 4 side
+// //           if ( (y>-98 && y<196+sqrt(3)*x && y<196-sqrt(3)*x) || (y<-181 || y>362+sqrt(3)*x || y>362-sqrt(3)*x) ) continue;  // 3 side, y=196+-sqrt(3)*x,y=362+-sqrt(3)*x
+// 	  if (fabs(y)<98 || fabs(y)>181) continue;  // 2 side, up and down
+// 	}
+       
+//         if (vx_gen != flux_vx->at(j)/10) cout << "vx " << vx_gen << " " << flux_vx->at(j)/10 <<endl;
+//         if (vy_gen != flux_vy->at(j)/10) cout << "vy " << vy_gen << " " << flux_vy->at(j)/10 <<endl;
+//         if (vz_gen != flux_vz->at(j)/10) cout << "vz " << vz_gen << " " << flux_vz->at(j)/10 <<endl;	
+	  
+	hflux[hit_id]->Fill(theta_gen,p_gen);
+        hflux_vertexZ[hit_id]->Fill(theta_gen,vz_gen);
+        hflux_vertexR[hit_id]->Fill(theta_gen,sqrt(vx_gen*vx_gen+vy_gen*vy_gen));
+       
+// 	counter[hit_id]++;       
+    }        
+    if (counter_hit[0]>1 || counter_hit[1]>1) {
+      cout << counter_hit[0] << " " << counter_hit[1] << endl;
+      cout << "more than 1 hit???" << endl;
+//       break;
+    }
+//     for(int k=0;k<n;k++){
+//       if (counter[hit_id] > 1) cout << counter[hit_id] << " " << hit_id << endl;
+//       counter[hit_id]=0;
+//     }
+    
+}
+file->Close();
+
+if (Is_PVDIS){ 
+//   double planeZ[6]={40,68,96,124,152,180};
+//   double Rin[6]={2.11, 12.86, 23.61, 34.36, 45.10, 55.85};
+//   double Rout[6]={39.60, 59.94, 80.28, 100.63, 120.97, 141.31};
+double Rin[11]={5.00,  7.88, 13.53, 19.19, 24.85, 30.50, 36.16, 41.82, 47.47, 53.13, 58.79 };
+double Rout[11]={ 38.16, 47.96, 57.77, 67.57, 77.37, 87.18, 96.98, 106.78, 116.58, 126.39, 136.19 };
+TCanvas *c_baffleplate = new TCanvas("baffleplate","baffleplate",1350,900);
+c_baffleplate->Divide(4,3);
+// for (int i=0;i<11;i++){
+//   c_baffleplate->cd(i+1);      
+//   hbaffleplate_observer[i]->SetMarkerColor(kRed);  
+//   hbaffleplate_observer[i]->Draw("box");    
+// //   hbaffleplate[i]->Draw("same");  
+// //   hbaffleplate_observer[i]->Add(hbaffleplate[i],-1);
+//   TArc *c_in=new TArc(0,0,Rin[i]);
+//   c_in->SetLineColor(kBlack);
+//   c_in->SetFillStyle(0);  
+//   c_in->Draw();
+//   TArc *c_out=new TArc(0,0,Rout[i]);
+//   c_out->SetLineColor(kBlack);
+//   c_out->SetFillStyle(0);    
+//   c_out->Draw();
+// }
+for (int i=11;i<22;i++){
+  c_baffleplate->cd(i-11+1);      
+  hbaffleplate_observer[i]->SetMarkerColor(kBlue);  
+//   hbaffleplate_observer[i]->Draw("box same");    
+    hbaffleplate_observer[i]->Draw();    
+}
+c_baffleplate->SaveAs(Form("%s_%s",the_filename,"baffleplate.png"));
+}
+
+for(int i=0;i<n;i++) {
+  hacceptance[i]->Divide(hflux[i],hgen);  
+  hacceptance[i]->SetMinimum(0);  
+  hacceptance[i]->SetMaximum(1);  
+  hacceptance_vertexZ[i]->Divide(hflux_vertexZ[i],hgen_vertexZ); 
+  hacceptance_vertexZ[i]->SetMinimum(0);  
+  hacceptance_vertexZ[i]->SetMaximum(1);      
+  hacceptance_vertexR[i]->Divide(hflux_vertexR[i],hgen_vertexR);  
+  hacceptance_vertexR[i]->SetMinimum(0);  
+  hacceptance_vertexR[i]->SetMaximum(1);      
+  hacceptance_mom[i]=(TH1F*)hacceptance[i]->ProjectionY();
+  hacceptance_mom[i]->SetMinimum(0);  
+  hacceptance_mom[i]->SetMaximum(1);    
+  hacceptance_theta[i]=(TH1F*)hacceptance[i]->ProjectionX();
+  hacceptance_theta[i]->SetMinimum(0);  
+  hacceptance_theta[i]->SetMaximum(1);      
+}
+
+TCanvas *c_acc = new TCanvas("acc","acc",1200,800);
+c_acc->Divide(3,2);
+c_acc->cd(1);
+gPad->SetLogy(1);
+hacceptance[0]->Draw("colz");
+c_acc->cd(2);
+hacceptance_vertexZ[0]->Draw("colz");
+// hacceptance_mom[0]->Draw();
+c_acc->cd(3);
+hacceptance_vertexR[0]->Draw("colz");
+// hacceptance_theta[0]->Draw();
+c_acc->cd(4);
+gPad->SetLogy(1);
+hacceptance[1]->Draw("colz");
+c_acc->cd(5);
+hacceptance_vertexZ[1]->Draw("colz");
+// hacceptance_mom[1]->Draw();
+c_acc->cd(6);
+hacceptance_vertexR[1]->Draw("colz");
+// hacceptance_theta[1]->Draw();
+c_acc->SaveAs(Form("%s_%s",the_filename,"acc.png"));
+
+TCanvas *c_gen = new TCanvas("gen","gen",1200,600);
+c_gen->Divide(3,1);
+c_gen->cd(1);
+hgen->Draw("colz");
+c_gen->cd(2);
+hgen_vertexZ->Draw("colz");
+c_gen->cd(3);
+hgen_vertexR->Draw("colz");
+
+TCanvas *c_flux = new TCanvas("flux","flux",1200,600);
+c_flux->Divide(3,2);
+c_flux->cd(1);
+hflux[0]->Draw("colz");
+c_flux->cd(2);
+hflux_vertexZ[0]->Draw("colz");
+c_flux->cd(3);
+hflux_vertexR[0]->Draw("colz");
+c_flux->cd(4);
+hflux[1]->Draw("colz");
+c_flux->cd(5);
+hflux_vertexZ[1]->Draw("colz");
+c_flux->cd(6);
+hflux_vertexR[1]->Draw("colz");
+c_flux->SaveAs(Form("%s_%s",the_filename,"flux.png"));
+
+TCanvas *c_hit_rz = new TCanvas("hit_rz","hit_rz",1800,800);
+hhit_rz->Draw("colz");
+
+TCanvas *c_hit_rMom = new TCanvas("hit_rMom","hit_rMom",1800,800);
+c_hit_rMom->Divide(2,1);
+for(int k=0;k<n;k++){
+c_hit_rMom->cd(k+1);
+gPad->SetLogz(1);
+gPad->SetLogy(1);
+hhit_rMom[k]->Draw("colz");
+}
+c_hit_rMom->SaveAs(Form("%s_%s",the_filename,"hit_rMom.png"));
+
+TCanvas *c_hit_phidiffMom = new TCanvas("hit_phidiffMom","hit_phidiffMom",1800,800);
+c_hit_phidiffMom->Divide(2,1);
+for(int k=0;k<n;k++){
+c_hit_phidiffMom->cd(k+1);
+gPad->SetLogz(1);
+hhit_phidiffMom[k]->Draw("colz");
+}
+c_hit_phidiffMom->SaveAs(Form("%s_%s",the_filename,"hit_phidiffMom.png"));
+
+TCanvas *c_hit_thetadiffMom = new TCanvas("hit_thetadiffMom","hit_thetadiffMom",1800,800);
+c_hit_thetadiffMom->Divide(2,1);
+for(int k=0;k<n;k++){
+c_hit_thetadiffMom->cd(k+1);
+gPad->SetLogz(1);
+hhit_thetadiffMom[k]->Draw("colz");
+}
+c_hit_thetadiffMom->SaveAs(Form("%s_%s",the_filename,"hit_thetadiffMom.png"));
+
+TCanvas *c_hit_xy = new TCanvas("hit_xy","hit_xy",1800,800);
+c_hit_xy->Divide(2,1);
+for(int k=0;k<n;k++){
+c_hit_xy->cd(k+1);
+gPad->SetLogz(1);
+hhit_xy[k]->Draw("colz");
+}
+c_hit_xy->SaveAs(Form("%s_%s",the_filename,"hit_xy.png"));
+
+// TCanvas *c_acceptance_all_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
+// c_acceptance_all_gem->Divide(2,3);
+// for(int k=0;k<6;k++){
+// c_acceptance_all_gem->cd(k+1);
+// hacceptance[k]->Draw("colz");
+// char hsttitle[80];
+// sprintf(hsttitle,"acceptance at GEM plane %i;theta (degree);P (GeV)",k+1);
+// hacceptance[k]->SetTitle(hsttitle);
+// }
+// c_acceptance_all_gem->SaveAs("acceptance_gem.png");
+
+// TCanvas *c_acceptance_all_gem_1D = new TCanvas("acceptance_gem_1D","acceptance_gem_1D",1800,800);
+// c_acceptance_all_gem_1D->Divide(2,6);
+// for(int k=0;k<6;k++){
+// c_acceptance_all_gem_1D->cd(k+1);
+// hacceptance_mom[k]->Draw();
+// c_acceptance_all_gem_1D->cd(6+k+1);
+// hacceptance_theta[k]->Draw();
+// }
+
+hacceptance_forwardangle=(TH2F*) hacceptance[0]->Clone("acceptance_forwardangle");
+hacceptance_forwardangle->SetNameTitle("acceptance_forwardangle","acceptance at forwardangle;vertex Theta (degree);P (GeV)");
+hacceptance_largeangle=(TH2F*) hacceptance[1]->Clone("acceptance_largeangle");
+hacceptance_largeangle->SetNameTitle("acceptance_largeangle","acceptance at largeangle;vertex Theta (degree);P (GeV)");
+hacceptance_overall=(TH2F*) hacceptance_largeangle->Clone();
+hacceptance_overall->Add(hacceptance_forwardangle);
+hacceptance_overall->SetNameTitle("acceptance","acceptance;vertex Theta (degree);P (GeV)");
+
+// gStyle->SetOptStat(0);
+
+if (Is_PVDIS){ 
+TCanvas *c_acceptance_all = new TCanvas("acceptance_all","acceptance_all",800,600);
+// c_acceptance_all->Divide(1,3);
+// c_acceptance_all->cd(1);
+// gPad->SetLogy(1);  
+hacceptance_overall->SetMinimum(0);  
+hacceptance_overall->SetMaximum(1);  
+hacceptance_overall->Draw("colz");
+c_acceptance_all->SaveAs(Form("%s_%s",the_filename,"acceptance_all.png"));
+}
+else{
+TCanvas *c_acceptance_all = new TCanvas("acceptance_all","acceptance_all",500,900);
+c_acceptance_all->Divide(1,3);
+c_acceptance_all->cd(1);
+gPad->SetLogy();
+gPad->SetGrid();
+hacceptance_forwardangle->SetMinimum(0);  
+hacceptance_forwardangle->SetMaximum(1);  
+hacceptance_forwardangle->Draw("colz");
+c_acceptance_all->cd(2);
+gPad->SetLogy();
+gPad->SetGrid();
+hacceptance_largeangle->SetMinimum(0);  
+hacceptance_largeangle->SetMaximum(1); 
+hacceptance_largeangle->Draw("colz");
+c_acceptance_all->cd(3);
+gPad->SetLogy();
+gPad->SetGrid();
+hacceptance_overall->SetMinimum(0);  
+hacceptance_overall->SetMaximum(1);  
+hacceptance_overall->Draw("colz");
+c_acceptance_all->SaveAs(Form("%s_%s",the_filename,"acceptance_all.png"));
+}
+
+//checking acceptance hole
+int NbinsX,NbinsY;
+NbinsX=hacceptance_forwardangle->GetXaxis()->GetNbins();
+NbinsY=hacceptance_forwardangle->GetYaxis()->GetNbins();
+cout << "checking hacceptance_forwardangle" << ",";
+for(int j=1;j<NbinsY;j++){
+  int count=0;
+  bool Is_acc=false;
+  for(int i=1;i<NbinsX;i++){
+    if (hacceptance_forwardangle->GetBinContent(i,j)>0 && !Is_acc) {Is_acc=true;count++;}
+    if (hacceptance_forwardangle->GetBinContent(i,j)==0 && Is_acc) {Is_acc=false;count++;} 
+  }
+  if (count !=2 && count !=0) cout << count << " " << j << ",";
+}
+cout << endl;
+NbinsX=hacceptance_largeangle->GetXaxis()->GetNbins();
+NbinsY=hacceptance_largeangle->GetYaxis()->GetNbins();
+cout << "checking hacceptance_largeangle" << ",";
+for(int j=1;j<NbinsY;j++){
+  int count=0;
+  bool Is_acc=false;
+  for(int i=1;i<NbinsX;i++){
+    if (hacceptance_largeangle->GetBinContent(i,j)>0 && !Is_acc) {Is_acc=true;count++;}
+    if (hacceptance_largeangle->GetBinContent(i,j)==0 && Is_acc) {Is_acc=false;count++;} 
+  }
+  if (count !=2) cout << count << " " << j << ",";
+}
+cout << endl;
+
+hacceptance_forwardangle->SetDirectory(outputfile);
+hacceptance_largeangle->SetDirectory(outputfile);
+hacceptance_overall->SetDirectory(outputfile);
+
+outputfile->Write();
+outputfile->Flush();
+
+}
