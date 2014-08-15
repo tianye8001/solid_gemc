@@ -26,10 +26,11 @@
 <option name="BEAM_V"   value="(0,0,-350)cm"/>
 <option name="SPREAD_V" value="(0.21,20)cm"/>
 
-<option name="N" value="1e6"/>
+<option name="MAX_FIELD_STEP" value="0"/>
+
+<option name="N" value="1e7"/>
 <option name="OUTPUT" value="evio,solid_SIDIS_He3_electron.evio"/>
 <option name="USE_GUI"  value="0"/>
-
 
 </gcard>
 

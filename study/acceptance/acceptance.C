@@ -213,7 +213,8 @@ else if (Is_JPsi){
 }
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
-   
+int counter_decay_incomplete=0;
+
 for (Int_t i=0;i<nevent;i++) { 
   cout << i << "\r";
 //   cout << i << "\n";
@@ -246,6 +247,7 @@ for (Int_t i=0;i<nevent;i++) {
     
     int counter_hit[2]={0,0};
 //   int counter[n]={0,0,0,0,0,0,0,0,0,0};  
+    int Is_decay=false;
     for (Int_t j=0;j<flux_hitn->size();j++) {
 //       cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
     
@@ -265,9 +267,7 @@ for (Int_t i=0;i<nevent;i++) {
     if (flux_id->at(j)==3110000) hit_id=0;
     if (flux_id->at(j)==3210000) hit_id=1;    
     if (hit_id==-1) continue;  //skip other subsubdetector
-
-    counter_hit[hit_id]++;
-    
+   
     double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);  
     double hit_phi=atan2(py_gen,px_gen)*DEG;
 //     double hit_phi=fabs(atan(hit_y/hit_x)*DEG);
@@ -285,9 +285,15 @@ for (Int_t i=0;i<nevent;i++) {
     
 //     if(mom > 1.4) continue;
                    
-       if ((detector_ID==3 && subdetector_ID==2) && (r/10 < rin_cut_LA || rout_cut_LA < r/10)) continue;
-       if ((detector_ID==3 && subdetector_ID==1) && (r/10 < rin_cut_FA || rout_cut_FA < r/10)) continue;    
-       if (flux_pid->at(j)!= pid_gen) {cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; continue;}
+      if ((detector_ID==3 && subdetector_ID==2) && (r/10 < rin_cut_LA || rout_cut_LA < r/10)) continue;
+      if ((detector_ID==3 && subdetector_ID==1) && (r/10 < rin_cut_FA || rout_cut_FA < r/10)) continue;    
+      if (flux_pid->at(j)!= pid_gen) {
+	Is_decay=true; 
+	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; 
+	continue;	 
+      }
+       
+       counter_hit[hit_id]++;       
        
        ///DIRC cut
 //        double x=flux_avg_x->at(j)/10,y=flux_avg_y->at(j)/10;
@@ -307,11 +313,15 @@ for (Int_t i=0;i<nevent;i++) {
        
 // 	counter[hit_id]++;       
     }        
+    
     if (counter_hit[0]>1 || counter_hit[1]>1) {
       cout << counter_hit[0] << " " << counter_hit[1] << endl;
       cout << "more than 1 hit???" << endl;
 //       break;
     }
+    
+    if (Is_decay) counter_decay_incomplete++;
+    
 //     for(int k=0;k<n;k++){
 //       if (counter[hit_id] > 1) cout << counter[hit_id] << " " << hit_id << endl;
 //       counter[hit_id]=0;
@@ -319,6 +329,8 @@ for (Int_t i=0;i<nevent;i++) {
     
 }
 file->Close();
+
+cout << "counter_decay_incomplete " << counter_decay_incomplete << endl;
 
 if (Is_PVDIS){ 
 //   double planeZ[6]={40,68,96,124,152,180};
