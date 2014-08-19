@@ -4,7 +4,7 @@
 <option name="DBUSER" value="soliduser"/>
 <option name="DBPSWD" value="ilovesolid"/>
 
-<detector name="../../solid_gemc2/geometry/solid_SIDIS_NH3_simple" factory="TEXT" variation="Original"/>
+<detector name="../../solid_gemc2/geometry/solid_SIDIS_He3_simple" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
@@ -21,17 +21,16 @@
 <option name="FIELD_DIR" value="../../solid_gemc2/field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
-<option name="BEAM_P"   value="pi+,5.5*GeV,20*deg,0*deg"/>
+<option name="BEAM_P"   value="pi-,5.5*GeV,20*deg,0*deg"/>
 <option name="SPREAD_P" value="5.5*GeV,20*deg,180*deg"/>
 <option name="BEAM_V"   value="(0,0,-350)cm"/>
-<option name="SPREAD_V" value="(0.21,1.423)cm"/>
+<option name="SPREAD_V" value="(0.21,20)cm"/>
 
 <option name="MAX_FIELD_STEP" value="0"/>
 
 <option name="N" value="1e7"/>
-<option name="OUTPUT" value="evio,solid_SIDIS_NH3_pionp.evio"/>
+<option name="OUTPUT" value="evio,acceptance_solid_SIDIS_He3_pionm.evio"/>
 <option name="USE_GUI"  value="0"/>
-
 
 </gcard>
 

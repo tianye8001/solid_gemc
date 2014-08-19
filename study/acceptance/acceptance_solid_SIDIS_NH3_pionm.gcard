@@ -29,7 +29,7 @@
 <option name="MAX_FIELD_STEP" value="0"/>
 
 <option name="N" value="1e7"/>
-<option name="OUTPUT" value="evio,solid_SIDIS_NH3_pionm.evio"/>
+<option name="OUTPUT" value="evio,acceptance_solid_SIDIS_NH3_pionm.evio"/>
 <option name="USE_GUI"  value="0"/>
 
 

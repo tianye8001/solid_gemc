@@ -43,50 +43,81 @@ char output_filename[200];
 sprintf(output_filename, "%s_output.root",the_filename);
 TFile *outputfile=new TFile(output_filename, "recreate");
 
-TH2F *hacceptance_forwardangle,*hacceptance_largeangle,*hacceptance_overall;
-
 const int n=2;
 
-TH2F *hgen=new TH2F("gen","gen",250,0,50,220,0,11);   
-TH2F *hgen_vertexZ=new TH2F("gen_vertexZ","gen_vertexZ",350,15,50,50,-15,35);
-TH2F *hgen_vertexR=new TH2F("gen_vertexR","gen_vertexR",350,15,50,50,0,1);
+TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","gen_ThetaP",250,0,50,220,0,11);
+TH2F *hgen_ThetaPhi=new TH2F("gen_ThetaPhi","gen_ThetaPhi",250,0,50,360,-180,180);     
+TH2F *hgen_PhiP=new TH2F("gen_PhiP","gen_PhiP",360,-180,180,220,0,11);
+TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",100,0,50,180,-180,180,110,0,11);   
 
-TH1F *hflux_mom[n],*hflux_theta[n];
-TH2F *hflux[n],*hflux_vertexZ[n],*hflux_vertexR[n];
-TH1F *hacceptance_mom[n],*hacceptance_theta[n];
-TH2F *hacceptance[n],*hacceptance_vertexZ[n],*hacceptance_vertexR[n];
+TH2F *hgen_ThetaVz=new TH2F("gen_ThetaVz","gen_ThetaVz",350,15,50,50,-15,35);
+TH2F *hgen_ThetaVr=new TH2F("gen_ThetaVr","gen_ThetaVr",350,15,50,50,0,1);
+
+TH1F *hflux_P[n],*hflux_theta[n];
+TH2F *hflux_ThetaP[n],*hflux_ThetaPhi[n],*hflux_PhiP[n];
+TH3F *hflux_ThetaPhiP[n];
+TH2F *hflux_ThetaVz[n],*hflux_ThetaVr[n];
+TH1F *hacceptance_P[n],*hacceptance_theta[n];
+TH2F *hacceptance_ThetaP[n],*hacceptance_ThetaPhi[n],*hacceptance_PhiP[n];
+TH3F *hacceptance_ThetaPhiP[n];
+TH2F *hacceptance_ThetaVz[n],*hacceptance_ThetaVr[n];
 TH2F *hhit_rMom[n],*hhit_xy[n];
 TH2F *hhit_phidiffMom[n],*hhit_thetadiffMom[n];
 TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);  
+
+char *title[n]={"FAEC","LAEC"};
 for(int i=0;i<n;i++){
-     char hstname[100];  
-   sprintf(hstname,"flux_mom_%i",i);
-   hflux_mom[i]=new TH1F(hstname,hstname,220,0,11);
+   char hstname[100];
+   
+   sprintf(hstname,"flux_P_%i",i);
+   hflux_P[i]=new TH1F(hstname,hstname,220,0,11);
    sprintf(hstname,"flux_theta_%i",i);
    hflux_theta[i]=new TH1F(hstname,hstname,250,0,50); 
-   sprintf(hstname,"flux_%i",i);
-   hflux[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);     
-   hflux[i]->SetTitle("particles detected by EC;vertex Theta (deg);P (GeV)");
-   sprintf(hstname,"flux_vertexZ_%i",i);
-   hflux_vertexZ[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
-   hflux_vertexZ[i]->SetTitle("particles detected by EC;vertex Theta (deg);vertex Z (cm)");   
-   sprintf(hstname,"flux_vertexR_%i",i);
-   hflux_vertexR[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
-   hflux_vertexR[i]->SetTitle("particles detected by EC;vertex Theta (deg);vertex R (cm)");      
+   
+   sprintf(hstname,"flux_ThetaP_%i",i);
+   hflux_ThetaP[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);        
+   hflux_ThetaP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);P (GeV)",title[i]));
+   sprintf(hstname,"flux_ThetaPhi_%i",i);   
+   hflux_ThetaPhi[i]=new TH2F(hstname,hstname,250,0,50,360,-180,180); 
+   hflux_ThetaPhi[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (GeV)",title[i]));
+   sprintf(hstname,"flux_PhiP_%i",i);
+   hflux_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
+   hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));
+   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,100,0,50,180,-180,180,110,0,11);   
+   hflux_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
+   
+   sprintf(hstname,"flux_ThetaVz_%i",i);
+   hflux_ThetaVz[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
+   hflux_ThetaVz[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Z (cm)",title[i]));   
+   sprintf(hstname,"flux_ThetaVr_%i",i);
+   hflux_ThetaVr[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
+   hflux_ThetaVr[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex R (cm)",title[i]));  
+   sprintf(hstname,"flux_ThetaPhiP_%i",i);   
   
-   sprintf(hstname,"acceptance_mom_%i",i);
-   hacceptance_mom[i]=new TH1F(hstname,hstname,220,0,11);
+   sprintf(hstname,"acceptance_P_%i",i);
+   hacceptance_P[i]=new TH1F(hstname,hstname,220,0,11);
    sprintf(hstname,"acceptance_theta_%i",i);
-   hacceptance_theta[i]=new TH1F(hstname,hstname,250,0,50); 
-   sprintf(hstname,"acceptance_%i",i);
-   hacceptance[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);   
-   hacceptance[i]->SetTitle("acceptance;vertex Theta (deg);P (GeV)");   
-   sprintf(hstname,"acceptance_vertexZ_%i",i);
-   hacceptance_vertexZ[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
-   hacceptance_vertexZ[i]->SetTitle("acceptance;vertex Theta (deg);vertex Z (cm)");      
-   sprintf(hstname,"acceptance_vertexR_%i",i);
-   hacceptance_vertexR[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
-   hacceptance_vertexR[i]->SetTitle("acceptance;vertex Theta (deg);vertex R (cm)");         
+   hacceptance_theta[i]=new TH1F(hstname,hstname,250,0,50);     
+   
+   sprintf(hstname,"acceptance_ThetaP_%i",i);
+   hacceptance_ThetaP[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);     
+   hacceptance_ThetaP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);P (GeV)",title[i]));
+   sprintf(hstname,"acceptance_ThetaPhi_%i",i);
+   hacceptance_ThetaPhi[i]=new TH2F(hstname,hstname,250,0,50,360,-180,180);     
+   hacceptance_ThetaPhi[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg)",title[i]));
+   sprintf(hstname,"acceptance_PhiP_%i",i);
+   hacceptance_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
+   hacceptance_PhiP[i]->SetTitle(Form("acceptance by %s;vertex Phi (deg);P (GeV)",title[i]));      
+   sprintf(hstname,"acceptance_ThetaPhiP_%i",i);   
+   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,100,0,50,180,-180,180,110,0,11);   
+   hacceptance_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));
+
+   sprintf(hstname,"acceptance_ThetaVz_%i",i);
+   hacceptance_ThetaVz[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
+   hacceptance_ThetaVz[i]->SetTitle("acceptance;vertex Theta (deg);vertex Z (cm)");      
+   sprintf(hstname,"acceptance_ThetaVr_%i",i);
+   hacceptance_ThetaVr[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
+   hacceptance_ThetaVr[i]->SetTitle("acceptance;vertex Theta (deg);vertex R (cm)");         
    
    sprintf(hstname,"hit_rMom_%i",i);
    hhit_rMom[i]=new TH2F(hstname,hstname,300,0,300,220,0,11);  
@@ -238,9 +269,13 @@ for (Int_t i=0;i<nevent;i++) {
       theta_gen=acos(pz_gen/p_gen)*DEG;  	//in deg
       phi_gen=atan2(py_gen,px_gen)*DEG;     	//in deg
             
-      hgen->Fill(theta_gen,p_gen);
-      hgen_vertexZ->Fill(theta_gen,vz_gen);
-      hgen_vertexR->Fill(theta_gen,sqrt(vx_gen*vx_gen+vy_gen*vy_gen));      
+      hgen_ThetaP->Fill(theta_gen,p_gen);      
+      hgen_ThetaPhi->Fill(theta_gen,phi_gen);            
+      hgen_PhiP->Fill(phi_gen,p_gen);
+      hgen_ThetaPhiP->Fill(theta_gen,phi_gen,p_gen);      
+      
+      hgen_ThetaVz->Fill(theta_gen,vz_gen);
+      hgen_ThetaVr->Fill(theta_gen,sqrt(vx_gen*vx_gen+vy_gen*vy_gen));      
   }  
   
     tree_flux->GetEntry(i);    
@@ -307,9 +342,13 @@ for (Int_t i=0;i<nevent;i++) {
 //         if (vy_gen != flux_vy->at(j)/10) cout << "vy " << vy_gen << " " << flux_vy->at(j)/10 <<endl;
 //         if (vz_gen != flux_vz->at(j)/10) cout << "vz " << vz_gen << " " << flux_vz->at(j)/10 <<endl;	
 	  
-	hflux[hit_id]->Fill(theta_gen,p_gen);
-        hflux_vertexZ[hit_id]->Fill(theta_gen,vz_gen);
-        hflux_vertexR[hit_id]->Fill(theta_gen,sqrt(vx_gen*vx_gen+vy_gen*vy_gen));
+	hflux_ThetaP[hit_id]->Fill(theta_gen,p_gen);
+	hflux_ThetaPhi[hit_id]->Fill(theta_gen,phi_gen);            
+	hflux_PhiP[hit_id]->Fill(phi_gen,p_gen);	
+	hflux_ThetaPhiP[hit_id]->Fill(theta_gen,phi_gen,p_gen);
+	
+        hflux_ThetaVz[hit_id]->Fill(theta_gen,vz_gen);
+        hflux_ThetaVr[hit_id]->Fill(theta_gen,sqrt(vx_gen*vx_gen+vy_gen*vy_gen));
        
 // 	counter[hit_id]++;       
     }        
@@ -365,19 +404,28 @@ c_baffleplate->SaveAs(Form("%s_%s",the_filename,"baffleplate.png"));
 }
 
 for(int i=0;i<n;i++) {
-  hacceptance[i]->Divide(hflux[i],hgen);  
-  hacceptance[i]->SetMinimum(0);  
-  hacceptance[i]->SetMaximum(1);  
-  hacceptance_vertexZ[i]->Divide(hflux_vertexZ[i],hgen_vertexZ); 
-  hacceptance_vertexZ[i]->SetMinimum(0);  
-  hacceptance_vertexZ[i]->SetMaximum(1);      
-  hacceptance_vertexR[i]->Divide(hflux_vertexR[i],hgen_vertexR);  
-  hacceptance_vertexR[i]->SetMinimum(0);  
-  hacceptance_vertexR[i]->SetMaximum(1);      
-  hacceptance_mom[i]=(TH1F*)hacceptance[i]->ProjectionY();
-  hacceptance_mom[i]->SetMinimum(0);  
-  hacceptance_mom[i]->SetMaximum(1);    
-  hacceptance_theta[i]=(TH1F*)hacceptance[i]->ProjectionX();
+  hacceptance_ThetaP[i]->Divide(hflux_ThetaP[i],hgen_ThetaP);  
+  hacceptance_ThetaP[i]->SetMinimum(0);  
+  hacceptance_ThetaP[i]->SetMaximum(1);  
+  hacceptance_ThetaPhi[i]->Divide(hflux_ThetaPhi[i],hgen_ThetaPhi);  
+  hacceptance_ThetaPhi[i]->SetMinimum(0);  
+  hacceptance_ThetaPhi[i]->SetMaximum(1);  
+  hacceptance_PhiP[i]->Divide(hflux_PhiP[i],hgen_PhiP);  
+  hacceptance_PhiP[i]->SetMinimum(0);  
+  hacceptance_PhiP[i]->SetMaximum(1);    
+  hacceptance_ThetaPhiP[i]->Divide(hflux_ThetaPhiP[i],hgen_ThetaPhiP);  
+  hacceptance_ThetaPhiP[i]->SetMinimum(0);  
+  hacceptance_ThetaPhiP[i]->SetMaximum(1); 
+  hacceptance_ThetaVz[i]->Divide(hflux_ThetaVz[i],hgen_ThetaVz); 
+  hacceptance_ThetaVz[i]->SetMinimum(0);  
+  hacceptance_ThetaVz[i]->SetMaximum(1);      
+  hacceptance_ThetaVr[i]->Divide(hflux_ThetaVr[i],hgen_ThetaVr);  
+  hacceptance_ThetaVr[i]->SetMinimum(0);  
+  hacceptance_ThetaVr[i]->SetMaximum(1);      
+  hacceptance_P[i]=(TH1F*)hacceptance_ThetaP[i]->ProjectionY();
+  hacceptance_P[i]->SetMinimum(0);  
+  hacceptance_P[i]->SetMaximum(1);    
+  hacceptance_theta[i]=(TH1F*)hacceptance_ThetaP[i]->ProjectionX();
   hacceptance_theta[i]->SetMinimum(0);  
   hacceptance_theta[i]->SetMaximum(1);      
 }
@@ -386,48 +434,64 @@ TCanvas *c_acc = new TCanvas("acc","acc",1200,800);
 c_acc->Divide(3,2);
 c_acc->cd(1);
 gPad->SetLogy(1);
-hacceptance[0]->Draw("colz");
+hacceptance_ThetaP[0]->Draw("colz");
 c_acc->cd(2);
-hacceptance_vertexZ[0]->Draw("colz");
-// hacceptance_mom[0]->Draw();
+hacceptance_ThetaPhi[0]->Draw("colz");
 c_acc->cd(3);
-hacceptance_vertexR[0]->Draw("colz");
-// hacceptance_theta[0]->Draw();
+hacceptance_PhiP[0]->Draw("colz");
 c_acc->cd(4);
 gPad->SetLogy(1);
-hacceptance[1]->Draw("colz");
+hacceptance_ThetaP[1]->Draw("colz");
 c_acc->cd(5);
-hacceptance_vertexZ[1]->Draw("colz");
-// hacceptance_mom[1]->Draw();
+hacceptance_ThetaPhi[1]->Draw("colz");
 c_acc->cd(6);
-hacceptance_vertexR[1]->Draw("colz");
-// hacceptance_theta[1]->Draw();
+hacceptance_PhiP[1]->Draw("colz");
 c_acc->SaveAs(Form("%s_%s",the_filename,"acc.png"));
 
-TCanvas *c_gen = new TCanvas("gen","gen",1200,600);
-c_gen->Divide(3,1);
-c_gen->cd(1);
-hgen->Draw("colz");
-c_gen->cd(2);
-hgen_vertexZ->Draw("colz");
-c_gen->cd(3);
-hgen_vertexR->Draw("colz");
+TCanvas *c_acc_vertex = new TCanvas("acc_vertex","acc_vertex",1200,800);
+c_acc_vertex->Divide(2,2);
+c_acc_vertex->cd(1);
+hacceptance_ThetaVz[0]->Draw("colz");
+c_acc_vertex->cd(2);
+hacceptance_ThetaVr[0]->Draw("colz");
+c_acc_vertex->cd(3);
+hacceptance_ThetaVz[1]->Draw("colz");
+c_acc_vertex->cd(4);
+hacceptance_ThetaVr[1]->Draw("colz");
 
-TCanvas *c_flux = new TCanvas("flux","flux",1200,600);
-c_flux->Divide(3,2);
-c_flux->cd(1);
-hflux[0]->Draw("colz");
-c_flux->cd(2);
-hflux_vertexZ[0]->Draw("colz");
-c_flux->cd(3);
-hflux_vertexR[0]->Draw("colz");
-c_flux->cd(4);
-hflux[1]->Draw("colz");
-c_flux->cd(5);
-hflux_vertexZ[1]->Draw("colz");
-c_flux->cd(6);
-hflux_vertexR[1]->Draw("colz");
-c_flux->SaveAs(Form("%s_%s",the_filename,"flux.png"));
+TCanvas *c_gen = new TCanvas("gen","gen",1800,600);
+c_gen->Divide(4,1);
+c_gen->cd(1);
+hgen_ThetaP->Draw("colz");
+c_gen->cd(2);
+hgen_ThetaPhi->Draw("colz");
+c_gen->cd(3);
+hgen_PhiP->Draw("colz");
+c_gen->cd(4);
+hgen_ThetaPhiP->Draw("box");
+
+TCanvas *c_gen_vertex = new TCanvas("gen_vertex","gen_vertex",1200,600);
+c_gen_vertex->Divide(2,1);
+c_gen_vertex->cd(1);
+hgen_ThetaVz->Draw("colz");
+c_gen_vertex->cd(2);
+hgen_ThetaVr->Draw("colz");
+
+// TCanvas *c_flux = new TCanvas("flux","flux",1200,600);
+// c_flux->Divide(3,2);
+// c_flux->cd(1);
+// hflux_ThetaP[0]->Draw("colz");
+// c_flux->cd(2);
+// hflux_ThetaVz[0]->Draw("colz");
+// c_flux->cd(3);
+// hflux_ThetaVr[0]->Draw("colz");
+// c_flux->cd(4);
+// hflux_ThetaP[1]->Draw("colz");
+// c_flux->cd(5);
+// hflux_ThetaVz[1]->Draw("colz");
+// c_flux->cd(6);
+// hflux_ThetaVr[1]->Draw("colz");
+// c_flux->SaveAs(Form("%s_%s",the_filename,"flux.png"));
 
 TCanvas *c_hit_rz = new TCanvas("hit_rz","hit_rz",1800,800);
 hhit_rz->Draw("colz");
@@ -440,7 +504,7 @@ gPad->SetLogz(1);
 gPad->SetLogy(1);
 hhit_rMom[k]->Draw("colz");
 }
-c_hit_rMom->SaveAs(Form("%s_%s",the_filename,"hit_rMom.png"));
+// c_hit_rMom->SaveAs(Form("%s_%s",the_filename,"hit_rMom.png"));
 
 TCanvas *c_hit_phidiffMom = new TCanvas("hit_phidiffMom","hit_phidiffMom",1800,800);
 c_hit_phidiffMom->Divide(2,1);
@@ -449,7 +513,7 @@ c_hit_phidiffMom->cd(k+1);
 gPad->SetLogz(1);
 hhit_phidiffMom[k]->Draw("colz");
 }
-c_hit_phidiffMom->SaveAs(Form("%s_%s",the_filename,"hit_phidiffMom.png"));
+// c_hit_phidiffMom->SaveAs(Form("%s_%s",the_filename,"hit_phidiffMom.png"));
 
 TCanvas *c_hit_thetadiffMom = new TCanvas("hit_thetadiffMom","hit_thetadiffMom",1800,800);
 c_hit_thetadiffMom->Divide(2,1);
@@ -458,7 +522,7 @@ c_hit_thetadiffMom->cd(k+1);
 gPad->SetLogz(1);
 hhit_thetadiffMom[k]->Draw("colz");
 }
-c_hit_thetadiffMom->SaveAs(Form("%s_%s",the_filename,"hit_thetadiffMom.png"));
+// c_hit_thetadiffMom->SaveAs(Form("%s_%s",the_filename,"hit_thetadiffMom.png"));
 
 TCanvas *c_hit_xy = new TCanvas("hit_xy","hit_xy",1800,800);
 c_hit_xy->Divide(2,1);
@@ -467,16 +531,16 @@ c_hit_xy->cd(k+1);
 gPad->SetLogz(1);
 hhit_xy[k]->Draw("colz");
 }
-c_hit_xy->SaveAs(Form("%s_%s",the_filename,"hit_xy.png"));
+// c_hit_xy->SaveAs(Form("%s_%s",the_filename,"hit_xy.png"));
 
 // TCanvas *c_acceptance_all_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
 // c_acceptance_all_gem->Divide(2,3);
 // for(int k=0;k<6;k++){
 // c_acceptance_all_gem->cd(k+1);
-// hacceptance[k]->Draw("colz");
+// hacceptance_ThetaP[k]->Draw("colz");
 // char hsttitle[80];
 // sprintf(hsttitle,"acceptance at GEM plane %i;theta (degree);P (GeV)",k+1);
-// hacceptance[k]->SetTitle(hsttitle);
+// hacceptance_ThetaP[k]->SetTitle(hsttitle);
 // }
 // c_acceptance_all_gem->SaveAs("acceptance_gem.png");
 
@@ -484,89 +548,127 @@ c_hit_xy->SaveAs(Form("%s_%s",the_filename,"hit_xy.png"));
 // c_acceptance_all_gem_1D->Divide(2,6);
 // for(int k=0;k<6;k++){
 // c_acceptance_all_gem_1D->cd(k+1);
-// hacceptance_mom[k]->Draw();
+// hacceptance_P[k]->Draw();
 // c_acceptance_all_gem_1D->cd(6+k+1);
 // hacceptance_theta[k]->Draw();
 // }
 
-hacceptance_forwardangle=(TH2F*) hacceptance[0]->Clone("acceptance_forwardangle");
-hacceptance_forwardangle->SetNameTitle("acceptance_forwardangle","acceptance at forwardangle;vertex Theta (degree);P (GeV)");
-hacceptance_largeangle=(TH2F*) hacceptance[1]->Clone("acceptance_largeangle");
-hacceptance_largeangle->SetNameTitle("acceptance_largeangle","acceptance at largeangle;vertex Theta (degree);P (GeV)");
-hacceptance_overall=(TH2F*) hacceptance_largeangle->Clone();
-hacceptance_overall->Add(hacceptance_forwardangle);
-hacceptance_overall->SetNameTitle("acceptance","acceptance;vertex Theta (degree);P (GeV)");
+TH2F *hacceptance_ThetaP_forwardangle=(TH2F*) hacceptance_ThetaP[0]->Clone();
+hacceptance_ThetaP_forwardangle->SetNameTitle("acceptance_ThetaP_forwardangle","acceptance_ThetaP at forwardangle;vertex Theta (degree);P (GeV)");
+TH2F *hacceptance_ThetaP_largeangle=(TH2F*) hacceptance_ThetaP[1]->Clone();
+hacceptance_ThetaP_largeangle->SetNameTitle("acceptance_ThetaP_largeangle","acceptance_ThetaP at largeangle;vertex Theta (degree);P (GeV)");
+TH2F *hacceptance_ThetaP_overall=(TH2F*) hacceptance_ThetaP_forwardangle->Clone();
+hacceptance_ThetaP_overall->Add(hacceptance_ThetaP_largeangle);
+hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP","acceptance_ThetaP overall;vertex Theta (degree);P (GeV)");
+hacceptance_ThetaP_overall->SetMinimum(0);  
+hacceptance_ThetaP_overall->SetMaximum(1);  
+
+TH2F *hacceptance_ThetaPhiP_forwardangle=(TH2F*) hacceptance_ThetaPhiP[0]->Clone();
+hacceptance_ThetaPhiP_forwardangle->SetNameTitle("acceptance_ThetaPhiP_forwardangle","acceptance_ThetaP at forwardangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
+TH2F *hacceptance_ThetaPhiP_largeangle=(TH2F*) hacceptance_ThetaPhiP[1]->Clone();
+hacceptance_ThetaPhiP_largeangle->SetNameTitle("acceptance_ThetaPhiP_largeangle","acceptance_ThetaP at largeangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
 
 // gStyle->SetOptStat(0);
 
 if (Is_PVDIS){ 
-TCanvas *c_acceptance_all = new TCanvas("acceptance_all","acceptance_all",800,600);
+TCanvas *c_acceptance_2D = new TCanvas("acceptance_2D","acceptance_2D",800,600);
 // c_acceptance_all->Divide(1,3);
 // c_acceptance_all->cd(1);
 // gPad->SetLogy(1);  
-hacceptance_overall->SetMinimum(0);  
-hacceptance_overall->SetMaximum(1);  
-hacceptance_overall->Draw("colz");
-c_acceptance_all->SaveAs(Form("%s_%s",the_filename,"acceptance_all.png"));
+hacceptance_ThetaP_forwardangle->Draw("colz");
+c_acceptance_2D->SaveAs(Form("%s_%s",the_filename,"acceptance_2D.png"));
 }
 else{
-TCanvas *c_acceptance_all = new TCanvas("acceptance_all","acceptance_all",500,900);
-c_acceptance_all->Divide(1,3);
-c_acceptance_all->cd(1);
+TCanvas *c_acceptance_2D = new TCanvas("acceptance_2D","acceptance_2D",500,900);
+c_acceptance_2D->Divide(1,3);
+c_acceptance_2D->cd(1);
 gPad->SetLogy();
 gPad->SetGrid();
-hacceptance_forwardangle->SetMinimum(0);  
-hacceptance_forwardangle->SetMaximum(1);  
-hacceptance_forwardangle->Draw("colz");
-c_acceptance_all->cd(2);
+hacceptance_ThetaP_forwardangle->Draw("colz");
+c_acceptance_2D->cd(2);
 gPad->SetLogy();
 gPad->SetGrid();
-hacceptance_largeangle->SetMinimum(0);  
-hacceptance_largeangle->SetMaximum(1); 
-hacceptance_largeangle->Draw("colz");
-c_acceptance_all->cd(3);
+hacceptance_ThetaP_largeangle->Draw("colz");
+c_acceptance_2D->cd(3);
 gPad->SetLogy();
 gPad->SetGrid();
-hacceptance_overall->SetMinimum(0);  
-hacceptance_overall->SetMaximum(1);  
-hacceptance_overall->Draw("colz");
-c_acceptance_all->SaveAs(Form("%s_%s",the_filename,"acceptance_all.png"));
+hacceptance_ThetaP_overall->Draw("colz");
+c_acceptance_2D->SaveAs(Form("%s_%s",the_filename,"acceptance_2D.png"));
+
+TCanvas *c_acceptance_3D = new TCanvas("acceptance_3D","acceptance_3D",1200,800);
+c_acceptance_3D->Divide(2,1);
+c_acceptance_3D->cd(1);
+hacceptance_ThetaPhiP_forwardangle->Draw("box");
+c_acceptance_3D->cd(2);
+hacceptance_ThetaPhiP_largeangle->Draw("box");
+c_acceptance_3D->SaveAs(Form("%s_%s",the_filename,"acceptance_3D.png"));
 }
 
-//checking acceptance hole
-int NbinsX,NbinsY;
-NbinsX=hacceptance_forwardangle->GetXaxis()->GetNbins();
-NbinsY=hacceptance_forwardangle->GetYaxis()->GetNbins();
-cout << "checking hacceptance_forwardangle" << ",";
+cout << "checking holes in acceptance plots" << endl;
+int NbinsX,NbinsY,NbinsZ;
+cout << "checking hacceptance_ThetaP_forwardangle" << ",";
+NbinsX=hacceptance_ThetaP_forwardangle->GetXaxis()->GetNbins();
+NbinsY=hacceptance_ThetaP_forwardangle->GetYaxis()->GetNbins();
 for(int j=1;j<NbinsY;j++){
   int count=0;
   bool Is_acc=false;
   for(int i=1;i<NbinsX;i++){
-    if (hacceptance_forwardangle->GetBinContent(i,j)>0 && !Is_acc) {Is_acc=true;count++;}
-    if (hacceptance_forwardangle->GetBinContent(i,j)==0 && Is_acc) {Is_acc=false;count++;} 
+    if (hacceptance_ThetaP_forwardangle->GetBinContent(i,j)>0 && !Is_acc) {Is_acc=true;count++;}
+    if (hacceptance_ThetaP_forwardangle->GetBinContent(i,j)==0 && Is_acc) {Is_acc=false;count++;} 
   }
-  if (count !=2 && count !=0) cout << count << " " << j << ",";
+  if (count !=2 && count !=0) cout << j << " " << count << ",";
 }
 cout << endl;
-NbinsX=hacceptance_largeangle->GetXaxis()->GetNbins();
-NbinsY=hacceptance_largeangle->GetYaxis()->GetNbins();
-cout << "checking hacceptance_largeangle" << ",";
+cout << "checking hacceptance_ThetaP_largeangle" << ",";
+NbinsX=hacceptance_ThetaP_largeangle->GetXaxis()->GetNbins();
+NbinsY=hacceptance_ThetaP_largeangle->GetYaxis()->GetNbins();
 for(int j=1;j<NbinsY;j++){
   int count=0;
   bool Is_acc=false;
   for(int i=1;i<NbinsX;i++){
-    if (hacceptance_largeangle->GetBinContent(i,j)>0 && !Is_acc) {Is_acc=true;count++;}
-    if (hacceptance_largeangle->GetBinContent(i,j)==0 && Is_acc) {Is_acc=false;count++;} 
+    if (hacceptance_ThetaP_largeangle->GetBinContent(i,j)>0 && !Is_acc) {Is_acc=true;count++;}
+    if (hacceptance_ThetaP_largeangle->GetBinContent(i,j)==0 && Is_acc) {Is_acc=false;count++;} 
   }
-  if (count !=2) cout << count << " " << j << ",";
+  if (count !=2) cout << j << " " << count << ",";
 }
 cout << endl;
+// cout << "checking hacceptance_ThetaPhiP_forwardangle" << ",";
+// NbinsX=hacceptance_ThetaPhiP_forwardangle->GetXaxis()->GetNbins();
+// NbinsY=hacceptance_ThetaPhiP_forwardangle->GetYaxis()->GetNbins();
+// NbinsZ=hacceptance_ThetaPhiP_forwardangle->GetZaxis()->GetNbins();
+// for(int k=1;k<NbinsZ;k++){
+// for(int j=1;j<NbinsY;j++){
+//   int count=0;
+//   bool Is_acc=false;
+//   for(int i=1;i<NbinsX;i++){
+//     if (hacceptance_ThetaPhiP_forwardangle->GetBinContent(i,j,k)>0 && !Is_acc) {Is_acc=true;count++;}
+//     if (hacceptance_ThetaPhiP_forwardangle->GetBinContent(i,j,k)==0 && Is_acc) {Is_acc=false;count++;} 
+//   }
+//   if (count !=2 && count !=0) cout << j << " " << k << " " << count << ",";
+// }}
+// cout << endl;
+// cout << "checking hacceptance_ThetaPhiP_largeangle" << ",";
+// NbinsX=hacceptance_ThetaPhiP_largeangle->GetXaxis()->GetNbins();
+// NbinsY=hacceptance_ThetaPhiP_largeangle->GetYaxis()->GetNbins();
+// NbinsZ=hacceptance_ThetaPhiP_largeangle->GetZaxis()->GetNbins();
+// for(int k=1;k<NbinsZ;k++){
+// for(int j=1;j<NbinsY;j++){
+//   int count=0;
+//   bool Is_acc=false;
+//   for(int i=1;i<NbinsX;i++){
+//     if (hacceptance_ThetaPhiP_largeangle->GetBinContent(i,j,k)>0 && !Is_acc) {Is_acc=true;count++;}
+//     if (hacceptance_ThetaPhiP_largeangle->GetBinContent(i,j,k)==0 && Is_acc) {Is_acc=false;count++;} 
+//   }
+//   if (count !=2 && count !=0) cout << j << " " << k << " " << count << ",";
+// }}
+// cout << endl;
 
-hacceptance_forwardangle->SetDirectory(outputfile);
-hacceptance_largeangle->SetDirectory(outputfile);
-hacceptance_overall->SetDirectory(outputfile);
+hacceptance_ThetaP_forwardangle->SetDirectory(outputfile);
+hacceptance_ThetaP_largeangle->SetDirectory(outputfile);
+hacceptance_ThetaP_overall->SetDirectory(outputfile);
+hacceptance_ThetaPhiP_forwardangle->SetDirectory(outputfile);
+hacceptance_ThetaPhiP_largeangle->SetDirectory(outputfile);
 
 outputfile->Write();
 outputfile->Flush();
-
 }
