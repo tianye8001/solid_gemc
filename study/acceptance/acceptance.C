@@ -84,7 +84,7 @@ for(int i=0;i<n;i++){
    hflux_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
    hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));
    hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,100,0,50,180,-180,180,110,0,11);   
-   hflux_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
+   hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
    
    sprintf(hstname,"flux_ThetaVz_%i",i);
    hflux_ThetaVz[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
@@ -217,7 +217,8 @@ if (Is_PVDIS){
 }
 else if (Is_SIDIS_He3 || Is_SIDIS_NH3){
   rout_cut_FA=220;     //target at -350,ec front at 415 with angle 15
-  rin_cut_FA=98;   //cut at the actual edge 
+//   rin_cut_FA=98;   //cut at the actual edge 
+  rin_cut_FA=105;   //cut at the actual edge
   rout_cut_LA=127;   //target at -350,ec front at -65 with angle 24
   rin_cut_LA=83;   //cut at the actual edge
   cout << " SIDIS_He3 and SIDIS_NH3 rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
@@ -324,7 +325,7 @@ for (Int_t i=0;i<nevent;i++) {
       if ((detector_ID==3 && subdetector_ID==1) && (r/10 < rin_cut_FA || rout_cut_FA < r/10)) continue;    
       if (flux_pid->at(j)!= pid_gen) {
 	Is_decay=true; 
-	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; 
+// 	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; 
 	continue;	 
       }
        
