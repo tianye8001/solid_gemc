@@ -43,6 +43,9 @@ char output_filename[200];
 sprintf(output_filename, "%s_output.root",the_filename);
 TFile *outputfile=new TFile(output_filename, "recreate");
 
+TH2F *hacceptance_ThetaP_forwardangle,*hacceptance_ThetaP_largeangle,*hacceptance_ThetaP_overall;
+TH3F *hacceptance_ThetaPhiP_forwardangle,*hacceptance_ThetaPhiP_largeangle;
+
 const int n=2;
 
 TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","gen_ThetaP",250,0,50,220,0,11);
@@ -128,6 +131,13 @@ for(int i=0;i<n;i++){
    
    sprintf(hstname,"hit_xy_%i",i);
    hhit_xy[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);     
+}
+
+TH2F *hhit_xy_gem[6];
+for(int i=0;i<6;i++){
+   char hstname[100];
+   sprintf(hstname,"hit_xy_gem_%i",i);
+   hhit_xy_gem[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
 }
 
 const int Nplate=22;
@@ -292,17 +302,22 @@ for (Int_t i=0;i<nevent;i++) {
     int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
 //     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID << endl;  
     
+    //check hit on baffleplate
 //     if (detector_ID==0 && subsubdetector_ID==0) hbaffleplate[subdetector_ID-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);
 //     if (detector_ID==0 && subsubdetector_ID==1) hbaffleplate_observer[subdetector_ID-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);
     if (flux_id->at(j)<100) hbaffleplate_observer[flux_id->at(j)-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);    
 
-       double r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));
-       hhit_rz->Fill(flux_avg_z->at(j)/10,r/10);
+     double r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));
+     hhit_rz->Fill(flux_avg_z->at(j)/10,r/10);
+    
+    //check hit on GEM
+    if (detector_ID==1) hhit_xy_gem[subdetector_ID-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);    
     
     int hit_id=-1;
     if (flux_id->at(j)==3110000) hit_id=0;
-    if (flux_id->at(j)==3210000) hit_id=1;    
-    if (hit_id==-1) continue;  //skip other subsubdetector
+    else if (flux_id->at(j)==3210000) hit_id=1;    
+    else if (flux_id->at(j)==1110000) hit_id=1;        
+    else if (hit_id==-1) continue;  //skip other subsubdetector
    
     double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);  
     double hit_phi=atan2(py_gen,px_gen)*DEG;
@@ -318,9 +333,7 @@ for (Int_t i=0;i<nevent;i++) {
     hhit_rMom[hit_id]->Fill(r/10,p_gen);   
     
      hhit_xy[hit_id]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);    
-    
-//     if(mom > 1.4) continue;
-                   
+                      
       if ((detector_ID==3 && subdetector_ID==2) && (r/10 < rin_cut_LA || rout_cut_LA < r/10)) continue;
       if ((detector_ID==3 && subdetector_ID==1) && (r/10 < rin_cut_FA || rout_cut_FA < r/10)) continue;    
       if (flux_pid->at(j)!= pid_gen) {
@@ -534,6 +547,14 @@ hhit_xy[k]->Draw("colz");
 }
 // c_hit_xy->SaveAs(Form("%s_%s",the_filename,"hit_xy.png"));
 
+TCanvas *c_hit_xy_gem = new TCanvas("hit_xy_gem","hit_xy_gem",1800,800);
+c_hit_xy_gem->Divide(3,2);
+for(int k=0;k<6;k++){
+c_hit_xy_gem->cd(k+1);
+gPad->SetLogz(1);
+hhit_xy_gem[k]->Draw("colz");
+}
+
 // TCanvas *c_acceptance_all_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
 // c_acceptance_all_gem->Divide(2,3);
 // for(int k=0;k<6;k++){
@@ -554,19 +575,19 @@ hhit_xy[k]->Draw("colz");
 // hacceptance_theta[k]->Draw();
 // }
 
-TH2F *hacceptance_ThetaP_forwardangle=(TH2F*) hacceptance_ThetaP[0]->Clone();
+hacceptance_ThetaP_forwardangle=(TH2F*) hacceptance_ThetaP[0]->Clone();
 hacceptance_ThetaP_forwardangle->SetNameTitle("acceptance_ThetaP_forwardangle","acceptance_ThetaP at forwardangle;vertex Theta (degree);P (GeV)");
-TH2F *hacceptance_ThetaP_largeangle=(TH2F*) hacceptance_ThetaP[1]->Clone();
+hacceptance_ThetaP_largeangle=(TH2F*) hacceptance_ThetaP[1]->Clone();
 hacceptance_ThetaP_largeangle->SetNameTitle("acceptance_ThetaP_largeangle","acceptance_ThetaP at largeangle;vertex Theta (degree);P (GeV)");
-TH2F *hacceptance_ThetaP_overall=(TH2F*) hacceptance_ThetaP_forwardangle->Clone();
+hacceptance_ThetaP_overall=(TH2F*) hacceptance_ThetaP_forwardangle->Clone();
 hacceptance_ThetaP_overall->Add(hacceptance_ThetaP_largeangle);
 hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP","acceptance_ThetaP overall;vertex Theta (degree);P (GeV)");
 hacceptance_ThetaP_overall->SetMinimum(0);  
 hacceptance_ThetaP_overall->SetMaximum(1);  
 
-TH2F *hacceptance_ThetaPhiP_forwardangle=(TH2F*) hacceptance_ThetaPhiP[0]->Clone();
+hacceptance_ThetaPhiP_forwardangle=(TH3F*) hacceptance_ThetaPhiP[0]->Clone();
 hacceptance_ThetaPhiP_forwardangle->SetNameTitle("acceptance_ThetaPhiP_forwardangle","acceptance_ThetaP at forwardangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
-TH2F *hacceptance_ThetaPhiP_largeangle=(TH2F*) hacceptance_ThetaPhiP[1]->Clone();
+hacceptance_ThetaPhiP_largeangle=(TH3F*) hacceptance_ThetaPhiP[1]->Clone();
 hacceptance_ThetaPhiP_largeangle->SetNameTitle("acceptance_ThetaPhiP_largeangle","acceptance_ThetaP at largeangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
 
 // gStyle->SetOptStat(0);
