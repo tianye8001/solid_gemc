@@ -79,13 +79,13 @@ for(int i=0;i<n;i++){
    
    sprintf(hstname,"flux_ThetaP_%i",i);
    hflux_ThetaP[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);        
-   hflux_ThetaP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);P (GeV)",title[i]));
+   hflux_ThetaP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);P (GeV)",title[i]));   
    sprintf(hstname,"flux_ThetaPhi_%i",i);   
    hflux_ThetaPhi[i]=new TH2F(hstname,hstname,250,0,50,360,-180,180); 
-   hflux_ThetaPhi[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (GeV)",title[i]));
-   sprintf(hstname,"flux_PhiP_%i",i);
+   hflux_ThetaPhi[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (GeV)",title[i]));   
+   sprintf(hstname,"flux_PhiP_%i",i);   
    hflux_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
-   hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));
+   hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));  
    hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,100,0,50,180,-180,180,110,0,11);   
    hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
    
@@ -316,7 +316,6 @@ for (Int_t i=0;i<nevent;i++) {
     int hit_id=-1;
     if (flux_id->at(j)==3110000) hit_id=0;
     else if (flux_id->at(j)==3210000) hit_id=1;    
-    else if (flux_id->at(j)==1110000) hit_id=1;        
     else if (hit_id==-1) continue;  //skip other subsubdetector
    
     double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);  
@@ -368,8 +367,8 @@ for (Int_t i=0;i<nevent;i++) {
     }        
     
     if (counter_hit[0]>1 || counter_hit[1]>1) {
-      cout << counter_hit[0] << " " << counter_hit[1] << endl;
-      cout << "more than 1 hit???" << endl;
+      cout << endl;
+      cout << "more than 1 hit? " << counter_hit[0] << " " << counter_hit[1] << endl;
 //       break;
     }
     
@@ -576,19 +575,19 @@ hhit_xy_gem[k]->Draw("colz");
 // }
 
 hacceptance_ThetaP_forwardangle=(TH2F*) hacceptance_ThetaP[0]->Clone();
-hacceptance_ThetaP_forwardangle->SetNameTitle("acceptance_ThetaP_forwardangle","acceptance_ThetaP at forwardangle;vertex Theta (degree);P (GeV)");
+hacceptance_ThetaP_forwardangle->SetNameTitle("acceptance_ThetaP_forwardangle","acceptance_ThetaP_forwardangle;vertex Theta (degree);P (GeV)");
 hacceptance_ThetaP_largeangle=(TH2F*) hacceptance_ThetaP[1]->Clone();
-hacceptance_ThetaP_largeangle->SetNameTitle("acceptance_ThetaP_largeangle","acceptance_ThetaP at largeangle;vertex Theta (degree);P (GeV)");
+hacceptance_ThetaP_largeangle->SetNameTitle("acceptance_ThetaP_largeangle","acceptance_ThetaP_largeangle;vertex Theta (degree);P (GeV)");
 hacceptance_ThetaP_overall=(TH2F*) hacceptance_ThetaP_forwardangle->Clone();
 hacceptance_ThetaP_overall->Add(hacceptance_ThetaP_largeangle);
-hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP","acceptance_ThetaP overall;vertex Theta (degree);P (GeV)");
+hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","acceptance_ThetaP_overall;vertex Theta (degree);P (GeV)");
 hacceptance_ThetaP_overall->SetMinimum(0);  
 hacceptance_ThetaP_overall->SetMaximum(1);  
 
 hacceptance_ThetaPhiP_forwardangle=(TH3F*) hacceptance_ThetaPhiP[0]->Clone();
-hacceptance_ThetaPhiP_forwardangle->SetNameTitle("acceptance_ThetaPhiP_forwardangle","acceptance_ThetaP at forwardangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
+hacceptance_ThetaPhiP_forwardangle->SetNameTitle("acceptance_ThetaPhiP_forwardangle","acceptance_ThetaPhiP_forwardangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
 hacceptance_ThetaPhiP_largeangle=(TH3F*) hacceptance_ThetaPhiP[1]->Clone();
-hacceptance_ThetaPhiP_largeangle->SetNameTitle("acceptance_ThetaPhiP_largeangle","acceptance_ThetaP at largeangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
+hacceptance_ThetaPhiP_largeangle->SetNameTitle("acceptance_ThetaPhiP_largeangle","acceptance_ThetaPhiP_largeangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
 
 // gStyle->SetOptStat(0);
 
