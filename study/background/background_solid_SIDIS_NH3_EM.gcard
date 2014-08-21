@@ -4,7 +4,7 @@
 <option name="DBUSER" value="soliduser"/>
 <option name="DBPSWD" value="ilovesolid"/>
 
-<detector name="../../solid_gemc2/geometry/solid_SIDIS_NH3" factory="TEXT" variation="Original"/>
+<detector name="/home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/solid_SIDIS_NH3" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
@@ -18,7 +18,7 @@
 <option name="MAX_Z_POS" value="20000"/>
 <option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
 
-<option name="FIELD_DIR" value="../../solid_gemc2/field"/>
+<option name="FIELD_DIR" value="/home/zwzhao/solid/solid_svn/solid/solid_gemc2/field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
 <option name="BEAM_P"   value="e-,11*GeV,3.624*deg,90*deg"/>
@@ -28,7 +28,7 @@
 
 <option name="MAX_FIELD_STEP" value="0"/>
 
-<option name="N" value="3e6"/>
+<option name="N" value="1e6"/>
 <option name="OUTPUT" value="evio,background_solid_SIDIS_NH3_EM.evio"/>
 <option name="USE_GUI"  value="0"/>
 
