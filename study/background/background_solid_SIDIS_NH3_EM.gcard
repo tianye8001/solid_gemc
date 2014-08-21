@@ -21,14 +21,14 @@
 <option name="FIELD_DIR" value="../../solid_gemc2/field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
-<option name="BEAM_P"   value="e-,11*GeV,2*deg,90*deg"/>
+<option name="BEAM_P"   value="e-,11*GeV,3.624*deg,90*deg"/>
 <option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
-<option name="BEAM_V"   value="(0,0,-300)cm"/>
-<option name="SPREAD_V" value="(0.21,0)cm"/>
+<option name="BEAM_V"   value="(0,-3.279,-400)cm"/>
+<option name="SPREAD_V" value="(0.1,0)cm"/>
 
 <option name="MAX_FIELD_STEP" value="0"/>
 
-<option name="N" value="1e6"/>
+<option name="N" value="3e6"/>
 <option name="OUTPUT" value="evio,background_solid_SIDIS_NH3_EM.evio"/>
 <option name="USE_GUI"  value="0"/>
 
