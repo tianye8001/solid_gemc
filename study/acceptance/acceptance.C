@@ -64,7 +64,8 @@ TH1F *hacceptance_P[n],*hacceptance_theta[n];
 TH2F *hacceptance_ThetaP[n],*hacceptance_ThetaPhi[n],*hacceptance_PhiP[n];
 TH3F *hacceptance_ThetaPhiP[n];
 TH2F *hacceptance_ThetaVz[n],*hacceptance_ThetaVr[n];
-TH2F *hhit_rMom[n],*hhit_xy[n];
+TH2F *hhit_rMom[n];
+TH2F *hhit_xy_ec[n],*hhit_PhiR_ec[n];
 TH2F *hhit_phidiffMom[n],*hhit_thetadiffMom[n];
 TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);  
 
@@ -129,15 +130,19 @@ for(int i=0;i<n;i++){
    sprintf(hstname,"hit_thetadiffMom_%i",i);
    hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,220,0,11);  
    
-   sprintf(hstname,"hit_xy_%i",i);
-   hhit_xy[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);     
+   sprintf(hstname,"hit_xy_ec_%i",i);
+   hhit_xy_ec[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);      
+   sprintf(hstname,"hit_xy_PhiR_%i",i);
+   hhit_PhiR_ec[i]=new TH2F(hstname,hstname,360,-180,180,300,0,300);   
 }
 
-TH2F *hhit_xy_gem[6];
+TH2F *hhit_xy_gem[6],*hhit_PhiR_gem[6];
 for(int i=0;i<6;i++){
    char hstname[100];
    sprintf(hstname,"hit_xy_gem_%i",i);
    hhit_xy_gem[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
+   sprintf(hstname,"hit_PhiR_gem_%i",i);
+   hhit_PhiR_gem[i]=new TH2F(hstname,hstname,360,-180,180,300,0,150);   
 }
 
 const int Nplate=22;
@@ -307,34 +312,40 @@ for (Int_t i=0;i<nevent;i++) {
 //     if (detector_ID==0 && subsubdetector_ID==1) hbaffleplate_observer[subdetector_ID-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);
     if (flux_id->at(j)<100) hbaffleplate_observer[flux_id->at(j)-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);    
 
-     double r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));
-     hhit_rz->Fill(flux_avg_z->at(j)/10,r/10);
-    
-    //check hit on GEM
-    if (detector_ID==1) hhit_xy_gem[subdetector_ID-1]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);    
-    
-    int hit_id=-1;
-    if (flux_id->at(j)==3110000) hit_id=0;
-    else if (flux_id->at(j)==3210000) hit_id=1;    
-    else if (hit_id==-1) continue;  //skip other subsubdetector
-   
-    double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);  
-    double hit_phi=atan2(py_gen,px_gen)*DEG;
+     double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));
+     double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);  
+     double hit_phi=atan2(flux_avg_y->at(j),flux_avg_x->at(j))*DEG;
 //     double hit_phi=fabs(atan(hit_y/hit_x)*DEG);
 //     if (hit_y>0 && hit_x>0) hit_phi=hit_phi;
 //     if (hit_y>0 && hit_x<0) hit_phi=180-hit_phi;
 //     if (hit_y<0 && hit_x<0) hit_phi=180+hit_phi;
 //     if (hit_y<0 && hit_x>0) hit_phi=360-hit_phi;    
-      
-    double hit_theta=atan((r/10-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;
+
+     hhit_rz->Fill(flux_avg_z->at(j)/10,hit_r/10);
+    
+    //check hit on GEM
+    if (detector_ID==1) {
+//       if (flux_pid->at(j)==11) {
+      hhit_xy_gem[subdetector_ID-1]->Fill(hit_x/10,hit_y/10);    
+      hhit_PhiR_gem[subdetector_ID-1]->Fill(hit_phi,hit_r/10);
+//       }
+    }       
+    
+    int hit_id=-1;
+    if (flux_id->at(j)==3110000) hit_id=0;
+    else if (flux_id->at(j)==3210000) hit_id=1;    
+    else if (hit_id==-1) continue;  //skip other subsubdetector
+    
+     hhit_xy_ec[hit_id]->Fill(hit_x/10,hit_y/10);    
+     hhit_PhiR_ec[hit_id]->Fill(hit_phi,hit_r/10);
+        
+    double hit_theta=atan((hit_r/10-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;
     hhit_phidiffMom[hit_id]->Fill(hit_phi-phi_gen,p_gen);
     hhit_thetadiffMom[hit_id]->Fill(hit_theta-theta_gen,p_gen);
-    hhit_rMom[hit_id]->Fill(r/10,p_gen);   
-    
-     hhit_xy[hit_id]->Fill(flux_avg_x->at(j)/10,flux_avg_y->at(j)/10);    
-                      
-      if ((detector_ID==3 && subdetector_ID==2) && (r/10 < rin_cut_LA || rout_cut_LA < r/10)) continue;
-      if ((detector_ID==3 && subdetector_ID==1) && (r/10 < rin_cut_FA || rout_cut_FA < r/10)) continue;    
+    hhit_rMom[hit_id]->Fill(hit_r/10,p_gen);   
+                    
+      if ((detector_ID==3 && subdetector_ID==2) && (hit_r/10 < rin_cut_LA || rout_cut_LA < hit_r/10)) continue;
+      if ((detector_ID==3 && subdetector_ID==1) && (hit_r/10 < rin_cut_FA || rout_cut_FA < hit_r/10)) continue;    
       if (flux_pid->at(j)!= pid_gen) {
 	Is_decay=true; 
 // 	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; 
@@ -537,14 +548,21 @@ hhit_thetadiffMom[k]->Draw("colz");
 }
 // c_hit_thetadiffMom->SaveAs(Form("%s_%s",the_filename,"hit_thetadiffMom.png"));
 
-TCanvas *c_hit_xy = new TCanvas("hit_xy","hit_xy",1800,800);
-c_hit_xy->Divide(2,1);
+TCanvas *c_hit_xy_ec = new TCanvas("hit_xy_ec","hit_xy_ec",1800,800);
+c_hit_xy_ec->Divide(2,1);
 for(int k=0;k<n;k++){
-c_hit_xy->cd(k+1);
+c_hit_xy_ec->cd(k+1);
 gPad->SetLogz(1);
-hhit_xy[k]->Draw("colz");
+hhit_xy_ec[k]->Draw("colz");
 }
-// c_hit_xy->SaveAs(Form("%s_%s",the_filename,"hit_xy.png"));
+
+TCanvas *c_hit_PhiR_ec = new TCanvas("hit_PhiR_ec","hit_PhiR_ec",1800,800);
+c_hit_PhiR_ec->Divide(2,1);
+for(int k=0;k<n;k++){
+c_hit_PhiR_ec->cd(k+1);
+gPad->SetLogz(1);
+hhit_PhiR_ec[k]->Draw("colz");
+}
 
 TCanvas *c_hit_xy_gem = new TCanvas("hit_xy_gem","hit_xy_gem",1800,800);
 c_hit_xy_gem->Divide(3,2);
@@ -552,6 +570,15 @@ for(int k=0;k<6;k++){
 c_hit_xy_gem->cd(k+1);
 gPad->SetLogz(1);
 hhit_xy_gem[k]->Draw("colz");
+}
+
+
+TCanvas *c_hit_PhiR_gem = new TCanvas("hit_PhiR_gem","hit_PhiR_gem",1800,800);
+c_hit_PhiR_gem->Divide(3,2);
+for(int k=0;k<6;k++){
+c_hit_PhiR_gem->cd(k+1);
+gPad->SetLogz(1);
+hhit_PhiR_gem[k]->Draw("colz");
 }
 
 // TCanvas *c_acceptance_all_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
