@@ -65,7 +65,6 @@ TH2F *hacceptance_ThetaP[n],*hacceptance_ThetaPhi[n],*hacceptance_PhiP[n];
 TH3F *hacceptance_ThetaPhiP[n];
 TH2F *hacceptance_ThetaVz[n],*hacceptance_ThetaVr[n];
 TH2F *hhit_rMom[n];
-TH2F *hhit_xy_ec[n],*hhit_PhiR_ec[n];
 TH2F *hhit_phidiffMom[n],*hhit_thetadiffMom[n];
 TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);  
 
@@ -87,6 +86,7 @@ for(int i=0;i<n;i++){
    sprintf(hstname,"flux_PhiP_%i",i);   
    hflux_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
    hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));  
+   sprintf(hstname,"flux_ThetaPhiP_%i",i);   
    hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,100,0,50,180,-180,180,110,0,11);   
    hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
    
@@ -129,22 +129,28 @@ for(int i=0;i<n;i++){
    hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,220,0,11);  
    sprintf(hstname,"hit_thetadiffMom_%i",i);
    hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,220,0,11);  
-   
-   sprintf(hstname,"hit_xy_ec_%i",i);
-   hhit_xy_ec[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);      
-   sprintf(hstname,"hit_xy_PhiR_%i",i);
-   hhit_PhiR_ec[i]=new TH2F(hstname,hstname,360,-180,180,300,0,300);   
 }
 
-TH2F *hhit_xy_gem[6],*hhit_PhiR_gem[6];
+TH2F *hhit_xy_gem[6][2],*hhit_PhiR_gem[6][2];
 for(int i=0;i<6;i++){
+  for(int j=0;j<2;j++){
    char hstname[100];
-   sprintf(hstname,"hit_xy_gem_%i",i);
-   hhit_xy_gem[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
-   sprintf(hstname,"hit_PhiR_gem_%i",i);
-   hhit_PhiR_gem[i]=new TH2F(hstname,hstname,360,-180,180,300,0,150);   
-}
+   sprintf(hstname,"hit_xy_gem_%i_%i",i,j);
+   hhit_xy_gem[i][j]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
+   sprintf(hstname,"hit_PhiR_gem_%i_%i",i,j);
+   hhit_PhiR_gem[i][j]=new TH2F(hstname,hstname,360,-180,180,300,0,150);   
+}}
 
+TH2F *hhit_xy_ec[n][2],*hhit_PhiR_ec[n][2];
+for(int i=0;i<n;i++){
+  for(int j=0;j<2;j++){
+   char hstname[100];
+   sprintf(hstname,"hit_xy_ec_%i_%i",i,j);
+   hhit_xy_ec[i][j]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
+   sprintf(hstname,"hit_PhiR_ec_%i_%i",i,j);
+   hhit_PhiR_ec[i][j]=new TH2F(hstname,hstname,360,-180,180,300,0,300);       
+}}
+  
 const int Nplate=22;
 TH2F *hbaffleplate[Nplate],*hbaffleplate_observer[Nplate];
 for (int i=0;i<Nplate;i++){
@@ -296,9 +302,8 @@ for (Int_t i=0;i<nevent;i++) {
   
     tree_flux->GetEntry(i);    
     
-    int counter_hit[2]={0,0};
-//   int counter[n]={0,0,0,0,0,0,0,0,0,0};  
-    int Is_decay=false;
+    bool Is_decay=false;
+    int acc[8]={0,0,0,0,0,0,0,0};
     for (Int_t j=0;j<flux_hitn->size();j++) {
 //       cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
     
@@ -315,44 +320,64 @@ for (Int_t i=0;i<nevent;i++) {
      double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));
      double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);  
      double hit_phi=atan2(flux_avg_y->at(j),flux_avg_x->at(j))*DEG;
-//     double hit_phi=fabs(atan(hit_y/hit_x)*DEG);
-//     if (hit_y>0 && hit_x>0) hit_phi=hit_phi;
-//     if (hit_y>0 && hit_x<0) hit_phi=180-hit_phi;
-//     if (hit_y<0 && hit_x<0) hit_phi=180+hit_phi;
-//     if (hit_y<0 && hit_x>0) hit_phi=360-hit_phi;    
+     double hit_theta=atan((hit_r/10-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;    
 
      hhit_rz->Fill(flux_avg_z->at(j)/10,hit_r/10);
     
     //check hit on GEM
     if (detector_ID==1) {
 //       if (flux_pid->at(j)==11) {
-      hhit_xy_gem[subdetector_ID-1]->Fill(hit_x/10,hit_y/10);    
-      hhit_PhiR_gem[subdetector_ID-1]->Fill(hit_phi,hit_r/10);
+      hhit_xy_gem[subdetector_ID-1][0]->Fill(hit_x/10,hit_y/10);    
+      hhit_PhiR_gem[subdetector_ID-1][0]->Fill(hit_phi,hit_r/10);
 //       }
     }       
+
+    if (detector_ID==3) {
+     hhit_xy_ec[subdetector_ID-1][0]->Fill(hit_x/10,hit_y/10);    
+     hhit_PhiR_ec[subdetector_ID-1][0]->Fill(hit_phi,hit_r/10);
+    }
     
-    int hit_id=-1;
-    if (flux_id->at(j)==3110000) hit_id=0;
-    else if (flux_id->at(j)==3210000) hit_id=1;    
-    else if (hit_id==-1) continue;  //skip other subsubdetector
-    
-     hhit_xy_ec[hit_id]->Fill(hit_x/10,hit_y/10);    
-     hhit_PhiR_ec[hit_id]->Fill(hit_phi,hit_r/10);
-        
-    double hit_theta=atan((hit_r/10-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;
-    hhit_phidiffMom[hit_id]->Fill(hit_phi-phi_gen,p_gen);
-    hhit_thetadiffMom[hit_id]->Fill(hit_theta-theta_gen,p_gen);
-    hhit_rMom[hit_id]->Fill(hit_r/10,p_gen);   
-                    
-      if ((detector_ID==3 && subdetector_ID==2) && (hit_r/10 < rin_cut_LA || rout_cut_LA < hit_r/10)) continue;
-      if ((detector_ID==3 && subdetector_ID==1) && (hit_r/10 < rin_cut_FA || rout_cut_FA < hit_r/10)) continue;    
-      if (flux_pid->at(j)!= pid_gen) {
-	Is_decay=true; 
+    if (detector_ID==3) {
+      hhit_phidiffMom[subdetector_ID-1]->Fill(hit_phi-phi_gen,p_gen);
+      hhit_thetadiffMom[subdetector_ID-1]->Fill(hit_theta-theta_gen,p_gen);
+      hhit_rMom[subdetector_ID-1]->Fill(hit_r/10,p_gen);              
+    }
+                         
+    if (flux_pid->at(j)!= pid_gen) {
+      Is_decay=true; 
 // 	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; 
-	continue;	 
-      }
-       
-       counter_hit[hit_id]++;       
+      continue;
+    }
+    //cut out some part of viritual plane to consider "good" part of EC
+    if ((detector_ID==3 && subdetector_ID==1) && (hit_r/10 < rin_cut_FA || rout_cut_FA < hit_r/10)) continue;        
+    if ((detector_ID==3 && subdetector_ID==2) && (hit_r/10 < rin_cut_LA || rout_cut_LA < hit_r/10)) continue;
+      
+    if (Is_SIDIS_He3){
+      if (flux_id->at(j)==3110000) acc[6]=1;
+      if (flux_id->at(j)==3210000) acc[7]=1;
+    }
+    else if (Is_SIDIS_NH3){
+      if ((detector_ID==3 && subdetector_ID==1) && ((-74<hit_phi && hit_phi<-38 && hit_r/10<195)||(-92<hit_phi && hit_phi<-88 && hit_r/10<120)||(50<hit_phi && hit_phi<80 && hit_r/10<195))) continue;                
+      if ((detector_ID==3 && subdetector_ID==2) && ((-85<hit_phi && hit_phi<-60)||(65<hit_phi && hit_phi<85))) continue;          
+      
+      if (flux_id->at(j)==3110000) acc[6]=1;
+      if (flux_id->at(j)==3210000) acc[7]=1;
+      
+      if ((detector_ID==1 && subdetector_ID==1) && ((-93<hit_phi && hit_phi<-82)||(80<hit_phi && hit_phi<92))) continue;          
+      if ((detector_ID==1 && subdetector_ID==2) && ((-93<hit_phi && hit_phi<-82)||(80<hit_phi && hit_phi<92))) continue;          
+      if ((detector_ID==1 && subdetector_ID==3) && ((-92<hit_phi && hit_phi<-75)||(77<hit_phi && hit_phi<92))) continue;          
+      if ((detector_ID==1 && subdetector_ID==4) && ((-92<hit_phi && hit_phi<-62)||(66<hit_phi && hit_phi<92))) continue;          
+      if ((detector_ID==1 && subdetector_ID==5) && ((-92<hit_phi && hit_phi<-65)||(66<hit_phi && hit_phi<92))) continue;          
+      if ((detector_ID==1 && subdetector_ID==6) && ((-92<hit_phi && hit_phi<-58)||(66<hit_phi && hit_phi<95))) continue;          
+	  
+      if (flux_id->at(j)==1110000) acc[0]=1;
+      if (flux_id->at(j)==1210000) acc[1]=1;
+      if (flux_id->at(j)==1310000) acc[2]=1;
+      if (flux_id->at(j)==1410000) acc[3]=1;
+      if (flux_id->at(j)==1510000) acc[4]=1;
+      if (flux_id->at(j)==1610000) acc[5]=1;  
+    }     
+      
        
        ///DIRC cut
 //        double x=flux_avg_x->at(j)/10,y=flux_avg_y->at(j)/10;
@@ -364,25 +389,66 @@ for (Int_t i=0;i<nevent;i++) {
        
 //         if (vx_gen != flux_vx->at(j)/10) cout << "vx " << vx_gen << " " << flux_vx->at(j)/10 <<endl;
 //         if (vy_gen != flux_vy->at(j)/10) cout << "vy " << vy_gen << " " << flux_vy->at(j)/10 <<endl;
-//         if (vz_gen != flux_vz->at(j)/10) cout << "vz " << vz_gen << " " << flux_vz->at(j)/10 <<endl;	
-	  
-	hflux_ThetaP[hit_id]->Fill(theta_gen,p_gen);
-	hflux_ThetaPhi[hit_id]->Fill(theta_gen,phi_gen);            
-	hflux_PhiP[hit_id]->Fill(phi_gen,p_gen);	
-	hflux_ThetaPhiP[hit_id]->Fill(theta_gen,phi_gen,p_gen);
-	
-        hflux_ThetaVz[hit_id]->Fill(theta_gen,vz_gen);
-        hflux_ThetaVr[hit_id]->Fill(theta_gen,sqrt(vx_gen*vx_gen+vy_gen*vy_gen));
-       
-// 	counter[hit_id]++;       
+//         if (vz_gen != flux_vz->at(j)/10) cout << "vz " << vz_gen << " " << flux_vz->at(j)/10 <<endl;		  
     }        
+    
+    int hit_id=-1;       
+    if (Is_SIDIS_He3){
+      if (acc[6]==1) hit_id=0;
+      if (acc[7]==1) hit_id=1;	  
+    }
+    else if (Is_SIDIS_NH3){
+//       if (acc[6]==1) hit_id=0;
+//       if (acc[7]==1) hit_id=1;	        
+      if (acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) hit_id=0; 
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) hit_id=1;
+    }
+
+    int counter_hit[2]={0,0};
+    if(hit_id != -1){   
+      counter_hit[hit_id]++;      
+      
+      hflux_ThetaP[hit_id]->Fill(theta_gen,p_gen);
+      hflux_ThetaPhi[hit_id]->Fill(theta_gen,phi_gen);            
+      hflux_PhiP[hit_id]->Fill(phi_gen,p_gen);	
+      hflux_ThetaPhiP[hit_id]->Fill(theta_gen,phi_gen,p_gen);
+      
+      hflux_ThetaVz[hit_id]->Fill(theta_gen,vz_gen);
+      hflux_ThetaVr[hit_id]->Fill(theta_gen,sqrt(vx_gen*vx_gen+vy_gen*vy_gen));
+    }    
     
     if (counter_hit[0]>1 || counter_hit[1]>1) {
       cout << endl;
       cout << "more than 1 hit? " << counter_hit[0] << " " << counter_hit[1] << endl;
-//       break;
     }
     
+    for (Int_t j=0;j<flux_hitn->size();j++) {
+      int detector_ID=flux_id->at(j)/1000000;
+      int subdetector_ID=(flux_id->at(j)%1000000)/100000;
+      int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
+
+      double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));
+      double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);  
+      double hit_phi=atan2(flux_avg_y->at(j),flux_avg_x->at(j))*DEG;
+      double hit_theta=atan((hit_r/10-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;    
+           
+      if ((hit_id==0 && (flux_id->at(j)==1410000 || flux_id->at(j)==1510000 || flux_id->at(j)==1610000 || flux_id->at(j)==3110000)) || (hit_id==1 && (flux_id->at(j)==1110000 || flux_id->at(j)==1210000 || flux_id->at(j)==1310000 || flux_id->at(j)==1410000 || flux_id->at(j)==3210000))) {	
+	//check hit on GEM
+	if (detector_ID==1) {
+    //       if (flux_pid->at(j)==11) {
+	  hhit_xy_gem[subdetector_ID-1][1]->Fill(hit_x/10,hit_y/10);    
+	  hhit_PhiR_gem[subdetector_ID-1][1]->Fill(hit_phi,hit_r/10);
+    //       }
+	}       
+
+	if (detector_ID==3) {
+	hhit_xy_ec[subdetector_ID-1][1]->Fill(hit_x/10,hit_y/10);    
+	hhit_PhiR_ec[subdetector_ID-1][1]->Fill(hit_phi,hit_r/10);
+	}
+      }
+    }
+    
+
     if (Is_decay) counter_decay_incomplete++;
     
 //     for(int k=0;k<n;k++){
@@ -548,38 +614,41 @@ hhit_thetadiffMom[k]->Draw("colz");
 }
 // c_hit_thetadiffMom->SaveAs(Form("%s_%s",the_filename,"hit_thetadiffMom.png"));
 
-TCanvas *c_hit_xy_ec = new TCanvas("hit_xy_ec","hit_xy_ec",1800,800);
-c_hit_xy_ec->Divide(2,1);
-for(int k=0;k<n;k++){
-c_hit_xy_ec->cd(k+1);
-gPad->SetLogz(1);
-hhit_xy_ec[k]->Draw("colz");
-}
-
-TCanvas *c_hit_PhiR_ec = new TCanvas("hit_PhiR_ec","hit_PhiR_ec",1800,800);
-c_hit_PhiR_ec->Divide(2,1);
-for(int k=0;k<n;k++){
-c_hit_PhiR_ec->cd(k+1);
-gPad->SetLogz(1);
-hhit_PhiR_ec[k]->Draw("colz");
-}
-
 TCanvas *c_hit_xy_gem = new TCanvas("hit_xy_gem","hit_xy_gem",1800,800);
-c_hit_xy_gem->Divide(3,2);
-for(int k=0;k<6;k++){
-c_hit_xy_gem->cd(k+1);
+c_hit_xy_gem->Divide(6,2);
+for(int j=0;j<2;j++){
+for(int i=0;i<6;i++){
+c_hit_xy_gem->cd(j*6+i+1);
 gPad->SetLogz(1);
-hhit_xy_gem[k]->Draw("colz");
-}
-
+hhit_xy_gem[i][j]->Draw("colz");
+}}
 
 TCanvas *c_hit_PhiR_gem = new TCanvas("hit_PhiR_gem","hit_PhiR_gem",1800,800);
-c_hit_PhiR_gem->Divide(3,2);
-for(int k=0;k<6;k++){
-c_hit_PhiR_gem->cd(k+1);
+c_hit_PhiR_gem->Divide(6,2);
+for(int j=0;j<2;j++){
+for(int i=0;i<6;i++){
+c_hit_PhiR_gem->cd(j*6+i+1);
 gPad->SetLogz(1);
-hhit_PhiR_gem[k]->Draw("colz");
-}
+hhit_PhiR_gem[i][j]->Draw("colz");
+}}
+
+TCanvas *c_hit_xy_ec = new TCanvas("hit_xy_ec","hit_xy_ec",1800,800);
+c_hit_xy_ec->Divide(2,2);
+for(int j=0;j<2;j++){
+for(int i=0;i<2;i++){
+c_hit_xy_ec->cd(j*2+i+1);
+gPad->SetLogz(1);
+hhit_xy_ec[i][j]->Draw("colz");
+}}
+
+TCanvas *c_hit_PhiR_ec = new TCanvas("hit_PhiR_ec","hit_PhiR_ec",1800,800);
+c_hit_PhiR_ec->Divide(2,2);
+for(int j=0;j<2;j++){
+for(int i=0;i<2;i++){
+c_hit_PhiR_ec->cd(j*2+i+1);
+gPad->SetLogz(1);
+hhit_PhiR_ec[i][j]->Draw("colz");
+}}
 
 // TCanvas *c_acceptance_all_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
 // c_acceptance_all_gem->Divide(2,3);
