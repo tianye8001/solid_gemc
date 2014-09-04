@@ -21,8 +21,8 @@
 <option name="FIELD_DIR" value="../../solid_gemc2/field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
-<option name="BEAM_P"   value="e-,5.5*GeV,20*deg,0*deg"/>
-<option name="SPREAD_P" value="5.5*GeV,20*deg,180*deg"/>
+<option name="BEAM_P"   value="e-,5.5*GeV,30*deg,0*deg"/>
+<option name="SPREAD_P" value="5.5*GeV,30*deg,180*deg"/>
 <option name="BEAM_V"   value="(0,0,-350)cm"/>
 <option name="SPREAD_V" value="(0.21,1.423)cm"/>
 

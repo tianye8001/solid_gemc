@@ -302,6 +302,7 @@ for (Int_t i=0;i<nevent;i++) {
   
     tree_flux->GetEntry(i);    
     
+    bool Is_out=false;
     bool Is_decay=false;
     int acc[8]={0,0,0,0,0,0,0,0};
     for (Int_t j=0;j<flux_hitn->size();j++) {
@@ -323,6 +324,9 @@ for (Int_t i=0;i<nevent;i++) {
      double hit_theta=atan((hit_r/10-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;    
 
      hhit_rz->Fill(flux_avg_z->at(j)/10,hit_r/10);
+
+      double Rin[6] = {36,21,25,32,42,55};
+      double Rout[6] = {87,98,112,135,100,123};
     
     //check hit on GEM
     if (detector_ID==1) {
@@ -330,6 +334,7 @@ for (Int_t i=0;i<nevent;i++) {
       hhit_xy_gem[subdetector_ID-1][0]->Fill(hit_x/10,hit_y/10);    
       hhit_PhiR_gem[subdetector_ID-1][0]->Fill(hit_phi,hit_r/10);
 //       }
+      if (hit_r/10<Rin[subdetector_ID-1] || Rout[subdetector_ID-1]<hit_r/10) {Is_out=true; cout << flux_id->at(j) << endl; }
     }       
 
     if (detector_ID==3) {
@@ -353,10 +358,12 @@ for (Int_t i=0;i<nevent;i++) {
     if ((detector_ID==3 && subdetector_ID==2) && (hit_r/10 < rin_cut_LA || rout_cut_LA < hit_r/10)) continue;
       
     if (Is_SIDIS_He3){
-      if (flux_id->at(j)==3110000) acc[6]=1;
-      if (flux_id->at(j)==3210000) acc[7]=1;
+      if(theta_gen>=8) {  //only acceptance 8 deg above
+	if (flux_id->at(j)==3110000) acc[6]=1;
+	if (flux_id->at(j)==3210000) acc[7]=1;
+      }
     }
-    else if (Is_SIDIS_NH3){
+    else if (Is_SIDIS_NH3){      
       if ((detector_ID==3 && subdetector_ID==1) && ((-74<hit_phi && hit_phi<-38 && hit_r/10<195)||(-92<hit_phi && hit_phi<-88 && hit_r/10<120)||(50<hit_phi && hit_phi<80 && hit_r/10<195))) continue;                
       if ((detector_ID==3 && subdetector_ID==2) && ((-85<hit_phi && hit_phi<-60)||(65<hit_phi && hit_phi<85))) continue;          
       
@@ -391,6 +398,15 @@ for (Int_t i=0;i<nevent;i++) {
 //         if (vy_gen != flux_vy->at(j)/10) cout << "vy " << vy_gen << " " << flux_vy->at(j)/10 <<endl;
 //         if (vz_gen != flux_vz->at(j)/10) cout << "vz " << vz_gen << " " << flux_vz->at(j)/10 <<endl;		  
     }        
+    
+    if(Is_out){
+    for (Int_t j=0;j<flux_hitn->size();j++) {
+      cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " (" << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << ") " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
+    }
+    for (int j=0;j<gen_pid->size();j++) {
+      cout << gen_pid->at(j) << " " << gen_px->at(j) << " " << gen_py->at(j) << " " << gen_pz->at(j) << " " << gen_vx->at(j) << " " << gen_vy->at(j) << " " << gen_vz->at(j) << endl; 
+    }    
+    }
     
     int hit_id=-1;       
     if (Is_SIDIS_He3){
