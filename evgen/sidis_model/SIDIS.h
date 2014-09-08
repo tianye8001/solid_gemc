@@ -58,8 +58,8 @@
 using namespace std;
 using namespace LHAPDF;
 
-const TString LHAPDF_Dir  = "/v/volatile/halla/solid/yez/sidis_model/lhapdf";
-//char *LHAPDF_Dir = getenv("LHAPDF");
+//const TString LHAPDF_Dir  = "/work/halla/solid/yez/lhapdf";
+char *LHAPDF_Dir = std::getenv("LHAPDF");
 const double DEG=180./3.1415926;
 const double PI=3.1415926;
 
@@ -75,8 +75,8 @@ class SIDIS
         void Print(){
 	       cerr<<"===================================================================================================="<<endl;	
 		   cerr<<" --- Useage:"<<endl;
-		   cerr<<"      1, Init(E0_ele, E0_ion, P_ele, Th_ele, Ph_ele, P_had, Th_had, Ph_had, tgt_flag, ptc_flg)"<<endl;
-		   cerr<<"           where E0_* and P_* are in GeV, and Theta_* and Phi_* are in Deg,"<<endl;
+		   cerr<<"      1, Init(energy_ele, energy_ion, P_ele, Th_ele, Ph_ele, P_had, Th_had, Ph_had, tgt_flag, ptc_flg)"<<endl;
+		   cerr<<"           where energy_* and P_* are in GeV, and Theta_* and Phi_* are in Deg,"<<endl;
 		   cerr<<"                 tgt_flag = 1->Proton, 2->Deutron, 3->He3,"<<endl;
 		   cerr<<"                  pct_flag = 1->Pion+, 2->Pion-, 3->Kaon+, 4->Kaon-;"<<endl;
 		   cerr<<"      2, CalcXS() --> Calculated dxs_hp and dxs_hm; "<<endl; 
@@ -111,14 +111,14 @@ class SIDIS
 			const int SUBSET = 1;
 			const string NAME = "cteq6m";
 
-			TString LHAPDF_path=Form("%s/share/lhapdf",LHAPDF_Dir.Data());
+			TString LHAPDF_path=Form("%s/share/lhapdf",LHAPDF_Dir);
 			setPDFPath(LHAPDF_path.Data());
 			LHAPDF::initPDFSet(NAME, LHAPDF::LHPDF, SUBSET);
 		}
         /*}}}*/
 		
-		/*void Init( double E0_ele, double E0_ion,...){{{*/
-		void Init(double E0_ele,double E0_ion,                        // GeV          GeV   
+		/*void Init( double energy_ele, double energy_ion,...){{{*/
+		void Init(double energy_ele,double energy_ion,                        // GeV          GeV   
 				double p_ele, double th_ele, double ph_ele,         // GeV/c         DEG            DEG 
 				double p_had, double th_had, double ph_had,         // GeV/c         DEG            DEG 
 				int tgt_flag, int ptcl_flag){
@@ -144,10 +144,10 @@ class SIDIS
 				mass_target = mass_p;
 			}else if (target_flag == 2){
 				mass_target = (mass_n+mass_p)/2.;
-				E0_ion = E0_ion/2.;
+				energy_ion = energy_ion/2.;
 			}else if (target_flag == 3){
 				mass_target = (mass_n+2.*mass_p)/3.;
-				E0_ion = E0_ion*2./3.;
+				energy_ion = energy_ion*2./3.;
 			}else{
 				cout << "target_flag is wrong! 1,2,3 " << endl;
 			}
@@ -167,8 +167,8 @@ class SIDIS
 			// //define the 4-momentum
 			//define electron direction as +z assuming a proton/neutron for the ion mass now 
 			// approximation for SIDIS
-			TLorentzVector *P4_ini_ele = new TLorentzVector(0.,0.,E0_ele,sqrt(E0_ele*E0_ele + mass_e*mass_e));
-			TLorentzVector *P4_ini_ion = new TLorentzVector(0.,0.,-E0_ion,sqrt(E0_ion*E0_ion + mass_target*mass_target));
+			TLorentzVector *P4_ini_ele = new TLorentzVector(0.,0.,energy_ele,sqrt(energy_ele*energy_ele + mass_e*mass_e));
+			TLorentzVector *P4_ini_ion = new TLorentzVector(0.,0.,-energy_ion,sqrt(energy_ion*energy_ion + mass_target*mass_target));
 			TLorentzVector *P4_fin_had = new TLorentzVector(0.,0.,0.,1.);
 			TLorentzVector *P4_fin_ele = new TLorentzVector(0.,0.,0.,1.);
 			TLorentzVector *P4_q = new TLorentzVector(0.,0.,0.,1.);
@@ -178,29 +178,36 @@ class SIDIS
 			TLorentzVector *lrz_P4_ef = new TLorentzVector(0.,0.,0.,1.);
 			//TLorentzVector *lrz_P4_ion = new TLorentzVector(0.,0.,0.,1.);
 			//TLorentzVector *lrz_P4_ei = new TLorentzVector(0.,0.,0.,1.);
-
-			double vn=E0_ion/sqrt(E0_ion*E0_ion + mass_target*mass_target);
+	
+			double vn=energy_ion/sqrt(energy_ion*energy_ion + mass_target*mass_target);
 			TVector3 vnboost(0.,0.,vn);
 
 			TVector3 p3_q,p3_fin_ele,p3_fin_had;
 			TVector3 p3_target_spin(0.,1.,0);
-			mom_ini_ele = fabs(E0_ele);
-			energy_ini_ele = sqrt(E0_ele*E0_ele + mass_e*mass_e);
+			mom_ini_ele = fabs(energy_ele);
+			energy_ini_ele = sqrt(energy_ele*energy_ele + mass_e*mass_e);
 
-			mom_pro = fabs(E0_ion);
-			energy_pro = sqrt(E0_ion*E0_ion + mass_target*mass_target);
+			mom_pro = fabs(energy_ion);
+			energy_pro = sqrt(energy_ion*energy_ion + mass_target*mass_target);
 
 			/*}}}*/
 
 			/*Kinematics Quantities{{{*/
 			//For electron
-
+            px_ele = p_ele*sin(th_ele/180.*3.1415926)*cos(ph_ele/180.*3.1415926);
+			py_ele = p_ele*sin(th_ele/180.*3.1415926)*sin(ph_ele/180.*3.1415926);
+			pz_ele = p_ele*cos(th_ele/180.*3.1415926);
+			E0_ele = sqrt(p_ele*p_ele+mass_e*mass_e);
 			P4_fin_ele->SetPxPyPzE(p_ele*sin(th_ele/180.*3.1415926)*cos(ph_ele/180.*3.1415926),
 					p_ele*sin(th_ele/180.*3.1415926)*sin(ph_ele/180.*3.1415926),
 					p_ele*cos(th_ele/180.*3.1415926)
 					,sqrt(p_ele*p_ele+mass_e*mass_e));
 
-					//For hadron
+			//For hadron
+			px_had = p_had*sin(th_had/180.*3.1415926)*cos(ph_had/180.*3.1415926);
+		    py_had = p_had*sin(th_had/180.*3.1415926)*sin(ph_had/180.*3.1415926);
+			pz_had = p_had*cos(th_had/180.*3.1415926);
+			E0_had = sqrt(p_had*p_had+mass_hadron*mass_hadron);
 			P4_fin_had->SetPxPyPzE(p_had*sin(th_had/180.*3.1415926)*cos(ph_had/180.*3.1415926),
 					p_had*sin(th_had/180.*3.1415926)*sin(ph_had/180.*3.1415926),
 					p_had*cos(th_had/180.*3.1415926)
@@ -261,8 +268,20 @@ class SIDIS
 			phi_ele = P4_fin_ele->Phi();
 			phi_had = P4_fin_had->Phi();
 
-			jacoF = Jacobian(mom_ele,theta_ele,phi_ele,mom_had,theta_had,phi_had,mom_pro,energy_pro,E0_ele);
+			jacoF = Jacobian(mom_ele,theta_ele,phi_ele,mom_had,theta_had,phi_had,mom_pro,energy_pro,energy_ele);
 			//jacoF = 1.0;
+
+			/*}}}*/
+			
+			/*Free Memory{{{*/
+			delete P4_ini_ele;
+			delete P4_ini_ion; 
+			delete P4_fin_had; 
+			delete P4_fin_ele;
+		   	delete P4_q; 
+			delete lrz_P4_q; 
+			delete lrz_P4_h; 
+			delete lrz_P4_ef;
 			/*}}}*/
 		} 
 		/*}}}*/
@@ -414,8 +433,6 @@ class SIDIS
 			else
 				return 2;
 			/*}}}*/
-
-
 		} 
 		/*}}}*/
 
@@ -992,6 +1009,15 @@ class SIDIS
 		double phi_q;
 		double phi_s;
 		double phi_h;
+
+		double px_ele;
+		double py_ele;
+		double pz_ele;
+		double E0_ele;
+		double px_had;
+		double py_had;
+		double pz_had;
+		double E0_had;
 
 		double Q2;
 		double W;
