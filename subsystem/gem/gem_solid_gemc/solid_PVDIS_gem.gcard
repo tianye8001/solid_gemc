@@ -6,10 +6,12 @@
 
 <detector name="solid_PVDIS_gem" factory="TEXT" variation="Original"/>
 
+<option name="INTEGRATEDRAW" value="flux"/>
+
 <option name="HIT_PROCESS_LIST" value="solid"/>
 <option name="PHYSICS" value="QGSP_BERT"/>
 <option name="RECORD_PASSBY" value="1"/>
-<option name="HALL_MATERIAL" value="Air"/>
+<option name="HALL_MATERIAL" value="G4_AIR"/>
 
 <option name="MAX_X_POS" value="20000"/>
 <option name="MAX_Y_POS" value="20000"/>
@@ -21,17 +23,17 @@
 <option name="BEAM_V"   value="(0,0,10)cm"/>
 <option name="SPREAD_V" value="(0.3,20)cm"/>
 
-<option name="N" value="3"/>
-<option name="OUTPUT" value="txt,output.txt"/>
+<option name="N" value="1e3"/>
+<option name="OUTPUT" value="evio,output.evio"/>
 <option name="USE_GUI"  value="0"/>
 
 </gcard>
 
 <!--  comment out
-<option name="INTEGRATEDRAW" value="flux"/>
 
 <option name="FIELD_VERBOSITY"  value="100"/>
 <option name="GEO_VERBOSITY"  value="100"/>
+<option name="HIT_VERBOSITY"  value="100"/>
 
 <option name="CHECK_OVERLAPS"  value="1"/>
 <option name="USE_GUI"  value="0"/>
