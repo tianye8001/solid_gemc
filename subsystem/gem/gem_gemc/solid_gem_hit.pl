@@ -11,10 +11,10 @@ sub define_solid_gem_hit
 	$hit{"name"}            = "solid_gem";
 	$hit{"description"}     = "solid gem hit definition";
 	$hit{"identifiers"}     = "id";
-	$hit{"signalThreshold"} = "0.*KeV";
+	$hit{"signalThreshold"} = "0*KeV";
 	$hit{"timeWindow"}      = "0*ns";
 	$hit{"prodThreshold"}   = "0*mm";
-	$hit{"maxStep"}         = "0*mm";
+	$hit{"maxStep"}         = "1*mm";
 	$hit{"delay"}           = "10*ns";
 	$hit{"riseTime"}        = "1*ns";
 	$hit{"fallTime"}        = "1*ns";

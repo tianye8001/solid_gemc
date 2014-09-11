@@ -77,8 +77,8 @@ solid_PVDIS_gem_real();
 # solid_PVDIS_virtualplane_cher();
 # require "solid_PVDIS_virtualplane_ec.pl";
 # solid_PVDIS_virtualplane_ec();
-# require "solid_PVDIS_virtualplane_gem.pl";
-# solid_PVDIS_virtualplane_gem();
+require "solid_PVDIS_virtualplane_gem.pl";
+solid_PVDIS_virtualplane_gem();
 
 #hit and bank definition Execute only when there are changes
 #hit
