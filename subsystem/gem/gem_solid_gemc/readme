@@ -2,3 +2,4 @@ $SoLID_GEMC/geometry/solid_materials.pl config_solid_PVDIS_gem.dat
 ./solid_PVDIS_gem.pl config_solid_PVDIS_gem.dat
 solid_gemc solid_PVDIS_gem.gcard
 evio2root -INPUTF=output.evio -B=solid_PVDIS_gem -WRITE_RAWS=no
+root 'analysis.C+("output.root")'

@@ -38,7 +38,7 @@ sub define_solid_gem_bank
 	insert_bank_variable(\%configuration, $bankname, "vx",          14, "Dd", "y coordinate of primary vertex");
 	insert_bank_variable(\%configuration, $bankname, "vy",          15, "Dd", "z coordinate of primary vertex");
 	insert_bank_variable(\%configuration, $bankname, "vz",          16, "Dd", "x coordinate of primary vertex");
-	insert_bank_variable(\%configuration, $bankname, "E",           17, "Dd", "Energy of the track at the entrance point");
+	insert_bank_variable(\%configuration, $bankname, "trE",         17, "Dd", "Energy of the track at the entrance point");
 	insert_bank_variable(\%configuration, $bankname, "trid",        18, "Di", "Track ID");
 	insert_bank_variable(\%configuration, $bankname, "weight",      19, "Dd", "Event weight(not used)");
 	insert_bank_variable(\%configuration, $bankname, "px",          20, "Dd", "Momentum x");
