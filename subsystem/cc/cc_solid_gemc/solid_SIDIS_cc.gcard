@@ -22,7 +22,7 @@
 <option name="SPREAD_V" value="(0.3,20)cm"/>
 
 <option name="N" value="3"/>
-<option name="OUTPUT" value="txt,output.txt"/>
+<option name="OUTPUT" value="evio,output.evio"/>
 <option name="USE_GUI"  value="1"/>
 
 
