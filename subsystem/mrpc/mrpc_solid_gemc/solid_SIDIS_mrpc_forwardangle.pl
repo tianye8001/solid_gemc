@@ -1,3 +1,4 @@
+#!/usr/bin/perl -w
 use strict;
 use warnings;
 our %detector;
@@ -15,8 +16,6 @@ sub solid_SIDIS_mrpc_forwardangle
 {
 make_mrpc_forwardangle();
 }
-
-my $hittype = "solid_mrpc";
 
 # MRPC structure
 # Atucal: First Layer: 6mm Honeycomb + 0.8mm PCB                  (1)+(2)
@@ -44,9 +43,8 @@ sub make_mrpc_forwardangle
 
  my $Nlayer = 35;
  my @layer_thickness = (0.6,0.08,0.015,0.04,0.07,0.025,0.07,0.025,0.07,0.025,0.07,0.025,0.07,0.025,0.07,0.04,0.015,0.16,0.015,0.04,0.07,0.025,0.07,0.025,0.07,0.025,0.07,0.025,0.07,0.025,0.07,0.04,0.015,0.08,0.6);
- my @material = ("AlHoneycomb","PCBoardM","MMMylar","G4_GRAPHITE","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","G4_GRAPHITE","MMMylar","PCBoardM","MMMylar","G4_GRAPHITE","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","GEMgas","G4_GLASS_PLATE","G4_GRAPHITE","MMMylar","PCBoardM","AlHoneycomb");
-# replace GEMgas with MRPCgas!!!!!!
- my $color="ff0000";
+ my @material = ("SL_AlHoneycomb","SL_PCBoardM","SL_MMMylar","G4_GRAPHITE","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","G4_GRAPHITE","SL_MMMylar","SL_PCBoardM","SL_MMMylar","G4_GRAPHITE","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","SL_MRPC_Gas","G4_GLASS_PLATE","G4_GRAPHITE","SL_MMMylar","SL_PCBoardM","SL_AlHoneycomb");
+ my $color="00ff00";
 
     my %detector=init_det();
     $detector{"name"}        = "$DetectorName";
@@ -60,7 +58,7 @@ sub make_mrpc_forwardangle
     my $Rmax = 210;
     my $Dz   = 2.83/2; # total thickness
     $detector{"dimensions"}  = "$Rmin*cm $Rmax*cm $Dz*cm 0*deg 360*deg";
-    $detector{"material"}   = "Vacuum";
+    $detector{"material"}   = "SL_Vacuum";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
@@ -102,18 +100,18 @@ sub make_mrpc_forwardangle
 	$detector{"exist"}       = 1;
 	$detector{"visible"}     = 1;
 	$detector{"style"}       = 1;
-	if ($detector{"material"} eq "GEMgas")
+	if ($detector{"material"} eq "SL_MRPC_Gas")
 	{
-	  $detector{"sensitivity"} = "$hittype";
-	  $detector{"hit_type"}    = "$hittype";
+	  $detector{"sensitivity"} = "flux";
+	  $detector{"hit_type"}    = "flux";
 	  $counter_gas=$counter_gas+1;
 	  my $id=4100000+$counter_gas;
 	  $detector{"identifiers"} = "id manual $id";
 	}
 	elsif ($detector{"material"} eq "G4_GLASS_PLATE")
 	{
-	  $detector{"sensitivity"} = "$hittype";
-	  $detector{"hit_type"}    = "$hittype";
+	  $detector{"sensitivity"} = "flux";
+	  $detector{"hit_type"}    = "flux";
 	  $counter_glass=$counter_glass+1;
 	  my $id=4120000+$counter_glass;
 	  $detector{"identifiers"} = "id manual $id";
