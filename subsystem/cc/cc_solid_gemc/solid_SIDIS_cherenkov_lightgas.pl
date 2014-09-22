@@ -24,6 +24,10 @@ make_lg_lightout();
 
 my $hitype="solid_cc";
 
+my $material_window="G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
+my $material_lightout="Kryptonite";
+my $material_gas="SL_LGCCgas_SIDIS";
+
 # C --- Gas Cherenkov
 # C
 # 
@@ -72,8 +76,6 @@ my $hitype="solid_cc";
 # Rin(58,65,67,85)
 # Rout(127,144,155,265)
 
-my $material_gas="G4_CARBON_DIOXIDE";
-
 sub make_frontchamber
 {
   my %detector=init_det();
@@ -109,7 +111,7 @@ sub make_frontchamber_window_front
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
  $detector{"dimensions"}  = "58.1*cm 126.9*cm 0.0025*cm 0*deg 360*deg";
- $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
+ $detector{"material"}    = $material_window;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
@@ -133,7 +135,7 @@ sub make_frontchamber_window_back
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
  $detector{"dimensions"}  = "65.1*cm 143.9*cm 0.005*cm 0*deg 360*deg";
- $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
+ $detector{"material"}    = $material_window;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
@@ -181,7 +183,7 @@ sub make_backchamber_window_front
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
  $detector{"dimensions"}  = "65.1*cm 143.9*cm 0.0025*cm 0*deg 360*deg";
- $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
+ $detector{"material"}    = $material_window;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
@@ -205,7 +207,7 @@ sub make_backchamber_window_back
  $detector{"color"}       = "33FFFF";
  $detector{"type"}        = "Tube";
  $detector{"dimensions"}  = "85.1*cm 264.9*cm 0.005*cm 0*deg 360*deg";
- $detector{"material"}    = "G4_POLYVINYL_CHLORIDE"; #should be POLYVINYL fluride 1.45g/cm3
+ $detector{"material"}    = $material_window;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;
@@ -243,7 +245,7 @@ sub make_lg_lightout
  my $Sphi  = 0;
  my $Dphi  = 360;
  $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"material"}    = "Vacuum";
+ $detector{"material"}    = $material_lightout;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
  $detector{"pMany"}       = 1;

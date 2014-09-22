@@ -7,9 +7,9 @@
 <detector name="solid_SIDIS_cc" factory="TEXT" variation="Original"/>
 
 <option name="HIT_PROCESS_LIST" value="solid"/>
-<option name="PHYSICS" value="QGSP_BERT"/>
+<option name="PHYSICS" value="QGSP_BERT+STD+Optical"/>
 <option name="RECORD_PASSBY" value="1"/>
-<option name="HALL_MATERIAL" value="Air"/>
+<option name="HALL_MATERIAL" value="SL_Vacuum"/>
 
 <option name="MAX_X_POS" value="20000"/>
 <option name="MAX_Y_POS" value="20000"/>
@@ -23,7 +23,7 @@
 
 <option name="N" value="3"/>
 <option name="OUTPUT" value="txt,output.txt"/>
-<option name="USE_GUI"  value="0"/>
+<option name="USE_GUI"  value="1"/>
 
 
 </gcard>
