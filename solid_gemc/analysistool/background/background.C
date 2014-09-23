@@ -385,7 +385,7 @@ Float_t flux_Edep,flux_E,flux_x,flux_y,flux_z,flux_vx,flux_vy,flux_vz,flux_px,fl
 while (!input.eof()){
   evncounter++;
 //   cout << evncounter << endl;
-  if (evncounter>10) break;
+//   if (evncounter>10) break;
 
   input >> flux_evn>> flux_nfluxhit >> flux_ID >> flux_pid >> flux_mpid >>  flux_Edep >> flux_E >> flux_x >> flux_y >> flux_z >> flux_vx >> flux_vy >> flux_vz  >> flux_px >> flux_py >> flux_pz;
   
