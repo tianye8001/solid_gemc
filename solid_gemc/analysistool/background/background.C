@@ -17,7 +17,7 @@
 #include <TPaveText.h>
 #include <TText.h>
 #include <TSystem.h>
-// #include "/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_fun.h"
+// #include "/home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_fun.h"
 // #include "/home/zwzhao/solid/solid_svn/solid/CaloSimShashlik/response/FastResponse.C"
 #include "FastResponse.C"
 #include "niel_fun.cc"
@@ -259,79 +259,79 @@ if (input_filename.find("_other_",0) != string::npos) {
   if (input_filename.find("_eDIS_",0) != string::npos) {Is_eDIS=true;}  
   
   if (input_filename.find("SIDIS_He3_window_upstream",0) != string::npos){
-    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_eDIS_1e6.root");
-    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pip_1e6.root");
-    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pim_1e6.root");
-    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pi0_1e6.root");
-    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_eES_1e6.root");
-    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Kp_1e6.root");
-    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Km_1e6.root");
-    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Ks_1e6.root");
-    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Kl_1e6.root");
-    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_p_1e6.root");
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_upstream_p_1e6.root");
   }  
   else if (input_filename.find("SIDIS_He3_window_downstream",0) != string::npos){
-    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_eDIS_1e6.root");
-    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pip_1e6.root");
-    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pim_1e6.root");
-    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pi0_1e6.root");
-    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_eES_1e6.root");
-    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Kp_1e6.root");
-    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Km_1e6.root");
-    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Ks_1e6.root");
-    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Kl_1e6.root");
-    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_p_1e6.root");
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_window_downstream_p_1e6.root");
   }
   else if (input_filename.find("SIDIS_He3",0) != string::npos){
-    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_eDIS_1e6.root");
-    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pip_1e6.root");
-    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pim_1e6.root");
-    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pi0_1e6.root");
-    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_eES_1e6.root");
-    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Kp_1e6.root");
-    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Km_1e6.root");
-    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Ks_1e6.root");
-    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Kl_1e6.root");
-    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_p_1e6.root");
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/SIDIS_He3/rate_solid_SIDIS_He3_p_1e6.root");
   }  
   
   if (input_filename.find("PVDIS_LD2",0) != string::npos){
-    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_eDIS_1e6.root");
-    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pip_1e6.root");
-    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pim_1e6.root");
-    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pi0_1e6.root");
-    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_eES_1e6.root");
-    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Kp_1e6.root");
-    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Km_1e6.root");
-    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Ks_1e6.root");
-    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Kl_1e6.root");
-    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_p_1e6.root");
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_p_1e6.root");
   }
 
   if (input_filename.find("PVDIS_LH2",0) != string::npos){
-    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_eDIS_1e6.root");
-    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pip_1e6.root");
-    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pim_1e6.root");
-    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pi0_1e6.root");
-    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_eES_1e6.root");
-    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Kp_1e6.root");
-    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Km_1e6.root");
-    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Ks_1e6.root");
-    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Kl_1e6.root");
-    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_p_1e6.root");
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LH2/rate_solid_PVDIS_LH2_p_1e6.root");
   }
   
   if (input_filename.find("JPsi_LH2",0) != string::npos){
-    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_eDIS_1e6.root");
-    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pip_1e6.root");
-    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pim_1e6.root");
-    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pi0_1e6.root");
-    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_eES_1e6.root");
-    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Kp_1e6.root");
-    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Km_1e6.root");
-    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Ks_1e6.root");
-    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Kl_1e6.root");
-    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_p_1e6.root");
+    if (input_filename.find("_eDIS_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_eDIS_1e6.root");
+    if (input_filename.find("_pip_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pip_1e6.root");
+    if (input_filename.find("_pim_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pim_1e6.root");
+    if (input_filename.find("_pi0_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_pi0_1e6.root");
+    if (input_filename.find("_eES_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_eES_1e6.root");
+    if (input_filename.find("_Kp_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Kp_1e6.root");
+    if (input_filename.find("_Km_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Km_1e6.root");
+    if (input_filename.find("_Ks_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Ks_1e6.root");
+    if (input_filename.find("_Kl_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_Kl_1e6.root");
+    if (input_filename.find("_p_",0) != string::npos) sprintf(rate_filename,"/home/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/JPsi_LH2/rate_solid_JPsi_LH2_p_1e6.root");
   }  
   
   ratefile=new TFile(rate_filename);  
