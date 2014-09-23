@@ -26,19 +26,15 @@ this converts evio to root format
 run 'root -b -q root2hit.C("background_solid_CLEO_SIDIS_He3_5e7.root")'
 this converts hits in flux bank into a txt file.
 
-<compile EC response function>
-cd solid/CaloSimShashlik/response
-root 
-.L FastResponse.C+
-<Then copy them over>
-cp * solid/solid_gemc/analysistool/background/
-
-******* niel not working for now as 2013/09/04******
-compile packacge niel to have niel_fun_lib.so
-
-in root, run 
-.L ../niel/niel_fun_lib.so
-****************************************************
+get dependance
+1. EC response function
+cp /home/zwzhao/solid/solid_svn/solid/subsystem/ec/CaloSimShashlik/response/* ./
+root -b -q 'FastResponse.C+'
+cp * /home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/background/
+2. neutron damage (niel not working for now as 2013/09/04)
+cp /home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_fun.* ./
+cp /home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_*.txt ./
+root -b -q 'niel_fun.cc+'
 
 background.C take about 12G memery to run because it creates a lot histograms, you can run it on ifarm which has enough memmory for now.
 
@@ -56,6 +52,7 @@ Edep.C    calculate energy deposited in EC
 trigger_EC_PVDIS.C   calculate EC trigger rate for PVDIS
 trigger_EC_SIDIS.C   calculate EC electron trigger rate for SIDIS
 trigger_EC_SIDIS_MIP.C   calculate EC MIP trigger rate for SIDIS
+compare_1D.C             compare histogram
 
 =======================
 2012 created by Zhiwen Zhao

@@ -20,6 +20,7 @@
 // #include "/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_fun.h"
 // #include "/home/zwzhao/solid/solid_svn/solid/CaloSimShashlik/response/FastResponse.C"
 #include "FastResponse.C"
+#include "niel_fun.cc"
 
 using namespace std;
 
@@ -384,7 +385,7 @@ Float_t flux_Edep,flux_E,flux_x,flux_y,flux_z,flux_vx,flux_vy,flux_vz,flux_px,fl
 while (!input.eof()){
   evncounter++;
 //   cout << evncounter << endl;
-//   if (evncounter>10) break;
+  if (evncounter>10) break;
 
   input >> flux_evn>> flux_nfluxhit >> flux_ID >> flux_pid >> flux_mpid >>  flux_Edep >> flux_E >> flux_x >> flux_y >> flux_z >> flux_vx >> flux_vy >> flux_vz  >> flux_px >> flux_py >> flux_pz;
   
@@ -1196,78 +1197,77 @@ for(int k=8;k<16;k++){
   }
 }
 
+gSystem->Load("niel_fun_cc.so"); 
+//   TNiel niel_proton("niel/niel_proton.txt");
+//   TNiel niel_electron("niel/niel_electron.txt");
+//   TNiel niel_pions("niel/niel_pions.txt");
+TNiel niel_neutron("niel_neutron.txt");
+TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",50, -6,1.3);
+for(int i=0;i<420;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(14./420.)-10))));
+TCanvas *c_niel_neutron = new TCanvas("niel_neutron","niel_neutron",600,600);
+gPad->SetLogy(1);
+hniel_neutron->Draw();
 
-// gSystem->Load("../niel/niel_fun_lib.so"); 
-// //   TNiel niel_proton("niel/niel_proton.txt");
-// //   TNiel niel_electron("niel/niel_electron.txt");
-// //   TNiel niel_pions("niel/niel_pions.txt");
-// TNiel niel_neutron("../niel/niel_neutron.txt");
-// TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",50, -6,1.3);
-// for(int i=0;i<420;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(14./420.)-10))));
-// TCanvas *c_niel_neutron = new TCanvas("niel_neutron","niel_neutron",600,600);
-// gPad->SetLogy(1);
-// hniel_neutron->Draw();
-// 
-// hfluxEklog_cut_niel[8][3]->Multiply(hfluxEklog_cut[8][3],hniel_neutron);
-// hfluxEklog_cut_niel[11][3]->Multiply(hfluxEklog_cut[11][3],hniel_neutron);
-// hfluxEklog_cut_niel[12][3]->Multiply(hfluxEklog_cut[12][3],hniel_neutron);
-// hfluxEklog_cut_niel[15][3]->Multiply(hfluxEklog_cut[15][3],hniel_neutron);
-// 
-// cout << hfluxEklog_cut_niel[8][3]->Integral() << endl;
-// cout << hfluxEklog_cut_niel[11][3]->Integral() << endl;
-// cout << hfluxEklog_cut_niel[12][3]->Integral() << endl;
-// cout << hfluxEklog_cut_niel[15][3]->Integral() << endl;
-// 
-// TCanvas *c_neutron_ec = new TCanvas("neutron_ec","neutron_ec",1600,900);
-// c_neutron_ec->Divide(4,2);
-// c_neutron_ec->cd(1);
-// gPad->SetLogy(1);
-// // hfluxR[8][3]->SetLineColor(1);
-// hfluxR[8][3]->Draw();
-// // hfluxR[11][3]->SetLineColor(2);
-// hfluxR[11][3]->Draw("same");
-// c_neutron_ec->cd(2);
-// gPad->SetLogy(1);
-// // hEklog[8][3]->SetLineColor(1);
-// hEklog[8][3]->Draw();
-// // hEklog[11][3]->SetLineColor(2);
-// hEklog[11][3]->Draw("same");
-// c_neutron_ec->cd(3);
-// gPad->SetLogy(1);
-// hfluxEklog_cut[8][3]->SetLineColor(1);
-// hfluxEklog_cut[8][3]->Draw();
-// hfluxEklog_cut[11][3]->SetLineColor(2);
-// hfluxEklog_cut[11][3]->Draw("same");
-// c_neutron_ec->cd(4);
-// gPad->SetLogy(1);
-// hfluxEklog_cut_niel[8][3]->SetLineColor(1);
-// hfluxEklog_cut_niel[8][3]->Draw();
-// hfluxEklog_cut_niel[11][3]->SetLineColor(2);
-// hfluxEklog_cut_niel[11][3]->Draw("same");
-// c_neutron_ec->cd(5);
-// gPad->SetLogy(1);
-// // hfluxR[12][3]->SetLineColor(1);
-// hfluxR[12][3]->Draw();
-// // hfluxR[15][3]->SetLineColor(2);
-// hfluxR[15][3]->Draw("same");
-// c_neutron_ec->cd(6);
-// gPad->SetLogy(1);
-// // hEklog[12][3]->SetLineColor(1);
-// hEklog[12][3]->Draw();
-// // hEklog[15][3]->SetLineColor(2);
-// hEklog[15][3]->Draw("same");
-// c_neutron_ec->cd(7);
-// gPad->SetLogy(1);
-// hfluxEklog_cut[12][3]->SetLineColor(1);
-// hfluxEklog_cut[12][3]->Draw();
-// hfluxEklog_cut[15][3]->SetLineColor(2);
-// hfluxEklog_cut[15][3]->Draw("same");
-// c_neutron_ec->cd(8);
-// gPad->SetLogy(1);
-// hfluxEklog_cut_niel[12][3]->SetLineColor(1);
-// hfluxEklog_cut_niel[12][3]->Draw();
-// hfluxEklog_cut_niel[15][3]->SetLineColor(2);
-// hfluxEklog_cut_niel[15][3]->Draw("same");
+hfluxEklog_cut_niel[8][3]->Multiply(hfluxEklog_cut[8][3],hniel_neutron);
+hfluxEklog_cut_niel[11][3]->Multiply(hfluxEklog_cut[11][3],hniel_neutron);
+hfluxEklog_cut_niel[12][3]->Multiply(hfluxEklog_cut[12][3],hniel_neutron);
+hfluxEklog_cut_niel[15][3]->Multiply(hfluxEklog_cut[15][3],hniel_neutron);
+
+cout << hfluxEklog_cut_niel[8][3]->Integral() << endl;
+cout << hfluxEklog_cut_niel[11][3]->Integral() << endl;
+cout << hfluxEklog_cut_niel[12][3]->Integral() << endl;
+cout << hfluxEklog_cut_niel[15][3]->Integral() << endl;
+
+TCanvas *c_neutron_ec = new TCanvas("neutron_ec","neutron_ec",1600,900);
+c_neutron_ec->Divide(4,2);
+c_neutron_ec->cd(1);
+gPad->SetLogy(1);
+// hfluxR[8][3]->SetLineColor(1);
+hfluxR[8][3]->Draw();
+// hfluxR[11][3]->SetLineColor(2);
+hfluxR[11][3]->Draw("same");
+c_neutron_ec->cd(2);
+gPad->SetLogy(1);
+// hEklog[8][3]->SetLineColor(1);
+hEklog[8][3]->Draw();
+// hEklog[11][3]->SetLineColor(2);
+hEklog[11][3]->Draw("same");
+c_neutron_ec->cd(3);
+gPad->SetLogy(1);
+hfluxEklog_cut[8][3]->SetLineColor(1);
+hfluxEklog_cut[8][3]->Draw();
+hfluxEklog_cut[11][3]->SetLineColor(2);
+hfluxEklog_cut[11][3]->Draw("same");
+c_neutron_ec->cd(4);
+gPad->SetLogy(1);
+hfluxEklog_cut_niel[8][3]->SetLineColor(1);
+hfluxEklog_cut_niel[8][3]->Draw();
+hfluxEklog_cut_niel[11][3]->SetLineColor(2);
+hfluxEklog_cut_niel[11][3]->Draw("same");
+c_neutron_ec->cd(5);
+gPad->SetLogy(1);
+// hfluxR[12][3]->SetLineColor(1);
+hfluxR[12][3]->Draw();
+// hfluxR[15][3]->SetLineColor(2);
+hfluxR[15][3]->Draw("same");
+c_neutron_ec->cd(6);
+gPad->SetLogy(1);
+// hEklog[12][3]->SetLineColor(1);
+hEklog[12][3]->Draw();
+// hEklog[15][3]->SetLineColor(2);
+hEklog[15][3]->Draw("same");
+c_neutron_ec->cd(7);
+gPad->SetLogy(1);
+hfluxEklog_cut[12][3]->SetLineColor(1);
+hfluxEklog_cut[12][3]->Draw();
+hfluxEklog_cut[15][3]->SetLineColor(2);
+hfluxEklog_cut[15][3]->Draw("same");
+c_neutron_ec->cd(8);
+gPad->SetLogy(1);
+hfluxEklog_cut_niel[12][3]->SetLineColor(1);
+hfluxEklog_cut_niel[12][3]->Draw();
+hfluxEklog_cut_niel[15][3]->SetLineColor(2);
+hfluxEklog_cut_niel[15][3]->Draw("same");
 
 outputfile->Write();
 outputfile->Flush();

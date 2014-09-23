@@ -287,24 +287,54 @@ gStyle->SetPadRightMargin(0.32);
 // // bool Is_log=false;
 // bool Is_log=true;
 
-const int m=5;
+// const int m=5;
+// char* input_filename[m]={
+// "background_solid_CLEO_SIDIS_He3_1e8_output.root",
+// "background_solid_CLEO_SIDIS_He3_1e8_output.root",
+// "background_solid_CLEO_SIDIS_He3_1e8_output.root",
+// "background_solid_CLEO_SIDIS_He3_1e8_output.root",
+// "background_solid_CLEO_SIDIS_He3_1e8_output.root"
+// };
+// int pid[m]={1,2,5,6,4};
+// char *label[m]={"gamma","e","pip","pim","p"};
+// int color[m]={1,2,3,4,5};
+// char *hst[m]={"EdepR","EdepR","EdepR","EdepR","EdepR"};
+// double min=0,max=1e10;
+// const int n=2;
+// int hit_id[n]={8,12};
+// char *title[n]={"FAEC","LAEC"};
+// TCanvas *c = new TCanvas("EdepR","EdepR",1600,900);
+// c->Divide(2,n/2);
+// ///option
+// bool Is_R=true,Is_Phi=false;
+// // bool Is_log=false;
+// bool Is_log=true;
+
+const int m=4;
 char* input_filename[m]={
-"background_solid_CLEO_SIDIS_He3_1e8_output.root",
-"background_solid_CLEO_SIDIS_He3_1e8_output.root",
-"background_solid_CLEO_SIDIS_He3_1e8_output.root",
-"background_solid_CLEO_SIDIS_He3_1e8_output.root",
-"background_solid_CLEO_SIDIS_He3_1e8_output.root"
+"background_solid_CLEO_PVDIS_LD2_nobaffle_2e8_output.root",
+"baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_1e8_output.root",
+"background_solid_CLEO_PVDIS_LD2_nobaffle_2e8_output.root",
+"baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_1e8_output.root",
+// "background_solid_CLEO_SIDIS_He3_notargetcollimator_1e8_output.root",
+// "background_solid_CLEO_SIDIS_He3_1e8_output.root",
+// "background_solid_CLEO_SIDIS_He3_notargetcollimator_1e8_output.root",
+// "background_solid_CLEO_SIDIS_He3_1e8_output.root",
 };
-int pid[m]={1,2,5,6,4};
-char *label[m]={"gamma","e","pip","pim","p"};
-int color[m]={1,2,3,4,5};
-char *hst[m]={"EdepR","EdepR","EdepR","EdepR","EdepR"};
+int pid[m]={1,1,2,2};
+char *label[m]={"gamma","gamma","e","e",};
+int color[m]={1,1,2,2};
+char *hst[m]={"fluxR","fluxR","fluxR","fluxR"};
 double min=0,max=1e10;
-const int n=2;
-int hit_id[n]={8,12};
-char *title[n]={"FAEC","LAEC"};
-TCanvas *c = new TCanvas("EdepR","EdepR",1600,900);
-c->Divide(2,n/2);
+// const int n=2;
+// int hit_id[n]={8,12};
+// char *title[n]={"FAEC","LAEC"};
+// TCanvas *c = new TCanvas("fluxR","fluxR",1600,900);
+// c->Divide(2,n/2);
+const int n=1;
+int hit_id[n]={8};
+char *title[n]={"FAEC"};
+TCanvas *c = new TCanvas("fluxR","fluxR",1000,900);
 ///option
 bool Is_R=true,Is_Phi=false;
 // bool Is_log=false;
@@ -502,8 +532,10 @@ for(int i=0;i<m;i++){
   cout << hstname << endl;
   h[j][i]=(TH1F*) input[i]->Get(hstname);
   c->cd(j+1);
+//   for(int k=1;k<24;k++) {h[j][i]->SetBinContent(k,0);}
   if(Is_log) gPad->SetLogy();
   h[j][i]->SetLineColor(color[i]);
+  h[j][i]->SetLineStyle(i%2*7);  
 //   h[j][i]->SetMinimum(min);
 //   h[j][i]->SetMaximum(max);
 //   h[j][i]->SetAxisRange(50,300);  
