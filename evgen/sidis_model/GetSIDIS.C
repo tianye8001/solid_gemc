@@ -432,9 +432,9 @@ int main(Int_t argc, char *argv[]){
 						1.0, //pol = 1.0 for now
 						Q2,
 						W,
-						cdxs,
 						phi_s,
-						phi_h
+						phi_h,
+						cdxs						
 						)<<endl;
 
 				//electron info: 1#index. 2#charge 3#type 4#pid 5#mpid 6#daughter 7#px 8#py 9#pz 10#E 11#mass 12#vx 13#vy 14#vz
