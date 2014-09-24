@@ -1,0 +1,4 @@
+$SoLID_GEMC/geometry/solid_materials.pl config_solid_SIDIS_He3.dat
+./solid_SIDIS_He3.pl config_solid_SIDIS_He3.dat
+solid_gemc solid_SIDIS_He3.gcard
+evio2root -INPUTF=output.evio -B=solid_SIDIS_He3

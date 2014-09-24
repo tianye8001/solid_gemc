@@ -1,0 +1,48 @@
+<gcard>
+<option name="DBHOST" value="soliddb"/>
+<option name="DATABASE" value="test"/>
+<option name="DBUSER" value="soliduser"/>
+<option name="DBPSWD" value="ilovesolid"/>
+
+<detector name="solid_SIDIS_He3" factory="TEXT" variation="Original"/>
+
+<option name="INTEGRATEDRAW" value="flux"/>
+
+<option name="HIT_PROCESS_LIST" value="solid"/>
+<option name="PHYSICS" value="QGSP_BERT"/>
+<option name="RECORD_PASSBY" value="1"/>
+<option name="HALL_MATERIAL" value="SL_Vacuum"/>
+
+<option name="SAVE_ALL_MOTHERS" value="1"/>
+
+<option name="MAX_X_POS" value="20000"/>
+<option name="MAX_Y_POS" value="20000"/>
+<option name="MAX_Z_POS" value="20000"/>
+<option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
+
+<option name="BEAM_P"   value="gamma,2e-3*GeV,10*deg,0*deg"/>
+<option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
+<option name="BEAM_V"   value="(0,0,-350)cm"/>
+<option name="SPREAD_V" value="(0.3,20)cm"/>
+
+<option name="N" value="100"/>
+<option name="OUTPUT" value="txt,output_gamma.txt"/>
+<option name="USE_GUI"  value="0"/>
+
+</gcard>
+
+<!--  comment out
+<option name="FIELD_VERBOSITY"  value="100"/>
+<option name="GEO_VERBOSITY"  value="100"/>
+
+<option name="CHECK_OVERLAPS"  value="1"/>
+<option name="USE_GUI"  value="0"/>
+
+<option name="geometry" value="1000x1000"/>
+<option name="HIGH_RES" value="1"/>
+<option name="USE_GUI"  value="1"/>
+
+<option name="OUTPUT" value="txt,output.txt"/>
+<option name="OUTPUT" value="evio,output.evio"/>
+
+-->
