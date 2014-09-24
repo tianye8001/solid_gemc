@@ -15,8 +15,9 @@ my $DetectorMother="root";
 sub solid_SIDIS_virtualplane_spd
 {
 make_solid_SIDIS_virtualplane_spd_forwardangle_front();
-make_solid_SIDIS_virtualplane_spd_largeangle_front();
 make_solid_SIDIS_virtualplane_spd_forwardangle_back();
+make_solid_SIDIS_virtualplane_spd_largeangle_front();
+make_solid_SIDIS_virtualplane_spd_largeangle_back();
 }
 
 sub make_solid_SIDIS_virtualplane_spd_forwardangle_front
@@ -56,7 +57,7 @@ sub make_solid_SIDIS_virtualplane_spd_forwardangle_back
  $detector{"name"}        = "$DetectorName\_forwardangle_back";
  $detector{"mother"}      = "root";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 409.5*cm";
+ $detector{"pos"}         = "0*cm 0*cm 407.5*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
@@ -109,5 +110,36 @@ sub make_solid_SIDIS_virtualplane_spd_largeangle_front
  $detector{"sensitivity"} = "flux";
  $detector{"hit_type"}    = "flux";
  $detector{"identifiers"} = "id manual 5210000";
+ print_det(\%configuration, \%detector); 
+}
+
+sub make_solid_SIDIS_virtualplane_spd_largeangle_back
+{
+ my %detector=init_det();
+ $detector{"name"}        = "$DetectorName\_largeangle_back";
+ $detector{"mother"}      = "root";
+ $detector{"description"} = $detector{"name"};
+ $detector{"pos"}         = "0*cm 0*cm -66.5*cm";
+ $detector{"rotation"}    = "0*deg 0*deg 0*deg";
+ $detector{"color"}       = "CC6633";
+ $detector{"type"}        = "Cons";
+  my $Rmin1 = 80;
+  my $Rmax1 = 135;
+  my $Rmin2 = 80;
+  my $Rmax2 = 145;
+  my $Dz    = 0.001/2;
+  my $Sphi  = 0;
+  my $Dphi  = 360;
+ $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
+ $detector{"material"}    = "SL_Vacuum";
+ $detector{"mfield"}      = "no";
+ $detector{"ncopy"}       = 1;
+ $detector{"pMany"}       = 1;
+ $detector{"exist"}       = 1;
+ $detector{"visible"}     = 1;
+ $detector{"style"}       = 0;
+ $detector{"sensitivity"} = "flux";
+ $detector{"hit_type"}    = "flux";
+ $detector{"identifiers"} = "id manual 5220000";
  print_det(\%configuration, \%detector);
 }
