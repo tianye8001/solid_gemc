@@ -63,20 +63,11 @@ my $DetectorMother="root";
 sub make_gem
 {
 
- my $Nplate  = 4;
-
- my @PlateZ = (157.5,185.5,306,315);
- my @Rin = (48,59,105,109);
- my @Rout = (122,143,230,237);
-#  my $Dz   = 0.48;
-#  my $material="DCgas";
-#  my $color="44ee11";
-
-# total thickness
-#  my $Dz   = 15.955/2;
-my $Dz   = 9.781/2; 
-#  my $material="DCgas";
-#  my $color="44ee11";
+ my $Nplate  = 5;
+ my @PlateZ = (157.5,185.5,190,306,315);
+ my @Rin = (48,59,65,105,109);
+ my @Rout = (122,143,143,230,237);
+ my $Dz   = 9.781/2; 
 
  my $Nlayer = 23;
   # unit in mm
