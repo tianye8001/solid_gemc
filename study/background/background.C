@@ -1,3 +1,10 @@
+///////////////////////////////////////////
+//Log:
+//--- Z. Ye (10/01), change the readin format to read GEMC.v2 files, 
+//
+//
+///////////////////////////////////////////
+
 #include <iostream> 
 #include <fstream>
 #include <cmath> 
@@ -18,6 +25,7 @@
 #include <TText.h>
 #include <TSystem.h>
 #include "./response/FastResponse.C"
+#include "./niel/niel_fun.cc"
 //#include "niel_fun.cc"
 
 using namespace std;
@@ -318,7 +326,7 @@ void background(string input_filename, int nselected){
 	}
 	else if(input_filename.find("_real_",0) != string::npos || input_filename.find("_actual_",0) != string::npos) {
 		Is_real=true;
-		if (Nevent!=1000000) {cout << "real for 1e6 events only" << endl; exit(-1);}
+		//if (Nevent!=1000000) {cout << "real for 1e6 events only" << endl; exit(-1);}
 		if (input_filename.find("_pip_",0) != string::npos) {Is_pip=true;}
 		if (input_filename.find("_pim_",0) != string::npos) {Is_pim=true;}
 		if (input_filename.find("_pi0_",0) != string::npos) {Is_pi0=true;}
@@ -1016,12 +1024,12 @@ void background(string input_filename, int nselected){
 	}
 
 	/*Neutrons{{{*/	
-	/*
-	   gSystem->Load("niel_fun_cc.so"); 
+	
+	gSystem->Load("./niel/niel_fun_cc.so"); 
 	//   TNiel niel_proton("niel/niel_proton.txt");
 	//   TNiel niel_electron("niel/niel_electron.txt");
 	//   TNiel niel_pions("niel/niel_pions.txt");
-	TNiel niel_neutron("niel_neutron.txt");
+	TNiel niel_neutron("./niel/niel_neutron.txt");
 	TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",50, -6,1.3);
 	for(int i=0;i<420;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(14./420.)-10))));
 	TCanvas *c_niel_neutron = new TCanvas("niel_neutron","niel_neutron",600,600);
@@ -1088,7 +1096,7 @@ void background(string input_filename, int nselected){
 	hfluxEklog_cut_niel[12][3]->Draw();
 	hfluxEklog_cut_niel[15][3]->SetLineColor(2);
 	hfluxEklog_cut_niel[15][3]->Draw("same");
-	*/
+	
 		/*Neutrons}}}*/
 		/*End of Plot and Save}}}*/
 

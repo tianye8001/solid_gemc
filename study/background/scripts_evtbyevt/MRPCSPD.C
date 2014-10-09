@@ -120,8 +120,8 @@ void MRPCSPD(TString input_filename)
 	region_index = 0;
 
 	int det[2]={8,12};  //detecor ID
-	double Rmin[2]={90,80};
-	double Rmax[2]={230,140};
+	double rmin[2]={105,80};
+	double rmax[2]={235,140};
 
 	TFile *file_trig_cut[2][Ntrigline][2];//[Det_ID][Cut_ID][PID], Det_DC: 0->FA, 1->LA, PID: 0->e, 1->pi
 	// Radius(cm)  P Threshold (GeV)

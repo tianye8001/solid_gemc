@@ -25,7 +25,7 @@
 
 using namespace std;
 
-void GetLGC(TString input_filename)
+void GetLASPD(TString input_filename)
 {
 	gROOT->Reset();
 	gStyle->SetPalette(1);
@@ -39,7 +39,6 @@ void GetLGC(TString input_filename)
 		exit(-1);
 	}
 	else cout << "open file " << input_filename << endl;
-
 	/*Set Branch{{{*/
 	//Header Tree:
 	// Var#1~#8 are free slots for propogating important info from the "INPUT generator seed"
@@ -107,7 +106,7 @@ void GetLGC(TString input_filename)
 	/*End Set Branch}}}*/
 	int nevent = (int)generated->GetEntries();
 	cout << "nevent = " << nevent << endl;
-	
+		
 	/*EC Electron Trigger{{{*/
 	const int Ntrigline=6,Ntriglinebin=21;
 	int region_index;
@@ -116,7 +115,7 @@ void GetLGC(TString input_filename)
 	//	else {cout << "need option for FA or LA region" << endl; exit(-1);}
 	region_index = 0;
 
-	int det[2]={8,12};  //detecor id
+	int det[2]={8,12};  //detecor ID
 	double rmin[2]={105,80};
 	double rmax[2]={235,140};
 
@@ -204,44 +203,42 @@ void GetLGC(TString input_filename)
 		}
 	}
 	/*}}}*/
-	const int EC_Trigger_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
-	const int EC_Trigger_Mom_Bin = 23;
-
-
-	/*Define LGC{{{*/
+	const int EC_Trigger_Slide = 6;// EC trigger_RCut slides 
+    const int EC_Trigger_Mom_Bin = 23;// EC trigger_RCut Mom bins 
+	
+	/*Define SPD{{{*/
 	//In each segmentation, 40 slides, each slides has 2.5cm width, 0.3cm between two slides.
-	const int LGC_Module = 30; //30 module around the circle
-	const int LGC_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
-	double LGC_R[LGC_Slide];//Center location of each slide
-	double LGC_In_G[LGC_Module][LGC_Slide];// Number of photons going into the device
-	double LGC_In_E[LGC_Module][LGC_Slide];// Number of electrons going into the device
-	double LGC_Out_G[LGC_Module][LGC_Slide];// Number of photons going into the device
-	double LGC_Out_E[LGC_Module][LGC_Slide];// Number of electrons going into the device
-
-	for(int i=0;i<LGC_Slide;i++){//I just want to initialize everything
-		LGC_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
-		for(int j=0;j<LGC_Module;j++){
-			LGC_In_G[j][i] =0.;
-			LGC_In_E[j][i] =0.;
-			LGC_Out_G[j][i] =0.;
-			LGC_Out_E[j][i] =0.;
+	const int SPD_Module = 30; //30 module around the circle
+	const int SPD_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
+	double SPD_R[SPD_Slide];//Center location of each slide
+	double SPD_In_G[SPD_Module][SPD_Slide];// Number of photons going into the device
+	double SPD_In_E[SPD_Module][SPD_Slide];// Number of electrons going into the device
+	double SPD_Out_G[SPD_Module][SPD_Slide];// Number of photons going into the device
+	double SPD_Out_E[SPD_Module][SPD_Slide];// Number of electrons going into the device
+	for(int i=0;i<SPD_Slide;i++){//I just want to initialize everything
+		SPD_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
+		for(int j=0;j<SPD_Module;j++){
+			SPD_In_G[j][i] =0.;
+			SPD_In_E[j][i] =0.;
+			SPD_Out_G[j][i] =0.;
+			SPD_Out_E[j][i] =0.;
 		}
 	}
-	double LGC_Threshold = 1.; //GeV for EC cut, the cut could be tight if using Jin's curves
-	double EC_Threshold = 1.; 
-	//double LGC_Threshold = 0.000001; //MeV for EC cut, the cut could be tight if using Jin's curves
+	
+	double SPD_Threshold = 0.000001; //MeV for SPD cut
+	double EC_Threshold = 1.0; //1 GeV for LAEC cut
+	int VP_Before = 5210000; //LASPD virtual plane
+	int VP_After  = 3210000; //LAEC virtual plane
 
-    const int VP_Before = 2110000; //LGC virtual plane
-	const int VP_After  = 2210000; //virtual plane of HGC
-	const double Z_LGC =96.0; //cm, LGC front VP
-	const double R_Min = 58.1;//cm, LGC front VP, use real detector's radius
-	const double R_Max = 126.9;//cm, LGC front VP, use real detector's radius
-	const double Z_Out = 305.0; //cm HGC VP position
-  	const double R_Min_Out = 83.0;//cm, HGC front VP
-	const double R_Max_Out = 235.0;//cm, HGC front VP, Originally 264.9cm but EC only has 235.
-	const double Z_EC = 427.5; //cm, EC front, VP position = 413cm
-	const double R_Min_EC = 105.0;//cm
-	const double R_Max_EC = 235.0;//cm
+	double Z_SPD = -67.45; //cm LASPD VP position
+	const double R_Min = 80.0;//cm, VP position, use SPD's actuall size 
+	const double R_Max = 135.0;//cm, VP position, SPD
+	double Z_Out = -66.50; //cm LAEC VP position
+	const double R_Min_Out = 83.0;//cm, LAEC VP front, use EC's actual size
+	const double R_Max_Out = 140.0;//cm,
+	const double Z_EC = -65.0; //cm, LAEC 
+	const double R_Min_EC = 83.0; //cm, LAEC
+	const double R_Max_EC = 140.0; //cm, LAEC
 	
 	//Other Definition	
 	const int Electron = 11;
@@ -251,12 +248,12 @@ void GetLGC(TString input_filename)
 	const int Neutrino1 = 12;//Nu_e
 	const int Neutrino2 = 14;//Nu_Mu
 	const int Neutrino3 = 16;//Nu_Tao
-	 
-	double r = -1000.0, R_EC = -1000.0;//cm
+  	 
+	double r = -1000.0, z = -1000.0, R_EC = -1000.0;//cm
 	int Slide_ID = 0;
 	int Module_ID = 0;
 	/*}}}*/
-
+	
 	/*Read in each event{{{*/
 	//Int_t nselected = 1e5;
 	Int_t nselected = nevent;
@@ -265,9 +262,6 @@ void GetLGC(TString input_filename)
 	int Count_Ep =0, Count_Em=0, Count_Both=0;
 	double Count_Cut_Ep =0, Count_Cut_Em=0;
 	double EC_Cut = 0.0;
-	double fmom_old = 0.0;
-	double x_EC = 0.0, y_EC = 0.0, vertex_theta, vertex_phi, VR;
-
 	int Double_Count = 0;
 	int FirstOne0 = 0; //incoming electron with E<1GeV
 	int FirstOne1 = 0; //incoming electron with E>1GeV
@@ -275,308 +269,276 @@ void GetLGC(TString input_filename)
 	int FirstOne5 = 0; //outgoing positron with R-dependence E-cut
 	int FirstOne3 = 0; //incoming electron with R-dependence E-cut by slides
 	int FirstOne4 = 0; //outgoing electron with R-dependence E-cut by slides
-	int FirstOne6 = 0; //outgoing electron with R-dependence E-cut by slides
 	cerr<<"++++++++++++++++ "<<endl;
 	for(Int_t i=0;i<nselected;i++){
 		cout<<i<<"\r";
 
-		generated->GetEntry(i);
-		const int ng = gen_pid->size();//Normally there is only one particle in the gen
-		double gen_theta[ng], gen_phi[ng], gen_mom[ng];
-		int Is_Electron = -1;
-		for(unsigned int ig=0;ig<ng;ig++){
-			gen_mom[ig]=0.0; gen_phi[ig]=0.0; gen_theta[ig]=0.0;
-          if((int)gen_pid->at(ig)==Electron)
-             Is_Electron = ig;
-		  gen_mom[ig] = sqrt( pow(gen_px->at(ig),2)+pow(gen_py->at(ig),2)+pow(gen_pz->at(ig),2) ); 
-		  gen_theta[ig] = acos(gen_pz->at(ig)/gen_mom[ig])*DEG;
-		  gen_phi[ig] = atan2( gen_py->at(ig), gen_px->at(ig))*DEG;
-		}
+		flux->GetEntry(i);
+		FirstOne0 = 0;
+		FirstOne1 = 0;
+		FirstOne2 = 0;
+		FirstOne3 = 0;
+		FirstOne5 = 0;
+		//Double_Count = 0;
+		double EC_Cut_Max = 0;
+		for (Int_t j=0;j<flux_hitn->size();j++) {
+			r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
+			if(r > R_Max||r<R_Min) continue;//The radius of a mrpc sector is 210cm;
+			double fmom=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))/1e3;//GeV
+			if(flux_pz->at(j)<-1e-19)continue;
 
-		//if(gen_theta[Is_Electron]>=7.0){
-		if(1){
-			flux->GetEntry(i);
-			FirstOne0 = 0;
-			FirstOne1 = 0;
-			FirstOne2 = 0;
-			FirstOne3 = 0;
-			FirstOne5 = 0;
-			FirstOne6 = 0;
-			//Double_Count = 0;
+			if(fmom<1e-9) continue;
 
-			/*Into the Device{{{*/
-			double EC_Cut_Max = 0.0;
-			for (Int_t j=0;j<flux_hitn->size();j++) {
-				r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
-				if(r > R_Max||r<R_Min) continue;//The radius of a mrpc sector is 210cm;
+			double vertex_theta = atan(sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2))/(flux_pz->at(j)))*DEG;
+			R_EC = abs((Z_EC - Z_SPD) * tan(vertex_theta/DEG) + r);
+			if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;
 
-				if(flux_pz->at(j)<1e-9)continue;//Cout out backward particles
+			int ID_Pick = VP_Before;
+			int ID_flux =(int) (flux_id->at(j));
+			int PID_flux =(int) (flux_pid->at(j));
 
-				double fmom=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))/1e3;//GeV
-				if(fmom<1e-9) continue; //Cut out Zero-E particles
-			
-				double vertex_theta = atan(sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2))/(flux_pz->at(j)))*DEG;
-				R_EC = abs((Z_EC - Z_Out) * tan(vertex_theta/DEG) + r);
-				if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;
+			//Selct the right Cut	
+			//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
+            EC_Cut = 0;
+			if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
 
-				int ID_Pick = VP_Before;
-				int ID_flux = (int) (flux_id->at(j));
-				int PID_flux = (int) (flux_pid->at(j));
+				/*Look at the EC to check E-Cut{{{*/ 
+				int JustOnceHere=0;
+				for (Int_t m=0;m<flux_hitn->size();m++) {
+					int ID_flux_m = (int) (flux_id->at(m));
+					int PID_flux_m = (int) (flux_pid->at(m));
 
-				//Selct the right Cut	
-				//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
-				EC_Cut = 0;
-				if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
+					if(ID_flux_m==3210000){//On EC VP
+						double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
+						if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
 
-					/*Look at the EC to check E-Cut{{{*/ 
-					int JustOnceHere=0;
-					for (Int_t m=0;m<flux_hitn->size();m++) {
-						int ID_flux_m = (int) (flux_id->at(m));
-						int PID_flux_m = (int) (flux_pid->at(m));
+						if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
+						double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
+						if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
 
-						if(ID_flux_m==3110000){//On EC VP
-							double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
-							if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
-
-							if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
-							double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
-							if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
-
-							if(abs(fmom_EC-fmom)/fmom<0.20){//Alow 20% Eloss--FIX_HERE
-								if(abs(PID_flux_m)==Electron)
-									JustOnceHere++;
-								/*Find E-Cut{{{*/
-								for(int k=0;k<EC_Trigger_Slide;k++){
-									for(int l=0;l<EC_Trigger_Mom_Bin;l++){
-										if(r_EC>trig_cut[0][k][l][0]&&r_EC<=trig_cut[0][k][l][1]){
-											if(fmom_EC>trig_cut[0][k][l][2]&&fmom_EC<=trig_cut[0][k][l][3]){
-												EC_Cut =trig_cut[0][k][l][4]; 
-												Slide_ID = k;
-											}
+						if(abs(fmom_EC-fmom)/fmom<0.20){//Alow 20% Eloss--FIX_HERE
+							if(abs(PID_flux_m)==Electron)
+								JustOnceHere++;
+							/*Find E-Cut{{{*/
+							for(int k=0;k<EC_Trigger_Slide;k++){
+								for(int l=0;l<EC_Trigger_Mom_Bin;l++){
+									if(r_EC>trig_cut[1][k][l][0]&&r_EC<=trig_cut[1][k][l][1]){
+										if(fmom_EC>trig_cut[1][k][l][2]&&fmom_EC<=trig_cut[1][k][l][3]){
+											EC_Cut =trig_cut[1][k][l][4]; 
+											Slide_ID = k;
 										}
 									}
 								}
-								/*}}}*/
 							}
-							//if(JustOnceHere>1&&EC_Cut>0.5)
-							//	cerr<<"No! More than one !!!"<<endl;
+							/*}}}*/
 						}
-						if(EC_Cut>EC_Cut_Max)
-							EC_Cut_Max = EC_Cut;
-					}//for (Int_t m=0;m<flux_hitn->size();m++) 
-					/*}}}*/
-
-					if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
-						EC_Cut_Max = 0.0;
-						cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, fmom)<<endl;
-						return;
+			//			if(JustOnceHere>1&&EC_Cut>0.5)
+			//				cerr<<"No! More than one !!!"<<endl;
 					}
-				}
+					if(EC_Cut>EC_Cut_Max)
+						EC_Cut_Max = EC_Cut;
+				}//for (Int_t m=0;m<flux_hitn->size();m++) 
+				/*}}}*/
 
-				//Low Energy Electron <1GeV
-				if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom<EC_Threshold){//#Electrons going out 
-					if(FirstOne0<1)
-						Count_Low+=1.0;
-					FirstOne0 ++;;
-				}
-				//High Energy Electron >1GeV
-				if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=EC_Threshold){//#Electrons going out 
-					if(FirstOne1<1)
-						Count_High+=1.0;
-					FirstOne1 ++;;
-
-					Count_Both++;
-					if(PID_flux==Electron)
-						Count_Em++;
-					if(PID_flux==-Electron)
-						Count_Ep++;
-				}
-				//High Energy Electron with EC R-Cut 
-				if((PID_flux==Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
-					//Count_Em++;
-					if(FirstOne2<1)
-						Count_Cut_Em+=EC_Cut_Max;
-					FirstOne2 ++;;
-				}
-				//High Energy Positron with EC R-Cut 
-				if((PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
-					//Count_Ep++;
-					if(FirstOne5<1)
-						Count_Cut_Ep+=EC_Cut_Max;
-					FirstOne5 ++;;
-				}
-
-				//Count by slides
-				double hit_y = flux_avg_y->at(j), hit_x = flux_avg_x->at(j);	
-				double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
-				Module_ID = (int) hit_phi/(360./LGC_Module);
-
-				if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Photons going in
-					if(FirstOne6<1)
-						LGC_In_G[Module_ID][Slide_ID]+=EC_Cut_Max;
-					FirstOne6++;
-				}
-				if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
-					if(FirstOne3<1){
-						LGC_In_E[Module_ID][Slide_ID]+=EC_Cut_Max;
-					}
-					FirstOne3 ++;;
+				if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
+					EC_Cut_Max = 0.0;
+					cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, fmom)<<endl;
+					return;
 				}
 			}
-			/*}}}*/
 
-			//		if((FirstOne2>=1) && (FirstOne5>=1))
-			//			cerr<<" Oh! Double Counting !!!  "<< ++Double_Count<<endl;
+			double hit_y = flux_avg_y->at(j), hit_x = flux_avg_x->at(j);	
+			double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
+			Module_ID = (int) hit_phi/(360./SPD_Module);
 
-			/*Out from the Device{{{*/
-			FirstOne4 = 0;
-			if(1){
-				for (Int_t j=0;j<flux_hitn->size();j++) {
-					r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
-					if(r<R_Min_Out && r>R_Max_Out) continue;
+				//Low Energy Electron <1GeV
+			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom<EC_Threshold){//#Eelectrons going out 
+				if(FirstOne0<1)
+					Count_Low+=1.0;
+				FirstOne0 ++;;
+			}
+			//High Energy Electron >1GeV
+			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=EC_Threshold){//#Eelectrons going out 
+				if(FirstOne1<1)
+					Count_High+=1.0;
+				FirstOne1 ++;;
 
-					double fmom=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))/1e3;//GeV
-					if(flux_pz->at(j)<1e-9)continue;
-					if(fmom<1e-9) continue;
+				if(PID_flux==Electron)
+					Count_Em++;
+				if(PID_flux==-Electron)
+					Count_Ep++;
+			}
+			//High Energy Electron with EC R-Cut 
+			if((PID_flux==Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
+				//Count_Em++;
+				if(FirstOne2<1)
+					Count_Cut_Em+=EC_Cut_Max;
+				FirstOne2 ++;;
+			}
+			//High Energy Positron with EC R-Cut 
+			if((PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
+				//Count_Ep++;
+				if(FirstOne5<1)
+					Count_Cut_Ep+=EC_Cut_Max;
+				FirstOne5 ++;;
+			}
 
-					double vertex_theta = atan(sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2))/(flux_pz->at(j)))*DEG;
-					R_EC = abs((Z_EC - Z_Out) * tan(vertex_theta/DEG) + r);
-					if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;
+            //Count by slides
+			if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold)//#Photons going in
+				SPD_In_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
+				if(FirstOne3<1)
+					SPD_In_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+				FirstOne3 ++;;
+			}
+		}
 
+		if((FirstOne2>=1) && (FirstOne5>=1))
+			cerr<<" Oh! Double Counting !!!  "<< ++Double_Count<<endl;
 
-					int ID_Pick = VP_After;
-					int ID_flux = (int) (flux_id->at(j));
-					int PID_flux = (int) (flux_pid->at(j));
-					
-					//Selct the right Cut	
-					//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
-					EC_Cut = 0;
-					if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
+		FirstOne4 = 0;
+		for (Int_t j=0;j<flux_hitn->size();j++) {
+			r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
+			if(r<R_Min_Out && r>R_Max_Out) continue;
+			double fmom=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))/1e3;//GeV
+			if(flux_pz->at(j)<-1e-19)continue;
+			if(fmom<1e-9) continue;
+			double vertex_theta = atan(sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2))/(flux_pz->at(j)))*DEG;
+			R_EC = abs((Z_EC - Z_Out) * tan(vertex_theta/DEG) + r);
+			if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;
 
-						/*Look at the EC to check E-Cut{{{*/ 
-						int JustOnceHere=0;
-						for (Int_t m=0;m<flux_hitn->size();m++) {
-							int ID_flux_m = (int) (flux_id->at(m));
-							int PID_flux_m = (int) (flux_pid->at(m));
+			int ID_Pick = VP_After;
+			int ID_flux =(int) (flux_id->at(j));
+			int PID_flux =(int) (flux_pid->at(j));
+	
+			//Selct the right Cut	
+			//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
+            EC_Cut = 0;
+			if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
 
-							if(ID_flux_m==3110000){//On EC VP
-								double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
-								if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
+				/*Look at the EC to check E-Cut{{{*/ 
+				int JustOnceHere=0;
+				for (Int_t m=0;m<flux_hitn->size();m++) {
+					int ID_flux_m = (int) (flux_id->at(m));
+					int PID_flux_m = (int) (flux_pid->at(m));
 
-								if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
-								double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
-								if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
+					if(ID_flux_m==3210000){//On EC VP
+						double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
+						if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
 
-								if(abs(fmom_EC-fmom)/fmom<0.20){//Alow 20% Eloss--FIX_HERE
-									if(abs(PID_flux_m)==Electron)
-										JustOnceHere++;
-									/*Find E-Cut{{{*/
-									for(int k=0;k<EC_Trigger_Slide;k++){
-										for(int l=0;l<EC_Trigger_Mom_Bin;l++){
-											if(r_EC>trig_cut[0][k][l][0]&&r_EC<=trig_cut[0][k][l][1]){
-												if(fmom_EC>trig_cut[0][k][l][2]&&fmom_EC<=trig_cut[0][k][l][3]){
-													EC_Cut =trig_cut[0][k][l][4]; 
-													Slide_ID = k;
-												}
-											}
+						if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
+						double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
+						if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
+
+						if(abs(fmom_EC-fmom)/fmom<0.20){//Alow 20% Eloss--FIX_HERE
+							if(abs(PID_flux_m)==Electron)
+								JustOnceHere++;
+							/*Find E-Cut{{{*/
+							for(int k=0;k<EC_Trigger_Slide;k++){
+								for(int l=0;l<EC_Trigger_Mom_Bin;l++){
+									if(r_EC>trig_cut[1][k][l][0]&&r_EC<=trig_cut[1][k][l][1]){
+										if(fmom_EC>trig_cut[1][k][l][2]&&fmom_EC<=trig_cut[1][k][l][3]){
+											EC_Cut =trig_cut[1][k][l][4]; 
+											Slide_ID = k;
 										}
 									}
-									/*}}}*/
 								}
-							//	if(JustOnceHere>1&&EC_Cut>0.5)
-							//		cerr<<"No! More than one !!!"<<endl;
 							}
-							if(EC_Cut>EC_Cut_Max)
-								EC_Cut_Max = EC_Cut;
-						}//for (Int_t m=0;m<flux_hitn->size();m++) 
-						/*}}}*/
-
-						if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
-							EC_Cut_Max = 0.0;
-							cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, fmom)<<endl;
-							return;
+							/*}}}*/
 						}
+						//if(JustOnceHere>1&&EC_Cut>0.5)
+						//	cerr<<"No! More than one !!!"<<endl;
 					}
+					if(EC_Cut>EC_Cut_Max)
+						EC_Cut_Max = EC_Cut;
+				}//for (Int_t m=0;m<flux_hitn->size();m++) 
+				/*}}}*/
 
-					double hit_y = flux_avg_y->at(j), hit_x = flux_avg_x->at(j);	
-					double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
-					Module_ID = (int) hit_phi/(360./LGC_Module);
+				if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
+					EC_Cut_Max = 0.0;
+					cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, fmom)<<endl;
+					return;
+				}
+			}
 
-					if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Photons going out 
-						LGC_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max;
-					}
-					if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
-						if(FirstOne4<1)
-							LGC_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max;
-						FirstOne4 ++;;
-					}
-				}//Flux particles in one event
-			}//if(1)
-			/*}}}*/
-		}
+			double hit_y = flux_avg_y->at(j), hit_x = flux_avg_x->at(j);	
+			double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
+			Module_ID = (int) hit_phi/(360./SPD_Module);
+
+			if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold ){//#Photons going out 
+				SPD_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+			}
+			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
+				Count_Both++;
+				if(FirstOne4<1)
+					SPD_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+				FirstOne4 ++;;
+			}
+		}//Flux particles in one event
+
 	}
 	/*End Read in each event}}}*/
-	
+		
 	/*Count_Rate_Ractor{{{*/
-	double Count_To_Rate = 0.0;
-	if(input_filename.Contains("pi0")){
-		Count_To_Rate = 212.0/1e3; //Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 136.0/1e3;//Count to KHz
+		double Count_To_Rate = 0.0;
+		if(input_filename.Contains("pi0")){
+			Count_To_Rate = 212.0/1e3; //Count to KHz
+			if(input_filename.Contains("up")||input_filename.Contains("down")){
+				Count_To_Rate = 136.0/1e3;//Count to KHz
+			}
 		}
-	}
-	else if(input_filename.Contains("pip")){
-		Count_To_Rate = 241.0/1e3; //Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 134.0/1e3;//Count to KHz
+		else if(input_filename.Contains("pip")){
+			Count_To_Rate = 241.0/1e3; //Count to KHz
+			if(input_filename.Contains("up")||input_filename.Contains("down")){
+				Count_To_Rate = 134.0/1e3;//Count to KHz
+			}
 		}
-	}
-	else if(input_filename.Contains("pim")){
-		Count_To_Rate = 183.0/1e3; //Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 136.0/1e3;//Count to KHz
+		else if(input_filename.Contains("pim")){
+			Count_To_Rate = 183.0/1e3; //Count to KHz
+			if(input_filename.Contains("up")||input_filename.Contains("down")){
+				Count_To_Rate = 136.0/1e3;//Count to KHz
+			}
 		}
-	}
-	else if(input_filename.Contains("Kp")){
-		Count_To_Rate = 5.9/1e3; //Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 3.0/1e3;//Count to KHz
+		else if(input_filename.Contains("Kp")){
+			Count_To_Rate = 5.9/1e3; //Count to KHz
+			if(input_filename.Contains("up")||input_filename.Contains("down")){
+				Count_To_Rate = 3.0/1e3;//Count to KHz
+			}
 		}
-	}
-	else if(input_filename.Contains("Km")){
-		Count_To_Rate = 3.7/1e3;//Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 3.4/1e3;//Count to KHz
+		else if(input_filename.Contains("Km")){
+			Count_To_Rate = 3.7/1e3;//Count to KHz
+			if(input_filename.Contains("up")||input_filename.Contains("down")){
+				Count_To_Rate = 3.4/1e3;//Count to KHz
+			}
 		}
-	}
-	else if(input_filename.Contains("Ks")||input_filename.Contains("Kl")){
-		Count_To_Rate = 2.4/1e3;//Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 1.53/1e3;//Count to KHz
+		else if(input_filename.Contains("Ks")||input_filename.Contains("Kl")){
+			Count_To_Rate = 2.4/1e3;//Count to KHz
+			if(input_filename.Contains("up")||input_filename.Contains("down")){
+				Count_To_Rate = 1.53/1e3;//Count to KHz
+			}
 		}
-	}
-	else if(input_filename.Contains("p")){
-		Count_To_Rate = 37./1e3;//Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 23.0/1e3;//Count to KHz
+		else if(input_filename.Contains("p")){
+			Count_To_Rate = 37./1e3;//Count to KHz
+			if(input_filename.Contains("up")||input_filename.Contains("down")){
+				Count_To_Rate = 23.0/1e3;//Count to KHz
+			}
 		}
-	}
-	else
-		Count_To_Rate = (((1.5e-5)/(1.6e-19))/nevent)/1e3; //Count to KHz for 15uA electron events;
-	/*}}}*/
+		else
+			Count_To_Rate = (((1.5e-5)/(1.6e-19))/nevent)/1e3; //Count to KHz for 15uA electron events;
+		/*}}}*/
 
 	/*Output Results{{{*/
-	cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;
+		cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;
 
 	TString input_out = input_filename;
 	input_out.ReplaceAll(".root",".out");
-	ofstream outfile(Form("LGC_%s",input_out.Data()));
-	for(int k=0;k<LGC_Slide;k++){
-		for(int l=0;l<LGC_Module;l++){
-			 In_G +=LGC_In_G[l][k];
-			 In_E +=LGC_In_E[l][k];
-			 Out_E +=LGC_Out_E[l][k];
-			 Out_G +=LGC_Out_G[l][k];
+	ofstream outfile(Form("SPD_%s",input_out.Data()));
+	for(int k=0;k<SPD_Slide;k++){
+		for(int l=0;l<SPD_Module;l++){
+			 In_G +=SPD_In_G[l][k];
+			 In_E +=SPD_In_E[l][k];
+			 Out_E +=SPD_Out_E[l][k];
+			 Out_G +=SPD_Out_G[l][k];
 		}
 	}
 	cerr<<" ====== In_E = "<< In_E*Count_To_Rate<<endl;
@@ -594,5 +556,4 @@ void GetLGC(TString input_filename)
 	outfile<<" ====== Out_E = "<< Out_E*Count_To_Rate<<endl;
 	outfile<<" ====== Out_G = "<< Out_G*Count_To_Rate<<endl;
     /*}}}*/
-
 }

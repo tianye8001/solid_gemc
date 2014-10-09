@@ -116,8 +116,8 @@ void GetLGCEC(TString input_filename)
 	region_index = 0;
 
 	int det[2]={8,12};  //detecor ID
-	double Rmin[2]={90,80};
-	double Rmax[2]={230,140};
+	double rmin[2]={105,80};
+	double rmax[2]={235,140};
 
 	TFile *file_trig_cut[2][Ntrigline][2];//[Det_ID][Cut_ID][PID], Det_DC: 0->FA, 1->LA, PID: 0->e, 1->pi
 	// Radius(cm)  P Threshold (GeV)
@@ -206,8 +206,6 @@ void GetLGCEC(TString input_filename)
 
 	/*Define LGC{{{*/
 	//In each segmentation, 40 slides, each slides has 2.5cm width, 0.3cm between two slides.
-	const double R_Min = 58.1;//cm, LGC front
-	const double R_Max = 126.9;//cm
 	const int LGC_Module = 30; //30 module around the circle
 	const int LGC_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
 	const int LGC_Mom_Bin = 23;
@@ -227,10 +225,23 @@ void GetLGCEC(TString input_filename)
 			LGC_Out_E[j][i] =0.;
 		}
 	}
-	double LGC_Threshold = 0.02; //GeV for EC cut, the cut could be tight if using Jin's curves
+	double LGC_Threshold = 0.02; //GeV for LGC cut
 	double EC_Threshold = 1.; //GeV for EC cut, the cut could be tight if using Jin's curves
 	//double EC_Threshold = 0.900001; //GeV for EC cut, the cut could be tight if using Jin's curves
 
+	const double R_Min = 58.1;//cm, LGC front
+	const double R_Max = 126.9;//cm
+	const int VP_LGC = 2110000; //virtual plane
+	const int VP_HGC = 2210000; //virtual plane after LGC
+	const int VP_EC  = 3110000; //virtual plane after LGC
+	const double Z_LGC =96.0; //cm
+	const int Z_HGC = 305.0; //cm VP position
+	const double R_Min_Out = 83.0;//cm, LGC front, back = 96cm
+	const double R_Max_Out = 235.0;//cm, Originally 264.9cm but EC only has 230.
+	const double Z_EC = 427.5; //cm
+	const double R_Min_EC = 105.;//cm, LGC front, back = 96cm
+	const double R_Max_EC = 235.0;//cm, Originally 264.9cm but EC only has 230.
+		
 	//Other Definition	
 	const int Electron = 11;
 	const int Gamma = 22;
@@ -239,15 +250,6 @@ void GetLGCEC(TString input_filename)
 	const int Neutrino1 = 12;//Nu_e
 	const int Neutrino2 = 14;//Nu_Mu
 	const int Neutrino3 = 16;//Nu_Tao
-
-	const int VP_LGC = 2110000; //virtual plane
-	const int VP_HGC = 2210000; //virtual plane after LGC
-	const int VP_EC  = 3110000; //virtual plane after LGC
-	const double Z_LGC =96.0; //cm
-	const int Z_HGC = 305.0; //cm VP position
-	const double Z_EC = 425.5; //cm
-	const double R_Min_Out = 83.1;//cm, LGC front, back = 96cm
-	const double R_Max_Out = 264.9;//cm, Originally 264.9cm but EC only has 230.
 
 	double r = -1000.0, R_EC = -1000.0;//cm
 	int Slide_ID = 0;
@@ -285,7 +287,8 @@ void GetLGCEC(TString input_filename)
 		  gen_phi[ig] = atan2( gen_py->at(ig), gen_px->at(ig))*DEG;
 		}
 
-		if(gen_theta[Is_Electron]>=5.0){
+		if(1){
+		//if(gen_theta[Is_Electron]>=5.0){
 			flux->GetEntry(i);
 			FirstOne0 = 0;
 			FirstOne1 = 0;
@@ -306,8 +309,7 @@ void GetLGCEC(TString input_filename)
 				//if((abs(PID_flux)==Electron)&&ID_flux==VP_EC && fmom>0.5*EC_Threshold&&FirstOne0<1){
 				if((abs(PID_flux)==Electron)&&ID_flux==VP_EC && fmom>0.9*EC_Threshold){
 					r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
-					//if(r > 230||r<90) continue;//The radius of a mrpc sector is 210cm;
-					if(r > 235||r<105) continue;//The radius of a mrpc sector is 210cm;
+					if(r > R_Max_EC||r<R_Min_EC) continue;
 
 					/*Find E-Cut{{{*/
 					for(int k=0;k<LGC_Slide;k++){
@@ -343,7 +345,7 @@ void GetLGCEC(TString input_filename)
 							Sign = -1;
 
 						vertex_theta = acos((flux_pz->at(j))/(fmom*1e3));
-						vertex_phi = acos((flux_px->at(j))/(fmom*1e3)/sin(vertex_theta) );	
+						vertex_phi = atan2(flux_py->at(j),flux_px->at(j) );	
 						Theta_EC = vertex_theta*DEG; 
 						Phi_EC = vertex_phi*DEG;
 						P_EC = fmom;
@@ -377,7 +379,7 @@ void GetLGCEC(TString input_filename)
 						if(flux_pz->at(j)<1e-9)continue;//Cout out backward particles
 
 						vertex_theta = acos((flux_pz->at(j))/(fmom*1e3));
-						vertex_phi = acos((flux_px->at(j))/(fmom*1e3)/sin(vertex_theta) );	
+						vertex_phi = atan2(flux_py->at(j),flux_px->at(j) );	
 /*
 						cerr<<endl<<"***************************************"<<endl;
 						cerr<<Form("In  EC: E=%6.4f Theta=%7.2f Phi=%7.2f x=%7.2f y=%7.2f R=%7.2f",

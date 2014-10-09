@@ -1,3 +1,4 @@
+/*Header{{{*/
 #include <iostream> 
 #include <fstream>
 #include <cmath> 
@@ -22,10 +23,11 @@
 #include <TText.h>
 #include <TSystem.h>
 #include <TArc.h>
+/*}}}*/
 
 using namespace std;
 
-void GetLGC(TString input_filename)
+void GetFAEC(TString input_filename)
 {
 	gROOT->Reset();
 	gStyle->SetPalette(1);
@@ -107,7 +109,7 @@ void GetLGC(TString input_filename)
 	/*End Set Branch}}}*/
 	int nevent = (int)generated->GetEntries();
 	cout << "nevent = " << nevent << endl;
-	
+
 	/*EC Electron Trigger{{{*/
 	const int Ntrigline=6,Ntriglinebin=21;
 	int region_index;
@@ -116,7 +118,7 @@ void GetLGC(TString input_filename)
 	//	else {cout << "need option for FA or LA region" << endl; exit(-1);}
 	region_index = 0;
 
-	int det[2]={8,12};  //detecor id
+	int det[2]={8,12};  //detecor ID
 	double rmin[2]={105,80};
 	double rmax[2]={235,140};
 
@@ -207,42 +209,38 @@ void GetLGC(TString input_filename)
 	const int EC_Trigger_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
 	const int EC_Trigger_Mom_Bin = 23;
 
+	/*Define EC{{{*/
+	const int EC_Module = 30; //30 module around the circle
+	const int EC_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
+	
+	double EC_R[EC_Slide];//Center location of each slide
+	double EC_In_G[EC_Module][EC_Slide];// Number of photons going into the device
+	double EC_In_E[EC_Module][EC_Slide];// Number of electrons going into the device
+	double EC_Out_G[EC_Module][EC_Slide];// Number of photons going into the device
+	double EC_Out_E[EC_Module][EC_Slide];// Number of electrons going into the device
 
-	/*Define LGC{{{*/
-	//In each segmentation, 40 slides, each slides has 2.5cm width, 0.3cm between two slides.
-	const int LGC_Module = 30; //30 module around the circle
-	const int LGC_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
-	double LGC_R[LGC_Slide];//Center location of each slide
-	double LGC_In_G[LGC_Module][LGC_Slide];// Number of photons going into the device
-	double LGC_In_E[LGC_Module][LGC_Slide];// Number of electrons going into the device
-	double LGC_Out_G[LGC_Module][LGC_Slide];// Number of photons going into the device
-	double LGC_Out_E[LGC_Module][LGC_Slide];// Number of electrons going into the device
-
-	for(int i=0;i<LGC_Slide;i++){//I just want to initialize everything
-		LGC_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
-		for(int j=0;j<LGC_Module;j++){
-			LGC_In_G[j][i] =0.;
-			LGC_In_E[j][i] =0.;
-			LGC_Out_G[j][i] =0.;
-			LGC_Out_E[j][i] =0.;
+	for(int i=0;i<EC_Slide;i++){//I just want to initialize everything
+		EC_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
+		for(int j=0;j<EC_Module;j++){
+			EC_In_G[j][i] =0.;
+			EC_In_E[j][i] =0.;
+			EC_Out_G[j][i] =0.;
+			EC_Out_E[j][i] =0.;
 		}
 	}
-	double LGC_Threshold = 1.; //GeV for EC cut, the cut could be tight if using Jin's curves
-	double EC_Threshold = 1.; 
-	//double LGC_Threshold = 0.000001; //MeV for EC cut, the cut could be tight if using Jin's curves
-
-    const int VP_Before = 2110000; //LGC virtual plane
-	const int VP_After  = 2210000; //virtual plane of HGC
-	const double Z_LGC =96.0; //cm, LGC front VP
-	const double R_Min = 58.1;//cm, LGC front VP, use real detector's radius
-	const double R_Max = 126.9;//cm, LGC front VP, use real detector's radius
-	const double Z_Out = 305.0; //cm HGC VP position
-  	const double R_Min_Out = 83.0;//cm, HGC front VP
-	const double R_Max_Out = 235.0;//cm, HGC front VP, Originally 264.9cm but EC only has 235.
+	double EC_Threshold = 1.; //GeV for EC cut, the cut could be tight if using Jin's curves
+	const int VP_Before = 3110000; //Front virtual plane
+	const int VP_After  = 3140000; //Rear virtual plane
+	const double Z_VP = 413.0; //cm VP position
+	const double R_Min = 105.0;//cm, VP position
+	const double R_Max = 235.0;//cm, VP position
+	const double Z_Out = 466.0; //cm VP position
+	const double R_Min_Out = 90.0;//cm, EC front
+	const double R_Max_Out = 265.0;//cm,
 	const double Z_EC = 427.5; //cm, EC front, VP position = 413cm
-	const double R_Min_EC = 105.0;//cm
-	const double R_Max_EC = 235.0;//cm
-	
+	const double R_Min_EC = 105.0;//cm, VP position
+	const double R_Max_EC = 235.0;//cm, VP position
+		
 	//Other Definition	
 	const int Electron = 11;
 	const int Gamma = 22;
@@ -251,8 +249,8 @@ void GetLGC(TString input_filename)
 	const int Neutrino1 = 12;//Nu_e
 	const int Neutrino2 = 14;//Nu_Mu
 	const int Neutrino3 = 16;//Nu_Tao
-	 
-	double r = -1000.0, R_EC = -1000.0;//cm
+
+	double r = -1000.0, z = -1000.0, R_EC = -1000.0;//cm
 	int Slide_ID = 0;
 	int Module_ID = 0;
 	/*}}}*/
@@ -266,16 +264,14 @@ void GetLGC(TString input_filename)
 	double Count_Cut_Ep =0, Count_Cut_Em=0;
 	double EC_Cut = 0.0;
 	double fmom_old = 0.0;
-	double x_EC = 0.0, y_EC = 0.0, vertex_theta, vertex_phi, VR;
-
 	int Double_Count = 0;
 	int FirstOne0 = 0; //incoming electron with E<1GeV
 	int FirstOne1 = 0; //incoming electron with E>1GeV
 	int FirstOne2 = 0; //incoming electron with R-dependence E-cut
-	int FirstOne5 = 0; //outgoing positron with R-dependence E-cut
 	int FirstOne3 = 0; //incoming electron with R-dependence E-cut by slides
 	int FirstOne4 = 0; //outgoing electron with R-dependence E-cut by slides
-	int FirstOne6 = 0; //outgoing electron with R-dependence E-cut by slides
+	int FirstOne5 = 0; //outgoing positron with R-dependence E-cut
+	int FirstOne6 = 0; //outgoing Gamma with R-dependence E-cut
 	cerr<<"++++++++++++++++ "<<endl;
 	for(Int_t i=0;i<nselected;i++){
 		cout<<i<<"\r";
@@ -291,19 +287,21 @@ void GetLGC(TString input_filename)
 		  gen_mom[ig] = sqrt( pow(gen_px->at(ig),2)+pow(gen_py->at(ig),2)+pow(gen_pz->at(ig),2) ); 
 		  gen_theta[ig] = acos(gen_pz->at(ig)/gen_mom[ig])*DEG;
 		  gen_phi[ig] = atan2( gen_py->at(ig), gen_px->at(ig))*DEG;
+      //    cerr<<Form("---#%d@%d Px=%f Py=%f Pz=%f P=%f Theta =%f Phi=%f ",i, ig,gen_px->at(ig),gen_py->at(ig),gen_pz->at(ig),gen_mom[ig],gen_theta[ig],gen_phi[ig])<<endl;
 		}
-
-		//if(gen_theta[Is_Electron]>=7.0){
+ 
+		//if(gen_theta[Is_Electron]>=5.0){
 		if(1){
 			flux->GetEntry(i);
 			FirstOne0 = 0;
 			FirstOne1 = 0;
 			FirstOne2 = 0;
 			FirstOne3 = 0;
+			FirstOne4 = 0;
 			FirstOne5 = 0;
 			FirstOne6 = 0;
 			//Double_Count = 0;
-
+		   
 			/*Into the Device{{{*/
 			double EC_Cut_Max = 0.0;
 			for (Int_t j=0;j<flux_hitn->size();j++) {
@@ -409,16 +407,16 @@ void GetLGC(TString input_filename)
 				//Count by slides
 				double hit_y = flux_avg_y->at(j), hit_x = flux_avg_x->at(j);	
 				double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
-				Module_ID = (int) hit_phi/(360./LGC_Module);
+				Module_ID = (int) hit_phi/(360./EC_Module);
 
 				if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Photons going in
 					if(FirstOne6<1)
-						LGC_In_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+						EC_In_G[Module_ID][Slide_ID]+=EC_Cut_Max;
 					FirstOne6++;
 				}
 				if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
 					if(FirstOne3<1){
-						LGC_In_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+						EC_In_E[Module_ID][Slide_ID]+=EC_Cut_Max;
 					}
 					FirstOne3 ++;;
 				}
@@ -500,23 +498,24 @@ void GetLGC(TString input_filename)
 
 					double hit_y = flux_avg_y->at(j), hit_x = flux_avg_x->at(j);	
 					double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
-					Module_ID = (int) hit_phi/(360./LGC_Module);
+					Module_ID = (int) hit_phi/(360./EC_Module);
 
 					if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Photons going out 
-						LGC_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+						EC_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max;
 					}
 					if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
 						if(FirstOne4<1)
-							LGC_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+							EC_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max;
 						FirstOne4 ++;;
 					}
 				}//Flux particles in one event
 			}//if(1)
 			/*}}}*/
+ 
 		}
 	}
 	/*End Read in each event}}}*/
-	
+
 	/*Count_Rate_Ractor{{{*/
 	double Count_To_Rate = 0.0;
 	if(input_filename.Contains("pi0")){
@@ -570,13 +569,13 @@ void GetLGC(TString input_filename)
 
 	TString input_out = input_filename;
 	input_out.ReplaceAll(".root",".out");
-	ofstream outfile(Form("LGC_%s",input_out.Data()));
-	for(int k=0;k<LGC_Slide;k++){
-		for(int l=0;l<LGC_Module;l++){
-			 In_G +=LGC_In_G[l][k];
-			 In_E +=LGC_In_E[l][k];
-			 Out_E +=LGC_Out_E[l][k];
-			 Out_G +=LGC_Out_G[l][k];
+	ofstream outfile(Form("EC_%s",input_out.Data()));
+	for(int k=0;k<EC_Slide;k++){
+		for(int l=0;l<EC_Module;l++){
+			In_G +=EC_In_G[l][k];
+			In_E +=EC_In_E[l][k];
+			Out_E +=EC_Out_E[l][k];
+			Out_G +=EC_Out_G[l][k];
 		}
 	}
 	cerr<<" ====== In_E = "<< In_E*Count_To_Rate<<endl;
@@ -585,14 +584,14 @@ void GetLGC(TString input_filename)
 	cerr<<" ====== Out_G = "<< Out_G*Count_To_Rate<<endl;
 
 	cerr<< Form("&&&& N (P<1GeV) = %d, N (P>1.0GeV) = %d, 1GeV Cut N = (-)%d / (+)%d /(+-)%d",
-		   	(int)(Count_Low), (int)(Count_High), (int)(Count_Em), (int)(Count_Ep), (int)(Count_Both))<<endl;
-	cerr<< Form("                                        R-Cut Cut N = (-)%d / (+)%d /(+-)%d", (int)(Count_Cut_Em),
-		   	(int)(Count_Cut_Ep), (int)(In_E))<<endl;
+			(int)(Count_Low), (int)(Count_High), (int)(Count_Em), (int)(Count_Ep), (int)(Count_Both))<<endl;
+	cerr<< Form("                                             R-Cut Cut N = (-)%d / (+)%d /(+-)%d",
+			(int)(Count_Cut_Em), (int)(Count_Cut_Ep), (int)(In_E))<<endl;
 
 	outfile<<" ====== In_E = "<< In_E*Count_To_Rate<<endl;
 	outfile<<" ====== In_G = "<< In_G*Count_To_Rate<<endl;
 	outfile<<" ====== Out_E = "<< Out_E*Count_To_Rate<<endl;
 	outfile<<" ====== Out_G = "<< Out_G*Count_To_Rate<<endl;
-    /*}}}*/
+	/*}}}*/
 
 }
