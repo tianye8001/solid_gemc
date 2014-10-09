@@ -30,8 +30,8 @@
 
 using namespace std;
 
-//read hits from a txt file produced by roo2hit.C
-void background(string input_filename, int nselected){
+//read hits from a root file produced by GEMC2 and EVIO2ROOT
+void background(string input_filename){
 	gROOT->Reset();
 	gStyle->SetPalette(1);
 	gStyle->SetOptStat(111111);
@@ -54,20 +54,20 @@ void background(string input_filename, int nselected){
 	// var1->Wprate, var2->Wmrate, var3->targetPol, var4->x,var5->y, var6->W, var7->Q2, var8->rate 
 	//
 	TTree *header = (TTree*) file->Get("header");
-	vector <double> *head_evn=0,*head_evn_type=0; //Note: Vectors have to be initialized at first!!!
-	vector <double> *head_beamPol=0;
-	vector<double> *head_Wmrate=0, *head_Wprate=0, *head_targetPol=0, *head_x=0, *head_Q2=0, *head_W=0, *head_rate=0, *head_y=0;
-	header->SetBranchAddress("evn",&head_evn);
-	header->SetBranchAddress("evn_type",&head_evn_type);
-	header->SetBranchAddress("beamPol",&head_beamPol);
-	header->SetBranchAddress("var1",    &head_Wprate);
-	header->SetBranchAddress("var2",    &head_Wmrate);
-	header->SetBranchAddress("var3",    &head_targetPol);
-	header->SetBranchAddress("var4",    &head_x);
-	header->SetBranchAddress("var5",    &head_y);
-	header->SetBranchAddress("var6",    &head_W);
-	header->SetBranchAddress("var7",    &head_Q2);
-	header->SetBranchAddress("var8",    &head_rate);
+	vector <double> *header_evn=0,*header_evn_type=0; //Note: Vectors have to be initialized at first!!!
+	vector <double> *header_beamPol=0;
+	vector<double> *header_Wmrate=0, *header_Wprate=0, *header_targetPol=0, *header_x=0, *header_Q2=0, *header_W=0, *header_rate=0, *header_y=0;
+	header->SetBranchAddress("evn",&header_evn);
+	header->SetBranchAddress("evn_type",&header_evn_type);
+	header->SetBranchAddress("beamPol",&header_beamPol);
+	header->SetBranchAddress("var1",    &header_Wprate);
+	header->SetBranchAddress("var2",    &header_Wmrate);
+	header->SetBranchAddress("var3",    &header_targetPol);
+	header->SetBranchAddress("var4",    &header_x);
+	header->SetBranchAddress("var5",    &header_y);
+	header->SetBranchAddress("var6",    &header_W);
+	header->SetBranchAddress("var7",    &header_Q2);
+	header->SetBranchAddress("var8",    &header_rate);
 
 	TTree *generated = (TTree*) file->Get("generated");
 	vector <int> *gen_pid=0;
@@ -111,7 +111,7 @@ void background(string input_filename, int nselected){
 	flux->SetBranchAddress("mvz",&flux_mvz);
 	flux->SetBranchAddress("avg_t",&flux_avg_t);
 	/*End Set Branch}}}*/
-	int Nevent = (int)generated->GetEntries();
+	int Nevent = (int)header->GetEntries();
 	cout << "Nevent = " << Nevent << endl;
 
 	char output_filename[80];
@@ -285,8 +285,8 @@ void background(string input_filename, int nselected){
 	TH1F *hactualothermass=new TH1F("actualothermass","actualothermass",1000,0.,10.);
     /*End Define Histogram}}}*/
 
-	/*Define Others{{{*/
-	bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_He3_window=false;  
+	/*Define run condition{{{*/
+	bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false;  
 	double current;
 	double target_center;  //in mm
 	if (input_filename.find("PVDIS",0) != string::npos){
@@ -296,51 +296,40 @@ void background(string input_filename, int nselected){
 		cout << " PVDIS " << current << " " << Nevent << endl;  
 	}
 	else if (input_filename.find("SIDIS_He3",0) != string::npos){
-		if (input_filename.find("SIDIS_He3_window",0) != string::npos) Is_SIDIS_He3_window=true;
-		else Is_SIDIS_He3=true;
+		Is_SIDIS_He3=true;
 		current=15e-6/1.6e-19;   //15uA
 		target_center=-3500;  //in mm  
 		cout << " SIDIS_He3 " << current << " " << Nevent <<  endl;  
 	}
-	else if (input_filename.find("SIDIS_proton",0) != string::npos){
+	else if (input_filename.find("SIDIS_NH3",0) != string::npos){
+		Is_SIDIS_NH3=true;	  
 		current=100e-9/1.6e-19;   //100nA
 		target_center=-3500;  //in mm  
-		cout << " SIDIS_proton " << current << " " << Nevent <<  endl;  
+		cout << " SIDIS_NH3 " << current << " " << Nevent <<  endl;  
 	}
-	else if (input_filename.find("JPsi",0) != string::npos){
+	else if (input_filename.find("JPsi_LH2",0) != string::npos){
+		Is_JPsi_LH2=true;
 		current=3e-6/1.6e-19;   //3uA
-		target_center=-3000;  //in mm  
-		cout << " JPsi " << current << " " << Nevent <<  endl;  
+		target_center=-3150;  //in mm  
+		cout << " JPsi_LH2 " << current << " " << Nevent <<  endl;  
 	}
 	else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
+	bool Is_EM=false;
+	if (input_filename.find("_EM_",0) != string::npos) {
+	  Is_EM=true;
+	  cout << "EM background " <<  endl;
+	}
+	else cout << "hadron background " <<  endl;
+	
 	bool Is_eDIS=false;
-	bool Is_pip=false,Is_pim=false,Is_pi0=false,Is_Kp=false,Is_Km=false,Is_Ks=false,Is_Kl=false,Is_p=false;
-	bool Is_other=false;
-	bool Is_real=false;
-
-	if(input_filename.find("_other_",0) != string::npos) {
-		Is_other=true;
-		if (input_filename.find("_eDIS_",0) != string::npos) {Is_eDIS=true;}
-		cout << " other background " <<  endl;  
+	if (input_filename.find("_eDIS_",0) != string::npos) {
+	  Is_eDIS=true;
+	  cout << "eDIS has W<2 cut" <<  endl;
 	}
-	else if(input_filename.find("_real_",0) != string::npos || input_filename.find("_actual_",0) != string::npos) {
-		Is_real=true;
-		//if (Nevent!=1000000) {cout << "real for 1e6 events only" << endl; exit(-1);}
-		if (input_filename.find("_pip_",0) != string::npos) {Is_pip=true;}
-		if (input_filename.find("_pim_",0) != string::npos) {Is_pim=true;}
-		if (input_filename.find("_pi0_",0) != string::npos) {Is_pi0=true;}
-		if (input_filename.find("_Kp_",0) != string::npos) {Is_Kp=true;}
-		if (input_filename.find("_Km_",0) != string::npos) {Is_Km=true;}    
-		if (input_filename.find("_Ks_",0) != string::npos) {Is_Ks=true;}    
-		if (input_filename.find("_Kl_",0) != string::npos) {Is_Kl=true;}        
-		if (input_filename.find("_p_",0) != string::npos) {Is_p=true;} 
+    /*End of Define run condition}}}*/
 
-		cout << " real background " <<  endl;
-	}
-	else  
-		cout << "EM background " <<  endl;
-
+	/*Loop events{{{*/    
 	//int evncounter=0;
 	int yescounter=0,Ek_nocounter=0,rate_nocounter=0;
 	int ratecounter=0;
@@ -349,20 +338,15 @@ void background(string input_filename, int nselected){
 
 	//int count_SC_front=0,count_SC=0,count_SC_back=0;
 	int count_SC_act=0,count_SC_inact=0;
-    /*End of Define Others}}}*/
 
-	if(nselected<1)
-		nselected = Nevent;
-	//nselected = 1000;
-	/*Loop events{{{*/
-	for(int i=0;i<nselected;i++) {
+	for(int i=0;i<Nevent;i++) {
 		cout << i << "\r";
 
 		header->GetEntry(i);
-		double rate = head_rate->at(0);
-		double W = head_W->at(0);
-		double Q2 = head_Q2->at(0);
-		double x = head_x->at(0);
+		double rate = header_rate->at(0);
+		double W = header_W->at(0);
+		double Q2 = header_Q2->at(0);
+		double x = header_x->at(0);
 
 		flux->GetEntry(i);
 		/*Loop fluxes{{{*/
@@ -558,21 +542,29 @@ void background(string input_filename, int nselected){
 			} 
 
 			yescounter++;
-
-			///cut away the back scattering from lead
-			if (input_filename.find("PVDIS",0) != string::npos) {  //PVDIS case
-				// 	  if (r/10.<110 || 265<r/10.) {backscat_counter++; continue;}
-				if (hit_id==8 && flux_vz->at(j)/10. > 318.2) {backscat_counter++; continue;}
-			}
-			if (input_filename.find("PVDIS",0) == string::npos) {  //non-PVDIS case
-				// 	  if ((hit_id==8 && flux_vz->at(j)/10. > 403.2) || (hit_id==12 && flux_vz->at(j)/10. > -66.8)) {backscat_counter++; continue;}
-				if ((hit_id==8 && flux_vz->at(j)/10. > 413.2) || (hit_id==12 && flux_vz->at(j)/10. > -66.8)){
-
-					backscat_counter++; 
-					continue;    
-				}
-			}
 			/*End of Check and Debugs}}}*/
+			
+			///cut away the back scattering from lead
+// 			if (input_filename.find("PVDIS",0) != string::npos) {  //PVDIS case
+// // 					  if (r/10.<110 || 265<r/10.) {backscat_counter++; continue;}
+// 				if (hit_id==8 && flux_vz->at(j)/10. > 318.2) {backscat_counter++; continue;}
+// 			}
+// 			if (input_filename.find("PVDIS",0) == string::npos) {  //non-PVDIS case
+// 				// 	  if ((hit_id==8 && flux_vz->at(j)/10. > 403.2) || (hit_id==12 && flux_vz->at(j)/10. > -66.8)) {backscat_counter++; continue;}
+// 				if ((hit_id==8 && flux_vz->at(j)/10. > 413.2) || (hit_id==12 && flux_vz->at(j)/10. > -66.8)){
+// 
+// 					backscat_counter++; 
+// 					continue;    
+// 				}
+// 			}
+			
+			///cut away the back scattering from lead			
+			if ((hit_id==8 || hit_id==12) && flux_pz->at(j) > 0.){
+			  backscat_counter++; 
+			  continue;    
+			}
+			
+			if (Is_eDIS && (W<2)) continue; /// cut for eDIS			
 
 			/*Start to Fill Histograms{{{*/
 			hvertex[hit_id][par]->Fill(flux_vz->at(j)/10.,sqrt(flux_vx->at(j)/10.*flux_vx->at(j)/10.+flux_vy->at(j)/10.*flux_vy->at(j)/10.));
@@ -585,40 +577,9 @@ void background(string input_filename, int nselected){
 			double areaR=2*3.1415926*r*1.; /// in mm2
 			double areaPhi=1.;  /// in any deg      
 			double areaTheta=2*3.1415926*r*(flux_avg_z->at(j)*(tan((Theta+0.25)/DEG)-tan((Theta-0.25)/DEG))); ///0.5deg width
-			if (Is_other) {
-				thisrate=rate;
-				if (input_filename.find("JPsi",0) != string::npos) thisrate=rate*1.2; ///use 1e37 while it should 1.2e37, may change later
-				if (Is_eDIS && (W<2)) continue; /// cut for eDIS
-				// 	if (Is_eDIS && (W<2||Q2<1)) continue; /// cut for eDIS	
-			}
-			else if (Is_real){
-				if(Is_PVDIS){
-					if (Is_pip || Is_pim || Is_pi0) thisrate=155000.;
-					if (Is_Kp || Is_Km) thisrate=3500.;
-					if (Is_Ks || Is_Kl) thisrate=1750.;
-					if (Is_p) thisrate=27000.;
-				}
-				else if(Is_SIDIS_He3_window){
-					if (Is_pip) thisrate=134.;
-					if (Is_pim) thisrate=136.;
-					if (Is_pi0) thisrate=136.;	  
-					if (Is_Kp) thisrate=3.0;
-					if (Is_Km) thisrate=3.4;
-					if (Is_Ks || Is_Kl) thisrate=1.53;
-					if (Is_p) thisrate=23.;  
-				}
-				else if(Is_SIDIS_He3){
-					if (Is_pip) thisrate=241.;
-					if (Is_pim) thisrate=183.;
-					if (Is_pi0) thisrate=212.;  
-					if (Is_Kp) thisrate=5.9;
-					if (Is_Km) thisrate=3.7;
-					if (Is_Ks || Is_Kl) thisrate=2.4;
-					if (Is_p) thisrate=37.;  
-				}
-			}
-			else 
-				thisrate=current/Nevent;
+			
+			if (Is_EM) thisrate=current/Nevent;
+			else thisrate=rate;
 
 			weight=thisrate/1e3/area;
 			weightR=thisrate/1e3/areaR;
@@ -719,7 +680,7 @@ void background(string input_filename, int nselected){
 			/*End of Fill Histograms}}}*/
 		}
 		/*End of Looping flux}}}*/
-	}//for (Int_t i=0;i<nselected;i++) {
+	}
 	/*End of Looping events}}}*/
 	
 	cout << "count_SC_act " << count_SC_act << " count_SC_inact " << count_SC_inact << endl;
