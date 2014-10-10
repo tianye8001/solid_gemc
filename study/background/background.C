@@ -339,7 +339,7 @@ void background(string input_filename){
 	//int count_SC_front=0,count_SC=0,count_SC_back=0;
 	int count_SC_act=0,count_SC_inact=0;
 
-	for(int i=0;i<1000;i++) {
+	for(int i=0;i<Nevent;i++) {
 		cout << i << "\r";
 
 		header->GetEntry(i);
