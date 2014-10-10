@@ -106,7 +106,7 @@ void GetLGCEC(TString input_filename)
 	/*End Set Branch}}}*/
 	int nevent = (int)generated->GetEntries();
 	cout << "nevent = " << nevent << endl;
-	
+
 	/*EC Electron Trigger{{{*/
 	const int Ntrigline=6,Ntriglinebin=21;
 	int region_index;
@@ -241,7 +241,7 @@ void GetLGCEC(TString input_filename)
 	const double Z_EC = 427.5; //cm
 	const double R_Min_EC = 105.;//cm, LGC front, back = 96cm
 	const double R_Max_EC = 235.0;//cm, Originally 264.9cm but EC only has 230.
-		
+
 	//Other Definition	
 	const int Electron = 11;
 	const int Gamma = 22;
@@ -273,6 +273,8 @@ void GetLGCEC(TString input_filename)
 	cerr<<"++++++++++++++++ "<<endl;
 	for(Int_t i=0;i<nselected;i++){
 		cout<<i<<"\r";
+		header->GetEntry(i);
+		double rate = head_rate->at(0);
 
 		generated->GetEntry(i);
 		const int ng = gen_pid->size();//Normally there is only one particle in the gen
@@ -280,15 +282,15 @@ void GetLGCEC(TString input_filename)
 		int Is_Electron = -1;
 		for(unsigned int ig=0;ig<ng;ig++){
 			gen_mom[ig]=0.0; gen_phi[ig]=0.0; gen_theta[ig]=0.0;
-          if((int)gen_pid->at(ig)==Electron)
-             Is_Electron = ig;
-		  gen_mom[ig] = sqrt( pow(gen_px->at(ig),2)+pow(gen_py->at(ig),2)+pow(gen_pz->at(ig),2) ); 
-		  gen_theta[ig] = acos(gen_pz->at(ig)/gen_mom[ig])*DEG;
-		  gen_phi[ig] = atan2( gen_py->at(ig), gen_px->at(ig))*DEG;
+			if((int)gen_pid->at(ig)==Electron)
+				Is_Electron = ig;
+			gen_mom[ig] = sqrt( pow(gen_px->at(ig),2)+pow(gen_py->at(ig),2)+pow(gen_pz->at(ig),2) ); 
+			gen_theta[ig] = acos(gen_pz->at(ig)/gen_mom[ig])*DEG;
+			gen_phi[ig] = atan2( gen_py->at(ig), gen_px->at(ig))*DEG;
 		}
 
 		if(1){
-		//if(gen_theta[Is_Electron]>=5.0){
+			//if(gen_theta[Is_Electron]>=5.0){
 			flux->GetEntry(i);
 			FirstOne0 = 0;
 			FirstOne1 = 0;
@@ -323,17 +325,17 @@ void GetLGCEC(TString input_filename)
 						}
 					}
 					/*}}}*/
-/*
-					vertex_theta = acos((flux_pz->at(j))/(fmom*1e3));
-					vertex_phi = acos((flux_px->at(j))/(fmom*1e3)/sin(vertex_theta) );	
-			        if(FirstOne0==1)		
-						cerr<<endl<<"***************************************"<<endl;
-					if(EC_Cut>=0.5){
-						cerr<<Form("In LGC: E=%6.4f Theta=%7.2f Phi=%7.2f x=%7.2f y=%7.2f R=%7.2f",
-								fmom, vertex_theta*DEG, vertex_phi*DEG, flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,r);	
-							cerr<<Form(" EC_Cut=%f", EC_Cut)<<endl;
-					}
-*/
+					/*
+					   vertex_theta = acos((flux_pz->at(j))/(fmom*1e3));
+					   vertex_phi = acos((flux_px->at(j))/(fmom*1e3)/sin(vertex_theta) );	
+					   if(FirstOne0==1)		
+					   cerr<<endl<<"***************************************"<<endl;
+					   if(EC_Cut>=0.5){
+					   cerr<<Form("In LGC: E=%6.4f Theta=%7.2f Phi=%7.2f x=%7.2f y=%7.2f R=%7.2f",
+					   fmom, vertex_theta*DEG, vertex_phi*DEG, flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,r);	
+					   cerr<<Form(" EC_Cut=%f", EC_Cut)<<endl;
+					   }
+					   */
 					if(EC_Cut>EC_Cut_Max){
 						//if(EC_Cut>=0.95){
 						//if(EC_Cut>=0.5){
@@ -359,108 +361,68 @@ void GetLGCEC(TString input_filename)
 						//cerr<<Form("In  EC: #%d E=%6.4f Theta=%7.2f Phi=%7.2f x=%7.2f y=%7.2f R=%7.2f, ECut=%f",
 						//		i, P_EC, Theta_EC, Phi_EC,x_LGC,y_LGC,R_LGC,EC_Cut )<<endl;	
 					}
-				}
-			}
-				/*}}}*/
-
-			if(FirstOne0>0&&EC_Cut_Max>0.1){
-				/*Into the LGC{{{*/
-				FirstOne1=0;
-				for (Int_t j=0;j<flux_hitn->size();j++) {
-					double fmom=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))/1e3;//GeV
-					if(fmom<1e-9) continue; //Cut out Zero-E particles
-					int ID_flux =(int) (flux_id->at(j));
-					int PID_flux =(int) (flux_pid->at(j));
-
-					if((abs(PID_flux)==Electron)&&ID_flux==VP_LGC && fmom>0.9*EC_Threshold){
-						r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
-						if(r > R_Max||r<R_Min) continue;//The radius of a mrpc sector is 210cm;
-
-						if(flux_pz->at(j)<1e-9)continue;//Cout out backward particles
-
-						vertex_theta = acos((flux_pz->at(j))/(fmom*1e3));
-						vertex_phi = atan2(flux_py->at(j),flux_px->at(j) );	
-/*
-						cerr<<endl<<"***************************************"<<endl;
-						cerr<<Form("In  EC: E=%6.4f Theta=%7.2f Phi=%7.2f x=%7.2f y=%7.2f R=%7.2f",
-								P_EC, Theta_EC, Phi_EC,x_LGC,y_LGC,R_LGC )<<endl;	
-
-						cerr<<Form("In LGC: E=%6.4f Theta=%7.2f Phi=%7.2f x=%7.2f y=%7.2f R=%7.2f,dE=%f",
-								fmom, vertex_theta*DEG, vertex_phi*DEG,
- flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,r, (fmom-P_EC)/fmom*100.)<<endl;	
-						cerr<<"======================================="<<endl<<endl;
-*/
-						if(FirstOne1<1)
-							In_E+=EC_Cut_Max;
-						FirstOne1++;
 					}
-				}
-				/*}}}*/
+					}
+					/*}}}*/
 
-				if(FirstOne1>2)
-					cerr<<"No~ Found more than one!!! "<< FirstOne1<<endl;
-			}
+					if(FirstOne0>0&&EC_Cut_Max>0.1){
+						/*Into the LGC{{{*/
+						FirstOne1=0;
+						for (Int_t j=0;j<flux_hitn->size();j++) {
+							double fmom=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))/1e3;//GeV
+							if(fmom<1e-9) continue; //Cut out Zero-E particles
+							int ID_flux =(int) (flux_id->at(j));
+							int PID_flux =(int) (flux_pid->at(j));
+
+							if((abs(PID_flux)==Electron)&&ID_flux==VP_LGC && fmom>0.9*EC_Threshold){
+								r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
+								if(r > R_Max||r<R_Min) continue;//The radius of a mrpc sector is 210cm;
+
+								if(flux_pz->at(j)<1e-9)continue;//Cout out backward particles
+
+								vertex_theta = acos((flux_pz->at(j))/(fmom*1e3));
+								vertex_phi = atan2(flux_py->at(j),flux_px->at(j) );	
+								/*
+								   cerr<<endl<<"***************************************"<<endl;
+								   cerr<<Form("In  EC: E=%6.4f Theta=%7.2f Phi=%7.2f x=%7.2f y=%7.2f R=%7.2f",
+								   P_EC, Theta_EC, Phi_EC,x_LGC,y_LGC,R_LGC )<<endl;	
+
+								   cerr<<Form("In LGC: E=%6.4f Theta=%7.2f Phi=%7.2f x=%7.2f y=%7.2f R=%7.2f,dE=%f",
+								   fmom, vertex_theta*DEG, vertex_phi*DEG,
+								   flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,r, (fmom-P_EC)/fmom*100.)<<endl;	
+								   cerr<<"======================================="<<endl<<endl;
+								   */
+								if(FirstOne1<1)
+									In_E+=EC_Cut_Max*rate;
+								FirstOne1++;
+							}
+						}
+						/*}}}*/
+
+						if(FirstOne1>2)
+							cerr<<"No~ Found more than one!!! "<< FirstOne1<<endl;
+					}
 		}
+		}
+		/*End Read in each event}}}*/
+
+		/*Count_Rate_Ractor{{{*/
+		double Count_To_Rate = 0.0;
+		if(input_filename.Contains("EM"))
+			Count_To_Rate = (((1.5e-5)/(1.6e-19))/nevent)/1e3; //Count to KHz for 15uA electron events;
+		else
+			Count_To_Rate = 1.0/1e3;
+		/*}}}*/
+
+		/*Output Results{{{*/
+		cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;
+
+		TString input_out = input_filename;
+		input_out.ReplaceAll(".root",".out");
+		ofstream outfile(Form("LGC_%s",input_out.Data()));
+
+		cerr<<" ====== In_LGC = "<< In_E*Count_To_Rate<<endl;
+		cerr<<" ====== In_EC  = "<< Out_E*Count_To_Rate<<endl;
+		/*}}}*/
+
 	}
-	/*End Read in each event}}}*/
-			
-	/*Count_Rate_Ractor{{{*/
-			double Count_To_Rate = 0.0;
-			if(input_filename.Contains("pi0")){
-				Count_To_Rate = 212.0/1e3; //Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 136.0/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("pip")){
-				Count_To_Rate = 241.0/1e3; //Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 134.0/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("pim")){
-				Count_To_Rate = 183.0/1e3; //Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 136.0/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("Kp")){
-				Count_To_Rate = 5.9/1e3; //Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 3.0/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("Km")){
-				Count_To_Rate = 3.7/1e3;//Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 3.4/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("Ks")||input_filename.Contains("Kl")){
-				Count_To_Rate = 2.4/1e3;//Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 1.53/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("p")){
-				Count_To_Rate = 37./1e3;//Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 23.0/1e3;//Count to KHz
-				}
-			}
-			else
-				Count_To_Rate = 1.0; //Count to MHz for 15uA electron events;
-			/*}}}*/
-
-	/*Output Results{{{*/
-	cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;
-
-	TString input_out = input_filename;
-	input_out.ReplaceAll(".root",".out");
-	ofstream outfile(Form("LGC_%s",input_out.Data()));
-
-	cerr<<" ====== In_LGC = "<< In_E*Count_To_Rate<<endl;
-	cerr<<" ====== In_EC  = "<< Out_E*Count_To_Rate<<endl;
-	/*}}}*/
-
-}

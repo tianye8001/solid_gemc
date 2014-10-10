@@ -273,6 +273,8 @@ void GetLAEC(TString input_filename)
 	cerr<<"++++++++++++++++ "<<endl;
 	for(Int_t i=0;i<nselected;i++){
 		cout<<i<<"\r";
+        header->GetEntry(i);
+		double rate = head_rate->at(0);
 
 		flux->GetEntry(i);
 		FirstOne0 = 0;
@@ -355,13 +357,13 @@ void GetLAEC(TString input_filename)
 				//Low Energy Electron <1GeV
 			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom<EC_Threshold){//#Eelectrons going out 
 				if(FirstOne0<1)
-					Count_Low+=1.0;
+					Count_Low+=1.0*rate;
 				FirstOne0 ++;;
 			}
 			//High Energy Electron >1GeV
 			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=EC_Threshold){//#Eelectrons going out 
 				if(FirstOne1<1)
-					Count_High+=1.0;
+					Count_High+=1.0*rate;
 				FirstOne1 ++;;
 
 				if(PID_flux==Electron)
@@ -373,23 +375,23 @@ void GetLAEC(TString input_filename)
 			if((PID_flux==Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
 				//Count_Em++;
 				if(FirstOne2<1)
-					Count_Cut_Em+=EC_Cut_Max;
+					Count_Cut_Em+=EC_Cut_Max*rate;
 				FirstOne2 ++;;
 			}
 			//High Energy Positron with EC R-Cut 
 			if((PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
 				//Count_Ep++;
 				if(FirstOne5<1)
-					Count_Cut_Ep+=EC_Cut_Max;
+					Count_Cut_Ep+=EC_Cut_Max*rate;
 				FirstOne5 ++;;
 			}
 
             //Count by slides
 			if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold)//#Photons going in
-				EC_In_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+				EC_In_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
 			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
 				if(FirstOne3<1)
-					EC_In_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+					EC_In_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
 				FirstOne3 ++;;
 			}
 		}
@@ -467,12 +469,12 @@ void GetLAEC(TString input_filename)
 			Module_ID = (int) hit_phi/(360./EC_Module);
 
 			if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold ){//#Photons going out 
-				EC_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+				EC_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
 			}
 			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
 				Count_Both++;
 				if(FirstOne4<1)
-					EC_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+					EC_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
 				FirstOne4 ++;;
 			}
 		}//Flux particles in one event
@@ -481,52 +483,12 @@ void GetLAEC(TString input_filename)
 	/*End Read in each event}}}*/
 	
 	/*Count_Rate_Ractor{{{*/
-			double Count_To_Rate = 0.0;
-			if(input_filename.Contains("pi0")){
-				Count_To_Rate = 212.0/1e3; //Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 136.0/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("pip")){
-				Count_To_Rate = 241.0/1e3; //Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 134.0/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("pim")){
-				Count_To_Rate = 183.0/1e3; //Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 136.0/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("Kp")){
-				Count_To_Rate = 5.9/1e3; //Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 3.0/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("Km")){
-				Count_To_Rate = 3.7/1e3;//Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 3.4/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("Ks")||input_filename.Contains("Kl")){
-				Count_To_Rate = 2.4/1e3;//Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 1.53/1e3;//Count to KHz
-				}
-			}
-			else if(input_filename.Contains("p")){
-				Count_To_Rate = 37./1e3;//Count to KHz
-				if(input_filename.Contains("up")||input_filename.Contains("down")){
-					Count_To_Rate = 23.0/1e3;//Count to KHz
-				}
-			}
-			else
-				Count_To_Rate = 1.0; //Count to MHz for 15uA electron events;
-			/*}}}*/
+	double Count_To_Rate = 0.0;
+	if(input_filename.Contains("EM"))
+		Count_To_Rate = (((1.5e-5)/(1.6e-19))/nevent)/1e3; //Count to KHz for 15uA electron events;
+	else
+        Count_To_Rate = 1.0/1e3;
+	/*}}}*/
 
 	/*Output Results{{{*/
 			cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;

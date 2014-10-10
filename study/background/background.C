@@ -45,7 +45,7 @@ void background(string input_filename){
 		exit(-1);
 	}
 	else cout << "open file " << input_filename << endl;
-	
+
 	/*Set Branch{{{*/
 	//Header Tree:
 	// Var#1~#8 are free slots for propogating important info from the "INPUT generator seed"
@@ -283,7 +283,7 @@ void background(string input_filename){
 
 	TH1F *hactualphotonpid=new TH1F("actualphotonpid","actualphotonpid",21,-10.5,10.5);
 	TH1F *hactualothermass=new TH1F("actualothermass","actualothermass",1000,0.,10.);
-    /*End Define Histogram}}}*/
+	/*End Define Histogram}}}*/
 
 	/*Define run condition{{{*/
 	bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false;  
@@ -317,17 +317,17 @@ void background(string input_filename){
 
 	bool Is_EM=false;
 	if (input_filename.find("_EM_",0) != string::npos) {
-	  Is_EM=true;
-	  cout << "EM background " <<  endl;
+		Is_EM=true;
+		cout << "EM background " <<  endl;
 	}
 	else cout << "hadron background " <<  endl;
-	
+
 	bool Is_eDIS=false;
 	if (input_filename.find("_eDIS_",0) != string::npos) {
-	  Is_eDIS=true;
-	  cout << "eDIS has W<2 cut" <<  endl;
+		Is_eDIS=true;
+		cout << "eDIS has W<2 cut" <<  endl;
 	}
-    /*End of Define run condition}}}*/
+	/*End of Define run condition}}}*/
 
 	/*Loop events{{{*/    
 	//int evncounter=0;
@@ -506,11 +506,11 @@ void background(string input_filename){
 				case 52:     if (subdetector_ID==521) hit_id=41;
 								 else if (subdetector_ID==520) hit_id=42;
 								 else cout << "wrong flux_ID 51 " << (int)flux_id->at(j)<< endl;
-								 
+
 								 break;		     
 				default:     cout << "wrong flux_ID 00 " << (int)flux_id->at(j)
-									 <<" ID="<<detector_ID<<  endl; 
-								 continue;//break;
+							 <<" ID="<<detector_ID<<  endl; 
+							 continue;//break;
 			}    
 			/*End of Check Detector ID}}}*/
 
@@ -543,27 +543,27 @@ void background(string input_filename){
 
 			yescounter++;
 			/*End of Check and Debugs}}}*/
-			
+
 			///cut away the back scattering from lead
-// 			if (input_filename.find("PVDIS",0) != string::npos) {  //PVDIS case
-// // 					  if (r/10.<110 || 265<r/10.) {backscat_counter++; continue;}
-// 				if (hit_id==8 && flux_vz->at(j)/10. > 318.2) {backscat_counter++; continue;}
-// 			}
-// 			if (input_filename.find("PVDIS",0) == string::npos) {  //non-PVDIS case
-// 				// 	  if ((hit_id==8 && flux_vz->at(j)/10. > 403.2) || (hit_id==12 && flux_vz->at(j)/10. > -66.8)) {backscat_counter++; continue;}
-// 				if ((hit_id==8 && flux_vz->at(j)/10. > 413.2) || (hit_id==12 && flux_vz->at(j)/10. > -66.8)){
-// 
-// 					backscat_counter++; 
-// 					continue;    
-// 				}
-// 			}
-			
+			// 			if (input_filename.find("PVDIS",0) != string::npos) {  //PVDIS case
+			// // 					  if (r/10.<110 || 265<r/10.) {backscat_counter++; continue;}
+			// 				if (hit_id==8 && flux_vz->at(j)/10. > 318.2) {backscat_counter++; continue;}
+			// 			}
+			// 			if (input_filename.find("PVDIS",0) == string::npos) {  //non-PVDIS case
+			// 				// 	  if ((hit_id==8 && flux_vz->at(j)/10. > 403.2) || (hit_id==12 && flux_vz->at(j)/10. > -66.8)) {backscat_counter++; continue;}
+			// 				if ((hit_id==8 && flux_vz->at(j)/10. > 413.2) || (hit_id==12 && flux_vz->at(j)/10. > -66.8)){
+			// 
+			// 					backscat_counter++; 
+			// 					continue;    
+			// 				}
+			// 			}
+
 			///cut away the back scattering from lead			
 			if ((hit_id==8 || hit_id==12) && flux_pz->at(j) > 0.){
-			  backscat_counter++; 
-			  continue;    
+				backscat_counter++; 
+				continue;    
 			}
-			
+
 			if (Is_eDIS && (W<2)) continue; /// cut for eDIS			
 
 			/*Start to Fill Histograms{{{*/
@@ -577,7 +577,7 @@ void background(string input_filename){
 			double areaR=2*3.1415926*r*1.; /// in mm2
 			double areaPhi=1.;  /// in any deg      
 			double areaTheta=2*3.1415926*r*(flux_avg_z->at(j)*(tan((Theta+0.25)/DEG)-tan((Theta-0.25)/DEG))); ///0.5deg width
-			
+
 			if (Is_EM) thisrate=current/Nevent;
 			else thisrate=rate;
 
@@ -682,7 +682,7 @@ void background(string input_filename){
 		/*End of Looping flux}}}*/
 	}
 	/*End of Looping events}}}*/
-	
+
 	cout << "count_SC_act " << count_SC_act << " count_SC_inact " << count_SC_inact << endl;
 	cout << "yescounter " << yescounter << " Ek_nocounter " << Ek_nocounter << " rate_nocounter " << rate_nocounter << endl;
 	cout << "counter_actualphoton " << counter_actualphoton << " counter_acutalother " << counter_acutalother << endl;
@@ -985,7 +985,7 @@ void background(string input_filename){
 	}
 
 	/*Neutrons{{{*/	
-	
+
 	gSystem->Load("./niel/niel_fun_cc.so"); 
 	//   TNiel niel_proton("niel/niel_proton.txt");
 	//   TNiel niel_electron("niel/niel_electron.txt");
@@ -1057,9 +1057,9 @@ void background(string input_filename){
 	hfluxEklog_cut_niel[12][3]->Draw();
 	hfluxEklog_cut_niel[15][3]->SetLineColor(2);
 	hfluxEklog_cut_niel[15][3]->Draw("same");
-	
-		/*Neutrons}}}*/
-		/*End of Plot and Save}}}*/
+
+	/*Neutrons}}}*/
+	/*End of Plot and Save}}}*/
 
 	outputfile->Write();
 	outputfile->Flush();

@@ -267,7 +267,7 @@ void GetLGC(TString input_filename)
 	double EC_Cut = 0.0;
 	double fmom_old = 0.0;
 	double x_EC = 0.0, y_EC = 0.0, vertex_theta, vertex_phi, VR;
-
+    double rate = 0.0;
 	int Double_Count = 0;
 	int FirstOne0 = 0; //incoming electron with E<1GeV
 	int FirstOne1 = 0; //incoming electron with E>1GeV
@@ -279,7 +279,8 @@ void GetLGC(TString input_filename)
 	cerr<<"++++++++++++++++ "<<endl;
 	for(Int_t i=0;i<nselected;i++){
 		cout<<i<<"\r";
-
+		header->GetEntry(i);
+        rate = head_rate->at(0);
 		generated->GetEntry(i);
 		const int ng = gen_pid->size();//Normally there is only one particle in the gen
 		double gen_theta[ng], gen_phi[ng], gen_mom[ng];
@@ -376,13 +377,13 @@ void GetLGC(TString input_filename)
 				//Low Energy Electron <1GeV
 				if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom<EC_Threshold){//#Electrons going out 
 					if(FirstOne0<1)
-						Count_Low+=1.0;
+						Count_Low+=1.0*rate;
 					FirstOne0 ++;;
 				}
 				//High Energy Electron >1GeV
 				if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=EC_Threshold){//#Electrons going out 
 					if(FirstOne1<1)
-						Count_High+=1.0;
+						Count_High+=1.0*rate;
 					FirstOne1 ++;;
 
 					Count_Both++;
@@ -395,14 +396,14 @@ void GetLGC(TString input_filename)
 				if((PID_flux==Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
 					//Count_Em++;
 					if(FirstOne2<1)
-						Count_Cut_Em+=EC_Cut_Max;
+						Count_Cut_Em+=EC_Cut_Max*rate;
 					FirstOne2 ++;;
 				}
 				//High Energy Positron with EC R-Cut 
 				if((PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
 					//Count_Ep++;
 					if(FirstOne5<1)
-						Count_Cut_Ep+=EC_Cut_Max;
+						Count_Cut_Ep+=EC_Cut_Max*rate;
 					FirstOne5 ++;;
 				}
 
@@ -413,12 +414,12 @@ void GetLGC(TString input_filename)
 
 				if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Photons going in
 					if(FirstOne6<1)
-						LGC_In_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+						LGC_In_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
 					FirstOne6++;
 				}
 				if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
 					if(FirstOne3<1){
-						LGC_In_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+						LGC_In_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
 					}
 					FirstOne3 ++;;
 				}
@@ -503,11 +504,11 @@ void GetLGC(TString input_filename)
 					Module_ID = (int) hit_phi/(360./LGC_Module);
 
 					if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Photons going out 
-						LGC_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max;
+						LGC_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
 					}
 					if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
 						if(FirstOne4<1)
-							LGC_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max;
+							LGC_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
 						FirstOne4 ++;;
 					}
 				}//Flux particles in one event
@@ -519,50 +520,10 @@ void GetLGC(TString input_filename)
 	
 	/*Count_Rate_Ractor{{{*/
 	double Count_To_Rate = 0.0;
-	if(input_filename.Contains("pi0")){
-		Count_To_Rate = 212.0/1e3; //Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 136.0/1e3;//Count to KHz
-		}
-	}
-	else if(input_filename.Contains("pip")){
-		Count_To_Rate = 241.0/1e3; //Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 134.0/1e3;//Count to KHz
-		}
-	}
-	else if(input_filename.Contains("pim")){
-		Count_To_Rate = 183.0/1e3; //Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 136.0/1e3;//Count to KHz
-		}
-	}
-	else if(input_filename.Contains("Kp")){
-		Count_To_Rate = 5.9/1e3; //Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 3.0/1e3;//Count to KHz
-		}
-	}
-	else if(input_filename.Contains("Km")){
-		Count_To_Rate = 3.7/1e3;//Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 3.4/1e3;//Count to KHz
-		}
-	}
-	else if(input_filename.Contains("Ks")||input_filename.Contains("Kl")){
-		Count_To_Rate = 2.4/1e3;//Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 1.53/1e3;//Count to KHz
-		}
-	}
-	else if(input_filename.Contains("p")){
-		Count_To_Rate = 37./1e3;//Count to KHz
-		if(input_filename.Contains("up")||input_filename.Contains("down")){
-			Count_To_Rate = 23.0/1e3;//Count to KHz
-		}
-	}
-	else
+	if(input_filename.Contains("EM"))
 		Count_To_Rate = (((1.5e-5)/(1.6e-19))/nevent)/1e3; //Count to KHz for 15uA electron events;
+	else
+        Count_To_Rate = 1.0/1e3;
 	/*}}}*/
 
 	/*Output Results{{{*/
