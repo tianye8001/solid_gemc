@@ -135,7 +135,7 @@ void background(string input_filename){
 	TH1F *hEfluxPhi[n][m],*hEfluxPhi_target[n][m],*hEfluxPhi_other[n][m];
 	TH2F *hflux_x_y[n][m],*hflux_x_y_high[n][m],*hflux_x_y_low[n][m],*hEflux_x_y[n][m];
 	TH1F *hPlog[n][m],*hElog[n][m],*hEklog[n][m];
-	TH1F *hfluxEklog_cut[n][m],*hfluxEklog_cut_niel[n][m];
+	TH1F *hfluxEklog[n][m],*hfluxEklog_niel[n][m];
 	TH2F *hP_Theta[n][m],*hP_Theta_high[n][m],*hP_Theta_low[n][m];
 	TH2F *hP_R[n][m],*hP_R_high[n][m],*hP_R_low[n][m];
 	TH2F *hPlog_R[n][m],*hPlog_R_high[n][m],*hPlog_R_low[n][m];
@@ -271,11 +271,11 @@ void background(string input_filename){
 			hEklog_R_Phi[k][l]->SetTitle(";Phi (deg);R (cm);log(Ek) (GeV)");
 
 			sprintf(hstname,"fluxEklog_cut_%i_%i",k,l);
-			hfluxEklog_cut[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-			hfluxEklog_cut[k][l]->SetTitle("at 10cm most inner part;log(Ek) MeV;flux (kHz/cm2)");    
+			hfluxEklog[k][l]=new TH1F(hstname,hstname,100,-6,2);
+			hfluxEklog[k][l]->SetTitle("without 1MeV neutron fluence equivalent NIEL;log(Ek) MeV;flux (kHz)");    
 			sprintf(hstname,"fluxEklog_cut_niel_%i_%i",k,l);
-			hfluxEklog_cut_niel[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-			hfluxEklog_cut_niel[k][l]->SetTitle("with 1MeV neutron fluence equivalent NIEL at 10cm most inner part;log(Ek) MeV;flux (kHz/cm2)*niel");
+			hfluxEklog_niel[k][l]=new TH1F(hstname,hstname,100,-6,2);
+			hfluxEklog_niel[k][l]->SetTitle("with 1MeV neutron fluence equivalent NIEL;log(Ek) MeV;flux (kHz)*niel");
 
 		} 
 	}
@@ -339,7 +339,7 @@ void background(string input_filename){
 	//int count_SC_front=0,count_SC=0,count_SC_back=0;
 	int count_SC_act=0,count_SC_inact=0;
 
-	for(int i=0;i<Nevent;i++) {
+	for(int i=0;i<1000;i++) {
 		cout << i << "\r";
 
 		header->GetEntry(i);
@@ -675,6 +675,9 @@ void background(string input_filename){
 				if (phi-int(phi/12)*12<6) hflux_x_y_high[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight/100.);
 				else hflux_x_y_low[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight/100.);    
 				hEflux_x_y[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight*Ek/100.*10.); ///in 1cm2 bin and from 1cm to 10cm	    
+				
+				hfluxEklog[hit_id][par]->Fill(log10(Ek),weight);
+// 				hfluxEklog_niel[hit_id][par]->Fill(log10(Ek),weight);
 			}
 			/*End of Other Detectors}}}*/	
 			/*End of Fill Histograms}}}*/
@@ -715,8 +718,8 @@ void background(string input_filename){
 		hPlog[k][0]->Add(hPlog[k][1],hPlog[k][2]);
 		hElog[k][0]->Add(hElog[k][1],hElog[k][2]);
 		hEklog[k][0]->Add(hEklog[k][1],hEklog[k][2]);
-		hfluxEklog_cut[k][0]->Add(hfluxEklog_cut[k][1],hfluxEklog_cut[k][2]);
-		hfluxEklog_cut_niel[k][0]->Add(hfluxEklog_cut_niel[k][1],hfluxEklog_cut_niel[k][2]);
+		hfluxEklog[k][0]->Add(hfluxEklog[k][1],hfluxEklog[k][2]);
+		hfluxEklog_niel[k][0]->Add(hfluxEklog_niel[k][1],hfluxEklog_niel[k][2]);
 		hP_Theta[k][0]->Add(hP_Theta[k][1],hP_Theta[k][2]);
 		hP_Theta_high[k][0]->Add(hP_Theta_high[k][1],hP_Theta_high[k][2]);   
 		hP_Theta_low[k][0]->Add(hP_Theta_low[k][1],hP_Theta_low[k][2]);         
@@ -987,25 +990,51 @@ void background(string input_filename){
 	/*Neutrons{{{*/	
 
 	gSystem->Load("./niel/niel_fun_cc.so"); 
-	//   TNiel niel_proton("niel/niel_proton.txt");
-	//   TNiel niel_electron("niel/niel_electron.txt");
-	//   TNiel niel_pions("niel/niel_pions.txt");
+	TNiel niel_proton("./niel/niel_proton.txt");
+	TNiel niel_electron("./niel/niel_electron.txt");
+	TNiel niel_pions("./niel/niel_pions.txt");
 	TNiel niel_neutron("./niel/niel_neutron.txt");
-	TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",50, -6,1.3);
-	for(int i=0;i<420;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(14./420.)-10))));
-	TCanvas *c_niel_neutron = new TCanvas("niel_neutron","niel_neutron",600,600);
+	TH1F *hniel_proton=new TH1F("niel_proton","niel_proton",100,-6,2);	
+	TH1F *hniel_electron=new TH1F("niel_electron","niel_electron",100,-6,2);	
+	TH1F *hniel_pions=new TH1F("niel_pions","niel_pions",100,-6,2);	
+	TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",100,-6,2);
+	for(int i=0;i<100;i++) hniel_proton->SetBinContent(i+1,niel_proton.GetNielFactor(pow(10,(i*(8./100.)-6))));
+	for(int i=0;i<100;i++) hniel_electron->SetBinContent(i+1,niel_electron.GetNielFactor(pow(10,(i*(8./100.)-6))));	
+	for(int i=0;i<100;i++) hniel_pions->SetBinContent(i+1,niel_pions.GetNielFactor(pow(10,(i*(8./100.)-6))));
+	for(int i=0;i<100;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(8./100.)-6))));
+	
+	TCanvas *c_niel = new TCanvas("niel","niel",900,900);
 	gPad->SetLogy(1);
-	hniel_neutron->Draw();
+	hniel_proton->SetMinimum(1e-5);
+	hniel_proton->SetMaximum(1e4);		
+	hniel_proton->Draw();
+	hniel_electron->Draw("same");
+	hniel_pions->Draw("same");
+	hniel_neutron->Draw("same");	
 
-	hfluxEklog_cut_niel[8][3]->Multiply(hfluxEklog_cut[8][3],hniel_neutron);
-	hfluxEklog_cut_niel[11][3]->Multiply(hfluxEklog_cut[11][3],hniel_neutron);
-	hfluxEklog_cut_niel[12][3]->Multiply(hfluxEklog_cut[12][3],hniel_neutron);
-	hfluxEklog_cut_niel[15][3]->Multiply(hfluxEklog_cut[15][3],hniel_neutron);
+	for(int k=0;k<n;k++){	
+			//   pid =0   photon+electron+positron
+			//        1   photon    
+			//        2   electron + positron
+			//        3   neutron
+			//        4   proton
+			//        5   pip
+			//        6   pim
+			//        7   Kp
+			//        8   Km
+			//        9   Kl
+			//       10   other  	  
+	  hfluxEklog_niel[k][2]->Multiply(hfluxEklog[k][2],hniel_electron);	  
+	  hfluxEklog_niel[k][3]->Multiply(hfluxEklog[k][3],hniel_neutron);
+	  hfluxEklog_niel[k][4]->Multiply(hfluxEklog[k][4],hniel_proton);
+	  hfluxEklog_niel[k][5]->Multiply(hfluxEklog[k][5],hniel_pions);
+	  hfluxEklog_niel[k][6]->Multiply(hfluxEklog[k][6],hniel_pions);	  	  
+	}
 
-	cout << hfluxEklog_cut_niel[8][3]->Integral() << endl;
-	cout << hfluxEklog_cut_niel[11][3]->Integral() << endl;
-	cout << hfluxEklog_cut_niel[12][3]->Integral() << endl;
-	cout << hfluxEklog_cut_niel[15][3]->Integral() << endl;
+	cout << hfluxEklog_niel[8][3]->Integral() << endl;
+	cout << hfluxEklog_niel[11][3]->Integral() << endl;
+	cout << hfluxEklog_niel[12][3]->Integral() << endl;
+	cout << hfluxEklog_niel[15][3]->Integral() << endl;
 
 	TCanvas *c_neutron_ec = new TCanvas("neutron_ec","neutron_ec",1600,900);
 	c_neutron_ec->Divide(4,2);
@@ -1023,16 +1052,16 @@ void background(string input_filename){
 	hEklog[11][3]->Draw("same");
 	c_neutron_ec->cd(3);
 	gPad->SetLogy(1);
-	hfluxEklog_cut[8][3]->SetLineColor(1);
-	hfluxEklog_cut[8][3]->Draw();
-	hfluxEklog_cut[11][3]->SetLineColor(2);
-	hfluxEklog_cut[11][3]->Draw("same");
+	hfluxEklog[8][3]->SetLineColor(1);
+	hfluxEklog[8][3]->Draw();
+	hfluxEklog[11][3]->SetLineColor(2);
+	hfluxEklog[11][3]->Draw("same");
 	c_neutron_ec->cd(4);
 	gPad->SetLogy(1);
-	hfluxEklog_cut_niel[8][3]->SetLineColor(1);
-	hfluxEklog_cut_niel[8][3]->Draw();
-	hfluxEklog_cut_niel[11][3]->SetLineColor(2);
-	hfluxEklog_cut_niel[11][3]->Draw("same");
+	hfluxEklog_niel[8][3]->SetLineColor(1);
+	hfluxEklog_niel[8][3]->Draw();
+	hfluxEklog_niel[11][3]->SetLineColor(2);
+	hfluxEklog_niel[11][3]->Draw("same");
 	c_neutron_ec->cd(5);
 	gPad->SetLogy(1);
 	// hfluxR[12][3]->SetLineColor(1);
@@ -1047,16 +1076,16 @@ void background(string input_filename){
 	hEklog[15][3]->Draw("same");
 	c_neutron_ec->cd(7);
 	gPad->SetLogy(1);
-	hfluxEklog_cut[12][3]->SetLineColor(1);
-	hfluxEklog_cut[12][3]->Draw();
-	hfluxEklog_cut[15][3]->SetLineColor(2);
-	hfluxEklog_cut[15][3]->Draw("same");
+	hfluxEklog[12][3]->SetLineColor(1);
+	hfluxEklog[12][3]->Draw();
+	hfluxEklog[15][3]->SetLineColor(2);
+	hfluxEklog[15][3]->Draw("same");
 	c_neutron_ec->cd(8);
 	gPad->SetLogy(1);
-	hfluxEklog_cut_niel[12][3]->SetLineColor(1);
-	hfluxEklog_cut_niel[12][3]->Draw();
-	hfluxEklog_cut_niel[15][3]->SetLineColor(2);
-	hfluxEklog_cut_niel[15][3]->Draw("same");
+	hfluxEklog_niel[12][3]->SetLineColor(1);
+	hfluxEklog_niel[12][3]->Draw();
+	hfluxEklog_niel[15][3]->SetLineColor(2);
+	hfluxEklog_niel[15][3]->Draw("same");
 
 	/*Neutrons}}}*/
 	/*End of Plot and Save}}}*/
