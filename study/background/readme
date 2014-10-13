@@ -23,16 +23,23 @@ edit "*.gcard" with the right input file and run it to produce hits in SoLID wit
 run "evio2root -INPUTF=background_solid_CLEO_SIDIS_He3_5e7.evio"
 this converts evio to root format
 
-<compile EC response function>
-cd ./solid/subsystem/ec/CaloSimShashlik/response
+Compile dependance lib
+1. compile EC response function
+cd response
 root 
 .L FastResponse.C+
+2. compile Non Ionizing Energy Loss in Silicon (NIEL)
+cd niel
+root
+.L niel_fun.cc+
 
-background.C take about 12G memery to run because it creates a lot histograms, you can run it on ifarm which has enough memmory for now.
+background.C take about 12G memery to run because it creates a lot histograms, you can run it on ifarm which has enough memmory for now
 
-root -b -q 'background.C+("background_solid_CLEO_SIDIS_He3_5e7.root",5e7)'
+run it like
+root -b -q 'background.C+("SIDIS_He3/background_solid_CLEO_SIDIS_He3_EM_1e8.root")'
 
-this plot histograms showing hits and store them in background_solid_CLEO_SIDIS_He3_5e7_output.root.
+this plot histograms showing hits and store them in
+"SIDIS_He3/background_solid_CLEO_SIDIS_He3_EM_1e8_output.root"
 
 = anslysis results = 
 
