@@ -192,12 +192,12 @@ else {cout << "need option for high or low region" << endl; exit(-1);}
 TFile *file_trig_cut[2];
 
 //trig file more1
-// file_trig_cut[0]=new TFile("triggerfile/PVDIS_LD2_201309/baffle_babarbafflemore1/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Real_Eklog_R_high_R0_ALL.rootTriggerSummaryhigh.root");
-// file_trig_cut[1]=new TFile("triggerfile/PVDIS_LD2_201309/baffle_babarbafflemore1/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Real_Eklog_R_low_R0_ALL.rootTriggerSummarylow.root");
+// file_trig_cut[0]=new TFile("../triggerfile/PVDIS_LD2_201309/baffle_babarbafflemore1/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Real_Eklog_R_high_R0_ALL.rootTriggerSummaryhigh.root");
+// file_trig_cut[1]=new TFile("../triggerfile/PVDIS_LD2_201309/baffle_babarbafflemore1/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Real_Eklog_R_low_R0_ALL.rootTriggerSummarylow.root");
 
 //trig file more1 block
-file_trig_cut[0]=new TFile("triggerfile/PVDIS_LD2_201309/baffle_babarbafflemore1_block/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Block_Real_Eklog_R_high_R0_ALL.rootTriggerSummaryhigh.root");
-file_trig_cut[1]=new TFile("triggerfile/PVDIS_LD2_201309/baffle_babarbafflemore1_block/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Block_Real_Eklog_R_low_R0_ALL.rootTriggerSummarylow.root");
+file_trig_cut[0]=new TFile("../triggerfile/PVDIS_LD2_201309/baffle_babarbafflemore1_block/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Block_Real_Eklog_R_high_R0_ALL.rootTriggerSummaryhigh.root");
+file_trig_cut[1]=new TFile("../triggerfile/PVDIS_LD2_201309/baffle_babarbafflemore1_block/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Block_Real_Eklog_R_low_R0_ALL.rootTriggerSummarylow.root");
 
 char *gr_trig_cut_ele_name[2][5]={
 "Graph_Electron_Eklog_R_high_R113",
