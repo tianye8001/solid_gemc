@@ -21,6 +21,7 @@
 
 using namespace std;
 
+// void trigger_EC_SIDIS(char *region)
 ///use Plog_R plot and trigger curve to make trigger cut and get trigger rate
 void trigger_EC_SIDIS()
 {
@@ -31,31 +32,46 @@ void trigger_EC_SIDIS()
 
 	int region_index=-1;
 	cerr<<" --- Region Index = (0->SIDIS_FA, 1->SIDIS_LA)"; cin >> region_index;
-	//if (region=="SIDIS_FA") region_index=0;
-	//else if (region=="SIDIS_LA") region_index=1;
-	//else {cout << "need option for FA or LA region" << endl; exit(-1);}
+// 	if (region=="SIDIS_FA") region_index=0;
+// 	else if (region=="SIDIS_LA") region_index=1;
+// 	else {cout << "need option for FA or LA region" << endl; exit(-1);}
 
 	double factor=1.;  //PVDIS need this factor 2 because rate calculation is for 2pi azimuthal, but SIDIS
 
-	const int m=9;
+// 	const int m=9;
+// 	char* input_filename[m]={
+// 		"background_solid_SIDIS_He3_actual_pip_p96_output.root",
+// 		"background_solid_SIDIS_He3_up_actual_pip_p96_output.root",
+// 		"background_solid_SIDIS_He3_down_actual_pip_p96_output.root",
+// 		"background_solid_SIDIS_He3_actual_pim_p96_output.root",
+// 		"background_solid_SIDIS_He3_up_actual_pim_p96_output.root",
+// 		"background_solid_SIDIS_He3_down_actual_pim_p96_output.root",
+// 		"background_solid_SIDIS_He3_actual_pi0_p96_output.root",
+// 		"background_solid_SIDIS_He3_up_actual_pi0_p96_output.root",
+// 		"background_solid_SIDIS_He3_down_actual_pi0_p96_output.root"
+// 	};
+// 	//1->photon, 2->e+-, 3->neutron, 4->proton, 5->pip, 6->pim, 7->Kp,8->Km, 9->Kl
+// 	int pid[m]={5,5,5,6,6,6,1,1,1};
+// 	char *label[m]={"#pi^{+}(DIS)","#pi^{+}(DIS,up)","#pi^{+}(DIS,down)",
+// 		"#pi^{-}(DIS)","#pi^{-}(DIS,up)","#pi^{-}(DIS,down)",
+// 		"#gamma(#pi^{0}(DIS))", "#gamma(#pi^{0}(DIS,up))", "#gamma(#pi^{0}(DIS,down))"};
+// 	double mass[m]={0.1396,0.1396,0.1396,0.1396,0.1396,0.1396,0.,0.,0.};
+// 	int color[m]={1,2,4,1,2,4,1,2,4,};
+
+	const int m=5;
 	char* input_filename[m]={
-		"background_solid_SIDIS_He3_actual_pip_p96_output.root",
-		"background_solid_SIDIS_He3_up_actual_pip_p96_output.root",
-		"background_solid_SIDIS_He3_down_actual_pip_p96_output.root",
-		"background_solid_SIDIS_He3_actual_pim_p96_output.root",
-		"background_solid_SIDIS_He3_up_actual_pim_p96_output.root",
-		"background_solid_SIDIS_He3_down_actual_pim_p96_output.root",
-		"background_solid_SIDIS_He3_actual_pi0_p96_output.root",
-		"background_solid_SIDIS_He3_up_actual_pi0_p96_output.root",
-		"background_solid_SIDIS_He3_down_actual_pi0_p96_output.root"
+// 	    "background_solid_SIDIS_He3_other_eDIS_output.root",
+	    "background_solid_SIDIS_He3_sum_actual_pim_output.root",	    
+	    "background_solid_SIDIS_He3_sum_actual_pim_output.root",
+	    "background_solid_SIDIS_He3_sum_actual_pip_output.root",
+	    "background_solid_SIDIS_He3_sum_actual_pi0_output.root",
+	    "background_solid_SIDIS_He3_actual_p_output.root"		
 	};
-	//1->photon, 2->e+-, 3->neutron, 4->proton, 5->pip, 6->pim, 7->Kp,8->Km, 9->Kl
-	int pid[m]={5,5,5,6,6,6,1,1,1};
-	char *label[m]={"#pi^{+}(DIS)","#pi^{+}(DIS,up)","#pi^{+}(DIS,down)",
-		"#pi^{-}(DIS)","#pi^{-}(DIS,up)","#pi^{-}(DIS,down)",
-		"#gamma(#pi^{0}(DIS))", "#gamma(#pi^{0}(DIS,up))", "#gamma(#pi^{0}(DIS,down))"};
-	double mass[m]={0.1396,0.1396,0.1396,0.1396,0.1396,0.1396,0.,0.,0.};
-	int color[m]={1,2,4,1,2,4,1,2,4,};
+	int pid[m]={2,6,5,1,4};
+	char *label[m]={"e(DIS)","#pi^{-}(DIS)","#pi^{+}(DIS)","#gamma(#pi^{0}(DIS))","p(DIS)"};
+	// char *label[m]={"e(EM)","#pi^{-}(EM)","#pi^{+}(EM)","#gamma(EM)","p(EM)"};
+	double mass[m]={0.0005,0.1396,0.1396,0.,0.938};
+	int color[m]={1,2,4,6,30};
 
 	/*EC Electron Trigger{{{*/
 	const int Ntrigline=6,Ntriglinebin=21;
@@ -99,7 +115,7 @@ void trigger_EC_SIDIS()
 	// 6 point cut, right on Q2=1 line and field bend line
 	double trig_cut_range_R[Ntrigline+1]={0,105,115,130,150,200,300};
 
-	TString Trigger_Dir_Rad="/w/work6501/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/background/SIDIS_He3/triggerfile/cutRadial_innerbackground/";
+	TString Trigger_Dir_Rad="../triggerfile/SIDIS_He3_201411/triggerfile/cutRadial_innerbackground/";
 	file_trig_cut[0][0][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH4.4.root",Trigger_Dir_Rad.Data()));
 	file_trig_cut[0][0][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH4.4.root",Trigger_Dir_Rad.Data()));
 	file_trig_cut[0][1][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH3.5.root",Trigger_Dir_Rad.Data()));
@@ -114,7 +130,7 @@ void trigger_EC_SIDIS()
 	file_trig_cut[0][5][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root",Trigger_Dir_Rad.Data()));
 
 	///Large Angle Trigger   has no radial dependence
-	TString Trigger_Dir_1GeVCut = "/w/work6501/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/background/SIDIS_He3/triggerfile/cut1GeV_innerbackground/";
+	TString Trigger_Dir_1GeVCut = "../triggerfile/SIDIS_He3_201411/triggerfile/cut1GeV_innerbackground/";
 	for (int i=0;i<Ntrigline;i++){
 		file_trig_cut[1][i][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunElectron_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root",Trigger_Dir_1GeVCut.Data()));
 		file_trig_cut[1][i][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunPion_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root",Trigger_Dir_1GeVCut.Data()));
