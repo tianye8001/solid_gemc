@@ -559,12 +559,13 @@ void background(string input_filename){
 			// 			}
 
 			///cut away the back scattering from lead			
-			if ((hit_id==8 || hit_id==12) && flux_pz->at(j) > 0.){
+			if ((hit_id==8 || hit_id==12) && flux_pz->at(j) < 0.){
 				backscat_counter++; 
 				continue;    
 			}
 
 			if (Is_eDIS && (W<2)) continue; /// cut for eDIS			
+// 			cout << "W " << W << " rate " << rate <<  endl;
 
 			/*Start to Fill Histograms{{{*/
 			hvertex[hit_id][par]->Fill(flux_vz->at(j)/10.,sqrt(flux_vx->at(j)/10.*flux_vx->at(j)/10.+flux_vy->at(j)/10.*flux_vy->at(j)/10.));
