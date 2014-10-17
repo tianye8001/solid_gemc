@@ -26,33 +26,35 @@ this converts evio to root format
 run 'root -b -q root2hit.C("background_solid_CLEO_SIDIS_He3_5e7.root")'
 this converts hits in flux bank into a txt file.
 
-get dependance
-1. EC response function
-cp /home/zwzhao/solid/solid_svn/solid/subsystem/ec/CaloSimShashlik/response/* ./
-root -b -q 'FastResponse.C+'
-cp * /home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/background/
-2. neutron damage (niel not working for now as 2013/09/04)
-cp /home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_fun.* ./
-cp /home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_*.txt ./
-root -b -q 'niel_fun.cc+'
+Compile dependance lib
+1. compile EC response function
+cd response
+root 
+.L FastResponse.C+
+2. compile Non Ionizing Energy Loss in Silicon (NIEL)
+cd niel
+root
+.L niel_fun.cc+
 
 background.C take about 12G memery to run because it creates a lot histograms, you can run it on ifarm which has enough memmory for now.
 
-root -b -q 'background.C+("background_solid_CLEO_SIDIS_He3_5e7.txt",5e7)'
+you have to run it in the background dir so it can find dependance lib, but you can give the full path of input file, the output file will be created where input file is
+for example
+root -b -q 'background.C+("PVDIS_LD2/background_solid_CLEO_SIDIS_He3_5e7.txt",5e7)'
 or 
-root -b -q 'background.C+("background_solid_CLEO_SIDIS_He3_other_pip_1e6.txt",1e6)'
+root -b -q 'background.C+("PVDIS_LD2/background_solid_CLEO_SIDIS_He3_other_pip_1e6.txt",1e6)'
 
 this plot histograms showing hits and store them in background_solid_CLEO_SIDIS_He3_5e7_output.root or background_solid_CLEO_SIDIS_He3_other_pip_1e6_output.root
 
 = anslysis results = 
 
-using the resulting root file from background.C
+using the resulting root file from background.C as input which is hard coded in the scripts
 
 Edep.C    calculate energy deposited in EC
-trigger_EC_PVDIS.C   calculate EC trigger rate for PVDIS
-trigger_EC_SIDIS.C   calculate EC electron trigger rate for SIDIS
-trigger_EC_SIDIS_MIP.C   calculate EC MIP trigger rate for SIDIS
-compare_1D.C             compare histogram
+trigger_EC_PVDIS.C("high") or trigger_EC_PVDIS.C("low") calculate EC trigger rate for PVDIS
+trigger_EC_SIDIS.C("SIDIS_FA") or trigger_EC_SIDIS.C("SIDIS_LA")   calculate EC electron trigger rate for SIDIS
+trigger_EC_SIDIS_MIP.C("SIDIS_FA")   calculate EC MIP trigger rate for SIDIS
+
 
 =======================
 2012 created by Zhiwen Zhao
