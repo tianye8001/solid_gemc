@@ -97,14 +97,21 @@ char* input_filename[m]={
 // "background_solid_CLEO_PVDIS_LD2_other_pi0_1e6_output.root",
 // "background_solid_CLEO_PVDIS_LD2_other_p_1e6_output.root",
 
-"background_solid_CLEO_PVDIS_LD2_real_pi0_1e6_output.root",
-// "background_solid_CLEO_PVDIS_LD2_other_eDIS_1e6_output.root",
-"background_solid_CLEO_PVDIS_LD2_real_pim_1e6_output.root",
-"background_solid_CLEO_PVDIS_LD2_real_pip_1e6_output.root",
-// "background_solid_CLEO_PVDIS_LD2_other_pi0_1e6_output.root",
-"background_solid_CLEO_PVDIS_LD2_real_pi0_1e6_output.root",
-"background_solid_CLEO_PVDIS_LD2_real_p_1e6_output.root",
+// "background_solid_CLEO_PVDIS_LD2_real_pi0_1e6_output.root",
+// // "background_solid_CLEO_PVDIS_LD2_other_eDIS_1e6_output.root",
+// "background_solid_CLEO_PVDIS_LD2_real_pim_1e6_output.root",
+// "background_solid_CLEO_PVDIS_LD2_real_pip_1e6_output.root",
+// // "background_solid_CLEO_PVDIS_LD2_other_pi0_1e6_output.root",
+// "background_solid_CLEO_PVDIS_LD2_real_pi0_1e6_output.root",
+// "background_solid_CLEO_PVDIS_LD2_real_p_1e6_output.root",
 
+// "background_solid_PVDIS_LD2_EM_1e8_output.root",
+"background_solid_PVDIS_LD2_other_eDIS_1e6_output.root",
+"background_solid_PVDIS_LD2_actual_pim_1e6_output.root",
+"background_solid_PVDIS_LD2_actual_pip_1e6_output.root",
+"background_solid_PVDIS_LD2_actual_pi0_1e6_output.root",
+"background_solid_PVDIS_LD2_actual_p_1e6_output.root",
+  
 // "background_solid_CLEO_PVDIS_LD2_other_eDIS_1e6_output.root",
 // "background_solid_CLEO_PVDIS_LD2_other_pi0_1e6_output.root",
 // "background_solid_CLEO_PVDIS_LD2_other_pi0_1e6_output.root",
@@ -238,10 +245,10 @@ trig_cut[j][i][0][0]=trig_cut_range_R[i];
 trig_cut[j][i][0][1]=trig_cut_range_R[i+1];
 trig_cut[j][i][0][2]=0.5;
 trig_cut[j][i][0][3]=1.;
-// trig_cut[j][i][0][4]=0.5*gr_trig_cut_ele[j]->GetY()[0];
-// trig_cut[j][i][0][5]=0.5*gr_trig_cut_pi[j]->GetY()[0];
-trig_cut[j][i][0][4]=0.;
-trig_cut[j][i][0][5]=0.;
+// trig_cut[j][i][0][4]=0.5*gr_trig_cut_ele[j]->GetY()[0];   //Method 1, eff(P<1GeV) = 0.5*eff(P=1GeV)
+// trig_cut[j][i][0][5]=0.5*gr_trig_cut_pi[j]->GetY()[0];   //Method 1, eff(P<1GeV) = 0.5*eff(P=1GeV)
+trig_cut[j][i][0][4]=0.;        //Method 2, eff(P<1GeV) = 0
+trig_cut[j][i][0][5]=0.;        //Method 2, eff(P<1GeV) = 0
 cout << gr_trig_cut_ele_name[j][i] << "\t" << gr_trig_cut_ele[j]->GetX()[0] << "\t" << gr_trig_cut_ele[j]->GetY()[0] << "\t" << gr_trig_cut_pi_name[j][i] << "\t" << gr_trig_cut_pi[j]->GetX()[0] << "\t" << gr_trig_cut_pi[j]->GetY()[0] << endl;
 for (int k=0;k<25;k++){
 trig_cut[j][i][k+1][0]=trig_cut_range_R[i];
