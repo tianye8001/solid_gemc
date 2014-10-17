@@ -17,10 +17,8 @@
 #include <TPaveText.h>
 #include <TText.h>
 #include <TSystem.h>
-// #include "/home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/niel/niel_fun.h"
-// #include "/home/zwzhao/solid/solid_svn/solid/CaloSimShashlik/response/FastResponse.C"
-#include "FastResponse.C"
-#include "niel_fun.cc"
+#include "./response/FastResponse.C"
+#include "./niel/niel_fun.cc"
 
 using namespace std;
 
@@ -30,8 +28,7 @@ gROOT->Reset();
 gStyle->SetPalette(1);
 gStyle->SetOptStat(111111);
 
-// gSystem->Load("/home/zwzhao/solid/solid_svn/solid/CaloSimShashlik/response/FastResponse_C.so");
-gSystem->Load("FastResponse_C.so");
+gSystem->Load("./response/FastResponse_C.so");
 
 const double DEG=180./3.1415926;
 
@@ -192,12 +189,11 @@ for(int k=0;k<n;k++){
     hEklog_R_Phi[k][l]->SetTitle(";Phi (deg);R (cm);log(Ek) (GeV)");
 
     sprintf(hstname,"fluxEklog_cut_%i_%i",k,l);
-    hfluxEklog_cut[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-    hfluxEklog_cut[k][l]->SetTitle("at 10cm most inner part;log(Ek) MeV;flux (kHz/cm2)");    
+    hfluxEklog_cut[k][l]=new TH1F(hstname,hstname,100,-6,2);
+    hfluxEklog_cut[k][l]->SetTitle("without 1MeV neutron fluence equivalent NIEL;log(Ek) MeV;flux (kHz)");    
     sprintf(hstname,"fluxEklog_cut_niel_%i_%i",k,l);
-    hfluxEklog_cut_niel[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-    hfluxEklog_cut_niel[k][l]->SetTitle("with 1MeV neutron fluence equivalent NIEL at 10cm most inner part;log(Ek) MeV;flux (kHz/cm2)*niel");
-    
+    hfluxEklog_cut_niel[k][l]=new TH1F(hstname,hstname,100,-6,2);
+    hfluxEklog_cut_niel[k][l]->SetTitle("with 1MeV neutron fluence equivalent NIEL;log(Ek) MeV;flux (kHz)*niel");    
  } 
 }
 TH1F *hpid=new TH1F("pid","pid",21,-10.5,10.5);
@@ -868,6 +864,10 @@ while (!input.eof()){
 	    if (phi-int(phi/12)*12<6) hflux_x_y_high[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight/100.);
 	    else hflux_x_y_low[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight/100.);    
 	    hEflux_x_y[hit_id][par]->Fill(flux_x/10.,flux_y/10.,weight*Ek/100.*10.); ///in 1cm2 bin and from 1cm to 10cm	    
+	    
+				hfluxEklog_cut[hit_id][par]->Fill(log10(Ek),weight);
+// 				hfluxEklog_cut_niel[hit_id][par]->Fill(log10(Ek),weight);
+	    
 	  }	
 	
 //     double rcut;  //in cm
@@ -1197,21 +1197,47 @@ for(int k=8;k<16;k++){
   }
 }
 
-gSystem->Load("niel_fun_cc.so"); 
-//   TNiel niel_proton("niel/niel_proton.txt");
-//   TNiel niel_electron("niel/niel_electron.txt");
-//   TNiel niel_pions("niel/niel_pions.txt");
-TNiel niel_neutron("niel_neutron.txt");
-TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",50, -6,1.3);
-for(int i=0;i<420;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(14./420.)-10))));
-TCanvas *c_niel_neutron = new TCanvas("niel_neutron","niel_neutron",600,600);
-gPad->SetLogy(1);
-hniel_neutron->Draw();
+	gSystem->Load("./niel/niel_fun_cc.so"); 
+	TNiel niel_proton("./niel/niel_proton.txt");
+	TNiel niel_electron("./niel/niel_electron.txt");
+	TNiel niel_pions("./niel/niel_pions.txt");
+	TNiel niel_neutron("./niel/niel_neutron.txt");
+	TH1F *hniel_proton=new TH1F("niel_proton","niel_proton",100,-6,2);	
+	TH1F *hniel_electron=new TH1F("niel_electron","niel_electron",100,-6,2);	
+	TH1F *hniel_pions=new TH1F("niel_pions","niel_pions",100,-6,2);	
+	TH1F *hniel_neutron=new TH1F("niel_neutron","niel_neutron",100,-6,2);
+	for(int i=0;i<100;i++) hniel_proton->SetBinContent(i+1,niel_proton.GetNielFactor(pow(10,(i*(8./100.)-6))));
+	for(int i=0;i<100;i++) hniel_electron->SetBinContent(i+1,niel_electron.GetNielFactor(pow(10,(i*(8./100.)-6))));	
+	for(int i=0;i<100;i++) hniel_pions->SetBinContent(i+1,niel_pions.GetNielFactor(pow(10,(i*(8./100.)-6))));
+	for(int i=0;i<100;i++) hniel_neutron->SetBinContent(i+1,niel_neutron.GetNielFactor(pow(10,(i*(8./100.)-6))));
+	
+	TCanvas *c_niel = new TCanvas("niel","niel",900,900);
+	gPad->SetLogy(1);
+	hniel_proton->SetMinimum(1e-5);
+	hniel_proton->SetMaximum(1e4);		
+	hniel_proton->Draw();
+	hniel_electron->Draw("same");
+	hniel_pions->Draw("same");
+	hniel_neutron->Draw("same");	
 
-hfluxEklog_cut_niel[8][3]->Multiply(hfluxEklog_cut[8][3],hniel_neutron);
-hfluxEklog_cut_niel[11][3]->Multiply(hfluxEklog_cut[11][3],hniel_neutron);
-hfluxEklog_cut_niel[12][3]->Multiply(hfluxEklog_cut[12][3],hniel_neutron);
-hfluxEklog_cut_niel[15][3]->Multiply(hfluxEklog_cut[15][3],hniel_neutron);
+	for(int k=0;k<n;k++){	
+			//   pid =0   photon+electron+positron
+			//        1   photon    
+			//        2   electron + positron
+			//        3   neutron
+			//        4   proton
+			//        5   pip
+			//        6   pim
+			//        7   Kp
+			//        8   Km
+			//        9   Kl
+			//       10   other  	  
+	  hfluxEklog_cut_niel[k][2]->Multiply(hfluxEklog_cut[k][2],hniel_electron);	  
+	  hfluxEklog_cut_niel[k][3]->Multiply(hfluxEklog_cut[k][3],hniel_neutron);
+	  hfluxEklog_cut_niel[k][4]->Multiply(hfluxEklog_cut[k][4],hniel_proton);
+	  hfluxEklog_cut_niel[k][5]->Multiply(hfluxEklog_cut[k][5],hniel_pions);
+	  hfluxEklog_cut_niel[k][6]->Multiply(hfluxEklog_cut[k][6],hniel_pions);	  	  
+	}
 
 cout << hfluxEklog_cut_niel[8][3]->Integral() << endl;
 cout << hfluxEklog_cut_niel[11][3]->Integral() << endl;
