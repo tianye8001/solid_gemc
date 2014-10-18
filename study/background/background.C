@@ -314,12 +314,34 @@ void background(string input_filename){
 	}
 	else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
-	bool Is_EM=false;
+	// there are different ways to get correct normalization for different files
+	//EM just need current and total number of event
+	//source from weighted or normalized event generator need rate and total file number, assume there are 100 files, each file has 10000 events, the rate in each file has normalized by 10000, then add 100 files with root tree together, the final result needs normalization by 10000*100=1e6, so the addtional factor is the file num 100
+	double filenum=1.;
+	bool Is_EM=false,Is_clean_weighted=false,Is_dirty_normalized=false;
 	if (input_filename.find("_EM_",0) != string::npos) {
 		Is_EM=true;
-		cout << "EM background " <<  endl;
+		cout << "EM background from beam on target" <<  endl;
 	}
-	else cout << "hadron background " <<  endl;
+	else if (input_filename.find("_clean_weighted_",0) != string::npos) {
+		Is_clean_weighted=true;
+		cout << "background from weighted event generator with no interaction except decay" <<  endl;
+	    if (input_filename.find("_file",0) != string::npos) {
+		filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
+		cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+	    }
+	    else {cout << "we need filenum for addtional normalization" << endl; return;}		
+	}	  
+	else if (input_filename.find("_dirty_normalized_",0) != string::npos) {
+		Is_dirty_normalized=true;
+		cout << "background from normalized event generator with all interaction" <<  endl;
+	    if (input_filename.find("_file",0) != string::npos) {
+		filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
+		cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+	    }
+	    else {cout << "we need filenum for addtional normalization" << endl; return;}
+	}	  	
+	else {cout << "not EM or clean_weighted or dirty_normalized " << endl; return;}
 
 	bool Is_eDIS=false;
 	if (input_filename.find("_eDIS_",0) != string::npos) {
@@ -578,8 +600,8 @@ void background(string input_filename){
 			double areaPhi=1.;  /// in any deg      
 			double areaTheta=2*3.1415926*r*(flux_avg_z->at(j)*(tan((Theta+0.25)/DEG)-tan((Theta-0.25)/DEG))); ///0.5deg width
 
-			if (Is_EM) thisrate=current/Nevent;
-			else thisrate=rate;
+			if (Is_EM) thisrate=current/Nevent;			
+			else thisrate=rate/filenum;			
 // 			cout << "thisrate" << rate << endl;
 			
 			weight=thisrate/1e3/area;
