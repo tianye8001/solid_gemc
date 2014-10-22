@@ -31,7 +31,37 @@ previously, "other" root file has all material krypotnite
 Now, "actual" root file has all material same as EM background, in particular, target collimater is made of tungsten
 Both target windows is studied also
 
-file:
+event generator:
+current event generator eicRate only produce events evenly distributed in phase space with individual rate per event
+A modified private copy of event generator for hadron is at  /home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_new/
+It uses a two step process (creating crossection histgram, then throw events accordingly) to produce hadron. The "rate" in output is not used, a single normalization factor is determined by comparing the new result to old output. This should gives more accurate 
+see Normalization below
+
+Normalization for EM background  (current/Nevent):  15e-6/1.6e-19/1e8
+Normalization for hadron background:
+	else if(Is_SIDIS_He3_window){
+	  if (Is_pip) thisrate=134.;
+	  if (Is_pim) thisrate=136.;
+	  if (Is_pi0) thisrate=136.;	  
+	  if (Is_Kp) thisrate=3.0;
+	  if (Is_Km) thisrate=3.4;
+	  if (Is_Ks || Is_Kl) thisrate=1.53;
+	  if (Is_p) thisrate=23.;  
+	}
+	else if(Is_SIDIS_He3){
+	  if (Is_pip) thisrate=241.;
+	  if (Is_pim) thisrate=183.;
+	  if (Is_pi0) thisrate=212.;  
+	  if (Is_Kp) thisrate=5.9;
+	  if (Is_Km) thisrate=3.7;
+	  if (Is_Ks || Is_Kl) thisrate=2.4;
+	  if (Is_p) thisrate=37.;  
+	}	
+
+files:
+"other" in file name means kryptonite for all geometry 
+"actual" in file name mean all real materials
+
 /home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/SIDIS_He3
 background_solid_CLEO_SIDIS_He3_1e8.root
 background_solid_CLEO_SIDIS_He3_actual_Kl_1e6.root
@@ -57,28 +87,7 @@ background_solid_CLEO_SIDIS_He3_window_upstream_actual_Ks_1e6.root
 background_solid_CLEO_SIDIS_He3_window_upstream_actual_p_1e6.root
 background_solid_CLEO_SIDIS_He3_window_upstream_actual_pi0_1e6.root
 background_solid_CLEO_SIDIS_He3_window_upstream_actual_pim_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_pip_1e6.root
-
-Normalization for EM background  (current/Nevent):  15e-6/1.6e-19/1e8
-Normalization for hadron background:
-	else if(Is_SIDIS_He3_window){
-	  if (Is_pip) thisrate=134.;
-	  if (Is_pim) thisrate=136.;
-	  if (Is_pi0) thisrate=136.;	  
-	  if (Is_Kp) thisrate=3.0;
-	  if (Is_Km) thisrate=3.4;
-	  if (Is_Ks || Is_Kl) thisrate=1.53;
-	  if (Is_p) thisrate=23.;  
-	}
-	else if(Is_SIDIS_He3){
-	  if (Is_pip) thisrate=241.;
-	  if (Is_pim) thisrate=183.;
-	  if (Is_pi0) thisrate=212.;  
-	  if (Is_Kp) thisrate=5.9;
-	  if (Is_Km) thisrate=3.7;
-	  if (Is_Ks || Is_Kl) thisrate=2.4;
-	  if (Is_p) thisrate=37.;  
-	}
+background_solid_CLEO_SIDIS_He3_window_upstream_actual_pip_1e6.root	
 
 
 ====== old_20130422 =============
