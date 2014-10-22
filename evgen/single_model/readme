@@ -1,0 +1,23 @@
+Attached is the our physics package for g2p. To use the WISER package:
+
+G2PPhysBase *p = new G2PPhysWISER();
+
+double pars[1];
+
+pars[0] = 0.027; // Radiation length
+
+p->SetPars(pars,1);
+
+p->SetParsTarget(Z,A);
+
+p->SetParticle(211); // Particle ID, follows PDG particle code
+
+xs = p->GetXS(Ei,Pf,ang);
+
+
+And the attached pdf file is a list of the models in this little package. 
+
+==============
+checked in by Zhiwen Zhao <zwzhao@jlab.org> 2014/10/22
+created by Chao Gu <cg2ja@virginia.edu>
+
