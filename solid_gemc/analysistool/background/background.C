@@ -735,6 +735,13 @@ while (!input.eof()){
       areaR=2*3.1415926*r*1.; /// in mm2
       areaPhi=1.;  /// in any deg      
       areaTheta=2*3.1415926*r*(flux_z*(tan((Theta+0.25)/DEG)-tan((Theta-0.25)/DEG))); ///0.5deg width
+      
+	// there are different ways to get correct normalization for different files
+	//EM just need current and total number of event
+	//source from weighted (file name with other) or normalized (file name with real or actual) event generator need rate and total file number, assume there are 100 files, each file has 10000 events, the rate in each file has normalized by 10000, then add 100 files with root tree together, the final result needs normalization by 10000*100=1e6, so the addtional factor is the file num 100
+	//only EM file was run on farm with multiple jobs
+        // other and real and actual files were run on ifarm and only has one file
+        //refer to log files
       if (Is_other) {
 	T->GetEntry(flux_evn-1);
 // 	cout << flux_evn << " " << pf << " " << theta << endl;
