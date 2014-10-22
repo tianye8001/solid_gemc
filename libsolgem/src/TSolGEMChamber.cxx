@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "THaApparatus.h"
 #include "TSolGEMChamber.h"
 #include "TSolWedge.h"
 #include "TMath.h"

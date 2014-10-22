@@ -109,7 +109,7 @@ class TSolSimDecoder : public THaEvData {
   TSolSimDecoder();
   virtual ~TSolSimDecoder();
 
-  virtual Int_t LoadEvent( const int* evbuffer, THaCrateMap* usermap );
+  virtual Int_t LoadEvent( const UInt_t* evbuffer, THaCrateMap* usermap );
   virtual void  Clear( Option_t* opt="" );
 
   Int_t  GetNBackTracks() const { return fBackTracks->GetLast()+1; }
@@ -138,7 +138,7 @@ class TSolSimDecoder : public THaEvData {
 
   Bool_t  fIsSetup;
 
-  Int_t DoLoadEvent( const int* evbuffer, THaCrateMap* usermap );
+  Int_t DoLoadEvent( const UInt_t* evbuffer, THaCrateMap* usermap );
 
   ClassDef(TSolSimDecoder,0) // Decoder for simulated SoLID spectrometer data
 };

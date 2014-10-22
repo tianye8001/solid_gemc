@@ -19,6 +19,7 @@
 #include "TClonesArray.h"
 #include "TError.h"
 #include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
@@ -132,7 +133,7 @@ void TSolSimDecoder::Clear( Option_t* opt )
 }
 
 //-----------------------------------------------------------------------------
-int TSolSimDecoder::LoadEvent(const int* evbuffer, THaCrateMap* map)
+int TSolSimDecoder::LoadEvent(const UInt_t* evbuffer, THaCrateMap* map)
 {
   // Wrapper around DoLoadEvent so we can conveniently stop the benchmark
   // counter in case of errors
@@ -145,7 +146,7 @@ int TSolSimDecoder::LoadEvent(const int* evbuffer, THaCrateMap* map)
 }
 
 //-----------------------------------------------------------------------------
-int TSolSimDecoder::DoLoadEvent(const int* evbuffer, THaCrateMap* map)
+int TSolSimDecoder::DoLoadEvent(const UInt_t* evbuffer, THaCrateMap* map)
 {
   // Fill crateslot structures with Monte Carlo event data in 'evbuffer'
 
@@ -366,7 +367,7 @@ void TSolSimBackTrack::Print( const Option_t* ) const
 {
   // Print TSolSimBackTrack info
 
-  cout << "track: type = " << fType
+    cout << "track: type = " << fType
        << ", PID = "       << fPID
        << ", sector = "    << fSector
        << endl;
