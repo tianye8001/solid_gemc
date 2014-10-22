@@ -68,6 +68,7 @@ sub make_gem
  my @Rin = (48,59,65,105,109);
  my @Rout = (122,143,143,230,237);
  my $Dz   = 9.781/2; 
+ my @offrot = (3.5, 3.0, 3.0, 2.5, 2.5);  # angular offsets in degrees (w.r.t. center on 12*$n for $n-th sector)
 
  my $Nlayer = 23;
   # unit in mm
@@ -120,9 +121,7 @@ sub make_gem
 	my $DlayerZ=$layer_thickness[$i-1]/2;
 
 	for( my $sec = 0; $sec < 30; $sec++ ){
-	    my $thisrot = -$sec*12.0;
-	    if( $n == 1 ){ $thisrot -= 2.0;}
-	    if( $n == 2 ){ $thisrot -= 4.0;}
+	    my $thisrot = -$sec*12.0 + $offrot[$n-1];
 
 	    $detector{"name"}        = "$DetectorName\_$n\_$i\_$sec";
 	    $detector{"mother"}      = "$DetectorName\_$n";
