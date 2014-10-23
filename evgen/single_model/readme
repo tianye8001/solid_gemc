@@ -17,6 +17,9 @@ xs = p->GetXS(Ei,Pf,ang);
 
 And the attached pdf file is a list of the models in this little package. 
 
+Peter Bosted's webpage mentioned deuteron fit needs tweaking
+https://userweb.jlab.org/~bosted/fits.html
+
 ==============
 checked in by Zhiwen Zhao <zwzhao@jlab.org> 2014/10/22
 created by Chao Gu <cg2ja@virginia.edu>
