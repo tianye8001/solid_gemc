@@ -46,10 +46,17 @@ public:
         fTargetMass = value;
     }
 
-    void SetParticle(int pid)
-    {
-        fPID = pid;
-    }
+  double GetTargetMass(){
+    return fTargetMass;
+  }
+
+  void SetParticle(int pid)
+  {
+    fPID = pid;
+  }
+  int GetParticle(){
+    return fPID;
+  }
 
     virtual void SetPars(double* array, int n);
 
