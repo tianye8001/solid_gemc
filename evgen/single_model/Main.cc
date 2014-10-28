@@ -268,22 +268,33 @@ int main()
   }
     
   //To generate GEMC lund file following code is added. Rakitha rakithab@jlab.org - Tue Oct 28 11:08:58 EDT 2014
-  /*
+  
   pPhys = new G2PPhysPB();
   pPhys->SetParticle(11);
   Ei = 2.253;
   Ef = 0.0, M = 0.0;
-  double PBarray[2]={0,0};//rad length before and after scattering vertex
+  double PBarray[2]={0,0};//rad length before and after scattering vertex  
   pPhys->SetPars(PBarray,2);
-  pPhys->SetTarget(1,2);
-  M = 2.014*0.931494028;
-  pPhys->SetTargetMass(M);
   
-
   double Ebeam = 11;//GeV
-  double lumi = 1e38;//cm^-2.s^-1
-  GenerateGEMCLundFile(pPhys,Ebeam,lumi,1000);
-  */    
+  
+//PVDIS_LD2    
+//   pPhys->SetTarget(1,2);
+//   M = 1.874; //2.014*0.931494028
+//   double lumi = 1.27e39;//cm^-2.s^-1   neuclon lumi
+ //SIDIS_He3
+//   pPhys->SetTarget(2,3);    
+//   M = 2.814;    
+//   double lumi = 3e36;//cm^-2.s^-1     neuclon lumi
+//SIDIS_He3_window_downstream
+  pPhys->SetTarget(17,35);    
+  M = 32.866;    
+  double lumi = 1.87e36;//cm^-2.s^-1         neuclon lumi
+  
+  pPhys->SetTargetMass(M); 
+  
+  GenerateGEMCLundFile(pPhys,Ebeam,lumi,1e6);
+      
   return 0;
 }
 
@@ -311,7 +322,10 @@ void GenerateGEMCLundFile(G2PPhysBase *pPhys,double beame, double lumi, double n
     //vertex
     vx = r3->Uniform(-0.5,0.5);
     vy = r3->Uniform(-0.5,0.5);
-    vz = r3->Uniform(-10,30);//for PVDIS
+//     vz = r3->Uniform(-10,30);//PVDIS_LD2
+//     vz = r3->Uniform(-370,330); //SIDIS_He3
+//     vz = r3->Uniform(-330.006,-329.994);//SIDIS_He3_downstream
+    vz = r3->Uniform(-370.006,-369.994);//SIDIS_He3_upstream    
     phi = r3->Uniform(0,2*3.14159);
     //kinematics
     mom_p = r3->Uniform(0,beame);
@@ -322,16 +336,18 @@ void GenerateGEMCLundFile(G2PPhysBase *pPhys,double beame, double lumi, double n
     //if (Q2<10 && w2<16){
     xs_pbosted = pPhys->GetXS(beame,mom_p,theta)*V;//cross section in units of ub or 1e-30 cm^2 the GetXS return in ub/MeV-sr and V has MeV-sr
     if (!isnan(xs_pbosted)){
-      printf(" %i %3.3f GeV %3.3f deg %3.3e ub %3.3f kHz \n",i,mom_p,theta/kDEG,xs_pbosted,xs_pbosted*1e-30*lumi/nevents/1000);
+//       printf(" %i %3.3f GeV %3.3f deg %3.3e ub %3.3f kHz \n",i,mom_p,theta/kDEG,xs_pbosted,xs_pbosted*1e-30*lumi/nevents/1000);
       rate = xs_pbosted*1e-30*lumi/nevents;
     }else{
-      printf(" %i %3.3f GeV %3.3f deg 0 ub 0 kHz \n",i,mom_p,theta/kDEG);
+//       printf(" %i %3.3f GeV %3.3f deg 0 ub 0 kHz \n",i,mom_p,theta/kDEG);
       rate = 0;
     }
-    //write to lund file
-    lundfile<<"1" << " \t " << 0 << " \t " << 0 << " \t " << "0"  << " \t " << "0" << " \t " << x << " \t " << (beame-mom_p)  << " \t " << w2  << " \t " << Q2  << " \t " << rate << endl;
-    lundfile<< " \t " << "1" << " \t " << -1 << " \t " << "1" << " \t " << pPhys->GetParticle() << " \t " << "0" << " \t " << "0" << " \t " << mom_p*sin(theta)*cos(phi) << " \t "<< mom_p*sin(theta)*sin(phi) << " \t "<< mom_p*cos(theta) << " \t " << mom_p << " \t " << pPhys->GetTargetMass() << " \t " << vx  << " \t " << vy << " \t " << vz << endl;
 
+    //write to lund file        
+    if (rate > 0.){
+    lundfile<<"1" << " \t " << 0 << " \t " << 0 << " \t " << "0"  << " \t " << "0" << " \t " << x << " \t " << (beame-mom_p)  << " \t " << w2  << " \t " << Q2  << " \t " << rate << endl;
+    lundfile<< " \t " << "1" << " \t " << -1 << " \t " << "1" << " \t " << pPhys->GetParticle() << " \t " << "0" << " \t " << "0" << " \t " << mom_p*sin(theta)*cos(phi) << " \t "<< mom_p*sin(theta)*sin(phi) << " \t "<< mom_p*cos(theta) << " \t " << mom_p << " \t " << 0.000511 << " \t " << vx  << " \t " << vy << " \t " << vz << endl;
+    }
     
     //}else
     //printf(" %i %3.3f GeV %3.3f deg 0 ub 0 kHz \n",i,mom_p,theta/kDEG);
