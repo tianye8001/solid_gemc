@@ -281,15 +281,15 @@ int main()
 //PVDIS_LD2    
 //   pPhys->SetTarget(1,2);
 //   M = 1.874; //2.014*0.931494028
-//   double lumi = 1.27e39;//cm^-2.s^-1   neuclon lumi
+//   double lumi = 0.63e39;//cm^-2.s^-1   neuclei lumi
  //SIDIS_He3
 //   pPhys->SetTarget(2,3);    
 //   M = 2.814;    
-//   double lumi = 3e36;//cm^-2.s^-1     neuclon lumi
+//   double lumi = 1e36;//cm^-2.s^-1    neuclei lumi
 //SIDIS_He3_window_downstream
   pPhys->SetTarget(17,35);    
   M = 32.866;    
-  double lumi = 1.87e36;//cm^-2.s^-1         neuclon lumi
+  double lumi = 0.054e36;//cm^-2.s^-1        neuclei lumi
   
   pPhys->SetTargetMass(M); 
   
