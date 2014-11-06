@@ -8,6 +8,7 @@ source $JLAB_ROOT/$JLAB_VERSION/ce/jlab.csh       #setup basic enviroment variab
 setenv SoLID_GEMC /home/zwzhao/solid/solid_svn/solid/solid_gemc2 #solid_gemc location where you download from SVN, modify this to your path!!!
 setenv GEMC_FIELD $SoLID_GEMC/field     #location of GEMC field map, change this to your path!!!
 setenv LD_LIBRARY_PATH ${GEMC}/source:${LD_LIBRARY_PATH}   # add path for "libgemc.so"
+setenv PATH /apps/cmake/bin/:{$PATH}     #add path for cmake2.8 on ifarm
 setenv PATH ${SoLID_GEMC}/source:${PATH}                   # add path for "solid_gemc"
 setenv GEMC_HOST soliddb.jlab.org   #use this if your system is on jlab network
 #setenv GEMC_HOST 127.0.0.1       #use this if you are tunnleing to access mysql server
