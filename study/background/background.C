@@ -343,11 +343,11 @@ void background(string input_filename){
 	}	  	
 	else {cout << "not EM or clean_weighted or dirty_normalized " << endl; return;}
 
-	bool Is_eDIS=false;
-	if (input_filename.find("_eDIS_",0) != string::npos) {
-		Is_eDIS=true;
-		cout << "eDIS has W<2 cut" <<  endl;
-	}
+// 	bool Is_eDIS=false;
+// 	if (input_filename.find("_eDIS_",0) != string::npos) {
+// 		Is_eDIS=true;
+// 		cout << "eDIS has W<2 cut" <<  endl;
+// 	}
 	/*End of Define run condition}}}*/
 
 	/*Loop events{{{*/    
@@ -431,17 +431,14 @@ void background(string input_filename){
 			int subdetector_ID= (int) flux_id->at(j);
 			subdetector_ID/=10000; 
 			//=========    hit_id and pid defination ==============
-			//   hitid =0 - 5  GEM plane 1 - 6
-			//         6       LGCC  PMT
-			//         18      LGCC  front
-			//         7       HGCC  PMT         
-			//         19      HGCC  front
+			// hitid  =0 - 5 6 GEM planes, unused
+			//         29 - 40  6 GEM plane, 1st layer and 2nd layer of gas		
+			//         20 - 25  6 GEM plane front			
+			//         6,18    LGCC  PMT, front
+			//         7,19    HGCC  PMT,  front
 			//         8 - 11  FAEC front,middle,inner,rear 
 			//         12 -15  LAEC front,middle,inner,rear 
-			//         16 - 17 MRPC front,within
-			//         20 - 25  GEM plane 1 - 6 front
-			//         29 - 40  GEM plane 1-6 #6 and #10 layers 
-			//         26 MRPC  
+			//         16,17,26 MRPC front,gas,glass
 			//         27-28 FA-SPD
 			//         41-42 LA-SPD 
 			//   pid =0   photon+electron+positron
@@ -459,79 +456,77 @@ void background(string input_filename){
 
 			int hit_id=-1;
 			switch (detector_ID){
-				case 11:     if (subdetector_ID==110) hit_id=0;
-								 else if (subdetector_ID==111) hit_id=20;
-								 else if (subdetector_ID==112) hit_id=29;
-								 else if (subdetector_ID==113) hit_id=30;
-								 else cout << "wrong flux_ID 11 " << (int)flux_id->at(j)<< endl;		      
-								 break; 
-				case 12:     if (subdetector_ID==120) hit_id=1;
-								 else if (subdetector_ID==121) hit_id=21;
-								 else if (subdetector_ID==122) hit_id=31;//#6 layer
-								 else if (subdetector_ID==123) hit_id=32;//#10 layers
-								 else cout << "wrong flux_ID 12 " << (int)flux_id->at(j)<< endl;		      
-								 break; 
-				case 13:     if (subdetector_ID==130) hit_id=2;
-								 else if (subdetector_ID==131) hit_id=22;
-								 else if (subdetector_ID==132) hit_id=33;
-								 else if (subdetector_ID==133) hit_id=34;
-								 else cout << "wrong flux_ID 13 " << (int)flux_id->at(j)<< endl;		      
-								 break; 
-				case 14:     if (subdetector_ID==140) hit_id=3;
-								 else if (subdetector_ID==141) hit_id=23;
-								 else if (subdetector_ID==142) hit_id=35;
-								 else if (subdetector_ID==143) hit_id=36;
-								 else cout << "wrong flux_ID 14 " << (int)flux_id->at(j)<< endl;		      
-								 break; 
-				case 15:     if (subdetector_ID==150) hit_id=4;
-								 else if (subdetector_ID==151) hit_id=24;
-								 else if (subdetector_ID==152) hit_id=37;
-								 else if (subdetector_ID==153) hit_id=38;
-								 else cout << "wrong flux_ID 15 " << (int)flux_id->at(j)<< endl;		      
-								 break; 
-				case 16:     if (subdetector_ID==160) hit_id=5;
-								 else if (subdetector_ID==161) hit_id=25;
-								 else if (subdetector_ID==162) hit_id=39;
-								 else if (subdetector_ID==163) hit_id=40;
-								 else cout << "wrong flux_ID 16 " << (int)flux_id->at(j)<< endl;		      
-								 break;
-				case 21:     if (subdetector_ID==210) hit_id=6;
-								 else if (subdetector_ID==211) hit_id=18;
-								 else cout << "wrong flux_ID 21 " << (int)flux_id->at(j)<< endl;		      
-								 break; 
-				case 22:     if (subdetector_ID==220) hit_id=7;
-								 else if (subdetector_ID==221) hit_id=19;
-								 else cout << "wrong flux_ID 22 " << (int)flux_id->at(j)<< endl;		      
-								 break;
-				case 31:     if (subdetector_ID==311) hit_id=8;
-								 else if (subdetector_ID==312) hit_id=9;
-								 else if (subdetector_ID==313) hit_id=10;
-								 else if (subdetector_ID==314) hit_id=11;  
-								 else cout << "wrong flux_ID 31 " << (int)flux_id->at(j)<< endl;		      
-								 break;
+				case 11:    if (subdetector_ID==110) hit_id=0;
+					    else if (subdetector_ID==111) hit_id=20;
+					    else if (subdetector_ID==112) hit_id=29;
+					    else if (subdetector_ID==113) hit_id=30;
+					    else cout << "wrong flux_ID 11 " << (int)flux_id->at(j)<< endl;		      
+					    break; 
+				case 12:    if (subdetector_ID==120) hit_id=1;
+					    else if (subdetector_ID==121) hit_id=21;
+					    else if (subdetector_ID==122) hit_id=31;//#6 layer
+					    else if (subdetector_ID==123) hit_id=32;//#10 layers
+					    else cout << "wrong flux_ID 12 " << (int)flux_id->at(j)<< endl;		      
+					    break; 
+				case 13:    if (subdetector_ID==130) hit_id=2;
+					    else if (subdetector_ID==131) hit_id=22;
+					    else if (subdetector_ID==132) hit_id=33;
+					    else if (subdetector_ID==133) hit_id=34;
+					    else cout << "wrong flux_ID 13 " << (int)flux_id->at(j)<< endl;		      
+					    break; 
+				case 14:    if (subdetector_ID==140) hit_id=3;
+					    else if (subdetector_ID==141) hit_id=23;
+					    else if (subdetector_ID==142) hit_id=35;
+					    else if (subdetector_ID==143) hit_id=36;
+					    else cout << "wrong flux_ID 14 " << (int)flux_id->at(j)<< endl;		      
+					    break; 
+				case 15:    if (subdetector_ID==150) hit_id=4;
+					    else if (subdetector_ID==151) hit_id=24;
+					    else if (subdetector_ID==152) hit_id=37;
+					    else if (subdetector_ID==153) hit_id=38;
+					    else cout << "wrong flux_ID 15 " << (int)flux_id->at(j)<< endl;		      
+					    break; 
+				case 16:    if (subdetector_ID==160) hit_id=5;
+					    else if (subdetector_ID==161) hit_id=25;
+					    else if (subdetector_ID==162) hit_id=39;
+					    else if (subdetector_ID==163) hit_id=40;
+					    else cout << "wrong flux_ID 16 " << (int)flux_id->at(j)<< endl;		      
+					    break;
+				case 21:    if (subdetector_ID==210) hit_id=6;
+					    else if (subdetector_ID==211) hit_id=18;
+					    else cout << "wrong flux_ID 21 " << (int)flux_id->at(j)<< endl;		      
+					    break; 
+				case 22:    if (subdetector_ID==220) hit_id=7;
+					    else if (subdetector_ID==221) hit_id=19;
+					    else cout << "wrong flux_ID 22 " << (int)flux_id->at(j)<< endl;		      
+					    break;
+				case 31:    if (subdetector_ID==311) hit_id=8;
+					    else if (subdetector_ID==312) hit_id=9;
+					    else if (subdetector_ID==313) hit_id=10;
+					    else if (subdetector_ID==314) hit_id=11;  
+					    else cout << "wrong flux_ID 31 " << (int)flux_id->at(j)<< endl;		      
+					    break;
 				case 32:     if (subdetector_ID==321) hit_id=12;
-								 else if (subdetector_ID==322) hit_id=13;
-								 else if (subdetector_ID==323) hit_id=14;
-								 else if (subdetector_ID==324) hit_id=15;		     
-								 else cout << "wrong flux_ID 32 " << (int)flux_id->at(j)<< endl;		      
-								 break;
+					    else if (subdetector_ID==322) hit_id=13;
+					    else if (subdetector_ID==323) hit_id=14;
+					    else if (subdetector_ID==324) hit_id=15;		     
+					    else cout << "wrong flux_ID 32 " << (int)flux_id->at(j)<< endl;		      
+					    break;
 				case 41:     if (subdetector_ID==411) hit_id=16;
-								 else if (subdetector_ID==410) hit_id=17;
-								 else if (subdetector_ID==412) hit_id=26;
-								 else cout << "wrong flux_ID 41 " << (int)flux_id->at(j)<< endl;		      
-								 break;
+					    else if (subdetector_ID==410) hit_id=17;
+					    else if (subdetector_ID==412) hit_id=26;
+					    else cout << "wrong flux_ID 41 " << (int)flux_id->at(j)<< endl;		      
+					    break;
 				case 51:     if (subdetector_ID==511) hit_id=27;
-								 else if (subdetector_ID==510) hit_id=28;
-								 else cout << "wrong flux_ID 51 " << (int)flux_id->at(j)<< endl;		      
-								 break;		     
+					    else if (subdetector_ID==510) hit_id=28;
+					    else cout << "wrong flux_ID 51 " << (int)flux_id->at(j)<< endl;		      
+					    break;		     
 				case 52:     if (subdetector_ID==521) hit_id=41;
-								 else if (subdetector_ID==520) hit_id=42;
-								 else cout << "wrong flux_ID 51 " << (int)flux_id->at(j)<< endl;
-
-								 break;		     
+					    else if (subdetector_ID==520) hit_id=42;
+					    else cout << "wrong flux_ID 52 " << (int)flux_id->at(j)<< endl;
+					    break;		     
 				default:     cout << "wrong flux_ID 00 " << (int)flux_id->at(j)
-							 <<" ID="<<detector_ID<<  endl; 
-							 continue;//break;
+							 <<" ID="<<detector_ID<<  endl;
 			}    
 			/*End of Check Detector ID}}}*/
 
@@ -585,7 +580,7 @@ void background(string input_filename){
 				continue;    
 			}
 
-			if (Is_eDIS && (W<2)) continue; /// cut for eDIS			
+// 			if (Is_eDIS && (W<2)) continue; /// cut for eDIS			
 // 			cout << "W " << W << " rate " << rate <<  endl;
 
 			/*Start to Fill Histograms{{{*/
