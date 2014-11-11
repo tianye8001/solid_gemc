@@ -525,6 +525,7 @@ while (!input.eof()){
 //         12 -15  LAEC front,middle,inner,rear 
 //         16 - 17 MRPC front,within
 //         20 - 25  GEM plane 1 - 6 front
+//         27 - 28  SPD front,scintillator    
 //   pid =0   photon+electron+positron
 //        1   photon    
 //        2   electron + positron
