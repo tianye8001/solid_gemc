@@ -432,15 +432,15 @@ void background(string input_filename){
 			subdetector_ID/=10000; 
 			//=========    hit_id and pid defination ==============
 			// hitid  =0 - 5 6 GEM planes, unused
-			//         29 - 40  6 GEM plane, 1st layer and 2nd layer of gas		
+			//         29 - 40  6 GEM plane,1st layer (odd) and 2nd layer (even) of gas		
 			//         20 - 25  6 GEM plane front			
 			//         6,18    LGCC  PMT, front
 			//         7,19    HGCC  PMT,  front
 			//         8 - 11  FAEC front,middle,inner,rear 
 			//         12 -15  LAEC front,middle,inner,rear 
 			//         16,17,26 MRPC front,gas,glass
-			//         27-28 FA-SPD
-			//         41-42 LA-SPD 
+			//         27-28 FASPD front, inner
+			//         41-42 LASPD front inner
 			//   pid =0   photon+electron+positron
 			//        1   photon    
 			//        2   electron + positron
@@ -583,10 +583,6 @@ void background(string input_filename){
 // 			if (Is_eDIS && (W<2)) continue; /// cut for eDIS			
 // 			cout << "W " << W << " rate " << rate <<  endl;
 
-			/*Start to Fill Histograms{{{*/
-			hvertex[hit_id][par]->Fill(flux_vz->at(j)/10.,sqrt(flux_vx->at(j)/10.*flux_vx->at(j)/10.+flux_vy->at(j)/10.*flux_vy->at(j)/10.));
-			hvertexZ[hit_id][par]->Fill(flux_vz->at(j)/10.);      
-
 			/*Calculate Weight{{{*/
 			double thisrate=0.0;
 			double weight=0.0,weightR=0.0,weightPhi=0.0,weightTheta=0.0;
@@ -604,76 +600,80 @@ void background(string input_filename){
 			weightPhi=thisrate/1e3/areaPhi;
 			weightTheta=thisrate/1e3/areaTheta;     
 			/*End of Caluclate Weight}}}*/
-
-			hhitXY[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight); 
-			hPlog[hit_id][par]->Fill(log10(P/1e3),weight);
-			hElog[hit_id][par]->Fill(log10(flux_trackE->at(j)/1e3),weight);
-			hEklog[hit_id][par]->Fill(log10(Ek/1e3),weight);
-			hP_Theta[hit_id][par]->Fill(Theta,P/1e3,weightTheta); ///in 0.5deg bin      
-			hP_R[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.); ///in 1cm bin            
-			hPlog_R[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.); ///in 1cm bin      
-			hElog_R[hit_id][par]->Fill(r/10.,log10(flux_trackE->at(j)/1e3),weightR/10.); ///in 1cm bin
-			hEklog_R[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.); ///in 1cm bin
-
-			/*EC{{{*/
-			double energy_depo_Preshower=0,energy_depo_Shower=0;   
-			if (hit_id==8 || hit_id==12){	    	  
-				if(particle_ID==22) {
-					energy_depo_Preshower=FastResponse("gamma","PS","scint",Ek/1e3);  //photon    
-					energy_depo_Shower=FastResponse("gamma","S","scint",Ek/1e3);		    
-				}
-				else if (abs(particle_ID)==11) {
-					energy_depo_Preshower=FastResponse("e","PS","scint",Ek/1e3); //electron or positron
-					energy_depo_Shower=FastResponse("e","S","scint",Ek/1e3);		    
-				}		  
-				//     else if(particle_ID==2112) energy_depo_Preshower=3;  //neutron
-				else if(particle_ID==2212) {
-					energy_depo_Preshower=FastResponse("p","PS","scint",Ek/1e3);  //proton    
-					energy_depo_Shower=FastResponse("p","S","scint",Ek/1e3);		    
-				}		  
-				else if(abs(particle_ID)==211)  {
-					energy_depo_Preshower=FastResponse("pi","PS","scint",Ek/1e3);  //pip or pim
-					energy_depo_Shower=FastResponse("pi","S","scint",Ek/1e3);		    
-				}		  
-				//     else if(particle_ID==321)  energy_depo_Preshower=7;  //Kp    
-				//     else if(particle_ID==-321)  energy_depo_Preshower=8;  //Km
-				//     else if(particle_ID==130)  energy_depo_Preshower=9;  //Kl    
-				else energy_depo_Preshower=0;  //all other	    
-				// 	    cout << "particle_ID " << particle_ID << " energy_depo " << energy_depo << endl;    
-				hEdepR_Preshower[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2	    
-				hEdepR_Shower[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2	  
-			}
-
-			if (phi-int(phi/12)*12<6) {
-				hP_R_high[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.*2.); /// in 1cm bin	
-				hPlog_R_high[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.*2.); /// in 1cm bin	
-				hEklog_R_high[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin	
-				if (hit_id==8 || hit_id==12){
-					hEdepR_Preshower_high[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	    
-					hEdepR_Shower_high[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	  
-				}
-			}
-			else {
-				hP_R_low[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.*2.); /// in 1cm bin	
-				hPlog_R_low[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.*2.); /// in 1cm bin	
-				hEklog_R_low[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin	
-				if (hit_id==8 || hit_id==12){
-					hEdepR_Preshower_low[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	    
-					hEdepR_Shower_low[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	  
-				}	
-			}
-			/*}}}*/		
-
-			/*Other Detectors{{{*/
-			hEklog_R_Phi[hit_id][par]->Fill(phi-int(phi/12)*12,r/10.,log10(Ek/1e3),weight/30.);  // due to phi cover 12 degree, this will overlap 30 sector together, so we need to divide rate by 30
-			if (hit_id<6 && flux_totEdep->at(j)<26e-6){} //gem required >26eV energy deposit in first 2 gas layer
+	
+			/*Start to Fill Histograms{{{*/			
+			if (29<=hit_id && hit_id<=40 && flux_totEdep->at(j)<26e-6){} //gem required >26eV energy deposit in first 2 gas layer
 			else if ((hit_id==17 || hit_id==26) && flux_totEdep->at(j)<1e-10){
 				// 	  cout <<"flux_totEdep->at(j) " << flux_totEdep->at(j) << endl;  
-			} //mrpc required >0 energy deposit
-			else if (hit_id==28 && flux_totEdep->at(j)<1e-10){
+			} //mrpc required >0 energy deposit			
+			else if ((hit_id==28 || hit_id==42) && flux_totEdep->at(j)<1e-10){
 				// 	  cout <<"flux_totEdep->at(j) " << flux_totEdep->at(j) << endl;  	  
 			} //spd required >0 energy deposit
 			else {  // all other just counting
+				hvertex[hit_id][par]->Fill(flux_vz->at(j)/10.,sqrt(flux_vx->at(j)/10.*flux_vx->at(j)/10.+flux_vy->at(j)/10.*flux_vy->at(j)/10.));
+				hvertexZ[hit_id][par]->Fill(flux_vz->at(j)/10.);      
+			  
+				hhitXY[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight); 
+				hPlog[hit_id][par]->Fill(log10(P/1e3),weight);
+				hElog[hit_id][par]->Fill(log10(flux_trackE->at(j)/1e3),weight);
+				hEklog[hit_id][par]->Fill(log10(Ek/1e3),weight);
+				hP_Theta[hit_id][par]->Fill(Theta,P/1e3,weightTheta); ///in 0.5deg bin      
+				hP_R[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.); ///in 1cm bin            
+				hPlog_R[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.); ///in 1cm bin      
+				hElog_R[hit_id][par]->Fill(r/10.,log10(flux_trackE->at(j)/1e3),weightR/10.); ///in 1cm bin
+				hEklog_R[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.); ///in 1cm bin
+				
+				hEklog_R_Phi[hit_id][par]->Fill(phi-int(phi/12)*12,r/10.,log10(Ek/1e3),weight/30.);  // due to phi cover 12 degree, this will overlap 30 sector together, so we need to divide rate by 30
+			
+				/*EC front, to calculate EC energy deposit*/
+				double energy_depo_Preshower=0,energy_depo_Shower=0;   
+				if (hit_id==8 || hit_id==12){	    	  
+					if(particle_ID==22) {
+						energy_depo_Preshower=FastResponse("gamma","PS","scint",Ek/1e3);  //photon    
+						energy_depo_Shower=FastResponse("gamma","S","scint",Ek/1e3);		    
+					}
+					else if (abs(particle_ID)==11) {
+						energy_depo_Preshower=FastResponse("e","PS","scint",Ek/1e3); //electron or positron
+						energy_depo_Shower=FastResponse("e","S","scint",Ek/1e3);		    
+					}		  
+					//     else if(particle_ID==2112) energy_depo_Preshower=3;  //neutron
+					else if(particle_ID==2212) {
+						energy_depo_Preshower=FastResponse("p","PS","scint",Ek/1e3);  //proton    
+						energy_depo_Shower=FastResponse("p","S","scint",Ek/1e3);		    
+					}		  
+					else if(abs(particle_ID)==211)  {
+						energy_depo_Preshower=FastResponse("pi","PS","scint",Ek/1e3);  //pip or pim
+						energy_depo_Shower=FastResponse("pi","S","scint",Ek/1e3);		    
+					}		  
+					//     else if(particle_ID==321)  energy_depo_Preshower=7;  //Kp    
+					//     else if(particle_ID==-321)  energy_depo_Preshower=8;  //Km
+					//     else if(particle_ID==130)  energy_depo_Preshower=9;  //Kl    
+					else energy_depo_Preshower=0;  //all other	    
+					// 	    cout << "particle_ID " << particle_ID << " energy_depo " << energy_depo << endl;    
+					hEdepR_Preshower[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2	    
+					hEdepR_Shower[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2	  
+				}			
+
+				//deal with high and low area for PVDIS
+				if (phi-int(phi/12)*12<6) {
+					hP_R_high[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.*2.); /// in 1cm bin	
+					hPlog_R_high[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.*2.); /// in 1cm bin	
+					hEklog_R_high[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin	
+					if (hit_id==8 || hit_id==12){
+						hEdepR_Preshower_high[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	    
+						hEdepR_Shower_high[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	  
+					}
+				}
+				else {
+					hP_R_low[hit_id][par]->Fill(r/10.,P/1e3,weightR/10.*2.); /// in 1cm bin	
+					hPlog_R_low[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.*2.); /// in 1cm bin	
+					hEklog_R_low[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.*2.); /// in 1cm bin	
+					if (hit_id==8 || hit_id==12){
+						hEdepR_Preshower_low[hit_id][par]->Fill(r/10.,energy_depo_Preshower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	    
+						hEdepR_Shower_low[hit_id][par]->Fill(r/10.,energy_depo_Shower*weightR/100.*1e4*2.); ///in 10cm bin and from mm2 to 100cm2	  
+					}	
+				}	
+			
 				hfluxR[hit_id][par]->Fill(r/10.,weightR/50.);   ///in 5cm bin
 				hEfluxR[hit_id][par]->Fill(r/10.,Ek/1e3*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2
 
@@ -692,12 +692,10 @@ void background(string input_filename){
 				hflux_x_y[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight/100.); //in 1cm2 bin	    
 				if (phi-int(phi/12)*12<6) hflux_x_y_high[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight/100.);
 				else hflux_x_y_low[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight/100.);    
-				hEflux_x_y[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight*Ek/100.*10.); ///in 1cm2 bin and from 1cm to 10cm	    
-				
+				hEflux_x_y[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight*Ek/100.*10.); ///in 1cm2 bin and from 1cm to 10cm	   				
 				hfluxEklog_cut[hit_id][par]->Fill(log10(Ek),weight);
 // 				hfluxEklog_cut_niel[hit_id][par]->Fill(log10(Ek),weight);
 			}
-			/*End of Other Detectors}}}*/	
 			/*End of Fill Histograms}}}*/
 		}
 		/*End of Looping flux}}}*/
