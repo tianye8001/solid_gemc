@@ -2,10 +2,13 @@
 change based on previous version
 
 general:
-running simulation with a devel version of GEMC which is similar to GEMC 2.1 in GEMC 2.1 within JLAB_VERSION=1 framework. 
+running simulation with a devel version of GEMC which is similar to GEMC 2.1 within JLAB_VERSION=1.1 framework.
 And QGSP_BERT_HP physics list and two version of geant4 are tried, 4.9.5.p01 and 5.9.6.p02, so that we check changes from previous simulation using geant4.9.5.p01 and QGSP_BERT_HP
-All SoLID related files are in SVN at revision 667 here
-https://jlabsvn.jlab.org/svnroot/solid
+The binary code used are at
+/home/zwzhao/apps/jlab_root_geant4.9.6.p02
+/home/zwzhao/apps/jlab_root_geant4.9.5.p01
+All SoLID related files are in SVN at revision 667, get it this way
+svn co -r 667 https://jlabsvn.jlab.org/svnroot/solid
 
 geometry:
 fixed previously known problem
