@@ -4,25 +4,25 @@ for non-EM background, we used lead baffle and other "krypotnite" for "real" fil
 
 general:
 use gemc 1.7 with geant4.9.5.p01 and QGSP_BERT_HP physics list
-some file may not use prothreshold 0.01mm for sensitive detector
+The binary code used are at
+/home/zwzhao/apps/jlab_software_1.7
+All SoLID related files are in SVN at revision 457, get it this way
+svn co -r 457 https://jlabsvn.jlab.org/svnroot/solid/solid_gemc/database_io/
+other info are here
+https://hallaweb.jlab.org/wiki/index.php/Solid_Background#run_1
 
-forward EC virtual entrance plane is R(90,270)cm, while forward EC module should cover R(110,265)cm 
-So apply the R cut yourself to look at rate
-This is to avoid rerun the simulation later if we decide to change the EC module coverage
-
-EM background:
-use 11GeV electron on target with 50uA current
-
-non-EM background:
-use all "kill" part except baffle as lead, no secondary particle, medium maybe air
-rate from eicRate
+geometry:
+1. some file may not use prothreshold 0.01mm for sensitive detector
+2. forward EC virtual entrance plane is R(90,270)cm, while forward EC module should cover R(110,265)cm 
+So apply the R cut yourself to look at rate. This is to avoid rerun the simulation later if we decide to change the EC module coverage
+3. EM background: use 11GeV electron on target with 50uA current
+4. non-EM background: use all "kill" part except baffle as lead, no secondary particle, medium maybe air rate from eicRate
 
 event generator:
 current event generator eicRate only produce events evenly distributed in phase space with individual rate per event
 A modified private copy of event generator for hadron is at  /home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_new/
 It uses a two step process (creating crossection histgram, then throw events accordingly) to produce hadron. The "rate" in output is not used, a single normalization factor is determined by comparing the new result to old output. This should gives more accurate 
 see Normalization below
-
 Normalization for EM background  (current/Nevent):  50e-6/1.6e-19/1e8
 Normalization for hadron background:
 	  if (Is_pip || Is_pim || Is_pi0) thisrate=155000.;
