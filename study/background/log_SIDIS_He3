@@ -8,7 +8,9 @@ The binary code used are at
 /home/zwzhao/apps/jlab_root_geant4.9.6.p02
 /home/zwzhao/apps/jlab_root_geant4.9.5.p01
 All SoLID related files are in SVN at revision 667, get it this way
-svn co -r 667 https://jlabsvn.jlab.org/svnroot/solid
+svn co -r 667 https://jlabsvn.jlab.org/svnroot/solid/solid_gemc2/
+other info are here
+https://hallaweb.jlab.org/wiki/index.php/Solid_Background#run_2
 
 geometry:
 fixed previously known problem
@@ -31,126 +33,7 @@ file:
 /home/zwzhao/work_halla/solid/solid_svn/solid/study/background/SIDIS_He3_geant4.9.5.p01/*root
 /home/zwzhao/work_halla/solid/solid_svn/solid/study/background/SIDIS_He3_geant4.9.6.p02/*root
 
-====== old_20131010======
-change based on previous version
+====== previous run =======
 
-known problem:
-GEM virtualhodoscope overlaps with GEM, ignore its result
-GEM first and second gas chamber use same flux ID, it could cause problem recording hits
-SPD is not in simulation
-MRPC has too thin glass due to a bug using mm instead of cm
-beamline window is 100um G4_Be, instead of G4_BERYLLIUM_OXIDE
-
-general:
-newly optimized target collimater for forward angle blocking,
-see compare_pim_targetcollimator.png
-
-heavey gas Cherenkov are enlarged and extend 10cm downstream due to its PMT readout size.
-MRPC and FAEC are moved 10cm downstream also to accomodate the change
-MRPC radius is changed to 96-210cm
-FAEC radius is changed to 98-230cm
-
-Hexagon EC module layout, one layer half length module at inner radius
-LAEC radius is changed to 83-140cm
-
-Virtual detector at entrance of real detector are larger, to prevent rerun the simulation if we decide to change or move the real detector.
-You need to make cut when evaluate rate!!!
-
-EM background:
-collimater change
-
-non-EM background:
-previously, "other" root file has all material krypotnite
-Now, "actual" root file has all material same as EM background, in particular, target collimater is made of tungsten
-Both target windows is studied also
-
-event generator:
-current event generator eicRate only produce events evenly distributed in phase space with individual rate per event
-A modified private copy of event generator for hadron is at  /home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_new/
-It uses a two step process (creating crossection histgram, then throw events accordingly) to produce hadron. The "rate" in output is not used, a single normalization factor is determined by comparing the new result to old output. This should gives more accurate 
-see Normalization below
-
-Normalization for EM background  (current/Nevent):  15e-6/1.6e-19/1e8
-Normalization for hadron background:
-	else if(Is_SIDIS_He3_window){
-	  if (Is_pip) thisrate=134.;
-	  if (Is_pim) thisrate=136.;
-	  if (Is_pi0) thisrate=136.;	  
-	  if (Is_Kp) thisrate=3.0;
-	  if (Is_Km) thisrate=3.4;
-	  if (Is_Ks || Is_Kl) thisrate=1.53;
-	  if (Is_p) thisrate=23.;  
-	}
-	else if(Is_SIDIS_He3){
-	  if (Is_pip) thisrate=241.;
-	  if (Is_pim) thisrate=183.;
-	  if (Is_pi0) thisrate=212.;  
-	  if (Is_Kp) thisrate=5.9;
-	  if (Is_Km) thisrate=3.7;
-	  if (Is_Ks || Is_Kl) thisrate=2.4;
-	  if (Is_p) thisrate=37.;  
-	}	
-
-files:
-"other" in file name means kryptonite for all geometry 
-"actual" in file name mean all real materials
-
-/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/SIDIS_He3
-background_solid_CLEO_SIDIS_He3_1e8.root
-background_solid_CLEO_SIDIS_He3_actual_Kl_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_Km_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_Kp_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_Ks_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_p_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_pi0_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_pim_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_pip_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_Kl_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_Km_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_Kp_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_Ks_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_p_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_pi0_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_pim_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_pip_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_Kl_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_Km_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_Kp_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_Ks_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_p_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_pi0_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_pim_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_pip_1e6.root	
-
-
-====== old_20130422 =============
-change based on previous version
-
-general:
-all sensitive detector use prothreshold 0.01mm
-
-EM background:
-GEM use real material, first two gas gap are sensitive
-cherenkov windows use real material
-mrpc use  real material
-thinner absorber
-
-non-EM background:
-fix the rate bug
-medium vacuum 
-
-====== old_20130321 =======
-general:
-use gemc 1.7 with geant4.9.5.p01 and QGSP_BERT_HP physics list
-some file may not use prothreshold 0.01mm for sensitive detector
-
-EM background:
-use 11GeV electron on target with 15uA current
-GEM use "GEMgas" only
-0.04cm thick Al Cherenkov windows
-mrpc is 1cm scintillator
-
-non-EM background:
-use all "kill" part, no secondary particle, medium maybe air
-rate from eicRate
-has a major BUG due to root tree by gemc_evio2root has one index higher than eicRate root tree, so all rate is wrong, this makes distribution more smeared. refer to compare.png for eDIS
+see log at 
+https://jlabsvn.jlab.org/svnroot/solid/solid_gemc/analysistool/background/log_SIDIS_He3
