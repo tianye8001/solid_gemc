@@ -164,7 +164,7 @@ int main(Int_t argc, char *argv[]){
 		t1->Branch("jacoF",&jacoF,"jacoF/D");
 		t1->Branch("dxs_hm",&dxs_hm,"dxs_hm/D");
 		t1->Branch("dxs_hp",&dxs_hp,"dxs_hp/D");
-		t1->Branch("cdxs",&cdxs,"cdxs/I");
+		t1->Branch("cdxs",&cdxs,"cdxs/D");
 		t1->Branch("mom_ele",&mom_ele,"mom_ele/D");
 		t1->Branch("mom_gen_ele",&mom_gen_ele,"mom_gen_ele/D");
 		t1->Branch("mom_had",&mom_had,"mom_had/D");
@@ -212,7 +212,7 @@ int main(Int_t argc, char *argv[]){
 		t2->Branch("jacoF",&jacoF,"jacoF/D");
 		t2->Branch("dxs_hm",&dxs_hm,"dxs_hm/D");
 		t2->Branch("dxs_hp",&dxs_hp,"dxs_hp/D");
-		t2->Branch("cdxs",&cdxs,"cdxs/I");
+		t2->Branch("cdxs",&cdxs,"cdxs/D");
 		t2->Branch("mom_ele",&mom_ele,"mom_ele/D");
 		t2->Branch("mom_had",&mom_had,"mom_had/D");
 		t2->Branch("theta_ele",&theta_ele,"theta_ele/D");
@@ -254,7 +254,7 @@ int main(Int_t argc, char *argv[]){
 		t3->Branch("jacoF",&jacoF,"jacoF/D");
 		t3->Branch("dxs_hm",&dxs_hm,"dxs_hm/D");
 		t3->Branch("dxs_hp",&dxs_hp,"dxs_hp/D");
-		t3->Branch("cdxs",&cdxs,"cdxs/I");
+		t3->Branch("cdxs",&cdxs,"cdxs/D");
 		t3->Branch("mom_ele",&mom_ele,"mom_ele/D");
 		t3->Branch("mom_had",&mom_had,"mom_had/D");
 		t3->Branch("theta_ele",&theta_ele,"theta_ele/D");
@@ -296,7 +296,7 @@ int main(Int_t argc, char *argv[]){
 		t4->Branch("jacoF",&jacoF,"jacoF/D");
 		t4->Branch("dxs_hm",&dxs_hm,"dxs_hm/D");
 		t4->Branch("dxs_hp",&dxs_hp,"dxs_hp/D");
-		t4->Branch("cdxs",&cdxs,"cdxs/I");
+		t4->Branch("cdxs",&cdxs,"cdxs/D");
 		t4->Branch("mom_ele",&mom_ele,"mom_ele/D");
 		t4->Branch("mom_had",&mom_had,"mom_had/D");
 		t4->Branch("theta_ele",&theta_ele,"theta_ele/D");
@@ -423,7 +423,7 @@ int main(Int_t argc, char *argv[]){
 
 				/*Output as text format for GEMC{{{*/
 
-				//Header:      1#part. 2#x 3#z 4#pt 5#Pol 6#sxs_e 7#sxs_h 8#cxs 9#phi_s 10#phi_h
+				//Header:      1#part. 2#x 3#z 4#pt 5#Pol 6#Q2 7#W 8#cxs 9#phi_s 10#phi_h
 				outgemc<<Form("    %2d \t %10.4e \t %10.4e \t %10.4e \t %4.3f \t %10.4e \t %10.4e \t %10.4e \t %10.4e \t %10.4e",
 						2, //ele+had
 						x,

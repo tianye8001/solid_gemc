@@ -58,8 +58,8 @@
 using namespace std;
 using namespace LHAPDF;
 
-//const TString LHAPDF_Dir  = "/work/halla/solid/yez/lhapdf";
-char *LHAPDF_Dir = std::getenv("LHAPDF");
+const TString LHAPDF_Dir  = "/work/halla/solid/yez/lhapdf";
+//char *LHAPDF_Dir = std::getenv("LHAPDF");
 const double DEG=180./3.1415926;
 const double PI=3.1415926;
 
