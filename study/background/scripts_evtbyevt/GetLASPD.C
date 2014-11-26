@@ -1,3 +1,4 @@
+/*Header{{{*/
 #include <iostream> 
 #include <fstream>
 #include <cmath> 
@@ -22,23 +23,48 @@
 #include <TText.h>
 #include <TSystem.h>
 #include <TArc.h>
+/*}}}*/
 
 using namespace std;
 
-void GetLASPD(TString input_filename)
+void GetLASPD(string input_filename)
 {
 	gROOT->Reset();
 	gStyle->SetPalette(1);
 	gStyle->SetOptStat(0);
 	const double DEG=180./3.1415926;
 
-	TFile *file=new TFile(input_filename.Data());
+	TFile *file=new TFile(input_filename.c_str());
 	if (file->IsZombie()) {
 		cout << "Error opening file" << input_filename << endl;
 		//continue;
 		exit(-1);
 	}
 	else cout << "open file " << input_filename << endl;
+	
+	/*Temp Rate Normalization{{{*/
+	double filenum=1.;
+	if (input_filename.find("_EM_",0) != string::npos) {
+		cout << "### EM background from beam on target" <<  endl;
+	}else if (input_filename.find("_clean_weighted_",0) != string::npos) {
+		cout << "### Background from weighted event generator with no interaction except decay" <<  endl;
+		if (input_filename.find("_file",0) != string::npos) {
+			filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
+			cout << "### filenum = " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+		}
+		else {cout << "### we need filenum for addtional normalization" << endl; return;}		
+	}	  
+	else if (input_filename.find("_dirty_normalized_",0) != string::npos) {
+		cout << "### background from normalized event generator with all interaction" <<  endl;
+		if (input_filename.find("_file",0) != string::npos) {
+			filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
+			cout << "### filenum = " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+		}
+		else {cout << "### we need filenum for addtional normalization" << endl; return;}
+	}	  	
+	else {cout << "### Not EM or clean_weighted or dirty_normalized " << endl; return;}
+    /*}}}*/
+
 	/*Set Branch{{{*/
 	//Header Tree:
 	// Var#1~#8 are free slots for propogating important info from the "INPUT generator seed"
@@ -106,7 +132,7 @@ void GetLASPD(TString input_filename)
 	/*End Set Branch}}}*/
 	int nevent = (int)generated->GetEntries();
 	cout << "nevent = " << nevent << endl;
-		
+
 	/*EC Electron Trigger{{{*/
 	const int Ntrigline=6,Ntriglinebin=21;
 	int region_index;
@@ -115,9 +141,9 @@ void GetLASPD(TString input_filename)
 	//	else {cout << "need option for FA or LA region" << endl; exit(-1);}
 	region_index = 0;
 
-	int det[2]={8,12};  //detecor ID
-	double rmin[2]={105,80};
-	double rmax[2]={235,140};
+	//int det[2]={8,12};  //detecor ID
+	//double rmin[2]={105,80};
+	//double rmax[2]={235,140};
 
 	TFile *file_trig_cut[2][Ntrigline][2];//[Det_ID][Cut_ID][PID], Det_DC: 0->FA, 1->LA, PID: 0->e, 1->pi
 	// Radius(cm)  P Threshold (GeV)
@@ -130,7 +156,7 @@ void GetLASPD(TString input_filename)
 	// 6 point cut, right on Q2=1 line and field bend line
 	double trig_cut_range_R[Ntrigline+1]={0,105,115,130,150,200,300};
 
-	TString Trigger_Dir_Rad="/w/work6501/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/background/SIDIS_He3/triggerfile/cutRadial_innerbackground/";
+	TString Trigger_Dir_Rad="./triggerfile/SIDIS_He3_201311/cutRadial_innerbackground/";
 	file_trig_cut[0][0][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH4.4.root",Trigger_Dir_Rad.Data()));
 	file_trig_cut[0][0][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH4.4.root",Trigger_Dir_Rad.Data()));
 	file_trig_cut[0][1][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH3.5.root",Trigger_Dir_Rad.Data()));
@@ -145,7 +171,7 @@ void GetLASPD(TString input_filename)
 	file_trig_cut[0][5][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root",Trigger_Dir_Rad.Data()));
 
 	///Large Angle Trigger   has no radial dependence
-	TString Trigger_Dir_1GeVCut = "/w/work6501/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/background/SIDIS_He3/triggerfile/cut1GeV_innerbackground/";
+	TString Trigger_Dir_1GeVCut = "./triggerfile/SIDIS_He3_201311/cut1GeV_innerbackground/";
 	for (int i=0;i<Ntrigline;i++){
 		file_trig_cut[1][i][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunElectron_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root",Trigger_Dir_1GeVCut.Data()));
 		file_trig_cut[1][i][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunPion_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root",Trigger_Dir_1GeVCut.Data()));
@@ -202,320 +228,512 @@ void GetLASPD(TString input_filename)
 			gr_trig_cut_pi[j][i]->Delete();
 		}
 	}
-	/*}}}*/
-	const int EC_Trigger_Slide = 6;// EC trigger_RCut slides 
-    const int EC_Trigger_Mom_Bin = 23;// EC trigger_RCut Mom bins 
 	
-	/*Define SPD{{{*/
-	//In each segmentation, 40 slides, each slides has 2.5cm width, 0.3cm between two slides.
-	const int SPD_Module = 30; //30 module around the circle
-	const int SPD_Slide = 6;// put 6 slides in each module just for check the R-dependence, 
-	double SPD_R[SPD_Slide];//Center location of each slide
-	double SPD_In_G[SPD_Module][SPD_Slide];// Number of photons going into the device
-	double SPD_In_E[SPD_Module][SPD_Slide];// Number of electrons going into the device
-	double SPD_Out_G[SPD_Module][SPD_Slide];// Number of photons going into the device
-	double SPD_Out_E[SPD_Module][SPD_Slide];// Number of electrons going into the device
-	for(int i=0;i<SPD_Slide;i++){//I just want to initialize everything
-		SPD_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
-		for(int j=0;j<SPD_Module;j++){
-			SPD_In_G[j][i] =0.;
-			SPD_In_E[j][i] =0.;
-			SPD_Out_G[j][i] =0.;
-			SPD_Out_E[j][i] =0.;
-		}
+	const int EC_Trigger_Slide = Ntrigline;// put 6 slides in each module just for check the R-dependence, 
+	const int EC_Trigger_Mom_Bin = Ntriglinebin+2;
+	double EC_R[EC_Trigger_Slide];//Center location of each slide
+	for(int i=0;i<EC_Trigger_Slide;i++){
+		EC_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
 	}
-	
-	double SPD_Threshold = 0.000001; //MeV for SPD cut
-	double EC_Threshold = 1.0; //1 GeV for LAEC cut
-	int VP_Before = 5210000; //LASPD virtual plane
-	int VP_After  = 3210000; //LAEC virtual plane
+	/*}}}*/
 
-	double Z_SPD = -67.45; //cm LASPD VP position
-	const double R_Min = 80.0;//cm, VP position, use SPD's actuall size 
-	const double R_Max = 135.0;//cm, VP position, SPD
-	double Z_Out = -66.50; //cm LAEC VP position
-	const double R_Min_Out = 83.0;//cm, LAEC VP front, use EC's actual size
-	const double R_Max_Out = 140.0;//cm,
-	const double Z_EC = -65.0; //cm, LAEC 
-	const double R_Min_EC = 83.0; //cm, LAEC
-	const double R_Max_EC = 140.0; //cm, LAEC
+	/*Define LASPD{{{*/
+    TString Detector_Name = "LASPD";   
+	const int VP_In = 5210000; //Front virtual plane
+	const double Z_In = -67.45; //cm Front VP position
+	const double R_Min_In = 80.0;//cm, Front VP position
+	const double R_Max_In = 135.0;//cm, Front VP position
 	
+	const int VP_Out  = 3210000; //Rear virtual plane
+	const double Z_Out = -66.5; //cm Rear VP position
+	const double R_Min_Out = 83.0;//cm, Rear VP position
+	const double R_Max_Out = 140.0;//cm, Rear VP position
+
+	const int VP_EC = 3210000; //Front virtual plane
+	const double Z_EC = -66.5; //cm, EC virtual plane front, VP position = 413cm
+	const double R_Min_EC = 83.0;//cm, EC VP position
+	const double R_Max_EC = 140.0;//cm, EC VP position
+
+	//For Segmentation only
+	const int Module = 30; //30 module around the circle
+	const int Slide = 6;// put 6 slides in each module just for check the R-dependence, 
+	double R_Slide[Slide+1];//edge each slide
+	for(int i=0;i<Slide+1;i++){
+		R_Slide[i] = i*(R_Max_In-R_Min_In)/Slide;
+	}
+		
 	//Other Definition	
+	double EC_Threshold = 3.; //GeV for EC cut, the cut could be tight if using Jin's curves
 	const int Electron = 11;
 	const int Gamma = 22;
-	const int Beam = 0;
-	const int Neutron = 2112;
-	const int Neutrino1 = 12;//Nu_e
-	const int Neutrino2 = 14;//Nu_Mu
-	const int Neutrino3 = 16;//Nu_Tao
-  	 
-	double r = -1000.0, z = -1000.0, R_EC = -1000.0;//cm
+	//const int Beam = 0;
+	//const int Neutron = 2112;
+	//const int Neutrino1 = 12;//Nu_e
+	//const int Neutrino2 = 14;//Nu_Mu
+	//const int Neutrino3 = 16;//Nu_Tao
+	/*}}}*/
+
+	/*Pre-Define{{{*/
+	const double MeV2GeV = 1./1000.;
+	const double MM2CM = 1./10.;
+	double In_G_All = 0, In_E_All = 0, Out_G_All = 0, Out_E_All = 0;
+	double In_G[Module][Slide];// Number of photons going into the device
+	double In_E[Module][Slide];// Number of electrons going into the device
+	double Out_G[Module][Slide];// Number of photons going into the device
+	double Out_E[Module][Slide];// Number of electrons going into the device
+	for(int i=0;i<Slide;i++){//I just want to initialize everything
+		EC_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
+		for(int j=0;j<Module;j++){
+			In_G[j][i] =0.;
+			In_E[j][i] =0.;
+			Out_G[j][i] =0.;
+			Out_E[j][i] =0.;
+		}
+	}
+	double Count_High = 0, Count_Low = 0;
+	double Count_Ep =0, Count_Em=0, Count_Both=0;
+	double Count_Cut_Ep =0, Count_Cut_Em=0;
+//	double Double_Count = 0;
+
 	int Slide_ID = 0;
 	int Module_ID = 0;
-	/*}}}*/
-	
-	/*Read in each event{{{*/
-	//Int_t nselected = 1e5;
-	Int_t nselected = nevent;
-	double In_G = 0, In_E = 0, Out_G = 0, Out_E = 0;
-	double Count_High = 0, Count_Low = 0;
-	int Count_Ep =0, Count_Em=0, Count_Both=0;
-	double Count_Cut_Ep =0, Count_Cut_Em=0;
-	double EC_Cut = 0.0;
-	int Double_Count = 0;
+
 	int FirstOne0 = 0; //incoming electron with E<1GeV
 	int FirstOne1 = 0; //incoming electron with E>1GeV
 	int FirstOne2 = 0; //incoming electron with R-dependence E-cut
-	int FirstOne5 = 0; //outgoing positron with R-dependence E-cut
 	int FirstOne3 = 0; //incoming electron with R-dependence E-cut by slides
 	int FirstOne4 = 0; //outgoing electron with R-dependence E-cut by slides
+	int FirstOne5 = 0; //outgoing positron with R-dependence E-cut
+	int FirstOne6 = 0; //outgoing Gamma with R-dependence E-cut
+    /*End of Pre-Define}}}*/
+
+	/*Tree Define{{{*/
+	TString pid_temp = "";
+	if(input_filename.find("_pi0_",0) != string::npos) {
+		if(input_filename.find("_upstream_",0) != string::npos) 
+			pid_temp = "pi0_up";
+		else if(input_filename.find("_downstream_",0) != string::npos) 
+			pid_temp = "pi0_down";
+		else
+			pid_temp = "pi0";
+	}
+	else if(input_filename.find("_pip_",0) != string::npos) {
+		if(input_filename.find("_upstream_",0) != string::npos) 
+			pid_temp = "pip_up";
+		else if(input_filename.find("_downstream_",0) != string::npos) 
+			pid_temp = "pip_down";
+		else
+			pid_temp = "pip";
+	}
+	else if(input_filename.find("_pim_",0) != string::npos) {
+		if(input_filename.find("_upstream_",0) != string::npos) 
+			pid_temp = "pim_up";
+		else if(input_filename.find("_downstream_",0) != string::npos) 
+			pid_temp = "pim_down";
+		else
+			pid_temp = "pim";
+	}
+	else if(input_filename.find("_EM_",0) != string::npos) {
+		pid_temp = "EM";
+	}
+	else if(input_filename.find("_eDIS_",0) != string::npos) {
+		if(input_filename.find("_upstream_",0) != string::npos) 
+			pid_temp = "eDIS_up";
+		else if(input_filename.find("_downstream_",0) != string::npos) 
+			pid_temp = "eDIS_down";
+		else
+			pid_temp = "eDIS";
+	}
+	
+	else
+		cerr<<"****ERROR, I don't understand the file name!!! *****"<<endl;
+
+	TString output_filename = Detector_Name + "_"+"background_SIDIS_He3"+"_"+pid_temp+".root";
+	cerr<<"--- I will save the detector info into "<<output_filename.Data()<<endl;
+	double rate, mom_gen, theta_gen,phi_gen,mom_flux,theta_flux,phi_flux,r_flux,x_flux,y_flux,z_flux,R_EC,EC_Cut_Max;
+	double px_flux, py_flux,pz_flux,vx_flux, vy_flux,vz_flux,E,Edep;
+	double px_gen, py_gen, pz_gen, vx_gen, vy_gen, vz_gen;
+	int evn, evn_flux, ID_flux,PID_flux,ID_Pick;
+	
+	TFile *out_file = new TFile(output_filename.Data(),"recreate");
+	TTree *T = new TTree("T","A new Tree");
+    //From Header Tree
+	T->Branch("rate",&rate,"rate/D");
+	T->Branch("evn",&evn,"evn/I");
+    
+	//From Generate Tree
+	T->Branch("mom_gen",&mom_gen,"mom_gen/D");
+	T->Branch("theta_gen",&theta_gen,"theta_gen/D");
+	T->Branch("phi_gen",&phi_gen,"phi_gen/D");
+	T->Branch("px_gen",&px_gen,"px_gen/D");
+	T->Branch("py_gen",&py_gen,"py_gen/D");
+	T->Branch("pz_gen",&pz_gen,"pz_gen/D");
+ 	T->Branch("vx_gen",&vx_gen,"vx_gen/D");
+	T->Branch("vy_gen",&vy_gen,"vy_gen/D");
+	T->Branch("vz_gen",&vz_gen,"vz_gen/D");
+ 
+  	//From Flux Tree
+	T->Branch("evn_flux",&evn_flux,"evn_flux/I");
+	T->Branch("mom_flux",&mom_flux,"mom_flux/D");
+	T->Branch("theta_flux",&theta_flux,"theta_flux/D");
+	T->Branch("phi_flux",&phi_flux,"phi_flux/D");
+	T->Branch("r_flux",&r_flux,"r_flux/D");
+	T->Branch("x_flux",&x_flux,"x_flux/D");
+	T->Branch("y_flux",&y_flux,"y_flux/D");
+	T->Branch("z_flux",&z_flux,"z_flux/D");
+	T->Branch("vx_flux",&vx_flux,"vx_flux/D");
+	T->Branch("vy_flux",&vy_flux,"vy_flux/D");
+	T->Branch("vz_flux",&vz_flux,"vz_flux/D");
+	T->Branch("px_flux",&px_flux,"px_flux/D");
+	T->Branch("py_flux",&py_flux,"py_flux/D");
+	T->Branch("pz_flux",&pz_flux,"pz_flux/D");
+	T->Branch("R_EC",&R_EC,"R_EC/D");
+	T->Branch("E",&E,"E/D");
+	T->Branch("Edep",&Edep,"Edep/D");
+	T->Branch("EC_Cut_Max",&EC_Cut_Max,"EC_Cut_Max/D");
+	T->Branch("ID_flux",&ID_flux,"ID_flux/I");
+	T->Branch("PID_flux",&PID_flux,"PID_flux/I");
+	T->Branch("ID_Pick",&ID_Pick,"ID_Pick/I");
+	/*}}}*/
+
+	/*Read in each event{{{*/
 	cerr<<"++++++++++++++++ "<<endl;
+	bool bCheck_Rear = kFALSE;
+	Int_t nselected = nevent;
 	for(Int_t i=0;i<nselected;i++){
 		cout<<i<<"\r";
-		header->GetEntry(i);
-        double rate = head_rate->at(0);
+        header->GetEntry(i);
+		rate = head_rate->at(0)/filenum;
+		evn = head_evn->at(0);
 
-		flux->GetEntry(i);
-		FirstOne0 = 0;
-		FirstOne1 = 0;
-		FirstOne2 = 0;
-		FirstOne3 = 0;
-		FirstOne5 = 0;
-		//Double_Count = 0;
-		double EC_Cut_Max = 0;
-		for (Int_t j=0;j<flux_hitn->size();j++) {
-			r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
-			if(r > R_Max||r<R_Min) continue;//The radius of a mrpc sector is 210cm;
-			double fmom=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))/1e3;//GeV
-			if(flux_pz->at(j)<-1e-19)continue;
+		generated->GetEntry(i);
+		const int ng = gen_pid->size();//Normally there is only one particle in the gen
+		double gen_theta_array[ng], gen_phi_array[ng], gen_mom_array[ng];
+		double gen_px_array[ng],gen_py_array[ng],gen_pz_array[ng],gen_vx_array[ng],gen_vy_array[ng],gen_vz_array[ng];
+		int Is_Electron = -1;
+		for(int ig=0;ig<ng;ig++){
+          if((int)gen_pid->at(ig)==Electron)
+             Is_Electron = ig;
+		  gen_mom_array[ig] = sqrt( pow(gen_px->at(ig),2)+pow(gen_py->at(ig),2)+pow(gen_pz->at(ig),2) )*MeV2GeV; //GeV
+		  gen_theta_array[ig] = acos(gen_pz->at(ig)/gen_mom_array[ig])*DEG;//Degree
+		  gen_phi_array[ig] = atan2( gen_py->at(ig), gen_px->at(ig))*DEG;//Degree
+		  gen_px_array[ig] = gen_px->at(ig)*MeV2GeV; //GeV
+		  gen_py_array[ig] = gen_py->at(ig)*MeV2GeV; //GeV
+		  gen_pz_array[ig] = gen_pz->at(ig)*MeV2GeV; //GeV
+		  gen_vx_array[ig] = gen_vx->at(ig)*MM2CM; //cm
+		  gen_vy_array[ig] = gen_vy->at(ig)*MM2CM; //cm
+		  gen_vz_array[ig] = gen_vz->at(ig)*MM2CM; //cm
+       //    cerr<<Form("---#%d@%d Px=%f Py=%f Pz=%f P=%f Theta =%f Phi=%f ",i, ig,gen_px->at(ig),gen_py->at(ig),gen_pz->at(ig),gen_mom[ig],gen_theta[ig],gen_phi[ig])<<endl;
+		}
+         mom_gen = gen_mom_array[Is_Electron];theta_gen = gen_theta_array[Is_Electron];phi_gen = gen_phi_array[Is_Electron];
+		 px_gen = gen_px_array[Is_Electron];py_gen = gen_py_array[Is_Electron];pz_gen = gen_pz_array[Is_Electron];
+		 vx_gen = gen_vx_array[Is_Electron];vy_gen = gen_vy_array[Is_Electron];vz_gen = gen_vz_array[Is_Electron];
 
-			if(fmom<1e-9) continue;
+		//if(gen_theta[Is_Electron]>=5.0){
+		if(1){
+			flux->GetEntry(i);
+			FirstOne0 = 0;
+			FirstOne1 = 0;
+			FirstOne2 = 0;
+			FirstOne3 = 0;
+			FirstOne4 = 0;
+			FirstOne5 = 0;
+			FirstOne6 = 0;
+			//Double_Count = 0;
+		   
+			/*Into the Device{{{*/
+			EC_Cut_Max = 0.0;
+			for (unsigned int j=0;j<flux_hitn->size();j++) {
+				evn_flux = j;
+				x_flux = flux_avg_x->at(j)*MM2CM; y_flux = flux_avg_y->at(j)*MM2CM; z_flux = flux_avg_z->at(j)*MM2CM;
+				vx_flux = flux_vx->at(j)*MM2CM;   vy_flux = flux_vy->at(j)*MM2CM;	vz_flux = flux_vz->at(j)*MM2CM;
+			    px_flux = flux_px->at(j)*MeV2GeV; py_flux = flux_py->at(j)*MeV2GeV; pz_flux = flux_pz->at(j)*MeV2GeV;
+				E = flux_trackE->at(j)*MeV2GeV; Edep = flux_totEdep->at(j)*MeV2GeV;
 
-			double vertex_theta = atan(sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2))/(flux_pz->at(j)))*DEG;
-			R_EC = abs((Z_EC - Z_SPD) * tan(vertex_theta/DEG) + r);
-			if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;
+				r_flux=sqrt(pow(x_flux,2)+pow(y_flux,2));//cm
+				mom_flux=sqrt(pow(px_flux,2)+pow(py_flux,2)+pow(pz_flux,2));//GeV
+				theta_flux = atan(sqrt(pow(px_flux,2)+pow(py_flux,2))/(pz_flux))*DEG;//Degree
+				phi_flux = fabs(atan(y_flux/x_flux)*DEG);
+				if(y_flux>0 && x_flux<0) phi_flux += 90.0;
+				else if(y_flux<0 && x_flux<0) phi_flux += 180.0;
+				else if(y_flux<0 && x_flux>0) phi_flux += 270.0;
 
-			int ID_Pick = VP_Before;
-			int ID_flux =(int) (flux_id->at(j));
-			int PID_flux =(int) (flux_pid->at(j));
+				double Delta_Z = Z_EC-Z_In;
+				double x_EC = x_flux + Delta_Z * px_flux/pz_flux;
+				double y_EC = y_flux + Delta_Z * py_flux/pz_flux;
+				R_EC = sqrt(x_EC*x_EC+y_EC*y_EC);
+				//R_EC = abs((Z_In - Z_EC) * tan(theta_flux/DEG) + r_flux);//cm
 
-			//Selct the right Cut	
-			//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
-            EC_Cut = 0;
-			if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
+				ID_Pick = VP_In;
+				ID_flux = (int) (flux_id->at(j));
+				PID_flux = (int) (flux_pid->at(j));
 
+				//Select the right Events
+				if(ID_flux!=ID_Pick) continue; //Only look at events on the detector plane (VP here) 
+				if(r_flux > R_Max_In||r_flux<R_Min_In) continue;//Must be within the radius range
+				if(flux_pz->at(j)<1e-9)continue;//Cout out backward particles
+				if(mom_flux<1e-9) continue; //Cut out Zero-E particles
+				if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;//Project the particles to the EC and see whether it has been accepted there
+		
+				if(PID_flux==Gamma&&mom_flux>3.0)	
+					cerr<<"++++ R_EC = "<<R_EC <<"   mom_flux="<<mom_flux<<endl;
+
+				//	if(mom_flux>=EC_Threshold)
+				//		EC_Cut_Max = 1.0;	
+				//	else
+				//		EC_Cut_Max = 0.0;
+
+				//Selct the right Cut	
+				//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
 				/*Look at the EC to check E-Cut{{{*/ 
-				int JustOnceHere=0;
-				for (Int_t m=0;m<flux_hitn->size();m++) {
-					int ID_flux_m = (int) (flux_id->at(m));
-					int PID_flux_m = (int) (flux_pid->at(m));
+				double EC_Cut = 0;
+				if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && mom_flux>=0.5*EC_Threshold){//#Electrons going out 
 
-					if(ID_flux_m==3210000){//On EC VP
-						double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
-						if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
+					int JustOnceHere=0;
+					for (Int_t m=0;m<flux_hitn->size();m++) {
+						int ID_flux_m = (int) (flux_id->at(m));
+						int PID_flux_m = (int) (flux_pid->at(m));
 
-						if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
-						double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
-						if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
+						if(ID_flux_m==VP_EC){//On EC VP
+							double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
+							if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
 
-						if(abs(fmom_EC-fmom)/fmom<0.20){//Alow 20% Eloss--FIX_HERE
-							if(abs(PID_flux_m)==Electron)
-								JustOnceHere++;
-							/*Find E-Cut{{{*/
-							for(int k=0;k<EC_Trigger_Slide;k++){
-								for(int l=0;l<EC_Trigger_Mom_Bin;l++){
-									if(r_EC>trig_cut[1][k][l][0]&&r_EC<=trig_cut[1][k][l][1]){
-										if(fmom_EC>trig_cut[1][k][l][2]&&fmom_EC<=trig_cut[1][k][l][3]){
-											EC_Cut =trig_cut[1][k][l][4]; 
-											Slide_ID = k;
+							if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
+							double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
+							if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
+
+							if(abs(fmom_EC-mom_flux)/mom_flux<0.50){//Alow 50% Eloss, just to make the code faster
+								if(abs(PID_flux_m)==Electron)
+									JustOnceHere++;
+								/*Find E-Cut{{{*/
+								for(int k=0;k<EC_Trigger_Slide;k++){
+									for(int l=0;l<EC_Trigger_Mom_Bin;l++){
+										if(r_EC>trig_cut[1][k][l][0]&&r_EC<=trig_cut[1][k][l][1]){
+											if(fmom_EC>trig_cut[1][k][l][2]&&fmom_EC<=trig_cut[1][k][l][3]){
+												EC_Cut =trig_cut[1][k][l][4]; 
+											}
 										}
 									}
 								}
+								/*}}}*/
 							}
-							/*}}}*/
+							//if(JustOnceHere>1&&EC_Cut>0.5)
+							//	cerr<<"No! More than one !!!"<<endl;
 						}
-			//			if(JustOnceHere>1&&EC_Cut>0.5)
-			//				cerr<<"No! More than one !!!"<<endl;
+						if(EC_Cut>EC_Cut_Max)
+							EC_Cut_Max = EC_Cut;
+					}//for (Int_t m=0;m<flux_hitn->size();m++) 
+
+					if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
+						EC_Cut_Max = 0.0;
+						cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r_flux, mom_flux)<<endl;
+						return;
 					}
-					if(EC_Cut>EC_Cut_Max)
-						EC_Cut_Max = EC_Cut;
-				}//for (Int_t m=0;m<flux_hitn->size();m++) 
-				/*}}}*/
-
-				if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
-					EC_Cut_Max = 0.0;
-					cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, fmom)<<endl;
-					return;
 				}
-			}
-
-			double hit_y = flux_avg_y->at(j), hit_x = flux_avg_x->at(j);	
-			double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
-			Module_ID = (int) hit_phi/(360./SPD_Module);
+				/*}}}*/
 
 				//Low Energy Electron <1GeV
-			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom<EC_Threshold){//#Eelectrons going out 
-				if(FirstOne0<1)
-					Count_Low+=1.0*rate;
-				FirstOne0 ++;;
+				if((PID_flux==Electron||PID_flux==-Electron)&& mom_flux<EC_Threshold){//#Electrons going out 
+					if(FirstOne0<1)
+						Count_Low+=1.0*rate;
+					FirstOne0 ++;;
+				}
+				//High Energy Electron >1GeV
+				if((PID_flux==Electron||PID_flux==-Electron)&& mom_flux>=EC_Threshold){//#Electrons going out 
+					if(FirstOne1<1)
+						Count_High+=1.0*rate;
+					FirstOne1 ++;;
+
+					Count_Both+=1.0*rate;
+					if(PID_flux==Electron)
+						Count_Em+=1.0*rate;
+					if(PID_flux==-Electron)
+						Count_Ep+=1.0*rate;
+				}
+				//High Energy Electron with EC R-Cut 
+				if((PID_flux==Electron)&& mom_flux>=0.5*EC_Threshold){//#Electrons going out 
+					if(FirstOne2<1)
+						Count_Cut_Em+=EC_Cut_Max*rate;
+					FirstOne2 ++;;
+				}
+				//High Energy Positron with EC R-Cut 
+				if((PID_flux==-Electron)&&mom_flux>=0.5*EC_Threshold){//#Electrons going out 
+					if(FirstOne5<1)
+						Count_Cut_Ep+=EC_Cut_Max*rate;
+					FirstOne5 ++;;
+				}
+
+				Module_ID = (int) phi_flux/(360./Module);
+				for(int k=0;k<Slide+1;k++){
+					if(r_flux>R_Slide[k]&&r_flux<R_Slide[k+1])
+						Slide_ID = k;
+				}
+								
+				if(PID_flux==Gamma&& mom_flux>=0.5*EC_Threshold){//#Photons going in
+					if(FirstOne6<1)
+						In_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
+					FirstOne6++;
+				}
+				if((PID_flux==Electron||PID_flux==-Electron) && mom_flux>=0.5*EC_Threshold){//#Electrons going out 
+					if(FirstOne3<1){
+						In_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
+					}
+					FirstOne3 ++;;
+				}
+
+				T->Fill();
 			}
-			//High Energy Electron >1GeV
-			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=EC_Threshold){//#Eelectrons going out 
-				if(FirstOne1<1)
-					Count_High+=1.0*rate;
-				FirstOne1 ++;;
+			/*}}}*/
 
-				if(PID_flux==Electron)
-					Count_Em++;
-				if(PID_flux==-Electron)
-					Count_Ep++;
-			}
-			//High Energy Electron with EC R-Cut 
-			if((PID_flux==Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
-				//Count_Em++;
-				if(FirstOne2<1)
-					Count_Cut_Em+=EC_Cut_Max*rate;
-				FirstOne2 ++;;
-			}
-			//High Energy Positron with EC R-Cut 
-			if((PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
-				//Count_Ep++;
-				if(FirstOne5<1)
-					Count_Cut_Ep+=EC_Cut_Max*rate;
-				FirstOne5 ++;;
-			}
+			//		if((FirstOne2>=1) && (FirstOne5>=1))
+			//			cerr<<" Oh! Double Counting !!!  "<< ++Double_Count<<endl;
 
-            //Count by slides
-			if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold)//#Photons going in
-				SPD_In_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
-			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
-				if(FirstOne3<1)
-					SPD_In_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
-				FirstOne3 ++;;
-			}
-		}
+			/*Out from the Device{{{*/
+			FirstOne4 = 0;
+			if(bCheck_Rear){
+				EC_Cut_Max = 0.0;
+				for (unsigned int j=0;j<flux_hitn->size();j++) {
+					double r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))*MM2CM;//cm
+					if(r<R_Min_Out && r>R_Max_Out) continue;
 
-		if((FirstOne2>=1) && (FirstOne5>=1))
-			cerr<<" Oh! Double Counting !!!  "<< ++Double_Count<<endl;
+					double mom_flux_out=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))*MeV2GeV;//GeV
+					if(flux_pz->at(j)<1e-9)continue;
+					if(mom_flux_out<1e-9) continue;
 
-		FirstOne4 = 0;
-		for (Int_t j=0;j<flux_hitn->size();j++) {
-			r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/10.;//cm
-			if(r<R_Min_Out && r>R_Max_Out) continue;
-			double fmom=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))/1e3;//GeV
-			if(flux_pz->at(j)<-1e-19)continue;
-			if(fmom<1e-9) continue;
-			double vertex_theta = atan(sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2))/(flux_pz->at(j)))*DEG;
-			R_EC = abs((Z_EC - Z_Out) * tan(vertex_theta/DEG) + r);
-			if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;
+					theta_flux = atan(sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2))/(flux_pz->at(j)))*DEG;
 
-			int ID_Pick = VP_After;
-			int ID_flux =(int) (flux_id->at(j));
-			int PID_flux =(int) (flux_pid->at(j));
-	
-			//Selct the right Cut	
-			//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
-            EC_Cut = 0;
-			if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Electrons going out 
+					double Delta_Z = Z_EC - Z_Out;
+					double x_EC = flux_avg_x->at(j) + Delta_Z * flux_px->at(j)/flux_pz->at(j);
+					double y_EC = flux_avg_y->at(j) + Delta_Z * flux_py->at(j)/flux_pz->at(j);
+					R_EC = sqrt(x_EC*x_EC+y_EC*y_EC);
+					//		R_EC = abs((Z_EC - Z_Out) * tan(theta_flux/DEG) + r);
+					if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;
 
-				/*Look at the EC to check E-Cut{{{*/ 
-				int JustOnceHere=0;
-				for (Int_t m=0;m<flux_hitn->size();m++) {
-					int ID_flux_m = (int) (flux_id->at(m));
-					int PID_flux_m = (int) (flux_pid->at(m));
+					ID_Pick = VP_Out;
+					ID_flux = (int) (flux_id->at(j));
+					PID_flux = (int) (flux_pid->at(j));
+					
+			        //if(mom_flux>=EC_Threshold)
+					//    EC_Cut_Max = 1.0;	
+					//else
+					//	EC_Cut_Max = 0.0;
+					
+					//Selct the right Cut	
+					//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
+					/*Look at the EC to check E-Cut{{{*/ 
+					double EC_Cut = 0;
+					if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && mom_flux_out>=0.5*EC_Threshold){//#Electrons going out 
 
-					if(ID_flux_m==3210000){//On EC VP
-						double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
-						if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
+						int JustOnceHere=0;
+						for (Int_t m=0;m<flux_hitn->size();m++) {
+							int ID_flux_m = (int) (flux_id->at(m));
+							int PID_flux_m = (int) (flux_pid->at(m));
 
-						if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
-						double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
-						if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
+							if(ID_flux_m==VP_EC){//On EC VP
+								double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
+								if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
 
-						if(abs(fmom_EC-fmom)/fmom<0.20){//Alow 20% Eloss--FIX_HERE
-							if(abs(PID_flux_m)==Electron)
-								JustOnceHere++;
-							/*Find E-Cut{{{*/
-							for(int k=0;k<EC_Trigger_Slide;k++){
-								for(int l=0;l<EC_Trigger_Mom_Bin;l++){
-									if(r_EC>trig_cut[1][k][l][0]&&r_EC<=trig_cut[1][k][l][1]){
-										if(fmom_EC>trig_cut[1][k][l][2]&&fmom_EC<=trig_cut[1][k][l][3]){
-											EC_Cut =trig_cut[1][k][l][4]; 
-											Slide_ID = k;
+								if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
+								double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
+								if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
+
+								if(abs(fmom_EC-mom_flux_out)/mom_flux_out<0.50){//Alow 50% Eloss--FIX_HERE
+									if(abs(PID_flux_m)==Electron)
+										JustOnceHere++;
+									/*Find E-Cut{{{*/
+									for(int k=0;k<EC_Trigger_Slide;k++){
+										for(int l=0;l<EC_Trigger_Mom_Bin;l++){
+											if(r_EC>trig_cut[1][k][l][0]&&r_EC<=trig_cut[1][k][l][1]){
+												if(fmom_EC>trig_cut[1][k][l][2]&&fmom_EC<=trig_cut[1][k][l][3]){
+													EC_Cut =trig_cut[1][k][l][4]; 
+												}
+											}
 										}
 									}
+									/*}}}*/
 								}
+							//	if(JustOnceHere>1&&EC_Cut>0.5)
+							//		cerr<<"No! More than one !!!"<<endl;
 							}
-							/*}}}*/
+							if(EC_Cut>EC_Cut_Max)
+								EC_Cut_Max = EC_Cut;
+						}//for (Int_t m=0;m<flux_hitn->size();m++) 
+
+						if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
+							EC_Cut_Max = 0.0;
+							cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, mom_flux_out)<<endl;
+							return;
 						}
-						//if(JustOnceHere>1&&EC_Cut>0.5)
-						//	cerr<<"No! More than one !!!"<<endl;
 					}
-					if(EC_Cut>EC_Cut_Max)
-						EC_Cut_Max = EC_Cut;
-				}//for (Int_t m=0;m<flux_hitn->size();m++) 
-				/*}}}*/
+					/*}}}*/
 
-				if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
-					EC_Cut_Max = 0.0;
-					cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, fmom)<<endl;
-					return;
-				}
-			}
+					//Count by slides
+					x_flux=flux_avg_x->at(j)*MM2CM; y_flux=flux_avg_y->at(j)*MM2CM; z_flux=flux_avg_z->at(j)*MM2CM;//cm
+					phi_flux = fabs(atan(y_flux/x_flux)*DEG);
+					if(y_flux>0 && x_flux<0) phi_flux += 90.0;
+					else if(y_flux<0 && x_flux<0) phi_flux += 180.0;
+					else if(y_flux<0 && x_flux>0) phi_flux += 270.0;
 
-			double hit_y = flux_avg_y->at(j), hit_x = flux_avg_x->at(j);	
-			double hit_phi = fabs(atan(hit_y/hit_x)*DEG);
-			Module_ID = (int) hit_phi/(360./SPD_Module);
+					Module_ID = (int) phi_flux/(360./Module);
+					for(int k=0;k<Slide+1;k++){
+						if(r_flux>R_Slide[k]&&r_flux<R_Slide[k+1])
+							Slide_ID = k;
+					}
 
-			if(PID_flux==Gamma&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold ){//#Photons going out 
-				SPD_Out_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
-			}
-			if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && fmom>=0.95*EC_Threshold){//#Eelectrons going out 
-				Count_Both++;
-				if(FirstOne4<1)
-					SPD_Out_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
-				FirstOne4 ++;
-			}
-		}//Flux particles in one event
+					if(PID_flux==Gamma&&ID_flux==ID_Pick && mom_flux_out>=0.5*EC_Threshold){//#Photons going out 
+						Out_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
+					}
+					if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && mom_flux_out>=0.5*EC_Threshold){//#Electrons going out 
+						if(FirstOne4<1)
+							Out_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
+						FirstOne4 ++;;
+					}
+				}//Flux particles in one event
+			}//if(1)
+			/*}}}*/
 
+		}
 	}
+	T->Write(); out_file->Close();
 	/*End Read in each event}}}*/
-		
+
 	/*Count_Rate_Ractor{{{*/
 	double Count_To_Rate = 0.0;
-	if(input_filename.Contains("EM"))
+	if(input_filename.find("_EM_",0) != string::npos) 
 		Count_To_Rate = (((1.5e-5)/(1.6e-19))/nevent)/1e3; //Count to KHz for 15uA electron events;
-	else
-        Count_To_Rate = 1.0/1e3;
+	else{
+		Count_To_Rate = 1.0/1e3;
+	}
 	/*}}}*/
 
 	/*Output Results{{{*/
-		cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;
+	cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;
 
 	TString input_out = input_filename;
 	input_out.ReplaceAll(".root",".out");
-	ofstream outfile(Form("SPD_%s",input_out.Data()));
-	for(int k=0;k<SPD_Slide;k++){
-		for(int l=0;l<SPD_Module;l++){
-			 In_G +=SPD_In_G[l][k];
-			 In_E +=SPD_In_E[l][k];
-			 Out_E +=SPD_Out_E[l][k];
-			 Out_G +=SPD_Out_G[l][k];
+	ofstream outfile(Form("EC_%s",input_out.Data()));
+	for(int k=0;k<Slide;k++){
+		for(int l=0;l<Module;l++){
+			In_G_All +=In_G[l][k];
+			In_E_All +=In_E[l][k];
+			Out_E_All +=Out_E[l][k];
+			Out_G_All +=Out_G[l][k];
 		}
 	}
-	cerr<<" ====== In_E = "<< In_E*Count_To_Rate<<endl;
-	cerr<<" ====== In_G = "<< In_G*Count_To_Rate<<endl;
-	cerr<<" ====== Out_E = "<< Out_E*Count_To_Rate<<endl;
-	cerr<<" ====== Out_G = "<< Out_G*Count_To_Rate<<endl;
+	cerr<<" ====== In_E = "<< In_E_All*Count_To_Rate<<endl;
+	cerr<<" ====== In_G = "<< In_G_All*Count_To_Rate<<endl;
+	cerr<<" ====== Out_E = "<< Out_E_All*Count_To_Rate<<endl;
+	cerr<<" ====== Out_G = "<< Out_G_All*Count_To_Rate<<endl;
 
 	cerr<< Form("&&&& N (P<1GeV) = %d, N (P>1.0GeV) = %d, 1GeV Cut N = (-)%d / (+)%d /(+-)%d",
-		   	(int)(Count_Low), (int)(Count_High), (int)(Count_Em), (int)(Count_Ep), (int)(Count_Both))<<endl;
-	cerr<< Form("                                        R-Cut Cut N = (-)%d / (+)%d /(+-)%d", (int)(Count_Cut_Em),
-		   	(int)(Count_Cut_Ep), (int)(In_E))<<endl;
+			(int)(Count_Low), (int)(Count_High), (int)(Count_Em), (int)(Count_Ep), (int)(Count_Both))<<endl;
+	cerr<< Form("                                             R-Cut Cut N = (-)%d / (+)%d /(+-)%d",
+			(int)(Count_Cut_Em), (int)(Count_Cut_Ep), (int)(In_E_All))<<endl;
 
-	outfile<<" ====== In_E = "<< In_E*Count_To_Rate<<endl;
-	outfile<<" ====== In_G = "<< In_G*Count_To_Rate<<endl;
-	outfile<<" ====== Out_E = "<< Out_E*Count_To_Rate<<endl;
-	outfile<<" ====== Out_G = "<< Out_G*Count_To_Rate<<endl;
-    /*}}}*/
+	outfile<<" ====== In_E = "<< In_E_All*Count_To_Rate<<endl;
+	outfile<<" ====== In_G = "<< In_G_All*Count_To_Rate<<endl;
+	outfile<<" ====== Out_E = "<< Out_E_All*Count_To_Rate<<endl;
+	outfile<<" ====== Out_G = "<< Out_G_All*Count_To_Rate<<endl;
+	/*}}}*/
+
 }

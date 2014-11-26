@@ -11,6 +11,7 @@
 #include <TH1.h>
 #include <TH2.h>
 #include <TH3.h>
+#include <TH2F.h>
 #include <TH3F.h>
 #include <TF1.h>
 #include <TLorentzVector.h>
@@ -27,7 +28,7 @@
 
 using namespace std;
 
-void GetLAEC(string input_filename)
+TString FASPD(string input_filename)
 {
 	gROOT->Reset();
 	gStyle->SetPalette(1);
@@ -36,33 +37,33 @@ void GetLAEC(string input_filename)
 
 	TFile *file=new TFile(input_filename.c_str());
 	if (file->IsZombie()) {
-		cout << "Error opening file" << input_filename << endl;
+		cout << "*** Error opening file" << input_filename << endl;
 		//continue;
 		exit(-1);
 	}
-	else cout << "open file " << input_filename << endl;
+	else cout << " ==> open file " << input_filename << endl;
 	
 	/*Temp Rate Normalization{{{*/
 	double filenum=1.;
 	if (input_filename.find("_EM_",0) != string::npos) {
-		cout << "### EM background from beam on target" <<  endl;
+		cout << "==> EM background from beam on target" <<  endl;
 	}else if (input_filename.find("_clean_weighted_",0) != string::npos) {
-		cout << "### Background from weighted event generator with no interaction except decay" <<  endl;
+		cout << "==> background from weighted event generator with no interaction except decay" <<  endl;
 		if (input_filename.find("_file",0) != string::npos) {
 			filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
-			cout << "### filenum = " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+			cout << "==> filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
 		}
-		else {cout << "### we need filenum for addtional normalization" << endl; return;}		
+		else {cout << "==> we need filenum for addtional normalization" << endl; return "0";}		
 	}	  
 	else if (input_filename.find("_dirty_normalized_",0) != string::npos) {
-		cout << "### background from normalized event generator with all interaction" <<  endl;
+		cout << "==> background from normalized event generator with all interaction" <<  endl;
 		if (input_filename.find("_file",0) != string::npos) {
 			filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
-			cout << "### filenum = " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+			cout << "==> filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
 		}
-		else {cout << "### we need filenum for addtional normalization" << endl; return;}
+		else {cout << "==> we need filenum for addtional normalization" << endl; return "0";}
 	}	  	
-	else {cout << "### Not EM or clean_weighted or dirty_normalized " << endl; return;}
+	else {cout << "==> not EM or clean_weighted or dirty_normalized " << endl; return "0";}
     /*}}}*/
 
 	/*Set Branch{{{*/
@@ -237,75 +238,50 @@ void GetLAEC(string input_filename)
 	}
 	/*}}}*/
 
-	/*Define LAEC{{{*/
-    TString Detector_Name = "LAEC";   
-	const int VP_In = 3210000; //Front virtual plane
-	const double Z_In = -66.5; //cm Front VP position
-	const double R_Min_In = 83.0;//cm, Front VP position
-	const double R_Max_In = 140.0;//cm, Front VP position
+	/*Define FASPD{{{*/
+    TString Detector_Name = "FASPD";   
+	const int VP_In = 5110000; //Front virtual plane
+	const double Z_In = 406.5; //cm Front VP position
+	const double R_Min_In = 96.0;//cm, Front VP position
+	const double R_Max_In = 210.0;//cm, Front VP position
 	
-	const int VP_Out  = 3240000; //Rear virtual plane
-	const double Z_Out = -14.0; //cm Rear VP position
-	const double R_Min_Out = 83.0;//cm, Rear VP position
-	const double R_Max_Out = 140.0;//cm, Rear VP position
+	//const int VP_Out  = 4110000; //Rear virtual plane
+	//const double Z_Out = 408.0; //cm Rear VP position
+	//const double R_Min_Out = 96.0;//cm, Rear VP position
+	//const double R_Max_Out = 210.0;//cm, Rear VP position
 
-	const int VP_EC = 3210000; //Front virtual plane
-	const double Z_EC = -66.5; //cm, EC virtual plane front, VP position = 413cm
-	const double R_Min_EC = 83.0;//cm, EC VP position
-	const double R_Max_EC = 140.0;//cm, EC VP position
-
+	const int VP_EC = 3110000; //Front virtual plane
+	const double Z_EC = 427.5; //cm, EC virtual plane front, VP position = 413cm
+	const double R_Min_EC = 105.0;//cm, EC VP position
+	const double R_Max_EC = 235.0;//cm, EC VP position
+	const double EC_Threshold = 1.0; //GeV
+	const int EC_ID = 0; //0 -> FAEC, 1->LAEC
+	
 	//For Segmentation only
 	const int Module = 30; //30 module around the circle
-	const int Slide = 6;// put 6 slides in each module just for check the R-dependence, 
+	const int Slide = 3;// put 3 slides in each module just for check the R-dependence, 
 	double R_Slide[Slide+1];//edge each slide
 	for(int i=0;i<Slide+1;i++){
 		R_Slide[i] = i*(R_Max_In-R_Min_In)/Slide;
 	}
 		
-	//Other Definition	
-	double EC_Threshold = 3.; //GeV for EC cut, the cut could be tight if using Jin's curves
+	//Other Definition
+	const double MeV2GeV = 1./1000.;
+	const double MM2CM = 1./10.;	
 	const int Electron = 11;
-	const int Gamma = 22;
+	const int Photon = 22;
+	const int Proton = 2212;
+	//const int Pi0 = 111;
+	const int Pion = 211;
+	//const int K0 = 311;
+	const int Kaon = 321;
+	//const int Neutron = 2112;
 	//const int Beam = 0;
 	//const int Neutron = 2112;
 	//const int Neutrino1 = 12;//Nu_e
 	//const int Neutrino2 = 14;//Nu_Mu
 	//const int Neutrino3 = 16;//Nu_Tao
 	/*}}}*/
-
-	/*Pre-Define{{{*/
-	const double MeV2GeV = 1./1000.;
-	const double MM2CM = 1./10.;
-	double In_G_All = 0, In_E_All = 0, Out_G_All = 0, Out_E_All = 0;
-	double In_G[Module][Slide];// Number of photons going into the device
-	double In_E[Module][Slide];// Number of electrons going into the device
-	double Out_G[Module][Slide];// Number of photons going into the device
-	double Out_E[Module][Slide];// Number of electrons going into the device
-	for(int i=0;i<Slide;i++){//I just want to initialize everything
-		EC_R[i] = trig_cut_range_R[i]; //{0,105,115,130,150,200,300};
-		for(int j=0;j<Module;j++){
-			In_G[j][i] =0.;
-			In_E[j][i] =0.;
-			Out_G[j][i] =0.;
-			Out_E[j][i] =0.;
-		}
-	}
-	double Count_High = 0, Count_Low = 0;
-	double Count_Ep =0, Count_Em=0, Count_Both=0;
-	double Count_Cut_Ep =0, Count_Cut_Em=0;
-//	double Double_Count = 0;
-
-	int Slide_ID = 0;
-	int Module_ID = 0;
-
-	int FirstOne0 = 0; //incoming electron with E<1GeV
-	int FirstOne1 = 0; //incoming electron with E>1GeV
-	int FirstOne2 = 0; //incoming electron with R-dependence E-cut
-	int FirstOne3 = 0; //incoming electron with R-dependence E-cut by slides
-	int FirstOne4 = 0; //outgoing electron with R-dependence E-cut by slides
-	int FirstOne5 = 0; //outgoing positron with R-dependence E-cut
-	int FirstOne6 = 0; //outgoing Gamma with R-dependence E-cut
-    /*End of Pre-Define}}}*/
 
 	/*Tree Define{{{*/
 	TString pid_temp = "";
@@ -344,16 +320,32 @@ void GetLAEC(string input_filename)
 		else
 			pid_temp = "eDIS";
 	}
-	
+	else if(input_filename.find("_ePB_",0) != string::npos) {
+		if(input_filename.find("_upstream_",0) != string::npos) 
+			pid_temp = "ePB_up";
+		else if(input_filename.find("_downstream_",0) != string::npos) 
+			pid_temp = "ePB_down";
+		else
+			pid_temp = "ePB";
+	}
+	else if(input_filename.find("_p_",0) != string::npos) {
+		if(input_filename.find("_upstream_",0) != string::npos) 
+			pid_temp = "p_up";
+		else if(input_filename.find("_downstream_",0) != string::npos) 
+			pid_temp = "p_down";
+		else
+			pid_temp = "p";
+	}
 	else
 		cerr<<"****ERROR, I don't understand the file name!!! *****"<<endl;
 
 	TString output_filename = Detector_Name + "_"+"background_SIDIS_He3"+"_"+pid_temp+".root";
 	cerr<<"--- I will save the detector info into "<<output_filename.Data()<<endl;
-	double rate, mom_gen, theta_gen,phi_gen,mom_flux,theta_flux,phi_flux,r_flux,x_flux,y_flux,z_flux,R_EC,EC_Cut_Max;
-	double px_flux, py_flux,pz_flux,vx_flux, vy_flux,vz_flux,E,Edep;
+	double rate, mom_gen, theta_gen,phi_gen,mom_flux,theta_flux,phi_flux,r_flux,x_flux,y_flux,z_flux,R_EC,EC_Cut,EC_Cut_Max;
+	double px_flux, py_flux,pz_flux,vx_flux, vy_flux,vz_flux, E,EDep, convert;
 	double px_gen, py_gen, pz_gen, vx_gen, vy_gen, vz_gen;
-	int evn, evn_flux, ID_flux,PID_flux,ID_Pick;
+	int evn, evn_flux,nhit_flux, ID_flux,PID_flux,ID_Pick;
+	int Slide_ID, Module_ID;
 	
 	TFile *out_file = new TFile(output_filename.Data(),"recreate");
 	TTree *T = new TTree("T","A new Tree");
@@ -374,6 +366,7 @@ void GetLAEC(string input_filename)
  
   	//From Flux Tree
 	T->Branch("evn_flux",&evn_flux,"evn_flux/I");
+	T->Branch("nhit_flux",&nhit_flux,"nhit_flux/I");
 	T->Branch("mom_flux",&mom_flux,"mom_flux/D");
 	T->Branch("theta_flux",&theta_flux,"theta_flux/D");
 	T->Branch("phi_flux",&phi_flux,"phi_flux/D");
@@ -388,22 +381,67 @@ void GetLAEC(string input_filename)
 	T->Branch("py_flux",&py_flux,"py_flux/D");
 	T->Branch("pz_flux",&pz_flux,"pz_flux/D");
 	T->Branch("R_EC",&R_EC,"R_EC/D");
+	T->Branch("EDep",&EDep,"EDep/D");
 	T->Branch("E",&E,"E/D");
-	T->Branch("Edep",&Edep,"Edep/D");
+	T->Branch("convert",&convert,"convert/D");
+	T->Branch("EC_Cut",&EC_Cut,"EC_Cut/D");
 	T->Branch("EC_Cut_Max",&EC_Cut_Max,"EC_Cut_Max/D");
 	T->Branch("ID_flux",&ID_flux,"ID_flux/I");
 	T->Branch("PID_flux",&PID_flux,"PID_flux/I");
 	T->Branch("ID_Pick",&ID_Pick,"ID_Pick/I");
+	T->Branch("Module", &Module_ID,"Module/I");
+	T->Branch("Slide", &Slide_ID,"Slide/I");
 	/*}}}*/
 
+	/*Histogram Define{{{*/
+    TH2F *hist_ele = new TH2F("hist_ele","Triggerred Electrons on FASPD",200,-200,200,200,-200,200);
+	hist_ele->SetXTitle("x");
+	hist_ele->SetYTitle("y");
+
+	TH2F *hist_pho = new TH2F("hist_pho","Triggerred Photon on FASPD",200,-200,200,200,-200,200);
+	hist_pho->SetXTitle("x");
+	hist_pho->SetYTitle("y");
+
+	/*}}}*/
+	
+	/*Photon_Convertion{{{*/
+	ifstream infile_cvt("convert_2cm_out.dat");
+	double rate_cvt[15], rate_err_cvt[15], ene_cvt[15];
+	int n_cvt = 0;
+	while(!(infile_cvt.eof())){
+		infile_cvt >> ene_cvt[n_cvt] >> rate_cvt[n_cvt] >> rate_err_cvt[n_cvt];
+	    n_cvt ++;
+	}
+	infile_cvt.close();
+	/*}}}*/
+
+	/*Get_EDep{{{*/
+	TFile *file_EDep = new TFile("SPD_EDep.root","r");
+	TH1F *hEDep_2cm = (TH1F*) file_EDep->Get("hEDep2cm_px");
+
+	//Use the log-scale histograms for very low energy particles
+	//TFile *file_EDep_Log = new TFile("SPD_EDep_Log.root","r");
+	//TH1F *hEDep_2cm_Log = (TH1F*) file_EDep_Log->Get("hEDep2cm_px");
+	//Use the log-scale histograms for very low energy particles
+	TFile *file_EDep_1GeV = new TFile("SPD_EDep_1GeV.root","r");
+	TH1F *hEDep_2cm_1GeV = (TH1F*) file_EDep_1GeV->Get("hEDep2cm_px");
+
+	/*}}}*/
+	
 	/*Read in each event{{{*/
 	cerr<<"++++++++++++++++ "<<endl;
-	bool bCheck_Rear = kFALSE;
 	Int_t nselected = nevent;
+	double In_G = 0.0, In_E = 0.0;
+	int FirstOne0 = 0, FirstOne1 = 0;
+   
+
 	for(Int_t i=0;i<nselected;i++){
 		cout<<i<<"\r";
         header->GetEntry(i);
-		rate = head_rate->at(0)/filenum;
+		if(input_filename.find("_EM_",0) != string::npos) 
+			rate = ((1.5e-5)/(1.6e-19))/nevent;
+		else 
+			rate = head_rate->at(0)/filenum;
 		evn = head_evn->at(0);
 
 		generated->GetEntry(i);
@@ -411,44 +449,83 @@ void GetLAEC(string input_filename)
 		double gen_theta_array[ng], gen_phi_array[ng], gen_mom_array[ng];
 		double gen_px_array[ng],gen_py_array[ng],gen_pz_array[ng],gen_vx_array[ng],gen_vy_array[ng],gen_vz_array[ng];
 		int Is_Electron = -1;
+				
 		for(int ig=0;ig<ng;ig++){
-          if((int)gen_pid->at(ig)==Electron)
-             Is_Electron = ig;
-		  gen_mom_array[ig] = sqrt( pow(gen_px->at(ig),2)+pow(gen_py->at(ig),2)+pow(gen_pz->at(ig),2) )*MeV2GeV; //GeV
-		  gen_theta_array[ig] = acos(gen_pz->at(ig)/gen_mom_array[ig])*DEG;//Degree
-		  gen_phi_array[ig] = atan2( gen_py->at(ig), gen_px->at(ig))*DEG;//Degree
-		  gen_px_array[ig] = gen_px->at(ig)*MeV2GeV; //GeV
-		  gen_py_array[ig] = gen_py->at(ig)*MeV2GeV; //GeV
-		  gen_pz_array[ig] = gen_pz->at(ig)*MeV2GeV; //GeV
-		  gen_vx_array[ig] = gen_vx->at(ig)*MM2CM; //cm
-		  gen_vy_array[ig] = gen_vy->at(ig)*MM2CM; //cm
-		  gen_vz_array[ig] = gen_vz->at(ig)*MM2CM; //cm
-       //    cerr<<Form("---#%d@%d Px=%f Py=%f Pz=%f P=%f Theta =%f Phi=%f ",i, ig,gen_px->at(ig),gen_py->at(ig),gen_pz->at(ig),gen_mom[ig],gen_theta[ig],gen_phi[ig])<<endl;
+			if((int)gen_pid->at(ig)==Electron)
+				Is_Electron = ig;
+			gen_mom_array[ig] = sqrt( pow(gen_px->at(ig),2)+pow(gen_py->at(ig),2)+pow(gen_pz->at(ig),2) )*MeV2GeV; //GeV
+			gen_theta_array[ig] = acos(gen_pz->at(ig)/gen_mom_array[ig])*DEG;//Degree
+			gen_phi_array[ig] = atan2( gen_py->at(ig), gen_px->at(ig))*DEG;//Degree
+			gen_px_array[ig] = gen_px->at(ig)*MeV2GeV; //GeV
+			gen_py_array[ig] = gen_py->at(ig)*MeV2GeV; //GeV
+			gen_pz_array[ig] = gen_pz->at(ig)*MeV2GeV; //GeV
+			gen_vx_array[ig] = gen_vx->at(ig)*MM2CM; //cm
+			gen_vy_array[ig] = gen_vy->at(ig)*MM2CM; //cm
+			gen_vz_array[ig] = gen_vz->at(ig)*MM2CM; //cm
+			//    cerr<<Form("---#%d@%d Px=%f Py=%f Pz=%f P=%f Theta =%f Phi=%f ",i, ig,gen_px->at(ig),gen_py->at(ig),gen_pz->at(ig),gen_mom[ig],gen_theta[ig],gen_phi[ig])<<endl;
 		}
-         mom_gen = gen_mom_array[Is_Electron];theta_gen = gen_theta_array[Is_Electron];phi_gen = gen_phi_array[Is_Electron];
-		 px_gen = gen_px_array[Is_Electron];py_gen = gen_py_array[Is_Electron];pz_gen = gen_pz_array[Is_Electron];
-		 vx_gen = gen_vx_array[Is_Electron];vy_gen = gen_vy_array[Is_Electron];vz_gen = gen_vz_array[Is_Electron];
+		mom_gen = gen_mom_array[Is_Electron];theta_gen = gen_theta_array[Is_Electron];phi_gen = gen_phi_array[Is_Electron];
+		px_gen = gen_px_array[Is_Electron];py_gen = gen_py_array[Is_Electron];pz_gen = gen_pz_array[Is_Electron];
+		vx_gen = gen_vx_array[Is_Electron];vy_gen = gen_vy_array[Is_Electron];vz_gen = gen_vz_array[Is_Electron];
 
 		//if(gen_theta[Is_Electron]>=5.0){
 		if(1){
-			flux->GetEntry(i);
 			FirstOne0 = 0;
 			FirstOne1 = 0;
-			FirstOne2 = 0;
-			FirstOne3 = 0;
-			FirstOne4 = 0;
-			FirstOne5 = 0;
-			FirstOne6 = 0;
-			//Double_Count = 0;
-		   
-			/*Into the Device{{{*/
+
+			flux->GetEntry(i);
 			EC_Cut_Max = 0.0;
-			for (unsigned int j=0;j<flux_hitn->size();j++) {
+			nhit_flux = flux_hitn->size();
+			/*Loop Flux Events{{{*/ 
+			for (int j=0;j<nhit_flux;j++) {
 				evn_flux = j;
 				x_flux = flux_avg_x->at(j)*MM2CM; y_flux = flux_avg_y->at(j)*MM2CM; z_flux = flux_avg_z->at(j)*MM2CM;
 				vx_flux = flux_vx->at(j)*MM2CM;   vy_flux = flux_vy->at(j)*MM2CM;	vz_flux = flux_vz->at(j)*MM2CM;
-			    px_flux = flux_px->at(j)*MeV2GeV; py_flux = flux_py->at(j)*MeV2GeV; pz_flux = flux_pz->at(j)*MeV2GeV;
-				E = flux_trackE->at(j)*MeV2GeV; Edep = flux_totEdep->at(j)*MeV2GeV;
+				px_flux = flux_px->at(j)*MeV2GeV; py_flux = flux_py->at(j)*MeV2GeV; pz_flux = flux_pz->at(j)*MeV2GeV;
+				E = flux_trackE->at(j)*MeV2GeV;
+				//EDep = flux_totEdep->at(j)*MeV2GeV; //Now only look at VP so Edep should be zero
+
+				/*Look for EDep for 2cm case{{{*/
+				EDep = -11111.0;
+				if(E<1.0){//Below 1 GeV
+					double E_Bin_Min = 0., E_Bin_Max = 1000.;
+					int Bin = 110;
+					double Bin_Size = (E_Bin_Max - E_Bin_Min)/Bin;
+					//Note: EDep = 0 when E<=1 MeV
+					if(PID_flux == Photon){
+						//Photon converts into positron and electrons with close energy
+						int EBin = (E/2.0*1000./Bin_Size) +1;
+						EDep = 2. * hEDep_2cm_1GeV->GetBinContent(EBin)/1000.;//MeV to GeV
+					}
+					else{
+						int EBin = (E*1000./Bin_Size) +1;
+						EDep = hEDep_2cm_1GeV->GetBinContent(EBin)/1000.;//MeV to GeV
+					}
+					//	double E_Bin_Min = -1., E_Bin_Max = 4.1;
+					//	int Bin = 110;
+					//	double Bin_Size = (E_Bin_Max - E_Bin_Min)/Bin;
+					//	int EBin = (log10(E*1000.)/Bin_Size) +1;
+					//	//Note: EDep = 0 when E<=1 MeV
+					//	EDep = hEDep_2cm_Log->GetBinContent(EBin)/1000.;//MeV to GeV
+				}
+				else{
+					double E_Bin_Min = 0., E_Bin_Max = 11000;
+					int Bin = 110;
+					double Bin_Size = (E_Bin_Max - E_Bin_Min)/Bin;
+					if(PID_flux == Photon){
+						//Photon converts into positron and electrons with close energy
+						int EBin = (E/2.0*1000./Bin_Size) +1;
+						EDep = 2.0 * hEDep_2cm->GetBinContent(EBin)/1000.;//MeV to GeV
+					}
+					else{
+						int EBin = (E*1000./Bin_Size) +1;
+						EDep = hEDep_2cm->GetBinContent(EBin)/1000.;//MeV to GeV
+					}
+				}
+				if(EDep>E)//Due to liminted bin-size, EDep can be larger than kE which is wrong
+					EDep = E; //let the particle deposit all its energy when it is very low
+				//cerr<<"--- E = "<<E <<"  EDEp = "<<EDep*1000.<<" MeV"<<endl;
+				/*}}}*/
 
 				r_flux=sqrt(pow(x_flux,2)+pow(y_flux,2));//cm
 				mom_flux=sqrt(pow(px_flux,2)+pow(py_flux,2)+pow(pz_flux,2));//GeV
@@ -458,281 +535,179 @@ void GetLAEC(string input_filename)
 				else if(y_flux<0 && x_flux<0) phi_flux += 180.0;
 				else if(y_flux<0 && x_flux>0) phi_flux += 270.0;
 
-				double Delta_Z = Z_EC-Z_In;
+				double Delta_Z =Z_EC - Z_In;
 				double x_EC = x_flux + Delta_Z * px_flux/pz_flux;
 				double y_EC = y_flux + Delta_Z * py_flux/pz_flux;
 				R_EC = sqrt(x_EC*x_EC+y_EC*y_EC);
-				//R_EC = abs((Z_In - Z_EC) * tan(theta_flux/DEG) + r_flux);//cm
+				//				R_EC = abs((Z_In - Z_EC) * tan(theta_flux/DEG) + r_flux);//cm
 
 				ID_Pick = VP_In;
 				ID_flux = (int) (flux_id->at(j));
 				PID_flux = (int) (flux_pid->at(j));
 
+				if(PID_flux == Photon){
+					/*Look for Photon-to-Electron convertion rate{{{*/
+					convert = -1111;
+					if(E<ene_cvt[0]){
+						//The minimum energy that I studied was 1MeV,set the rate the same as 1MeV when the E<1MeV, could be a potential problem
+						//convert = rate_cvt[0];
+						//Use the linear projection of last two points, not perfect but should be roughly OK	
+						convert = (E-ene_cvt[1])/(ene_cvt[0]-ene_cvt[1])*(rate_cvt[0]-rate_cvt[1])+rate_cvt[1];
+						convert /=100.; //rate is given in %
+					}
+					else if(E>ene_cvt[14])
+						convert = rate_cvt[14];
+					else{
+						for(int m=0;m<14;m++){
+							if(E>ene_cvt[m]&&E<=ene_cvt[m+1]){
+								convert = (E-ene_cvt[m])/(ene_cvt[m+1]-ene_cvt[m])*(rate_cvt[m+1]-rate_cvt[m])+rate_cvt[m];
+								convert /=100.; //rate is given in %
+							}
+						}
+					}
+					if(convert<0.0)		
+						cerr<<"*** ERROR, something is wrong when getting the Photon-Convertion!!!"<<endl;
+					//cerr<<"--- Photon: E = "<<E<<"  convert = "<<convert<<endl;
+					/*}}}*/
+				}
+				else
+					convert = 1.0;
+
 				//Select the right Events
+				if(PID_flux!=Electron&&PID_flux!=-Electron
+						&&PID_flux!=Pion&&PID_flux!=-Pion
+						&&PID_flux!=Kaon&&PID_flux!=-Kaon
+						&&PID_flux!=Proton&&PID_flux!=Photon) continue; //only deal with Electron, Proton, Pion,Kaon and Photon
 				if(ID_flux!=ID_Pick) continue; //Only look at events on the detector plane (VP here) 
 				if(r_flux > R_Max_In||r_flux<R_Min_In) continue;//Must be within the radius range
 				if(flux_pz->at(j)<1e-9)continue;//Cout out backward particles
 				if(mom_flux<1e-9) continue; //Cut out Zero-E particles
-				if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;//Project the particles to the EC and see whether it has been accepted there
-		
-			    //if(PID_flux==Gamma&&mom_flux>1.0)	
-				//	cerr<<"++++ R_EC = "<<R_EC <<"   mom_flux="<<mom_flux<<endl;
 
-				//if(mom_flux>=EC_Threshold)
-				//	EC_Cut_Max = 1.0;
-				//else
-				//	EC_Cut_Max = 0.0;
-		          
 				//Selct the right Cut	
 				//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
+				int EC_PID = 0;
+				if(PID_flux==Electron||PID_flux==-Electron||PID_flux==Photon)
+					EC_PID = 4;
+				else if(PID_flux==Pion||PID_flux==-Pion||PID_flux==Kaon||PID_flux==-Kaon||PID_flux==Proton)//Only Pion's EC-R-Cut for Proton and Kaon so far
+					EC_PID = 5;
+				else
+					cerr<<"*** Error, I don't know this particle = "<<PID_flux<<endl;
+
 				/*Look at the EC to check E-Cut{{{*/ 
-				double EC_Cut = 0;
-				if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && mom_flux>=0.5*EC_Threshold){//#Electrons going out 
+				double EC_Cut_Temp = 0.0;
+				for (unsigned int m=0;m<flux_hitn->size();m++) {
+					int ID_flux_m = (int) (flux_id->at(m));
+					//int PID_flux_m = (int) (flux_pid->at(m));
 
-					int JustOnceHere=0;
-					for (Int_t m=0;m<flux_hitn->size();m++) {
-						int ID_flux_m = (int) (flux_id->at(m));
-						int PID_flux_m = (int) (flux_pid->at(m));
+					if(ID_flux_m==VP_EC){//On EC VP
+						double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
+						if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
 
-						if(ID_flux_m==VP_EC){//On EC VP
-							double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
-							if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
+						if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
+						double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
+						if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
 
-							if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
-							double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
-							if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
-
-							if(abs(fmom_EC-mom_flux)/mom_flux<0.50){//Alow 50% Eloss, just to make the code faster
-								if(abs(PID_flux_m)==Electron)
-									JustOnceHere++;
-								/*Find E-Cut{{{*/
-								for(int k=0;k<EC_Trigger_Slide;k++){
-									for(int l=0;l<EC_Trigger_Mom_Bin;l++){
-										if(r_EC>trig_cut[1][k][l][0]&&r_EC<=trig_cut[1][k][l][1]){
-											if(fmom_EC>trig_cut[1][k][l][2]&&fmom_EC<=trig_cut[1][k][l][3]){
-												EC_Cut =trig_cut[1][k][l][4]; 
-											}
+						if(fabs(fmom_EC-mom_flux)/mom_flux<0.50){//Alow 50% Eloss, just to make the code faster
+							/*Find E-Cut{{{*/
+							for(int k=0;k<EC_Trigger_Slide;k++){
+								for(int l=0;l<EC_Trigger_Mom_Bin;l++){
+									if(r_EC>trig_cut[EC_ID][k][l][0]&&r_EC<=trig_cut[EC_ID][k][l][1]){
+										if(fmom_EC>trig_cut[EC_ID][k][l][2]&&fmom_EC<=trig_cut[EC_ID][k][l][3]){
+											EC_Cut_Temp =trig_cut[EC_ID][k][l][EC_PID]; 
 										}
 									}
 								}
-								/*}}}*/
 							}
-							//if(JustOnceHere>1&&EC_Cut>0.5)
-							//	cerr<<"No! More than one !!!"<<endl;
+							/*}}}*/
 						}
-						if(EC_Cut>EC_Cut_Max)
-							EC_Cut_Max = EC_Cut;
-					}//for (Int_t m=0;m<flux_hitn->size();m++) 
+					}
+					if(EC_Cut_Temp>EC_Cut_Max)
+						EC_Cut_Max = EC_Cut_Temp;
+				}//for (Int_t m=0;m<flux_hitn->size();m++) 
 
-					if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
-						EC_Cut_Max = 0.0;
-						cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r_flux, mom_flux)<<endl;
-						return;
+				if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
+					EC_Cut_Max = 0.0;
+					cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r_flux, mom_flux)<<endl;
+					return "0";
+				}
+				/*}}}*/
+
+				/*Find E-Cut{{{*/
+				for(int k=0;k<EC_Trigger_Slide;k++){
+					for(int l=0;l<EC_Trigger_Mom_Bin;l++){
+						if(R_EC>trig_cut[EC_ID][k][l][0]&&R_EC<=trig_cut[EC_ID][k][l][1]){
+							if(mom_flux>trig_cut[EC_ID][k][l][2]&&mom_flux<=trig_cut[EC_ID][k][l][3]){
+								EC_Cut =trig_cut[EC_ID][k][l][EC_PID]; 
+							}
+						}
 					}
 				}
 				/*}}}*/
-	
-				//Low Energy Electron <1GeV
-				if((PID_flux==Electron||PID_flux==-Electron)&& mom_flux<EC_Threshold){//#Electrons going out 
-					if(FirstOne0<1)
-						Count_Low+=1.0*rate;
-					FirstOne0 ++;;
-				}
-				//High Energy Electron >1GeV
-				if((PID_flux==Electron||PID_flux==-Electron)&& mom_flux>=EC_Threshold){//#Electrons going out 
-					if(FirstOne1<1)
-						Count_High+=1.0*rate;
-					FirstOne1 ++;;
-
-					Count_Both+=1.0*rate;
-					if(PID_flux==Electron)
-						Count_Em+=1.0*rate;
-					if(PID_flux==-Electron)
-						Count_Ep+=1.0*rate;
-				}
-				//High Energy Electron with EC R-Cut 
-				if((PID_flux==Electron)&& mom_flux>=0.99*EC_Threshold){//#Electrons going out 
-					if(FirstOne2<1)
-						Count_Cut_Em+=EC_Cut_Max*rate;
-					FirstOne2 ++;;
-				}
-				//High Energy Positron with EC R-Cut 
-				if((PID_flux==-Electron)&&mom_flux>=0.99*EC_Threshold){//#Electrons going out 
-					if(FirstOne5<1)
-						Count_Cut_Ep+=EC_Cut_Max*rate;
-					FirstOne5 ++;;
-				}
 
 				Module_ID = (int) phi_flux/(360./Module);
 				for(int k=0;k<Slide+1;k++){
-					if(r_flux>R_Slide[k]&&r_flux<R_Slide[k+1])
+					if(r_flux>R_Slide[k]&&r_flux<=R_Slide[k+1])
 						Slide_ID = k;
 				}
-								
-				if(PID_flux==Gamma&& mom_flux>=0.5*EC_Threshold){//#Photons going in
-					if(FirstOne6<1)
-						In_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
-					FirstOne6++;
-				}
-				if((PID_flux==Electron||PID_flux==-Electron) && mom_flux>=0.5*EC_Threshold){//#Electrons going out 
-					if(FirstOne3<1){
-						In_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
-					}
-					FirstOne3 ++;;
-				}
 
+				if(PID_flux==Photon){//#Photons going in
+					hist_pho->Fill(y_flux, x_flux, EC_Cut*rate*convert);
+				}
+				if((PID_flux)==Electron||(PID_flux)==Pion||(PID_flux)==Kaon
+						||(PID_flux)==-Electron||(PID_flux)==-Pion||(PID_flux)==-Kaon||PID_flux==Proton){//#Charged Particles going out 
+					hist_ele->Fill(y_flux, x_flux, EC_Cut*rate);
+				}
+				
 				T->Fill();
+
+				if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;//Project the particles to the EC and see whether it has been accepted there
+
+				if(PID_flux==Photon&& mom_flux>=0.5*EC_Threshold){//#Photons going in
+					if(FirstOne0<1)
+						In_G+=EC_Cut_Max*rate;
+					FirstOne0++;
+				}
+				if((PID_flux==Electron||PID_flux==Pion||PID_flux==Kaon
+						||PID_flux==-Electron||PID_flux==-Pion||PID_flux==-Kaon||PID_flux==Proton)
+						&& mom_flux>=0.5*EC_Threshold){//#Charged Particles going out 
+					if(FirstOne1<1)
+						In_E+=EC_Cut_Max*rate;
+					FirstOne1 ++;;
+				}
 			}
-			/*}}}*/
+			/*flux}}}*/
 
-			//		if((FirstOne2>=1) && (FirstOne5>=1))
-			//			cerr<<" Oh! Double Counting !!!  "<< ++Double_Count<<endl;
-
-			/*Out from the Device{{{*/
-			FirstOne4 = 0;
-			if(bCheck_Rear){
-				EC_Cut_Max = 0.0;
-				for (unsigned int j=0;j<flux_hitn->size();j++) {
-					double r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))*MM2CM;//cm
-					if(r<R_Min_Out && r>R_Max_Out) continue;
-
-					double mom_flux_out=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2))*MeV2GeV;//GeV
-					if(flux_pz->at(j)<1e-9)continue;
-					if(mom_flux_out<1e-9) continue;
-
-					theta_flux = atan(sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2))/(flux_pz->at(j)))*DEG;
-
-					double Delta_Z = Z_EC - Z_Out;
-					double x_EC = flux_avg_x->at(j) + Delta_Z * flux_px->at(j)/flux_pz->at(j);
-					double y_EC = flux_avg_y->at(j) + Delta_Z * flux_py->at(j)/flux_pz->at(j);
-					R_EC = sqrt(x_EC*x_EC+y_EC*y_EC);
-					//		R_EC = abs((Z_EC - Z_Out) * tan(theta_flux/DEG) + r);
-					if(R_EC>R_Max_EC || R_EC<R_Min_EC) continue;
-
-					ID_Pick = VP_Out;
-					ID_flux = (int) (flux_id->at(j));
-					PID_flux = (int) (flux_pid->at(j));
-					
-					//if(mom_flux>=EC_Threshold)
-					//	EC_Cut_Max = 1.0;
-					//else
-					//	EC_Cut_Max = 0.0;
-					
-					//Selct the right Cut	
-					//cut[Det_ID][Cut_ID][Data_Point][Cut_Info]: Cut_Info: R_Min, R_Max, P_Min, P_Max, e_Eff, pi_Eff
-					/*Look at the EC to check E-Cut{{{*/ 
-					double EC_Cut = 0;
-					if((abs(PID_flux)==Electron||PID_flux==Gamma)&&ID_flux==ID_Pick && mom_flux_out>=0.5*EC_Threshold){//#Electrons going out 
-						int JustOnceHere=0;
-						for (Int_t m=0;m<flux_hitn->size();m++) {
-							int ID_flux_m = (int) (flux_id->at(m));
-							int PID_flux_m = (int) (flux_pid->at(m));
-
-							if(ID_flux_m==VP_EC){//On EC VP
-								double r_EC=sqrt(pow(flux_avg_x->at(m),2)+pow(flux_avg_y->at(m),2))/10.;//cm
-								if(r_EC>R_Max_EC||r_EC<R_Min_EC) continue;//The radius of a mrpc sector is 210cm;
-
-								if(flux_pz->at(m)<1e-9)continue;//Cut out backward particles
-								double fmom_EC=sqrt(pow(flux_px->at(m),2)+pow(flux_py->at(m),2)+pow(flux_pz->at(m),2))/1e3;//GeV
-								if(fmom_EC<1e-9) continue; //Cut out Zero-E particles
-
-								if(abs(fmom_EC-mom_flux_out)/mom_flux_out<0.50){//Alow 50% Eloss--FIX_HERE
-									if(abs(PID_flux_m)==Electron)
-										JustOnceHere++;
-									/*Find E-Cut{{{*/
-									for(int k=0;k<EC_Trigger_Slide;k++){
-										for(int l=0;l<EC_Trigger_Mom_Bin;l++){
-											if(r_EC>trig_cut[1][k][l][0]&&r_EC<=trig_cut[1][k][l][1]){
-												if(fmom_EC>trig_cut[1][k][l][2]&&fmom_EC<=trig_cut[1][k][l][3]){
-													EC_Cut =trig_cut[1][k][l][4]; 
-												}
-											}
-										}
-									}
-									/*}}}*/
-								}
-							//	if(JustOnceHere>1&&EC_Cut>0.5)
-							//		cerr<<"No! More than one !!!"<<endl;
-							}
-							if(EC_Cut>EC_Cut_Max)
-								EC_Cut_Max = EC_Cut;
-						}//for (Int_t m=0;m<flux_hitn->size();m++) 
-
-						if(EC_Cut_Max<-1e-9||EC_Cut_Max>1){
-							EC_Cut_Max = 0.0;
-							cerr<<"----In: I can't find the cut!"<<Form(" --- R= %f,  E =%f", r, mom_flux_out)<<endl;
-							return;
-						}
-					}
-					/*}}}*/
-
-					//Count by slides
-					x_flux=flux_avg_x->at(j)*MM2CM; y_flux=flux_avg_y->at(j)*MM2CM; z_flux=flux_avg_z->at(j)*MM2CM;//cm
-					phi_flux = fabs(atan(y_flux/x_flux)*DEG);
-					if(y_flux>0 && x_flux<0) phi_flux += 90.0;
-					else if(y_flux<0 && x_flux<0) phi_flux += 180.0;
-					else if(y_flux<0 && x_flux>0) phi_flux += 270.0;
-
-					Module_ID = (int) phi_flux/(360./Module);
-					for(int k=0;k<Slide+1;k++){
-						if(r_flux>R_Slide[k]&&r_flux<R_Slide[k+1])
-							Slide_ID = k;
-					}
-
-					if(PID_flux==Gamma&&ID_flux==ID_Pick && mom_flux_out>=0.5*EC_Threshold){//#Photons going out 
-						Out_G[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
-					}
-					if((PID_flux==Electron||PID_flux==-Electron)&&ID_flux==ID_Pick && mom_flux_out>=0.5*EC_Threshold){//#Electrons going out 
-						if(FirstOne4<1)
-							Out_E[Module_ID][Slide_ID]+=EC_Cut_Max*rate;
-						FirstOne4 ++;;
-					}
-				}//Flux particles in one event
-			}//if(1)
-			/*}}}*/
-
-		}
-	}
-	T->Write(); out_file->Close();
+		}//if(1) or if(gen_theta>5.0)
+	}//gen
 	/*End Read in each event}}}*/
 
 	/*Count_Rate_Ractor{{{*/
 	double Count_To_Rate = 0.0;
-	if(input_filename.find("_EM_",0) != string::npos) 
-		Count_To_Rate = (((1.5e-5)/(1.6e-19))/nevent)/1e3; //Count to KHz for 15uA electron events;
-	else{
-		Count_To_Rate = 1.0/1e3;
-	}
+	Count_To_Rate = 1.0/1e3;//Hz to KHz
+
+	cerr<<" ====== In_E = "<< In_E*Count_To_Rate<<endl;
+	cerr<<" ====== In_G = "<< In_G*Count_To_Rate<<endl;
 	/*}}}*/
 
-	/*Output Results{{{*/
-	cerr<<" --- Using Converting Factor = "<<Count_To_Rate<<endl;
+	out_file->cd(); T->Write(); hist_ele->Write(); hist_pho->Write(); 
+	out_file->Close(); 
+	file->Close();
+	file_EDep->Close();
+	file_EDep_1GeV->Close();
+	
+	return output_filename;
+}
 
-	TString input_out = input_filename;
-	input_out.ReplaceAll(".root",".out");
-	ofstream outfile(Form("EC_%s",input_out.Data()));
-	for(int k=0;k<Slide;k++){
-		for(int l=0;l<Module;l++){
-			In_G_All +=In_G[l][k];
-			In_E_All +=In_E[l][k];
-			Out_E_All +=Out_E[l][k];
-			Out_G_All +=Out_G[l][k];
-		}
-	}
-	cerr<<" ====== In_E = "<< In_E_All*Count_To_Rate<<endl;
-	cerr<<" ====== In_G = "<< In_G_All*Count_To_Rate<<endl;
-	cerr<<" ====== Out_E = "<< Out_E_All*Count_To_Rate<<endl;
-	cerr<<" ====== Out_G = "<< Out_G_All*Count_To_Rate<<endl;
+void RunAll(){
+   ifstream runlist("runlist.dat");
+   TString filename = "";
 
-	cerr<< Form("&&&& N (P<1GeV) = %d, N (P>1.0GeV) = %d, 1GeV Cut N = (-)%d / (+)%d /(+-)%d",
-			(int)(Count_Low), (int)(Count_High), (int)(Count_Em), (int)(Count_Ep), (int)(Count_Both))<<endl;
-	cerr<< Form("                                             R-Cut Cut N = (-)%d / (+)%d /(+-)%d",
-			(int)(Count_Cut_Em), (int)(Count_Cut_Ep), (int)(In_E_All))<<endl;
-
-	outfile<<" ====== In_E = "<< In_E_All*Count_To_Rate<<endl;
-	outfile<<" ====== In_G = "<< In_G_All*Count_To_Rate<<endl;
-	outfile<<" ====== Out_E = "<< Out_E_All*Count_To_Rate<<endl;
-	outfile<<" ====== Out_G = "<< Out_G_All*Count_To_Rate<<endl;
-	/*}}}*/
-
+   while(!(runlist.eof())){
+      runlist >> filename;
+      cerr<<"---- Working on the file = "<<filename.Data()<<endl;
+	  TString output_file = FASPD(filename.Data());
+	  if(output_file!="0")
+		  gSystem->Exec(Form("mv %s file_FASPD/", output_file.Data()));
+   }
+   
 }
