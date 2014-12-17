@@ -10,7 +10,8 @@ Note:
   1) A generator is given in "GetSIDIS.C" 
   2) A simpler example of using the model is given in "example.C"
 3, LHAPDF is needed to be installed. Unpar "lhapdf.5.8.8.tar.gz", 
-   and follow the instruction to install it. Specify the path in "SIDIS.h"
+   and follow the instruction to install it. Specify the path in "SIDIS.h" or
+define ${LHAPDF}=/your_path/
 4, The output files include both the ROOT format files and LUND format files,
    where, four root files will generated:
     *_1_0.root, Q2=<10, pt<=1 
