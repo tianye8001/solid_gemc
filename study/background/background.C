@@ -123,8 +123,8 @@ void background(string input_filename){
 	TString label[m]={"photon+electron+positron","photon","electron+positron","neutron","proton","pip","pim","Kp","Km","Kl","other"};
 
 	/*Define Histograms{{{*/
-	TH1F *hvertexZ[n][m];
-	TH2F *hhitXY[n][m],*hvertex[n][m];
+	TH1F *hhitZ[n][m],*hvertexZ[n][m];
+	TH2F *hhitXY[n][m],*hvertexZR[n][m];
 	TH1F *hfluxR[n][m];
 	TH1F *hfluxPhi[n][m],*hfluxPhi_target[n][m],*hfluxPhi_other[n][m];
 	TH1F *hEfluxR[n][m];
@@ -147,11 +147,17 @@ void background(string input_filename){
 			char hstname[100];
 			sprintf(hstname,"hitXY_%i_%i",k,l);
 			hhitXY[k][l]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);
-			sprintf(hstname,"vertex_%i_%i",k,l);
-			hvertex[k][l]=new TH2F(hstname,hstname,5000,-500,500,800,0,400);
+			hhitXY[k][l]->SetTitle("rate (kHz);X (cm);Y (cm)");
+			sprintf(hstname,"hitZ_%i_%i",k,l);   
+			hhitZ[k][l]=new TH1F(hstname,hstname,2000,-500,500);
+			hhitZ[k][l]->SetTitle(";Z (cm);rate (kHz)");
+						
+			sprintf(hstname,"vertexZR_%i_%i",k,l);
+			hvertexZR[k][l]=new TH2F(hstname,hstname,2000,-500,500,800,0,400);
+			hvertexZR[k][l]->SetTitle("rate (kHz);vertex Z (cm);vertex R (cm)");		
 			sprintf(hstname,"vertexZ_%i_%i",k,l);   
-			hvertexZ[k][l]=new TH1F(hstname,hstname,5000,-500,500);   
-			hvertexZ[k][l]->SetTitle(";vertex Z (cm);");
+			hvertexZ[k][l]=new TH1F(hstname,hstname,2000,-500,500);   
+			hvertexZ[k][l]->SetTitle(";vertex Z (cm);rate (kHz)");
 
 			sprintf(hstname,"fluxR_%i_%i",k,l);
 			hfluxR[k][l]=new TH1F(hstname,hstname,60,0,300);
@@ -610,10 +616,12 @@ void background(string input_filename){
 				// 	  cout <<"flux_totEdep->at(j) " << flux_totEdep->at(j) << endl;  	  
 			} //spd required >0 energy deposit
 			else {  // all other just counting
-				hvertex[hit_id][par]->Fill(flux_vz->at(j)/10.,sqrt(flux_vx->at(j)/10.*flux_vx->at(j)/10.+flux_vy->at(j)/10.*flux_vy->at(j)/10.));
-				hvertexZ[hit_id][par]->Fill(flux_vz->at(j)/10.);      
+				hvertexZR[hit_id][par]->Fill(flux_vz->at(j)/10.,sqrt(flux_vx->at(j)/10.*flux_vx->at(j)/10.+flux_vy->at(j)/10.*flux_vy->at(j)/10.),weight);
+				hvertexZ[hit_id][par]->Fill(flux_vz->at(j)/10.,weight);      
 			  
-				hhitXY[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight); 
+				hhitXY[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight);
+				hhitZ[hit_id][par]->Fill(flux_avg_z->at(j)/10.,weight);      		
+				
 				hPlog[hit_id][par]->Fill(log10(P/1e3),weight);
 				hElog[hit_id][par]->Fill(log10(flux_trackE->at(j)/1e3),weight);
 				hEklog[hit_id][par]->Fill(log10(Ek/1e3),weight);
@@ -711,7 +719,9 @@ void background(string input_filename){
 	/*Operate Histograms{{{*/
 	for(int k=0;k<n;k++){
 		hhitXY[k][0]->Add(hhitXY[k][1],hhitXY[k][2]);
-		hvertex[k][0]->Add(hvertex[k][1],hvertex[k][2]);
+		hhitZ[k][0]->Add(hhitZ[k][1],hhitZ[k][2]);		
+		hvertexZR[k][0]->Add(hvertexZR[k][1],hvertexZR[k][2]);
+		hvertexZ[k][0]->Add(hvertexZ[k][1],hvertexZ[k][2]);		
 		hfluxR[k][0]->Add(hfluxR[k][1],hfluxR[k][2]);
 		hfluxPhi[k][0]->Add(hfluxPhi[k][1],hfluxPhi[k][2]);
 		hfluxPhi_target[k][0]->Add(hfluxPhi_target[k][1],hfluxPhi_target[k][2]);      
@@ -779,7 +789,7 @@ void background(string input_filename){
 		for(int k=0;k<n;k++){
 			gPad->SetLogz(1);  
 			c_vertex->cd(l*n+k+1);    
-			hvertex[k][l]->Draw("colz");
+			hvertexZR[k][l]->Draw("colz");
 		}
 	}
 
