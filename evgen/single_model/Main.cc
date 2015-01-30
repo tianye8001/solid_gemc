@@ -279,17 +279,17 @@ int main()
   double Ebeam = 11;//GeV
   
 //PVDIS_LD2    
-//   pPhys->SetTarget(1,2);
-//   M = 1.874; //2.014*0.931494028
-//   double lumi = 0.63e39;//cm^-2.s^-1   neuclei lumi
+  pPhys->SetTarget(1,2);
+  M = 1.874; //2.014*0.931494028
+  double lumi = 0.63e39;//cm^-2.s^-1   neuclei lumi
  //SIDIS_He3
 //   pPhys->SetTarget(2,3);    
 //   M = 2.814;    
 //   double lumi = 1e36;//cm^-2.s^-1    neuclei lumi
 //SIDIS_He3_window_downstream
-  pPhys->SetTarget(17,35);    
-  M = 32.866;    
-  double lumi = 0.054e36;//cm^-2.s^-1        neuclei lumi
+//   pPhys->SetTarget(17,35);    
+//   M = 32.866;    
+//   double lumi = 0.054e36;//cm^-2.s^-1        neuclei lumi
   
   pPhys->SetTargetMass(M); 
   
@@ -322,10 +322,10 @@ void GenerateGEMCLundFile(G2PPhysBase *pPhys,double beame, double lumi, double n
     //vertex
     vx = r3->Uniform(-0.5,0.5);
     vy = r3->Uniform(-0.5,0.5);
-//     vz = r3->Uniform(-10,30);//PVDIS_LD2
+    vz = r3->Uniform(-10,30);//PVDIS_LD2
 //     vz = r3->Uniform(-370,330); //SIDIS_He3
 //     vz = r3->Uniform(-330.006,-329.994);//SIDIS_He3_downstream
-    vz = r3->Uniform(-370.006,-369.994);//SIDIS_He3_upstream    
+//     vz = r3->Uniform(-370.006,-369.994);//SIDIS_He3_upstream    
     phi = r3->Uniform(0,2*3.14159);
     //kinematics
     mom_p = r3->Uniform(0,beame);
