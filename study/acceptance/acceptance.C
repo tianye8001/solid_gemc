@@ -25,15 +25,65 @@ void acceptance(string input_filename)
 {
 gROOT->Reset();
 gStyle->SetPalette(1);
-gStyle->SetOptStat(0);
+// gStyle->SetOptStat(0);
+gStyle->SetOptStat(11111);
 
 const double DEG=180./3.1415926;
 
-bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi=false;
+bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false;
 if (input_filename.find("PVDIS",0) != string::npos) Is_PVDIS=true;
 else if (input_filename.find("SIDIS_He3",0) != string::npos) Is_SIDIS_He3=true;
 else if (input_filename.find("SIDIS_NH3",0) != string::npos) Is_SIDIS_NH3=true;
-else if (input_filename.find("JPsi",0) != string::npos) Is_JPsi=true;
+else if (input_filename.find("JPsi",0) != string::npos) Is_JPsi_LH2=true;
+else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
+
+///radius cut standard as particles can travel 30cm in Z before leave calorimeter
+///SIDIS largeangle EC outerradius is at 140cm
+double rout_cut_FA,rin_cut_FA,rout_cut_LA,rin_cut_LA;
+if (Is_PVDIS){
+  rout_cut_FA = 250;  //target at 10,ec front at 320 back at 370 with angle 36
+  rin_cut_FA = 110;  //as the detector edge
+  cout << " PVDIS rcut " << rin_cut_FA << " " << rout_cut_FA <<  endl;
+}
+else if (Is_SIDIS_He3 || Is_SIDIS_NH3){
+  rout_cut_FA=220;     //target at -350,ec front at 415 with angle 15
+//   rin_cut_FA=98;   //cut at the actual edge 
+  rin_cut_FA=105;   //cut at the actual edge
+  rout_cut_LA=127;   //target at -350,ec front at -65 with angle 24
+  rin_cut_LA=83;   //cut at the actual edge
+  cout << " SIDIS_He3 and SIDIS_NH3 rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
+}
+else if (Is_JPsi_LH2){
+    rout_cut_FA=220;     //target at -350,ec front at 405 with angle 15
+//     rin_cut_FA=98;   	//cut at the actual edge
+    rin_cut_FA=105;   	 //cut at the actual edge
+    
+//   rout_cut_LA=127.1;   //target at -360,ec front at -65 with angle 23.3    
+//   rout_cut_LA=126.3;   //target at -350,ec front at -65 with angle 23.9
+//   rout_cut_LA=125.9;   //target at -340,ec front at -65 with angle 24.6
+//   rout_cut_LA=125.3;   //target at -330,ec front at -65 with angle 25.3    
+//   rout_cut_LA=124.9;   //target at -320,ec front at -65 with angle 26.1
+  rout_cut_LA=124.5;   //target at -315,ec front at -65 with angle 26.9
+//   rout_cut_LA=124.3;   //target at -310,ec front at -65 with angle 26.9
+//      rout_cut_LA=124.0;   //target at -305,ec front at -65 with angle 27.3
+//      rout_cut_LA=123.9;   //target at -300,ec front at -65 with angle 27.8
+//      rout_cut_LA=123.8;   //target at -295,ec front at -65 with angle 28.3
+//   rout_cut_LA=123.2;   //target at -290,ec front at -65 with angle 28.7
+//      rout_cut_LA=122.6;   //target at -280,ec front at -65 with angle 29.7
+//      rout_cut_LA=121.7;   //target at -270,ec front at -65 with angle 30.7
+//   rout_cut_LA=120.1;   //target at -250,ec front at -65 with angle 33.0
+  rin_cut_LA=83;   //cut at the actual edge  
+  cout << " JPsi rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
+}
+else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
+
+double theta_max;
+if (Is_SIDIS_He3 || Is_JPsi_LH2 || Is_PVDIS){
+    theta_max=40;
+}
+else if(Is_SIDIS_NH3) {
+    theta_max=60;
+}
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
 char the_filename[200];
@@ -48,19 +98,22 @@ TH3F *hacceptance_ThetaPhiP_forwardangle,*hacceptance_ThetaPhiP_largeangle;
 
 const int n=2;
 
-TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","gen_ThetaP",250,0,50,220,0,11);
-TH2F *hgen_ThetaPhi=new TH2F("gen_ThetaPhi","gen_ThetaPhi",250,0,50,360,-180,180);     
+TH1F *hgen_P=new TH1F("gen_P","gen_P",220,0,11);
+TH1F *hgen_Theta=new TH1F("gen_Theta","gen_Theta",int(theta_max*5),0,theta_max);
+TH1F *hgen_Phi=new TH1F("gen_Phi","gen_Phi",360,-180,180);
+TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","gen_ThetaP",int(theta_max*5),0,theta_max,220,0,11);
+TH2F *hgen_ThetaPhi=new TH2F("gen_ThetaPhi","gen_ThetaPhi",int(theta_max*5),0,theta_max,360,-180,180);     
 TH2F *hgen_PhiP=new TH2F("gen_PhiP","gen_PhiP",360,-180,180,220,0,11);
-TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",100,0,50,180,-180,180,110,0,11);   
+TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",int(theta_max*2),0,theta_max,180,-180,180,110,0,11);   
 
 TH2F *hgen_ThetaVz=new TH2F("gen_ThetaVz","gen_ThetaVz",350,15,50,50,-15,35);
 TH2F *hgen_ThetaVr=new TH2F("gen_ThetaVr","gen_ThetaVr",350,15,50,50,0,1);
 
-TH1F *hflux_P[n],*hflux_theta[n];
+TH1F *hflux_P[n],*hflux_Theta[n],*hflux_Phi[n];
 TH2F *hflux_ThetaP[n],*hflux_ThetaPhi[n],*hflux_PhiP[n];
 TH3F *hflux_ThetaPhiP[n];
 TH2F *hflux_ThetaVz[n],*hflux_ThetaVr[n];
-TH1F *hacceptance_P[n],*hacceptance_theta[n];
+TH1F *hacceptance_P[n],*hacceptance_Theta[n],*hacceptance_Phi[n];;
 TH2F *hacceptance_ThetaP[n],*hacceptance_ThetaPhi[n],*hacceptance_PhiP[n];
 TH3F *hacceptance_ThetaPhiP[n];
 TH2F *hacceptance_ThetaVz[n],*hacceptance_ThetaVr[n];
@@ -74,20 +127,22 @@ for(int i=0;i<n;i++){
    
    sprintf(hstname,"flux_P_%i",i);
    hflux_P[i]=new TH1F(hstname,hstname,220,0,11);
-   sprintf(hstname,"flux_theta_%i",i);
-   hflux_theta[i]=new TH1F(hstname,hstname,250,0,50); 
+   sprintf(hstname,"flux_Theta_%i",i);
+   hflux_Theta[i]=new TH1F(hstname,hstname,int(theta_max*5),0,theta_max); 
+   sprintf(hstname,"flux_Phi_%i",i);
+   hflux_Phi[i]=new TH1F(hstname,hstname,360,-180,180); 
    
    sprintf(hstname,"flux_ThetaP_%i",i);
-   hflux_ThetaP[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);        
+   hflux_ThetaP[i]=new TH2F(hstname,hstname,int(theta_max*5),0,theta_max,220,0,11);        
    hflux_ThetaP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);P (GeV)",title[i]));   
    sprintf(hstname,"flux_ThetaPhi_%i",i);   
-   hflux_ThetaPhi[i]=new TH2F(hstname,hstname,250,0,50,360,-180,180); 
+   hflux_ThetaPhi[i]=new TH2F(hstname,hstname,int(theta_max*5),0,theta_max,360,-180,180); 
    hflux_ThetaPhi[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (GeV)",title[i]));   
    sprintf(hstname,"flux_PhiP_%i",i);   
    hflux_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
    hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));  
    sprintf(hstname,"flux_ThetaPhiP_%i",i);   
-   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,100,0,50,180,-180,180,110,0,11);   
+   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,int(theta_max*2),0,theta_max,180,-180,180,110,0,11);   
    hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
    
    sprintf(hstname,"flux_ThetaVz_%i",i);
@@ -100,20 +155,25 @@ for(int i=0;i<n;i++){
   
    sprintf(hstname,"acceptance_P_%i",i);
    hacceptance_P[i]=new TH1F(hstname,hstname,220,0,11);
-   sprintf(hstname,"acceptance_theta_%i",i);
-   hacceptance_theta[i]=new TH1F(hstname,hstname,250,0,50);     
+   hacceptance_P[i]->SetTitle(Form("acceptance by %s;P (GeV);",title[i]));
+   sprintf(hstname,"acceptance_Theta_%i",i);
+   hacceptance_Theta[i]=new TH1F(hstname,hstname,int(theta_max*5),0,theta_max);    
+   hacceptance_Theta[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);",title[i]));   
+   sprintf(hstname,"acceptance_Phi_%i",i);
+   hacceptance_Phi[i]=new TH1F(hstname,hstname,360,-180,180);    
+   hacceptance_Phi[i]->SetTitle(Form("acceptance by %s;vertex Phi (deg));",title[i]));   
    
    sprintf(hstname,"acceptance_ThetaP_%i",i);
-   hacceptance_ThetaP[i]=new TH2F(hstname,hstname,250,0,50,220,0,11);     
+   hacceptance_ThetaP[i]=new TH2F(hstname,hstname,int(theta_max*5),0,theta_max,220,0,11);     
    hacceptance_ThetaP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);P (GeV)",title[i]));
    sprintf(hstname,"acceptance_ThetaPhi_%i",i);
-   hacceptance_ThetaPhi[i]=new TH2F(hstname,hstname,250,0,50,360,-180,180);     
+   hacceptance_ThetaPhi[i]=new TH2F(hstname,hstname,int(theta_max*5),0,theta_max,360,-180,180);     
    hacceptance_ThetaPhi[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg)",title[i]));
    sprintf(hstname,"acceptance_PhiP_%i",i);
    hacceptance_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
    hacceptance_PhiP[i]->SetTitle(Form("acceptance by %s;vertex Phi (deg);P (GeV)",title[i]));      
    sprintf(hstname,"acceptance_ThetaPhiP_%i",i);   
-   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,100,0,50,180,-180,180,110,0,11);   
+   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,int(theta_max*2),0,theta_max,180,-180,180,110,0,11);   
    hacceptance_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));
 
    sprintf(hstname,"acceptance_ThetaVz_%i",i);
@@ -228,44 +288,6 @@ int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
 cout << "nevent " << nevent << endl;
 
-///radius cut standard as particles can travel 30cm in Z before leave calorimeter
-///SIDIS largeangle EC outerradius is at 140cm
-double rout_cut_FA,rin_cut_FA,rout_cut_LA,rin_cut_LA;
-if (Is_PVDIS){
-  rout_cut_FA = 250;  //target at 10,ec front at 320 back at 370 with angle 36
-  rin_cut_FA = 110;  //as the detector edge
-  cout << " PVDIS rcut " << rin_cut_FA << " " << rout_cut_FA <<  endl;
-}
-else if (Is_SIDIS_He3 || Is_SIDIS_NH3){
-  rout_cut_FA=220;     //target at -350,ec front at 415 with angle 15
-//   rin_cut_FA=98;   //cut at the actual edge 
-  rin_cut_FA=105;   //cut at the actual edge
-  rout_cut_LA=127;   //target at -350,ec front at -65 with angle 24
-  rin_cut_LA=83;   //cut at the actual edge
-  cout << " SIDIS_He3 and SIDIS_NH3 rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
-}
-else if (Is_JPsi){
-    rout_cut_FA=220;     //target at -350,ec front at 405 with angle 15
-    rin_cut_FA=98;   	//cut at the actual edge
-  
-//   rout_cut_LA=127.1;   //target at -360,ec front at -65 with angle 23.3    
-//   rout_cut_LA=126.3;   //target at -350,ec front at -65 with angle 23.9
-//   rout_cut_LA=125.9;   //target at -340,ec front at -65 with angle 24.6
-//   rout_cut_LA=125.3;   //target at -330,ec front at -65 with angle 25.3    
-  rout_cut_LA=124.9;   //target at -320,ec front at -65 with angle 26.1
-//   rout_cut_LA=124.3;   //target at -310,ec front at -65 with angle 26.9
-//      rout_cut_LA=124.0;   //target at -305,ec front at -65 with angle 27.3
-//      rout_cut_LA=123.9;   //target at -300,ec front at -65 with angle 27.8
-//      rout_cut_LA=123.8;   //target at -295,ec front at -65 with angle 28.3
-//   rout_cut_LA=123.2;   //target at -290,ec front at -65 with angle 28.7
-//      rout_cut_LA=122.6;   //target at -280,ec front at -65 with angle 29.7
-//      rout_cut_LA=121.7;   //target at -270,ec front at -65 with angle 30.7
-//   rout_cut_LA=120.1;   //target at -250,ec front at -65 with angle 33.0
-  rin_cut_LA=83;   //cut at the actual edge  
-  cout << " JPsi rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
-}
-else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
-
 int counter_decay_incomplete=0;
 
 for (Int_t i=0;i<nevent;i++) { 
@@ -290,7 +312,10 @@ for (Int_t i=0;i<nevent;i++) {
       p_gen=sqrt(px_gen*px_gen+py_gen*py_gen+pz_gen*pz_gen);
       theta_gen=acos(pz_gen/p_gen)*DEG;  	//in deg
       phi_gen=atan2(py_gen,px_gen)*DEG;     	//in deg
-            
+
+      hgen_P->Fill(p_gen);      
+      hgen_Theta->Fill(theta_gen);            
+      hgen_Phi->Fill(phi_gen);      
       hgen_ThetaP->Fill(theta_gen,p_gen);      
       hgen_ThetaPhi->Fill(theta_gen,phi_gen);            
       hgen_PhiP->Fill(phi_gen,p_gen);
@@ -301,12 +326,21 @@ for (Int_t i=0;i<nevent;i++) {
   }  
   
     tree_flux->GetEntry(i);    
-    
+
+    //check all hits, begin ============================================================    
     bool Is_out=false;
     bool Is_decay=false;
     int acc[8]={0,0,0,0,0,0,0,0};
     for (Int_t j=0;j<flux_hitn->size();j++) {
 //       cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
+    
+    // remove decay product
+    if (flux_pid->at(j)!= pid_gen) {
+      Is_decay=true; 
+      counter_decay_incomplete++;            
+	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; 
+      continue;
+    }
     
     int detector_ID=flux_id->at(j)/1000000;
     int subdetector_ID=(flux_id->at(j)%1000000)/100000;
@@ -334,34 +368,42 @@ for (Int_t i=0;i<nevent;i++) {
       hhit_xy_gem[subdetector_ID-1][0]->Fill(hit_x/10,hit_y/10);    
       hhit_PhiR_gem[subdetector_ID-1][0]->Fill(hit_phi,hit_r/10);
 //       }
-      if (hit_r/10<Rin[subdetector_ID-1] || Rout[subdetector_ID-1]<hit_r/10) {Is_out=true; cout << flux_id->at(j) << endl; }
+      // some low mom tracks spiral and travel back in field and go through one plane twice or more,   flux bank average these steps to get hit position which is wrong and can be outside of the virtual plane.
+      if (hit_r/10<Rin[subdetector_ID-1] || Rout[subdetector_ID-1]<hit_r/10) {
+	Is_out=true;
+// 	cout << flux_id->at(j) << endl; 	
+	continue;	
+      }  
     }       
 
+    //check hit on EC    
     if (detector_ID==3) {
      hhit_xy_ec[subdetector_ID-1][0]->Fill(hit_x/10,hit_y/10);    
      hhit_PhiR_ec[subdetector_ID-1][0]->Fill(hit_phi,hit_r/10);
-    }
-    
-    if (detector_ID==3) {
+
       hhit_phidiffMom[subdetector_ID-1]->Fill(hit_phi-phi_gen,p_gen);
       hhit_thetadiffMom[subdetector_ID-1]->Fill(hit_theta-theta_gen,p_gen);
       hhit_rMom[subdetector_ID-1]->Fill(hit_r/10,p_gen);              
+      
+      //cut out some part of viritual plane to consider "good" part of EC
+//       if ((detector_ID==3 && subdetector_ID==1) && (hit_r/10 < rin_cut_FA || rout_cut_FA < hit_r/10)) continue;        
+//       if ((detector_ID==3 && subdetector_ID==2) && (hit_r/10 < rin_cut_LA || rout_cut_LA < hit_r/10)) continue;
+      if ((detector_ID==3 && subdetector_ID==1) && (hit_r/10 < rin_cut_FA)) continue;        
+      if ((detector_ID==3 && subdetector_ID==2) && (hit_r/10 < rin_cut_LA)) continue;
     }
-                         
-    if (flux_pid->at(j)!= pid_gen) {
-      Is_decay=true; 
-// 	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; 
-      continue;
-    }
-    //cut out some part of viritual plane to consider "good" part of EC
-    if ((detector_ID==3 && subdetector_ID==1) && (hit_r/10 < rin_cut_FA || rout_cut_FA < hit_r/10)) continue;        
-    if ((detector_ID==3 && subdetector_ID==2) && (hit_r/10 < rin_cut_LA || rout_cut_LA < hit_r/10)) continue;
       
     if (Is_SIDIS_He3){
-      if(theta_gen>=8) {  //only acceptance 8 deg above
+      if(theta_gen<8) continue;  //only acceptance 8 deg above      
+      
 	if (flux_id->at(j)==3110000) acc[6]=1;
 	if (flux_id->at(j)==3210000) acc[7]=1;
-      }
+	
+	if (flux_id->at(j)==1110000) acc[0]=1;
+	if (flux_id->at(j)==1210000) acc[1]=1;
+	if (flux_id->at(j)==1310000) acc[2]=1;
+	if (flux_id->at(j)==1410000) acc[3]=1;
+	if (flux_id->at(j)==1510000) acc[4]=1;
+	if (flux_id->at(j)==1610000) acc[5]=1;
     }
     else if (Is_SIDIS_NH3){      
       if ((detector_ID==3 && subdetector_ID==1) && ((-74<hit_phi && hit_phi<-38 && hit_r/10<195)||(-92<hit_phi && hit_phi<-88 && hit_r/10<120)||(50<hit_phi && hit_phi<80 && hit_r/10<195))) continue;                
@@ -383,7 +425,18 @@ for (Int_t i=0;i<nevent;i++) {
       if (flux_id->at(j)==1410000) acc[3]=1;
       if (flux_id->at(j)==1510000) acc[4]=1;
       if (flux_id->at(j)==1610000) acc[5]=1;  
-    }     
+    }
+    else if (Is_JPsi_LH2){
+	if (flux_id->at(j)==3110000) acc[6]=1;
+	if (flux_id->at(j)==3210000) acc[7]=1;
+	
+	if (flux_id->at(j)==1110000) acc[0]=1;
+	if (flux_id->at(j)==1210000) acc[1]=1;
+	if (flux_id->at(j)==1310000) acc[2]=1;
+	if (flux_id->at(j)==1410000) acc[3]=1;
+	if (flux_id->at(j)==1510000) acc[4]=1;
+	if (flux_id->at(j)==1610000) acc[5]=1;
+    }
       
        
        ///DIRC cut
@@ -398,32 +451,45 @@ for (Int_t i=0;i<nevent;i++) {
 //         if (vy_gen != flux_vy->at(j)/10) cout << "vy " << vy_gen << " " << flux_vy->at(j)/10 <<endl;
 //         if (vz_gen != flux_vz->at(j)/10) cout << "vz " << vz_gen << " " << flux_vz->at(j)/10 <<endl;		  
     }        
+    //check all hits, end ============================================================
     
-    if(Is_out){
-    for (Int_t j=0;j<flux_hitn->size();j++) {
-      cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " (" << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << ") " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
-    }
-    for (int j=0;j<gen_pid->size();j++) {
-      cout << gen_pid->at(j) << " " << gen_px->at(j) << " " << gen_py->at(j) << " " << gen_pz->at(j) << " " << gen_vx->at(j) << " " << gen_vy->at(j) << " " << gen_vz->at(j) << endl; 
-    }    
-    }
+    //analysis hit result, begin ============================================================    
+//     if(Is_out){
+//     for (Int_t j=0;j<flux_hitn->size();j++) {
+//       cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " (" << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << ") " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
+//     }
+//     for (int j=0;j<gen_pid->size();j++) {
+//       cout << gen_pid->at(j) << " " << gen_px->at(j) << " " << gen_py->at(j) << " " << gen_pz->at(j) << " " << gen_vx->at(j) << " " << gen_vy->at(j) << " " << gen_vz->at(j) << endl; 
+//     }    
+//     }
     
     int hit_id=-1;       
     if (Is_SIDIS_He3){
-      if (acc[6]==1) hit_id=0;
-      if (acc[7]==1) hit_id=1;	  
+      if (acc[6]==1) hit_id=0;  //hit on FAEC
+      if (acc[7]==1) hit_id=1;	  //hit on LAEC
     }
     else if (Is_SIDIS_NH3){
 //       if (acc[6]==1) hit_id=0;
 //       if (acc[7]==1) hit_id=1;	        
-      if (acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) hit_id=0; 
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) hit_id=1;
+      if (acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) hit_id=0; //hit on FAEC and GEM
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) hit_id=1; //hit on LAEC and GEM
     }
+    else if (Is_JPsi_LH2){
+//       if (acc[6]==1) hit_id=0;  //hit on FAEC
+//       if (acc[7]==1) hit_id=1;	  //hit on LAEC      
+      
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) hit_id=0; //hit on FAEC and GEM
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) hit_id=1; //hit on LAEC and GEM
+    }
+    
 
     int counter_hit[2]={0,0};
     if(hit_id != -1){   
       counter_hit[hit_id]++;      
       
+      hflux_P[hit_id]->Fill(p_gen);
+      hflux_Theta[hit_id]->Fill(theta_gen);            
+      hflux_Phi[hit_id]->Fill(phi_gen);	      
       hflux_ThetaP[hit_id]->Fill(theta_gen,p_gen);
       hflux_ThetaPhi[hit_id]->Fill(theta_gen,phi_gen);            
       hflux_PhiP[hit_id]->Fill(phi_gen,p_gen);	
@@ -462,16 +528,13 @@ for (Int_t i=0;i<nevent;i++) {
 	hhit_PhiR_ec[subdetector_ID-1][1]->Fill(hit_phi,hit_r/10);
 	}
       }
-    }
-    
-
-    if (Is_decay) counter_decay_incomplete++;
+    }    
     
 //     for(int k=0;k<n;k++){
 //       if (counter[hit_id] > 1) cout << counter[hit_id] << " " << hit_id << endl;
 //       counter[hit_id]=0;
 //     }
-    
+    //analysis hit result, end ============================================================       
 }
 file->Close();
 
@@ -510,6 +573,15 @@ c_baffleplate->SaveAs(Form("%s_%s",the_filename,"baffleplate.png"));
 }
 
 for(int i=0;i<n;i++) {
+  hacceptance_P[i]->Divide(hflux_P[i],hgen_P);  
+  hacceptance_P[i]->SetMinimum(0);  
+  hacceptance_P[i]->SetMaximum(1);   
+  hacceptance_Theta[i]->Divide(hflux_Theta[i],hgen_Theta);    
+  hacceptance_Theta[i]->SetMinimum(0);  
+  hacceptance_Theta[i]->SetMaximum(1);    
+  hacceptance_Phi[i]->Divide(hflux_Phi[i],hgen_Phi);    
+  hacceptance_Phi[i]->SetMinimum(0);  
+  hacceptance_Phi[i]->SetMaximum(1);    
   hacceptance_ThetaP[i]->Divide(hflux_ThetaP[i],hgen_ThetaP);  
   hacceptance_ThetaP[i]->SetMinimum(0);  
   hacceptance_ThetaP[i]->SetMaximum(1);  
@@ -528,16 +600,10 @@ for(int i=0;i<n;i++) {
   hacceptance_ThetaVr[i]->Divide(hflux_ThetaVr[i],hgen_ThetaVr);  
   hacceptance_ThetaVr[i]->SetMinimum(0);  
   hacceptance_ThetaVr[i]->SetMaximum(1);      
-  hacceptance_P[i]=(TH1F*)hacceptance_ThetaP[i]->ProjectionY();
-  hacceptance_P[i]->SetMinimum(0);  
-  hacceptance_P[i]->SetMaximum(1);    
-  hacceptance_theta[i]=(TH1F*)hacceptance_ThetaP[i]->ProjectionX();
-  hacceptance_theta[i]->SetMinimum(0);  
-  hacceptance_theta[i]->SetMaximum(1);      
 }
 
-TCanvas *c_acc = new TCanvas("acc","acc",1200,800);
-c_acc->Divide(3,2);
+TCanvas *c_acc = new TCanvas("acc","acc",1200,1000);
+c_acc->Divide(3,4);
 c_acc->cd(1);
 gPad->SetLogy(1);
 hacceptance_ThetaP[0]->Draw("colz");
@@ -552,6 +618,18 @@ c_acc->cd(5);
 hacceptance_ThetaPhi[1]->Draw("colz");
 c_acc->cd(6);
 hacceptance_PhiP[1]->Draw("colz");
+c_acc->cd(7);
+hacceptance_P[0]->Draw();
+c_acc->cd(8);
+hacceptance_Theta[0]->Draw();
+c_acc->cd(9);
+hacceptance_Phi[0]->Draw();
+c_acc->cd(10);
+hacceptance_P[1]->Draw();
+c_acc->cd(11);
+hacceptance_Theta[1]->Draw();
+c_acc->cd(12);
+hacceptance_Phi[1]->Draw();
 c_acc->SaveAs(Form("%s_%s",the_filename,"acc.png"));
 
 TCanvas *c_acc_vertex = new TCanvas("acc_vertex","acc_vertex",1200,800);
@@ -566,14 +644,20 @@ c_acc_vertex->cd(4);
 hacceptance_ThetaVr[1]->Draw("colz");
 
 TCanvas *c_gen = new TCanvas("gen","gen",1800,600);
-c_gen->Divide(4,1);
+c_gen->Divide(3,3);
 c_gen->cd(1);
-hgen_ThetaP->Draw("colz");
+hgen_P->Draw();
 c_gen->cd(2);
-hgen_ThetaPhi->Draw("colz");
+hgen_Theta->Draw();
 c_gen->cd(3);
-hgen_PhiP->Draw("colz");
+hgen_Phi->Draw();
 c_gen->cd(4);
+hgen_ThetaP->Draw("colz");
+c_gen->cd(5);
+hgen_ThetaPhi->Draw("colz");
+c_gen->cd(6);
+hgen_PhiP->Draw("colz");
+c_gen->cd(7);
 hgen_ThetaPhiP->Draw("box");
 
 TCanvas *c_gen_vertex = new TCanvas("gen_vertex","gen_vertex",1200,600);
