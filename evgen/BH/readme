@@ -16,17 +16,16 @@ My work dir is at /home/zwzhao/grape_work where you can see some examples, Read 
 ** general note **
 1. It's default +Z axis is along proton beam direction. So is Theta defined in its input file
 if we are using electron beam direction as +Z axis, we need to rotate along Y 180 degree to analyses results
-2. For BH with interference, the scattering e- and decay e- are not distinguishable.
-No cut can be applied on any of them without careful consideration, like PMIN,PMAX,Theta,MASSLL etc
+2. Variaous cuts like mom and angle etc can be applied in the input file, they can be used carefully to focus the simulation on interested physical region and particular detecctor acceptance and trigger condition.
+3. with interference, the scattering e- and decay e- are not distinguishable.
+No cut can be applied on any of them without careful consideration, like PMIN,PMAX,THMIN,THMAX,MASSLL etc and a lepton stored in the 8th line has smaller transverse momentum than that of a lepton in the 10th line of the output
+4. output has two trees "h1" including event info and "h11" including xsec[0] is total crossection in pb for the simulated phasespace, divide it by number of event generated to have the weight factor
 
 ** known problem **
 1. occasionally, integ wouldn't end because grid calculation can't converge for certain configuration. 2. spring seems have a fixed random seed, so every time it generator the same file. 3. spring will crash when events go more than 2.9M due to unknown reason.
 
 =====analysis code ==================================================
 anaGrape.C can be used to analyze the output tree "grp.root" from grape-dilepton
-
-to see how to run grape-dilepton, refer to
-https://hallaweb.jlab.org/wiki/index.php/TCS#code
 
 It's too slow to run as script, need to run after compiling
 
