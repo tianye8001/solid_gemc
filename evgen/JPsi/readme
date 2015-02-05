@@ -1,5 +1,5 @@
 = how to use it = 
-compile simu_p.C by
+setup root, then compile simu_p.C by
 make O=simu_p
 or 
 doit
@@ -7,28 +7,49 @@ doit
 run by
 simu_p -n[nevents as integer like 1000000] -b[Ebeam in GeV] -c[acceptance_root_file produced by acceptance.C from SoLID_GEMC] -o[output_root_file]
 
+./simu_p -n10000 -tg -b11 -ooutput.root
+./simu_p -n1e6 -te -b11 -ooutput.root
+
 Other macro is for analysis the results from simu_p
 proj.C plots results
 compare.C compare total detected events (FOM) from different simulation files.
 plot_acceptance.C compare acceptance from different simulation files
 
-output root file has a tree "T"
-
 = how it works =
+1. simu_p.C
 
 refer to PAC39 proposal for the crossection formula
 
-There are three models, t-channel "dxs", 2g model "dxs_2g", "dxs_23g", they are in unit of nb/GeV
+electroproduction
+scattered electon p,theta,phi and recoil proton theta, phi are degree of freedom for electron beam
+special Jacob J
+special decay distribution
 
-scattered electon p,theta,phi and recoil proton theta, phi are degree of freedom, their range is defined in the code
+photoproduction (unfinished)
+Gbeam,recoil proton theta, phi are degree of freedom for photoproduction (by bremstrlung from a fix energy electron beam on a radiator)
+special Jacob J
+special decay distribution
 
-The similation throw events evenly in the ranges of the 5 degee of freedom and only keep the events with right kinematics 
+The similation throw events evenly in the ranges of the all degree of freedom and only keep the events with right kinematics 
 
-the output number of events is defined in command line option, the throw number of events are stored as "neve"
+"phasespace" is the total phase including momemtum and solid angle
+"weight" is for weighting of two possible kinematic solutions
+"weight_decay" is for for JPsi decay weight
+"dxs*" three crossection models, t-channel "dxs", 2g model "dxs_2g", "dxs_23g", in unit nb/GeV2
+"neve" the thrown number of events while only events passing kinematics are recorded which ouput until the number of events defined in command line option
 
-"weight" is for weighting of two possible kinematic solutions, "weight_decay" is for for JPsi decay weight
+output root file has a tree "T"
 
-acceptance is read from acceptance root file which are just histograms from simulation code, they are recorded in "accep_*" 
+2. accep.C 
+it will take the output root file from simu_o.C and add acceptance entries.
+acceptance can be read from acceptance root file which are just histograms from simulation code or some rough cut estimation
+
+3. proj.C
+
+4. plot_crossection.C
+plot photon crossection fit function, matching paper "Brodsky Physics Letters B 498 (2001) 23¨C28" Fig 3
+
+5. plot_brem.C
 
 = history =
 

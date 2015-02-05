@@ -1,14 +1,18 @@
 void plot_acceptance()
 {
     gStyle->SetOptStat(0);
-TFile *file1 = new TFile("accep.root");
+TFile *file1 = new TFile("forzhiwen/acceptance/accep.root");
 TH2F *hf1 = (TH2F*)file1->Get("h2");
 TH2F *hl1 = (TH2F*)file1->Get("h3"); 
 
-TFile *file2 = new TFile("/home/zwzhao/solid/solid_svn/solid/solid_gemc/analysistool/acceptance/CLEO_JPsi_test/acceptance_solid_CLEO_JPsi_negative_target360_output.root");    
+TFile *file2 = new TFile("acceptance_solid_CLEO_JPsi_negative_target300_output.root");    
 TH2F *hf2 = (TH2F*)file2->Get("acceptance_forwardangle");
 TH2F *hl2 = (TH2F*)file2->Get("acceptance_largeangle");
-    
+
+// TFile *file2 = new TFile("acceptance_solid_JPsi_negative_1e7_output.root");    
+// TH2F *hf2 = (TH2F*)file2->Get("acceptance_ThetaP_forwardangle");
+// TH2F *hl2 = (TH2F*)file2->Get("acceptance_ThetaP_largeangle");
+
 TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1400,800);
 c_acceptance->Divide(2,2);
 c_acceptance->cd(1);

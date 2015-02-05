@@ -27,11 +27,14 @@
 
 using namespace std;
 
+const Double_t DEG = 180./3.1415926;
+
 const Double_t mass_e = 0.511e-3;
 const Double_t mass_p = 0.93827;
 const Double_t mass_n = 0.939566;
 const Double_t mass_jpsi = 3.097;
 const Double_t width_jpsi = 93.2e-6;
+
 TLorentzVector pSpec;
 
 Float_t t0lim(Float_t m1, Float_t m2,Float_t m3, Float_t m4,Float_t s);
@@ -75,59 +78,62 @@ int main (Int_t argc, char *argv[])
 //     }
     Int_t nevents=1000000; //number of events
     Double_t Ebeam=11.0; // Beam Energy
-    char *acceptance_root_file;
-    char *output_root_file;
+    char *output_root_file="output.root";
+    string type;
+    string acceptance_root_file="no";    
+    bool Is_e=false,Is_g=false;    
     if (argc==1){
-    cout << "./simu_p -n[nevents as integer like 1000000] -b[Ebeam in GeV] -c[acceptance_root_file produced by acceptance.C from SoLID_GEMC] -o[output_root_file]" << endl;
+    cout << "./simu_p -n[nevents as integer like 1000000] -t[e for electroproduction,g for photoproduction] -b[Ebeam in GeV] -o[output_root_file]" << endl;
     }
     else{
 
     for(Int_t i = 1; i != argc; i++){
       switch(argv[i][1]){
       case 'n':
-        nevents= atoi(&argv[i][2]); 
+        nevents= int(atof(&argv[i][2])); 
+	break;
+      case 't':
+	 type = &argv[i][2]; 
+// 	 cout << type << endl;
+	 if (type=="e") {Is_e=true;}
+	 else if (type=="g") {Is_g=true;}
+	 else { cout << "wrong type" << endl; return 0; }
 	break;
       case 'b':
 	Ebeam = atof(&argv[i][2]); 
 	break;
-      case 'c':
-	acceptance_root_file = &argv[i][2]; 
-	break;	
       case 'o':
 	output_root_file = &argv[i][2];
-	break;	
+	break;
       default:
 	cout << "Warning!!!! Unknown option: " << &argv[i][1] << endl;
 	return 0;
 	break;
       }
     }
+ 
+  double Gbeam_min=7.5;
+  
+    if (Is_e)  cout << "Ebeam " << Ebeam << " GeV" << endl;
+    else if (Is_g) cout << "Gbeam " << Gbeam_min << " - " << Ebeam << " GeV" << endl;
+ 
+  TF1 *fbr = new TF1("fbr","[1]/(x/[0])*(4./3.-4./3.*(x/[0])+(x/[0])*(x/[0]))",Gbeam_min,Ebeam);  
+  fbr->SetParameter(0,Ebeam);
+  fbr->SetParameter(1,0.0024);  
+  //brem photon produced by one electron for 100% radiator
+  //a=0.000146 for a 6% radiator, according to p251 of PDG 2012 and Jixie Zhang's estimation,  it only works for thin radiator
+  //a=0.0024=0.000146/0.06 for a 100% radiator
 
     Double_t mass[10];
     
-//     TFile *file1 = new TFile("accep.root");
-//     TH2F *hf = (TH2F*)file1->Get("h2");
-//     TH2F *hl = (TH2F*)file1->Get("h3"); 
-    
-    TFile *file1 = new TFile(acceptance_root_file);    
-    if (file1->IsZombie()) {
-       cout << "Error opening file" << acceptance_root_file << endl;
-       return 0;
-    }
-    else cout << "open file " << acceptance_root_file << endl;    
-    TH1F *hf = (TH1F*)file1->Get("acceptance_forwardangle");
-    TH1F *hl = (TH1F*)file1->Get("acceptance_largeangle");
-    
-
-    TLorentzVector *pBeam = new TLorentzVector(0.,0.,Ebeam,sqrt(Ebeam*Ebeam+mass_e*mass_e));
-    TLorentzVector *pTarget = new TLorentzVector(0.,0.,0.,mass_p);
+    TLorentzVector *pBeam = new TLorentzVector(0.,0.,0.,0.);
+    TLorentzVector *pTarget = new TLorentzVector(0.,0.,0.,0.);
     
     TGenPhaseSpace *gen1 = new TGenPhaseSpace();
     mass[0] = mass_e;
     mass[1] = mass_e;
     
     TLorentzVector *ps = new TLorentzVector(0.,0.,0.,0.);
-    *ps = *pBeam + *pTarget;
     TLorentzVector *pq = new TLorentzVector(0.,0.,0.,0.);
     TLorentzVector *pt = new TLorentzVector(0.,0.,0.,0.);
     TLorentzVector *ps1 = new TLorentzVector(0.,0.,0.,0.);
@@ -137,22 +143,31 @@ int main (Int_t argc, char *argv[])
     TLorentzVector *p4_recoil = new TLorentzVector(0.,0.,0.,0.);
     TLorentzVector *p4_jpsi = new TLorentzVector(0.,0.,0.,0.);
 
-
     TLorentzVector *p4_recoil_tmp = new TLorentzVector(0.,0.,0.,0.);
     TLorentzVector *p4_q_tmp = new TLorentzVector(0.,0.,0.,0.);
 
     TLorentzVector *p4_je1 = new TLorentzVector(0.,0.,0.,0.);
     TLorentzVector *p4_je2 = new TLorentzVector(0.,0.,0.,0.);
+
+    TLorentzVector *p4_ep_GJ = new TLorentzVector(0.,0.,0.,0.);    
+    TLorentzVector *p4_recoil_GJ = new TLorentzVector(0.,0.,0.,0.);
+    TLorentzVector *p4_jpsi_GJ = new TLorentzVector(0.,0.,0.,0.);    
+    TLorentzVector *p4_je1_GJ = new TLorentzVector(0.,0.,0.,0.);
+    TLorentzVector *p4_je2_GJ = new TLorentzVector(0.,0.,0.,0.);
+    
         
     TFile *file = new TFile(output_root_file,"RECREATE");
     TTree *T = new TTree("T","T");
     T->SetDirectory(file);
     
-    hf->SetDirectory(file);
-    hl->SetDirectory(file);
-    file1->Close();
+//     hf->SetDirectory(file);
+//     hl->SetDirectory(file);
 
-    Double_t weight_decay;
+    Double_t Gbeam=0,Gflux=0;
+    T->Branch("Ebeam",&Ebeam,"data/D");
+    T->Branch("Gbeam",&Gbeam,"data/D");
+    T->Branch("Gflux",&Gflux,"data/D");        
+    
     Double_t Q2,t;
     
     Double_t p_e,theta_e,phi_e;
@@ -161,7 +176,8 @@ int main (Int_t argc, char *argv[])
     
     Double_t p_je1, theta_je1, phi_je1;
     Double_t p_je2, theta_je2, phi_je2;
-    
+
+    Double_t weight_decay;    
     T->Branch("weight_decay",&weight_decay,"data/D");
     Double_t weight;
     T->Branch("weight",&weight,"data/D");
@@ -191,12 +207,12 @@ int main (Int_t argc, char *argv[])
 
     Int_t neve=0,neve1=0;
     T->Branch("neve",&neve,"data/I");
-    
+
     // calculation formular
     Double_t Gamma;
     Double_t epsilon,Keq,W,q,theta_q;
     Double_t J,R,theta_cm,r,phi_cm;
-    
+
     T->Branch("Gamma",&Gamma,"data/D");
     T->Branch("epsilon",&epsilon,"data/D");
     T->Branch("Keq",&Keq,"data/D");
@@ -208,7 +224,7 @@ int main (Int_t argc, char *argv[])
     T->Branch("theta_cm",&theta_cm,"data/D");
     T->Branch("phi_cm",&phi_cm,"data/D");
     T->Branch("r",&r,"data/D");
-    
+
     Double_t dxs,dxs_2g,dxs_23g;
     T->Branch("dxs",&dxs,"data/D");
     T->Branch("dxs_2g",&dxs_2g,"data/D");
@@ -217,16 +233,19 @@ int main (Int_t argc, char *argv[])
     Double_t tmin,tmax;
     T->Branch("tmin",&tmin,"data/D");
     T->Branch("tmax",&tmax,"data/D");
-    
-    Double_t accep_e,accep_je1,accep_je2,accep_p;
-    T->Branch("accep_e",&accep_e,"data/D");
-    T->Branch("accep_je1",&accep_je1,"data/D");
-    T->Branch("accep_je2",&accep_je2,"data/D");
-    T->Branch("accep_p",&accep_p,"data/D");
 
-    Double_t accep_e_both,accep_p_both;
-    T->Branch("accep_e_both",&accep_e_both,"data/D");
-    T->Branch("accep_p_both",&accep_p_both,"data/D");        
+    Double_t phasespace;
+    T->Branch("phasespace",&phasespace,"data/D");
+    
+//     Double_t accep_e,accep_je1,accep_je2,accep_p;
+//     T->Branch("accep_e",&accep_e,"data/D");
+//     T->Branch("accep_je1",&accep_je1,"data/D");
+//     T->Branch("accep_je2",&accep_je2,"data/D");
+//     T->Branch("accep_p",&accep_p,"data/D");
+// 
+//     Double_t accep_e_both,accep_p_both;
+//     T->Branch("accep_e_both",&accep_e_both,"data/D");
+//     T->Branch("accep_p_both",&accep_p_both,"data/D");        
     
     Double_t A = 0.94;
     Double_t b = -0.97;
@@ -234,26 +253,28 @@ int main (Int_t argc, char *argv[])
     Double_t a = 2.164;
     Double_t n = 2.131;
     
-    Int_t flag_kin1,flag_kin2,flag_accep;
-
-    
+    // start to generate particles  
     Int_t qflag = 1;
-    // start to generate particles
-    while(qflag){
-      //set the flag for kinematics 
-      flag_kin1 = 0;
-      flag_kin2 = 0;
+    Int_t counter[4]={0,0,0,0};
+       
+    if(Is_e){    
+    while(qflag){  
       
-
-      //sample electron's angle and momentum
+	//sample electron's angle and momentum
 //       p_e = gRandom->Uniform(0.5,3.0);
-      p_e = gRandom->Uniform(0.,3.0);      
-//       theta_e = acos(gRandom->Uniform(0.85,cos(8./180.*3.1415926)));
-      theta_e = acos(gRandom->Uniform(cos(40./180.*3.1415926),cos(0./180.*3.1415926))); //random selection in solid angle need to go with cos(theta)    
+      p_e = gRandom->Uniform(0.,5.0);      
+//       theta_e = acos(gRandom->Uniform(0.85,cos(8./DEG)));
+//       theta_e = acos(gRandom->Uniform(cos(40./DEG),cos(0./DEG))); //random selection in solid angle need to go with cos(theta)    
+      theta_e = acos(gRandom->Uniform(-1,1)); //random selection in solid angle need to go with cos(theta)
       phi_e = gRandom->Uniform(0.,2.*3.1415926);
-      
+           
       p4_ep->SetPxPyPzE(p_e*sin(theta_e)*cos(phi_e),p_e*sin(theta_e)*sin(phi_e),p_e*cos(theta_e),sqrt(p_e*p_e+mass_e*mass_e));
-      *pq = *pBeam - *p4_ep;
+      
+      pBeam->SetPxPyPzE(0.,0.,Ebeam,sqrt(Ebeam*Ebeam+mass_e*mass_e));
+      pTarget->SetPxPyPzE(0.,0.,0.,mass_p);
+      *ps = *pBeam + *pTarget;
+     
+      *pq = *pBeam - *p4_ep;     
       
       Q2 = -pq->M2();
       *ps1 = *ps - *p4_ep;
@@ -262,12 +283,16 @@ int main (Int_t argc, char *argv[])
 
       //judge whether the event pass the kinematics
       if (ps1->M2() > pow(mass_jpsi+mass_p,2)){
-	flag_kin1 = 1;
+
 	//sample proton solid angle;
-// 	theta_p = acos(gRandom->Uniform(0.85,cos(8./180.*3.1415926)));
-	theta_p = acos(gRandom->Uniform(cos(40./180.*3.1415926),cos(0./180.*3.1415926))); //random selection in solid angle need to go with cos(theta)    
+// 	theta_p = acos(gRandom->Uniform(0.85,cos(8./DEG)));
+// 	theta_p = acos(gRandom->Uniform(cos(40./DEG),cos(0./DEG))); //random selection in solid angle need to go with cos(theta)    
+	theta_p = acos(gRandom->Uniform(-1,1)); //random selection in solid angle need to go with cos(theta)
 	phi_p = gRandom->Uniform(0.,2.*3.1415926);
 	
+	phasespace = (5.-0.)*(4*3.1415926)*(4.*3.1415926);
+
+	//solve recoil proton mom	
 	TVector3 p3_p(sin(theta_p)*cos(phi_p),sin(theta_p)*sin(phi_p),cos(theta_p));
 	Double_t aa = (ps1->M2()+mass_p*mass_p-mass_jpsi*mass_jpsi)/2.;
 	Double_t bb = ps1->E();
@@ -280,7 +305,7 @@ int main (Int_t argc, char *argv[])
 	  sol[1] = (-2*aa*cc-sqrt(pow(2.*aa*cc,2)-4.*(bb*bb-cc*cc)*(bb*bb*mass_p*mass_p-aa*aa)))/2./(bb*bb-cc*cc);
 
 	  if (sol[0]>=0||sol[1]>=0){
-	    flag_kin2 = 1;
+	    
 	    if (sol[0]>=0&&sol[1]<0){
 	      weight = 1;
 	    }else if (sol[1]>=0&&sol[0]<0){
@@ -288,14 +313,13 @@ int main (Int_t argc, char *argv[])
 	    }else if (sol[0]>=0&&sol[1]>=0){
 	      weight = 0.5;
 	    }
-
+	    
 	    //	    cout << sol[0] << " " << sol[1] << endl;
 	    
 	    Double_t theta_ps = theta_p;
 	    Double_t phi_ps = phi_p;
 
 	    for (Int_t j=0;j!=2;j++){
-	      flag_accep = 0.;
 	      p_p = sol[j];
 	      if (p_p>0){
 		p4_recoil->SetPxPyPzE(p_p*sin(theta_ps)*cos(phi_ps),p_p*sin(theta_ps)*sin(phi_ps),p_p*cos(theta_ps),sqrt(p_p*p_p+mass_p*mass_p));
@@ -309,41 +333,42 @@ int main (Int_t argc, char *argv[])
 		  p4_je1 = gen1->GetDecay(0);
 		  p4_je2 = gen1->GetDecay(1);
 		  
-		  theta_e = p4_ep->Theta()/3.1415926*180.;
-		  phi_e = p4_ep->Phi()/3.1415926*180.;
+		  theta_e = p4_ep->Theta()*DEG;
+		  phi_e = p4_ep->Phi()*DEG;
 		  
-		  theta_p = p4_recoil->Theta()/3.1415926*180.;
-		  phi_p = p4_recoil->Phi()/3.1415926*180.;
+		  theta_p = p4_recoil->Theta()*DEG;
+		  phi_p = p4_recoil->Phi()*DEG;
 		  
 		  p_jpsi = p4_jpsi->P();
-		  theta_jpsi = p4_jpsi->Theta()/3.1415926*180.;
-		  phi_jpsi = p4_jpsi->Phi()/3.1415926*180.;
+		  theta_jpsi = p4_jpsi->Theta()*DEG;
+		  phi_jpsi = p4_jpsi->Phi()*DEG;
 		  
 		  p_je1 = p4_je1->P();
-		  theta_je1 = p4_je1->Theta()/3.1415926*180.;
-		  phi_je1 = p4_je1->Phi()/3.1415926*180.;
+		  theta_je1 = p4_je1->Theta()*DEG;
+		  phi_je1 = p4_je1->Phi()*DEG;
 		  
 		  p_je2 = p4_je2->P();
-		  theta_je2 = p4_je2->Theta()/3.1415926*180.;
-		  phi_je2 = p4_je2->Phi()/3.1415926*180.;
+		  theta_je2 = p4_je2->Theta()*DEG;
+		  phi_je2 = p4_je2->Phi()*DEG;
 		  
 		  *pt = *p4_recoil - *pTarget;
 		  t = -pt->M2();
 		  
 		  R = pow((a*mass_jpsi*mass_jpsi+Q2)/(a*mass_jpsi*mass_jpsi),n) -1;
-		  theta_q = pq->Theta()/3.1415926*180.;
+		  //R defination and parameter a and n are from eq 18 of "R. Fiore et al. Exclusive Jpsi electroproduction in a dual model. Phys. Rev.,D80:116001, 2009"		  
+		  theta_q = pq->Theta()*DEG;
 		  q = pq->P();
 		  W = sqrt(pow(mass_p + pq->E(),2)-pow(pq->P(),2));
 		  Keq = (W*W-mass_p*mass_p)/2./mass_p;
-		  epsilon = 1./(1+2*q*q/Q2*pow(tan(theta_e/180.*3.1415926/2.),2));
+		  epsilon = 1./(1+2*q*q/Q2*pow(tan(theta_e/DEG/2.),2));
 		  Gamma = alpha/2./3.1415926/3.1415926*p_e/Ebeam*Keq/Q2/(1.-epsilon);
 		  r= epsilon*R/(1.+epsilon*R);
 		  
-		  // J = fabs((pq->E()+mass_p-q*p4_recoil->E()/p_p*(cos(theta_q/180.*3.1415926)*cos(theta_p/180.*3.1415926)+sin(theta_q/180.*3.1415926)*sin(theta_p/180.*3.1415926)*sin((phi_p-phi_e+180.)/180.*3.1415926))*tan(theta_q/180.*3.1415926))
-		  //	   /(2.*mass_p*q*p_p*(cos(theta_q*3.1415926/180.)*tan(theta_p/180.*3.1415926)-sin(theta_q/180.*3.1415926)*sin((phi_p-phi_e+180.)/180.*3.1415926))));
+		  // J = fabs((pq->E()+mass_p-q*p4_recoil->E()/p_p*(cos(theta_q/DEG)*cos(theta_p/DEG)+sin(theta_q/DEG)*sin(theta_p/DEG)*sin((phi_p-phi_e+180.)/DEG))*tan(theta_q/DEG))
+		  //	   /(2.*mass_p*q*p_p*(cos(theta_q/DEG)*tan(theta_p/DEG)-sin(theta_q/DEG)*sin((phi_p-phi_e+180.)/DEG))));
 		  // cout << aa - bb*sqrt(p_p*p_p+mass_p*mass_p)-cc*p_p << endl;
 
-		  Double_t dEpdcp=fabs((ps1->Pz()-(ps1->Px()*cos(phi_p/180.*3.1415926)+ps1->Py()*sin(phi_p/180.*3.1415926))*cos(theta_p/180.*3.1415926)/sin(theta_p/180.*3.1415926))*p_p/(bb+cc*sqrt(p_p*p_p+mass_p*mass_p)/p_p));
+		  Double_t dEpdcp=fabs((ps1->Pz()-(ps1->Px()*cos(phi_p/DEG)+ps1->Py()*sin(phi_p/DEG))*cos(theta_p/DEG)/sin(theta_p/DEG))*p_p/(bb+cc*sqrt(p_p*p_p+mass_p*mass_p)/p_p));
 		  //cout << J << " " << 1./mass_p/2./dEpdcp<< " " << dEpdcp << " " << p_p << " " << bb+cc*sqrt(p_p*p_p+mass_p*mass_p)/p_p << endl;
 		  J = 2 * mass_p * dEpdcp;
 
@@ -364,95 +389,221 @@ int main (Int_t argc, char *argv[])
 
 		  a1.RotateUz(a2.Unit());
 		  a3.RotateUz(a2.Unit());
-		  theta_cm = a1.Theta()/3.1415926*180.;//p4_je1->Theta()/3.1415926*180.;
-		  phi_cm = a1.Phi()/3.1415926*180.-a3.Phi()/3.1415926*180.;
+		  theta_cm = a1.Theta()*DEG;//p4_je1->Theta()*DEG;
+		  phi_cm = a1.Phi()*DEG-a3.Phi()*DEG;
 		  if (phi_cm<0.) phi_cm+=360;
 		  if (phi_cm>360) phi_cm-=360;
-		  // phi_cm = p4_je1->Phi()/3.1415926*180.;
+		  // phi_cm = p4_je1->Phi()*DEG;
 		  //theta_cm = 0.;
 		  
-		  weight_decay = 3./2.*(1-r + (3*r-1)*pow(cos(theta_cm/180.*3.1415926),2));
+		  weight_decay = 3./2.*(1-r + (3*r-1)*pow(cos(theta_cm/DEG),2));
+		  //eq 92 of "K. Schilling and G. Wolf. How to analyze vector meson production in inelastic lepton scattering. Nucl. Phys., B61:381, 1973.", after removing all phi related term and times 4*pi
+		  // this is verified to be normalized to perfect 1 even with r varying
 		  
 		  // calculate tmin
 		  *ps2 = *pq + *pTarget;
 		  tmin = -1*t0lim(-sqrt(Q2),mass_p, mass_jpsi, mass_p, ps2->M2());
 		  tmax = -1*t1lim(-sqrt(Q2),mass_p, mass_jpsi, mass_p, ps2->M2());
-		  
-		  
+ 
 
-		  dxs     = J/2./3.1415926*Gamma*A*exp(b*(t));
+		  //differential crossection in nb/(phasespace cell)
+		  dxs     = J/2./3.1415926*Gamma*A*exp(b*(t));   
 		  dxs_2g  = J/2./3.1415926*Gamma*fun_2g(W,t);
 		  dxs_23g = J/2./3.1415926*Gamma*fun_23g(W,t);
-		  
-// 		  Int_t tmp_x,tmp_y;
-// 		  tmp_x = 10.*(theta_e)+1;
-// 		  tmp_y = 100.*(p_e)/8.+1;
-// 		  if (tmp_x>310) tmp_x = 310;
-// 		  if (tmp_y>100) tmp_y = 100;
-// 		  
-// 		  accep_e = hf->GetBinContent(tmp_x,tmp_y);
-// 		  
-// 		  tmp_x = 10.*(theta_je1)+1;
-// 		  tmp_y = 100.*(p_je1)/8.+1;
-// 		  if (tmp_x>310) tmp_x = 310;
-// 		  if (tmp_y>100) tmp_y = 100;
-// 		  
-// 		  accep_je1 = hf->GetBinContent(tmp_x,tmp_y) + hl->GetBinContent(tmp_x,tmp_y);
-// 		  
-// 		  tmp_x = 10.*(theta_je2)+1;
-// 		  tmp_y = 100.*(p_je2)/8.+1;
-// 		  if (tmp_x>310) tmp_x = 310;
-// 		  if (tmp_y>100) tmp_y = 100;
-// 		  
-// 		  accep_je2 = hf->GetBinContent(tmp_x,tmp_y) + hl->GetBinContent(tmp_x,tmp_y);
-// 		  
-// 		  tmp_x = 10.*(theta_p)+1;
-// 		  tmp_y = 100.*(p_p)/8.+1;
-// 		  if (tmp_x>310) tmp_x = 310;
-// 		  if (tmp_y>100) tmp_y = 100;
-// 		  
-// 		  accep_p = hf->GetBinContent(tmp_x,tmp_y);
-		  
-		  int bin,binx,biny,binz;
-
-		  bin=hf->FindBin(theta_e,p_e);  
-		  hf->GetBinXYZ(bin,binx,biny,binz);
-		  accep_e = hf->GetBinContent(binx,biny);
-		  accep_e_both = hf->GetBinContent(binx,biny) + hl->GetBinContent(binx,biny);
-
-		  bin=hf->FindBin(theta_je1,p_je1);
-		  hf->GetBinXYZ(bin,binx,biny,binz);
-		  accep_je1 = hf->GetBinContent(binx,biny) + hl->GetBinContent(binx,biny);
-		  
-		  bin=hf->FindBin(theta_je2,p_je2);
-		  hf->GetBinXYZ(bin,binx,biny,binz);
-		  accep_je2 = hf->GetBinContent(binx,biny) + hl->GetBinContent(binx,biny);
-
-		  bin=hf->FindBin(theta_p,p_p);  
-		  hf->GetBinXYZ(bin,binx,biny,binz);
-		  accep_p = hf->GetBinContent(binx,biny);
-		  accep_p_both = hf->GetBinContent(binx,biny) + hl->GetBinContent(binx,biny);  
-		  
-// 		  if (accep_e>0.&&accep_je1>0.&&accep_je2>0.) flag_accep=1;
-// 		  if (5<theta_e && theta_e<40 && 5<theta_je1 && theta_je1<40 && 5<theta_je2 && theta_je2<40 ) flag_accep=1;
-// 		  if (flag_accep>0.&&flag_kin1>0.&&flag_kin2>0.){
-		  if (flag_kin1>0.&&flag_kin2>0.){		    
-		    T->Fill();
-		    if (neve1%100000==0) cout << neve1 << endl;
-		    neve1++;
-		    if (neve1 > nevents){
-		      qflag = 0;
-		    }
-		  }
-		}
-	      }
-	    }
-	  }
-	}
-      }
+		  		    
+		  T->Fill();
+		  if (neve1%(nevents/10)==0) cout << neve1 << endl;
+		  neve1++;
+		  if (neve1 > nevents) qflag = 0;		  
+		    
+		} //check if jpsi mass is positive
+		else counter[3]++;
+	      }//choose only positive recoil p mom
+	    } //end of loop through two solution	    
+	  }  //check if we can find positive solution for recoil p mom
+	  else counter[2]++;	      	    	  
+	} //check if we can find solution for recoil p mom
+	else counter[1]++;	      	    	  
+      } //check if cross mass threshold
+      else counter[0]++;	      	    	  
       neve++;
     }
+    } // end of e beam
+    
+    if(Is_g){    
+    while(qflag){      
+            
+      //sample photon energy
+      Gbeam = fbr->GetRandom();
+//       Gbeam = gRandom->Uniform(7.5,Ebeam);
+//       Gbeam = 11;      
+      Gflux = fbr->Eval(Gbeam);
+//       cout << Gbeam << " " << Gflux << endl;
+      
+      pBeam->SetPxPyPzE(0.,0.,Gbeam,Gbeam);
+      pTarget->SetPxPyPzE(0.,0.,0.,mass_p);
+      
+      *ps = *pBeam + *pTarget;
+      
+      *pq = *pBeam;
+      
+      Q2 = -pq->M2();
+      *ps1 = *ps;      
 
+      //judge whether the event pass the kinematics
+      if (ps1->M2() > pow(mass_jpsi+mass_p,2)){
+	//sample proton solid angle;
+// 	theta_p = acos(gRandom->Uniform(0.85,cos(8./DEG)));
+	theta_p = acos(gRandom->Uniform(-1,1)); //random selection in solid angle need to go with cos(theta)    	
+	phi_p = gRandom->Uniform(0.,2.*3.1415926);
+	
+	phasespace = (Ebeam-Gbeam_min)*(4*3.1415926);
+// 	phasespace = (4*3.1415926);	
+	
+	//solve recoil proton mom	
+	TVector3 p3_p(sin(theta_p)*cos(phi_p),sin(theta_p)*sin(phi_p),cos(theta_p));
+	Double_t aa = (ps1->M2()+mass_p*mass_p-mass_jpsi*mass_jpsi)/2.;
+	Double_t bb = ps1->E();
+	TVector3 p3_s(ps1->Px(),ps1->Py(),ps1->Pz());
+	Double_t cc = -p3_p.Dot(p3_s);
+	Double_t sol[2];
+	
+	if (pow(2.*aa*cc,2)-4.*(bb*bb-cc*cc)*(bb*bb*mass_p*mass_p-aa*aa)>=0.){
+	  sol[0] = (-2*aa*cc+sqrt(pow(2.*aa*cc,2)-4.*(bb*bb-cc*cc)*(bb*bb*mass_p*mass_p-aa*aa)))/2./(bb*bb-cc*cc);
+	  sol[1] = (-2*aa*cc-sqrt(pow(2.*aa*cc,2)-4.*(bb*bb-cc*cc)*(bb*bb*mass_p*mass_p-aa*aa)))/2./(bb*bb-cc*cc);
+
+	  if (sol[0]>=0||sol[1]>=0){
+	    
+	    if (sol[0]>=0&&sol[1]<0){
+	      weight = 1;
+	    }else if (sol[1]>=0&&sol[0]<0){
+	      weight = 1;
+	    }else if (sol[0]>=0&&sol[1]>=0){
+	      weight = 0.5;
+	    }
+
+// 	    	    cout << sol[0] << " " << sol[1] << endl;
+	    
+	    Double_t theta_ps = theta_p;
+	    Double_t phi_ps = phi_p;
+
+	    for (Int_t j=0;j!=2;j++){
+	      p_p = sol[j];
+	      if (p_p>0){
+		p4_recoil->SetPxPyPzE(p_p*sin(theta_ps)*cos(phi_ps),p_p*sin(theta_ps)*sin(phi_ps),p_p*cos(theta_ps),sqrt(p_p*p_p+mass_p*mass_p));
+		*p4_jpsi = *ps1-*p4_recoil;
+		
+		//	cout << p4_recoil->Theta() << " " << theta_ps << endl;
+
+		if (p4_jpsi->M()>0.){
+		  gen1->SetDecay(*p4_jpsi,2,&mass[0]);
+		  weight_decay = gen1->Generate();
+		  p4_je1 = gen1->GetDecay(0);
+		  p4_je2 = gen1->GetDecay(1);
+		  
+		  theta_e = p4_ep->Theta()*DEG;
+		  phi_e = p4_ep->Phi()*DEG;
+		  
+		  theta_p = p4_recoil->Theta()*DEG;
+		  phi_p = p4_recoil->Phi()*DEG;
+		  
+		  p_jpsi = p4_jpsi->P();
+		  theta_jpsi = p4_jpsi->Theta()*DEG;
+		  phi_jpsi = p4_jpsi->Phi()*DEG;
+		  
+		  p_je1 = p4_je1->P();
+		  theta_je1 = p4_je1->Theta()*DEG;
+		  phi_je1 = p4_je1->Phi()*DEG;
+		  
+		  p_je2 = p4_je2->P();
+		  theta_je2 = p4_je2->Theta()*DEG;
+		  phi_je2 = p4_je2->Phi()*DEG;
+		  
+		  *pt = *p4_recoil - *pTarget;
+		  t = -pt->M2();
+		  
+		  R = pow((a*mass_jpsi*mass_jpsi+Q2)/(a*mass_jpsi*mass_jpsi),n) -1;
+		  theta_q = pq->Theta()*DEG;
+		  q = pq->P();
+		  W = sqrt(pow(mass_p + pq->E(),2)-pow(pq->P(),2));
+		  Keq = (W*W-mass_p*mass_p)/2./mass_p;
+// 		  epsilon = 1./(1+2*q*q/Q2*pow(tan(theta_e/DEG/2.),2));
+// 		  Gamma = alpha/2./3.1415926/3.1415926*p_e/Ebeam*Keq/Q2/(1.-epsilon);
+// 		  r= epsilon*R/(1.+epsilon*R);
+		  
+		  // J = fabs((pq->E()+mass_p-q*p4_recoil->E()/p_p*(cos(theta_q/DEG)*cos(theta_p/DEG)+sin(theta_q/DEG)*sin(theta_p/DEG)*sin((phi_p-phi_e+180.)/DEG))*tan(theta_q/DEG))
+		  //	   /(2.*mass_p*q*p_p*(cos(theta_q/DEG)*tan(theta_p/DEG)-sin(theta_q/DEG)*sin((phi_p-phi_e+180.)/DEG))));
+		  // cout << aa - bb*sqrt(p_p*p_p+mass_p*mass_p)-cc*p_p << endl;
+
+		  Double_t dEpdcp=fabs((ps1->Pz()-(ps1->Px()*cos(phi_p/DEG)+ps1->Py()*sin(phi_p/DEG))*cos(theta_p/DEG)/sin(theta_p/DEG))*p_p/(bb+cc*sqrt(p_p*p_p+mass_p*mass_p)/p_p));
+		  //cout << J << " " << 1./mass_p/2./dEpdcp<< " " << dEpdcp << " " << p_p << " " << bb+cc*sqrt(p_p*p_p+mass_p*mass_p)/p_p << endl;
+		  J = 2 * mass_p * dEpdcp;
+
+		  //go to JPsi at rest frame
+		  TVector3 beta = p4_jpsi->Vect();
+		  beta *= -1./p4_jpsi->E();
+		  p4_je1->Boost(beta);
+		  //get recoil proton in the same frame
+		  *p4_recoil_tmp = *p4_recoil;
+		  p4_recoil_tmp->Boost(beta);
+
+		  *p4_q_tmp = *pq;
+		  p4_q_tmp->Boost(beta);
+		  // calculate the theta angle between these two
+		  TVector3 a1 = p4_je1->Vect();
+		  TVector3 a2 = p4_recoil_tmp->Vect();
+		  TVector3 a3 = p4_q_tmp->Vect();
+
+		  a1.RotateUz(a2.Unit());
+		  a3.RotateUz(a2.Unit());
+		  theta_cm = a1.Theta()*DEG;//p4_je1->Theta()*DEG;
+		  phi_cm = a1.Phi()*DEG-a3.Phi()*DEG;
+		  if (phi_cm<0.) phi_cm+=360;
+		  if (phi_cm>360) phi_cm-=360;
+		  // phi_cm = p4_je1->Phi()*DEG;
+		  //theta_cm = 0.;
+		  
+		  //is it valid ????????????		  
+		  weight_decay = 3./2*(1 - pow(cos(theta_cm/DEG),2));
+		  // eq 32 and 31 from K. Schilling, P. Seyboth and G. Wolf, "ON THE ANALYSIS OF VECTOR-MESON PRODUCTION BY POLARIZED PHOTONS"  NucL Phys. B15 (1970) 397, B18 (1970) 332. and Nuclear Physics B18 (1970) 332
+		  //removing all phi terms and times 4*pi and treat rho^0_00=0
+		  weight_decay = weight_decay/2.35619;
+		  // this is need to normalization factor to make the whole integral as 1
+		  
+		  // calculate tmin
+		  *ps2 = *pq + *pTarget;
+		  tmin = -1*t0lim(-sqrt(Q2),mass_p, mass_jpsi, mass_p, ps2->M2());
+		  tmax = -1*t1lim(-sqrt(Q2),mass_p, mass_jpsi, mass_p, ps2->M2());
+ 
+		  
+		  //differential crossection in nb/(phasespace cell)
+		  dxs     = A*exp(b*(t));
+		  dxs_2g  = fun_2g(W,t);
+		  dxs_23g = fun_23g(W,t);
+		  
+		    T->Fill();
+		    if (neve1%(nevents/10)==0) cout << neve1 << endl;
+		    neve1++;
+		    if (neve1 > nevents)  qflag = 0;
+		    
+		} //check if jpsi mass is positive
+		else counter[3]++;
+	      }//choose only positive recoil p mom
+	    } //end of loop through two solution	    
+	  }  //check if we can find positive solution for recoil p mom
+	  else counter[2]++;	      	    	  
+	} //check if we can find solution for recoil p mom
+	else counter[1]++;	      	    	  
+      } //check if cross mass threshold
+      else counter[0]++;
+      neve++;
+    }
+    } // end of g beam
+    
+    cout << nevents << " events obtained after " <<  neve << " trials" << endl;
+    
+    cout << "counter " << counter[0] << " " << counter[1] << " " << counter[2] << " " << counter[3] << endl;
+        
     file->Write();
     file->Close();
   }

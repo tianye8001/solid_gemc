@@ -1,32 +1,51 @@
-void proj(char *file){
+void proj(char *file,string type){
   gROOT->Reset();
   gStyle->SetPalette(1);
-  gStyle->SetOptStat(0);
- 
+  gStyle->SetOptStat(111111);
+  
+  //Ebeam
   Double_t cov= 1e-9 * 1e-24; //nb to cm2 coversion
-  Double_t lumi = 1e37;  // 1e37/cm2/s is from 3nA on 15cm long LH2 target
   Double_t br = 5.94/100.;
-//   Double_t accep = pow(2.*3.1415926*(cos(8./180.*3.1415926)-0.85),2)*2.5;
-  Double_t range_angle = pow(2.*3.1415926*(cos(0./180.*3.1415926)-cos(40./180.*3.1415926)),2); // both e and proton solid angle range
-    Double_t range_P= 3.-0.;  // e mom range
-//   Double_t range_P= 3.-0.5;  // e mom range  
   Double_t time = 50*3600*24;  //50 days in seconds
   Double_t eff = 0.85;
-  Double_t overall_NOneve = cov *lumi * br * range_angle * range_P * eff * time;  
+
+  Double_t lumi = 1.2e37;  // 1.2e37/cm2/s is from 3uA on 15cm long LH2 target  
+  
+  //Gbeam  
+//   double lumi_g = 8e35; // 10e-9/1.6e-19*30*0.071*6.02e23  100nA e and 30cm LH2
+  Double_t rad = 1.7e-2;    // 15cm LH2, 15/890.4=1.7e-2 radiator
+
+  Double_t norm_experiment;  
+  char accep_normal[200];
+  if (type=="e")  {
+    norm_experiment = cov * br * eff * time * lumi;  
+  sprintf(accep_normal,"%s","(accep_je1_1+accep_je1_2)*(accep_je2_1+accep_je2_2)*(accep_e_1+accep_e_2)*(accep_p_1+accep_p_2)");
+//   sprintf(accep_normal,"%s","(accep_je1_1+accep_je1_2)*(accep_je2_1+accep_je2_2)*(accep_p_1+accep_p_2)");
+//     sprintf(accep_normal,"%s","(accep_je1_1+accep_je1_2)*(accep_je2_1+accep_je2_2)"); 
+  }
+  else if (type=="g") {
+    norm_experiment = cov * br * eff * time * lumi * rad;
+    sprintf(accep_normal,"%s","(accep_je1_1+accep_je1_2)*(accep_je2_1+accep_je2_2)*(accep_p_1+accep_p_2)*Gflux"); 
+//     sprintf(accep_normal,"%s","(accep_je1_1+accep_je1_2)*(accep_je2_1+accep_je2_2)*Gflux");     
+  }
+  else {cout << "wrong type" << endl;  return 0;}  
 
   TChain *T = new TChain("T","T");
   T->AddFile(file);
   cout << " open file " << file << endl;   
+  Double_t phasespace;
+  T->SetBranchAddress("phasespace",&phasespace);  
   Int_t neve;
   T->SetBranchAddress("neve",&neve);
   T->GetEntry(T->GetEntries()-1);
   cout << " throw events " << neve << endl;
   
-  Double_t overall=overall_NOneve/neve;    
-
-const int n=13;
+  Double_t norm_simulation=phasespace/neve;
+  Double_t overall=norm_experiment*norm_simulation;    
+  
+  const int n=13;
   TH2F *hThetaP[n][4];  //#theta(deg);P(GeV)
-  TH2F *htemp=new TH2F("htemp","htemp",80,0,40,110,0,11);
+  TH2F *htemp=new TH2F("htemp","htemp",180,0,180,120,0,12);
   char *content[4]={"p_e:theta_e","p_p:theta_p","p_je1:theta_je1","p_je2:theta_je2"};
 //     TH1F *htemp=new TH1F("htemp","htemp",80,0,8);
 //     char *content[4]={"p_e","p_p","p_je1","p_je2"};
@@ -55,9 +74,9 @@ const int n=13;
 ///4 fold 
 char *weight[n]={
 "",
-"dxs","dxs*weight","dxs*weight*weight_decay","dxs*weight*weight_decay*accep_je1*accep_je2*accep_e*accep_p*%f",
-"dxs_2g","dxs_2g*weight","dxs_2g*weight*weight_decay","dxs_2g*weight*weight_decay*accep_je1*accep_je2*accep_e*accep_p*%f",
-"dxs_23g","dxs_23g*weight","dxs_23g*weight*weight_decay","dxs_23g*weight*weight_decay*accep_je1*accep_je2*accep_e*accep_p*%f"
+"dxs","dxs*weight","dxs*weight*weight_decay","dxs*weight*weight_decay*%s*%f",
+"dxs_2g","dxs_2g*weight","dxs_2g*weight*weight_decay","dxs_2g*weight*weight_decay*%s*%f",
+"dxs_23g","dxs_23g*weight","dxs_23g*weight*weight_decay","dxs_23g**weight*weight_decay*%s*%f"
 };
   
 ///psudo 4 fold with W cut 
@@ -80,14 +99,14 @@ char *weight[n]={
   for (Int_t i=0;i<n;i++){
       for (Int_t j=0;j<4;j++){
 // 	T->Project("htemp",content[j],weight[i]);
-	T->Project("htemp",content[j],Form(weight[i],overall));
+	T->Project("htemp",content[j],Form(weight[i],accep_normal,overall));
 	c_ThetaP->cd(i*4+j+1);
 	gPad->SetLogz(1);
 	hThetaP[i][j]=(TH2F*) htemp->Clone();
 	hThetaP[i][j]->Draw("colz");
       }
 //       if (i==4 || i==8 || i==12) cout << hThetaP[i][0]->Integral() << endl;
-      if (i==4 || i==8 || i==12) cout << htemp->GetSum() << endl;
+//       if (i==4 || i==8 || i==12) cout << htemp->Integral() << endl;
   }      
     
     TCanvas *c_ThetaP_2g = new TCanvas("ThetaP_2g","ThetaP_2g",800,1200);
@@ -97,25 +116,55 @@ char *weight[n]={
 	  c_ThetaP_2g->cd((i-5)*4+j+1);
 	  gPad->SetLogz(1);
 	  hThetaP[i][j]->Draw("colz");
+	  cout << hThetaP[i][j]->Integral() << endl;	  
 	}
-    }     
+    }
 //   c_ThetaP_2g->SaveAs("ThetaP_2g.png");
 
-    TCanvas *c_ThetaP_2g_final = new TCanvas("ThetaP_2g_final","ThetaP_2g_final",1000,800);
+  char *title[4]={"scattered e^{-}","recoil p","decay e^{-}","decay e^{+}"};
+    TCanvas *c_ThetaP_2g_final = new TCanvas("ThetaP_2g_final","ThetaP_2g_final",1200,1000);
     c_ThetaP_2g_final->Divide(2,2);   
     for (Int_t i=8;i<9;i++){
 	for (Int_t j=0;j<4;j++){
 	  c_ThetaP_2g_final->cd(j+1);
 	  gPad->SetLogz(1);
+	  hThetaP[i][j]->SetAxisRange(0,40,"X");
+	  hThetaP[i][j]->SetTitle(Form("Counts (%s);#theta (deg);P (GeV)",title[j]));	  
+// 	  gStyle->SetTitleAlign(23);	  
+// 	  hThetaP[i][j]->GetXaxis()->SetLabelSize(0.1);
+// 	  hThetaP[i][j]->GetYaxis()->SetLabelSize(0.1);	  
+// 	  hThetaP[i][j]->GetXaxis()->SetTitleSize(0.1);
+// 	  hThetaP[i][j]->GetYaxis()->SetTitleSize(0.1);	  	  
 	  hThetaP[i][j]->Draw("colz");
 	}
-    }  
+    }   
+  c_ThetaP_2g_final->SaveAs("ThetaP_2g_final.png");
+  
+TCanvas *c_decay = new TCanvas("decay","decay",1400,600);
+c_decay->Divide(2,1);   
+c_decay->cd(1);
+gPad->SetLogz();	
+T->Project("hdecay_gen(100,-1,1,360,0,360)","phi_cm:cos(theta_cm*3.1416/180)",Form("dxs_2g*weight*weight_decay*%f",overall));
+// T->Project("hdecay_gen(100,-1,1)","cos(theta_cm*3.1416/180)",Form("dxs_2g*weight*weight_decay*%f",overall));
+hdecay_gen->SetTitle("J/#psi decay (generated);cos(#theta_{GJ});#phi_{GJ} (deg)");
+hdecay_gen->GetXaxis()->SetLabelSize(0.04);
+hdecay_gen->GetYaxis()->SetLabelSize(0.04);
+hdecay_gen->Draw("colz");
+c_decay->cd(2);
+gPad->SetLogz();	
+T->Project("hdecay_acc(100,-1,1,360,0,360)","phi_cm:cos(theta_cm*3.1416/180)",Form("dxs_2g*weight*weight_decay*%s*%f",accep_normal,overall));
+hdecay_acc->SetTitle("J/#psi decay (accepted);cos(#theta_{GJ});#phi_{GJ} (deg)");
+hdecay_acc->GetXaxis()->SetLabelSize(0.04);
+hdecay_acc->GetYaxis()->SetLabelSize(0.04);
+hdecay_acc->Draw("colz");
+
 
 TCanvas *c = new TCanvas("c","c",1800,700);
-c->Divide(3,1);   
+c->Divide(2,2);   
 c->cd(1);
 gPad->SetLogz();	
-T->Project("hWt(60,0,6,60,3.5,5)","W:(t-tmin)","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e");
+T->Project("hWt(60,0,6,100,4,5)","W:(t-tmin)",Form("dxs_2g*weight*weight_decay*%s*%f",accep_normal,overall));
+// T->Project("hWt(60,0,6,100,4,5)","W:(t-tmin)",Form("(Q2<0.01)*(dxs_2g*weight*weight_decay*%s*%f)",accep_normal,overall));
 hWt->Draw("colz");
 // c->cd(2);
 // gPad->SetLogz();	
@@ -123,12 +172,32 @@ hWt->Draw("colz");
 // hWKeq->Draw("colz");
 c->cd(2);
 gPad->SetLogz();	
-T->Project("htheta_je1_je2(80,0,40,80,0,40)","theta_je1:theta_je2","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e");
+T->Project("htheta_je1_je2(80,0,40,80,0,40)","theta_je1:theta_je2",Form("dxs_2g*weight*weight_decay*%s*%f",accep_normal,overall));
 htheta_je1_je2->Draw("colz");
 c->cd(3);
 gPad->SetLogz();	
-T->Project("htheta_e_je1(80,0,40,80,0,40)","theta_e:theta_je1","weight*dxs_2g*weight_decay*accep_p*accep_je1*accep_je2*accep_e");
+T->Project("htheta_e_je1(80,0,40,80,0,40)","theta_e:theta_je1",Form("dxs_2g*weight*weight_decay*%s*%f",accep_normal,overall));
 htheta_e_je1->Draw("colz");
+c->cd(4);
+gPad->SetLogz();
+double nevent=T->GetEntries();
+// T->Project("hweight_decay(100,-1,1)","cos(theta_cm*3.1416/180)",Form("weight_decay/%f",nevent));
+T->Project("hweight_decay(100,0,180)","theta_cm",Form("weight_decay/%f",nevent));
+hweight_decay->Draw("colz");
+cout << "decay integral " << hweight_decay->Integral() << endl;
+
+TCanvas *c_G = new TCanvas("G","G",1800,700);
+c_G->Divide(2,1);   
+c_G->cd(1);
+gPad->SetLogy();
+// T->Project("hXGbeam(50,7,12)","Gbeam",Form("dxs_2g*weight*%f",norm_simulation));
+T->Project("hXGbeam(50,7,12)","Gbeam");
+hXGbeam->Draw("colz");
+c_G->cd(2);
+gPad->SetLogy();
+T->Project("hXGbeam_Norm(50,7,12)","Gbeam",Form("dxs_2g*weight*Gflux*%f",norm_simulation));
+hXGbeam_Norm->Draw("colz");
+
 
 /*
   TCanvas *c = new TCanvas("c","c",800,600);
