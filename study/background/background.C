@@ -127,7 +127,7 @@ void background(string input_filename){
 	TH2F *hhitXY[n][m],*hvertexZR[n][m];
 	TH1F *hfluxR[n][m];
 	TH1F *hfluxPhi[n][m],*hfluxPhi_target[n][m],*hfluxPhi_other[n][m];
-	TH1F *hEfluxR[n][m];
+	TH1F *hEfluxR[n][m],*hEdepR[n][m];;
 	TH1F *hEdepR_Preshower[n][m],*hEdepR_Shower[n][m];
 	TH1F *hEdepR_Preshower_high[n][m],*hEdepR_Shower_high[n][m];
 	TH1F *hEdepR_Preshower_low[n][m],*hEdepR_Shower_low[n][m];
@@ -164,26 +164,29 @@ void background(string input_filename){
 			hfluxR[k][l]->SetTitle(";R (cm);flux (kHz/mm2)");
 			sprintf(hstname,"EfluxR_%i_%i",k,l);
 			hEfluxR[k][l]=new TH1F(hstname,hstname,30,0,300);
-			hEfluxR[k][l]->SetTitle(";R (cm);Eflux (1e3*GeV/100cm2/s)");
+			hEfluxR[k][l]->SetTitle(";R (cm);Eflux (GeV*kHz/100cm2)");
+			sprintf(hstname,"EdepR_%i_%i",k,l);
+			hEdepR[k][l]=new TH1F(hstname,hstname,60,0,300);
+			hEdepR[k][l]->SetTitle(";R (cm);Edep (GeV*kHz/mm2)");			
 
 			sprintf(hstname,"EdepR_Preshower_%i_%i",k,l);
 			hEdepR_Preshower[k][l]=new TH1F(hstname,hstname,30,0,300);
-			hEdepR_Preshower[k][l]->SetTitle("Preshower;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+			hEdepR_Preshower[k][l]->SetTitle("Preshower;R (cm);Edep in scint (GeV*kHz/100cm2)");
 			sprintf(hstname,"EdepR_Shower_%i_%i",k,l);
 			hEdepR_Shower[k][l]=new TH1F(hstname,hstname,30,0,300);
-			hEdepR_Shower[k][l]->SetTitle("Shower;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+			hEdepR_Shower[k][l]->SetTitle("Shower;R (cm);Edep in scint (GeV*kHz/100cm2)");
 			sprintf(hstname,"EdepR_Preshower_high_%i_%i",k,l);
 			hEdepR_Preshower_high[k][l]=new TH1F(hstname,hstname,30,0,300);
-			hEdepR_Preshower_high[k][l]->SetTitle("Preshower_high;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+			hEdepR_Preshower_high[k][l]->SetTitle("Preshower_high;R (cm);Edep in scint (GeV*kHz/100cm2)");
 			sprintf(hstname,"EdepR_Shower_high_%i_%i",k,l);
 			hEdepR_Shower_high[k][l]=new TH1F(hstname,hstname,30,0,300);
-			hEdepR_Shower_high[k][l]->SetTitle("Shower_high;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+			hEdepR_Shower_high[k][l]->SetTitle("Shower_high;R (cm);Edep in scint (GeV*kHz/100cm2)");
 			sprintf(hstname,"EdepR_Preshower_low_%i_%i",k,l);
 			hEdepR_Preshower_low[k][l]=new TH1F(hstname,hstname,30,0,300);
-			hEdepR_Preshower_low[k][l]->SetTitle("Preshower_low;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+			hEdepR_Preshower_low[k][l]->SetTitle("Preshower_low;R (cm);Edep in scint (GeV*kHz/100cm2)");
 			sprintf(hstname,"EdepR_Shower_low_%i_%i",k,l);
 			hEdepR_Shower_low[k][l]=new TH1F(hstname,hstname,30,0,300);
-			hEdepR_Shower_low[k][l]->SetTitle("Shower_low;R (cm);Edep in scint (1e3*GeV/100cm2/s)");
+			hEdepR_Shower_low[k][l]->SetTitle("Shower_low;R (cm);Edep in scint (GeV*kHz/100cm2)");
 
 			sprintf(hstname,"fluxPhi_%i_%i",k,l);   
 			hfluxPhi[k][l]=new TH1F(hstname,hstname,96,0,24);
@@ -219,13 +222,13 @@ void background(string input_filename){
 
 			sprintf(hstname,"Plog_%i_%i",k,l);
 			hPlog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-			hPlog[k][l]->SetTitle(";log(P) GeV;counts");        
+			hPlog[k][l]->SetTitle(";log(P) GeV;kHz");        
 			sprintf(hstname,"Elog_%i_%i",k,l);
 			hElog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-			hElog[k][l]->SetTitle(";log(E) GeV;counts");    
+			hElog[k][l]->SetTitle(";log(E) GeV;kHz");    
 			sprintf(hstname,"Eklog_%i_%i",k,l);
 			hEklog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
-			hEklog[k][l]->SetTitle(";log(Ek) GeV;counts");    
+			hEklog[k][l]->SetTitle(";log(Ek) GeV;kHz");    
 
 			sprintf(hstname,"P_Theta_%i_%i",k,l);
 			hP_Theta[k][l]=new TH2F(hstname,hstname,100, 0, 50, 1100,0,11);    
@@ -323,32 +326,32 @@ void background(string input_filename){
 	// there are different ways to get correct normalization for different files
 	//EM just need current and total number of event
 	//source from weighted or normalized event generator need rate and total file number, assume there are 100 files, each file has 10000 events, the rate in each file has normalized by 10000, then add 100 files with root tree together, the final result needs normalization by 10000*100=1e6, so the addtional factor is the file num 100
-	double filenum=1.;
-	bool Is_EM=false,Is_clean_weighted=false,Is_dirty_normalized=false;
+	//dirty or clean means put in realmaterial or not
+
+	bool Is_EM=false,Is_weighted=false,Is_normalized=false;
 	if (input_filename.find("_EM_",0) != string::npos) {
 		Is_EM=true;
 		cout << "EM background from beam on target" <<  endl;
 	}
-	else if (input_filename.find("_clean_weighted_",0) != string::npos) {
-		Is_clean_weighted=true;
-		cout << "background from weighted event generator with no interaction except decay" <<  endl;
-	    if (input_filename.find("_file",0) != string::npos) {
-		filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
-		cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
-	    }
-	    else {cout << "we need filenum for addtional normalization" << endl; return;}		
+	else if (input_filename.find("_weighted_",0) != string::npos) {
+		Is_weighted=true;
+		cout << "background from weighted event generator" <<  endl;
 	}	  
-	else if (input_filename.find("_dirty_normalized_",0) != string::npos) {
-		Is_dirty_normalized=true;
-		cout << "background from normalized event generator with all interaction" <<  endl;
-	    if (input_filename.find("_file",0) != string::npos) {
-		filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
-		cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
-	    }
-	    else {cout << "we need filenum for addtional normalization" << endl; return;}
+	else if (input_filename.find("_normalized_",0) != string::npos) {
+		Is_normalized=true;
+		cout << "background from normalized event generator" <<  endl;
 	}	  	
-	else {cout << "not EM or clean_weighted or dirty_normalized " << endl; return;}
-
+	else {cout << "not EM or weighted or normalized " << endl; return;}
+	
+	double filenum=1.;
+	if (!Is_EM){   //for non-EM background
+	  if (input_filename.find("_filenum",0) != string::npos) {
+	    filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
+	      cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+	  }
+	  else {cout << "we need filenum for addtional normalization" << endl; return;}		
+	}
+	
 // 	bool Is_eDIS=false;
 // 	if (input_filename.find("_eDIS_",0) != string::npos) {
 // 		Is_eDIS=true;
@@ -618,8 +621,14 @@ void background(string input_filename){
 			else {  // all other just counting
 				hvertexZR[hit_id][par]->Fill(flux_vz->at(j)/10.,sqrt(flux_vx->at(j)/10.*flux_vx->at(j)/10.+flux_vy->at(j)/10.*flux_vy->at(j)/10.),weight);
 				hvertexZ[hit_id][par]->Fill(flux_vz->at(j)/10.,weight);      
-			  
-				hhitXY[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight);
+				
+// 				TVector3 aaa(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,0);	
+// // 				cout << "before " << aaa.X() << " " << aaa.Y() << " " << aaa.Z() << " " << aaa.Phi()*DEG  << endl;
+// 				aaa.RotateZ(-int(phi/36)*36/DEG);
+// // 				cout << "after " << aaa.X() << " " << aaa.Y() << " " << aaa.Z() << " " << aaa.Phi()*DEG << endl;	
+// 				hhitXY[hit_id][par]->Fill(aaa.X(),aaa.Y(),weight);
+
+				hhitXY[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight);				
 				hhitZ[hit_id][par]->Fill(flux_avg_z->at(j)/10.,weight);      		
 				
 				hPlog[hit_id][par]->Fill(log10(P/1e3),weight);
@@ -684,6 +693,7 @@ void background(string input_filename){
 			
 				hfluxR[hit_id][par]->Fill(r/10.,weightR/50.);   ///in 5cm bin
 				hEfluxR[hit_id][par]->Fill(r/10.,Ek/1e3*weightR/100.*1e4); ///in 10cm bin and from mm2 to 100cm2
+				hEdepR[hit_id][par]->Fill(r/10.,flux_totEdep->at(j)/1e3*weightR/50.); ///in 5cm bin				
 
 				///divide rate by 15 because it's 24 degree	    
 				hfluxPhi[hit_id][par]->Fill(phi-int(phi/24)*24,weightPhi/15);	    	    
@@ -727,6 +737,7 @@ void background(string input_filename){
 		hfluxPhi_target[k][0]->Add(hfluxPhi_target[k][1],hfluxPhi_target[k][2]);      
 		hfluxPhi_other[k][0]->Add(hfluxPhi_other[k][1],hfluxPhi_other[k][2]);      
 		hEfluxR[k][0]->Add(hEfluxR[k][1],hEfluxR[k][2]);
+		hEdepR[k][0]->Add(hEdepR[k][1],hEdepR[k][2]);		
 		hEdepR_Preshower[k][0]->Add(hEdepR_Preshower[k][1],hEdepR_Preshower[k][2]);
 		hEdepR_Shower[k][0]->Add(hEdepR_Shower[k][1],hEdepR_Shower[k][2]);      
 		hEdepR_Preshower_high[k][0]->Add(hEdepR_Preshower_high[k][1],hEdepR_Preshower_high[k][2]);
