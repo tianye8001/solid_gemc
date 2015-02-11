@@ -106,8 +106,11 @@ char* input_filename[m]={
 // "background_solid_CLEO_PVDIS_LD2_real_p_1e6_output.root",
 
 // "background_solid_PVDIS_LD2_EM_1e8_output.root",
-// "background_solid_PVDIS_LD2_clean_weighted_filenum1_eDIS_1e6_output.root",
-"background_solid_PVDIS_LD2_dirty_normalized_filenum100_pi0_1e6_output.root",
+    "background_solid_PVDIS_LD2_shield_clean_weighted_filenum1_eDIS_1e6_output.root",
+//   "background_solid_PVDIS_LD2_clean_weighted_filenum1_eDIS_1e6_output.root",
+// "background_solid_PVDIS_LD2_clean_weighted_filenum1_eES_1e6_output.root",
+// "background_solid_PVDIS_LD2_clean_weighted_filenum1_eDIS_1e6_output_Wcut.root",
+// "background_solid_PVDIS_LD2_dirty_normalized_filenum100_pi0_1e6_output.root",
 "background_solid_PVDIS_LD2_dirty_normalized_filenum100_pim_1e6_output.root",
 "background_solid_PVDIS_LD2_dirty_normalized_filenum100_pip_1e6_output.root",
 "background_solid_PVDIS_LD2_dirty_normalized_filenum100_pi0_1e6_output.root",

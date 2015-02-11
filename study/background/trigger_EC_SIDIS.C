@@ -61,11 +61,15 @@ void trigger_EC_SIDIS()
 	const int m=5;
 	char* input_filename[m]={
 // 	    "background_solid_SIDIS_He3_other_eDIS_output.root",
-	    "background_solid_SIDIS_He3_sum_actual_pim_output.root",	    
-	    "background_solid_SIDIS_He3_sum_actual_pim_output.root",
-	    "background_solid_SIDIS_He3_sum_actual_pip_output.root",
-	    "background_solid_SIDIS_He3_sum_actual_pi0_output.root",
-	    "background_solid_SIDIS_He3_actual_p_output.root"		
+// 	    "background_solid_SIDIS_He3_sum_actual_pim_output.root",
+// 	    "background_solid_SIDIS_He3_sum_actual_pip_output.root",
+// 	    "background_solid_SIDIS_He3_sum_actual_pi0_output.root",
+// 	    "background_solid_SIDIS_He3_actual_p_output.root"		
+	    "background_solid_SIDIS_He3_sum_clean_weighted_eDIS_output.root",
+	    "background_solid_SIDIS_He3_sum_dirty_normalized_pim_output.root",	  
+	    "background_solid_SIDIS_He3_sum_dirty_normalized_pip_output.root",	  
+	    "background_solid_SIDIS_He3_sum_dirty_normalized_pi0_output.root",	  
+	    "background_solid_SIDIS_He3_sum_dirty_normalized_p_output.root"	    
 	};
 	int pid[m]={2,6,5,1,4};
 	char *label[m]={"e(DIS)","#pi^{-}(DIS)","#pi^{+}(DIS)","#gamma(#pi^{0}(DIS))","p(DIS)"};
@@ -115,7 +119,7 @@ void trigger_EC_SIDIS()
 	// 6 point cut, right on Q2=1 line and field bend line
 	double trig_cut_range_R[Ntrigline+1]={0,105,115,130,150,200,300};
 
-	TString Trigger_Dir_Rad="../triggerfile/SIDIS_He3_201411/triggerfile/cutRadial_innerbackground/";
+	TString Trigger_Dir_Rad="../triggerfile/SIDIS_He3_201311/cutRadial_innerbackground/";
 	file_trig_cut[0][0][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH4.4.root",Trigger_Dir_Rad.Data()));
 	file_trig_cut[0][0][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH4.4.root",Trigger_Dir_Rad.Data()));
 	file_trig_cut[0][1][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH3.5.root",Trigger_Dir_Rad.Data()));
@@ -130,7 +134,7 @@ void trigger_EC_SIDIS()
 	file_trig_cut[0][5][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root",Trigger_Dir_Rad.Data()));
 
 	///Large Angle Trigger   has no radial dependence
-	TString Trigger_Dir_1GeVCut = "../triggerfile/SIDIS_He3_201411/triggerfile/cut1GeV_innerbackground/";
+	TString Trigger_Dir_1GeVCut = "../triggerfile/SIDIS_He3_201311/cut1GeV_innerbackground/";
 	for (int i=0;i<Ntrigline;i++){
 		file_trig_cut[1][i][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunElectron_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root",Trigger_Dir_1GeVCut.Data()));
 		file_trig_cut[1][i][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunPion_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root",Trigger_Dir_1GeVCut.Data()));
