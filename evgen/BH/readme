@@ -42,4 +42,7 @@ cp acceptance_root_file ../
 
 The parameter can be SoLID or CLAS12
 
+root2lund.C to convert "grp.root" to "grp.lund" with vertex info added in, use it after compiling otherwise it takes large mem and too slow, run it in the dir where "grp.root" is
+root 'root2lund.C+'
+
 compare.C to compare different configuration
