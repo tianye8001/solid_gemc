@@ -164,7 +164,7 @@ sprintf(input_filename, "grp.root");
     double x=Q2/2./targ.M()/mu;
     double y=mu/ki.E();
   
-    double vertexZ=rand->Uniform(-307.5,322.5);
+    double vertexZ=rand->Uniform(-322.5,-307.5);
       
       double count_convert = 1e-36*1e35*3600*24*120*0.85;
       
