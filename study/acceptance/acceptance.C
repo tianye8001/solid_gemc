@@ -25,16 +25,17 @@ void acceptance(string input_filename)
 {
 gROOT->Reset();
 gStyle->SetPalette(1);
-// gStyle->SetOptStat(0);
-gStyle->SetOptStat(11111);
+gStyle->SetOptStat(0);
+// gStyle->SetOptStat(11111);
 
 const double DEG=180./3.1415926;
 
-bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false;
+bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_DDVCS_JPsi_LH2=false,Is_JPsi=false;
 if (input_filename.find("PVDIS",0) != string::npos) Is_PVDIS=true;
 else if (input_filename.find("SIDIS_He3",0) != string::npos) Is_SIDIS_He3=true;
 else if (input_filename.find("SIDIS_NH3",0) != string::npos) Is_SIDIS_NH3=true;
-else if (input_filename.find("JPsi",0) != string::npos) Is_JPsi_LH2=true;
+else if (input_filename.find("DDVCS_JPsi_LH2",0) != string::npos) Is_DDVCS_JPsi_LH2=true;
+else if (input_filename.find("JPsi",0) != string::npos) Is_JPsi=true;
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
 ///radius cut standard as particles can travel 30cm in Z before leave calorimeter
@@ -53,7 +54,7 @@ else if (Is_SIDIS_He3 || Is_SIDIS_NH3){
   rin_cut_LA=83;   //cut at the actual edge
   cout << " SIDIS_He3 and SIDIS_NH3 rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
 }
-else if (Is_JPsi_LH2){
+else if (Is_JPsi){
     rout_cut_FA=220;     //target at -350,ec front at 405 with angle 15
 //     rin_cut_FA=98;   	//cut at the actual edge
     rin_cut_FA=105;   	 //cut at the actual edge
@@ -75,16 +76,31 @@ else if (Is_JPsi_LH2){
   rin_cut_LA=83;   //cut at the actual edge  
   cout << " JPsi rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
 }
-else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
+else if(Is_DDVCS_JPsi_LH2){
+  rout_cut_FA=1000;     //target at -350,ec front at 415 with angle 15
+  rin_cut_FA=0;   //cut at the actual edge
+  rout_cut_LA=1000;   //target at -350,ec front at -65 with angle 24
+  rin_cut_LA=0;   //cut at the actual edge
+  cout << " DDVCS_JPsi_LH2 rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;  
+}
+else {cout << "not PVDIS or SIDIS or JPsi or DDVCS_JPsi_LH2" << endl; return;}
 
 double theta_max,theta_min;
-if (Is_SIDIS_He3 || Is_JPsi_LH2 ){
+if (Is_SIDIS_He3 || Is_JPsi ){
     theta_max=40;
     theta_min=0;    
 }
-else if(Is_SIDIS_NH3 || Is_PVDIS) {
+else if(Is_SIDIS_NH3) {
+    theta_max=50;
+    theta_min=0;    
+}
+else if(Is_PVDIS) {
     theta_max=50;
     theta_min=10;    
+}
+else if(Is_DDVCS_JPsi_LH2) {
+    theta_max=40;
+    theta_min=0;    
 }
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
@@ -145,7 +161,7 @@ for(int i=0;i<m;i++){
    hflux_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
    hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));  
    sprintf(hstname,"flux_ThetaPhiP_%i",i);   
-   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,int(theta_max*2),0,theta_max,180,-180,180,110,0,11);   
+   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max,180,-180,180,110,0,11);   
    hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
    
    sprintf(hstname,"flux_ThetaVz_%i",i);
@@ -176,7 +192,7 @@ for(int i=0;i<m;i++){
    hacceptance_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
    hacceptance_PhiP[i]->SetTitle(Form("acceptance by %s;vertex Phi (deg);P (GeV)",title[i]));      
    sprintf(hstname,"acceptance_ThetaPhiP_%i",i);   
-   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,int(theta_max*2),0,theta_max,180,-180,180,110,0,11);   
+   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max,180,-180,180,110,0,11);
    hacceptance_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));
 
    sprintf(hstname,"acceptance_ThetaVz_%i",i);
@@ -188,7 +204,7 @@ for(int i=0;i<m;i++){
    
 }
 
-const int n=8;  //include 6 GEM and 2 calorimeter
+const int n=10;  //include 6 GEM and 2 calorimeter and 2 muon detector
 
 TH2F *hhit_rMom[n];
 TH2F *hhit_phidiffMom[n],*hhit_thetadiffMom[n],*hhit_anglediffMom[n];
@@ -247,6 +263,18 @@ for(int i=0;i<2;i++){
    hhit_xy_ec[i][j]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
    sprintf(hstname,"hit_PhiR_ec_%i_%i",i,j);
    hhit_PhiR_ec[i][j]=new TH2F(hstname,hstname,360,-180,180,300,0,300);       
+}}
+
+TH2F *hhit_xy_muon[n][2],*hhit_PhiR_muon[n][2],*hhit_PhiZ_muon[n][2];
+for(int i=0;i<2;i++){
+  for(int j=0;j<2;j++){
+   char hstname[100];
+   sprintf(hstname,"hit_xy_muon_%i_%i",i,j);
+   hhit_xy_muon[i][j]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
+   sprintf(hstname,"hit_PhiR_muon_%i_%i",i,j);
+   hhit_PhiR_muon[i][j]=new TH2F(hstname,hstname,360,-180,180,300,0,300);       
+   sprintf(hstname,"hit_PhiZ_muon_%i_%i",i,j);
+   hhit_PhiZ_muon[i][j]=new TH2F(hstname,hstname,360,-180,180,400,150,550);          
 }}
   
 const int Nplate=22;
@@ -382,7 +410,7 @@ for (Int_t i=0;i<nevent;i++) {
       TVector3 mom_GEM4(0,0,0);     
     bool Is_out=false;
     bool Is_decay=false;
-    int acc[8]={0,0,0,0,0,0,0,0};
+    int acc[10]={0,0,0,0,0,0,0,0,0,0};
     for (Int_t j=0;j<flux_hitn->size();j++) {
 //       cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
     
@@ -390,7 +418,7 @@ for (Int_t i=0;i<nevent;i++) {
     if (flux_pid->at(j)!= pid_gen) {
       Is_decay=true; 
       counter_decay_incomplete++;            
-	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << endl; 
+// 	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << ", "; 
       continue;
     }
     
@@ -403,6 +431,8 @@ for (Int_t i=0;i<nevent;i++) {
     else if (flux_id->at(j)==1610000) hit_id=5;    
     else if (flux_id->at(j)==3110000) hit_id=6;
     else if (flux_id->at(j)==3210000) hit_id=7;	
+    else if (flux_id->at(j)==6110000) hit_id=8;
+    else if (flux_id->at(j)==6210000) hit_id=9;
     else continue;  //skip other detector for now
 	
     int detector_ID=flux_id->at(j)/1000000;
@@ -423,7 +453,7 @@ for (Int_t i=0;i<nevent;i++) {
     }
     
      double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));
-     double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j);
+     double hit_y=flux_avg_y->at(j),hit_x=flux_avg_x->at(j),hit_z=flux_avg_z->at(j);
      
 //      double hit_phi=atan2(flux_avg_y->at(j)-vy_gen,flux_avg_x->at(j)-vx_gen);
 // //      double hit_theta=atan((hit_r/1e1-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;        
@@ -482,7 +512,7 @@ for (Int_t i=0;i<nevent;i++) {
     //check hit on EC    
     if (detector_ID==3) {
      hhit_xy_ec[subdetector_ID-1][0]->Fill(hit_x/1e1,hit_y/1e1);    
-     hhit_PhiR_ec[subdetector_ID-1][0]->Fill(hit_phi,hit_r/1e1);
+     hhit_PhiR_ec[subdetector_ID-1][0]->Fill(hit_phi*DEG,hit_r/1e1);
       
       //cut out some part of viritual plane to consider "good" part of EC
 //       if ((detector_ID==3 && subdetector_ID==1) && (hit_r/1e1 < rin_cut_FA || rout_cut_FA < hit_r/1e1)) continue;        
@@ -490,7 +520,12 @@ for (Int_t i=0;i<nevent;i++) {
       if ((detector_ID==3 && subdetector_ID==1) && (hit_r/1e1 < rin_cut_FA)) continue;        
       if ((detector_ID==3 && subdetector_ID==2) && (hit_r/1e1 < rin_cut_LA)) continue;
     }
-      
+    
+    if (detector_ID==6) {
+     hhit_xy_muon[subdetector_ID-1][0]->Fill(hit_x/1e1,hit_y/1e1);    
+     hhit_PhiR_muon[subdetector_ID-1][0]->Fill(hit_phi*DEG,hit_r/1e1);
+     hhit_PhiZ_muon[subdetector_ID-1][0]->Fill(hit_phi*DEG,hit_z/1e1);
+    }                
    
     if (Is_PVDIS){
       acc[hit_id]=1;      
@@ -513,9 +548,12 @@ for (Int_t i=0;i<nevent;i++) {
 	  
       acc[hit_id]=1; 
     }
-    else if (Is_JPsi_LH2){
+    else if (Is_JPsi){
       acc[hit_id]=1;      
-    }      
+    }
+    else if (Is_DDVCS_JPsi_LH2){
+      acc[hit_id]=1;      
+    }
        
        ///DIRC cut
 //        double x=flux_avg_x->at(j)/1e1,y=flux_avg_y->at(j)/1e1;
@@ -561,13 +599,19 @@ for (Int_t i=0;i<nevent;i++) {
       if (acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM
       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) pattern_id=1; //hit on LAEC and GEM
     }
-    else if (Is_JPsi_LH2){
+    else if (Is_JPsi){
 //       if (acc[6]==1) pattern_id=0;  //hit on FAEC
 //       if (acc[7]==1) pattern_id=1;	  //hit on LAEC      
       
       if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM
       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) pattern_id=1; //hit on LAEC and GEM
     }
+    else if (Is_DDVCS_JPsi_LH2){
+//       if (acc[8]==1) pattern_id=0;  //hit on forward angle muon det behind endcap
+//       if (acc[9]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[8]==1) pattern_id=0;  //hit on forward angle muon det behind endcap and all gem
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[9]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut and all gem      
+    }    
     
 
     int counter_hit[2]={0,0};
@@ -854,6 +898,33 @@ for(int i=0;i<2;i++){
 c_hit_PhiR_ec->cd(j*2+i+1);
 gPad->SetLogz(1);
 hhit_PhiR_ec[i][j]->Draw("colz");
+}}
+
+TCanvas *c_hit_xy_muon = new TCanvas("hit_xy_muon","hit_xy_muon",1800,800);
+c_hit_xy_muon->Divide(2,2);
+for(int j=0;j<2;j++){
+for(int i=0;i<2;i++){
+c_hit_xy_muon->cd(j*2+i+1);
+gPad->SetLogz(1);
+hhit_xy_muon[i][j]->Draw("colz");
+}}
+
+TCanvas *c_hit_PhiR_muon = new TCanvas("hit_PhiR_muon","hit_PhiR_muon",1800,800);
+c_hit_PhiR_muon->Divide(2,2);
+for(int j=0;j<2;j++){
+for(int i=0;i<2;i++){
+c_hit_PhiR_muon->cd(j*2+i+1);
+gPad->SetLogz(1);
+hhit_PhiR_muon[i][j]->Draw("colz");
+}}
+
+TCanvas *c_hit_PhiZ_muon = new TCanvas("hit_PhiZ_muon","hit_PhiZ_muon",1800,800);
+c_hit_PhiZ_muon->Divide(2,2);
+for(int j=0;j<2;j++){
+for(int i=0;i<2;i++){
+c_hit_PhiZ_muon->cd(j*2+i+1);
+gPad->SetLogz(1);
+hhit_PhiZ_muon[i][j]->Draw("colz");
 }}
 
 // TCanvas *c_acceptance_all_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
