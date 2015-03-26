@@ -11,8 +11,8 @@ sub define_solid_ec_hit
 	$hit{"name"}            = "solid_ec";
 	$hit{"description"}     = "solid ec hit definition";
 	$hit{"identifiers"}     = "id";
-	$hit{"signalThreshold"} = "0.5*MeV";
-	$hit{"timeWindow"}      = "4*ns";
+	$hit{"signalThreshold"} = "0*MeV";
+	$hit{"timeWindow"}      = "400*ns";
 	$hit{"prodThreshold"}   = "1*mm";
 	$hit{"maxStep"}         = "1*cm";
 	$hit{"delay"}           = "10*ns";

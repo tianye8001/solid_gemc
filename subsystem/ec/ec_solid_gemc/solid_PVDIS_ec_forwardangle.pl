@@ -49,7 +49,7 @@ $configuration{"detector_name"} = "solid_PVDIS_ec_forwardangle";
 $configuration{"variation"} = "Original";
 
 # To get the parameters proper authentication is needed.
-# our %parameters    = get_parameters(%configuration);
+our %parameters    = get_parameters(%configuration);
 # $configuration{"detector_name"} = "solid_PVDIS";
 
 #Geometry definition

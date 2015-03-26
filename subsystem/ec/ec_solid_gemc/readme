@@ -1,3 +1,25 @@
+Here is EC simulation using "solid_gemc"
+It can work as standalone, but also with whole SoLID simulation, you just need to copy the files to the offical location at solid_gemc2/geometry/ec
+
+=== How to use it ===
+#make ec materials
+./solid_ec_materials.pl config_solid_PVDIS_ec_forwardangle.dat
+
+#generate ec geometry,output bank and hit processing
 ./solid_PVDIS_ec_forwardangle.pl config_solid_PVDIS_ec_forwardangle.dat
+
+#run ec simulation
 solid_gemc solid_PVDIS_ec_forwardangle.gcard
-evio2root -INPUTF=output.evio -B=solid_PVDIS_ec_forwardangle -BANK_VERBOSITY=100
+
+#convert evio2root file with solid_ec bank
+evio2root -INPUTF=output.evio -B=solid_PVDIS_ec_forwardangle -WRITE_RAWS=no
+
+=== note ===
+solid_ec_bank.pl defines output bank "solid_ec", it needs to exactly match hit processing routine in solid_ec_hitprocess.cc under solid_gemc2/source
+Every time, you add or remove an entry, you need to modify the source code and recompile "solid_gemc" by following instruction there
+
+solid_ec_hit.pl defines some general features of the hit processing
+
+solid_PVDIS_ec_forwardangle_real.pl defines actual EC geometry
+
+
