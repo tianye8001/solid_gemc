@@ -1,0 +1,54 @@
+<gcard>
+<option name="DBHOST" value="soliddb"/>
+<option name="DATABASE" value="test"/>
+<option name="DBUSER" value="soliduser"/>
+<option name="DBPSWD" value="ilovesolid"/>
+
+<detector name="../../solid_gemc2/geometry/solid_PVDIS_simple" factory="TEXT" variation="Original"/>
+
+<option name="INTEGRATEDRAW" value="flux"/>
+
+<option name="HIT_PROCESS_LIST" value="solid"/>
+<option name="PHYSICS" value="QGSP_BERT"/>
+<option name="RECORD_PASSBY" value="1"/>
+<option name="HALL_MATERIAL" value="Vacuum"/>
+
+<option name="MAX_X_POS" value="20000"/>
+<option name="MAX_Y_POS" value="20000"/>
+<option name="MAX_Z_POS" value="20000"/>
+<option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
+
+<option name="FIELD_DIR" value="../../solid_gemc2/field"/>
+<option name="HALL_FIELD" value="solenoid_CLEOv8"/>
+
+<option name="INPUT_GEN_FILE" value="LUND,solid_PVDIS_electron.lund"/>
+
+<option name="N" value="1e0"/>
+<option name="OUTPUT" value="evio,solid_PVDIS_electron.evio"/>
+<option name="USE_GUI"  value="0"/>
+
+</gcard>
+
+<!--  comment out
+<option name="FIELD_VERBOSITY"  value="100"/>
+<option name="GEO_VERBOSITY"  value="100"/>
+
+use this to check overlap
+<option name="CHECK_OVERLAPS"  value="1"/>
+<option name="USE_GUI"  value="0"/>
+
+use this to run batch mode for txt or evio output
+<option name="N" value="1"/>
+<option name="OUTPUT" value="txt,output.txt"/>
+<option name="OUTPUT" value="evio,output.evio"/>
+<option name="USE_GUI"  value="0"/>
+
+use this for interactive mode
+<option name="EXEC_MACRO" value="../../solid_gemc2/script/solid_slice.vis"/>
+<option name="geometry" value="1000x1000"/>
+<option name="HIGH_RES" value="1"/>
+<option name="USE_GUI"  value="1"/>
+
+use "gemc -help" to see all options
+
+-->
