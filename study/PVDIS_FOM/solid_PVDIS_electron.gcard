@@ -23,7 +23,7 @@
 
 <option name="INPUT_GEN_FILE" value="LUND,solid_PVDIS_electron.lund"/>
 
-<option name="N" value="1e0"/>
+<option name="N" value="1e6"/>
 <option name="OUTPUT" value="evio,solid_PVDIS_electron.evio"/>
 <option name="USE_GUI"  value="0"/>
 
