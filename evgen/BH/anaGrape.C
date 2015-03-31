@@ -16,16 +16,18 @@
 using namespace std;
 
 // void anaGrape(string input_filedir,string detector=""){
-void anaGrape(string detector=""){
+void anaGrape(string detector="",bool Is_inter=false){
 //  set_style();
 // gROOT->Reset();
 gStyle->SetPalette(1);
-gStyle->SetOptStat(1000011);
-//   gStyle->SetOptStat(1);
+// gStyle->SetOptStat(11111111);
+gStyle->SetOptStat(0);
 
+      double count_convert;
 double thetamin,thetamax;
 TH3F *hacceptance_PThetaPhi_positive,*hacceptance_PThetaPhi_negative;
 TH2F *hacceptance_ThetaP_forwardangle,*hacceptance_ThetaP_largeangle;
+TH2F *hacceptance_ThetaP_forwardangle_muon,*hacceptance_ThetaP_largeangle_muon;
 
 if (detector=="CLAS12"){
 //   TFile *acceptancefile=new TFile("clas12_acceptance_pipele.root");
@@ -35,15 +37,18 @@ if (detector=="CLAS12"){
   hacceptance_PThetaPhi_positive=(TH3F*) acceptancefile->Get("acceptance_PThetaPhi_pip");  
   hacceptance_PThetaPhi_negative=(TH3F*) acceptancefile->Get("acceptance_PThetaPhi_ele");
 
+  TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1200,900);
+  c_acceptance->Divide(2,1);
+  c_acceptance->cd(1);
+  hacceptance_PThetaPhi_positive->Draw();
+  c_acceptance->cd(2);
+  hacceptance_PThetaPhi_negative->Draw(); 
+  
   thetamin=0;    
   thetamax=180;  
-  
-//   TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1200,900);
-//   c_acceptance->Divide(2,1);
-//   c_acceptance->cd(1);
-//   hacceptance_PThetaPhi_positive->Draw();
-//   c_acceptance->cd(2);
-//   hacceptance_PThetaPhi_negative->Draw();  
+
+//      pb = 1e-36 cm2, lumi 1e35/cm2/s, 120 days, 0.85 eff
+     count_convert = 1e-36*1e35*3600*24*120*0.85;   
   
 //   target.SetPxPyPzE(0.,0.,0.,0.938);  
 //   Pmax=3; 
@@ -60,7 +65,7 @@ if (detector=="CLAS12"){
 //   resolution_p[0]=0.01;resolution_theta[0]=1e-3;resolution_phi[0]=4e-3;
 //   resolution_p[1]=0.05;resolution_theta[1]=10e-3;resolution_phi[1]=5e-3;   
 }
-else if (detector=="SoLID"){
+else if (detector=="SoLID_DDVCS_JPsi"){
   TFile *acceptancefile=new TFile("../acceptance_solid_JPsi_electron_target315_output.root");  
   
   hacceptance_ThetaP_forwardangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_forwardangle");  
@@ -74,7 +79,10 @@ else if (detector=="SoLID"){
   hacceptance_ThetaP_largeangle->Draw("colz");  
   
   thetamin=0;    
-  thetamax=50;  
+  thetamax=180;  
+  
+//      pb = 1e-36 cm2, lumi 1e37/cm2/s, 50 days, 0.85 eff
+      count_convert = 1e-36*1e37*3600*24*50*0.85;
   
 //   target.SetPxPyPzE(0.,0.,0.,0.938);  
 //   Pmax=3; 
@@ -90,6 +98,35 @@ else if (detector=="SoLID"){
 //resolution mom 1%, theta 1mr, phi 4mr   
 //   resolution_p[0]=0.01;resolution_theta[0]=1e-3;resolution_phi[0]=4e-3;
 //   resolution_p[1]=0.05;resolution_theta[1]=10e-3;resolution_phi[1]=5e-3;   
+      
+  TFile *acceptancefile_muon=new TFile("../acceptance_solid_DDVCS_JPsi_LH2_muonp_target315_output.root");       
+  
+  hacceptance_ThetaP_forwardangle_muon=(TH2F*) acceptancefile_muon->Get("acceptance_ThetaP_forwardangle");  
+  hacceptance_ThetaP_largeangle_muon=(TH2F*) acceptancefile_muon->Get("acceptance_ThetaP_largeangle");
+  
+  TCanvas *c_acceptance_muon = new TCanvas("acceptance_muon","acceptance_muon",1200,900);
+  c_acceptance_muon->Divide(2,1);
+  c_acceptance_muon->cd(1);
+  hacceptance_ThetaP_forwardangle_muon->Draw("colz");
+  c_acceptance_muon->cd(2);
+  hacceptance_ThetaP_largeangle_muon->Draw("colz");  
+  
+}
+else if (detector=="SoLID_DDVCS_PVDIS"){
+  TFile *acceptancefile=new TFile("../acceptance_solid_PVDIS_electron_output.root");  
+  
+  hacceptance_ThetaP_forwardangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_forwardangle");  
+  
+  TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1000,900);
+  c_acceptance->Divide(1,1);
+  c_acceptance->cd(1);
+  hacceptance_ThetaP_forwardangle->Draw("colz");
+  
+  thetamin=0;    
+  thetamax=180;  
+  
+//      pb = 1e-36 cm2, lumi 1e39/cm2/s, 120 days, 0.85 eff
+      count_convert = 1e-36*1e37*3600*24*50*0.85;  
 }
 else {cout << "wrong detector" << endl;}
   
@@ -135,19 +172,29 @@ TH1F *hprph = new TH1F("hprph","",100, -180., 180.);
 TH1F *hkpp = new TH1F("hkpp","",100,0, 5);
 TH1F *hprp = new TH1F("hprp","",100,0, 5);
 
-TH2F *hQ2W = new TH2F("Q2W","Q2W",50,4,4.5,200,0,2);
-TH2F *htW = new TH2F("tW","tW",50,4,4.5,600,0,6);
-TH2F *htminW = new TH2F("tminW","tminW",50,4,4.5,600,0,6);
-TH2F *htmaxW = new TH2F("tmaxW","tmaxW",50,4,4.5,600,0,6);
 TH1F *ht = new TH1F("\t","\t",600,0,6);
 
-TH2F *hlepIM_W = new TH2F("hlepIM_W",";e+ e- Inv Mass (GeV);W (GeV)",80,0,4.0,40,2,6); 
+TH2F *ht_Qp2 = new TH2F("t_Qp2",";t (GeV^{2});Q'2 (GeV^{2})",100,0,2,100,0,20);
+TH2F *ht_W = new TH2F("t_W",";t (GeV^{2});W (GeV)",100,0,2,100,0,5);
+TH2F *ht_Q2 = new TH2F("t_Q2",";t (GeV^{2});Q2 (GeV^{2})",100,0,2,100,0,2);
+TH2F *ht_eta = new TH2F("t_eta",";t (GeV^{2});eta",100,0,2,100,0,2.5);
+
+TH2F *hxi_eta = new TH2F("xi_eta",";xi;eta",100,-2.5,2.5,100,0,2.5);
+TH2F *hxbj_eta = new TH2F("xbj_eta",";xbj;eta",100,0,1,100,0,2.5);
+TH2F *hxbj_xi = new TH2F("xbj_xi",";xbj;xi",100,0,1,100,-2.5,2.5);
+TH2F *ht_xi = new TH2F("t_xi",";t;xi",100,0,2.5,100,-2.5,2.5);
+
+TH2F *htmin_W = new TH2F("tmin_W",";tmin (GeV^{2});W (GeV)",100,0,5,100,0,5);
+TH2F *htmax_W = new TH2F("tmax_W",";tmax (GeV^{2});W (GeV)",100,0,5,100,0,5);	
 
 const int m=4;
 
 char *title[m]={"scattered lepton","recoil p","decay lepton^{-}","decay lepton^{+}"};
+TH3F *ht_Qp2_eta[m];
+TH2F *hQp2_eta[m],*hQp2_t[m];
 TH1F *hlepIM1[m],*hlepIM2[m],*hlepIM[m];
 TH2F *hlepIM_2D[m];
+TH2F *hdecayangle1[m],*hdecayangle2[m];
 TH2F *hThetaP[4][m],*hThetaPhi[4][m];
 for(int k=0;k<m;k++){
   char hstname[100];
@@ -157,16 +204,32 @@ for(int k=0;k<m;k++){
    sprintf(hstname,"ThetaPhi_%i_%i",l,k);
    hThetaPhi[l][k]=new TH2F(hstname,";#theta_{lab} (deg);#phi_{lab} (deg)",180,0,180,100,-180.,180.);   
   }
-    
-  sprintf(hstname,"hlepIM_2D_%i",k);
+
+  sprintf(hstname,"decayangle1_%i",k);
+  hdecayangle1[k] = new TH2F(hstname,";l+ #theta (deg);l+ #theta (deg)",180,0,180,180,0,180);   
+
+  sprintf(hstname,"decayangle2_%i",k);
+  hdecayangle2[k] = new TH2F(hstname,";l+ #theta (deg);l+ #theta (deg)",180,0,180,180,0,180);     
+  
+  sprintf(hstname,"lepIM_2D_%i",k);
   hlepIM_2D[k] = new TH2F(hstname,";e+ e-(1st) Inv Mass (GeV);e+ e-(2nd) Inv Mass (GeV)",80,0,4.0,80,0,4.0);   
   
-  sprintf(hstname,"hlepIM1_%i",k);
+  sprintf(hstname,"lepIM1_%i",k);
   hlepIM1[k] = new TH1F(hstname,";e+ e- Inv Mass (GeV);",80,0,4.0);   
-  sprintf(hstname,"hlepIM2_%i",k);
+  sprintf(hstname,"lepIM2_%i",k);
   hlepIM2[k] = new TH1F(hstname,";e+ e- Inv Mass (GeV);",80,0,4.0);   
-  sprintf(hstname,"hlepIM_%i",k);
+  sprintf(hstname,"lepIM_%i",k);
   hlepIM[k] = new TH1F(hstname,";e+ e- Inv Mass (GeV);",80,0,4.0);
+  
+  sprintf(hstname,"t_Qp2_eta_%i",k);
+  ht_Qp2_eta[k]=new TH3F(hstname,hstname,100,0,0.5,100,0,10,100,0,5);
+  ht_Qp2_eta[k]->SetTitle(";#eta;Q'2(GeV^{2});t(GeV^{2})");      
+  sprintf(hstname,"Qp2_eta_%i",k);
+  hQp2_eta[k]=new TH2F(hstname,hstname,100,0,0.5,100,0,10);
+  hQp2_eta[k]->SetTitle(";#eta;Q'2(GeV^{2})");
+  sprintf(hstname,"Qp2_t_%i",k);  
+  hQp2_t[k]=new TH2F(hstname,hstname,100,0,5,100,0,10);
+  hQp2_t[k]->SetTitle(";t(GeV^{2});Q'2(GeV^{2})");  
 }
 
 double weight[m];
@@ -238,7 +301,7 @@ sprintf(input_filename, "grp.root");
 
   Bool_t scatPhiBool, scat_e_calo;
 
-  int counter1=0,counter2=0,counter3=0,counter4=0,counter5=0;
+  int counter1=0,counter2=0,counter3=0,counter4=0,counter5=0,counter6=0;
   
   Int_t counter;
   Int_t countd = 1;
@@ -257,7 +320,7 @@ sprintf(input_filename, "grp.root");
 	cout << "|" << endl;
       }
     }
-
+//     cout << i << endl;
     h1->GetEvent(i);
 
     if(i<3) {
@@ -289,21 +352,36 @@ sprintf(input_filename, "grp.root");
     
     double InvM_epm1=(ep+em).M();
     double InvM_epm2=(ep+kp).M();	
-	  
+    double Qp2=InvM_epm1*InvM_epm1;
+      
     double Q2=-(ki-kp).M2();
     double W=(ki-kp+targ).M();
 //         double W=(prot+ep+em).M();    
+    double xbj=Q2/2/(ki*(ep+em));        
     double t=-(prot-targ).M2();
+    double delta2=-t;    
     double m1=(ki-kp).M(),m2=targ.M(),m3=3.097,m4=prot.M();
     double s=W*W;
+    
     double E1cm=(s+m1*m1-m2*m2)/(2*sqrt(s)),E3cm=(s+m3*m3-m4*m4)/(2*sqrt(s));
     double p1cm=sqrt(E1cm*E1cm-m1*m1),p3cm=sqrt(E3cm*E3cm-m3*m3);
     double tmin= -(pow(E1cm-E3cm,2) - pow(p1cm-p3cm,2));
     double tmax= -(pow(E1cm-E3cm,2) - pow(p1cm+p3cm,2));    
     
+     double tau=Qp2*Qp2/(s-targ.M()*targ.M());
+//       double eta=tau/(2-tau);   
+//       double eta=Qp2/(2*s-2*M*M-Qp2);   //       tau/(2-tau)=Qp2/(2*s-2*M*M-Qp2)
+//       double eta=Qp2/(2*(s-M*M)-Qp2-t);  //this is detailed defination  
+//      double eta=Qp2/(2*s-Qp2);       //eta in TCS is similar to xi in DVCS 
+     
+     //according to DDVCS
+     double xi=(Q2-Qp2+delta2/2.)/(2.*Q2/xbj-Q2-Qp2+delta2);
+     double eta=(Q2+Qp2)/(2.*Q2/xbj-Q2-Qp2+delta2);     
+      
 // cout << W << endl;
 // cout << (kp+prot+ep+em).P() <<  " " << (kp+prot+ep+em).Theta() << endl;
 
+     if (Q2<1) continue;
     //    hem_theta->Fill(kp.Theta());
     //    hem_phi->Fill(kp.Phi());
 
@@ -356,7 +434,7 @@ sprintf(input_filename, "grp.root");
       double acc=0;      
       double acc_prot=0,acc_kp=0,acc_em=0,acc_ep=0;
       if (detector=="CLAS12"){
-	  //note CLAS12 phi (0,360), TCS sim phi (-180,180) 	
+	  //note CLAS12 phi (0,360), grape-dilepton sim phi (-180,180) 	
 	  acc_prot=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(prot_phi+180,prot_theta,prot_mom));
 	  acc_ep=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(ep_phi+180,ep_theta,ep_mom));
 	  acc_kp=hacceptance_PThetaPhi_negative->GetBinContent(hacceptance_PThetaPhi_negative->FindBin(kp_phi+180,kp_theta,kp_mom));	  
@@ -373,30 +451,35 @@ sprintf(input_filename, "grp.root");
 // 	  if (acc_kp < 0.9) acc_kp=0;
 // 	  if (acc_em < 0.9) acc_em=0; 
 	    	  
-	  //for with both electron
-// 	  if ((acc_kp>0 && 5<em_theta && em_theta<36 && kp_mom < 4.9) && (acc_em>0 && 5<em_theta && em_theta<36 && em_mom < 4.9)) {whichone=1;} // both in main detector 
-// 	  else if ((acc_kp>0 && 5<em_theta && em_theta<36 && kp_mom < 4.9) && 2.5<em_theta && em_theta <4.5) {acc_em=1.;whichone=2;}
-// // 	  else if ((acc_em>0 && 5<em_theta && em_theta<36 && em_mom < 4.9) && 2.5<em_theta && em_theta <4.5) {acc_kp=1.;whichone=3;}
-// 	  else {acc_kp=0; acc_em=0; whichone=4;}
- 
-// 	  if (ep_theta>36 || ep_mom > 4.9) acc_ep=0; //lepton has no detection at central detector
+	  //lepton has no detection at central detector, nor when higher than 4.9GeV HTCC threshold at forward detetor
+	  if (ep_theta>36 || (ep_theta<=36 && ep_mom > 4.9)) acc_ep=0;
+	  if (em_theta>36 || (em_theta<=36 && em_mom > 4.9)) acc_em=0;
+	  if (kp_theta>36 || (kp_theta<=36 && kp_mom > 4.9)) acc_kp=0;
+	  
+	  //for both electron
+	  if (acc_ep>0 && acc_em>0 && acc_kp>0)	{acc=acc_ep*acc_em*acc_kp; whichone=1;}  //both in main detector
+	  else if (acc_ep>0 && acc_em>0 && (2.5 <=kp_theta && kp_theta<=4.5)) {acc=acc_ep*acc_em*1; whichone=2;} //one in forard tagger
+	  else if (acc_ep>0 && (2.5 <=em_theta && em_theta<=4.5) && acc_kp>0) {acc=acc_ep*1*acc_kp; whichone=3;}	//the other in forard tagger  
+	  else if (acc_ep>0 && (2.5 <=em_theta && em_theta<=4.5) && (2.5 <=kp_theta && kp_theta<=4.5)) {acc=acc_ep*1*1; whichone=4;}	 //both in forard tagger 
+	  else if (acc_ep>0) {acc=0; whichone=5;} //positron detected, but not both electron detected
+	  else {acc=0; whichone=0;}  //all other cases
+	  	    
 // 	  if (prot_theta>36 && prot_mom > 1) acc_prot=0;
 // 	  if (prot_theta<36 && prot_mom > 4) acc_prot=0;
 	  
-	  acc=acc_prot*acc_ep*acc_kp*acc_em;
-	  
-	  if ((2.5 <=em_theta && em_theta<=4.5) || (2.5 <=kp_theta && kp_theta<=4.5)) {}
-	  else acc=0;
-	  
+// 	  acc=acc_prot*acc_ep*acc_kp*acc_em;
+// 	  acc=acc_ep*acc_kp*acc_em;	  
+
 	  if (acc>0){
-	    if (whichone==1) {counter1++; acc=0;}  //don't count both in main detector
+	    if (whichone==1) {counter1++; }
 	    else if (whichone==2) counter2++;
 	    else if (whichone==3) counter3++;
+	    else if (whichone==4) counter4++;	    
 	    else cout << "something wrong" << endl;
 	  }
 	  else {
-	    if (whichone==4) counter4++;
-	    else counter5++;
+	    if (whichone==5) counter5++;
+	    else counter6++;
 	  }
 // 	  if (acc==0 && whichone!=4) cout << "kkkkkkkkkkkkkk" << endl;
 	  
@@ -408,19 +491,23 @@ sprintf(input_filename, "grp.root");
 // 	  if (prot_theta >36) res_index_proton=1;
 	   
       }
-      else if (detector=="SoLID"){
+      else if (detector=="SoLID_DDVCS_JPsi"){
 	  //sim phi (-180,180)	
 	  acc_prot=hacceptance_ThetaP_forwardangle->GetBinContent(hacceptance_ThetaP_forwardangle->FindBin(prot_theta,prot_mom));
-	  acc_ep=hacceptance_ThetaP_forwardangle->GetBinContent(hacceptance_ThetaP_forwardangle->FindBin(ep_theta,ep_mom));
 	  acc_kp=hacceptance_ThetaP_forwardangle->GetBinContent(hacceptance_ThetaP_forwardangle->FindBin(kp_theta,kp_mom));	  
-	  acc_em=hacceptance_ThetaP_forwardangle->GetBinContent(hacceptance_ThetaP_forwardangle->FindBin(em_theta,em_mom));	  
+	  
+	  acc_ep=hacceptance_ThetaP_forwardangle_muon->GetBinContent(hacceptance_ThetaP_forwardangle_muon->FindBin(ep_theta,ep_mom));	  
+	  acc_em=hacceptance_ThetaP_forwardangle_muon->GetBinContent(hacceptance_ThetaP_forwardangle_muon->FindBin(em_theta,em_mom));	  
 	
 	  acc_prot += hacceptance_ThetaP_largeangle->GetBinContent(hacceptance_ThetaP_largeangle->FindBin(prot_theta,prot_mom));
-	  acc_ep += hacceptance_ThetaP_largeangle->GetBinContent(hacceptance_ThetaP_largeangle->FindBin(ep_theta,ep_mom));
 	  acc_kp += hacceptance_ThetaP_largeangle->GetBinContent(hacceptance_ThetaP_largeangle->FindBin(kp_theta,kp_mom));	  
-	  acc_em += hacceptance_ThetaP_largeangle->GetBinContent(hacceptance_ThetaP_largeangle->FindBin(em_theta,em_mom));	
+	  
+	  acc_ep += hacceptance_ThetaP_largeangle_muon->GetBinContent(hacceptance_ThetaP_largeangle_muon->FindBin(ep_theta,ep_mom));  
+	  acc_em += hacceptance_ThetaP_largeangle_muon->GetBinContent(hacceptance_ThetaP_largeangle_muon->FindBin(em_theta,em_mom));	
 	   
-	  acc=acc_prot*acc_ep*acc_kp*acc_em;	  
+// 	  acc=acc_prot*acc_ep*acc_kp*acc_em;	  
+	  acc=acc_kp*acc_ep*acc_em;	  	  	  
+// 	  acc=acc_prot*acc_ep*acc_em;	  	  	  	  
 	  
 // 	  if (acc>0){
 // 	    if (whichone==1) {counter1++; acc=0;}
@@ -433,11 +520,29 @@ sprintf(input_filename, "grp.root");
 // 	    else counter5++;
 // 	  }
       }      
+      else if (detector=="SoLID_DDVCS_PVDIS"){
+	  //sim phi (-180,180)	
+
+	  acc_prot=0;
+	  acc_kp=hacceptance_ThetaP_forwardangle->GetBinContent(hacceptance_ThetaP_forwardangle->FindBin(kp_theta,kp_mom));	  
+
+	  if (10<ep_theta && ep_theta<35) acc_ep=1;
+	  if (10<em_theta && em_theta<35) acc_em=1;	  
+// 	  acc_ep=hacceptance_ThetaP_forwardangle->GetBinContent(hacceptance_ThetaP_forwardangle->FindBin(ep_theta,ep_mom));	  
+// 	  acc_em=hacceptance_ThetaP_forwardangle->GetBinContent(hacceptance_ThetaP_forwardangle->FindBin(em_theta,em_mom));	  
+	  
+// 	  acc_ep=hacceptance_ThetaP_forwardangle_muon->GetBinContent(hacceptance_ThetaP_forwardangle_muon->FindBin(ep_theta,ep_mom));	  
+// 	  acc_em=hacceptance_ThetaP_forwardangle_muon->GetBinContent(hacceptance_ThetaP_forwardangle_muon->FindBin(em_theta,em_mom));	  
+
+// 	  	cout << acc_kp << "\t" << acc_ep << "\t" << acc_em << endl;
+		
+// 	  acc=acc_prot*acc_ep*acc_kp*acc_em;	  
+	  acc=acc_kp*acc_ep*acc_em;	  	  	  
+// 	  acc=acc_prot*acc_ep*acc_em;	  	  	  	  
+	  
+      }     
       else {cout << "wrong detector" << endl;}
-      
-      //      pb = 1e-36 cm2, lumi 1e35/cm2/s, 120 days, 0.85 eff
-      double count_convert = 1e-36*1e35*3600*24*120*0.85;
-      
+           
       weight[0]=1;
       weight[1]=acc;
       weight[2]=acc*effxsec;
@@ -445,6 +550,11 @@ sprintf(input_filename, "grp.root");
 	      
       for(Int_t k=0; k < m; k++){  
 	if(k>0 && acc==0) continue;
+	
+	ht_Qp2_eta[k]->Fill(eta,Qp2,t,weight[k]);
+	hQp2_eta[k]->Fill(eta,Qp2,weight[k]);
+	hQp2_t[k]->Fill(t,Qp2,weight[k]);
+	
 	hThetaP[0][k]->Fill(kp_theta,kp_mom,weight[k]);
 	hThetaP[1][k]->Fill(prot_theta,prot_mom,weight[k]);	
 	hThetaP[2][k]->Fill(em_theta,em_mom,weight[k]);
@@ -455,28 +565,40 @@ sprintf(input_filename, "grp.root");
 	hThetaPhi[2][k]->Fill(em_theta,em_phi,weight[k]);
 	hThetaPhi[3][k]->Fill(ep_theta,ep_phi,weight[k]);
 
+	hdecayangle1[k]->Fill(ep_theta,em_theta,weight[k]);
+	if (Is_inter) hdecayangle2[k]->Fill(ep_theta,kp_theta,weight[k]);	
+	
 	hlepIM_2D[k]->Fill(InvM_epm1,InvM_epm2,weight[k]);
 	
 	hlepIM1[k]->Fill(InvM_epm1,weight[k]);
-	hlepIM2[k]->Fill(InvM_epm2,weight[k]);
+	if (Is_inter) hlepIM2[k]->Fill(InvM_epm2,weight[k]);
 
 	hlepIM[k]->Fill(InvM_epm1,weight[k]);
-	hlepIM[k]->Fill(InvM_epm2,weight[k]);	
+	if (Is_inter) hlepIM[k]->Fill(InvM_epm2,weight[k]);
 	
 // 	if (whichone==2) hlepIM[k]->Fill(InvM_epm1,weight[k]);
 // 	else if (whichone==3) hlepIM[k]->Fill(InvM_epm2,weight[k]);
       }
       
-	if ( 3.0 < InvM_epm1 && InvM_epm1 < 3.25 ) {
-	  hW->Fill(W,weight[2]);	  
-	  hWstat->Fill(W,weight[2]);	  
-	  hlepIM_W->Fill(InvM_epm1,W,weight[2]);
-	  hlepIM_W->Fill(InvM_epm2,W,weight[2]);	  	  	  	  
-	  hQ2W->Fill(W,Q2,weight[2]);
-	  htW->Fill(W,t-tmin,weight[2]);    
-	  htminW->Fill(W,tmin,weight[2]);    
-	  htmaxW->Fill(W,tmax,weight[2]);
-	  ht->Fill(t-tmin,weight[2]);	    
+	if ( 2.0 < InvM_epm1 && InvM_epm1 < 3.0 ) {      
+// 	if ( 3.0 < InvM_epm1 && InvM_epm1 < 3.25 ) {
+// 	if (3.0 < InvM_epm1 && InvM_epm1 < 3.25) || (Is_inter && (3.0 < InvM_epm2 && InvM_epm2 < 3.25)) ) {
+	  hW->Fill(W,weight[3]);	  
+	  hWstat->Fill(W,weight[3]);	    
+	  htmin_W->Fill(W,tmin,weight[3]);    
+	  htmax_W->Fill(W,tmax,weight[3]);
+	  ht->Fill(t,weight[3]);	  
+	  
+	  ht_Qp2->Fill(t,Qp2,weight[3]);
+	  ht_W->Fill(t,W,weight[3]);
+	  ht_Q2->Fill(t,Q2,weight[3]);    	  	  
+	  ht_eta->Fill(t,eta,weight[3]);  
+	  
+	  hxi_eta->Fill(xi,eta,weight[3]);  
+	  hxbj_eta->Fill(xbj,eta,weight[3]);  
+	  hxbj_xi->Fill(xbj,xi,weight[3]);
+	  ht_xi->Fill(t,xi,weight[3]);  	  
+	  
 	}
 		
 	  //      hkpth->Fill(180.0 -kp.Theta()/D2R, effxsec);
@@ -496,7 +618,7 @@ sprintf(input_filename, "grp.root");
 //      cout << i << endl; 
   }
   
-  cout << counter1 << " " << counter2 << " " << counter3 << " " << counter4 << " " << counter5 << endl;
+  cout << "counter " << counter1 << " " << counter2 << " " << counter3 << " " << counter4 << " " << counter5 << " " << counter6 <<  endl;
 
   TCanvas *c_ThetaP = new TCanvas("ThetaP","ThetaP",1200,900);
   c_ThetaP->Divide(4,m-2);
@@ -535,25 +657,117 @@ sprintf(input_filename, "grp.root");
       hlepIM_2D[k]->Draw("colz");   
   }
   
+  TCanvas *c_decayangle1 = new TCanvas("decayangle1","decayangle1",1200,900);
+  hdecayangle1[3]->Draw("colz");  
+
+  TCanvas *c_decayangle2 = new TCanvas("decayangle2","decayangle2",1200,900);
+  hdecayangle2[3]->Draw("colz");  
   
-  TCanvas *c_lepIM1_xsec = new TCanvas("lepIM1_xsec","lepIM1_xsec",900,900);
+  TCanvas *c_lepIM1_xsec = new TCanvas("lepIM1_xsec","lepIM1_xsec",1200,900);
   hlepIM1[2]->SetTitle(";l^{+}l^{-} InvM (GeV);d#sigma (pb)");  
   hlepIM1[2]->Draw();
 
-  TCanvas *c_lepIM1_count = new TCanvas("lepIM1_count","lepIM1_count",900,900);
-  hlepIM1[3]->SetTitle(";l^{+}l^{-} InvM (GeV);count of (lumi 1e35/cm2/s 120 days 85% eff)");    
+  TCanvas *c_lepIM1_count = new TCanvas("lepIM1_count","lepIM1_count",1200,900);
+  hlepIM1[3]->SetTitle(";l^{+}l^{-} InvM (GeV);count");    
   hlepIM1[3]->Draw();
   
-  TCanvas *c_lepIM_xsec = new TCanvas("lepIM_xsec","lepIM_xsec",900,900);
+  TCanvas *c_lepIM2_xsec = new TCanvas("lepIM2_xsec","lepIM2_xsec",1200,900);
+  hlepIM2[2]->SetTitle(";l^{+}l^{-} InvM (GeV);d#sigma (pb)");  
+  hlepIM2[2]->Draw();
+
+  TCanvas *c_lepIM2_count = new TCanvas("lepIM2_count","lepIM2_count",1200,900);
+  hlepIM2[3]->SetTitle(";l^{+}l^{-} InvM (GeV);count");    
+  hlepIM2[3]->Draw();  
+  
+  TCanvas *c_lepIM_xsec = new TCanvas("lepIM_xsec","lepIM_xsec",1200,900);
   hlepIM[2]->SetTitle(";l^{+}l^{-} InvM (GeV);d#sigma (pb)");  
   hlepIM[2]->Draw();
 
-  TCanvas *c_lepIM_count = new TCanvas("lepIM_count","lepIM_count",900,900);
-  hlepIM[3]->SetTitle(";l^{+}l^{-} InvM (GeV);count of (lumi 1e35/cm2/s 120 days 85% eff)");    
-  hlepIM[3]->Draw();  
+  TCanvas *c_lepIM_count = new TCanvas("lepIM_count","lepIM_count",1200,900);
+  hlepIM[3]->SetTitle(";l^{+}l^{-} InvM (GeV);count");    
+  hlepIM[3]->Draw();
 
   cout << "BH " <<  hlepIM[3]->Integral();
-/*  
+  
+  
+TCanvas *c_t_Qp2_eta = new TCanvas("t_Qp2_eta","t_Qp2_eta",1600,800);
+c_t_Qp2_eta->Divide(3,1);
+c_t_Qp2_eta->cd(1);
+gPad->SetLogz();
+ht_Qp2_eta[0]->SetTitle("generated");
+ht_Qp2_eta[0]->Draw("box");
+c_t_Qp2_eta->cd(2);
+gPad->SetLogz();
+ht_Qp2_eta[1]->SetTitle("detected");
+ht_Qp2_eta[1]->Draw("box");
+c_t_Qp2_eta->cd(3);
+gPad->SetLogz();
+TH3F *hacc_t_Qp2_eta=(TH3F*)ht_Qp2_eta[1]->Clone();
+hacc_t_Qp2_eta->Divide(ht_Qp2_eta[0]);
+hacc_t_Qp2_eta->SetMinimum(0);
+hacc_t_Qp2_eta->SetMaximum(1);
+hacc_t_Qp2_eta->SetNameTitle("acc_t_Qp2_eta","acceptance");
+hacc_t_Qp2_eta->Draw("box");
+
+TCanvas *c_Qp2_eta = new TCanvas("Qp2_eta","Qp2_eta",1600,800);
+c_Qp2_eta->Divide(3,1);
+c_Qp2_eta->cd(1);
+gPad->SetLogz();
+hQp2_eta[0]->SetTitle("generated");
+hQp2_eta[0]->Draw("colz");
+c_Qp2_eta->cd(2);
+gPad->SetLogz();
+hQp2_eta[1]->SetTitle("detected");
+hQp2_eta[1]->Draw("colz");
+c_Qp2_eta->cd(3);
+gPad->SetLogz();
+TH2F *hacc_Qp2_eta=(TH2F*)hQp2_eta[1]->Clone();
+hacc_Qp2_eta->Divide(hQp2_eta[0]);
+hacc_Qp2_eta->SetMinimum(0);
+hacc_Qp2_eta->SetMaximum(1);
+hacc_Qp2_eta->SetNameTitle("acc_Qp2_eta","acceptance");
+hacc_Qp2_eta->Draw("colz");
+
+TCanvas *c_Qp2_t = new TCanvas("Qp2_t","Qp2_t",1600,800);
+c_Qp2_t->Divide(3,1);
+c_Qp2_t->cd(1);
+gPad->SetLogz();
+hQp2_t[0]->SetTitle("generated");
+hQp2_t[0]->Draw("colz");
+c_Qp2_t->cd(2);
+gPad->SetLogz();
+hQp2_t[1]->SetTitle("detected");
+hQp2_t[1]->Draw("colz");
+c_Qp2_t->cd(3);
+gPad->SetLogz();
+TH2F *hacc_Qp2_t=(TH2F*)hQp2_t[1]->Clone();
+hacc_Qp2_t->Divide(hQp2_t[0]);
+hacc_Qp2_t->SetMinimum(0);
+hacc_Qp2_t->SetMaximum(1);
+hacc_Qp2_t->SetNameTitle("acc_Qp2_t","acceptance");
+hacc_Qp2_t->Draw("colz");
+
+  TCanvas *c_kinematic_1 = new TCanvas("kinematic_1","kinematic_1",1200,900);
+  c_kinematic_1 ->Divide(2,2);  
+  c_kinematic_1 ->cd(1);
+  ht_Qp2->Draw("colz");
+  c_kinematic_1 ->cd(2);
+  ht_W->Draw("colz");
+  c_kinematic_1 ->cd(3);
+  ht_Q2->Draw("colz");
+  c_kinematic_1 ->cd(4);
+  ht_eta->Draw("colz");
+  
+  TCanvas *c_kinematic_2 = new TCanvas("kinematic_2","kinematic_2",1200,900);  
+  c_kinematic_2->Divide(2,2);  
+  c_kinematic_2->cd(1);
+  hxi_eta->Draw("colz");
+  c_kinematic_2->cd(2);
+  hxbj_eta->Draw("colz");
+  c_kinematic_2->cd(3);
+  hxbj_xi->Draw("colz");
+  c_kinematic_2->cd(4);
+  ht_xi->Draw("colz");
   
 //   TCanvas *can12 = new TCanvas("can12","",1200,900);
 //   gStyle->SetOptStat(0);  
@@ -568,25 +782,25 @@ sprintf(input_filename, "grp.root");
 //   hlepIM_count->Draw();
 //   hlepIM_count->SetLineWidth(3.5);
 
-  TCanvas *can = new TCanvas("can","can",1200,900);
-  can->Divide(3,2);  
-  can->cd(1);
-  hW->GetXaxis()->SetTitle("W");
-  hW->GetYaxis()->SetTitle("d#sigma (pb/10 MeV)");
-  hW->Draw();  
-  can->cd(2);
-  hWstat->GetXaxis()->SetTitle("Wstat");
-  hWstat->GetYaxis()->SetTitle("number of event per day/ 10MeV");
-  hWstat->Draw();   
-  can->cd(3);
-  hQ2W->Draw("colz");
-  can->cd(4);
-  htW->Draw("colz");
-  can->cd(5);
-  htminW->Draw("colz");
-  htmaxW->Draw("colz same");  
-  can->cd(6);
-  ht->Draw();
+//   TCanvas *can = new TCanvas("can","can",1200,900);
+//   can->Divide(3,2);  
+//   can->cd(1);
+//   hW->GetXaxis()->SetTitle("W");
+//   hW->GetYaxis()->SetTitle("d#sigma (pb/10 MeV)");
+//   hW->Draw();  
+//   can->cd(2);
+//   hWstat->GetXaxis()->SetTitle("Wstat");
+//   hWstat->GetYaxis()->SetTitle("number of event per day/ 10MeV");
+//   hWstat->Draw();   
+//   can->cd(3);
+//   hQp2W->Draw("colz");
+//   can->cd(4);
+//   htW->Draw("colz");
+//   can->cd(5);
+//   htminW->Draw("colz");
+//   htmaxW->Draw("colz same");  
+//   can->cd(6);
+//   ht->Draw();
   
 //   TCanvas *can4 = new TCanvas("can4","can4",1200,800);
 //   can4->Divide(3,2);
@@ -622,5 +836,5 @@ sprintf(input_filename, "grp.root");
      
 outputfile->Write();
 outputfile->Flush();      
-*/
+
 }

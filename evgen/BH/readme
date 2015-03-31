@@ -22,7 +22,8 @@ No cut can be applied on any of them without careful consideration, like PMIN,PM
 4. output has two trees "h1" including event info and "h11" including xsec[0] is total crossection in pb for the simulated phasespace, divide it by number of event generated to have the weight factor
 
 ** known problem **
-1. occasionally, integ wouldn't end because grid calculation can't converge for certain configuration. 2. spring seems have a fixed random seed, so every time it generator the same file. 3. spring will crash when events go more than 2.9M due to unknown reason.
+1. occasionally, integ wouldn't end because grid calculation can't converge for certain configuration. 2. spring seems have a fixed random seed, so every time it generator the same file. 
+3. spring will crash when events go more than 2.9M due to unknown reason.
 
 =====analysis code ==================================================
 anaGrape.C can be used to analyze the output tree "grp.root" from grape-dilepton
@@ -38,9 +39,9 @@ http://hallaweb.jlab.org/12GeV/SoLID/download/sim/acceptance/
 
 cd your_directoty_where_grp.root_is 
 cp acceptance_root_file ../
-.x anaGrape.C+("SoLID")
+.x anaGrape.C+("SoLID",true)
 
-The parameter can be SoLID or CLAS12
+The parameter can be SoLID or CLAS12 for detector, true or false for inter or not
 
 root2lund.C to convert "grp.root" to "grp.lund" with vertex info added in, use it after compiling otherwise it takes large mem and too slow, run it in the dir where "grp.root" is
 root -b -q 'root2lund.C+'

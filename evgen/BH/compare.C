@@ -3,38 +3,74 @@
 gStyle->SetPalette(1);
 gStyle->SetOptStat(0);
 
-const int n=4;
+// const int n=4;
+// char *name[n]={"BHinterNO","BHinter","Compton","QED"};
+const int n=3;
+char *name[n]={"BH_muon_3fold_decaypairproton_deg5-50","BH_muon_3fold_decaypairelectron_deg5-50","BH_muon_4fold_deg5-50"};
 
-char *name[n]={"BHinterNO","BHinter","Compton","QED"};
+char *label[n]={"recoil proton and decay pair","scattered e- and decay pair","all 4 particles"};
 
-TFile *file[n];
+int color[3]={kBlack,kRed,kGreen};
 
-// file[0]=new TFile("zwzhao_4fold_BHinterference.root");
-// file[1]=new TFile("zwzhao_4fold_Compton.root");
-// file[2]=new TFile("zwzhao_4fold_QEDdiagrams.root");
-
-TH1F *h[n];
-
+TFile *file[6];
+TH1F *h[6];
 TCanvas *c = new TCanvas("c","c",1000,800);
-TText *label;
+TLegend* leg = new TLegend(0.75, 0.9-0.05*6, 0.95, 0.95);
 for (Int_t i=0;i<n;i++) {
-  file[i]=new TFile(Form("4fold_%s.root",name[i]));  
-  h[i]=(TH1F*) file[i]->Get("hlepIM");
+//   cout << Form("%s/grp_out.root",name[i]) << endl;
+//   file[i]=new TFile(Form("%s/acceptance_forward/grp_out.root",name[i]));  
+//   file[i]=new TFile(Form("%s/acceptance_forwardandlarge/grp_out.root",name[i]));    
+  file[i]=new TFile(Form("%s/grp_out.root",name[i]));      
+
+  h[i]=(TH1F*) file[i]->Get("lepIM1_3");
 //   hacceptance_P[i]=(TH1F*) file[i]->Get("acceptance_P");
 //   hacceptance_Theta[i]=(TH1F*) file[i]->Get("acceptance_Theta");
 //   hacceptance_Q2[i]=(TH1F*) file[i]->Get("acceptance_Q2");
- h[i]->SetLineColor(i+1); 
- h[i]->SetMaximum(1.5e-5); 
+//  h[i]->SetLineColor(i+1); 
+   h[i]->SetLineColor(color[i]);
+ h[i]->SetMaximum(5e5); 
+//  h[i]->SetMaximum(1.5e-5);  
  cout << i << endl;
  if (i==0) h[i]->Draw();
  else h[i]->Draw("same");
  
-label = new TText(0.5,8e-6+i*2e-6,name[i]);
-label->SetTextColor(i+1);
-label->SetTextSize(0.05);
-label->Draw();
+// label = new TText(0.5,8e-6+i*2e-6,name[i]);
+// label = new TText(0.5,8e-6+i*2e-6,name[i]); 
+// label->SetTextColor(i+1);
+// label->SetTextSize(0.05);
+// label->Draw();
+  leg->AddEntry(h[i], label[i],"l");  
  
 }
+
+for (Int_t i=3;i<6;i++) {
+//   cout << Form("%s/grp_out.root",name[i]) << endl;
+//   file[i]=new TFile(Form("%s/acceptance_forward/grp_out.root",name[i]));  
+  file[i]=new TFile(Form("%s/acceptance_forwardandlarge/grp_out.root",name[i-3]));    
+//   file[i]=new TFile(Form("%s/grp_out.root",name[i]));      
+
+  h[i]=(TH1F*) file[i]->Get("lepIM1_3");
+//   hacceptance_P[i]=(TH1F*) file[i]->Get("acceptance_P");
+//   hacceptance_Theta[i]=(TH1F*) file[i]->Get("acceptance_Theta");
+//   hacceptance_Q2[i]=(TH1F*) file[i]->Get("acceptance_Q2");
+//  h[i]->SetLineColor(i+1); 
+   h[i]->SetLineColor(color[i-3]);
+   h[i]->SetLineStyle(2);   
+ h[i]->SetMaximum(5e5); 
+//  h[i]->SetMaximum(1.5e-5);  
+ cout << i << endl;
+  h[i]->Draw("same");
+ 
+// label = new TText(0.5,8e-6+i*2e-6,name[i]);
+// label = new TText(0.5,8e-6+i*2e-6,name[i]); 
+// label->SetTextColor(i+1);
+// label->SetTextSize(0.05);
+// label->Draw();
+  leg->AddEntry(h[i], label[i-3],"l");  
+ 
+}
+
+leg->Draw();
 
 /*
 TH2F *h=(TH2F*) h1->Clone();
