@@ -302,13 +302,13 @@ void GenerateGEMCLundFile(G2PPhysBase *pPhys,double beame, double lumi, double n
   //rate=eff_cross_sec in cm^2 * luminosity in cm^-2.s^-1 / nevents
   double M = 0.931494028;//in GeV
   TRandom *r3 = new TRandom3();
-  double mom_p = r3->Uniform(0,beame);
+  double mom_p;
   double theta_max = 90 * kDEG ;
   double theta_min = 0 * kDEG ;
   double phi;
   double Q2,w2;
   double x;
-  double theta = r3->Uniform(theta_min,theta_max);
+  double theta;
   double xs_pbosted =0.;
   double rate;
 
@@ -329,7 +329,7 @@ void GenerateGEMCLundFile(G2PPhysBase *pPhys,double beame, double lumi, double n
     phi = r3->Uniform(0,2*3.14159);
     //kinematics
     mom_p = r3->Uniform(0,beame);
-    theta = r3->Uniform(theta_min,theta_max);
+    theta = acos(r3->Uniform(cos(theta_max),cos(theta_min));
     Q2=4.*beame*mom_p*pow((sin(abs(theta)/2.)),2); 
     w2=pow(M,2)+2.*M*(beame-mom_p)-Q2;
     x = Q2/(2.0*M*(beame-mom_p));
