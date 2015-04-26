@@ -46,13 +46,13 @@ this plot histograms showing hits and store them in
 
 using the resulting root file from background.C as input which is hard coded in the scripts
 
-old style code reading histogram produced by background.C
+old style code reading histogram produced by background.C and cut according to trigger curves
 **********************************************
 Edep.C    calculate energy deposited in EC
 trigger_EC_PVDIS.C("high") or trigger_EC_PVDIS.C("low") calculate EC trigger rate for PVDIS
 trigger_EC_SIDIS_MIP.C("SIDIS_FA")   calculate EC MIP trigger rate for SIDIS
 trigger_EC_SIDIS.C()   calculate EC electron trigger rate for SIDIS, choose "SIDIS_FA" or "SIDIS_LA"
-trigger_EC_JPsi.C()   calculate EC electron trigger rate for JPsi, choose "SIDIS_FA" or "SIDIS_LA", using SIDIS ftrigger file for now
+trigger_EC_JPsi.C()   calculate EC electron trigger rate for JPsi, choose "SIDIS_FA" or "SIDIS_LA", using SIDIS trigger file for now
 **********************************************
 
 new style code (need some explaination here ......)

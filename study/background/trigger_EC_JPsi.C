@@ -36,7 +36,8 @@ void trigger_EC_JPsi()
 // 	else if (region=="SIDIS_LA") region_index=1;
 // 	else {cout << "need option for FA or LA region" << endl; exit(-1);}
 
-	double factor=1.;  //PVDIS need this factor 2 because rate calculation is for 2pi azimuthal, but SIDIS
+	double factor=1.;  //only PVDIS need this factor as 2 because high and low area only takes half of full azimuthal	
+	
 
 // 	const int m=9;
 // 	char* input_filename[m]={
@@ -58,19 +59,20 @@ void trigger_EC_JPsi()
 // 	double mass[m]={0.1396,0.1396,0.1396,0.1396,0.1396,0.1396,0.,0.,0.};
 // 	int color[m]={1,2,4,1,2,4,1,2,4,};
 
-	const int m=5;
+	const int m=6;
 	char* input_filename[m]={
 	    "background_solid_JPsi_LH2_clean_weighted_eDIS_filenum1_1e6_output.root",	  
 	    "background_solid_JPsi_LH2_dirty_normalized_pim_filenum44_4.4e5_output.root",
 	    "background_solid_JPsi_LH2_dirty_normalized_pip_filenum43_4.3e5_output.root",
-	    "background_solid_JPsi_LH2_dirty_normalized_pi0_filenum99_9.9e5_output.root",	    
+	    "background_solid_JPsi_LH2_dirty_normalized_pi0_filenum99_9.9e5_output.root",
+	    "background_solid_JPsi_LH2_dirty_normalized_pi0_filenum99_9.9e5_output.root",	      
 	    "background_solid_JPsi_LH2_dirty_normalized_p_filenum66_6.6e4_output.root"
 	};
-	int pid[m]={2,6,5,1,4};
-	char *label[m]={"e(DIS)","#pi^{-}(DIS)","#pi^{+}(DIS)","#gamma(#pi^{0}(DIS))","p(DIS)"};
+	int pid[m]={2,6,5,1,2,4};
+	char *label[m]={"e","#pi^{-}","#pi^{+}","#gamma(#pi^{0})","e(#pi^{0})","p"};
 	// char *label[m]={"e(EM)","#pi^{-}(EM)","#pi^{+}(EM)","#gamma(EM)","p(EM)"};
-	double mass[m]={0.0005,0.1396,0.1396,0.,0.938};
-	int color[m]={1,2,4,6,30};
+	double mass[m]={0.0005,0.1396,0.1396,0.,0.0005,0.938};
+	int color[m]={1,2,4,6,25,30};
 
 	/*EC Electron Trigger{{{*/
 	const int Ntrigline=6,Ntriglinebin=21;
@@ -135,7 +137,7 @@ void trigger_EC_JPsi()
 // 		file_trig_cut[1][i][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Large_RunPion_GetEfficienciesBackGround_Oct2013_SIDIS_Full_bgd_TrigSH2.0.root",Trigger_Dir_1GeVCut.Data()));
 // 	}
 
-	//JPsi trigger borrow SIDIS trigger 2GeV for now
+	//JPsi trigger borrow SIDIS trigger 4GeV at FAEC and 2GeV at LAEC for now
 	TString Trigger_Dir_Rad="../triggerfile/SIDIS_He3_201311/cutRadial_innerbackground/";
 	//Forward Angle Trigger
 	for (int i=0;i<Ntrigline;i++){
@@ -144,8 +146,8 @@ void trigger_EC_JPsi()
 	}	
 	//Large Angle Trigger
 	for (int i=0;i<Ntrigline;i++){
-	  file_trig_cut[1][i][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH3.5.root",Trigger_Dir_Rad.Data()));
-	  file_trig_cut[1][i][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH3.5.root",Trigger_Dir_Rad.Data()));
+	  file_trig_cut[1][i][0]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunElectron_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root",Trigger_Dir_Rad.Data()));
+	  file_trig_cut[1][i][1]=new TFile(Form("%s/Lead2X0PbBlock_Hex.1.SIDIS_Forward_RunPion_GetEfficiencies_BackGround_Oct2013_SIDIS_TrigSH1.6.root",Trigger_Dir_Rad.Data()));
 	}
 	
 	char *gr_trig_cut_ele_name[2][Ntrigline],*gr_trig_cut_pi_name[2][Ntrigline];
@@ -244,9 +246,23 @@ void trigger_EC_JPsi()
 			if (i!=3) hPlog_R[j][i]->SetAxisRange(-3,1.1,"Y");  
 			hPlog_R[j][i]->Draw("colz");
 
-			hfluxR_proj[j][i]= (TH1F*) hPlog_R[j][i]->ProjectionX();
-			//   hfluxR_proj[j][i]->Scale(1/5.);  
-			//   hfluxR_proj[j][i]->Rebin(5);
+// 			hfluxR_proj[j][i]= (TH1F*) hPlog_R[j][i]->ProjectionX();
+			hfluxR_proj[j][i]= (TH1F*) hPlog_R[j][i]->ProjectionX("_px",1,hPlog_R[j][i]->GetNbinsY());			
+// 			hfluxR_proj[j][i]= (TH1F*) hEklog_R[j][i]->ProjectionX("_px",1,hEklog_R[j][i]->GetNbinsY());		
+// 			  hfluxR_proj[j][i]->Scale(1/5.);  
+// 			  hfluxR_proj[j][i]->Rebin(5);
+			  
+			//remove bin below Rmin
+// 			int bin,binx,biny,binz;
+// 			int bin = hfluxR_proj[j][i]->FindBin(Rmin[region_index]);  
+// 			hfluxR_proj[j][i]->GetBinXYZ(bin,binx,biny,binz);
+// 			int bin_Rmin=binx;
+			int bin_Rmin=hfluxR_proj[j][i]->FindBin(Rmin[region_index]);		
+			
+			for(int l=1;l<=hfluxR_proj[j][i]->GetNbinsX();l++){			
+			  if (l<bin_Rmin) hfluxR_proj[j][i]->SetBinContent(l,0);
+			}
+			
 			c_fluxR_ec_proj->cd(j+1);
 			gPad->SetLogy(1);      
 			hfluxR_proj[j][i]->SetLineColor(color[i]);
@@ -312,9 +328,18 @@ void trigger_EC_JPsi()
 
 				c_fluxR_ec_proj->cd(j+1);
 				gPad->SetLogy(1);  
-				hfluxR_trig[j][i]= (TH1F*) hPlog_R_trig[j][i]->ProjectionX();
-				//   hfluxR_trig[j][i]->Scale(1/5.);  //change from 1cm to 5cm bin
-				//   hfluxR_trig[j][i]->Rebin(5); //change from 1cm to 5cm bin
+// 				hfluxR_trig[j][i]= (TH1F*) hPlog_R_trig[j][i]->ProjectionX();
+				hfluxR_trig[j][i]= (TH1F*) hPlog_R_trig[j][i]->ProjectionX("_px",1,hPlog_R_trig[j][i]->GetNbinsY());	 // do this to remove underflow and overflow bin content				
+// 				hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX("_px",1,hEklog_R_trig[j][i]->GetNbinsY());   // do this to remove underflow and overflow bin content				
+// 				hfluxR_trig[j][i]->Scale(1/5.);  //change from 1cm to 5cm bin
+// 				hfluxR_trig[j][i]->Rebin(5); //change from 1cm to 5cm bin
+				
+				//remove bin below Rmin
+				bin_Rmin=hfluxR_trig[j][i]->FindBin(Rmin[region_index]);		
+				for(int l=1;l<=hfluxR_trig[j][i]->GetNbinsX();l++){			
+				  if (l<bin_Rmin) hfluxR_trig[j][i]->SetBinContent(l,0);
+				}
+			
 				hfluxR_trig[j][i]->SetLineStyle(7);  
 				hfluxR_trig[j][i]->SetLineColor(color[i]);
 				hfluxR_trig[j][i]->SetMinimum(1e-7);
@@ -401,7 +426,7 @@ void trigger_EC_JPsi()
 				}
 				// c_fluxR_ec_trig->cd(j+1);
 				{
-					TPaveText *pt1 = new TPaveText(0.65,0.70-m*0.05,0.99,0.70,"brNDC");
+					TPaveText *pt1 = new TPaveText(0.65,0.65-m*0.05,0.99,0.65,"brNDC");
 					// TPaveLabel *pt1 = new TPaveLabel(0.7,0.5,0.95,0.95,"a \n b \r sdfhdfghdsfkghdkfghdshgh","brNDC");
 					pt1->SetFillColor(19);
 					pt1->SetTextAlign(12);
