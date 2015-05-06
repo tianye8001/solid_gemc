@@ -34,20 +34,25 @@ string type;
 string treename;
 int pid_decay;
 double mass_decay;
-if (output_filename.find("SoLID_TCS_ele",0) != string::npos) {
-  type="SoLID_TCS_ele";
+if (output_filename.find("CLAS12_TCS_FTSetup_ele",0) != string::npos) {
+  type="CLAS12_TCS_FTSetup_ele";
   pid_decay=11;mass_decay=0.000511;
   treename="TCS_Tree";
 }
-else if (output_filename.find("SoLID_DDVCS_muon",0) != string::npos) {
-  type="SoLID_DDVCS_muon";
+else if (output_filename.find("SoLID_TCS_JPsiSetup_ele",0) != string::npos) {
+  type="SoLID_TCS_JPsiSetup_ele";
+  pid_decay=11;mass_decay=0.000511;
+  treename="TCS_Tree";
+}
+else if (output_filename.find("SoLID_DDVCS_JPsiSetup_muon",0) != string::npos) {
+  type="SoLID_DDVCS_JPsiSetup_muon";
   pid_decay=13;mass_decay=0.10567;
   treename="DDVCS_Tree";
 }
 else {cout << "not sure what type" << endl; return 0;}
 
 char *title_cut[5]={"gen","accep_individual","accep_3fold_recoildecaypair","accep_3fold_eloutdecaypair","accep_4fold"};
-char *title_par[4]={"scattered e^{-}","recoil p","decay e^{-}","decay e^{+}"};  
+char *title_par[4]={"scat e^{-}","recoil p","decay l^{-}","decay l^{+}"};  
 TH2F *h[5][4];
 for(int i=0;i<5;i++){
   for(int j=0;j<4;j++){    
@@ -58,25 +63,42 @@ for(int i=0;i<5;i++){
   }
 }
 
+TH3F *hacceptance_PThetaPhi_positive,*hacceptance_PThetaPhi_negative;
+TH2F *hacceptance_ThetaP_forwardangle,*hacceptance_ThetaP_largeangle;
+TH2F *hacceptance_ThetaP_forwardangle_muon,*hacceptance_ThetaP_largeangle_muon;
+
+if (type=="CLAS12_TCS_FTSetup_ele") {
+  TFile *acceptancefile=new TFile("clasev_acceptance.root");  
+  hacceptance_PThetaPhi_positive=(TH3F*) acceptancefile->Get("acceptance_PThetaPhi_pip");  
+  hacceptance_PThetaPhi_negative=(TH3F*) acceptancefile->Get("acceptance_PThetaPhi_ele");
+  TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1200,900);
+  c_acceptance->Divide(2,1);
+  c_acceptance->cd(1);
+  hacceptance_PThetaPhi_positive->Draw();
+  c_acceptance->cd(2);
+  hacceptance_PThetaPhi_negative->Draw(); 
+}    
+else if (type=="SoLID_DDVCS_JPsiSetup_muon" || type=="SoLID_TCS_JPsiSetup_ele") {
   TFile *acceptancefile=new TFile("acceptance_solid_JPsi_electron_target315_output.root");    
-  TH2F *hacceptance_ThetaP_forwardangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_forwardangle");  
-  TH2F *hacceptance_ThetaP_largeangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_largeangle");
+  hacceptance_ThetaP_forwardangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_forwardangle");  
+  hacceptance_ThetaP_largeangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_largeangle");
   TCanvas *c_acceptance_solid = new TCanvas("acceptance_solid","acceptance_solid",1200,900);
   c_acceptance_solid->Divide(2,1);
   c_acceptance_solid->cd(1);
   hacceptance_ThetaP_forwardangle->Draw("colz");
   c_acceptance_solid->cd(2);
-  hacceptance_ThetaP_largeangle->Draw("colz");  
+  hacceptance_ThetaP_largeangle->Draw("colz");
 
   TFile *acceptancefile_muon=new TFile("acceptance_solid_DDVCS_JPsi_LH2_muonp_target315_output.root");    
-  TH2F *hacceptance_ThetaP_forwardangle_muon=(TH2F*) acceptancefile_muon->Get("acceptance_ThetaP_forwardangle");  
-  TH2F *hacceptance_ThetaP_largeangle_muon=(TH2F*) acceptancefile_muon->Get("acceptance_ThetaP_largeangle");  
+  hacceptance_ThetaP_forwardangle_muon=(TH2F*) acceptancefile_muon->Get("acceptance_ThetaP_forwardangle");  
+  hacceptance_ThetaP_largeangle_muon=(TH2F*) acceptancefile_muon->Get("acceptance_ThetaP_largeangle");  
   TCanvas *c_acceptance_muon_solid = new TCanvas("acceptance_muon_solid","acceptance_muon_solid",1200,900);
   c_acceptance_muon_solid->Divide(2,1);
   c_acceptance_muon_solid->cd(1);
   hacceptance_ThetaP_forwardangle_muon->Draw("colz");
   c_acceptance_muon_solid->cd(2);
   hacceptance_ThetaP_largeangle_muon->Draw("colz"); 
+}
 
 // char output_filename[200];
 // sprintf(output_filename,"%s_accep.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
@@ -218,7 +240,38 @@ for (Int_t i=0;i<nentries;i++) {
     
   int bin,binx,biny,binz;
 
-  if (type=="SoLID_TCS_ele") {
+  if (type=="CLAS12_TCS_FTSetup_ele") {
+    //note CLAS12 acceptance phi (0,360), TLonrenzvector.Phi (-180,180) 	    
+    if (LV_recoil_lab.Theta()*DEG<=35){
+      accep_recoil_1=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(LV_recoil_lab.Phi()*DEG+180,LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P()));
+    }
+    else{
+      accep_recoil_2=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(LV_recoil_lab.Phi()*DEG+180,LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P()));
+    }
+    if (LV_plus_lab.Theta()*DEG<=35){
+      accep_plus_1=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(LV_plus_lab.Phi()*DEG+180,LV_plus_lab.Theta()*DEG,LV_plus_lab.P()));
+    }
+    else{
+      accep_plus_2=0;
+    }
+    if (LV_minus_lab.Theta()*DEG<=35){
+      accep_minus_1=hacceptance_PThetaPhi_negative->GetBinContent(hacceptance_PThetaPhi_negative->FindBin(LV_minus_lab.Phi()*DEG+180,LV_minus_lab.Theta()*DEG,LV_minus_lab.P()));
+    }
+    else{
+      accep_minus_2=0;
+    }
+    if (2.5<= LV_el_out.Theta()*DEG && LV_el_out.Theta()*DEG<=4.5){
+      accep_el_out_1=1;  //within forward tagger
+    }
+    else{
+      accep_el_out_2=0;
+    }
+
+    accep_4fold =  (accep_el_out_1+accep_el_out_2)*(accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+    accep_3fold_eloutdecaypair =  (accep_el_out_1+accep_el_out_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+    accep_3fold_recoildecaypair =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+  }
+  else if (type=="SoLID_TCS_JPsiSetup_ele") {
     bin=hacceptance_ThetaP_forwardangle->FindBin(LV_el_out.Theta()*DEG,LV_el_out.P());  
     hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
     accep_el_out_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);
@@ -238,14 +291,14 @@ for (Int_t i=0;i<nentries;i++) {
     hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
     accep_recoil_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);
     accep_recoil_2 = hacceptance_ThetaP_largeangle->GetBinContent(binx,biny); 
-    
+   
     accep_4fold = 0;    
     accep_3fold_eloutdecaypair = 0;  
     // at least one decay particles goes forward to use Cherenkov
     if (accep_minus_2 > 0 && accep_plus_2 > 0) accep_3fold_recoildecaypair=0;
     else accep_3fold_recoildecaypair =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
   }
-  else if (type=="SoLID_DDVCS_muon") {  
+  else if (type=="SoLID_DDVCS_JPsiSetup_muon") {  
     bin=hacceptance_ThetaP_forwardangle->FindBin(LV_el_out.Theta()*DEG,LV_el_out.P());  
     hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
     accep_el_out_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);
@@ -266,8 +319,8 @@ for (Int_t i=0;i<nentries;i++) {
     accep_recoil_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);
     accep_recoil_2 = hacceptance_ThetaP_largeangle->GetBinContent(binx,biny); 
     
-    accep_4fold =  (accep_el_out_1+accep_el_out_1)*(accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
-    accep_3fold_eloutdecaypair =  (accep_el_out_1+accep_el_out_1)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+    accep_4fold =  (accep_el_out_1+accep_el_out_2)*(accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+    accep_3fold_eloutdecaypair =  (accep_el_out_1+accep_el_out_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
     accep_3fold_recoildecaypair =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
   }  
 //   cout << "theta " << LV_el_out.Theta()*DEG << " " << LV_minus_lab.Theta()*DEG <<  " " << LV_plus_lab.Theta()*DEG << " " << LV_recoil_lab.Theta()*DEG <<endl;
@@ -333,8 +386,9 @@ for (Int_t i=0;i<nentries;i++) {
 }
 
 int n;
-if (type=="SoLID_TCS_ele") {n=3;}
-else if (type=="SoLID_DDVCS_muon") {n=5;}
+if (type=="SoLID_TCS_JPsiSetup_ele") {n=3;}
+else if (type=="SoLID_DDVCS_JPsiSetup_muon") {n=5;}
+else if (type=="CLAS12_TCS_FTSetup_ele") {n=5;}
 
 TCanvas *c_ThetaP = new TCanvas("ThetaP","ThetaP",1200,900);
 c_ThetaP->Divide(4,n);

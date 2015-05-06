@@ -6,11 +6,9 @@ accep.C gets the acceptance of a detector is provided by histograms in an accept
 then check every particles and record its acceptace by in new tree entry
 Double_t accep_el_out_1,accep_minus_1,accep_plus_1,accep_recoil_1;
 Double_t accep_el_out_2,accep_minus_2,accep_plus_2,accep_recoil_2;
-Double_t accep;
-accep*1 means acceptance by forwardangle detetor of SoLID, accep*2 means acceptance by largeangle detector of SoLID
-accep means the total acceptance for SoLID
-  if (accep_minus_2 > 0 && accep_plus_2 > 0) accep=0;
-  else accep =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+Double_t accep_3fold_recoildecaypair;
+Double_t accep_3fold_eloutdecaypair;
+Double_t accep_4fold;
   
 Some monitoring plots are drawn and saved during running  accep.C
 acceptance.png shows detector acceptance
@@ -22,11 +20,12 @@ TCS_Tree_infos.txt explain the tree entries
 
 == how to run ==
 cd /u/scratch/zwzhao/
-cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_SoLID_TCS_ele.root
-cp /u/scratch/mboer/DDVCS_allxbj.root DDVCS_allxbj_SoLID_DDVCS_muon.root
+cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_CLAS12_TCS_FTSetup_ele.root
+cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_SoLID_TCS_JPsiSetup_ele.root
+cp /u/scratch/mboer/DDVCS_allxbj.root DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root
 
 cd /home/zwzhao/solid/solid_svn/solid/evgen/dilepton/
 enter root, then run
-.x accep.C+("/u/scratch/zwzhao/TCS_electro2_SoLID_TCS_ele.root")
-.x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_muon.root")
-
+.x accep.C+("/u/scratch/zwzhao/TCS_electro2_CLAS12_TCS_FTSetup_ele.root")
+.x accep.C+("/u/scratch/zwzhao/TCS_electro2_SoLID_TCS_JPsiSetup_ele.root")
+.x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root")
