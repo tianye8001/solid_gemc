@@ -17,6 +17,9 @@ acceptance.png shows detector acceptance
 ThetaP.png show 4 final particles generated, with individual acceptance, with overall acceptance in three rows
  
 output particles info into a txt format LUND file is there, but commented out for now
+
+TCS_Tree_infos.txt explain the tree entries
+
 == how to run ==
 cd /u/scratch/zwzhao/
 cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_solid.root
