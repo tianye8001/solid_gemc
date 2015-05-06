@@ -21,7 +21,7 @@
 
 using namespace std;
 
-int accep(string output_filename,string acceptance_filename,char *treename,string decay_particle)
+int accep(string output_filename)
 {
 gROOT->Reset();
 gStyle->SetPalette(1);
@@ -30,44 +30,53 @@ gStyle->SetOptStat(0);
 const double DEG=180./3.1415926;
 // const double DEG=1;
 
+string type;
+string treename;
 int pid_decay;
 double mass_decay;
-// cout << decay_particle<< endl;
-if(decay_particle=="ele") {pid_decay=11;mass_decay=0.000511;}
-else if(decay_particle=="muon") {pid_decay=13;mass_decay=0.10567;}
-else {cout << "not sure what decay particle" << endl; return 0;}
+if (output_filename.find("SoLID_TCS_ele",0) != string::npos) {
+  type="SoLID_TCS_ele";
+  pid_decay=11;mass_decay=0.000511;
+  treename="TCS_Tree";
+}
+else if (output_filename.find("SoLID_DDVCS_muon",0) != string::npos) {
+  type="SoLID_DDVCS_muon";
+  pid_decay=13;mass_decay=0.10567;
+  treename="DDVCS_Tree";
+}
+else {cout << "not sure what type" << endl; return 0;}
 
-TH2F *h[3][4];
-for(int i=0;i<3;i++){
+char *title_cut[5]={"gen","accep_individual","accep_3fold_recoildecaypair","accep_3fold_eloutdecaypair","accep_4fold"};
+char *title_par[4]={"scattered e^{-}","recoil p","decay e^{-}","decay e^{+}"};  
+TH2F *h[5][4];
+for(int i=0;i<5;i++){
   for(int j=0;j<4;j++){    
    char hstname[100];  
-   sprintf(hstname,"ThetaP_%i_%i",i,j);
+   sprintf(hstname,"ThetaP_%i%i",i,j);   
    h[i][j]=new TH2F(hstname,hstname,100,0,100,220,0,11);
+   h[i][j]->SetTitle(Form("BH, %s, %s;#theta (deg);P(GeV)",title_par[j],title_cut[i]));
   }
 }
 
-TFile *file1;
-TH2F *hf,*hl;
-file1 = new TFile(acceptance_filename.c_str());    
-if (file1->IsZombie()) {
-  cout << "Error opening acceptance file" << acceptance_filename << endl;       
-  return 0;
-}
-else {
-  cout << "open acceptance file " << acceptance_filename << endl;    
-  hf = (TH2F*)file1->Get("acceptance_ThetaP_forwardangle");
-  hl = (TH2F*)file1->Get("acceptance_ThetaP_largeangle");	
-//   hf = (TH2F*)file1->Get("acceptance_forwardangle");
-//   hl = (TH2F*)file1->Get("acceptance_largeangle");	  
-}	
-    
-TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1200,900);
-c_acceptance->Divide(2,1);
-c_acceptance->cd(1);
-hf->Draw("colz");
-c_acceptance->cd(2);
-hl->Draw("colz");
-c_acceptance->SaveAs("acceptance.png");
+  TFile *acceptancefile=new TFile("acceptance_solid_JPsi_electron_target315_output.root");    
+  TH2F *hacceptance_ThetaP_forwardangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_forwardangle");  
+  TH2F *hacceptance_ThetaP_largeangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_largeangle");
+  TCanvas *c_acceptance_solid = new TCanvas("acceptance_solid","acceptance_solid",1200,900);
+  c_acceptance_solid->Divide(2,1);
+  c_acceptance_solid->cd(1);
+  hacceptance_ThetaP_forwardangle->Draw("colz");
+  c_acceptance_solid->cd(2);
+  hacceptance_ThetaP_largeangle->Draw("colz");  
+
+  TFile *acceptancefile_muon=new TFile("acceptance_solid_DDVCS_JPsi_LH2_muonp_target315_output.root");    
+  TH2F *hacceptance_ThetaP_forwardangle_muon=(TH2F*) acceptancefile_muon->Get("acceptance_ThetaP_forwardangle");  
+  TH2F *hacceptance_ThetaP_largeangle_muon=(TH2F*) acceptancefile_muon->Get("acceptance_ThetaP_largeangle");  
+  TCanvas *c_acceptance_muon_solid = new TCanvas("acceptance_muon_solid","acceptance_muon_solid",1200,900);
+  c_acceptance_muon_solid->Divide(2,1);
+  c_acceptance_muon_solid->cd(1);
+  hacceptance_ThetaP_forwardangle_muon->Draw("colz");
+  c_acceptance_muon_solid->cd(2);
+  hacceptance_ThetaP_largeangle_muon->Draw("colz"); 
 
 // char output_filename[200];
 // sprintf(output_filename,"%s_accep.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
@@ -81,10 +90,8 @@ if (file->IsZombie()) {
   exit(-1);
 }
 else cout << "open file " << output_filename << endl;
-
-
-
-TTree *T = (TTree*) file->Get("TCS_Tree");
+ 
+TTree *T = (TTree*) file->Get(treename.c_str());
 
 Long64_t EventNumber;
 Int_t VirtualFlag;
@@ -117,20 +124,20 @@ T->SetBranchAddress("tt",&tt);
 // T->SetBranchAddress("ttmin",&ttmin);
 T->SetBranchAddress("Phi_CMV",&Phi_CMV);
 T->SetBranchAddress("Theta_CMV",&Theta_CMV);
-T->SetBranchAddress("Egamma",&Egamma);
+// T->SetBranchAddress("Egamma",&Egamma);
 // T->SetBranchAddress("cross_tot",&cross_tot);
 // T->SetBranchAddress("cross_tot_unpol",&cross_tot_unpol);
 // T->SetBranchAddress("cross_BH",&cross_BH);
 // T->SetBranchAddress("cross_TCS",&cross_TCS);
-T->SetBranchAddress("W_tot",&W_tot);
+// T->SetBranchAddress("W_tot",&W_tot);
 // T->SetBranchAddress("W_tot_unpol",&W_tot_unpol);
-// T->SetBranchAddress("W_BH",&W_BH);
+T->SetBranchAddress("W_BH",&W_BH);
 // T->SetBranchAddress("W_TCS",&W_TCS);
 // T->SetBranchAddress("DeltaBin",&DeltaBin);
 // T->SetBranchAddress("LinPol",&LinPol);
 // T->SetBranchAddress("CircPol",&CircPol);
 // T->SetBranchAddress("TargetPol",&TargetPol);
-T->SetBranchAddress("VirtualFlag",&VirtualFlag);
+// T->SetBranchAddress("VirtualFlag",&VirtualFlag);
 // T->SetBranchAddress("Flux_qr",&Flux_qr);
 // T->SetBranchAddress("Flux_bmr",&Flux_bmr);
 // T->SetBranchAddress("epsilon",&epsilon);
@@ -149,7 +156,9 @@ T->SetBranchAddress("EventNumber", &EventNumber);
 
 Double_t accep_el_out_1,accep_minus_1,accep_plus_1,accep_recoil_1;
 Double_t accep_el_out_2,accep_minus_2,accep_plus_2,accep_recoil_2;
-Double_t accep;
+Double_t accep_3fold_recoildecaypair;
+Double_t accep_3fold_eloutdecaypair;
+Double_t accep_4fold;
 TBranch *bnew1 = T->Branch("accep_el_out_1",&accep_el_out_1,"data/D");
 TBranch *bnew2 = T->Branch("accep_minus_1",&accep_minus_1,"data/D");
 TBranch *bnew3 = T->Branch("accep_plus_1",&accep_plus_1,"data/D");
@@ -158,7 +167,9 @@ TBranch *bnew5 = T->Branch("accep_el_out_2",&accep_el_out_2,"data/D");
 TBranch *bnew6 = T->Branch("accep_minus_2",&accep_minus_2,"data/D");
 TBranch *bnew7 = T->Branch("accep_plus_2",&accep_plus_2,"data/D");
 TBranch *bnew8 = T->Branch("accep_recoil_2",&accep_recoil_2,"data/D");
-TBranch *bnew9 = T->Branch("accep",&accep,"data/D");
+TBranch *bnew9 = T->Branch("accep_3fold_recoildecaypair",&accep_3fold_recoildecaypair,"data/D");
+TBranch *bnew10= T->Branch("accep_3fold_eloutdecaypair",&accep_3fold_eloutdecaypair,"data/D");
+TBranch *bnew11= T->Branch("accep_4fold",&accep_4fold,"data/D");
 
 //   ofstream OUT ("out.lund");
 
@@ -166,7 +177,7 @@ TBranch *bnew9 = T->Branch("accep",&accep,"data/D");
 Int_t nentries = T->GetEntries();
 cout << "nentries " << nentries << endl;
 
-for (Int_t i=0;i<nentries/10;i++) {
+for (Int_t i=0;i<nentries;i++) {
 // for (Int_t i=0;i<5;i++) {
 //   cout << "EventNumber " << EventNumber << "\r";
   T->GetEvent(i);
@@ -207,48 +218,92 @@ for (Int_t i=0;i<nentries/10;i++) {
     
   int bin,binx,biny,binz;
 
-  bin=hf->FindBin(LV_el_out.Theta()*DEG,LV_el_out.P());  
-  hf->GetBinXYZ(bin,binx,biny,binz);
-  accep_el_out_1 = hf->GetBinContent(binx,biny);
-  accep_el_out_2 = hl->GetBinContent(binx,biny);
+  if (type=="SoLID_TCS_ele") {
+    bin=hacceptance_ThetaP_forwardangle->FindBin(LV_el_out.Theta()*DEG,LV_el_out.P());  
+    hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
+    accep_el_out_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);
+    accep_el_out_2 = hacceptance_ThetaP_largeangle->GetBinContent(binx,biny);
 
-  bin=hf->FindBin(LV_minus_lab.Theta()*DEG,LV_minus_lab.P());
-  hf->GetBinXYZ(bin,binx,biny,binz);
-  accep_minus_1 = hf->GetBinContent(binx,biny);  
-  accep_minus_2 = hl->GetBinContent(binx,biny);
-  
-  bin=hf->FindBin(LV_plus_lab.Theta()*DEG,LV_plus_lab.P());
-  hf->GetBinXYZ(bin,binx,biny,binz);
-  accep_plus_1 = hf->GetBinContent(binx,biny);  
-  accep_plus_2 = hl->GetBinContent(binx,biny);
+    bin=hacceptance_ThetaP_forwardangle->FindBin(LV_minus_lab.Theta()*DEG,LV_minus_lab.P());
+    hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
+    accep_minus_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);  
+    accep_minus_2 = hacceptance_ThetaP_largeangle->GetBinContent(binx,biny);
+    
+    bin=hacceptance_ThetaP_forwardangle->FindBin(LV_plus_lab.Theta()*DEG,LV_plus_lab.P());
+    hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
+    accep_plus_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);  
+    accep_plus_2 = hacceptance_ThetaP_largeangle->GetBinContent(binx,biny);
 
-  bin=hf->FindBin(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P());  
-  hf->GetBinXYZ(bin,binx,biny,binz);
-  accep_recoil_1 = hf->GetBinContent(binx,biny);
-  accep_recoil_2 = hl->GetBinContent(binx,biny);
+    bin=hacceptance_ThetaP_forwardangle->FindBin(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P());  
+    hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
+    accep_recoil_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);
+    accep_recoil_2 = hacceptance_ThetaP_largeangle->GetBinContent(binx,biny); 
+    
+    accep_4fold = 0;    
+    accep_3fold_eloutdecaypair = 0;  
+    // at least one decay particles goes forward to use Cherenkov
+    if (accep_minus_2 > 0 && accep_plus_2 > 0) accep_3fold_recoildecaypair=0;
+    else accep_3fold_recoildecaypair =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+  }
+  else if (type=="SoLID_DDVCS_muon") {  
+    bin=hacceptance_ThetaP_forwardangle->FindBin(LV_el_out.Theta()*DEG,LV_el_out.P());  
+    hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
+    accep_el_out_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);
+    accep_el_out_2 = hacceptance_ThetaP_largeangle->GetBinContent(binx,biny);
 
-  if (accep_minus_2 > 0 && accep_plus_2 > 0) accep=0;
-  else accep =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
-  
+    bin=hacceptance_ThetaP_forwardangle_muon->FindBin(LV_minus_lab.Theta()*DEG,LV_minus_lab.P());
+    hacceptance_ThetaP_forwardangle_muon->GetBinXYZ(bin,binx,biny,binz);
+    accep_minus_1 = hacceptance_ThetaP_forwardangle_muon->GetBinContent(binx,biny);  
+    accep_minus_2 = hacceptance_ThetaP_largeangle_muon->GetBinContent(binx,biny);
+    
+    bin=hacceptance_ThetaP_forwardangle_muon->FindBin(LV_plus_lab.Theta()*DEG,LV_plus_lab.P());
+    hacceptance_ThetaP_forwardangle_muon->GetBinXYZ(bin,binx,biny,binz);
+    accep_plus_1 = hacceptance_ThetaP_forwardangle_muon->GetBinContent(binx,biny);  
+    accep_plus_2 = hacceptance_ThetaP_largeangle_muon->GetBinContent(binx,biny);
+
+    bin=hacceptance_ThetaP_forwardangle->FindBin(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P());  
+    hacceptance_ThetaP_forwardangle->GetBinXYZ(bin,binx,biny,binz);
+    accep_recoil_1 = hacceptance_ThetaP_forwardangle->GetBinContent(binx,biny);
+    accep_recoil_2 = hacceptance_ThetaP_largeangle->GetBinContent(binx,biny); 
+    
+    accep_4fold =  (accep_el_out_1+accep_el_out_1)*(accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+    accep_3fold_eloutdecaypair =  (accep_el_out_1+accep_el_out_1)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+    accep_3fold_recoildecaypair =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+  }  
 //   cout << "theta " << LV_el_out.Theta()*DEG << " " << LV_minus_lab.Theta()*DEG <<  " " << LV_plus_lab.Theta()*DEG << " " << LV_recoil_lab.Theta()*DEG <<endl;
 //   cout << "p " << LV_el_out.P() << " " << LV_minus_lab.P() <<  " " << LV_plus_lab.P() << " " << LV_recoil_lab.P() <<endl;
   
-  h[0][0]->Fill(LV_el_out.Theta()*DEG,LV_el_out.P());
-  h[0][1]->Fill(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P());    
-  h[0][2]->Fill(LV_minus_lab.Theta()*DEG,LV_minus_lab.P());    
-  h[0][3]->Fill(LV_plus_lab.Theta()*DEG,LV_plus_lab.P());
+  h[0][0]->Fill(LV_el_out.Theta()*DEG,LV_el_out.P(),W_BH);
+  h[0][1]->Fill(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P(),W_BH);    
+  h[0][2]->Fill(LV_minus_lab.Theta()*DEG,LV_minus_lab.P(),W_BH);    
+  h[0][3]->Fill(LV_plus_lab.Theta()*DEG,LV_plus_lab.P(),W_BH);
   
-  if (accep_el_out_1+accep_el_out_2 > 0) h[1][0]->Fill(LV_el_out.Theta()*DEG,LV_el_out.P());
-  if (accep_recoil_1+accep_recoil_2 > 0) h[1][1]->Fill(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P());    
-  if (accep_minus_1+accep_minus_2 > 0) h[1][2]->Fill(LV_minus_lab.Theta()*DEG,LV_minus_lab.P());    
-  if (accep_plus_1+accep_plus_2 > 0) h[1][3]->Fill(LV_plus_lab.Theta()*DEG,LV_plus_lab.P());
+  if (accep_el_out_1+accep_el_out_2 > 0) h[1][0]->Fill(LV_el_out.Theta()*DEG,LV_el_out.P(),W_BH);
+  if (accep_recoil_1+accep_recoil_2 > 0) h[1][1]->Fill(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P(),W_BH);    
+  if (accep_minus_1+accep_minus_2 > 0) h[1][2]->Fill(LV_minus_lab.Theta()*DEG,LV_minus_lab.P(),W_BH);    
+  if (accep_plus_1+accep_plus_2 > 0) h[1][3]->Fill(LV_plus_lab.Theta()*DEG,LV_plus_lab.P(),W_BH);
 
-  if (accep>0){
-  h[2][0]->Fill(LV_el_out.Theta()*DEG,LV_el_out.P());
-  h[2][1]->Fill(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P());    
-  h[2][2]->Fill(LV_minus_lab.Theta()*DEG,LV_minus_lab.P());    
-  h[2][3]->Fill(LV_plus_lab.Theta()*DEG,LV_plus_lab.P());
+  if (accep_3fold_recoildecaypair>0){
+  h[2][0]->Fill(LV_el_out.Theta()*DEG,LV_el_out.P(),W_BH);
+  h[2][1]->Fill(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P(),W_BH);    
+  h[2][2]->Fill(LV_minus_lab.Theta()*DEG,LV_minus_lab.P(),W_BH);    
+  h[2][3]->Fill(LV_plus_lab.Theta()*DEG,LV_plus_lab.P(),W_BH);
   }
+  
+  if (accep_3fold_eloutdecaypair>0){
+  h[3][0]->Fill(LV_el_out.Theta()*DEG,LV_el_out.P(),W_BH);
+  h[3][1]->Fill(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P(),W_BH);    
+  h[3][2]->Fill(LV_minus_lab.Theta()*DEG,LV_minus_lab.P(),W_BH);    
+  h[3][3]->Fill(LV_plus_lab.Theta()*DEG,LV_plus_lab.P(),W_BH);
+  }
+
+  if (accep_4fold>0){
+  h[4][0]->Fill(LV_el_out.Theta()*DEG,LV_el_out.P(),W_BH);
+  h[4][1]->Fill(LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P(),W_BH);    
+  h[4][2]->Fill(LV_minus_lab.Theta()*DEG,LV_minus_lab.P(),W_BH);    
+  h[4][3]->Fill(LV_plus_lab.Theta()*DEG,LV_plus_lab.P(),W_BH);
+  }
+  
   
   //HallD
   // 		  if (3 < theta_je1 && theta_je1 <140)  accep_minus = 1.;
@@ -273,11 +328,17 @@ for (Int_t i=0;i<nentries/10;i++) {
    bnew7->Fill();
    bnew8->Fill();
    bnew9->Fill();       
+   bnew10->Fill();
+   bnew11->Fill();          
 }
 
+int n;
+if (type=="SoLID_TCS_ele") {n=3;}
+else if (type=="SoLID_DDVCS_muon") {n=5;}
+
 TCanvas *c_ThetaP = new TCanvas("ThetaP","ThetaP",1200,900);
-c_ThetaP->Divide(4,3);
-for(int i=0;i<3;i++){
+c_ThetaP->Divide(4,n);
+for(int i=0;i<n;i++){
   for(int j=0;j<4;j++){    
    c_ThetaP->cd(i*4+j+1);
    gPad->SetLogz();
@@ -287,7 +348,7 @@ for(int i=0;i<3;i++){
     h[i][j]->Draw("colz");
   }
 }
-c_ThetaP->SaveAs("ThetaP.png");
+c_ThetaP->SaveAs(Form("BH_ThetaP_%s.png",type.c_str()));
 
 // OUT.close();
 T->Write();

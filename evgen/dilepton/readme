@@ -1,5 +1,5 @@
 == Intro ==
-first copy the root file produced by the generator to a new file
+first copy the root file produced by the generator to a new file with special name
 The run the accep.C code
 
 accep.C gets the acceptance of a detector is provided by histograms in an acceptance file
@@ -22,7 +22,11 @@ TCS_Tree_infos.txt explain the tree entries
 
 == how to run ==
 cd /u/scratch/zwzhao/
-cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_solid.root
+cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_SoLID_TCS_ele.root
+cp /u/scratch/mboer/DDVCS_allxbj.root DDVCS_allxbj_SoLID_DDVCS_muon.root
 
+cd /home/zwzhao/solid/solid_svn/solid/evgen/dilepton/
 enter root, then run
-.x /home/zwzhao/solid/solid_svn/solid/evgen/dilepton/accep.C+("TCS_electro2_solid.root","acceptance_solid_JPsi_electron_target315_output.root","TCS_Tree","ele")
+.x accep.C+("/u/scratch/zwzhao/TCS_electro2_SoLID_TCS_ele.root")
+.x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_muon.root")
+
