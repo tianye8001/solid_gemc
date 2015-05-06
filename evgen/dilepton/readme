@@ -29,3 +29,12 @@ enter root, then run
 .x accep.C+("/u/scratch/zwzhao/TCS_electro2_CLAS12_TCS_FTSetup_ele.root")
 .x accep.C+("/u/scratch/zwzhao/TCS_electro2_SoLID_TCS_JPsiSetup_ele.root")
 .x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root")
+
+== info about exp==
+
+Jlab ele beam pol is 0.84+-0.01
+
+SoLID JPsi has 15cm LH2 target with 1e37/cm2/s luminosity
+
+CLAS12 has 3cm(?) LH2 target with 1e35/cm/s luminosity
+
