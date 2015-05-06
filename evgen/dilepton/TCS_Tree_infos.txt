@@ -1,0 +1,52 @@
+ ALV_minus_lab   = outgoing lepton (mu- or e-). format is 0=E, 1=px, 2= py, 3= pz (same for all 4-vectors arrays).
+ ALV_plus_lab    = outgoing antilepton (mu+ or e+)
+ ALV_gamma_in    = incoming photon
+ ALV_el_in       = electron beam in case we are working in quasi-real photoproduction
+ ALV_Recoil_lab  = recoil proton
+ ALV_el_out      = scattered electron bean in case we are working in quasi-real photoproduction
+ AV_PolTarget    = target polarization vector => not fixed !
+ AV_PolBeam      = beam polarization vector (circular component) => not fixed !
+ AV_PolBeam_Lin  = beam polarization vector (linear component) => not fixed !
+ Q2              = virtuality of incoming photon in case we are working in quasi-real photoproduction 
+ theta_beam      = scattering angle of beam electron in case we are working in quasi-real photoproduction
+ phi_beam        = azimuthal angle of beam electron in case we are working in quasi-real photoproduction
+ yy              = y=Egamma/Eelectron= inelasticity in case we are working in quasi-real photoproduction
+ Qp2             = Q'2 = invariant mass of the emitted virtual photon and of the lepton pair 
+ tt              = momentum transfert = Mandelstam variable
+ RotAxis         = arbitrary rotation of the reaction plane (radians)
+ Psi_p           = polarization angle of the target (see scheme, there are 3 arrows)
+ Psi_g           = polarization angle of the incoming photon (see scheme, there are 2 arrows)
+ ttmin           = minimal value of -t at this kinematic
+ Phi_CMV         = azimuthal angle between lepton decay plane and reaction plane (see scheme)
+ Theta_CMV       = angle between lepton direction in the frame of CM of the virtual photon and the boost direction (photon direction in gamma-P CM frame)  (see scheme)
+ Egamma          = energy of incoming photon
+ cross_tot       = total cross section taking acount polarization effects => not fixed !
+ cross_tot_unpol = total cross section
+ cross_BH        = cross section if there were only BH
+ cross_TCS       = cross section if there were only TCS
+ W_tot           = total cross section taking account connexion to the photon flux and polarization effects => not fixed !
+ W_tot_unpol     = total cross section taking account connexion to the photon flux
+ W_BH            = BH cross section taking account connexion to the photon flux
+ W_TCS           = TCS cross section taking account connexion to the photon flux
+ DeltaBin        =  => not fixed !
+ LinPol          =  => not fixed !
+ CircPol         = Polarization of the beam
+ TargetPol       =  => not fixed !
+ VirtualFlag     = if 0, the incoming photon comes from bremsstrahlung in the target, if 1, it is a quasi-real photon from interaction with low Q2
+ Flux_qr         = quasi-real photon flux = probability of photon emission at this kinematic
+ Flux_bmr        = bremsstrahlung photon flux = probability of photon emission at this kinematic
+ epsilon         = sigmaL/sigmaT (quasi-real only) => not fixed !
+ Abeam_polcirc   = Circularly polarized beam spin asymmetry
+ Abeam_pollin    = linearly polarized beam spin asymmetry
+ Atarget_long    = longitudinnaly polarized target spin asymmetry
+ Atarget_trans   = transversally polarized target spin asymmetry (in reaction plane= along px)
+ Atarget_trans_2 = transversally polarized target spin asymmetry (perpendicular to the reaction plane = along py)
+ A_circ_long     = double spin asymmetry with Circularly polarized beam and longitudinnaly polarized target
+ A_circ_trans    = double spin asymmetry with Circularly polarized beam and  transversally polarized target (in reaction plane= along px)
+ A_circ_trans_2  = double spin asymmetry with Circularly polarized beam and  transversally polarized target (perpendicular to the reaction plane = along py)
+ A_lin_long      = double spin asymmetry with linearly polarized beam and longitudinnaly polarized target
+ A_lin_trans     = double spin asymmetry with linearly polarized beam and transversally polarized target (in reaction plane= along px)
+ A_lin_trans_2   = double spin asymmetry with linearly polarized beam and transversally polarized target (perpendicular to the reaction plane = along py
+ EventNumber     = arbitrary number to recognize the event
+ TrueEventNumber = number of the event in the process. the last one gives the total number of events which were initially processed (not saved if there are out from the 'physical' phase space). The generation phase space is constant.
+

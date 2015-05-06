@@ -1,0 +1,25 @@
+== Intro ==
+first copy the root file produced by the generator to a new file
+The run the accep.C code
+
+accep.C gets the acceptance of a detector is provided by histograms in an acceptance file
+then check every particles and record its acceptace by in new tree entry
+Double_t accep_el_out_1,accep_minus_1,accep_plus_1,accep_recoil_1;
+Double_t accep_el_out_2,accep_minus_2,accep_plus_2,accep_recoil_2;
+Double_t accep;
+accep*1 means acceptance by forwardangle detetor of SoLID, accep*2 means acceptance by largeangle detector of SoLID
+accep means the total acceptance for SoLID
+  if (accep_minus_2 > 0 && accep_plus_2 > 0) accep=0;
+  else accep =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+  
+Some monitoring plots are drawn and saved during running  accep.C
+acceptance.png shows detector acceptance
+ThetaP.png show 4 final particles generated, with individual acceptance, with overall acceptance in three rows
+ 
+output particles info into a txt format LUND file is there, but commented out for now
+== how to run ==
+cd /u/scratch/zwzhao/
+cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_solid.root
+
+enter root, then run
+.x /home/zwzhao/solid/solid_svn/solid/evgen/dilepton/accep.C+("TCS_electro2_solid.root","acceptance_solid_JPsi_electron_target315_output.root","TCS_Tree","ele")
