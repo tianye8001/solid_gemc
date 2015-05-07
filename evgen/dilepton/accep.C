@@ -302,9 +302,11 @@ for (Int_t i=0;i<nentries;i++) {
    
     accep_4fold = 0;    
     accep_3fold_eloutdecaypair = 0;  
-    // at least one decay particles goes forward to use Cherenkov
-    if (accep_minus_2 > 0 && accep_plus_2 > 0) accep_3fold_recoildecaypair=0;
-    else accep_3fold_recoildecaypair =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+    // at least one decay particles goes forward to use Cherenkov 4.9GeV threshold
+    if ((accep_minus_1>0 && LV_minus_lab.P()<4.9) || (accep_plus_1>0 && LV_plus_lab.P()<4.9)){
+      accep_3fold_recoildecaypair =  (accep_recoil_1+accep_recoil_2)*(accep_minus_1+accep_minus_2)*(accep_plus_1+accep_plus_2);
+    }
+    else accep_3fold_recoildecaypair=0;
   }
   else if (type=="SoLID_DDVCS_JPsiSetup_muon") {  
     bin=hacceptance_ThetaP_forwardangle->FindBin(LV_el_out.Theta()*DEG,LV_el_out.P());  
