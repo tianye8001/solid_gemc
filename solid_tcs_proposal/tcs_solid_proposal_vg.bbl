@@ -1,0 +1,407 @@
+\begin{thebibliography}{10}
+
+\bibitem{Goeke:2001tz}
+K.~Goeke, M.V. Polyakov, and M.~Vanderhaeghen.
+\newblock Hard exclusive reactions and the structure of hadrons.
+\newblock {\em Progress in Particle and Nuclear Physics}, 47(2):401 -- 515,
+  2001, \href{http://inspirehep.net/record/557665?ln=en}{hep-ph/0106012}.
+
+\bibitem{Diehl:2003ny}
+M.~Diehl.
+\newblock Generalized parton distributions.
+\newblock {\em Physics Reports}, 388(24):41 -- 277, 2003,
+  \href{http://inspirehep.net/record/624706?ln=en}{hep-ph/0307382}.
+
+\bibitem{Belitsky:2005qn}
+A.V. Belitsky and A.V. Radyushkin.
+\newblock Unraveling hadron structure with generalized parton distributions.
+\newblock {\em Physics Reports}, 418(16):1 -- 387, 2005,
+  \href{http://inspirehep.net/record/679716?ln=en}{hep-ph/0504030}.
+
+\bibitem{Collins:1996fb}
+John~C. Collins, Leonid Frankfurt, and Mark Strikman.
+\newblock Factorization for hard exclusive electroproduction of mesons in qcd.
+\newblock {\em Phys. Rev. D}, 56:2982--3006, Sep 1997,
+  \href{http://inspirehep.net/record/426483?ln=en}{hep-ph/9611433}.
+
+\bibitem{Collins:1998be}
+John~C. Collins and Andreas Freund.
+\newblock Proof of factorization for deeply virtual compton scattering in qcd.
+\newblock {\em Phys. Rev. D}, 59:074009, Feb 1999,
+  \href{http://inspirehep.net/record/466174?ln=en}{hep-ph/9801262}.
+
+\bibitem{Ji:1996ek}
+Xiangdong Ji.
+\newblock Gauge-invariant decomposition of nucleon spin.
+\newblock {\em Phys. Rev. Lett.}, 78:610--613, Jan 1997,
+  \href{http://inspirehep.net/record/416559?ln=en}{hep-ph/9603249}.
+
+%vg 
+%\cite{Guidal:2013rya}
+\bibitem{Guidal:2013rya} 
+  M.~Guidal, H.~Moutarde and M.~Vanderhaeghen.
+\newblock Generalized Parton Distributions in the valence region from Deeply Virtual Compton Scattering.
+%  arXiv:1303.6600 [hep-ph].
+  %%CITATION = ARXIV:1303.6600;%%
+\href{http://inspirehep.net/record/1225553?ln=en}{arXiv:1303.6600}.
+
+\bibitem{Berger:2001xd}
+E.R. Berger, M.~Diehl, and B.~Pire.
+\newblock Timelike compton scattering: exclusive photoproduction of lepton
+  pairs.
+\newblock {\em The European Physical Journal C - Particles and Fields},
+  23:675--689, 2002,
+  \href{http://inspirehep.net/record/563798?ln=en}{hep-ph/0110062}.
+
+\bibitem{Guidal:2008ie}
+M.~Guidal.
+\newblock {A Fitter code for Deep Virtual Compton Scattering and Generalized
+  Parton Distributions}.
+\newblock {\em Eur. Phys. J.}, A37:319--332, 2008,
+  \href{http://inspirehep.net/record/790768?ln=en}{arXiv:0807.2355 [hep-ph]}.
+
+%vg
+%\cite{Braun:2011zr}
+\bibitem{Braun:2011zr} 
+  V.~M.~Braun and A.~N.~Manashov.
+ \newblock {Kinematic power corrections in off-forward hard reactions}.
+ \newblock{\em Phys. Rev. Lett.}, 107:202001, (2011),
+ \href{http://inspirehep.net/record/922946?ln=en}{arXiv:1108.2394 [hep-ph]]}.
+  %%CITATION = ARXIV:1108.2394;%%
+  %13 citations counted in INSPIRE as of 05 Apr 2013
+
+%\cite{Braun:2012hq}
+\bibitem{Braun:2012hq} 
+  V.~M.~Braun, A.~N.~Manashov and B.~Pirnay.
+\newblock {Finite-t and target mass corrections to deeply virtual Compton scattering}.
+\newblock{\em  Phys. Rev. Lett.}, 109: 242001, (2012),
+\href{http://inspirehep.net/record/1185275}{arXiv:1209.2559 [hep-ph]}.
+  %%CITATION = ARXIV:1209.2559;%%
+  %5 citations counted in INSPIRE as of 05 Apr 2013
+
+
+\bibitem{Moutarde:2013qs}
+H.~Moutarde, B.~Pire, F.~Sabatie, L.~Szymanowski, and J.~Wagner.
+\newblock {On timelike and spacelike deeply virtual Compton scattering at next
+  to leading order}.
+\newblock 2013, 1301.3819.
+
+\bibitem{Pire:2011st}
+B.~Pire, L.~Szymanowski, and J.~Wagner.
+\newblock Next-to-leading order corrections to timelike, spacelike, and double
+  deeply virtual compton scattering.
+\newblock {\em Phys. Rev. D}, 83:034009, Feb 2011,
+  \href{http://inspirehep.net/record/883191?ln=en}{arXiv:1101.0555 [hep-ph]}.
+
+\bibitem{Pire:2012yq}
+D.~M{\"{u}}ller, B.~Pire, L.~Szymanowski, and J.~Wagner.
+\newblock {On timelike and spacelike hard exclusive reactions}.
+\newblock 2012,
+  \href{http://inspirehep.net/record/1094310?ln=en}{arXiv:1203.4392 [hep-ph]}.
+
+\bibitem{Polyakov:2002wz}
+M.V. Polyakov and A.G. Shuvaev.
+\newblock {On'dual' parametrizations of generalized parton distributions}.
+\newblock 2002,
+  \href{http://inspirehep.net/record/590456?ln=en}{hep-ph/0207153}.
+
+\bibitem{Guzey:2006xi}
+V.~Guzey and T.~Teckentrup.
+\newblock {The Dual parameterization of the proton generalized parton
+  distribution functions H and E and description of the DVCS cross sections and
+  asymmetries}.
+\newblock {\em Phys. Rev.}, D74:054027, 2006,
+  \href{http://inspirehep.net/record/721155?ln=en}{hep-ph/0607099}.
+
+\bibitem{Guzey:2008ys}
+V.~Guzey and T.~Teckentrup.
+\newblock {On the mistake in the implementation of the minimal model of the
+  dual parameterization and resulting inability to describe the high-energy
+  DVCS data}.
+\newblock {\em Phys. Rev.}, D79:017501, 2009,
+  \href{http://inspirehep.net/record/800245?ln=en}{arXiv:0810.3899 [hep-ph]}.
+
+\bibitem{Polyakov:2008aa}
+Maxim~V. Polyakov and Kirill~M. Semenov-Tian-Shansky.
+\newblock {Dual parametrization of GPDs versus double distribution Ansatz}.
+\newblock {\em Eur. Phys. J.}, A40:181--198, 2009,
+  \href{http://inspirehep.net/record/810064?ln=en}{arXiv:0811.2901 [hep-ph]}.
+
+\bibitem{Radyushkin:1998es}
+A.V. Radyushkin.
+\newblock {Double distributions and evolution equations}.
+\newblock {\em Phys. Rev.}, D59:014030, 1999,
+  \href{http://inspirehep.net/record/470511?ln=en}{hep-ph/9805342}.
+
+\bibitem{Polyakov:1999gs}
+M.~V. Polyakov and C.~Weiss.
+\newblock Skewed and double distributions in the pion and the nucleon.
+\newblock {\em Phys. Rev. D}, 60:114017, Nov 1999,
+  \href{http://inspirehep.net/record/495824?ln=en}{hep-ph/9902451}.
+
+%vg
+%\cite{Radyushkin:2011dh}
+\bibitem{Radyushkin:2011dh} 
+  A.V. Radyushkin.
+\newblock Generalized Parton Distributions and Their Singularities.
+\newblock{\em  Phys. Rev. D}, 83:076006 (2011),
+\newblock{http://inspirehep.net/record/884128} {arXiv:1101.2165 [hep-ph]}.
+  %%CITATION = ARXIV:1101.2165;%%
+  %6 citations counted in INSPIRE as of 05 Apr 2013
+
+
+\bibitem{Jaffe:1989jz}
+R.~L. Jaffe and Aneesh Manohar.
+\newblock {The G(1) Problem: Fact and Fantasy on the Spin of the Proton}.
+\newblock {\em Nucl. Phys.}, B337:509--546, 1990,
+  \href{http://inspirehep.net/record/277754?ln=en}{[INSPIRE]}.
+
+\bibitem{Polyakov:2002yz}
+M.~V. Polyakov.
+\newblock {Generalized parton distributions and strong forces inside nucleons
+  and nuclei}.
+\newblock {\em Phys. Lett.}, B555:57--62, 2003,
+  \href{http://inspirehep.net/record/599384?ln=en}{hep-ph/0210165}.
+
+\bibitem{Goeke:2007fp}
+K.~Goeke et~al.
+\newblock {Nucleon form-factors of the energy momentum tensor in the chiral
+  quark-soliton model}.
+\newblock {\em Phys. Rev.}, D75:094021, 2007,
+  \href{http://inspirehep.net/record/743763?ln=en}{hep-ph/0702030}.
+
+\bibitem{Gockeler:2003jfa}
+M.~Gockeler et~al.
+\newblock {Generalized parton distributions from lattice QCD}.
+\newblock {\em Phys. Rev. Lett.}, 92:042002, 2004,
+  \href{http://inspirehep.net/record/617701?ln=en}{hep-ph/0304249}.
+
+\bibitem{Anikin:2007yh}
+I.V. Anikin and O.V. Teryaev.
+\newblock {Dispersion relations and subtractions in hard exclusive processes}.
+\newblock {\em Phys. Rev.}, D76:056007, 2007,
+  \href{http://inspirehep.net/record/748745?ln=en}{arXiv:0704.2185 [hep-ph]}.
+
+\bibitem{Diehl:2007jb}
+M.~Diehl and D.~Yu. Ivanov.
+\newblock {Dispersion representations for hard exclusive processes: beyond the
+  Born approximation}.
+\newblock {\em Eur. Phys. J.}, C52:919--932, 2007,
+  \href{http://inspirehep.net/record/754779?ln=en}{arXiv:0707.0351 [hep-ph]}.
+
+\bibitem{Polyakov:2007rv}
+M.V. Polyakov.
+\newblock {Tomography for amplitudes of hard exclusive processes}.
+\newblock {\em Phys. Lett.}, B659:542--550, 2008,
+  \href{http://inspirehep.net/record/755998?ln=en}{arXiv:0707.2509 [hep-ph]}.
+
+\bibitem{Brodsky:1971zh}
+Stanley~J. Brodsky, Francis~E. Close, and J.F. Gunion.
+\newblock Compton scattering and fixed poles in parton field theoretic models.
+\newblock {\em Phys. Rev.}, D5:1384, 1972,
+  \href{http://inspirehep.net/record/67180?ln=en}{[INSPIRE]}.
+
+\bibitem{Brodsky:1972vv}
+Stanley~J. Brodsky, Francis~E. Close, and J.F. Gunion.
+\newblock {Phenomenology of Photon Processes, Vector Dominance and Crucial
+  Tests for Parton Models}.
+\newblock {\em Phys. Rev.}, D6:177, 1972,
+  \href{http://inspirehep.net/record/73491?ln=en}{[INSPIRE]}.
+
+\bibitem{Brodsky:1973hm}
+Stanley~J. Brodsky, Francis~E. Close, and J.F. Gunion.
+\newblock A gauge - invariant scaling model of current interactions with regge
+  behavior and finite fixed pole sum rules.
+\newblock {\em Phys. Rev.}, D8:3678, 1973,
+  \href{http://inspirehep.net/record/81052?ln=en}{[INSPIRE]}.
+
+\bibitem{Brodsky:2008qu}
+Stanley~J. Brodsky, Felipe~J. Llanes-Estrada, and Adam~P. Szczepaniak.
+\newblock {Local Two-Photon Couplings and the J=0 Fixed Pole in Real and
+  Virtual Compton Scattering}.
+\newblock {\em Phys. Rev.}, D79:033012, 2009,
+  \href{http://inspirehep.net/record/804085?ln=en}{arXiv:0812.0395 [hep-ph]}.
+
+\bibitem{Pire:2008ea}
+B.~Pire, L.~Szymanowski, and J.~Wagner.
+\newblock Can one measure timelike compton scattering at lhc$?$.
+\newblock {\em Phys. Rev. D}, 79:014010, Jan 2009,
+  \href{http://inspirehep.net/record/801406?ln=en}{arXiv:0811.0321 [hep-ph]}.
+
+\bibitem{Petrov:1998kf}
+V.~Yu. Petrov et~al.
+\newblock {Off-forward quark distributions of the nucleon in the large N(c)
+  limit}.
+\newblock {\em Phys. Rev.}, D57:4325--4333, 1998,
+  \href{http://inspirehep.net/record/465957?ln=en}{hep-ph/9710270}.
+
+\bibitem{Freund:2002a}
+Andreas Freund and Martin McDermott.
+\newblock Next-to-leading order qcd analysis of deeply virtual compton
+  scattering amplitudes.
+\newblock {\em Phys. Rev. D}, 65:074008, Mar 2002,
+  \href{http://inspirehep.net/record/559276?ln=en}{hep-ph/0106319}.
+
+\bibitem{Freund:2002b}
+A.~Freund and M.~McDermott.
+\newblock A next-to-leading order analysis of deeply virtual compton
+  scattering.
+\newblock {\em Phys. Rev. D}, 65:091901, Apr 2002,
+  \href{http://inspirehep.net/record/558289?ln=en}{hep-ph/0106124}.
+
+\bibitem{Freund:2002c}
+A.~Freund and M.~McDermott.
+\newblock A detailed next-to-leading order qcd analysis of deeply virtual
+  compton scattering observables.
+\newblock {\em The European Physical Journal C - Particles and Fields},
+  23:651--674, 2002,
+  \href{http://inspirehep.net/record/567612?ln=en}{hep-ph/0111472}.
+
+\bibitem{MPSSzW}
+H.~Moutarde, B.~Pire, F.~Sabatie, L.~Szymanowski, and J.~Wagner.
+\newblock work in preparation.
+
+\bibitem{Anikin:2005}
+I.~V. Anikin, B.~Pire, L.~Szymanowski, O.~V. Teryaev, and S.~Wallon.
+\newblock On {BLM} scale fixing in exclusive processes.
+\newblock {\em The European Physical Journal C - Particles and Fields},
+  42:163--168, 2005,
+  \href{http://inspirehep.net/record/665654?ln=en}{hep-ph/0411408}.
+
+\bibitem{JiO:1998a}
+Xiangdong Ji and Jonathan Osborne.
+\newblock One-loop corrections and all order factorization in deeply virtual
+  compton scattering.
+\newblock {\em Phys. Rev. D}, 58:094018, Sep 1998,
+  \href{http://inspirehep.net/record/466154?ln=en}{hep-ph/9801260}.
+
+\bibitem{JiO:1998b}
+Xiangdong Ji and Jonathan Osborne.
+\newblock One-loop qcd corrections to deeply-virtual compton scattering: The
+  parton helicity-independent case.
+\newblock {\em Phys. Rev. D}, 57:1337--1340, Feb 1998,
+  \href{http://inspirehep.net/record/445270?ln=en}{hep-ph/9707254}.
+
+\bibitem{Mankiewicz:1998}
+L.~Mankiewicz, G.~Piller, E.~Stein, M.~V\"{a}nttinen, and T.~Weigl.
+\newblock {NLO} corrections to deeply-virtual {C}ompton scattering.
+\newblock {\em Physics Letters B}, 425(12):186 -- 192, 1998,
+  \href{http://inspirehep.net/record/451868?ln=en}{hep-ph/9712251}.
+
+\bibitem{Belitsky:1997rh}
+A.V. Belitsky and D.~M\"{u}ller.
+\newblock Predictions from conformal algebra for the deeply virtual compton
+  scattering.
+\newblock {\em Physics Letters B}, 417(12):129 -- 140, 1998,
+  \href{http://inspirehep.net/record/448523?ln=en}{hep-ph/9709379}.
+
+\bibitem{Belitsky:1999sg}
+A.V. Belitsky, D.~M\"{u}ller, L.~Niedermeier, and A.~Sch\"{a}fer.
+\newblock Deeply virtual compton scattering in next-to-leading order.
+\newblock {\em Physics Letters B}, 474(12):163 -- 169, 2000,
+  \href{http://inspirehep.net/record/505380?ln=en}{hep-ph/9908337}.
+
+\bibitem{Kumericki:2007sa}
+K.~Kumericki, D.~M\"{u}ller, and K.~Passek-Kumericki.
+\newblock Towards a fitting procedure for deeply virtual compton scattering at
+  next-to-leading order and beyond.
+\newblock {\em Nuclear Physics B}, 794(12):244 -- 323, 2008,
+  \href{http://inspirehep.net/record/746649?ln=en}{hep-ph/0703179 [HEP-PH]}.
+
+\bibitem{Moutarde:2009fg}
+H.~Moutarde.
+\newblock Extraction of the compton form factor $\mathcal{H}$ from deeply
+  virtual compton scattering measurements at jefferson lab.
+\newblock {\em Phys. Rev. D}, 79:094021, May 2009,
+  \href{http://inspirehep.net/record/817667?ln=en}{arXiv:0904.1648 [hep-ph]}.
+
+\bibitem{Guidal:2009aa}
+M.~Guidal and H.~Moutarde.
+\newblock Generalized parton distributions from deeply virtual compton
+  scattering at hermes.
+\newblock {\em The European Physical Journal A - Hadrons and Nuclei},
+  42:71--78, 2009,
+  \href{http://inspirehep.net/record/819736?ln=en}{arXiv:0905.1220 [hep-ph]}.
+
+\bibitem{Guidal:2010ig}
+M.~Guidal.
+\newblock Generalized parton distributions from deep virtual compton scattering
+  at {CLAS}.
+\newblock {\em Physics Letters B}, 689(45):156 -- 162, 2010,
+  \href{http://inspirehep.net/record/847105?ln=en}{arXiv:1003.0307 [hep-ph]}.
+
+\bibitem{Guidal:2010de}
+M.~Guidal.
+\newblock Constraints on the generalized parton distribution from deep virtual
+  compton scattering measured at hermes.
+\newblock {\em Physics Letters B}, 693(1):17 -- 23, 2010,
+  \href{http://inspirehep.net/record/856257?ln=en}{arXiv:1005.4922 [hep-ph]}.
+
+\bibitem{Moutarde:2010uk}
+H.~Moutarde and [on behalf of~the {CLAS}~group].
+\newblock Extraction of the {C}ompton form factor {H} from {DVCS} measurements
+  in the quark sector.
+\newblock In {\em AIP Conference Proceedings}, volume 1374, pages 133--138.
+  American Insitute of Physics, 2011,
+  \href{http://inspirehep.net/record/873597?ln=en}{arXiv:1010.4521 [hep-ph]}.
+
+\bibitem{Moutarde:2011zz}
+H.~Moutarde and [on behalf of the CLAS group~at Saclay].
+\newblock Extraction of the compton form factor \cal{H} from recent {DVCS}
+  measurements at jlab.
+\newblock In {\em Exclusive Reactions at High Momentum Transfer: Proceedings of
+  the 4th Workshop}, pages 53--60. World Scientific, 2011,
+  \href{http://inspirehep.net/record/898009?ln=en}{INSPIRE}.
+
+\bibitem{Kumericki:2011aa}
+K.~Kumericki, D.~Mueller, and A.~Schafer.
+\newblock Parametrizing compton form factors with neural networks.
+\newblock 2011,
+  \href{http://inspirehep.net/record/1080751?ln=en}{arXiv:1112.1958 [hep-ph]}.
+\newblock Presented by K.K. at Ringberg HERA workshop.
+
+\bibitem{Vanderhaeghen:1999xj}
+M.~Vanderhaeghen, Pierre~A.M. Guichon, and M.~Guidal.
+\newblock {Deeply virtual electroproduction of photons and mesons on the
+  nucleon: Leading order amplitudes and power corrections}.
+\newblock {\em Phys. Rev.}, D60:094017, 1999,
+  \href{http://inspirehep.net/record/500047?ln=en}{hep-ph/9905372}.
+
+\bibitem{Guidal:2004nd}
+M.~Guidal, M.V. Polyakov, A.V. Radyushkin, and M.~Vanderhaeghen.
+\newblock {Nucleon form-factors from generalized parton distributions}.
+\newblock {\em Phys. Rev.}, D72:054013, 2005,
+  \href{http://inspirehep.net/record/662132?ln=en}{hep-ph/0410251}.
+
+\bibitem{Rafael:2010}
+R.~Paremuzyan.
+\newblock {\em Timelike Compton Scattering}.
+\newblock PhD thesis, Yerevan, 2010.
+
+\bibitem{CLAS}
+B.A. Mecking et~al.
+\newblock The cebaf large acceptance spectrometer (clas).
+\newblock {\em Nucl. Instrum. Meth.}, A503:513--553, 2003.
+
+\bibitem{clas12}
+{CLAS12} technical design report.
+\newblock Technical report, JLAB, 2008.
+
+\bibitem{fsgen}
+Event generator for electro- and photoproduction on nucleon and nuclei, 2005.
+\newblock {CLAS} software repository.
+
+\bibitem{bh_code}
+Bethe-heitler code.
+\newblock {CLAS} software repository.
+
+\bibitem{fastmc}
+Monte-carlo program to simulate {CLAS12} detector response.
+\newblock {CLAS} software repository.
+
+\bibitem{vadim}
+V.~Guzey.
+\newblock Code for cross section calculations for {B}ethe-{H}eitler and
+  {T}imelike {C}ompton {S}cattering.
+
+\end{thebibliography}

@@ -1,0 +1,222 @@
+\documentclass[letterpaper,superscriptaddress,amsmath,amssymb,aps,11pt]{revtex4}
+%\documentclass[letterpaper,11pt,aps,floatfix]{revtex4}
+
+\usepackage[dvipdf]{graphicx}
+\usepackage{subfigure}  % For subfloats
+\usepackage{color}
+\usepackage{multirow}
+\usepackage{epsfig}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage{amsmath}
+\usepackage{footmisc}
+\usepackage{hyperref}
+
+\renewcommand{\baselinestretch}{1.2}
+
+\setlength{\textwidth}{6.3in}
+\setlength{\textheight}{8.4in}
+\setlength{\topmargin}{0.3in}
+\setlength{\oddsidemargin}{.0in}
+\setlength{\parindent}{.4in}
+\setlength{\headheight}{0.0in}
+\setlength{\headsep}{0.0in}
+
+\newcommand{\Pomeron}{I\!\!P}
+\newcommand{\re}{\mathrm{Re}\,}
+\newcommand{\im}{\mathrm{Im}\,}
+\newcommand{\dd}{D\!D}   % for double distribution
+
+\newcommand{\footlabel}[2]{%
+    \addtocounter{footnote}{1}
+    \footnotetext[\thefootnote]{%
+        \addtocounter{footnote}{-1}%
+        \refstepcounter{footnote}\label{#1}%
+        #2%
+    }%
+    $^{\ref{#1}}$%
+}
+
+%\newcommand{\footref}[1]{%
+%    $^{\ref{#1}}$%
+%}
+\def \rarr {\rightarrow}
+\def \grinp {\includegraphics}
+\def \tw {\textwidth}
+\def\dfrac#1#2{\displaystyle{{#1}\over{#2}}}
+\def \dstl {\displaystyle}
+\definecolor{GREEN}{rgb}{0.,0.8,0}
+\definecolor{RED}{rgb}{1,0,0}
+\definecolor{ORANGE}{rgb}{1,0.5,0}
+\newcommand{\JLAB}{Thomas Jefferson National Accelerator Facility, Newport News, Virginia 23606}
+\newcommand{\CUA}{Catholic University of America, Washington, D.C. 20064}
+\newcommand{\ORSAY}{Institut de Physique Nucleaire d'Orsay, IN2P3, BP 1, 91406 Orsay, France}
+\newcommand{\WARSAW}{National Center for Nuclear Research (NCBJ), 00-681 Warsaw, Poland}
+\newcommand{\YEREVAN}{Yerevan Physics Institute, 375036 Yerevan, Armenia}
+\newcommand{\SCAROLINA}{University of South Carolina, Columbia, South Carolina 29208}
+\newcommand{\NSU}{Norfolk State University, Norfolk, Virginia 23504}
+\newcommand{\ODU}{Old Dominion University, Norfolk, Virginia 23529}
+\newcommand{\SACLAY}{CEA, Centre de Saclay, Irfu/Service de Physique Nucl\'eaire, 91191 Gif-sur-Yvette, France}
+\newcommand{\ECOLE}{CPhT, \'Ecole Polytechnique, 91128 Palaiseau, France}
+\newcommand{\GENOVA}{Istituto Nazionale di Fisica Nucleare, Sezione di Genova e Dipartimento di Fisica dell'Universita, 16146 Genova, Italy}
+\newcommand{\FIU}{Florida International University, Miami, Florida 33199}
+\newcommand{\HU}{Hampton University, Hampton, Virginia 23668}
+\newcommand{\UConn}{University of Connecticut, Storrs, Connecticut 06269}
+\newcommand{\GRENOBLE}{LPSC Grenoble, 38000 Grenoble, France}
+\newcommand{\UVA}{University of Virginia, Charlottesville, VA 22904}
+\newcommand{\PETERSBURG}{Petersburg Nuclear Physics Institute, Gatchina 188300, Russia}
+\newcommand{\USTC}{University of Science and Technology of China, Heifei, Anhui 230026, China}
+\renewcommand*{\thesection}{\arabic{section}}
+\newcommand{\Contact}{Contact person}
+\newcommand{\ee}{$e^+e^-$}
+\begin{document}
+
+\title{Letter of Intent for Jefferson Lab PAC 40\\
+\large{{\bf Timelike Compton Scattering
+% and $J/\psi$ photoproduction 
+in $e^+e^-$ pair production on the proton\\
+with SoLID at 11 GeV}}}
+\author{I.~Albayrak}
+\affiliation{\CUA}
+%\author{V.~Burkert} 
+%\affiliation{\JLAB}
+\author{A.~Camsonne}
+\affiliation{\JLAB}
+%\author{E.~Chudakov}
+%\affiliation{\JLAB}
+%\author{N.~Dashyan}
+%\affiliation{\YEREVAN}
+%\author{C.~Desnault}
+%\affiliation{\ORSAY}
+%\author{N.~Gevorgyan}
+%\affiliation{\YEREVAN}
+%\author{Y.~Ghandilyan}
+%\affiliation{\YEREVAN}
+%\author{B.~Guegan}
+%\affiliation{\ORSAY}
+%\author{M.~Guidal\footnote{Co-spokesperson\label{spoks}}}
+\author{M.~Guidal}
+\affiliation{\ORSAY}
+\author{V.~Guzey}
+\affiliation{\PETERSBURG}
+%\author{T.~Horn\footref{spoks}}
+\author{T.~Horn}
+\affiliation{\CUA}
+\author{C.~Hyde}
+\affiliation{\ODU}
+\author{Y.~Ilieva} 
+\affiliation{\SCAROLINA}
+\author{H.-S.~Jo}
+\affiliation{\ORSAY}
+\author{C.~Keppel}
+\affiliation{\JLAB}
+%\author{V.~Kubarovsky}
+%\affiliation{\JLAB}
+\author{P.E.C.~Markowitz}
+\affiliation{\FIU}
+%\author{A.~Marti}
+%\affiliation{\ORSAY}
+\author{H.~Moutarde} 
+\affiliation{\SACLAY}
+\author{C.~Munoz~Camacho}
+\affiliation{\ORSAY}
+%\author{P.~Nadel-Turonski\footref{spoks}
+\author{\\P.~Nadel-Turonski\footnote{Co-spokesperson\label{spoks}}
+\footnote{Contact person: \href{mailto:turonski@jlab.org}{turonski@jlab.org}}}
+\affiliation{\JLAB}
+%\author{S.~Niccolai}
+%\affiliation{\ORSAY}
+%\author{R.~Paremuzyan\footref{spoks}}
+\author{R.~Paremuzyan}
+\affiliation{\ORSAY}
+\affiliation{\YEREVAN}
+\author{B.~Pire}
+\affiliation{\ECOLE}
+\author{F.~Sabati\'e} 
+\affiliation{\SACLAY}
+%\author{C.~Salgado}
+%\affiliation{\NSU}
+\author{P.~Schweitzer}
+\affiliation{\UConn}
+%\author{A.~Simonyan}
+%\affiliation{\YEREVAN}
+%\author{D.~Sokhan}
+%\affiliation{\GLASGOW}
+%\author{S.~Stepanyan\footref{spoks}}
+\author{S.~Stepanyan}
+\affiliation{\JLAB}
+\author{L.~Szymanowski} 
+\affiliation{\WARSAW}
+%\author{H.~Voskanyan}
+%\affiliation{\YEREVAN}
+%\author{E.~Voutier}
+%\affiliation{\GRENOBLE}
+\author{J.~Wagner} 
+\affiliation{\WARSAW}
+\author{C.~Weiss}
+\affiliation{\JLAB}
+\author{N.~Zachariou}
+\affiliation{\SCAROLINA}
+\author{J.~Zhang}
+\affiliation{\JLAB}
+\author{Y.~Zhao}
+\affiliation{\USTC}
+\author{Z.W.~Zhao\footref{spoks}.}
+\affiliation{\UVA}
+%\author{the~SoLID~Collaboration.}
+%\noaffiliation
+
+\date{\today}
+\pagenumbering{arabic}
+\pagestyle{plain}
+\newpage
+
+\begin{abstract}
+%\vspace{0.05cm}
+\newpage
+\label{sec:abstract}
+\input{tcs_abstract}
+\end{abstract}
+
+\maketitle
+\clearpage
+
+\tableofcontents
+
+\newpage
+\section{Introduction}
+\label{sec:intro}
+\input{tcs_intro}
+
+\newpage
+\section{Physics of Timelike Compton Scattering}
+\label{sec:phm}
+\input{tcs_motivation}
+
+\newpage
+\section{Experimental Setup}
+\label{sec:exp}
+\input{tcs_experiment}
+
+\newpage
+\section{Projected Results}
+\label{sec:rates}
+\input{tcs_projections}
+
+\newpage
+\section{Systematic Uncertainties}
+\label{sec:systematics}
+\input{tcs_systematics}
+
+\newpage
+\section{Beam Time}
+\label{sec:beamtime}
+\input{tcs_beamtime}
+ 
+\clearpage
+%\bibliographystyle{h-physrev}
+\bibliographystyle{hunsrt}
+%\bibliographystyle{unsrt}
+\bibliography{tcs_refs}
+
+\end{document}
