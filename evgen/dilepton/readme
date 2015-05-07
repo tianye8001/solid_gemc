@@ -51,7 +51,6 @@ table.C read the root tree with acceptance output by accep.C, and bin it into 5D
 The binning choice are now
 8 Egamma (5-11), 8 tt (0.1-1), 8 Qp2 (4-9), 10 Phi_CMV(0-2pi), 15 Theta_CMV(45-135)
 
-The txt format is 9 entries per line seperated by tab
-Egamma tt Qp2 Phi_CMV Theta_CMV accep_3fold_recoildecaypair accep_3fold_eloutdecaypair accep_4fold Ngen 
-(The 5 bin are just bin index for now)
+each line of the txt file has 9 entries seperated by tab as below
+"bin_Egamma	bin_tt bin_Qp2	bin_Phi_CMV	bin_Theta_CMV	accep_3fold_recoildecaypair		accep_3fold_eloutdecaypair	accep_4fold	Ngen"
 
