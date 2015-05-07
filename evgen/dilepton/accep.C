@@ -244,26 +244,34 @@ for (Int_t i=0;i<nentries;i++) {
     //note CLAS12 acceptance phi (0,360), TLonrenzvector.Phi (-180,180) 	    
     if (LV_recoil_lab.Theta()*DEG<=35){
       accep_recoil_1=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(LV_recoil_lab.Phi()*DEG+180,LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P()));
+      accep_recoil_2=0;      
     }
     else{
+      accep_recoil_1=0;      
       accep_recoil_2=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(LV_recoil_lab.Phi()*DEG+180,LV_recoil_lab.Theta()*DEG,LV_recoil_lab.P()));
     }
     if (LV_plus_lab.Theta()*DEG<=35){
       accep_plus_1=hacceptance_PThetaPhi_positive->GetBinContent(hacceptance_PThetaPhi_positive->FindBin(LV_plus_lab.Phi()*DEG+180,LV_plus_lab.Theta()*DEG,LV_plus_lab.P()));
+      accep_plus_2=0;      
     }
     else{
+      accep_plus_1=0;
       accep_plus_2=0;
     }
     if (LV_minus_lab.Theta()*DEG<=35){
       accep_minus_1=hacceptance_PThetaPhi_negative->GetBinContent(hacceptance_PThetaPhi_negative->FindBin(LV_minus_lab.Phi()*DEG+180,LV_minus_lab.Theta()*DEG,LV_minus_lab.P()));
+      accep_minus_2=0;      
     }
     else{
+      accep_minus_1=0;      
       accep_minus_2=0;
     }
     if (2.5<= LV_el_out.Theta()*DEG && LV_el_out.Theta()*DEG<=4.5){
       accep_el_out_1=1;  //within forward tagger
+      accep_el_out_2=0;      
     }
     else{
+      accep_el_out_1=0;      
       accep_el_out_2=0;
     }
 
