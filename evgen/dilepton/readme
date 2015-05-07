@@ -1,3 +1,4 @@
+=accep.C=
 == Intro ==
 accep.C gets the acceptance of a detector is provided by histograms in an acceptance file
 then check every particles and record its acceptace by in new tree entry
@@ -16,17 +17,23 @@ output particles info into a txt format LUND file is there, but commented out fo
 TCS_Tree_infos.txt explain the tree entries
 
 == how to run ==
+(change relative path to yours)
+
 first copy the root file produced by the generator to a new file with special name
-cd /u/scratch/zwzhao/
+cd /volatile/halla/solid/zwzhao/dilepton/TCSfiles
+cp /volatile/halla/solid/mboer/Generator/TCSfiles/TCS_electroprod_1.root TCS_electroprod_1__SoLID_TCS_JPsiSetup_ele.root  
+
+
 cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_CLAS12_TCS_FTSetup_ele.root
-cp /u/scratch/mboer/TCS_electro2.root TCS_electro2_SoLID_TCS_JPsiSetup_ele.root
 cp /u/scratch/mboer/DDVCS_allxbj.root DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root
 
 The run the accep.C code with compliation in root
 cd /home/zwzhao/solid/solid_svn/solid/evgen/dilepton/
+ln -s ~/volatile/halla/solid/zwzhao/dilepton/TCSfiles ./
 root
-.x accep.C+("/u/scratch/zwzhao/TCS_electro2_CLAS12_TCS_FTSetup_ele.root")
-.x accep.C+("/u/scratch/zwzhao/TCS_electro2_SoLID_TCS_JPsiSetup_ele.root")
+.x accep.C+("TCSfiles/TCS_electroprod_1__SoLID_TCS_JPsiSetup_ele.root")
+
+.x accep.C+("~/volatile/halla/solid/mboer/Generator/TCS_electro2_CLAS12_TCS_FTSetup_ele.root")
 .x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root")
 
 == info about exp==
@@ -36,4 +43,15 @@ Jlab ele beam pol is 0.84+-0.01
 SoLID JPsiSetup has 15cm LH2 target with 1e37/cm2/s luminosity
 
 CLAS12 ForwardTagger Setup has 15cm LH2 target with 1e35/cm/s luminosity
+
+=table.C=
+table.C read the root tree with acceptance output by accep.C, and bin it into 5D binnng and calculate acceptance in each bin and output result into a table in a txt file
+(currently, input files are hardcoded)
+
+The binning choice are now
+8 Egamma (5-11), 8 tt (0.1-1), 8 Qp2 (4-9), 10 Phi_CMV(0-2pi), 15 Theta_CMV(45-135)
+
+The txt format is 9 entries per line seperated by tab
+Egamma tt Qp2 Phi_CMV Theta_CMV accep_3fold_recoildecaypair accep_3fold_eloutdecaypair accep_4fold Ngen 
+(The 5 bin are just bin index for now)
 

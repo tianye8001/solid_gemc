@@ -21,7 +21,8 @@
 
 using namespace std;
 
-int table(string output_filename)
+// int table(string filename)
+int table()
 {
 gROOT->Reset();
 gStyle->SetPalette(1);
@@ -29,33 +30,76 @@ gStyle->SetOptStat(0);
 
 const double DEG=180./3.1415926;
 
-string type;
-string treename;
-int pid_decay;
-double mass_decay;
-if (output_filename.find("CLAS12_TCS_FTSetup_ele",0) != string::npos) {
-  type="CLAS12_TCS_FTSetup_ele";
-  pid_decay=11;mass_decay=0.000511;
-  treename="TCS_Tree";
-}
-else if (output_filename.find("SoLID_TCS_JPsiSetup_ele",0) != string::npos) {
-  type="SoLID_TCS_JPsiSetup_ele";
-  pid_decay=11;mass_decay=0.000511;
-  treename="TCS_Tree";
-}
-else if (output_filename.find("SoLID_DDVCS_JPsiSetup_muon",0) != string::npos) {
-  type="SoLID_DDVCS_JPsiSetup_muon";
-  pid_decay=13;mass_decay=0.10567;
-  treename="DDVCS_Tree";
-}
-else {cout << "not sure what type" << endl; return 0;}
+//8 Egamma (5-11), 8 tt (0.1-1), 8 Qp2 (4-9), 10 Phi_CMV(0-2pi), 15 Theta_CMV(45-135)
+const int Nbin_Egamma=8,Nbin_tt=8,Nbin_Qp2=8,Nbin_Phi_CMV=10,Nbin_Theta_CMV=15;
 
-TFile *file=new TFile(output_filename.c_str());
+Double_t gen[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
+Double_t acc_3fold_recoildecaypair[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
+Double_t acc_3fold_eloutdecaypair[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
+Double_t acc_4fold[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
+
+for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
+  for (Int_t a2=0;a2<Nbin_tt;a2++) {
+    for (Int_t a3=0;a3<Nbin_Qp2;a3++) {
+      for (Int_t a4=0;a4<Nbin_Phi_CMV;a4++) {
+	for (Int_t a5=0;a5<Nbin_Theta_CMV;a5++) {
+	  gen[a1][a2][a3][a4][a5]=0;	  
+	  acc_3fold_recoildecaypair[a1][a2][a3][a4][a5]=0;
+	  acc_3fold_eloutdecaypair[a1][a2][a3][a4][a5]=0;
+	  acc_4fold[a1][a2][a3][a4][a5]=0;
+//   cout << " " <<  a1 <<  " " << a2<< " " << a3 << " " <<a4 << " " << a5 << " " << "\r";  	  
+	}
+      }
+    }
+  }
+}
+
+// string type;
+// string treename;
+// int pid_decay;
+// double mass_decay;
+// if (filename.find("CLAS12_TCS_FTSetup_ele",0) != string::npos) {
+//   type="CLAS12_TCS_FTSetup_ele";
+//   pid_decay=11;mass_decay=0.000511;
+//   treename="TCS_Tree";
+// }
+// else if (filename.find("SoLID_TCS_JPsiSetup_ele",0) != string::npos) {
+//   type="SoLID_TCS_JPsiSetup_ele";
+//   pid_decay=11;mass_decay=0.000511;
+//   treename="TCS_Tree";
+// }
+// else if (filename.find("SoLID_DDVCS_JPsiSetup_muon",0) != string::npos) {
+//   type="SoLID_DDVCS_JPsiSetup_muon";
+//   pid_decay=13;mass_decay=0.10567;
+//   treename="DDVCS_Tree";
+// }
+// else {cout << "not sure what type" << endl; return 0;}
+
+string type="SoLID_TCS_JPsiSetup_ele";
+string treename="TCS_Tree";
+
+string filename[10]={
+"TCSfiles/TCS_electroprod_100_SoLID_TCS_JPsiSetup_ele.root",  
+"TCSfiles/TCS_electroprod_101_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_102_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_103_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_104_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_105_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_106_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_107_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_108_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_109_SoLID_TCS_JPsiSetup_ele.root",
+};
+
+//start of looping through file list
+for (Int_t j=0;j<10;j++) {
+  
+TFile *file=new TFile(filename[j].c_str());
 if (file->IsZombie()) {
-  cout << "Error opening file" << output_filename << endl;
+  cout << "Error opening file" << filename[j] << endl;
   exit(-1);
 }
-else cout << "open file " << output_filename << endl;
+else cout << "open file " << filename[j] << endl;
  
 TTree *T = (TTree*) file->Get(treename.c_str());
 
@@ -130,33 +174,9 @@ T->SetBranchAddress("accep_3fold_recoildecaypair", &accep_3fold_recoildecaypair)
 T->SetBranchAddress("accep_3fold_eloutdecaypair", &accep_3fold_eloutdecaypair);
 T->SetBranchAddress("accep_4fold", &accep_4fold);
 
-//8 Egamma (5-11), 8 tt (0.1-1), 8 Qp2 (4-9), 10 Phi_CMV(0-2pi), 15 Theta_CMV(45-135)
-const int Nbin_Egamma=8,Nbin_tt=8,Nbin_Qp2=8,Nbin_Phi_CMV=10,Nbin_Theta_CMV=15;
-
-Double_t gen[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
-Double_t acc_3fold_recoildecaypair[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
-Double_t acc_3fold_eloutdecaypair[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
-Double_t acc_4fold[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
-
-for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
-  for (Int_t a2=0;a2<Nbin_tt;a2++) {
-    for (Int_t a3=0;a3<Nbin_Qp2;a3++) {
-      for (Int_t a4=0;a4<Nbin_Phi_CMV;a4++) {
-	for (Int_t a5=0;a5<Nbin_Theta_CMV;a5++) {
-	  gen[a1][a2][a3][a4][a5]=0;	  
-	  acc_3fold_recoildecaypair[a1][a2][a3][a4][a5]=0;
-	  acc_3fold_eloutdecaypair[a1][a2][a3][a4][a5]=0;
-	  acc_4fold[a1][a2][a3][a4][a5]=0;
-//   cout << " " <<  a1 <<  " " << a2<< " " << a3 << " " <<a4 << " " << a5 << " " << "\r";  	  
-	}
-      }
-    }
-  }
-}
-
 // cout << endl << "ok" << endl;
 
-int counter=0;
+int counter_outside=0;
 
 //  loop on entries
 Int_t nentries = T->GetEntries();
@@ -186,21 +206,30 @@ for (Int_t i=0;i<nentries;i++) {
 	  acc_3fold_eloutdecaypair[bin_Egamma][bin_tt][bin_Qp2][bin_Phi_CMV][bin_Theta_CMV] +=accep_3fold_eloutdecaypair;
 	  acc_4fold[bin_Egamma][bin_tt][bin_Qp2][bin_Phi_CMV][bin_Theta_CMV] +=accep_4fold;
   }
-  else counter++;
+  else counter_outside++;
         
 }
 
-  cout << endl << "counter outside " << counter << endl;    
+cout << endl << "counter_outside " << counter_outside << endl;    
 
 file->Close();
+}
+//end of looping through file list
+
+int Nbin=Nbin_Egamma*Nbin_tt*Nbin_Qp2*Nbin_Phi_CMV*Nbin_Theta_CMV;
+TH1F *hacc_3fold_recoildecaypair=new TH1F("acc_3fold_recoildecaypair","acc_3fold_recoildecaypair",Nbin,0,Nbin);
+TH1F *hacc_3fold_eloutdecaypair=new TH1F("acc_3fold_eloutdecaypair","acc_3fold_eloutdecaypair",Nbin,0,Nbin);
+TH1F *hacc_4fold=new TH1F("acc_4fold","acc_4fold",Nbin,0,Nbin);
+TH1F *hNgen=new TH1F("Ngen","Ngen",Nbin,0,Nbin);
 
 ofstream OUT(Form("table_%s.dat",type.c_str()));
 
+int counter=0;
 for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
   for (Int_t a2=0;a2<Nbin_tt;a2++) {
     for (Int_t a3=0;a3<Nbin_Qp2;a3++) {
       for (Int_t a4=0;a4<Nbin_Phi_CMV;a4++) {
-	for (Int_t a5=0;a5<Nbin_Theta_CMV;a5++) {
+	for (Int_t a5=0;a5<Nbin_Theta_CMV;a5++) {	  
 	  double b1=0,b2=0,b3=0;
 	  if (gen[a1][a2][a3][a4][a5]>0) {
 	    b1=acc_3fold_recoildecaypair[a1][a2][a3][a4][a5]/gen[a1][a2][a3][a4][a5];
@@ -209,7 +238,13 @@ for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
 	  }	  
 	  OUT << a1 << "\t" << a2 << "\t" << a3 << "\t" << a4 << "\t" << a5 << "\t";
 	  OUT << b1 << "\t" << b1 << "\t" << b1 << "\t";
-	  OUT << gen[a1][a2][a3][a4][a5] << "\n";  
+	  OUT << gen[a1][a2][a3][a4][a5] << "\n"; 
+	  
+	  counter++;
+	  hacc_3fold_recoildecaypair->Fill(counter,b1);
+	  hacc_3fold_eloutdecaypair->Fill(counter,b2);
+	  hacc_4fold->Fill(counter,b3);
+	  hNgen->Fill(counter,gen[a1][a2][a3][a4][a5]);
 	}
       }
     }
@@ -218,6 +253,16 @@ for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
 
 OUT.close();
 
-
+TCanvas *c = new TCanvas("c","c",1200,900);
+c->Divide(1,2);
+c->cd(2);
+hNgen->Draw();
+c->cd(1);
+hacc_3fold_recoildecaypair->SetLineColor(kBlack);
+hacc_3fold_recoildecaypair->Draw();
+hacc_3fold_eloutdecaypair->SetLineColor(kRed);
+hacc_3fold_eloutdecaypair->Draw("same");
+hacc_4fold->SetLineColor(kBlue);
+hacc_4fold->Draw("same");
     
 }
