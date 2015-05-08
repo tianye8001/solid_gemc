@@ -36,21 +36,24 @@ root
 .x accep.C+("~/volatile/halla/solid/mboer/Generator/TCS_electro2_CLAS12_TCS_FTSetup_ele.root")
 .x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root")
 
-== info about exp==
-
-Jlab ele beam pol is 0.84+-0.01
-
-SoLID JPsiSetup has 15cm LH2 target with 1e37/cm2/s luminosity
-
-CLAS12 ForwardTagger Setup has 15cm LH2 target with 1e35/cm/s luminosity
-
 =table.C=
+
 table.C read the root tree with acceptance output by accep.C, and bin it into 5D binnng and calculate acceptance in each bin and output result into a table in a txt file
 (currently, input files are hardcoded)
+
+run it in root with compilation ".x table.C+"
 
 The binning choice are now
 8 Egamma (5-11), 8 tt (0.1-1), 8 Qp2 (4-9), 10 Phi_CMV(0-2pi), 15 Theta_CMV(45-135)
 
 each line of the txt file has 9 entries seperated by tab as below
 "bin_Egamma	bin_tt bin_Qp2	bin_Phi_CMV	bin_Theta_CMV	accep_3fold_recoildecaypair		accep_3fold_eloutdecaypair	accep_4fold	Ngen"
+bin numbers increase from kinematic variable right to left
 
+== info about exp==
+
+Jlab ele beam pol is 0.84+-0.01
+
+SoLID JPsiSetup has 15cm LH2 target with 1e37/cm2/s luminosity, running for 50 days
+
+CLAS12 ForwardTagger Setup has 15cm LH2 target with 1e35/cm/s luminosity, running for 130 days
