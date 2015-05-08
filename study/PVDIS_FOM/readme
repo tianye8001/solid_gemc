@@ -6,7 +6,7 @@ This tool is to calculate PVDIS Figure of Merit which is Apv_Err in Q2 and x bin
 2. then source your set_eic and run solid simulation with no physics and no secondary particles 
 gemc solid_PVDIS_electron.gcard
 3. convert output evio to root tree
-evio2root -INPUF=solid_PVDIS_electron.evio
+evio2root -INPUTF=solid_PVDIS_electron.evio
 4. use the analysis code to look at result  (this code needs modification to work)
 pvdis_FOM.C("solid_PVDIS_electron.root",false)  //without trig cut
 pvdis_FOM.C("solid_PVDIS_electron.root",true)   //with trig cut
