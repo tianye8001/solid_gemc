@@ -36,18 +36,32 @@ root
 .x accep.C+("~/volatile/halla/solid/mboer/Generator/TCS_electro2_CLAS12_TCS_FTSetup_ele.root")
 .x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root")
 
-=table.C=
+=table_TCS.C=
 
 table.C read the root tree with acceptance output by accep.C, and bin it into 5D binnng and calculate acceptance in each bin and output result into a table in a txt file
 (currently, input files are hardcoded)
 
-run it in root with compilation ".x table.C+"
+run it in root with compilation ".x table_TCS.C+"
 
 The binning choice are now
 8 Egamma (5-11), 8 tt (0.1-1), 8 Qp2 (4-9), 10 Phi_CMV(0-2pi), 15 Theta_CMV(45-135)
 
 each line of the txt file has 9 entries seperated by tab as below
 "bin_Egamma	bin_tt bin_Qp2	bin_Phi_CMV	bin_Theta_CMV	accep_3fold_recoildecaypair		accep_3fold_eloutdecaypair	accep_4fold	Ngen"
+bin numbers increase from kinematic variable right to left
+
+=table_DDVCS.C=
+
+table.C read the root tree with acceptance output by accep.C, and bin it into 7D binnng and calculate acceptance in each bin and output result into a table in a txt file
+(currently, input files are hardcoded)
+
+run it in root with compilation ".x table_DDVCS.C+"
+
+The binning choice are now
+4 Xbj (0.1-0.4), 6 tt (0.1-0.8), 6 Q2 (1-7), 6 Qp2 (2-9), 8 Phi_LH (0-2pi), 6 Theta_CMV(45-135),8 Phi_CMV(0-2pi),
+
+each line of the txt file has 9 entries seperated by tab as below
+"bin_Xbj	bin_tt bin_Q2	bin_Qp2	bin_Phi_LH	bin_Theta_CMV	bin_Phi_CMV	accep_3fold_recoildecaypair		accep_3fold_eloutdecaypair	accep_4fold	Ngen"
 bin numbers increase from kinematic variable right to left
 
 == info about exp==

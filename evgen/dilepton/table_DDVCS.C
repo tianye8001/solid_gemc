@@ -22,34 +22,37 @@
 using namespace std;
 
 // int table(string filename)
-int table()
+int table_DDVCS()
 {
 gROOT->Reset();
 gStyle->SetPalette(1);
 gStyle->SetOptStat(0);
 
 const double DEG=180./3.1415926;
+//4 Xbj (0.1-0.4), 6 tt (0.1-0.8), 6 Q2 (1-7), 6 Qp2 (2-9), 8 Phi_LH (0-2pi), 6 Theta_CMV(45-135),8 Phi_CMV(0-2pi),
+const int Nbin_Xbj=4,Nbin_tt=6,Nbin_Q2=6,Nbin_Qp2=6,Nbin_Phi_LH=8,Nbin_Theta_CMV=6,Nbin_Phi_CMV=8;
 
-//8 Egamma (5-11), 8 tt (0.1-1), 8 Qp2 (4-9), 10 Phi_CMV(0-2pi), 15 Theta_CMV(45-135)
-const int Nbin_Egamma=8,Nbin_tt=8,Nbin_Qp2=8,Nbin_Phi_CMV=10,Nbin_Theta_CMV=15;
+Double_t gen[Nbin_Xbj][Nbin_tt][Nbin_Q2][Nbin_Qp2][Nbin_Phi_LH][Nbin_Theta_CMV][Nbin_Phi_CMV];
+Double_t acc_3fold_recoildecaypair[Nbin_Xbj][Nbin_tt][Nbin_Q2][Nbin_Qp2][Nbin_Phi_LH][Nbin_Theta_CMV][Nbin_Phi_CMV];
+Double_t acc_3fold_eloutdecaypair[Nbin_Xbj][Nbin_tt][Nbin_Q2][Nbin_Qp2][Nbin_Phi_LH][Nbin_Theta_CMV][Nbin_Phi_CMV];
+Double_t acc_4fold[Nbin_Xbj][Nbin_tt][Nbin_Q2][Nbin_Qp2][Nbin_Phi_LH][Nbin_Theta_CMV][Nbin_Phi_CMV];
 
-Double_t gen[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
-Double_t acc_3fold_recoildecaypair[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
-Double_t acc_3fold_eloutdecaypair[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
-Double_t acc_4fold[Nbin_Egamma][Nbin_tt][Nbin_Qp2][Nbin_Phi_CMV][Nbin_Theta_CMV];
-
-for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
+for (Int_t a1=0;a1<Nbin_Xbj;a1++) {
   for (Int_t a2=0;a2<Nbin_tt;a2++) {
-    for (Int_t a3=0;a3<Nbin_Qp2;a3++) {
-      for (Int_t a4=0;a4<Nbin_Phi_CMV;a4++) {
-	for (Int_t a5=0;a5<Nbin_Theta_CMV;a5++) {
-	  gen[a1][a2][a3][a4][a5]=0;	  
-	  acc_3fold_recoildecaypair[a1][a2][a3][a4][a5]=0;
-	  acc_3fold_eloutdecaypair[a1][a2][a3][a4][a5]=0;
-	  acc_4fold[a1][a2][a3][a4][a5]=0;
+    for (Int_t a3=0;a3<Nbin_Q2;a3++) {
+    for (Int_t a4=0;a4<Nbin_Qp2;a4++) {      
+      for (Int_t a5=0;a5<Nbin_Phi_LH;a5++) {      
+      for (Int_t a6=0;a6<Nbin_Theta_CMV;a6++) {
+	for (Int_t a7=0;a7<Nbin_Phi_CMV;a7++) {
+	  gen[a1][a2][a3][a4][a5][a6][a7]=0;	  
+	  acc_3fold_recoildecaypair[a1][a2][a3][a4][a5][a6][a7]=0;
+	  acc_3fold_eloutdecaypair[a1][a2][a3][a4][a5][a6][a7]=0;
+	  acc_4fold[a1][a2][a3][a4][a5][a6][a7]=0;
 //   cout << " " <<  a1 <<  " " << a2<< " " << a3 << " " <<a4 << " " << a5 << " " << "\r";  	  
 	}
       }
+      }
+    }
     }
   }
 }
@@ -75,20 +78,20 @@ for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
 // }
 // else {cout << "not sure what type" << endl; return 0;}
 
-string type="SoLID_TCS_JPsiSetup_ele";
-string treename="TCS_Tree";
+string type="SoLID_DDVCS_JPsiSetup_muon"; 
+string treename="DDVCS_Tree";
 
 string filename[10]={
-"TCSfiles/TCS_electroprod_100_SoLID_TCS_JPsiSetup_ele.root",  
-"TCSfiles/TCS_electroprod_101_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_102_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_103_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_104_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_105_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_106_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_107_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_108_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_109_SoLID_TCS_JPsiSetup_ele.root",
+"DDVCSfiles/DDVCS_electroprod_muons_10_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_11_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_12_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_13_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_14_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_15_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_16_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_17_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_18_SoLID_DDVCS_JPsiSetup_muon.root",
+"DDVCSfiles/DDVCS_electroprod_muons_19_SoLID_DDVCS_JPsiSetup_muon.root",
 };
 
 //start of looping through file list
@@ -107,11 +110,13 @@ Long64_t EventNumber;
 Int_t VirtualFlag;
 Double_t ALV_minus_lab[4],ALV_plus_lab[4],ALV_gamma_in[4],ALV_el_in[4],ALV_Recoil_lab[4],ALV_el_out[4];
 Double_t AV_PolTarget[3],AV_PolBeam[3],AV_PolBeam_Lin[3];
-Double_t Q2,theta_beam,phi_beam,yy,Qp2,tt,RotAxis,Psi_p,Psi_g,ttmin,Phi_CMV,Theta_CMV,Egamma;
+Double_t Q2,theta_beam,phi_beam,yy,Qp2,tt,RotAxis,Psi_p,Psi_g,ttmin,Phi_CMV,Theta_CMV;
 Double_t cross_tot,cross_tot_unpol,cross_BH,cross_TCS;
 Double_t W_tot,W_tot_unpol,W_BH,W_TCS;
 Double_t DeltaBin,LinPol,CircPol,TargetPol,Flux_qr,Flux_bmr,epsilon;
 Double_t Abeam_polcirc,Abeam_pollin,Atarget_long,Atarget_trans,Atarget_trans_2,A_circ_long,A_circ_trans,A_circ_trans_2,A_lin_long,A_lin_trans,A_lin_trans_2;
+
+Double_t Xbj,Phi_LH,W_DDVCS; //special entry for DDVCS_Tree
 
 T->SetBranchAddress("ALV_minus_lab",ALV_minus_lab);
 T->SetBranchAddress("ALV_plus_lab",&ALV_plus_lab);
@@ -134,7 +139,7 @@ T->SetBranchAddress("tt",&tt);
 // T->SetBranchAddress("ttmin",&ttmin);
 T->SetBranchAddress("Phi_CMV",&Phi_CMV);
 T->SetBranchAddress("Theta_CMV",&Theta_CMV);
-T->SetBranchAddress("Egamma",&Egamma);
+// T->SetBranchAddress("Xbj",&Xbj);
 // T->SetBranchAddress("cross_tot",&cross_tot);
 // T->SetBranchAddress("cross_tot_unpol",&cross_tot_unpol);
 // T->SetBranchAddress("cross_BH",&cross_BH);
@@ -164,6 +169,11 @@ T->SetBranchAddress("W_BH",&W_BH);
 // T->SetBranchAddress("A_lin_trans_2",&A_lin_trans_2);
 T->SetBranchAddress("EventNumber", &EventNumber);
 
+ //special entry for DDVCS_Tree
+T->SetBranchAddress("Xbj",&Xbj);
+T->SetBranchAddress("Phi_LH",&Phi_LH);
+T->SetBranchAddress("W_DDVCS",&W_DDVCS);
+
 Double_t accep_el_out_1,accep_minus_1,accep_plus_1,accep_recoil_1;
 Double_t accep_el_out_2,accep_minus_2,accep_plus_2,accep_recoil_2;
 Double_t accep_3fold_recoildecaypair;
@@ -174,7 +184,7 @@ T->SetBranchAddress("accep_3fold_recoildecaypair", &accep_3fold_recoildecaypair)
 T->SetBranchAddress("accep_3fold_eloutdecaypair", &accep_3fold_eloutdecaypair);
 T->SetBranchAddress("accep_4fold", &accep_4fold);
 
-// cout << endl << "ok" << endl;
+
 
 int counter_outside=0;
 
@@ -188,23 +198,25 @@ for (Int_t i=0;i<nentries;i++) {
 //   cout << "EventNumber " << EventNumber << "\r";   
   
   T->GetEvent(i);
-  int bin_Egamma=int((Egamma-5)/((11.-5.)/Nbin_Egamma));
-  int bin_tt=int((-tt-0.1)/((1.-0.1)/Nbin_tt));
-  int bin_Qp2=int((Qp2-4.)/((9.-4.)/Nbin_Qp2));  
-  int bin_Phi_CMV=int((Phi_CMV*DEG-0.)/((360.-0.)/Nbin_Phi_CMV));
+  int bin_Xbj=int((Xbj-0.1)/((0.4-0.1)/Nbin_Xbj));
+  int bin_tt=int((-tt-0.1)/((0.8-0.1)/Nbin_tt));
+  int bin_Q2=int((Q2-1.)/((7.-1.)/Nbin_Q2));    
+  int bin_Qp2=int((Qp2-2.)/((9.-2.)/Nbin_Qp2));  
+  int bin_Phi_LH=int((Phi_LH*DEG-0.)/((360.-0.)/Nbin_Phi_LH));  
   int bin_Theta_CMV=int((Theta_CMV*DEG-45)/((135.-45.)/Nbin_Theta_CMV)); 
+  int bin_Phi_CMV=int((Phi_CMV*DEG-0.)/((360.-0.)/Nbin_Phi_CMV));  
 
 //   if (bin_Qp2>0){
-//   cout << "value " << Egamma <<  " " << -tt<< " " << Qp2 << " " <<Phi_CMV*DEG << " " << Theta_CMV*DEG << " " << "\n";    
-//   cout << "bin " <<  bin_Egamma <<  " " << bin_tt<< " " << bin_Qp2 << " " <<bin_Phi_CMV << " " << bin_Theta_CMV << " " << "\n";  
+//   cout << "value " << Xbj <<  " " << -tt<< " " << Qp2 << " " <<Phi_CMV*DEG << " " << Theta_CMV*DEG << " " << "\n";    
+//   cout << "bin " <<  bin_Xbj <<  " " << bin_tt<< " " << bin_Qp2 << " " <<bin_Phi_CMV << " " << bin_Theta_CMV << " " << "\n";  
 //       cout << "accep " <<  accep_3fold_recoildecaypair <<  " " << accep_3fold_eloutdecaypair << " " << accep_4fold << "\n";  
 //   }
   
-  if ((bin_Egamma<Nbin_Egamma && bin_tt<Nbin_tt && bin_Qp2<Nbin_Qp2 &&  bin_Phi_CMV<Nbin_Phi_CMV && bin_Theta_CMV<Nbin_Theta_CMV) && (0<=bin_Egamma && 0<=bin_tt && 0<=bin_Qp2 &&  0<=bin_Phi_CMV && 0<=bin_Theta_CMV)){  
-	  gen[bin_Egamma][bin_tt][bin_Qp2][bin_Phi_CMV][bin_Theta_CMV] +=1;  
-	  acc_3fold_recoildecaypair[bin_Egamma][bin_tt][bin_Qp2][bin_Phi_CMV][bin_Theta_CMV] += accep_3fold_recoildecaypair;
-	  acc_3fold_eloutdecaypair[bin_Egamma][bin_tt][bin_Qp2][bin_Phi_CMV][bin_Theta_CMV] +=accep_3fold_eloutdecaypair;
-	  acc_4fold[bin_Egamma][bin_tt][bin_Qp2][bin_Phi_CMV][bin_Theta_CMV] +=accep_4fold;
+  if ((bin_Xbj<Nbin_Xbj && bin_tt<Nbin_tt && bin_Q2<Nbin_Q2 && bin_Qp2<Nbin_Qp2 &&  bin_Phi_LH<Nbin_Phi_LH && bin_Theta_CMV<Nbin_Theta_CMV &&  bin_Phi_CMV<Nbin_Phi_CMV) && (0<=bin_Xbj && 0<=bin_tt && 0<=bin_Q2 && 0<=bin_Qp2 &&  0<=bin_Phi_LH && 0<=bin_Theta_CMV &&  0<=bin_Phi_CMV)){  
+	  gen[bin_Xbj][bin_tt][bin_Q2][bin_Qp2][bin_Phi_LH][bin_Theta_CMV][bin_Phi_CMV] +=1;  
+	  acc_3fold_recoildecaypair[bin_Xbj][bin_tt][bin_Q2][bin_Qp2][bin_Phi_LH][bin_Theta_CMV][bin_Phi_CMV] += accep_3fold_recoildecaypair;
+	  acc_3fold_eloutdecaypair[bin_Xbj][bin_tt][bin_Q2][bin_Qp2][bin_Phi_LH][bin_Theta_CMV][bin_Phi_CMV] +=accep_3fold_eloutdecaypair;
+	  acc_4fold[bin_Xbj][bin_tt][bin_Q2][bin_Qp2][bin_Phi_LH][bin_Theta_CMV][bin_Phi_CMV] +=accep_4fold;
   }
   else counter_outside++;
         
@@ -216,7 +228,7 @@ file->Close();
 }
 //end of looping through file list
 
-int Nbin=Nbin_Egamma*Nbin_tt*Nbin_Qp2*Nbin_Phi_CMV*Nbin_Theta_CMV;
+int Nbin=Nbin_Xbj*Nbin_tt*Nbin_Q2*Nbin_Qp2*Nbin_Phi_LH*Nbin_Theta_CMV*Nbin_Phi_CMV;
 TH1F *hacc_3fold_recoildecaypair=new TH1F("acc_3fold_recoildecaypair","acc_3fold_recoildecaypair",Nbin,0,Nbin);
 TH1F *hacc_3fold_eloutdecaypair=new TH1F("acc_3fold_eloutdecaypair","acc_3fold_eloutdecaypair",Nbin,0,Nbin);
 TH1F *hacc_4fold=new TH1F("acc_4fold","acc_4fold",Nbin,0,Nbin);
@@ -225,28 +237,32 @@ TH1F *hNgen=new TH1F("Ngen","Ngen",Nbin,0,Nbin);
 ofstream OUT(Form("table_%s.dat",type.c_str()));
 
 int counter=0;
-for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
+for (Int_t a1=0;a1<Nbin_Xbj;a1++) {
   for (Int_t a2=0;a2<Nbin_tt;a2++) {
-    for (Int_t a3=0;a3<Nbin_Qp2;a3++) {
-      for (Int_t a4=0;a4<Nbin_Phi_CMV;a4++) {
-	for (Int_t a5=0;a5<Nbin_Theta_CMV;a5++) {	  
+    for (Int_t a3=0;a3<Nbin_Q2;a3++) {
+    for (Int_t a4=0;a4<Nbin_Qp2;a4++) {      
+      for (Int_t a5=0;a5<Nbin_Phi_LH;a5++) {      
+      for (Int_t a6=0;a6<Nbin_Theta_CMV;a6++) {
+	for (Int_t a7=0;a7<Nbin_Phi_CMV;a7++) {
 	  double b1=0,b2=0,b3=0;
-	  if (gen[a1][a2][a3][a4][a5]>0) {
-	    b1=acc_3fold_recoildecaypair[a1][a2][a3][a4][a5]/gen[a1][a2][a3][a4][a5];
-	    b2=acc_3fold_eloutdecaypair[a1][a2][a3][a4][a5]/gen[a1][a2][a3][a4][a5];
-	    b3=acc_4fold[a1][a2][a3][a4][a5]/gen[a1][a2][a3][a4][a5];
+	  if (gen[a1][a2][a3][a4][a5][a6][a7]>0) {
+	    b1=acc_3fold_recoildecaypair[a1][a2][a3][a4][a5][a6][a7]/gen[a1][a2][a3][a4][a5][a6][a7];
+	    b2=acc_3fold_eloutdecaypair[a1][a2][a3][a4][a5][a6][a7]/gen[a1][a2][a3][a4][a5][a6][a7];
+	    b3=acc_4fold[a1][a2][a3][a4][a5][a6][a7]/gen[a1][a2][a3][a4][a5][a6][a7];
 	  }	  
-	  OUT << a1 << "\t" << a2 << "\t" << a3 << "\t" << a4 << "\t" << a5 << "\t";
+	  OUT << a1 << "\t" << a2 << "\t" << a3 << "\t" << a4 << "\t" << a5 << "\t" << a6 << "\t" << a7 << "\t";
 	  OUT << b1 << "\t" << b1 << "\t" << b1 << "\t";
-	  OUT << gen[a1][a2][a3][a4][a5] << "\n"; 
+	  OUT << gen[a1][a2][a3][a4][a5][a6][a7] << "\n"; 
 	  
 	  counter++;
 	  hacc_3fold_recoildecaypair->Fill(counter,b1);
 	  hacc_3fold_eloutdecaypair->Fill(counter,b2);
 	  hacc_4fold->Fill(counter,b3);
-	  hNgen->Fill(counter,gen[a1][a2][a3][a4][a5]);
+	  hNgen->Fill(counter,gen[a1][a2][a3][a4][a5][a6][a7]);
 	}
       }
+      }
+    }
     }
   }
 }
