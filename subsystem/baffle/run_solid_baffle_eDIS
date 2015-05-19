@@ -1,0 +1,35 @@
+#!/bin/sh
+gemc \
+-gcard=solid_CLEO_PVDIS.gcard \
+-DBHOST=$GEMC_HOST \
+-HIT_PROCESS_LIST=solid \
+-HALL_MATERIAL=Vacuum \
+-USE_PHYSICSL=QGSP_BERT \
+-RECORD_PASSBY=1 \
+-FIELD_DIR=$GEMC_field \
+-HALL_FIELD=solenoid_CLEO \
+-INPUT_GEN_FILE="LUND,/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_eDIS_1e6.lund" \
+-N=1e6 \
+-OUTPUT="evio,eDIS.evio" \
+-USE_QT=0
+
+gemc_evio2root eDIS.evio baffleCLEOv8_eDIS_0.55x5deg.root
+ 
+# -BEAM_P="e+, 5.5*GeV, 28.5*deg, 0*deg" \
+# -SPREAD_P="5.5*GeV, 7.5*deg, 180*deg" \
+# -BEAM_V="(0, 0, 10)cm" \
+# -SPREAD_V="(0.1, 20)cm" \
+
+# -N=1e5 \
+# -USE_QT=0
+
+# -N=5e6 \
+# -OUTPUT="evio,background_solid_CLEO_PVDIS_5e6.evio" \
+# -USE_QT=0
+
+# -geometry=1000x1000 \
+# -EXEC_MACRO=$SoLID_GEMC/script/solid_slice.vis \
+# -USE_QT=1
+
+# -CHECK_OVERLAPS=1 \
+# -USE_QT=0

@@ -1,0 +1,29 @@
+<gcard>
+<!-- geometry: 	-->
+    <sqltable name="solid_CLEO_solenoid_kill"/>
+    <sqltable name="solid_CLEO_PVDIS_ec_forwardangle_kill"/>
+    <sqltable name="solid_CLEO_PVDIS_virtualhodoscope_ec"/> 
+<!--    <sqltable name="solid_CLEO_PVDIS_virtualhodoscope_gem"/> -->
+    <sqltable name="solid_CLEO_PVDIS_virtualhodoscope_cher"/>
+    <sqltable name="solid_CLEO_PVDIS_baffle_kill"/> 
+<!--    <sqltable name="solid_CLEO_PVDIS_baffle_babarbafflemore1_kill"/>  -->
+    <sqltable name="solid_CLEO_PVDIS_baffle_observer"/>
+<!--    <sqltable name="solid_CLEO_PVDIS_ec_forwardangle_block_0p5x5deg_kill"/> -->
+<!--    <sqltable name="solid_CLEO_PVDIS_ec_forwardangle_block_kill"/> -->
+ 
+<!--    <sqltable name="solid_BaBar_PVDIS_new_baffle_kill"/>  -->
+<!--    <sqltable name="solid_CLEO_PVDIS_baffle_inspection_seamus"/> -->
+
+<!--    <sqltable name="solid_CLEO_PVDIS_baffle_straight_inspection"/> -->
+<!--    <sqltable name="solid_CLEO_PVDIS_baffle_straight_kill"/> -->
+<!--    <sqltable name="solid_CLEO_PVDIS_baffle_design"/> -->
+
+<!--    <sqltable name="solid_BaBar_PVDIS_baffle_spr"/>  -->
+<!--    <sqltable name="solid_BaBar_traps"/>  -->
+
+<!-- option: 	-->
+        <option name="DBUSER"          value="soliduser" />
+        <option name="DBPSWD"          value="ilovesolid" />
+        <option name="DATABASE"        value="user_geometry_1" />
+        <option name="BANK_DATABASE"   value="user_banks_1" />
+</gcard>
