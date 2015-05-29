@@ -30,12 +30,13 @@ gStyle->SetOptStat(0);
 
 const double DEG=180./3.1415926;
 
-bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_DDVCS_JPsi_LH2=false,Is_JPsi=false;
-if (input_filename.find("PVDIS",0) != string::npos) Is_PVDIS=true;
-else if (input_filename.find("SIDIS_He3",0) != string::npos) Is_SIDIS_He3=true;
+bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_DDVCS_JPsi_LH2=false,Is_DDVCS_PVDIS_LH2=false,Is_JPsi=false;
+if (input_filename.find("SIDIS_He3",0) != string::npos) Is_SIDIS_He3=true;
 else if (input_filename.find("SIDIS_NH3",0) != string::npos) Is_SIDIS_NH3=true;
 else if (input_filename.find("DDVCS_JPsi_LH2",0) != string::npos) Is_DDVCS_JPsi_LH2=true;
 else if (input_filename.find("JPsi",0) != string::npos) Is_JPsi=true;
+else if (input_filename.find("DDVCS_PVDIS_LH2",0) != string::npos) Is_DDVCS_PVDIS_LH2=true;
+else if (input_filename.find("PVDIS",0) != string::npos) Is_PVDIS=true;
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
 ///radius cut standard as particles can travel 30cm in Z before leave calorimeter
@@ -76,14 +77,14 @@ else if (Is_JPsi){
   rin_cut_LA=83;   //cut at the actual edge  
   cout << " JPsi rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
 }
-else if(Is_DDVCS_JPsi_LH2){
+else if(Is_DDVCS_JPsi_LH2 || Is_DDVCS_PVDIS_LH2){
   rout_cut_FA=1000;     //target at -350,ec front at 415 with angle 15
   rin_cut_FA=0;   //cut at the actual edge
   rout_cut_LA=1000;   //target at -350,ec front at -65 with angle 24
   rin_cut_LA=0;   //cut at the actual edge
-  cout << " DDVCS_JPsi_LH2 rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;  
+  cout << " DDVCS rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;  
 }
-else {cout << "not PVDIS or SIDIS or JPsi or DDVCS_JPsi_LH2" << endl; return;}
+else {cout << "not PVDIS or SIDIS or JPsi or DDVCS" << endl; return;}
 
 double theta_max,theta_min;
 if (Is_SIDIS_He3 || Is_JPsi ){
@@ -99,6 +100,10 @@ else if(Is_PVDIS) {
     theta_min=10;    
 }
 else if(Is_DDVCS_JPsi_LH2) {
+    theta_max=40;
+    theta_min=0;    
+}
+else if(Is_DDVCS_PVDIS_LH2) {
     theta_max=40;
     theta_min=0;    
 }
@@ -320,6 +325,8 @@ tree_generated->SetBranchAddress("vz",&gen_vz);
 
 TTree *tree_flux = (TTree*) file->Get("flux");
 vector<int> *flux_id=0,*flux_hitn=0;
+// vector<double> *flux_id=0;
+// vector<int> *flux_hitn=0;
 vector<int> *flux_pid=0,*flux_mpid=0,*flux_tid=0,*flux_mtid=0,*flux_otid=0;
 vector<double> *flux_trackE=0,*flux_totEdep=0,*flux_avg_x=0,*flux_avg_y=0,*flux_avg_z=0,*flux_avg_lx=0,*flux_avg_ly=0,*flux_avg_lz=0,*flux_px=0,*flux_py=0,*flux_pz=0,*flux_vx=0,*flux_vy=0,*flux_vz=0,*flux_mvx=0,*flux_mvy=0,*flux_mvz=0,*flux_avg_t=0;
 tree_flux->SetBranchAddress("hitn",&flux_hitn);
@@ -435,10 +442,13 @@ for (Int_t i=0;i<nevent;i++) {
     else if (flux_id->at(j)==6210000) hit_id=9;
     else continue;  //skip other detector for now
 	
-    int detector_ID=flux_id->at(j)/1000000;
-    int subdetector_ID=(flux_id->at(j)%1000000)/100000;
-    int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/1000;
-//     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID << endl;  
+//     int detector_ID=flux_id->at(j)/1000000;
+//     int subdetector_ID=(flux_id->at(j)%1000000)/100000;
+//     int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
+    int detector_ID=int(flux_id->at(j))/1000000;
+    int subdetector_ID=(int(flux_id->at(j))%1000000)/100000;
+    int subsubdetector_ID=((int(flux_id->at(j))%1000000)%100000)/10000;
+    cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID << endl;  
         
     coor_acc.SetXYZ(flux_avg_x->at(j),flux_avg_y->at(j),flux_avg_z->at(j));
     mom_acc.SetXYZ(flux_px->at(j),flux_py->at(j),flux_pz->at(j));   
@@ -554,6 +564,9 @@ for (Int_t i=0;i<nevent;i++) {
     else if (Is_DDVCS_JPsi_LH2){
       acc[hit_id]=1;      
     }
+    else if (Is_DDVCS_PVDIS_LH2){
+      acc[hit_id]=1;      
+    }    
        
        ///DIRC cut
 //        double x=flux_avg_x->at(j)/1e1,y=flux_avg_y->at(j)/1e1;
@@ -612,6 +625,11 @@ for (Int_t i=0;i<nevent;i++) {
       if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[8]==1) pattern_id=0;  //hit on forward angle muon det behind endcap and all gem
       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[9]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut and all gem      
     }    
+    else if (Is_DDVCS_PVDIS_LH2){
+//       if (acc[8]==1) pattern_id=0;  //hit on FAEC      
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[8]==1) pattern_id=0; //hit on forward angle muon det behind endcap and all gem
+//       cout << "ok" << endl;
+    }        
     
 
     int counter_hit[2]={0,0};
