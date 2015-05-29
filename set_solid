@@ -15,7 +15,7 @@ setenv SoLID_GEMC /home/zwzhao/solid/solid_svn/solid/solid_gemc2 #solid_gemc loc
 #no need to modify variables below generally
 source $JLAB_ROOT/$JLAB_VERSION/ce/jlab.csh       #setup basic enviroment variables 
 setenv LD_LIBRARY_PATH ${GEMC}/source:${LD_LIBRARY_PATH}   # add path for "libgemc.so"
-setenv GEMC_FIELD SoLID_GEMC/field
+setenv GEMC_FIELD ${SoLID_GEMC}/field
 setenv PATH ${SoLID_GEMC}/source/${GEMC_VERSION}:${PATH}     # add path for "solid_gemc" binary
 setenv GEMC_HOST soliddb.jlab.org   #use this if your system is on jlab network
 #setenv GEMC_HOST 127.0.0.1       #use this if you are tunnleing to access mysql server
