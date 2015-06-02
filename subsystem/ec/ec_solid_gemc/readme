@@ -2,6 +2,8 @@ Here is EC simulation using "solid_gemc"
 It can work as standalone, but also with whole SoLID simulation, you just need to copy the files to the offical location at solid_gemc2/geometry/ec
 
 === How to use it ===
+source your set_solid
+
 #make ec materials
 ./solid_ec_materials.pl config_solid_PVDIS_ec_forwardangle.dat
 
@@ -22,4 +24,4 @@ solid_ec_hit.pl defines some general features of the hit processing
 
 solid_PVDIS_ec_forwardangle_real.pl defines actual EC geometry
 
-
+solid_PVDIS_ec_forwardangle__parameters_Original.txt store all parameters needed to build EC

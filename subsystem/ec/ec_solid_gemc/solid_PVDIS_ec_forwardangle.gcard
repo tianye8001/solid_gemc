@@ -23,10 +23,11 @@
 <option name="BEAM_V"   value="(0,0,10)cm"/>
 <option name="SPREAD_V" value="(0,0)cm"/>
 
-<option name="PRINT_EVENT" value="10"/>
-<option name="N" value="1e3"/>
-<option name="OUTPUT" value="evio,output.evio"/>
-<option name="USE_GUI"  value="0"/>
+
+<option name="EXEC_MACRO" value="solid_slice.vis"/>
+<option name="geometry" value="1000x1000"/>
+<option name="HIGH_RES" value="1"/>
+<option name="USE_GUI"  value="1"/>
 
 </gcard>
 
@@ -48,8 +49,11 @@
 <option name="HIGH_RES" value="1"/>
 <option name="USE_GUI"  value="1"/>
 
+use this to run batch mode for txt or evio output
+<option name="N" value="1"/>
 <option name="OUTPUT" value="txt,output.txt"/>
 <option name="OUTPUT" value="evio,output.evio"/>
+<option name="USE_GUI"  value="0"/>
 
 <option name="ENERGY_CUT"  value="0.1"/>
 

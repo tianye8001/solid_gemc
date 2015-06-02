@@ -7,7 +7,7 @@ Thickness_prescint	| 2	               | cm   | Thickness_prescint      | - |  - 
 Thickness_support	| 2	               | cm   | Thickness_support       | - |  - | - | - | - | -
 z_shower		| 350                  | cm   | z_shower       		| - |  - | - | - | - | -
 Rmin			| 110   	       | cm   | Rmin       		| - |  - | - | - | - | -
-Rmax			| 365	               | cm   | Rmax      		| - |  - | - | - | - | -
+Rmax			| 265	               | cm   | Rmax      		| - |  - | - | - | - | -
 Sphi			| 0  	               | deg  | Sphi       		| - |  - | - | - | - | -
 Dphi			| 360                  | deg  | Dphi       		| - |  - | - | - | - | -
 
