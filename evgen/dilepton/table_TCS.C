@@ -75,31 +75,31 @@ for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
 // }
 // else {cout << "not sure what type" << endl; return 0;}
 
-// string type="SoLID_TCS_JPsiSetup_ele";
-string type="CLAS12_TCS_FTSetup_ele"; 
+string type="SoLID_TCS_JPsiSetup_ele";
+// string type="CLAS12_TCS_FTSetup_ele"; 
 string treename="TCS_Tree";
 
 string filename[10]={
-// "TCSfiles/TCS_electroprod_100_SoLID_TCS_JPsiSetup_ele.root",  
-// "TCSfiles/TCS_electroprod_101_SoLID_TCS_JPsiSetup_ele.root",
-// "TCSfiles/TCS_electroprod_102_SoLID_TCS_JPsiSetup_ele.root",
-// "TCSfiles/TCS_electroprod_103_SoLID_TCS_JPsiSetup_ele.root",
-// "TCSfiles/TCS_electroprod_104_SoLID_TCS_JPsiSetup_ele.root",
-// "TCSfiles/TCS_electroprod_105_SoLID_TCS_JPsiSetup_ele.root",
-// "TCSfiles/TCS_electroprod_106_SoLID_TCS_JPsiSetup_ele.root",
-// "TCSfiles/TCS_electroprod_107_SoLID_TCS_JPsiSetup_ele.root",
-// "TCSfiles/TCS_electroprod_108_SoLID_TCS_JPsiSetup_ele.root",
-// "TCSfiles/TCS_electroprod_109_SoLID_TCS_JPsiSetup_ele.root",
-"TCSfiles/TCS_electroprod_100_CLAS12_TCS_FTSetup_ele.root",  
-"TCSfiles/TCS_electroprod_101_CLAS12_TCS_FTSetup_ele.root",
-"TCSfiles/TCS_electroprod_102_CLAS12_TCS_FTSetup_ele.root",
-"TCSfiles/TCS_electroprod_103_CLAS12_TCS_FTSetup_ele.root",
-"TCSfiles/TCS_electroprod_104_CLAS12_TCS_FTSetup_ele.root",
-"TCSfiles/TCS_electroprod_105_CLAS12_TCS_FTSetup_ele.root",
-"TCSfiles/TCS_electroprod_106_CLAS12_TCS_FTSetup_ele.root",
-"TCSfiles/TCS_electroprod_107_CLAS12_TCS_FTSetup_ele.root",
-"TCSfiles/TCS_electroprod_108_CLAS12_TCS_FTSetup_ele.root",
-"TCSfiles/TCS_electroprod_109_CLAS12_TCS_FTSetup_ele.root",  
+"TCSfiles/TCS_electroprod_100_SoLID_TCS_JPsiSetup_ele.root",  
+"TCSfiles/TCS_electroprod_101_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_102_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_103_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_104_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_105_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_106_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_107_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_108_SoLID_TCS_JPsiSetup_ele.root",
+"TCSfiles/TCS_electroprod_109_SoLID_TCS_JPsiSetup_ele.root",
+// "TCSfiles/TCS_electroprod_100_CLAS12_TCS_FTSetup_ele.root",  
+// "TCSfiles/TCS_electroprod_101_CLAS12_TCS_FTSetup_ele.root",
+// "TCSfiles/TCS_electroprod_102_CLAS12_TCS_FTSetup_ele.root",
+// "TCSfiles/TCS_electroprod_103_CLAS12_TCS_FTSetup_ele.root",
+// "TCSfiles/TCS_electroprod_104_CLAS12_TCS_FTSetup_ele.root",
+// "TCSfiles/TCS_electroprod_105_CLAS12_TCS_FTSetup_ele.root",
+// "TCSfiles/TCS_electroprod_106_CLAS12_TCS_FTSetup_ele.root",
+// "TCSfiles/TCS_electroprod_107_CLAS12_TCS_FTSetup_ele.root",
+// "TCSfiles/TCS_electroprod_108_CLAS12_TCS_FTSetup_ele.root",
+// "TCSfiles/TCS_electroprod_109_CLAS12_TCS_FTSetup_ele.root",  
 };
 
 //start of looping through file list
@@ -248,7 +248,7 @@ for (Int_t a1=0;a1<Nbin_Egamma;a1++) {
 	    b3=acc_4fold[a1][a2][a3][a4][a5]/gen[a1][a2][a3][a4][a5];
 	  }	  
 	  OUT << a1 << "\t" << a2 << "\t" << a3 << "\t" << a4 << "\t" << a5 << "\t";
-	  OUT << b1 << "\t" << b1 << "\t" << b1 << "\t";
+	  OUT << b1 << "\t" << b2 << "\t" << b3 << "\t";
 	  OUT << gen[a1][a2][a3][a4][a5] << "\n"; 
 	  
 	  counter++;
@@ -271,9 +271,11 @@ hNgen->Draw();
 c->cd(1);
 hacc_3fold_recoildecaypair->SetLineColor(kBlack);
 hacc_3fold_recoildecaypair->Draw();
+hacc_3fold_recoildecaypair->SetTitle("acc_3fold_recoildecaypair in black,acc_3fold_eloutdecaypair in red,acc_4fold in blue");
 hacc_3fold_eloutdecaypair->SetLineColor(kRed);
 hacc_3fold_eloutdecaypair->Draw("same");
 hacc_4fold->SetLineColor(kBlue);
 hacc_4fold->Draw("same");
+c->SaveAs(Form("table_%s.png",type.c_str()));
     
 }

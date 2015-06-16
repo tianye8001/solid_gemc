@@ -251,7 +251,7 @@ for (Int_t a1=0;a1<Nbin_Xbj;a1++) {
 	    b3=acc_4fold[a1][a2][a3][a4][a5][a6][a7]/gen[a1][a2][a3][a4][a5][a6][a7];
 	  }	  
 	  OUT << a1 << "\t" << a2 << "\t" << a3 << "\t" << a4 << "\t" << a5 << "\t" << a6 << "\t" << a7 << "\t";
-	  OUT << b1 << "\t" << b1 << "\t" << b1 << "\t";
+	  OUT << b1 << "\t" << b2 << "\t" << b3 << "\t";
 	  OUT << gen[a1][a2][a3][a4][a5][a6][a7] << "\n"; 
 	  
 	  counter++;
@@ -276,9 +276,10 @@ hNgen->Draw();
 c->cd(1);
 hacc_3fold_recoildecaypair->SetLineColor(kBlack);
 hacc_3fold_recoildecaypair->Draw();
+hacc_3fold_recoildecaypair->SetTitle("acc_3fold_recoildecaypair in black,acc_3fold_eloutdecaypair in red,acc_4fold in blue");
 hacc_3fold_eloutdecaypair->SetLineColor(kRed);
 hacc_3fold_eloutdecaypair->Draw("same");
 hacc_4fold->SetLineColor(kBlue);
 hacc_4fold->Draw("same");
-    
+c->SaveAs(Form("table_%s.png",type.c_str()));
 }
