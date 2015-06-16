@@ -36,10 +36,25 @@ root
 .x accep.C+("~/volatile/halla/solid/mboer/Generator/TCS_electro2_CLAS12_TCS_FTSetup_ele.root")
 .x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root")
 
+for SoLID_TCS_JPsiSetup_ele,
+accep_3fold_recoildecaypair means all three particles in forward or large angle detector
+accep_3fold_eloutdecaypair is always 0 
+accep_4fold is always 0
+
+for CLAS12_TCS_FTSetup_ele, 
+accep_3fold_recoildecaypair means decaypair in forward detector and recoil proton in either forwrd or central detector, 
+accep_3fold_eloutdecaypair means decaypair in forward detector and elout in forward tagger by 2.5 and 4.5 degree cut,  
+accep_4fold means decaypair in forward detector and recoil proton in either forwrd or central detector and elout in forward tagger by 2.5 and 4.5 degree cut
+
+for SoLID_DDVCS_JPsiSetup_muon,
+accep_3fold_recoildecaypair means decaypair in forward or large angle muon detector and recoil proton in forwrd or large angle detector (channel with low Q2 and high stat)
+accep_3fold_eloutdecaypair means decaypair in forward or large angle muon detector and elout in forwrd or large angle detector  (channel with high Q2 and high stat, most interesting one)
+accep_4fold means decaypair in forward or large angle muon detector and elout in forwrd or large angle detector and recoil proton in forwrd or large angle detector (channel with high Q2 and low  stat)
+
 =table_TCS.C=
 
-table.C read the root tree with acceptance output by accep.C, and bin it into 5D binnng and calculate acceptance in each bin and output result into a table in a txt file
-(currently, input files are hardcoded)
+this file read the root tree with acceptance output by accep.C, and bin it into 5D binnng and calculate acceptance in each bin and output result into a table in a txt file
+(currently, input files are hardcoded, you need to change it by hand for different detector)
 
 run it in root with compilation ".x table_TCS.C+"
 
@@ -52,16 +67,16 @@ bin numbers increase from kinematic variable right to left
 
 =table_DDVCS.C=
 
-table.C read the root tree with acceptance output by accep.C, and bin it into 7D binnng and calculate acceptance in each bin and output result into a table in a txt file
-(currently, input files are hardcoded)
+this file read the root tree with acceptance output by accep.C, and bin it into 7D binnng and calculate acceptance in each bin and output result into a table in a txt file
+(currently, input files are hardcoded, you need to change it by hand for different detector)
 
 run it in root with compilation ".x table_DDVCS.C+"
 
 The binning choice are now
 4 Xbj (0.1-0.4), 6 tt (0.1-0.8), 6 Q2 (1-7), 6 Qp2 (2-9), 8 Phi_LH (0-2pi), 6 Theta_CMV(45-135),8 Phi_CMV(0-2pi),
 
-each line of the txt file has 9 entries seperated by tab as below
-"bin_Xbj	bin_tt bin_Q2	bin_Qp2	bin_Phi_LH	bin_Theta_CMV	bin_Phi_CMV	accep_3fold_recoildecaypair		accep_3fold_eloutdecaypair	accep_4fold	Ngen"
+each line of the txt file has 11 entries seperated by tab as below
+"bin_Xbj	bin_tt	bin_Q2	bin_Qp2	bin_Phi_LH	bin_Theta_CMV	bin_Phi_CMV	accep_3fold_recoildecaypair		accep_3fold_eloutdecaypair	accep_4fold	Ngen"
 bin numbers increase from kinematic variable right to left
 
 == info about exp==
