@@ -1,0 +1,3 @@
+./solid_SIDIS_hgc.pl config_solid_SIDIS_hgc.dat
+gemc solid_SIDIS_hgc.gcard
+evio2root -INPUTF=output.evio
