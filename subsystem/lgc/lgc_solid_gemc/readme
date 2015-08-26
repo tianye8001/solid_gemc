@@ -1,0 +1,2 @@
+./solid_SIDIS_lgc.pl config_solid_SIDIS_lgc.dat
+gemc solid_SIDIS_lgc.gcard
