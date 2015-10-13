@@ -42,8 +42,8 @@ my $DEG=180/3.1415916;
 my $material_chamber="G4_Al";
 # my $material_gas="G4_Al";
 my $material_gas="SL_HGC_C4F8O";
-# my $material_block="SL_HGC_C4F8O";
-my $material_block="G4_Al";
+my $material_block="SL_HGC_C4F8O";
+# my $material_block="G4_Al";
 my $material_window_front_1 = "SL_HGC_kevlar";
 my $material_window_front_2 = "SL_HGC_mylar";
 my $material_window_back = "G4_Al";
@@ -416,7 +416,8 @@ sub make_mirror
   my $R_end_in = $Z_end*tan($Angle_in/$DEG);
   my $R_end_out = $Z_end*tan($Angle_out/$DEG);
 print "$R_front_in $R_front_out $R_end_in $R_end_out\n";  
-  
+#   86.3640091200709 181.92483680982 99.5292544127646 209.657281445463
+
   my $ang_start=-0.5*$ang_width;  
 #   my $ang_start=0;  
 

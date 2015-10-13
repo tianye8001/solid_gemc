@@ -33,7 +33,7 @@ void analysis(string input_filename)
 gROOT->Reset();
 gStyle->SetPalette(1);
 // gStyle->SetOptStat(0);
-gStyle->SetOptStat(1);
+gStyle->SetOptStat(111111);
 
 const double DEG=180./3.1415926;
 
@@ -64,6 +64,10 @@ double eff_PMT[41] = {
 0.09  
 }; 
 
+//safety factor
+double factor=0.8;  //PMT and assmbly effective area
+factor=factor*0.5;  //for pion, manual reduce 2
+
 char the_filename[200];
 sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_str());
 
@@ -80,10 +84,17 @@ for(int i=0;i<41;i++){
 hQE_WL->Fill(1.24/PhotonEnergy[i]*1e3,eff_PMT[i]);
 }
 
+TH1F *hspectrum_E_photon=new TH1F("hspectrum_E_photon",";E (eV);number of photon",100,0,10);
+TH1F *hspectrum_WL_photon=new TH1F("hspectrum_WL_photon",";wavelength (nm);number of photon",100,0,1000);
+
 TH1F *hspectrum_E=new TH1F("hspectrum_E",";E (eV);number of photoelectron",100,0,10);
 TH1F *hspectrum_WL=new TH1F("hspectrum_WL",";wavelength (nm);number of photoelectron",100,0,1000);
 
-TH1F *hcount=new TH1F("hcount","hcount;number of photoelectron;count",500,0,50);
+TH1F *hcount=new TH1F("hcount","hcount;number of photoelectron;count",100,0,50);
+
+TH1F *hedep_spd=new TH1F("hedep_spd","hedep_spd;edep;count",500,0,50);
+
+TH2F *hcount_edep_spd=new TH2F("hcount_edep_spd","hcount_edep_spd;hgc_PEcount;spd_edep",100,0,50,500,0,50);
 
 const int n=30; //total number of sector
 
@@ -335,21 +346,37 @@ for (Int_t i=0;i<nevent;i++) {
     
 //     cout << "nhits " << flux_hitn->size() << "\n";
 
+    double edep_spd=0;
     double photon_count[n];
     for (Int_t k=0;k<n;k++) {photon_count[k]=0;}
     
     for (Int_t j=0;j<flux_hitn->size();j++) {
 //             cout << "flux " << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
-
-     if (flux_pid->at(j) !=0 ) {
-//        cout << "not optical photon? " << flux_pid->at(j) << endl; 
-       continue;    
-    }
+            
       
     int detector_ID=flux_id->at(j)/1000000;
     int subdetector_ID=(flux_id->at(j)%1000000)/100000;
     int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
 //     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID << endl;  
+    
+     if (detector_ID ==2 || subdetector_ID ==2) {
+//        cout << "not optical photon? " << flux_pid->at(j) << endl; 
+	if (flux_pid->at(j) !=0 ) {
+//        cout << "not optical photon? " << flux_pid->at(j) << endl; 
+	  continue;    
+	}
+    }    
+//     else continue;
+
+     if (flux_id->at(j) == 5100000) {
+       edep_spd += flux_totEdep->at(j);
+     }
+           
+
+     if (flux_pid->at(j) !=0 ) {
+//        cout << "not optical photon? " << flux_pid->at(j) << endl; 
+       continue;    
+    }    
     
 //     int sector_new=(flux_id->at(j)-2200000)/10000;
 //     if (sector_new != sector) { cout << "from other sector? " << sector << " " << sector_new << endl;} 
@@ -369,10 +396,14 @@ for (Int_t i=0;i<nevent;i++) {
 //        weight=1;
 	      
        photon_count[sector_this-1] += weight;    
-      
+
        hspectrum_E->Fill(E_flux,weight);
        double WL_flux=1.24/E_flux*1e3;
        hspectrum_WL->Fill(WL_flux,weight); 
+       
+       hspectrum_E_photon->Fill(E_flux);
+       hspectrum_WL_photon->Fill(WL_flux);        
+       
        
        double vx_flux=flux_vx->at(j)/10.;  //in cm
        double vy_flux=flux_vy->at(j)/10.;  //in cm     
@@ -389,13 +420,17 @@ for (Int_t i=0;i<nevent;i++) {
     for (Int_t k=0;k<n;k++) { 
 // 	  cout <<k << " " << photon_count[k] << ", "; 
 	  if(photon_count[k]>=photon_count[sector-1]) {sector=k+1;}
-	  counter_total += photon_count[k]*0.8*0.5;		  
+	  counter_total += photon_count[k]*factor;		  
     }
 //     cout << endl;
 
     hcount->Fill(counter_total);
     
-    double counter = photon_count[sector-1]*0.8*0.5;
+    hedep_spd->Fill(edep_spd);
+
+    hcount_edep_spd->Fill(counter_total,edep_spd);        
+    
+    double counter = photon_count[sector-1]*factor;
 
 	vector_p_gen.push_back(p_gen); 
 	vector_phi_gen.push_back(fmod(phi_gen+180,12.));	
@@ -582,6 +617,13 @@ hspectrum_E->Draw();
 c_spectrum->cd(2);
 hspectrum_WL->Draw();
 
+TCanvas *c_spectrum_photon = new TCanvas("spectrum_photon","spectrum_photon",1600,800);
+c_spectrum_photon->Divide(2,1);
+c_spectrum_photon->cd(1);
+hspectrum_E_photon->Draw();
+c_spectrum_photon->cd(2);
+hspectrum_WL_photon->Draw();
+
 TCanvas *c_QE = new TCanvas("QE","QE",1600,800);
 c_QE->Divide(2,1);
 c_QE->cd(1);
@@ -591,8 +633,14 @@ c_QE->cd(2);
 hQE_WL->Draw();
 gPad->SetLogy(1);
 
-TCanvas *c_count = new TCanvas("count","count",1200,800);
+TCanvas *c = new TCanvas("c","c",1600,800);
+c->Divide(3,1);
+c->cd(1);
 hcount->Draw();
+c->cd(2);
+hedep_spd->Draw();
+c->cd(3);
+hcount_edep_spd->Draw();
 
 TCanvas *c_count_total_2D = new TCanvas("count_total_2D","count_total_2D",1000,800);
 hcount_total_2D->SetAxisRange(2,8,"X");
