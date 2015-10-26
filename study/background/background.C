@@ -117,8 +117,8 @@ void background(string input_filename){
 	sprintf(output_filename, "%s_output.root",input_filename.substr(0,input_filename.rfind(".")).c_str());
 	TFile *outputfile=new TFile(output_filename, "recreate");
 
-	const int n=43; // number of detector
-	const int m=11; //number of particles
+	const int n=48; // number of detector
+	const int m=13; //number of particles
 
 	TString label[m]={"photon+electron+positron","photon","electron+positron","neutron","proton","pip","pim","Kp","Km","Kl","other"};
 
@@ -136,8 +136,11 @@ void background(string input_filename){
 	TH1F *hPlog[n][m],*hElog[n][m],*hEklog[n][m];
 	TH1F *hfluxEklog_cut[n][m],*hfluxEklog_cut_niel[n][m];
 	TH2F *hP_Theta[n][m],*hP_Theta_high[n][m],*hP_Theta_low[n][m];
+	TH2F *hQ2_x[n][m];;
 	TH2F *hP_R[n][m],*hP_R_high[n][m],*hP_R_low[n][m];
 	TH2F *hPlog_R[n][m],*hPlog_R_high[n][m],*hPlog_R_low[n][m];
+	TH2F *hPlog_Z[n][m];		
+	TH2F *hEklog_Z[n][m];		
 	TH2F *hElog_R[n][m];
 	TH2F *hEklog_R[n][m],*hEklog_R_high[n][m],*hEklog_R_low[n][m];
 	TH3F *hEklog_R_Phi[n][m];
@@ -230,6 +233,10 @@ void background(string input_filename){
 			hEklog[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
 			hEklog[k][l]->SetTitle(";log(Ek) GeV;kHz");    
 
+			sprintf(hstname,"Q2_x_%i_%i",k,l);
+			hQ2_x[k][l]=new TH2F(hstname,hstname,20, 0, 1, 20,0,10);    
+			hQ2_x[k][l]->SetTitle("rate(kHz);x ;Q2 (GeV^{2})");    
+			
 			sprintf(hstname,"P_Theta_%i_%i",k,l);
 			hP_Theta[k][l]=new TH2F(hstname,hstname,100, 0, 50, 1100,0,11);    
 			hP_Theta[k][l]->SetTitle("rate(kHz)/0.5deg/10MeV;Theta (deg);P (GeV)");    
@@ -260,6 +267,14 @@ void background(string input_filename){
 			hPlog_R_low[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);    
 			hPlog_R_low[k][l]->SetTitle(";R (cm);log(P) (GeV)");          
 
+			sprintf(hstname,"Plog_Z_%i_%i",k,l);
+			hPlog_Z[k][l]=new TH2F(hstname,hstname,300, 200, 500, 200,-6,1.3);    
+			hPlog_Z[k][l]->SetTitle(";Z (cm);log(P) (GeV)"); 
+			
+			sprintf(hstname,"Eklog_Z_%i_%i",k,l);
+			hEklog_Z[k][l]=new TH2F(hstname,hstname,300, 200, 500, 200,-6,1.3);    
+			hEklog_Z[k][l]->SetTitle(";Z (cm);log(Ek) (GeV)");    
+			
 			sprintf(hstname,"Elog_R_%i_%i",k,l);
 			hElog_R[k][l]=new TH2F(hstname,hstname,300, 0, 300, 200,-6,1.3);    
 			hElog_R[k][l]->SetTitle(";R (cm);log(E) (GeV)");    
@@ -377,7 +392,8 @@ void background(string input_filename){
 		double W = header_W->at(0);
 		double Q2 = header_Q2->at(0);
 		double x = header_x->at(0);
-
+// 		cout << Q2 << " " << x << endl;
+		
 		flux->GetEntry(i);
 		/*Loop fluxes{{{*/
 		for(unsigned int j=0;j<flux_hitn->size();j++) {
@@ -419,7 +435,9 @@ void background(string input_filename){
 			else if(particle_ID==321)  par=7;  //Kp    
 			else if(particle_ID==-321)  par=8;  //Km
 			else if(particle_ID==130)  par=9;  //Kl    
-			else par=10;  //all other
+			else if(particle_ID==-13)  par=10;  //mu+
+			else if(particle_ID==13)  par=11;  //mu-			
+			else par=12;  //all other
 			/*End of Check PID}}}*/
 
 			int detector_ID= (int) flux_id->at(j);
@@ -427,7 +445,7 @@ void background(string input_filename){
 			/*Check Detector ID{{{*/
 			if ( detector_ID !=11 && detector_ID !=12 &&  detector_ID !=13 && detector_ID !=14 && detector_ID !=15 
 					&& detector_ID !=16 && detector_ID !=31 && detector_ID !=32 
-					&& detector_ID!=21 && detector_ID!=22 && detector_ID!=41 && detector_ID!=42 && detector_ID!=51 && detector_ID!=52){
+					&& detector_ID!=21 && detector_ID!=22 && detector_ID!=41 && detector_ID!=42 && detector_ID!=51 && detector_ID!=52 && detector_ID!=61 && detector_ID!=62 && detector_ID!=63){
 				cout << "wrong detector_ID "  << i  << " " << j << " " << flux_id->at(j) << endl;
 				cout << " " <<  flux_id->at(j) << " " <<  particle_ID << " " <<  flux_mpid->at(j) 
 					<< " " <<   flux_totEdep->at(j) << " " <<  flux_trackE->at(j) << " " 
@@ -450,6 +468,9 @@ void background(string input_filename){
 			//         16,17,26 MRPC front,gas,glass
 			//         27-28 FASPD front, inner
 			//         41-42 LASPD front inner
+			//	   43-44 forward muon detector front,back
+			//	   45  encap donut muon detector front
+			//	   46.47  barrel muon detector 1st,2nd layer
 			//   pid =0   photon+electron+positron
 			//        1   photon    
 			//        2   electron + positron
@@ -534,6 +555,17 @@ void background(string input_filename){
 					    else if (subdetector_ID==520) hit_id=42;
 					    else cout << "wrong flux_ID 52 " << (int)flux_id->at(j)<< endl;
 					    break;		     
+				case 61:     if (subdetector_ID==611) hit_id=43;
+					    else if (subdetector_ID==612) hit_id=44;
+					    else cout << "wrong flux_ID 61 " << (int)flux_id->at(j)<< endl;
+					    break;			
+				case 62:     if (subdetector_ID==621) hit_id=45;
+					    else cout << "wrong flux_ID 62 " << (int)flux_id->at(j)<< endl;
+					    break;			
+				case 63:     if (subdetector_ID==631) hit_id=46;
+					    else if (subdetector_ID==632) hit_id=47;
+					    else cout << "wrong flux_ID 63 " << (int)flux_id->at(j)<< endl;
+					    break;						    
 				default:     cout << "wrong flux_ID 00 " << (int)flux_id->at(j)
 							 <<" ID="<<detector_ID<<  endl;
 			}    
@@ -583,11 +615,18 @@ void background(string input_filename){
 			// 				}
 			// 			}
 
-			///cut away the back scattering from lead			
+			///cut away the back scattering from EC			
 			if ((hit_id==8 || hit_id==12) && flux_pz->at(j) < 0.){
 				backscat_counter++; 
 				continue;    
 			}
+
+			///cut away the back scattering from muon detector			
+			if (hit_id==43 && flux_pz->at(j) < 0.){
+				backscat_counter++; 
+				continue;    
+			}
+			
 
 // 			if (Is_eDIS && (W<2)) continue; /// cut for eDIS			
 // 			cout << "W " << W << " rate " << rate <<  endl;
@@ -630,6 +669,8 @@ void background(string input_filename){
 
 				hhitXY[hit_id][par]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.,weight);				
 				hhitZ[hit_id][par]->Fill(flux_avg_z->at(j)/10.,weight);      		
+
+				hQ2_x[hit_id][par]->Fill(x,Q2,weight);
 				
 				hPlog[hit_id][par]->Fill(log10(P/1e3),weight);
 				hElog[hit_id][par]->Fill(log10(flux_trackE->at(j)/1e3),weight);
@@ -639,6 +680,9 @@ void background(string input_filename){
 				hPlog_R[hit_id][par]->Fill(r/10.,log10(P/1e3),weightR/10.); ///in 1cm bin      
 				hElog_R[hit_id][par]->Fill(r/10.,log10(flux_trackE->at(j)/1e3),weightR/10.); ///in 1cm bin
 				hEklog_R[hit_id][par]->Fill(r/10.,log10(Ek/1e3),weightR/10.); ///in 1cm bin
+
+				hPlog_Z[hit_id][par]->Fill(flux_avg_z->at(j)/10.,log10(P/1e3),weight); 
+				hEklog_Z[hit_id][par]->Fill(flux_avg_z->at(j)/10.,log10(Ek/1e3),weight); 	
 				
 				hEklog_R_Phi[hit_id][par]->Fill(phi-int(phi/12)*12,r/10.,log10(Ek/1e3),weight/30.);  // due to phi cover 12 degree, this will overlap 30 sector together, so we need to divide rate by 30
 			
@@ -757,6 +801,7 @@ void background(string input_filename){
 		hEklog[k][0]->Add(hEklog[k][1],hEklog[k][2]);
 		hfluxEklog_cut[k][0]->Add(hfluxEklog_cut[k][1],hfluxEklog_cut[k][2]);
 		hfluxEklog_cut_niel[k][0]->Add(hfluxEklog_cut_niel[k][1],hfluxEklog_cut_niel[k][2]);
+		hQ2_x[k][0]->Add(hQ2_x[k][1],hQ2_x[k][2]);		
 		hP_Theta[k][0]->Add(hP_Theta[k][1],hP_Theta[k][2]);
 		hP_Theta_high[k][0]->Add(hP_Theta_high[k][1],hP_Theta_high[k][2]);   
 		hP_Theta_low[k][0]->Add(hP_Theta_low[k][1],hP_Theta_low[k][2]);         
@@ -766,6 +811,8 @@ void background(string input_filename){
 		hPlog_R[k][0]->Add(hPlog_R[k][1],hPlog_R[k][2]);
 		hPlog_R_high[k][0]->Add(hPlog_R_high[k][1],hPlog_R_high[k][2]);
 		hPlog_R_low[k][0]->Add(hPlog_R_low[k][1],hPlog_R_low[k][2]);   
+		hPlog_Z[k][0]->Add(hPlog_Z[k][1],hPlog_Z[k][2]);
+		hEklog_Z[k][0]->Add(hEklog_Z[k][1],hEklog_Z[k][2]);		
 		hEklog_R[k][0]->Add(hEklog_R[k][1],hEklog_R[k][2]);
 		hEklog_R_high[k][0]->Add(hEklog_R_high[k][1],hEklog_R_high[k][2]);
 		hEklog_R_low[k][0]->Add(hEklog_R_low[k][1],hEklog_R_low[k][2]);   
@@ -1068,10 +1115,10 @@ void background(string input_filename){
 	  hfluxEklog_cut_niel[k][6]->Multiply(hfluxEklog_cut[k][6],hniel_pions);	  	  
 	}
 
-	cout << hfluxEklog_cut_niel[8][3]->Integral() << endl;
-	cout << hfluxEklog_cut_niel[11][3]->Integral() << endl;
-	cout << hfluxEklog_cut_niel[12][3]->Integral() << endl;
-	cout << hfluxEklog_cut_niel[15][3]->Integral() << endl;
+// 	cout << hfluxEklog_cut_niel[8][3]->Integral() << endl;
+// 	cout << hfluxEklog_cut_niel[11][3]->Integral() << endl;
+// 	cout << hfluxEklog_cut_niel[12][3]->Integral() << endl;
+// 	cout << hfluxEklog_cut_niel[15][3]->Integral() << endl;
 
 	TCanvas *c_neutron_ec = new TCanvas("neutron_ec","neutron_ec",1600,900);
 	c_neutron_ec->Divide(4,2);
