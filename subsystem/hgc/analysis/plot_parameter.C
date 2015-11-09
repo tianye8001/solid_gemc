@@ -100,6 +100,18 @@ TGraph *g_QE_H8500_03_WL=new TGraph(n,Wavelength,QE_H8500_03);
 g_QE_H8500_03_WL->SetTitle(";wavelength(nm);QE(%)");
 g_QE_H8500_03_WL->SetName("QE_H8500_03");
 
+double Wavelength_Hamamatsu[51] = {
+200,210,220,230,240,250,260,270,280,290,300,310,320,330,340,350,360,370,380,390,400,410,420,430,440,450,460,470,480,490,500,510,520,530,540,550,560,570,580,590,600,610,620,630,640,650,660,670,680,690,700
+};
+
+double QE_H12700_03_Hamamatsu[51] = {
+11.50,14.12,16.83,18.91,22.45,25.18,27.22,28.86,30.15,31.35,32.87,33.37,33.63,33.73,33.46,33.12,32.74,32.42,32.45,31.54,30.76,29.76,28.77,27.59,26.16,24.31,22.48,20.93,19.67,18.49,16.50,13.05,10.11,8.36,7.15,6.12,5.19,4.29,3.46,2.69,2.00,1.41,0.95,0.60,0.35,0.19,0.10,0.05,0.02,0.01,0.00  
+};
+
+TGraph *g_QE_H12700_03_WL_Hamamatsu=new TGraph(51,Wavelength_Hamamatsu,QE_H12700_03_Hamamatsu);
+g_QE_H12700_03_WL_Hamamatsu->SetTitle(";wavelength(nm);QE(%)");
+g_QE_H12700_03_WL_Hamamatsu->SetName("H12700_03_Hamamatsu");
+
 TLegend* leg_QE_E = new TLegend(0.8, 0.8, .95, .95);
 leg_QE_E->AddEntry(g_QE_H12700_03_E,g_QE_H12700_03_E->GetName());
 leg_QE_E->AddEntry(g_QE_H8500_03_E,g_QE_H8500_03_E->GetName());
@@ -107,6 +119,8 @@ leg_QE_E->AddEntry(g_QE_H8500_03_E,g_QE_H8500_03_E->GetName());
 TLegend* leg_QE_WL = new TLegend(0.8, 0.8, .95, .95);
 leg_QE_WL->AddEntry(g_QE_H12700_03_WL,g_QE_H12700_03_WL->GetName());
 leg_QE_WL->AddEntry(g_QE_H8500_03_WL,g_QE_H8500_03_WL->GetName());
+leg_QE_WL->AddEntry(g_QE_H12700_03_WL_Hamamatsu,g_QE_H12700_03_WL_Hamamatsu->GetName());
+
 
 TCanvas *c_QE = new TCanvas("QE","QE",1600,800);
 c_QE->Divide(2,1);
@@ -131,7 +145,10 @@ g_QE_H12700_03_WL->SetMinimum(0);
 g_QE_H12700_03_WL->GetXaxis()->SetRangeUser(200,800);
 g_QE_H8500_03_WL->SetMarkerColor(kRed);
 g_QE_H8500_03_WL->Draw("C*");
+g_QE_H12700_03_WL_Hamamatsu->SetMarkerColor(kBlack);
+g_QE_H12700_03_WL_Hamamatsu->Draw("C*");
 leg_QE_WL->Draw();
+
 
 double reflectivity[n] = {
 0.8678125, 0.8651562, 0.8639063, 0.8637500,
