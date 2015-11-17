@@ -1,4 +1,0 @@
-$SoLID_GEMC/geometry/solid_materials.pl config_solid_SIDIS_cc.dat
-./solid_SIDIS_cc.pl config_solid_SIDIS_cc.dat
-solid_gemc solid_SIDIS_cc.gcard
-evio2root -INPUTF=output.evio -B=solid_SIDIS_cc -WRITE_RAWS=no
