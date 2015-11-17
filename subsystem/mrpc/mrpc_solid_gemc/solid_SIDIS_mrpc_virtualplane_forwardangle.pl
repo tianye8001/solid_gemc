@@ -8,13 +8,13 @@ our %parameters;
 use Getopt::Long;
 use Math::Trig;
 
-my $DetectorName = 'solid_SIDIS_virtualplane_mrpc_forwardangle';
+my $DetectorName = 'solid_SIDIS_mrpc_forwardangle_virtualplane';
 
 my $DetectorMother="root";
 
-sub solid_SIDIS_virtualplane_mrpc_forwardangle
+sub solid_SIDIS_mrpc_forwardangle_virtualplane
 {
-make_solid_SIDIS_virtualplane_mrpc_forwardangle_front();
+make_solid_SIDIS_mrpc_forwardangle_virtualplane_front();
 }
 
  my $z=408;
