@@ -19,7 +19,7 @@ make_solid_SIDIS_mrpc_forwardangle_virtualplane_front();
 
  my $z=408;
 
-sub make_solid_SIDIS_virtualplane_mrpc_forwardangle_front
+sub make_solid_SIDIS_mrpc_forwardangle_virtualplane_front
 {
  my %detector=init_det();
  $detector{"name"}        = "$DetectorName\_front";
