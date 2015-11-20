@@ -1,0 +1,36 @@
+
+Hello Zhiwen,
+
+Here are some revisions to the Calorimeter module coordinates.
+
+Paul
+
+
+-------- Original Message --------
+Subject: 	New SOLID Tube Coordinates
+Date: 	Fri, 28 Jun 2013 11:28:55 -0500
+From: 	Tom O'Connor <toconnor@anl.gov>
+To: 	Paul E. Reimer <reimer@anl.gov>
+
+
+Hi Paul,
+
+I'm attaching the newest data for the SOLID tubes along with two reference
+drawings for the different styles of tube layouts.  The tube layouts for the
+other quadrants are just mirror images of these so I just flipped the signs
+in the spreadsheet.  The top half of the spreadsheet is from Victors
+original model without the additional tubes we talked about last week.  The
+bottom half is from my model.  Take a look and if you have any questions or
+find any mistakes please let me know.  
+
+Have a good weekend.
+
+Tom 
+
+
+
+	
+Paul E. Reimer <reimer@anl.gov>
+Physicist
+Physics
+Argonne National Laboratory

@@ -1,0 +1,78 @@
+
+got it.
+
+The current space within the endcap is 90-270cm in radius at FAEC location.
+Besides the supporting structure, I think we want to fill it up with EC modules to maximize acceptance.
+
+For the next iteration of endcap design, we should try to reduce the inner radius from 90cm to 85 or 80cm to optimize the most forward angle detection for SIDIS.
+
+Zhiwen
+
+
+On 6/18/2013 11:06 AM, Paul E. Reimer wrote:
+> Hello,
+>
+> In answer to your questions:
+>
+>  1. Refer to the PDF drawing that was also attached--see the labeling in
+>     the lower right area.  The A and B represent a half cell offset.
+>     These correspond to lines 27 and 28.
+>  2. We are still working on this.  Tom asked me which one I wanted first.
+>
+> Paul
+>
+> On 6/18/13 8:55 AM, Zhiwen Zhao wrote:
+>> Hi, Paul
+>>
+>> Thanks a lot for the files from Tom.
+>> two questions
+>> 1. What's the set A and set B mentioned in the spreadsheet file?
+>> 2. Can we also have the CAD files for HallA engineers to merge it into
+>> the main SoLID setup?
+>>
+>> Zhiwen
+>>
+>>
+>> On 6/17/2013 11:24 AM, Paul E. Reimer wrote:
+>>> Hello Zhiwen,
+>>>
+>>> Attached are the coordinates for the forward EM calo blocks.
+>>>
+>>> Paul
+>>>
+>>>
+>>> -------- Original Message --------
+>>> Subject:     SOLID Tube Centers
+>>> Date:     Mon, 17 Jun 2013 10:22:04 -0500
+>>> From:     Tom O'Connor <toconnor@anl.gov>
+>>> To:     Paul E. Reimer <reimer@anl.gov>
+>>>
+>>>
+>>>
+>>> Hi Paul,
+>>>
+>>> I've attached a very cumbersome spreadsheet with coordinates of the PMT
+>>> centers for the SOLID detector.  I've also attached a pdf that
+>>> graphically
+>>> shows the centers for one quadrant.
+>>> The first column of the spreadsheet lists the all of the y
+>>> coordinates for
+>>> the PMT's, the remaining columns show the x-coordinates of all the tubes
+>>> which correspond to that particular y-coordinate.  The green cells
+>>> highlight
+>>> the Y-axis.  If you have any questions or would prefer another format
+>>> please
+>>> let me know.
+>>>
+>>> Tom
+>>>
+>>>
+>>>
+>
+> -- 
+> Paul E. Reimer                 +1-630-252-4037 (Argonne Office)
+> Physics Division Bldg 203      +1-630-252-3903 (Argonne Fax)
+> 9700 S. Cass Ave.              +1-630-840-5709 (Fermilab)
+> Argonne, IL  60439             +1-630-344-9207 (Cell)
+> USAreimer@anl.gov
+>
