@@ -39,12 +39,12 @@ void gfield::create_MFM()
 
 		// caching does not seem to help for dipole-y
 		// will it help for other field maps?
-		G4MagneticField *pCachedMagField = new G4CachedMagneticField(map, 12 * cm);
+		G4MagneticField *pCachedMagField = new G4CachedMagneticField(map, 1 * cm);
 		MFM = new G4FieldManager(pCachedMagField, iChordFinder);
 
 		// change these?
-		MFM->SetDeltaOneStep(1 * mm);
-		MFM->SetDeltaIntersection(1 * mm);
+		MFM->SetDeltaOneStep(0.01 * mm);
+		MFM->SetDeltaIntersection(0.001 * mm);
 	}
 
 }
@@ -100,7 +100,7 @@ void gfield::create_simple_multipole_MFM()
 G4MagIntegratorStepper *createStepper(string sname, G4Mag_UsualEqRhs* ie)
 {
 	if (sname == "ClassicalRK4")	return new G4ClassicalRK4(ie);
-	if (sname == "RungeKutta")		return new G4HelixSimpleRunge(ie);
+	if (sname == "RungeKutta") 		return new G4HelixSimpleRunge(ie);
 	if (sname == "ImplicitEuler")	return new G4HelixImplicitEuler(ie);
 	if (sname == "ExplicitEuler")	return new G4HelixExplicitEuler(ie);
 
