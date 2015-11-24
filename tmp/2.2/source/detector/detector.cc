@@ -804,37 +804,7 @@ int detector::create_physical_volumes(goptions gemcOpt, G4LogicalVolume *mamma)
 		return 1;
 	}
 	
-	if(type.find("Replica:") == 0)
-	{
-		if(dimensions.size() != 4)
-		{
-			cout << hd_msg << " Fatal Error: the number of dimensions for " << name
-			<< " is " << dimensions.size() <<  ":" << endl;
-			for(unsigned int i=0; i<dimensions.size(); i++)
-				cout << "      dimension " << i + 1 << ": " <<  dimensions[i] << endl;
-			cout << "      This does not match a G4Replicas (4). Exiting" << endl << endl;
-			exit(0);
-		}
-		
-		EAxis pAxis;
-		if(dimensions[0] == 1) pAxis = kXAxis;
-		if(dimensions[0] == 2) pAxis = kYAxis;
-		if(dimensions[0] == 3) pAxis = kZAxis;
-		int nreps     = (int) dimensions[1];
-		double width  = dimensions[2];
-		double offset = dimensions[3];
-		
-		// the logical volume is built
-		// the mother is built as well
-		PhysicalV = new G4PVReplica(name,     ///< name
-								LogicV,       ///< Logical Volume Copy
-								mamma,        ///< Mother Logical Volume
-								pAxis,        ///< EAxis of copy - can be kXAxis,kYAxis,kZAxis,kRho,kRadial3D,kPhi
-								nreps,        ///< Number of repetitions
-								width,        ///< Width of repetitions
-								offset);      ///< Offset of repetitions
-		
-	}
+
 	
 	
 	
@@ -848,8 +818,50 @@ int detector::create_physical_volumes(goptions gemcOpt, G4LogicalVolume *mamma)
 									  false,             ///< no boolean operation
 									  0);                ///< copy number
 	
-	else
-		PhysicalV = new G4PVPlacement(&rot,       ///< rotation
+	else	if(description.find("Replica:") == 0)
+	{
+      // 	  cout << description.substr(8,description.length()) << endl;
+		vector<double>   replica_vec;
+		stringstream vars(description.substr(8,description.length()));	  
+		string var;
+		while(!vars.eof())
+		{
+			vars >> var;
+			replica_vec.push_back(get_number(var,1));
+		}	  
+		if(replica_vec.size() != 4)
+		{
+			cout << hd_msg << " Fatal Error: the number of parameter for G4PVReplica" << name
+			<< " is " << replica_vec.size() <<  ":" << endl;
+			for(unsigned int i=0; i<replica_vec.size(); i++)
+				cout << "      G4PVReplica " << i + 1 << ": " <<  replica_vec[i] << endl;
+			cout << "      This does not match a G4PVReplica (4). Exiting" << endl << endl;
+			exit(0);
+		}
+		
+		EAxis pAxis;
+		if(replica_vec[0] == 1) pAxis = kXAxis;
+		if(replica_vec[0] == 2) pAxis = kYAxis;
+		if(replica_vec[0] == 3) pAxis = kZAxis;
+		if(replica_vec[0] == 4) pAxis = kRho;
+		if(replica_vec[0] == 5) pAxis = kPhi;		
+		int nreps     = (int) replica_vec[1];
+		double width  = replica_vec[2];
+		double offset = replica_vec[3];
+		
+		// the logical volume is built
+		// the mother is built as well
+		PhysicalV = new G4PVReplica(name,     ///< name
+								LogicV,       ///< Logical Volume Copy
+								mamma,        ///< Mother Logical Volume
+								pAxis,        ///< EAxis of copy - can be kXAxis,kYAxis,kZAxis,kRho,kRadial3D,kPhi
+								nreps,        ///< Number of repetitions
+								width,        ///< Width of repetitions
+								offset);      ///< Offset of repetitions
+// 		cout<< name << " " << LogicV << " " << mamma << " " <<  replica_vec[0] << " " << nreps << " " << width << " " << " " << offset << endl;
+		
+	}
+	else	PhysicalV = new G4PVPlacement(&rot,       ///< rotation
 									  pos,                  ///< translation
 									  LogicV,               ///< logical volume
 									  name.c_str(),         ///< name
