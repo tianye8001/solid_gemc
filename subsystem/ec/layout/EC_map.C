@@ -8,13 +8,7 @@ void EC_map(string option,double hit_x=0,double hit_y=0){
 	if (option != "find" && option != "convert") {cout << "wrong option" << endl; return;}
 	
 	//________________________________construct map_____________________________________________________
-	
-	ofstream OUTPUT_file;
-	if (option == "convert") {
-	  OUTPUT_file.open("map_FAEC_ANL_20130628_PVDIS_parameters.txt");
-	  OUTPUT_file << "idymax" << "\t" << "| " << 54 << "\t| - | - | - |  - | - | - | - | - " << endl;	  
-	}
-	
+		
 	ifstream INPUT_file;
 	INPUT_file.open("map_FAEC_ANL_20130628.txt");
 	if(!INPUT_file)cout<<"ERROR!!! Can't open map_FAEC_ANL_20130628.txt"<<endl;	
@@ -25,11 +19,11 @@ void EC_map(string option,double hit_x=0,double hit_y=0){
 	double y[54][50]={100000}; 
 	
 	
-	double total_EC_module=0;
+	double total_module=0;
 	for(int i=0;i<54;i++){ //54 rows
 		INPUT_file>>num_module_in_row[i];
 		num_module_in_row[i]=num_module_in_row[i]-1;  //first one is y coordinate
-		total_EC_module+=num_module_in_row[i];
+		total_module+=num_module_in_row[i];
 		double tmp_y;
 		INPUT_file>>tmp_y;
 		y_bak[i]=tmp_y;       //make a backup in order to judge which row a certain particle hits the EC
@@ -70,22 +64,46 @@ void EC_map(string option,double hit_x=0,double hit_y=0){
 
 	//_______sector map is finished___________________________________________	
 	
+	int total_module_active=0;
 	int status[54][50]={100000};    //the structure is the same as x[54][50], y[54][50]   54 is the number of y rows
 	for(int i=0;i<54;i++){
 		for(int j=0;j<num_module_in_row[i];j++){
 		  status[i][j]=1; //all active for PVDIS FAEC
+		  if (status[i][j]==1) total_module_active++;
 		}
 	}
 
 	if (option == "convert") {
-	  for(int i=0;i<54;i++){
-	      OUTPUT_file << Form("idxmax_idy%i",i+1) << "\t" << "| " << num_module_in_row[i] << "\t| - | - | - |  - | - | - | - | - " << endl;
-	      OUTPUT_file << Form("y_idy%i",i+1) << "\t" << "| " << tmp_y << "\t| cm | - |  - | - | - | - | - | - " << endl;
-		  
-		  for(int j=0;j<num_module_in_row[i];j++){
-		    OUTPUT_file << Form("x_idy%i_idx%i_id%i_sector%i_status%i",i+1,j+1,id[i][j],sector[i][j],status[i][j]) << "\t" << "| " << x[i][j] << "\t| cm | - |  - | - | - | - | - | - " << endl;
-		  }		  			
+	  
+	  ofstream OUTPUT_file;
+	  OUTPUT_file.open("map_FAEC_ANL_20130628_PVDIS_parameters.txt");
+
+	  OUTPUT_file << "total_module" << "\t" << "| " << total_module << "\t| counts | - | - |  - | - | - | - | - " << endl;	  
+	  OUTPUT_file << "total_module_active" << "\t" << "| " << total_module_active << "\t| counts | - | - |  - | - | - | - | - " << endl;   
+	  
+// 	  OUTPUT_file << "idymax" << "\t" << "| " << 54 << "\t| - | - | - |  - | - | - | - | - " << endl;	  	  
+// 	  
+// 	  for(int i=0;i<54;i++){
+// 	      OUTPUT_file << Form("idxmax_idy%i",i+1) << "\t" << "| " << num_module_in_row[i] << "\t| - | - | - |  - | - | - | - | - " << endl;
+// 	      OUTPUT_file << Form("y_idy%i",i+1) << "\t" << "| " << tmp_y << "\t| cm | - |  - | - | - | - | - | - " << endl;
+// 		  
+// 		  for(int j=0;j<num_module_in_row[i];j++){
+// 		    OUTPUT_file << Form("status_idy%i_idx%i_id%i_sector%i",i+1,j+1,id[i][j],sector[i][j]) << "\t" << "| " << status[i][j] << "\t| - | - |  - | - | - | - | - | - " << endl;		    
+// 		    OUTPUT_file << Form("x_idy%i_idx%i_id%i_sector%i",i+1,j+1,id[i][j],sector[i][j]) << "\t" << "| " << x[i][j] << "\t| cm | - |  - | - | - | - | - | - " << endl;		    
+// 		  }		  			
+// 	  }	
+	  
+	  for(int i=0;i<54;i++){	  
+	    for(int j=0;j<num_module_in_row[i];j++){
+	      OUTPUT_file << Form("id%i_status",id[i][j]) << "\t" << "| " << status[i][j] << "\t| counts | - | - |  - | - | - | - | - " << endl;
+	      OUTPUT_file << Form("id%i_idy",id[i][j]) << "\t" << "| " << i+1 << "\t| counts | - | - |  - | - | - | - | - " << endl;
+	      OUTPUT_file << Form("id%i_idx",id[i][j]) << "\t" << "| " << j+1 << "\t| counts | - | - |  - | - | - | - | - " << endl;
+	      OUTPUT_file << Form("id%i_y",id[i][j]) << "\t" << "| " << y[i][j] << "\t| cm | - | - |  - | - | - | - | - " << endl;
+	      OUTPUT_file << Form("id%i_x",id[i][j]) << "\t" << "| " << x[i][j] << "\t| cm | - | - |  - | - | - | - | - " << endl;	      
+	      OUTPUT_file << Form("id%i_sector",id[i][j]) << "\t" << "| " << sector[i][j] << "\t| counts | - | - |  - | - | - | - | - " << endl;
+	    }		  			
 	  }	
+	  
 	  OUTPUT_file.close();
 	}
 	
@@ -184,7 +202,7 @@ void EC_map(string option,double hit_x=0,double hit_y=0){
 	//______________________________________module search is finished ____________________________________________________________________
 
 	
-	cout<<"________total EC module: "<<total_EC_module<<endl;
+	cout<<"________total EC module: "<<total_module<<endl;
 	cout<<"find  "<<label<<" around the hitted module"<<endl;
 	cout<<"idy\tidx\tid\tsector"<<endl;
 	cout<<hit_idy+1<<"\t"<<hit_idx+1<<"\t"<<id[hit_idy][hit_idx]<<"\t"<<sector[hit_idy][hit_idx]<<" ----> this module is hitted!"<<endl;
