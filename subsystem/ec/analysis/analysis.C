@@ -19,6 +19,8 @@
 #include <TSystem.h>
 #include <TArc.h>
 
+#include "analysis_tree_solid_ec.C"
+
 using namespace std;
 
 void analysis(string input_filename)
@@ -37,7 +39,7 @@ sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_
 // sprintf(output_filename, "%s_output.root",the_filename);
 // TFile *outputfile=new TFile(output_filename, "recreate");
 
-TH1F *htotEdep=new TH1F("totEdep","totEdep",350,0,3500);
+TH1F *htotEdep_ec=new TH1F("htotEdep_ec","ec;totEdep(MeV);",100,900,1600);
 
 TFile *file=new TFile(input_filename.c_str());
 if (file->IsZombie()) {
@@ -73,50 +75,51 @@ tree_generated->SetBranchAddress("vx",&gen_vx);
 tree_generated->SetBranchAddress("vy",&gen_vy);
 tree_generated->SetBranchAddress("vz",&gen_vz);
 
-TTree *tree_solid_ec = (TTree*) file->Get("solid_ec");
-vector<int> *solid_ec_id=0,*solid_ec_hitn=0;
-vector<int> *solid_ec_pid=0,*solid_ec_mpid=0,*solid_ec_tid=0,*solid_ec_mtid=0,*solid_ec_otid=0;
-vector<double> *solid_ec_trackE=0,*solid_ec_totEdep=0,*solid_ec_avg_x=0,*solid_ec_avg_y=0,*solid_ec_avg_z=0,*solid_ec_avg_lx=0,*solid_ec_avg_ly=0,*solid_ec_avg_lz=0,*solid_ec_px=0,*solid_ec_py=0,*solid_ec_pz=0,*solid_ec_vx=0,*solid_ec_vy=0,*solid_ec_vz=0,*solid_ec_mvx=0,*solid_ec_mvy=0,*solid_ec_mvz=0,*solid_ec_avg_t=0;
-tree_solid_ec->SetBranchAddress("hitn",&solid_ec_hitn);
-tree_solid_ec->SetBranchAddress("id",&solid_ec_id);
-tree_solid_ec->SetBranchAddress("pid",&solid_ec_pid);
-tree_solid_ec->SetBranchAddress("mpid",&solid_ec_mpid);
-tree_solid_ec->SetBranchAddress("tid",&solid_ec_tid);
-tree_solid_ec->SetBranchAddress("mtid",&solid_ec_mtid);
-tree_solid_ec->SetBranchAddress("otid",&solid_ec_otid);
-tree_solid_ec->SetBranchAddress("trackE",&solid_ec_trackE);
-tree_solid_ec->SetBranchAddress("totEdep",&solid_ec_totEdep);
-tree_solid_ec->SetBranchAddress("avg_x",&solid_ec_avg_x);
-tree_solid_ec->SetBranchAddress("avg_y",&solid_ec_avg_y);
-tree_solid_ec->SetBranchAddress("avg_z",&solid_ec_avg_z);
-tree_solid_ec->SetBranchAddress("avg_lx",&solid_ec_avg_lx);
-tree_solid_ec->SetBranchAddress("avg_ly",&solid_ec_avg_ly);
-tree_solid_ec->SetBranchAddress("avg_lz",&solid_ec_avg_lz);
-tree_solid_ec->SetBranchAddress("px",&solid_ec_px);
-tree_solid_ec->SetBranchAddress("py",&solid_ec_py);
-tree_solid_ec->SetBranchAddress("pz",&solid_ec_pz);
-tree_solid_ec->SetBranchAddress("vx",&solid_ec_vx);
-tree_solid_ec->SetBranchAddress("vy",&solid_ec_vy);
-tree_solid_ec->SetBranchAddress("vz",&solid_ec_vz);
-tree_solid_ec->SetBranchAddress("mvx",&solid_ec_mvx);
-tree_solid_ec->SetBranchAddress("mvy",&solid_ec_mvy);
-tree_solid_ec->SetBranchAddress("mvz",&solid_ec_mvz);
-tree_solid_ec->SetBranchAddress("avg_t",&solid_ec_avg_t);
+TTree *tree_flux = (TTree*) file->Get("flux");
+vector<int> *flux_id=0,*flux_hitn=0;
+vector<int> *flux_pid=0,*flux_mpid=0,*flux_tid=0,*flux_mtid=0,*flux_otid=0;
+vector<double> *flux_trackE=0,*flux_totEdep=0,*flux_avg_x=0,*flux_avg_y=0,*flux_avg_z=0,*flux_avg_lx=0,*flux_avg_ly=0,*flux_avg_lz=0,*flux_px=0,*flux_py=0,*flux_pz=0,*flux_vx=0,*flux_vy=0,*flux_vz=0,*flux_mvx=0,*flux_mvy=0,*flux_mvz=0,*flux_avg_t=0;
+tree_flux->SetBranchAddress("hitn",&flux_hitn);
+tree_flux->SetBranchAddress("id",&flux_id);
+tree_flux->SetBranchAddress("pid",&flux_pid);
+tree_flux->SetBranchAddress("mpid",&flux_mpid);
+tree_flux->SetBranchAddress("tid",&flux_tid);
+tree_flux->SetBranchAddress("mtid",&flux_mtid);
+tree_flux->SetBranchAddress("otid",&flux_otid);
+tree_flux->SetBranchAddress("trackE",&flux_trackE);
+tree_flux->SetBranchAddress("totEdep",&flux_totEdep);
+tree_flux->SetBranchAddress("avg_x",&flux_avg_x);
+tree_flux->SetBranchAddress("avg_y",&flux_avg_y);
+tree_flux->SetBranchAddress("avg_z",&flux_avg_z);
+tree_flux->SetBranchAddress("avg_lx",&flux_avg_lx);
+tree_flux->SetBranchAddress("avg_ly",&flux_avg_ly);
+tree_flux->SetBranchAddress("avg_lz",&flux_avg_lz);
+tree_flux->SetBranchAddress("px",&flux_px);
+tree_flux->SetBranchAddress("py",&flux_py);
+tree_flux->SetBranchAddress("pz",&flux_pz);
+tree_flux->SetBranchAddress("vx",&flux_vx);
+tree_flux->SetBranchAddress("vy",&flux_vy);
+tree_flux->SetBranchAddress("vz",&flux_vz);
+tree_flux->SetBranchAddress("mvx",&flux_mvx);
+tree_flux->SetBranchAddress("mvy",&flux_mvy);
+tree_flux->SetBranchAddress("mvz",&flux_mvz);
+tree_flux->SetBranchAddress("avg_t",&flux_avg_t);
 
-// cout << tree_solid_ec->GetEntries() << " " << tree_header->GetEntries() << " " << tree_generated->GetEntries() << endl;
+TTree *tree_solid_ec = (TTree*) file->Get("solid_ec");
+setup_tree_solid_ec(tree_solid_ec);
 
 int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
 cout << "nevent " << nevent << endl;
 
 for (Int_t i=0;i<nevent;i++) { 
+// for (Int_t i=0;i<2;i++) { 
 //   cout << i << "\r";
 //   cout << i << "\n";
 
   tree_header->GetEntry(i);
   
   tree_generated->GetEntry(i);  
-  
   int pid_gen=0;
   double theta_gen=0,phi_gen=0,p_gen=0,px_gen=0,py_gen=0,pz_gen=0,vx_gen=0,vy_gen=0,vz_gen=0;      
   for (int j=0;j<gen_pid->size();j++) {
@@ -131,32 +134,38 @@ for (Int_t i=0;i<nevent;i++) {
       p_gen=sqrt(px_gen*px_gen+py_gen*py_gen+pz_gen*pz_gen);
       theta_gen=acos(pz_gen/p_gen);
       phi_gen=atan2(py_gen,px_gen);
-  }  
-  
-  double totEdep=0;
-  
-    tree_solid_ec->GetEntry(i);    
-//     cout << solid_ec_hitn->size() << endl;        
-    for (Int_t j=0;j<solid_ec_hitn->size();j++) {
-//       cout << "solid_ec " << " !!! " << solid_ec_hitn->at(j) << " " << solid_ec_id->at(j) << " " << solid_ec_pid->at(j) << " " << solid_ec_mpid->at(j) << " " << solid_ec_tid->at(j) << " " << solid_ec_mtid->at(j) << " " << solid_ec_trackE->at(j) << " " << solid_ec_totEdep->at(j) << " " << solid_ec_avg_x->at(j) << " " << solid_ec_avg_y->at(j) << " " << solid_ec_avg_z->at(j) << " " << solid_ec_avg_lx->at(j) << " " << solid_ec_avg_ly->at(j) << " " << solid_ec_avg_lz->at(j) << " " << solid_ec_px->at(j) << " " << solid_ec_py->at(j) << " " << solid_ec_pz->at(j) << " " << solid_ec_vx->at(j) << " " << solid_ec_vy->at(j) << " " << solid_ec_vz->at(j) << " " << solid_ec_mvx->at(j) << " " << solid_ec_mvy->at(j) << " " << solid_ec_mvz->at(j) << " " << solid_ec_avg_t->at(j) << endl;         
-    
-      int detector_ID=solid_ec_id->at(j)/1000000;
-      int subdetector_ID=(solid_ec_id->at(j)%1000000)/100000;
-      int subsubdetector_ID=((solid_ec_id->at(j)%1000000)%100000)/10000;
-//     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID << endl;  
       
-       totEdep +=solid_ec_totEdep->at(j);     
-    }
+      cout << "p_gen " << p_gen << endl;
+  }
+
+    tree_flux->GetEntry(i);  
     
-    htotEdep->Fill(totEdep);
-    
+    for (Int_t j=0;j<flux_hitn->size();j++) {
+//       cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
+
+      int detector_ID=flux_id->at(j)/1000000;
+      int subdetector_ID=(flux_id->at(j)%1000000)/100000;
+      int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
+      int component_ID=flux_id->at(j)%10000;      
+           
+      if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1)   cout << "particle mom entering EC " << flux_trackE->at(j) << endl;         
+      
+    }													
+  tree_solid_ec->GetEntry(i);  
+  
+  double totEdep_ec=process_tree_solid_ec(tree_solid_ec);
+  cout << "totEdep_ec " << totEdep_ec << endl;
+
+  htotEdep_ec->Fill(totEdep_ec);    
+  
 }
 file->Close();
 
 // outputfile->Write();
 // outputfile->Flush();
 
-TCanvas *c = new TCanvas("totEdep","totEdep",1000,900);
-htotEdep->Draw();
-htotEdep->Fit("gaus");
+TCanvas *c = new TCanvas("totEdep_ec","totEdep_ec",1600,900);
+htotEdep_ec->Draw();
+htotEdep_ec->Fit("gaus");
+c->SaveAs("totEdep_ec.png");
 }
