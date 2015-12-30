@@ -4,7 +4,7 @@
 <option name="DBUSER" value="soliduser"/>
 <option name="DBPSWD" value="ilovesolid"/>
 
-<detector name="../gem_solid_gemc/solid_PVDIS_gem" factory="TEXT" variation="Original"/>
+<detector name="../gem_solid_gemc/solid_SIDIS_gem" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
@@ -21,15 +21,17 @@
 <option name="FIELD_DIR" value="../../../solid_gemc2/field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
-<option name="BEAM_P"   value="e-,5.5*GeV,30*deg,0*deg"/>
-<option name="SPREAD_P" value="5.5*GeV,15*deg,180*deg"/>
-<option name="BEAM_V"   value="(0,0,10)cm"/>
+<option name="BEAM_P"   value="e-,5.5*GeV,16*deg,0*deg"/>
+<option name="SPREAD_P" value="5.5*GeV,10*deg,180*deg"/>
+<option name="BEAM_V"   value="(0,0,-350)cm"/>
 <option name="SPREAD_V" value="(0.21,20)cm"/>
+
 
 <option name="EXEC_MACRO" value="../../../solid_gemc2/script/solid_slice.vis"/>
 <option name="geometry" value="1000x1000"/>
 <option name="HIGH_RES" value="1"/>
 <option name="USE_GUI"  value="1"/>
+
 
 </gcard>
 
@@ -47,12 +49,6 @@
 
 
 <option name="EXEC_MACRO" value="../../../solid_gemc2/script/solid_slice.vis"/>
-<option name="geometry" value="1000x1000"/>
-<option name="HIGH_RES" value="1"/>
-<option name="USE_GUI"  value="1"/>
-
-
-<option name="EXEC_MACRO" value="solid_slice.vis"/>
 <option name="geometry" value="1000x1000"/>
 <option name="HIGH_RES" value="1"/>
 <option name="USE_GUI"  value="1"/>

@@ -1,5 +1,15 @@
-$SoLID_GEMC/geometry/solid_materials.pl config_solid_PVDIS_gem.dat
-./solid_PVDIS_gem.pl config_solid_PVDIS_gem.dat
+Here is the files and scripts to run simulation and analysis results
+
+It can work as standalone, but also test with other subsystems and full SoLID simulation
+
+== run == 
+
+#run gem simulation standalone
+solid_gemc solid_SIDIS_gem.gcard
 solid_gemc solid_PVDIS_gem.gcard
-evio2root -INPUTF=output.evio -B=solid_PVDIS_gem -WRITE_RAWS=no
-root 'analysis.C+("output.root")'
+
+#convert evio file in standalone simulation to root file
+evio2root -INPUTF=output.evio -B="../gem_solid_gemc/solid_SIDIS_gem" -W
+evio2root -INPUTF=output.evio -B="../gem_solid_gemc/solid_PVDIS_gem"
+
+== analysis == 
