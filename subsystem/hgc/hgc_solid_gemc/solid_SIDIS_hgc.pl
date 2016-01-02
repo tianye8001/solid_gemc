@@ -53,40 +53,10 @@ $configuration{"variation"} = "Original";
 # $configuration{"detector_name"} = "solid_SIDIS";
 
 #Geometry definition
-# require "solid_solenoid.pl";
-# solid_solenoid();
-# require "solid_SIDIS_target_He3_collimator.pl";
-# solid_SIDIS_target_He3_collimator();
-# require "solid_SIDIS_target_He3.pl";
-# solid_SIDIS_target_He3();
-# require "solid_SIDIS_beamline_He3.pl";
-# solid_SIDIS_beamline_He3();
-# require "solid_SIDIS_gem.pl";
-# solid_SIDIS_gem();
-# require "solid_SIDIS_cherenkov_heavygas.pl";
-# solid_SIDIS_cherenkov_heavygas();
-# require "solid_SIDIS_cherenkov_lightgas.pl";
-# solid_SIDIS_cherenkov_lightgas();
-# require "solid_SIDIS_ec_forwardangle.pl";
-# solid_SIDIS_ec_forwardangle();
-# require "solid_SIDIS_ec_largeangle.pl";
-# solid_SIDIS_ec_largeangle();
-# require "solid_SIDIS_spd_forwardangle.pl";
-# solid_SIDIS_spd_forwardangle();
-# require "solid_SIDIS_mrpc_forwardangle.pl";
-# solid_SIDIS_mrpc_forwardangle();
-# require "solid_SIDIS_virtualplane_cher.pl";
-# solid_SIDIS_virtualplane_cher();
-# require "solid_SIDIS_virtualplane_ec.pl";
-# solid_SIDIS_virtualplane_ec();
-# require "solid_SIDIS_virtualplane_gem.pl";
-# solid_SIDIS_virtualplane_gem();
-# require "solid_SIDIS_virtualplane_mrpc.pl";
-# solid_SIDIS_virtualplane_mrpc();
-# require "solid_SIDIS_virtualplane_spd.pl";
-# solid_SIDIS_virtualplane_spd();
 require "solid_SIDIS_hgc_geometry.pl";
 solid_SIDIS_hgc_geometry();
+require "solid_SIDIS_hgc_virtualplane.pl";
+solid_SIDIS_hgc_virtualplane();
 
 #materials
 require "solid_SIDIS_hgc_materials.pl";
@@ -94,12 +64,8 @@ require "solid_SIDIS_hgc_materials.pl";
 #mirror
 require "solid_SIDIS_hgc_mirror.pl";
 
+#hit definition
+require "solid_SIDIS_hgc_hit.pl";
 
-#hit and bank definition Execute only when there are changes
-#hit
-# require "solid_SIDIS_hgc_hit.pl";
-# define_solid_SIDIS_hgc_hit();
-
-# banks
-# require "solid_SIDIS_hgc_bank.pl";
-# define_solid_SIDIS_hgc_bank();
+# bank definition
+require "solid_SIDIS_hgc_bank.pl";

@@ -4,7 +4,7 @@ use warnings;
 our %configuration;
 our %parameters;
 
-sub define_solid_SIDIS_hgc_hit
+sub define_hit
 {
 	# uploading the hit definition
 	my %hit = init_hit();
@@ -22,6 +22,6 @@ sub define_solid_SIDIS_hgc_hit
 	$hit{"pedestal"}        = -20;
 	print_hit(\%configuration, \%hit);
 }
-
+define_hit();
 
 1;

@@ -36,8 +36,8 @@ make_mirror();
 
 my $DEG=180/3.1415916;
 
-# # my $hitype="solid_SIDIS_hgc";
-# my $hitype="flux";
+# my $hitype="solid_SIDIS_hgc";
+my $hitype="flux";
 
 my $material_chamber="G4_Al";
 # my $material_gas="G4_Al";
@@ -344,8 +344,8 @@ sub make_pmt
 #       $detector{"sensitivity"} = "mirror: SL_HGC_mirror_pmt";
 #       $detector{"hit_type"}    = "mirror";
 #       $detector{"identifiers"} = "no";
-      $detector{"sensitivity"} = "flux";
-      $detector{"hit_type"}    = "flux";
+      $detector{"sensitivity"} = $hitype;
+      $detector{"hit_type"}    = $hitype;
       my $id=2200000+$i*10000;      
       $detector{"identifiers"} = "id manual $id";      
       print_det(\%configuration, \%detector);
