@@ -34,6 +34,13 @@ if($#ARGV < 0){
     do $ARGV[0];
 }
 
+#file settings:
+if($use_pvdis){
+    our %configuration = load_configuration("solid_lgc_PVDIS.config");  #This is the configuration file that keeps track of database information.
+}else{
+    our %configuration = load_configuration("solid_lgc_SIDIS.config");
+}
+
 #make geometry:
 require 'geometries/build_world_and_tank.pl';
 require 'geometries/build_pmts.pl';
