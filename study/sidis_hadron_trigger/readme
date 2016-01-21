@@ -1,0 +1,20 @@
+run simulation gcard to generate some files
+
+evio2root -INPUTF=out_gamma.evio -B="/home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/ec/solid_SIDIS_ec_forwardangle /home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/ec/solid_SIDIS_ec_largeangle /home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/hgc/solid_SIDIS_hgc /home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/lgc/solid_SIDIS_lgc /home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/hgc/solid_SIDIS_hgc /home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/gem/solid_SIDIS_gem /home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/mrpc/solid_SIDIS_mrpc_forwardangle /home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/spd/solid_SIDIS_spd_forwardangle /home/zwzhao/solid/solid_svn/solid/solid_gemc2/geometry/spd/solid_SIDIS_spd_largeangle"
+
+some note
+
+pi
+907
+4 4 6 4
+903 903 903 903
+
+gamma
+899
+707 640 584 763
+192 259 136 136
+
+e
+904
+6 5 5 6
+898 899 898 898

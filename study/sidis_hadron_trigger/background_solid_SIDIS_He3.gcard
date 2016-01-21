@@ -34,11 +34,13 @@
 <option name="BEAM_P"   value="gamma,5*GeV,12*deg,0*deg"/>
 <option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
 <option name="BEAM_V"   value="(0,0,-350)cm"/>
-<option name="SPREAD_V" value="(0.21,20)cm"/>
+<option name="SPREAD_V" value="(0,0)cm"/>
 
 <option name="N" value="1000"/>
 <option name="OUTPUT" value="evio,out.evio"/>
 <option name="USE_GUI"  value="0"/>
+
+<option name="PRINT_EVENT" value="1"/>
 
 </gcard>
 

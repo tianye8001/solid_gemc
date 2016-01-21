@@ -42,14 +42,34 @@ sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_
 // TFile *outputfile=new TFile(output_filename, "recreate");
 
 TH1F *htotEdep_spd=new TH1F("htotEdep_spd","htotEdep_spd",100,0,5);
-TH1F *htotEdep_mrpc=new TH1F("htotEdep_mrpc","htotEdep_mrpc",100,0,0.1);
-TH1F *htotEdep_ec=new TH1F("htotEdep_ec","htotEdep_ec",100,0,2000);
+TH1F *htotEdep_mrpc=new TH1F("htotEdep_mrpc","htotEdep_mrpc",100,0,0.01);
+TH1F *htotEdep_ec=new TH1F("htotEdep_ec","htotEdep_ec",200,0,2000);
 
 TH2F *htotEdep_ec_gen=new TH2F("htotEdep_ec_gen","htotEdep_ec_gen",100,0,2000,110,0,11000);
 TH2F *htotEdep_ec_spd=new TH2F("htotEdep_ec_spd","htotEdep_ec_spd",100,0,2000,100,0,5);
 TH2F *htotEdep_ec_mrpc=new TH2F("htotEdep_ec_mrpc","htotEdep_ec_mrpc",100,0,2000,100,0,0.1);
 TH2F *htotEdep_spd_mrpc=new TH2F("htotEdep_spd_mrpc","htotEdep_spd_mrpc",100,0,5,100,0,0.1);
 
+
+const int n=2;
+const int m=3;
+
+char *det[n]={"entering mrpc","within mrpc"};
+char *label[m]={"photon+electron+positron","photon","electron+positron"};
+
+TH1F *hfluxR_mrpc[n][m];
+TH1F *hPlog_mrpc[n][m];
+for(int k=0;k<n;k++){
+for(int l=0;l<m;l++){
+char hstname[100];
+sprintf(hstname,"fluxR_mrpc_%i_%i",k,l);
+hfluxR_mrpc[k][l]=new TH1F(hstname,hstname,60,0,300);
+hfluxR_mrpc[k][l]->SetTitle(";R (cm);flux (kHz/mm2)");
+sprintf(hstname,"Plog_mrpc_%i_%i",k,l);
+hPlog_mrpc[k][l]=new TH1F(hstname,hstname,50,-6,1.3);
+hPlog_mrpc[k][l]->SetTitle(";log(P) GeV;kHz");
+}  
+}
 TFile *file=new TFile(input_filename.c_str());
 if (file->IsZombie()) {
     cout << "Error opening file" << input_filename << endl;
@@ -127,9 +147,13 @@ int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
 cout << "nevent " << nevent << endl;
 
-for (Int_t i=0;i<nevent;i++) { 
-// for (Int_t i=0;i<2;i++) { 
-//   cout << i << "\r";
+int counter_ec=0;
+int g_counter_ec_spd=0,g_counter_ec_mrpc=0,g_counter_mrpc_spd=0,g_counter_ec_mrpc_spd=0;
+int e_counter_ec_spd=0,e_counter_ec_mrpc=0,e_counter_mrpc_spd=0,e_counter_ec_mrpc_spd=0;
+
+// for (Int_t i=0;i<nevent;i++) { 
+for (Int_t i=0;i<nevent/100;i++) { 
+  cout << i << "\r";
 //   cout << i << "\n";
 
   tree_header->GetEntry(i);
@@ -150,9 +174,11 @@ for (Int_t i=0;i<nevent;i++) {
       theta_gen=acos(pz_gen/p_gen);
       phi_gen=atan2(py_gen,px_gen);
       
-      cout << "p_gen " << p_gen << endl;
+//       cout << "p_gen " << p_gen << endl;
   }
 
+  if (p_gen<1000) continue;  
+  
     tree_flux->GetEntry(i);  
     
     for (Int_t j=0;j<flux_hitn->size();j++) {
@@ -163,33 +189,105 @@ for (Int_t i=0;i<nevent;i++) {
       int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
       int component_ID=flux_id->at(j)%10000;
       
-     
-      if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 1)   cout << "particle mom entering SPD " << flux_trackE->at(j) << endl;   
+      /*Check PID{{{*/
+      int particle_ID = (int) flux_pid->at(j);
+      int par;
+      if(particle_ID==22) par=1;  //photon    
+      else if (abs(particle_ID)==11) par=2; //electron or positron
+      else if(particle_ID==2112) par=3;  //neutron
+      else if(particle_ID==2212) par=4;  //proton    
+      else if(particle_ID==211)  par=5;  //pip
+      else if(particle_ID==-211) par=6;  //pim
+      else if(particle_ID==321)  par=7;  //Kp    
+      else if(particle_ID==-321)  par=8;  //Km
+      else if(particle_ID==130)  par=9;  //Kl    
+      else if(particle_ID==-13)  par=10;  //mu+
+      else if(particle_ID==13)  par=11;  //mu-			
+      else par=12;  //all other
+      
+      double target_center=-350;
+      
+      double r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2));  //in mm
+      double Theta=atan(r/(flux_avg_z->at(j)-target_center))*DEG;
+      double P=sqrt(pow(flux_px->at(j),2)+pow(flux_py->at(j),2)+pow(flux_pz->at(j),2));
+      
+      /*Calculate Weight{{{*/
+      double thisrate=0.0;
+      double weight=0.0,weightR=0.0,weightPhi=0.0,weightTheta=0.0;
+      double area=1.;      /// in 
+      double areaR=2*3.1415926*r*1.; /// in mm2
+      double areaPhi=1.;  /// in any deg      
+      double areaTheta=2*3.1415926*r*(flux_avg_z->at(j)*(tan((Theta+0.25)/DEG)-tan((Theta-0.25)/DEG))); ///0.5deg width
 
-      if (detector_ID==4 && subdetector_ID == 1 && subsubdetector_ID == 1)   cout << "particle mom entering MRPC " << flux_trackE->at(j) << endl;   
+      thisrate=15e-6/1.6e-19/1e6;			
+//       if (Is_EM) thisrate=current/Nevent;			
+//       else thisrate=rate/filenum;			
+  // 			cout << "thisrate" << rate << endl;
       
-      if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1)   cout << "particle mom entering EC " << flux_trackE->at(j) << endl;         
+      weight=thisrate/1e3/area;
+      weightR=thisrate/1e3/areaR;
+      weightPhi=thisrate/1e3/areaPhi;
+      weightTheta=thisrate/1e3/areaTheta;     
+      /*End of Caluclate Weight}}}*/
       
+      
+      if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 1){
+// 	cout << "particle mom entering SPD " << flux_trackE->at(j) << endl;   
+      }
+      
+      if (detector_ID==4 && subdetector_ID == 1 && subsubdetector_ID == 1){	
+// 	cout << "particle mom entering MRPC " << flux_trackE->at(j) << endl;   
+      
+	hfluxR_mrpc[0][par]->Fill(r/10.,weightR/50.);  // in 5cm bin
+	hPlog_mrpc[0][par]->Fill(log10(P/1e3),weight);	
+      }
+      
+      if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1){
+// 	cout << "particle mom entering EC " << flux_trackE->at(j) << endl;         
+      }
     }
 
   tree_solid_spd->GetEntry(i);  
   
   double totEdep_spd=process_tree_solid_spd(tree_solid_spd);
-  cout << "totEdep_spd " << totEdep_spd << endl;  
+//   cout << "totEdep_spd " << totEdep_spd << endl;  
 
   tree_solid_mrpc->GetEntry(i);  
   
   double totEdep_mrpc=process_tree_solid_mrpc(tree_solid_mrpc);
-  cout << "totEdep_mrpc " << totEdep_mrpc << endl;    
+//   cout << "totEdep_mrpc " << totEdep_mrpc << endl;    
+//       if (detector_ID==4 && subdetector_ID == 1 && subsubdetector_ID == 1){	
+// // 	cout << "particle mom entering MRPC " << flux_trackE->at(j) << endl;   
+//       
+// 	hfluxR_mrpc[0][par]->Fill(r/10.,weightR/50.);  // in 5cm bin
+// 	hPlog[0][par]->Fill(log10(P/1e3),weight);	
+//       }  
   
   tree_solid_ec->GetEntry(i);  
   
   double totEdep_ec=process_tree_solid_ec(tree_solid_ec);
-  cout << "totEdep_ec " << totEdep_ec << endl;
+//   cout << "totEdep_ec " << totEdep_ec << endl;
 
+  bool Is_ec=false,Is_spd=false,Is_mrpc=false;
+  if (totEdep_ec>40) Is_ec=true;
+  if (totEdep_spd>0.3) Is_spd=true;
+  if (totEdep_mrpc>0.0005) Is_mrpc=true;    
+
+  if (Is_ec) counter_ec++;    
+  
+  if (Is_ec && !Is_spd) g_counter_ec_spd++;
+  if (Is_ec && !Is_mrpc) g_counter_ec_mrpc++;  
+  if (!Is_mrpc && !Is_spd) g_counter_mrpc_spd++;  
+  if (Is_ec && (!Is_mrpc || !Is_spd)) g_counter_ec_mrpc_spd++;    
+
+  if (Is_ec && Is_spd) e_counter_ec_spd++;
+  if (Is_ec && Is_mrpc) e_counter_ec_mrpc++;  
+  if (Is_mrpc && Is_spd) e_counter_mrpc_spd++;  
+  if (Is_ec && (Is_mrpc && Is_spd)) e_counter_ec_mrpc_spd++;    
+  
   htotEdep_spd->Fill(totEdep_spd);
   htotEdep_mrpc->Fill(totEdep_mrpc);
-  htotEdep_ec->Fill(totEdep_ec);  
+  htotEdep_ec->Fill(totEdep_ec);
   
 //   if (totEdep_spd !=0) htotEdep_spd->Fill(totEdep_spd);
 //   if (totEdep_mrpc !=0) htotEdep_mrpc->Fill(totEdep_mrpc);
@@ -204,6 +302,10 @@ for (Int_t i=0;i<nevent;i++) {
 }
 file->Close();
 
+cout << counter_ec << endl;
+cout << g_counter_ec_spd << " " << g_counter_ec_mrpc << " " << g_counter_mrpc_spd << " " << g_counter_ec_mrpc_spd <<  endl;
+cout << e_counter_ec_spd << " " << e_counter_ec_mrpc << " " << e_counter_mrpc_spd << " " << e_counter_ec_mrpc_spd <<  endl;
+
 // outputfile->Write();
 // outputfile->Flush();
 
@@ -216,13 +318,26 @@ htotEdep_mrpc->Draw();
 c->cd(3);
 htotEdep_ec->Draw();
 
-TCanvas *cc = new TCanvas("totEdep_compare","totEdep_compare",1600,900);
-cc->Divide(3,1);
-cc->cd(1);
+TCanvas *c_totEdep_compare = new TCanvas("totEdep_compare","totEdep_compare",1600,900);
+c_totEdep_compare->Divide(3,1);
+c_totEdep_compare->cd(1);
 htotEdep_ec_spd->Draw("colz");
-cc->cd(2);
+c_totEdep_compare->cd(2);
 htotEdep_ec_mrpc->Draw("colz");
-cc->cd(3);
+c_totEdep_compare->cd(3);
 htotEdep_spd_mrpc->Draw("colz");
+
+TCanvas *c_fluxR = new TCanvas("fluxR","fluxR",1600,900);
+c_fluxR->Divide(2,1);
+c_fluxR->cd(1);
+hfluxR_mrpc[0][1]->SetLineColor(kRed);
+hfluxR_mrpc[0][1]->Draw();
+hfluxR_mrpc[0][2]->SetLineColor(kBlue);
+hfluxR_mrpc[0][2]->Draw("same");
+c_fluxR->cd(2);
+hPlog_mrpc[0][1]->SetLineColor(kRed);
+hPlog_mrpc[0][1]->Draw();
+hPlog_mrpc[0][2]->SetLineColor(kBlue);
+hPlog_mrpc[0][2]->Draw("same");
 
 }
