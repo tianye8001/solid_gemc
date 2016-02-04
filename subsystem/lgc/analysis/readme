@@ -1,0 +1,28 @@
+Here is the files and scripts to run simulation and analysis results
+
+It can work as standalone, but also test with other subsystems and full SoLID simulation
+
+== run == 
+
+#run lgc simulation standalone
+solid_gemc solid_PVDIS_LD2_lgc.gcard
+solid_gemc solid_SIDIS_He3_lgc.gcard
+
+#run lgc simulation with other subsystems
+solid_gemc solid_PVDIS_LD2_full.gcard
+solid_gemc solid_SIDIS_He3_full.gcard
+
+#convert evio file in standalone simulation to root file
+evio2root -INPUTF=output.evio -B="../lgc_solid_gemc/solid_PVDIS_lgc"
+evio2root -INPUTF=output.evio -B="../lgc_solid_gemc/solid_SIDIS_lgc"
+
+evio2root -INPUTF=output.evio -B="../lgc_solid_gemc/lg_cherenkov"
+
+#convert evio file in full simulation to root file
+evio2root -INPUTF=output.evio -B="../lgc_solid_gemc/solid_PVDIS_lgc ../../../solid_gemc2/geometry/ec/solid_PVDIS_ec ../../../solid_gemc2/geometry/gem/solid_PVDIS_gem"
+evio2root -INPUTF=output.evio -B="../lgc_solid_gemc/solid_SIDIS_lgc
+../../../solid_gemc2/geometry/ec/solid_SIDIS_ec ../../../solid_gemc2/geometry/hgc/solid_SIDIS_hgc   ../../../solid_gemc2/geometry/gem/solid_SIDIS_gem ../../../solid_gemc2/geometry/mrpc/solid_SIDIS_mrpc ../../../solid_gemc2/geometry/spd/solid_SIDIS_spd"
+
+== analysis == 
+
+root> .x analysis.C+("output.root")
