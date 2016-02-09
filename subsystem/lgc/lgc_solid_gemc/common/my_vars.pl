@@ -17,8 +17,8 @@ our $buildBlinders = 0;
 
 our $D2R = 3.14159265/180.0;
 
-#our $detMom = "root";  #This is the mother volume that the geometries are placed in.
-our $detMom = "hall";
+our $detMom = "root";  #This is the mother volume that the geometries are placed in.
+# our $detMom = "hall";
 our $namePre = "cher_lg_"; #naming convention for light gas cherenkov (so as not to conflict with other subdetector geometry names when we put everything together).
 
 #some variable tank window settings:

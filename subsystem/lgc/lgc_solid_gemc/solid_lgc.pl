@@ -50,7 +50,7 @@ require 'geometries/build_mirror2.pl';
 require 'geometries/build_mirror3.pl';
 require 'geometries/build_support.pl';
 require 'geometries/build_blinder.pl';
-make_mother();
+# make_mother();
 
 #note: lowEM files not on repo yet -- MP: 01/20/16
 if($lowEM){

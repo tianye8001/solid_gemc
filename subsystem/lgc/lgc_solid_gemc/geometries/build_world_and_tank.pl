@@ -88,7 +88,7 @@ sub make_tank_BaBar_pvdis
     $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
-    $detector{"visible"}     = 0;
+    $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "no";
@@ -127,7 +127,7 @@ sub make_tank_CLEO_pvdis
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
 #    $detector{"visible"}     = 0;
-    $detector{"visible"}     = 0;
+    $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "no";
@@ -149,7 +149,7 @@ sub make_tank_CLEO_pvdis
     $detector{"ncopy"}       = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
-    $detector{"visible"}     = 0;
+    $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "no";
@@ -213,7 +213,7 @@ sub make_tank_CLEO_pvdis
     $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
-    $detector{"visible"}     = 0;
+    $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "no";
@@ -298,7 +298,7 @@ sub make_tank_CLEO_sidis
     $detector{"ncopy"}       = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
-    $detector{"visible"}     = 0;
+    $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "no";
@@ -319,7 +319,7 @@ sub make_tank_CLEO_sidis
     $detector{"ncopy"}       = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
-    $detector{"visible"}     = 0;
+    $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "no";
@@ -345,8 +345,8 @@ sub make_snout
     $detector{"ncopy"}       = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
-    $detector{"visible"}     = 0;
- #   $detector{"visible"}     = 1;
+#     $detector{"visible"}     = 0;
+   $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "no";
