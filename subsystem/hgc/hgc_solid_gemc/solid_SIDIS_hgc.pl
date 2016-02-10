@@ -62,10 +62,10 @@ solid_SIDIS_hgc_virtualplane();
 require "solid_SIDIS_hgc_materials.pl";
 
 #mirror
-require "solid_SIDIS_hgc_mirror.pl";
+require "solid_hgc_mirror.pl";
 
 #hit definition
-require "solid_SIDIS_hgc_hit.pl";
+require "solid_hgc_hit.pl";
 
 # bank definition
 require "solid_SIDIS_hgc_bank.pl";
