@@ -24,7 +24,7 @@ sensitiveID::sensitiveID(string SD, goptions gemcOpt, string factory, string var
 		identifiers.push_back("id");
 		signalThreshold = 0;
 		timeWindow      = 0;
-		prodThreshold   = 1000*eV;  // 1 KeV production threshold
+		prodThreshold   = 0.001*mm;
 		maxStep         = 1*mm;
 		return;
 	}
