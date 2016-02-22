@@ -1,6 +1,6 @@
 = Intro ===================
 
-Here is EC simulation setup using "solid_gemc" which is the SoLID simulation program based on GEMC
+Here is HGC simulation setup using "solid_gemc" which is the SoLID simulation program based on GEMC
 
 The setup gives a complete definition of the detector.
 How to run the simulation and analysis result is not here, they are at "subsystem/hgc/analysis"
