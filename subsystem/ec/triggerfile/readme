@@ -18,3 +18,64 @@ created by Jin huang around 2013/09
 
 use plot_PVDIS.C or plot_SIDIS.C to plot trigger summary plot
 
+============ wrapper to get trigger value from the trigger curve =========
+
+
+This is a collection of data (Jin's trigger curve) and functions to get trigger efficiency on EC.
+
+Any questions, please contact Yuxiang Zhao (yxzhao@jlab.org) or Zhiwen Zhao (zwzhao@jlab.org)
+
+
+To use the functions, you can include the file into your own analysis code,
+but make sure that two directories PVDIS_LD2_201309 and SIDIS_He3_201311 are
+in the same directory with your code.
+
+---------
+To get trigger efficiency on EC for PVDIS:
+
+double Get_PVDIS_trigger_efficiency_EC(TString phi_range,TString pid,double hit_R, double hit_Mom, bool Is_debug=false){
+	//to test:  in root [1] .x Get_PVDIS_trigger_efficiency_EC.C("high", "electron",235, 3)
+	// phi_range= "high" or "low" 
+	// pid="electron",  "pion", "gamma", "proton"
+	// hit_R= 110->265, out of this range, trigger efficiency is set to be zero  
+	// hit_Mom : this is momentum of the particle  
+	// note: gamma trigger efficiency = electron,  proton trigger efficiency =1/2 pion trigger efficiency
+
+rig_eff(P>6GeV) = trig_eff(P=6GeV)
+trig_eff(P<0.5GeV) = 0
+trig_eff(0.5<P<1GeV) = 0.5*trig_eff(P=1GeV)
+trig_eff_Proton = 0.5*trig_eff_pion
+
+----------
+To get trigger efficiency on EC for SIDIS (electron trigger):
+
+double Get_SIDIS_trigger_efficiency_EC(TString det_ID,TString pid,double hit_R, double hit_Mom, bool Is_debug){
+	//det_ID="large", "forward"
+	//pid="electron", "gamma", "pion", "proton"
+	//hit_R: r value for the hit, in cm  
+	//hit_Mom: momentum of the hit
+	
+SIDIS FAEC Electron trigger Assumption
+trig_eff (P>Max)=trig_eff(P=Max)
+trig_eff (P<Min)=0
+trig_eff_Proton = 0.5*trig_eff_pion
+
+SIDIS LAEC Electron trigger Assumption
+trig_eff (P>Max)=trig_eff(P=Max)
+trig_eff (P<Min)=0
+trig_eff_Proton = 0.5*trig_eff_pion
+
+
+--------
+To get trigger efficiency on EC for SIDIS (hadron trigger):
+
+double Get_SIDIS_MIP_trigger_efficiency_EC(TString pid,double hit_Mom,bool Is_debug){
+	//hit_Mom, momentum of the hit
+	//pid="electron", "gamma", "pion", "proton"
+	// currently no R dependent cut was used for hadron trigger!
+	
+
+SIDIS FAEC MIP trigger Assumption
+trig_eff (Ek>Max)=trig_eff(P=Max)
+trig_eff (Ek<Min)=0
+
