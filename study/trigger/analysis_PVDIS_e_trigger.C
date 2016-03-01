@@ -194,7 +194,7 @@ setup_tree_solid_lgc(tree_solid_lgc);
 int Nevent = (int)tree_header->GetEntries();
 cout << "Nevent = " << Nevent << endl;
 
-for (Int_t i=0;i<1000;i++) { 
+for (Int_t i=0;i<Nevent;i++) { 
 // for (Int_t i=0;i<2;i++) { 
 //   cout << i << "\r";
 //   cout << i << "\n";
