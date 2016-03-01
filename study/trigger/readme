@@ -1,6 +1,9 @@
 the tool here is a very simple example to process different tree from different hit process from different ditector.
 each tree is processed by different file and can be kept independent, they are called by the analysis script which process event by event and combine the result from different detector.
 
+run it like
 
+root -b  'analysis_PVDIS_e_trigger.C+("/home/zwzhao/work_halla/solid/solid_svn/solid/study/background/PVDIS_LD2_JLAB_VERSION_1.2/pass2/background_solid_PVDIS_LD2_dirty_normalized_pimWiser_filenum58_0.58e6.root")'
 
+root -b  'analysis_PVDIS_e_trigger.C+("/home/zwzhao/work_halla/solid/solid_svn/solid/study/background/PVDIS_LD2_JLAB_VERSION_1.2/pass2/background_solid_PVDIS_LD2_EM_0.98e8.root")'
 

@@ -52,12 +52,81 @@ sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_
 // TH2F *htotEdep_ec_mrpc=new TH2F("htotEdep_ec_mrpc","htotEdep_ec_mrpc",100,0,2000,100,0,0.1);
 // TH2F *htotEdep_spd_mrpc=new TH2F("htotEdep_spd_mrpc","htotEdep_spd_mrpc",100,0,5,100,0,0.1);
 
+	TH1F *hfluxR,*hfluxR_trig;
+	char hstname[100];	
+	sprintf(hstname,"fluxR");
+	hfluxR=new TH1F(hstname,hstname,60,0,300);
+	hfluxR->SetTitle(";R (cm);flux (kHz/mm2)");
+	sprintf(hstname,"fluxR_trig");
+	hfluxR_trig=new TH1F(hstname,hstname,60,0,300);
+	hfluxR_trig->SetTitle(";R (cm);flux_trig (kHz/mm2)");
+	
 TFile *file=new TFile(input_filename.c_str());
 if (file->IsZombie()) {
     cout << "Error opening file" << input_filename << endl;
     exit(-1);
 }
-else cout << "open file " << input_filename << endl;    
+else cout << "open file " << input_filename << endl;   
+
+	/*Define run condition{{{*/
+	bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false;  
+	double current;
+	double target_center;  //in mm
+	if (input_filename.find("PVDIS",0) != string::npos){
+		Is_PVDIS=true;
+		current=50e-6/1.6e-19;  //50uA
+		target_center=100;  //in mm
+		cout << " PVDIS " << current  << endl;  
+	}
+	else if (input_filename.find("SIDIS_He3",0) != string::npos){
+		Is_SIDIS_He3=true;
+		current=15e-6/1.6e-19;   //15uA
+		target_center=-3500;  //in mm  
+		cout << " SIDIS_He3 " << current  <<  endl;  
+	}
+	else if (input_filename.find("SIDIS_NH3",0) != string::npos){
+		Is_SIDIS_NH3=true;	
+		current=100e-9/1.6e-19;   //100nA
+		target_center=-3500;  //in mm  
+		cout << " SIDIS_NH3 " << current  <<  endl;  
+	}
+	else if (input_filename.find("JPsi_LH2",0) != string::npos){
+		Is_JPsi_LH2=true;
+		current=3e-6/1.6e-19;   //3uA
+		target_center=-3150;  //in mm  
+		cout << " JPsi_LH2 " << current  <<  endl;  
+	}
+	else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
+	
+	// there are different ways to get correct normalization for different files
+	//EM just need current and total number of event
+	//source from weighted or normalized event generator need rate and total file number, assume there are 100 files, each file has 10000 events, the rate in each file has normalized by 10000, then add 100 files with root tree together, the final result needs normalization by 10000*100=1e6, so the addtional factor is the file num 100
+	//dirty or clean means put in realmaterial or not
+
+	bool Is_EM=false,Is_weighted=false,Is_normalized=false;
+	if (input_filename.find("_EM_",0) != string::npos) {
+		Is_EM=true;
+		cout << "EM background from beam on target" <<  endl;
+	}
+	else if (input_filename.find("_weighted_",0) != string::npos) {
+		Is_weighted=true;
+		cout << "background from weighted event generator" <<  endl;
+	}	  
+	else if (input_filename.find("_normalized_",0) != string::npos) {
+		Is_normalized=true;
+		cout << "background from normalized event generator" <<  endl;
+	}	  	
+	else {cout << "not EM or weighted or normalized " << endl; return;}
+	
+	double filenum=1.;
+	if (!Is_EM){   //for non-EM background
+	  if (input_filename.find("_filenum",0) != string::npos) {
+	    filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
+	      cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+	  }
+	  else {cout << "we need filenum for addtional normalization" << endl; return;}		
+	}
+		
 
 TTree *tree_header = (TTree*) file->Get("header");
 vector <int> *evn=0,*evn_type=0;
@@ -122,17 +191,21 @@ setup_tree_solid_ec(tree_solid_ec);
 TTree *tree_solid_lgc = (TTree*) file->Get("solid_lgc");
 setup_tree_solid_lgc(tree_solid_lgc);
 
-int nevent = (int)tree_generated->GetEntries();
-int nselected = 0;
-cout << "nevent " << nevent << endl;
+int Nevent = (int)tree_header->GetEntries();
+cout << "Nevent = " << Nevent << endl;
 
-for (Int_t i=0;i<nevent;i++) { 
+for (Int_t i=0;i<1000;i++) { 
 // for (Int_t i=0;i<2;i++) { 
 //   cout << i << "\r";
 //   cout << i << "\n";
 
   tree_header->GetEntry(i);
-  
+  double rate = var8->at(0);
+//   double W = header_W->at(0);
+//   double Q2 = header_Q2->at(0);
+//   double x = header_x->at(0);
+//cout << Q2 << " " << x << endl;  
+   
   tree_generated->GetEntry(i);  
   int pid_gen=0;
   double theta_gen=0,phi_gen=0,p_gen=0,px_gen=0,py_gen=0,pz_gen=0,vx_gen=0,vy_gen=0,vz_gen=0;      
@@ -152,8 +225,15 @@ for (Int_t i=0;i<nevent;i++) {
 //       cout << "p_gen " << p_gen << endl;
   }
 
-    tree_flux->GetEntry(i);  
-    
+  tree_solid_lgc->GetEntry(i);  
+  bool Is_trigger_lgc=lgc_trigger(tree_solid_lgc);
+  
+//   bool Is_trigger_lgc = process_tree_solid_lgc_trigger(tree_solid_lgc);
+
+//   tree_solid_ec->GetEntry(i);  
+//   bool Is_trigger_ec = process_tree_solid_ec_trigger(tree_solid_ec);
+  
+    tree_flux->GetEntry(i);      
     for (Int_t j=0;j<flux_hitn->size();j++) {
 //       cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
 
@@ -190,17 +270,76 @@ for (Int_t i=0;i<nevent;i++) {
 	cout << "EC trigger " << PVDIS_trigger_efficiency_EC  << " at ";
 	cout << " region " << region << ", pid " << pid << ", flux_r " << flux_r/10 << ", cm flux_mom " << flux_mom/1e3 << " GeV" << endl;
 	}
+	
+      /*Calculate Weight{{{*/
+      double thisrate=0.0;
+      double weight=0.0,weightR=0.0,weightPhi=0.0,weightTheta=0.0;
+      double area=1.;      /// in 
+      double areaR=2*3.1415926*flux_r*1.; /// in mm2
+      double areaPhi=1.;  /// in any deg      
+//       double areaTheta=2*3.1415926*flux_r*(flux_avg_z->at(j)*(tan((Theta+0.25)/DEG)-tan((Theta-0.25)/DEG))); ///0.5deg width
+
+      if (Is_EM) thisrate=current/Nevent;			
+      else thisrate=rate/filenum;			
+// 			cout << "thisrate" << rate << endl;
+      
+      weight=thisrate/1e3/area;
+      weightR=thisrate/1e3/areaR;
+      weightPhi=thisrate/1e3/areaPhi;
+//       weightTheta=thisrate/1e3/areaTheta;     
+      /*End of Caluclate Weight}}}*/
+	
+      double Is_trigger=PVDIS_trigger_efficiency_EC*Is_trigger_lgc;      
+
+      hfluxR->Fill(flux_r/10.,weightR/50.);   ///in 5cm bin
+      hfluxR_trig->Fill(flux_r/10.,weightR/50.*Is_trigger);   ///in 5cm bin    
+      
       }
     }
-
-//   tree_solid_lgc->GetEntry(i);  
-//   bool Is_trigger_lgc = process_tree_solid_lgc_trigger(tree_solid_lgc);
-
-//   tree_solid_ec->GetEntry(i);  
-//   bool Is_trigger_ec = process_tree_solid_ec_trigger(tree_solid_ec);
+    
    
 }
 file->Close();
+
+TCanvas *c_fluxR = new TCanvas("fluxR","fluxR",1600,900);
+c_fluxR->Divide(2,1);
+hfluxR->SetMinimum(1e-7);
+hfluxR->SetMaximum(1e7);    
+hfluxR->SetLineColor(1);
+hfluxR->Draw();
+hfluxR_trig->SetLineColor(2);
+hfluxR_trig->Draw("same");
+
+      int nbins=hfluxR->GetNbinsX();
+      double binwidth=hfluxR->GetBinWidth(1);
+//       cout << nbins << " " << binwidth << endl;
+      double sum=0,sum_trig=0;
+      double sum_R[5]={0,0,0,0,0},sum_R_trig[5]={0,0,0,0,0};
+      for(int k=1;k<nbins;k++){
+// 	double r=hfluxR_proj[j][i]->GetBinCenter(k);
+// 	if (r < Rmin || Rmax< r) continue;
+// 	if (hfluxR_proj[j][i]->GetBinCenter(k) < 60 || 150< hfluxR_proj[j][i]->GetBinCenter(k)) continue;
+	double thisrate=2*3.1415926*hfluxR->GetBinCenter(k)*binwidth*100*hfluxR->GetBinContent(k);
+	double thisrate_trig=2*3.1415926*hfluxR_trig->GetBinCenter(k)*binwidth*100*hfluxR_trig->GetBinContent(k);
+	sum += thisrate;
+	sum_trig += thisrate_trig;
+      }
+      
+      cout << sum << endl;
+      
+      cout << sum_trig << endl;      
+      
+
+// 	// add text
+// 	TPaveText *pt1 = new TPaveText(0.6,0.6,0.95,0.9,"brNDC");
+// 	pt1->SetFillColor(17);
+// 	pt1->SetTextAlign(12);
+// 	pt1->Draw();
+// 	for(int i=0;i<m;i++){
+// 		TText *text=pt1->AddText();
+// 		text->SetTextColor(i+1);
+// 		text->SetTextSize(0.024);
+// 	}
 
 // outputfile->Write();
 // outputfile->Flush();

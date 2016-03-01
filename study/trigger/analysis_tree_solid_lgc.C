@@ -44,8 +44,9 @@ return;
 //Must imput the lgc_tree, the event number, and the PMT and PEperPMT thresholds (default is a 2x2 trigger).
 
 
-Bool_t lgc_trigger(TTree *tree_solid_lgc, Int_t eventn, Int_t PMTthresh = 2, Int_t PEthresh = 2){
-  tree_solid_lgc->GetEntry(eventn);
+// Bool_t lgc_trigger(TTree *tree_solid_lgc, Int_t eventn, Int_t PMTthresh = 2, Int_t PEthresh = 2){
+//   tree_solid_lgc->GetEntry(eventn);
+Bool_t lgc_trigger(TTree *tree_solid_lgc, Int_t PMTthresh = 2, Int_t PEthresh = 2){
   if(!solid_lgc_hitn->size()) return 0;
    //if using root6, uncomment line below, and comment out following line
   //std::vector<std::vector<int>> sectorhits (30, std::vector<int>(9,0));  //initialize a 30x9 vector array
