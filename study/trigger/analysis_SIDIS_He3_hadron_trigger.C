@@ -59,20 +59,20 @@ if (file->IsZombie()) {
 else cout << "open file " << input_filename << endl;    
 
 TTree *tree_header = (TTree*) file->Get("header");
-vector <int> *evn=0,*evn_type=0;
-vector <double> *beamPol=0;
-vector <int> *var1=0,*var2=0,*var3=0,*var4=0,*var5=0,*var6=0,*var7=0,*var8=0;
-tree_header->SetBranchAddress("evn",&evn);
-tree_header->SetBranchAddress("evn_type",&evn_type);
-tree_header->SetBranchAddress("beamPol",&beamPol);
-tree_header->SetBranchAddress("var1",&var1);
-tree_header->SetBranchAddress("var2",&var2);
-tree_header->SetBranchAddress("var3",&var3);
-tree_header->SetBranchAddress("var4",&var4);
-tree_header->SetBranchAddress("var5",&var5);
-tree_header->SetBranchAddress("var6",&var6);
-tree_header->SetBranchAddress("var7",&var7);
-tree_header->SetBranchAddress("var8",&var8);
+vector <int> *header_evn=0,*header_evn_type=0;
+vector <double> *header_beamPol=0;
+vector<double> *header_Wmrate=0, *header_Wprate=0, *header_targetPol=0, *header_x=0, *header_Q2=0, *header_W=0, *header_rate=0, *header_y=0;
+header->SetBranchAddress("evn",&header_evn);
+header->SetBranchAddress("evn_type",&header_evn_type);
+header->SetBranchAddress("beamPol",&header_beamPol);
+header->SetBranchAddress("var1",    &header_Wprate);
+header->SetBranchAddress("var2",    &header_Wmrate);
+header->SetBranchAddress("var3",    &header_targetPol);
+header->SetBranchAddress("var4",    &header_x);
+header->SetBranchAddress("var5",    &header_y);
+header->SetBranchAddress("var6",    &header_W);
+header->SetBranchAddress("var7",    &header_Q2);
+header->SetBranchAddress("var8",    &header_rate);
 
 TTree *tree_generated = (TTree*) file->Get("generated");
 vector <int> *gen_pid=0;
