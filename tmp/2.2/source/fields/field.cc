@@ -42,7 +42,12 @@ void gfield::create_MFM()
 		G4MagneticField *pCachedMagField = new G4CachedMagneticField(map, 1 * cm);
 		MFM = new G4FieldManager(pCachedMagField, iChordFinder);
 
-		// change these?
+		G4double minEps= 0.1;  //   Minimum & value for smallest steps
+		G4double maxEps= 1.0;  //   Maximum & value for largest steps
+		
+		MFM->SetMinimumEpsilonStep( minEps );
+		MFM->SetMaximumEpsilonStep( maxEps );
+
 		MFM->SetDeltaOneStep(0.01 * mm);
 		MFM->SetDeltaIntersection(0.001 * mm);
 	}
