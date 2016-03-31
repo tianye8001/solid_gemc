@@ -50,12 +50,14 @@ Bool_t lgc_trigger(TTree *tree_solid_lgc, Int_t PMTthresh = 2, Int_t PEthresh = 
   if(!solid_lgc_hitn->size()) return 0;
    //if using root6, uncomment line below, and comment out following line
   //std::vector<std::vector<int>> sectorhits (30, std::vector<int>(9,0));  //initialize a 30x9 vector array
-  Int_t sectorhits[30][9];
+  Int_t sectorhits[30][9] = {0};  //need to intialize to zero or bad stuff
   Int_t ntrigsecs =0;
   Int_t ntrigpmts =0;
  
   for(Int_t i = 0; i < solid_lgc_hitn->size(); i++){
-    sectorhits[solid_lgc_sector->at(i)-1][solid_lgc_pmt->at(i)-1] += solid_lgc_nphe->at(i);
+    if(solid_lgc_nphe->at(i)){
+      sectorhits[solid_lgc_sector->at(i)-1][solid_lgc_pmt->at(i)-1] += solid_lgc_nphe->at(i);
+    }
   }
   for(Int_t i = 0; i < 30; i++){
     ntrigpmts = 0;
