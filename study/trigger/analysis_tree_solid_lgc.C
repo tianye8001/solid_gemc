@@ -54,7 +54,7 @@ Bool_t lgc_trigger(TTree *tree_solid_lgc, Int_t PMTthresh = 2, Int_t PEthresh = 
   Int_t ntrigsecs =0;
   Int_t ntrigpmts =0;
  
-  for(Int_t i = 0; i < solid_lgc_hitn->at(0); i++){
+  for(Int_t i = 0; i < solid_lgc_hitn->size(); i++){
     sectorhits[solid_lgc_sector->at(i)-1][solid_lgc_pmt->at(i)-1] += solid_lgc_nphe->at(i);
   }
   for(Int_t i = 0; i < 30; i++){
