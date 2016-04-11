@@ -50,8 +50,10 @@ $configuration{"variation"} = "Original";
 # our %parameters    = get_parameters(%configuration);
 
 #Geometry definition
-require "solid_DDVCS_muon_forwardangle_geometry.pl";
-solid_DDVCS_muon_forwardangle();
+# require "solid_DDVCS_muon_forwardangle_geometry.pl";
+# solid_DDVCS_muon_forwardangle();
+require "solid_DDVCS_muon_forwardangle_pat.pl";
+solid_DDVCS_muon_forwardangle_pat();
 require "solid_DDVCS_muon_forwardangle_virtualplane.pl";
 solid_DDVCS_muon_forwardangle_virtualplane();
 
