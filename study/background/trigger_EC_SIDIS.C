@@ -240,7 +240,7 @@ void trigger_EC_SIDIS()
 			hPlog_R[j][i]->Draw("colz");
 
 // 			hfluxR_proj[j][i]= (TH1F*) hPlog_R[j][i]->ProjectionX();
-			hfluxR_proj[j][i]= (TH1F*) hEklog_R[j][i]->ProjectionX("_px",1,hEklog_R[j][i]->GetNbinsY());
+			hfluxR_proj[j][i]= (TH1F*) hPlog_R[j][i]->ProjectionX("_px",1,hPlog_R[j][i]->GetNbinsY());
 			  hfluxR_proj[j][i]->Scale(1./rebin_factor);  
 			  hfluxR_proj[j][i]->Rebin(rebin_factor);
 			c_fluxR_ec_proj->cd(j+1);
@@ -309,7 +309,7 @@ void trigger_EC_SIDIS()
 				c_fluxR_ec_proj->cd(j+1);
 				gPad->SetLogy(1);  
 // 				hfluxR_trig[j][i]= (TH1F*) hPlog_R_trig[j][i]->ProjectionX();
-				hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX("_px",1,hEklog_R_trig[j][i]->GetNbinsY());   // do this to remove underflow and overflow bin content				
+				hfluxR_trig[j][i]= (TH1F*) hPlog_R_trig[j][i]->ProjectionX("_px",1,hPlog_R_trig[j][i]->GetNbinsY());   // do this to remove underflow and overflow bin content				
 				  hfluxR_trig[j][i]->Scale(1./rebin_factor);  //change from 1cm to 5cm bin
 				  hfluxR_trig[j][i]->Rebin(rebin_factor); //change from 1cm to 5cm bin
 				hfluxR_trig[j][i]->SetLineStyle(7);  

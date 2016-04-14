@@ -406,7 +406,7 @@ for(int i=0;i<m;i++){
 
   c_fluxR_ec_proj->cd(j+1);
   gPad->SetLogy(1);  
-  hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX();
+//   hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX();
   hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX("_px",1,hEklog_R_trig[j][i]->GetNbinsY());   // do this to remove underflow and overflow bin content  
   hfluxR_trig[j][i]->Scale(1./rebin_factor);  //change from 1cm to 5cm bin
   hfluxR_trig[j][i]->Rebin(rebin_factor); //change from 1cm to 5cm bin  
