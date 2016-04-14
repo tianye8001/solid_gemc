@@ -366,10 +366,12 @@ int main(Int_t argc, char *argv[]){
 					target_flag, particle_flag);
 			
 			mom_ele = sidis->mom_ele; theta_ele = sidis->theta_ele; phi_ele = sidis->phi_ele;
-			mom_had = sidis->mom_had; theta_had = sidis->theta_had; phi_ele = sidis->phi_had;
-			theta_q=sidis->theta_q;  theta_s=sidis->theta_s; phi_s= sidis->phi_s; phi_h = sidis->phi_h;
 			px_ele = sidis->px_ele;	py_ele = sidis->py_ele;	pz_ele = sidis->pz_ele; E0_ele = sidis->E0_ele;
+			
+            mom_had = sidis->mom_had; theta_had = sidis->theta_had; phi_had = sidis->phi_had;
 			px_had = sidis->px_had;	py_had = sidis->py_had;	pz_had = sidis->pz_had; E0_had = sidis->E0_had;
+			
+            theta_q=sidis->theta_q;  theta_s=sidis->theta_s; phi_s= sidis->phi_s; phi_h = sidis->phi_h;
 
 			x=sidis->x; y=sidis->y; z=sidis->z; Q2=sidis->Q2; W=sidis->W; Wp=sidis->Wp;
 			s=sidis->s; nu=sidis->nu; pt=sidis->pt; gamma=sidis->gamma; epsilon=sidis->epsilon;
