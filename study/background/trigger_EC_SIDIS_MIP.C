@@ -25,7 +25,9 @@ double Rmax[2]={235,140};
 // double Rmin[2]={58,80};
 // double Rmax[2]={127,140};
 
-double factor=1.;  //PVDIS need this factor 2 because rate calculation is for 2pi azimuthal, but SIDIS
+double factor=1.;  //only PVDIS need this factor as 2 because high and low area only takes half of full azimuthal
+
+int rebin_factor=1;
 
 const int m=5;
 char* input_filename[m]={
@@ -321,7 +323,10 @@ for(int i=0;i<m;i++){
   if (i!=3) hEklog_R[j][i]->SetAxisRange(-3,1.1,"Y");  
   hEklog_R[j][i]->Draw("colz");
   
-  hfluxR_proj[j][i]= (TH1F*) hEklog_R[j][i]->ProjectionX();
+//   hfluxR_proj[j][i]= (TH1F*) hEklog_R[j][i]->ProjectionX();
+  hfluxR_proj[j][i]= (TH1F*) hEklog_R[j][i]->ProjectionX("_px",1,hEklog_R[j][i]->GetNbinsY());  
+  hfluxR_proj[j][i]->Scale(1./rebin_factor);  
+  hfluxR_proj[j][i]->Rebin(rebin_factor);  
   c_fluxR_ec_proj->cd(j+1);
   gPad->SetLogy(1);      
   hfluxR_proj[j][i]->SetLineColor(color[i]);
@@ -402,6 +407,9 @@ for(int i=0;i<m;i++){
   c_fluxR_ec_proj->cd(j+1);
   gPad->SetLogy(1);  
   hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX();
+  hfluxR_trig[j][i]= (TH1F*) hEklog_R_trig[j][i]->ProjectionX("_px",1,hEklog_R_trig[j][i]->GetNbinsY());   // do this to remove underflow and overflow bin content  
+  hfluxR_trig[j][i]->Scale(1./rebin_factor);  //change from 1cm to 5cm bin
+  hfluxR_trig[j][i]->Rebin(rebin_factor); //change from 1cm to 5cm bin  
   hfluxR_trig[j][i]->SetLineStyle(7);  
   hfluxR_trig[j][i]->SetLineColor(color[i]);
   hfluxR_trig[j][i]->SetMinimum(1e-7);
