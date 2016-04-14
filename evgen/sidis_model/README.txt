@@ -2,6 +2,8 @@
 *  SIDIS Cross Section Model   *
 *  -- Zhihong Ye, 06/10/2014   *
 ********************************
+UPDATE:
+-- 04/14/2016, a bug was fixed in GetSIDIS.C where the values of "phi_ele" and "phi_had" were wrong.
 
 Note:
 1, This model is extracted fro Xin Qian's SIDIS generator "collider.C" 
