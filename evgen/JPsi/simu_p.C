@@ -119,10 +119,10 @@ int main (Int_t argc, char *argv[])
  
   TF1 *fbr = new TF1("fbr","[1]/(x/[0])*(4./3.-4./3.*(x/[0])+(x/[0])*(x/[0]))",Gbeam_min,Ebeam);  
   fbr->SetParameter(0,Ebeam);
-  fbr->SetParameter(1,0.0024);  
+  fbr->SetParameter(1,0.00243);  
   //brem photon produced by one electron for 100% radiator
   //a=0.000146 for a 6% radiator, according to p251 of PDG 2012 and Jixie Zhang's estimation,  it only works for thin radiator
-  //a=0.0024=0.000146/0.06 for a 100% radiator
+  //a=0.00243=0.000146/0.06 for a 100% radiator
 
     Double_t mass[10];
     
