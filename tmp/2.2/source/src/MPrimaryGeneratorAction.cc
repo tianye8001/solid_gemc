@@ -363,7 +363,7 @@ void MPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 			// luminosity momentum
 			L_Mom   = L_mom/MeV   + (2.0*G4UniformRand()-1.0)*L_dmom/MeV;
 // 			L_Theta = L_theta/rad + (2.0*G4UniformRand()-1.0)*L_dtheta/rad;
-			L_Theta = acos(G4UniformRand()*(cos(L_theta/rad-_L_dtheta/rad)-cos(L_theta/rad+L_dtheta/rad)) + cos(L_theta/rad+L_dtheta/rad))/rad;		
+			L_Theta = acos(G4UniformRand()*(cos(L_theta/rad-L_dtheta/rad)-cos(L_theta/rad+L_dtheta/rad)) + cos(L_theta/rad+L_dtheta/rad))/rad;		
 			L_Phi   = L_phi/rad   + (2.0*G4UniformRand()-1.0)*L_dphi/rad;
 			
 			double L_akine = sqrt(L_Mom*L_Mom + L_mass*L_mass) - L_mass ;
@@ -400,7 +400,7 @@ void MPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 		{
 			// luminosity momentum
 			L2_Mom   = L2_mom/MeV   + (2.0*G4UniformRand()-1.0)*L2_dmom/MeV;
-			L2_Theta = acos(G4UniformRand()*(cos(L2_theta/rad-_L2_dtheta/rad)-cos(L2_theta/rad+L2_dtheta/rad)) + cos(L2_theta/rad+L2_dtheta/rad))/rad;	
+			L2_Theta = acos(G4UniformRand()*(cos(L2_theta/rad-L2_dtheta/rad)-cos(L2_theta/rad+L2_dtheta/rad)) + cos(L2_theta/rad+L2_dtheta/rad))/rad;	
 // 			L2_Theta = L2_theta/rad + (2.0*G4UniformRand()-1.0)*L2_dtheta/rad;
 			L2_Phi   = L2_phi/rad   + (2.0*G4UniformRand()-1.0)*L2_dphi/rad;
 			
