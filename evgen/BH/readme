@@ -39,7 +39,7 @@ if we are using electron beam direction as +Z axis, we need to rotate along Y 18
 
 ** known problem **
 1. occasionally, integ wouldn't end because grid calculation can't converge for certain configuration. 
-2. spring will crash when events go more than 2.9M due to unknown reason. so set NGEN at most 25000000 to be safe
+2. spring will crash when events go more than 2.9M due to unknown reason (maybe related to avalaible mem). so set NGEN at most 25000000 to be safe
 
 =====analysis code ==================================================
 anaGrape.C can be used to analyze the output tree "grp.root" from grape-dilepton
