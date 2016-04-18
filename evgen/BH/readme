@@ -35,6 +35,7 @@ Absolutely NO cut can be applied on any of them without careful consideration, l
    (c) display at end of running "spring", thus stored in file "spring.log"
 8. It's default +Z axis is along proton beam direction. So is Theta defined in its input file
 if we are using electron beam direction as +Z axis, we need to rotate along Y 180 degree to analyses results
+9. when using multiple root files, the correct weight factor is (total crossection)/(total event numbers of all files)
 
 ** known problem **
 1. occasionally, integ wouldn't end because grid calculation can't converge for certain configuration. 
