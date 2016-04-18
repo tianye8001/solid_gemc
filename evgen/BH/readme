@@ -21,8 +21,9 @@ run "/home/zwzhao/grape-dilpeton_v1.1k/src/spring | cat > spring.log"
 then an ntuple "grp.rz" is produced. You can convert it to root file "grp.root" by "h2root grp.rz" then analysis it by using code from https://jlabsvn.jlab.org/svnroot/solid/evgen/BH
 
 ** general note **
-1. Be careful with NCALL input, too large it can take long time to run bases, too small will reduce accuracy
-2. add "RNDGEN   true" in grape.cards" to use non-default random seed. Otherwise everytime, you will regeneated the same events. you need to "mv rndstat.dat rndstat.dat.prev" everytime if you want to get new events. refer to http://research.kek.jp/people/tabe/grape/FAQ/rndstat.html
+0. Be careful with NCALL input, too large it can take long time to run bases, too small will reduce accuracy
+1. turn ISR on for initial radiation for electron beam. there is no way to make radation forr final state particle of elastic channel yet. (PSFSR doesn't work for this)
+2. add "RNDGEN true" in grape.cards" to use non-default random seed. Otherwise everytime, you will regeneated the same events. you need to "mv rndstat.dat rndstat.dat.prev" everytime if you want to get new events. refer to http://research.kek.jp/people/tabe/grape/FAQ/rndstat.html
 3. Variaous cuts like mom and angle etc can be applied in the input file, they can be used carefully to focus the simulation on interested physical region and particular detecctor acceptance and trigger condition.
 4. with interference on for electrion pair, the scattering e- and decay e- are not distinguishable.
 Absolutely NO cut can be applied on any of them without careful consideration, like PMIN,PMAX,THMIN,THMAX,MASSLL etc.
