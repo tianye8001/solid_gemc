@@ -18,7 +18,7 @@
 
 using namespace std;
 
-void root2lund(){
+void root2lund_grape-dilepton(){
 //  set_style();
 // gROOT->Reset();
 gStyle->SetPalette(1);
