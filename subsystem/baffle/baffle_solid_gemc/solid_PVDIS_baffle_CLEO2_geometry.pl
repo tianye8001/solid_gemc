@@ -127,7 +127,7 @@ sub solid_PVDIS_baffle_CLEO2_geometry
 	{
 	    # Inert Kryptonite
 	    $material_baffle[$i] = "Kryptonite";
-	    $material_baffle_within[$i] = "Vacuum";
+	    $material_baffle_within[$i] = "G4_Galactic";
 	    $sensitivity_baffle[$i] = "no";
 	    $hit_baffle[$i] = "no";
 	}
@@ -149,8 +149,8 @@ sub solid_PVDIS_baffle_CLEO2_geometry
 	}
 	if ($i == 0 && $configuration{"variation"} =~ /Enclosure/)
 	{
-	    $mother[$i] = "solid_PVDIS_target_LD2_enclosure_TACV";
-	    $material_baffle_within[$i] = "SL_Vacuum";
+	    $mother[$i] = "solid_PVDIS_target_enclosure_TACV";
+	    $material_baffle_within[$i] = "G4_Galactic";
 	}
 	$color_baffle[$i] = "00C0C0";
     }
