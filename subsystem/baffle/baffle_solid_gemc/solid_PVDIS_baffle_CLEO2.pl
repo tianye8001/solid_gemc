@@ -47,17 +47,17 @@ our %parameters    = get_parameters(%configuration);
 
 require "solid_PVDIS_baffle_CLEO2_geometry.pl";
 solid_PVDIS_baffle_CLEO2_geometry("Original");
-require "solid_PVDIS_baffle_babarbafflemore1_photonblock.pl";
-solid_PVDIS_baffle_babarbafflemore1_photonblock();
+# require "solid_PVDIS_baffle_babarbafflemore1_photonblock.pl";
+# solid_PVDIS_baffle_babarbafflemore1_photonblock();
 solid_PVDIS_baffle_CLEO2_geometry("Kill");
-require "solid_PVDIS_baffle_babarbafflemore1_photonblock_kill.pl";
-solid_PVDIS_baffle_babarbafflemore1_photonblock_kill();
+# require "solid_PVDIS_baffle_babarbafflemore1_photonblock_kill.pl";
+# solid_PVDIS_baffle_babarbafflemore1_photonblock_kill();
 solid_PVDIS_baffle_CLEO2_geometry("Enclosure");
-require "solid_PVDIS_baffle_babarbafflemore1_photonblock.pl";
-solid_PVDIS_baffle_babarbafflemore1_photonblock();
+# require "solid_PVDIS_baffle_babarbafflemore1_photonblock.pl";
+# solid_PVDIS_baffle_babarbafflemore1_photonblock();
 solid_PVDIS_baffle_CLEO2_geometry("EnclosureKill");
-require "solid_PVDIS_baffle_babarbafflemore1_photonblock_kill.pl";
-solid_PVDIS_baffle_babarbafflemore1_photonblock_kill();
+# require "solid_PVDIS_baffle_babarbafflemore1_photonblock_kill.pl";
+# solid_PVDIS_baffle_babarbafflemore1_photonblock_kill();
 
 #hit and bank definition Execute only when there are changes
 #hit
