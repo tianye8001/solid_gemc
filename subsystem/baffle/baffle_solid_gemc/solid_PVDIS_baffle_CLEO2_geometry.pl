@@ -105,7 +105,6 @@ my $c2_phi12;
 
 my @PlateZ;
 my @Dphi_adj; # adjustments to Dphi
-my @rout_adj; # adjustments to routin and routout
 
 sub solid_PVDIS_baffle_CLEO2_geometry
 {
@@ -115,7 +114,6 @@ sub solid_PVDIS_baffle_CLEO2_geometry
     $Nplate  = $parameters{"Nplate"}; 
     for (my $i = 0; $i < $Nplate; $i++)
     {
-	$rout_adj[$i] = 0; # adjustments to routin and routout
 	$Dphi_adj[$i] = 0;
 	$mother[$i] = $DetectorMother;
 	# adjustments -- 
@@ -304,9 +302,7 @@ sub make_CLEO2_baffle_plate_outer
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "$color_baffle[$n-1]";
 	$detector{"type"}       = "Tube";
-	my $roi = $routin[$n-1] + $rout_adj[$n-1];
-	my $roo = $routout[$n-1] + $rout_adj[$n-1];
-	$detector{"dimensions"} = "$roi*cm $roo*cm $Dz*cm 0*deg 360*deg";
+	$detector{"dimensions"} = "$routin[$n-1]*cm $routout[$n-1]*cm $Dz*cm 0*deg 360*deg";
 	$detector{"material"}   = "$material_baffle[$n-1]";
 	$detector{"mfield"}     = "no";
 	$detector{"ncopy"}      = 1;
@@ -321,7 +317,7 @@ sub make_CLEO2_baffle_plate_outer
 	print_det(\%configuration, \%detector);
 	if ($WDBFILE)
 	{
-	    print DBFILE "$n $roi $roo 0.0 360.0\n";
+	    print DBFILE "$n $routin[$n-1] $routout[$n-1] 0.0 360.0\n";
 	}
     }
 }
@@ -339,8 +335,7 @@ sub make_CLEO2_baffle_plate   #virtual container for baffle plate
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "000000";
 	$detector{"type"}       = "Tube";
-	my $roi = $routin[$n-1] + $rout_adj[$n-1];
-	$detector{"dimensions"} = "$rinout[$n-1]*cm $roi*cm $Dz*cm 0*deg 360*deg";
+	$detector{"dimensions"} = "$rinout[$n-1]*cm $routin[$n-1]*cm $Dz*cm 0*deg 360*deg";
 	$detector{"material"}   = "$material_baffle_within[$n-1]";
 	$detector{"mfield"}     = "no";
 	$detector{"ncopy"}      = 1;
@@ -370,8 +365,7 @@ sub make_CLEO2_baffle_blocks
     
     for (my $ip = 0; $ip < $Nplate; ++$ip)
     {
-	my $roi = $routin[$ip] + $rout_adj[$ip];
-	my $dr = ($roi - $rinout[$ip]) / $Nblock;
+	my $dr = ($routin[$ip] - $rinout[$ip]) / $Nblock;
 
 # This is used in Rich's Slit.C macro
 #	printf "%6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f, %6.2f,\n",
@@ -393,19 +387,19 @@ sub make_CLEO2_baffle_blocks
 	    if ($ip < 2)
 	    {
 		my $phi = $phi01a + ($rc - $R1[$ip]) *
-		    ($phi02a-$phi01a) / ($roi-$R1[$ip]);
+		    ($phi02a-$phi01a) / ($routin[$ip]-$R1[$ip]);
 		my $Dphi = $phi11a + ($rc - $R1[$ip]) *
-		    ($phi12a-$phi11a) / ($roi-$R1[$ip]) - $phi;
+		    ($phi12a-$phi11a) / ($routin[$ip]-$R1[$ip]) - $phi;
 		push @{$x[$ip]}, ($r0b, $r1b, $phi, $phi+$Dphi);
 	    }
 	    else
 	    {
 		my $phi = $phi01a + ($rc - $R1[$ip]) *
 		    ($rc < $R1[$ip] ? ($phi00a-$phi01a) / ($rinout[$ip]-$R1[$ip])
-		     : ($phi02a-$phi01a) / ($roi-$R1[$ip]));
+		     : ($phi02a-$phi01a) / ($routin[$ip]-$R1[$ip]));
 		my $Dphi = $phi11a + ($rc - $R1[$ip]) *
 		    ($rc < $R1[$ip] ? ($phi10a-$phi11a) / ($rinout[$ip]-$R1[$ip])
-		     : ($phi12a-$phi11a) / ($roi-$R1[$ip])) - $phi;
+		     : ($phi12a-$phi11a) / ($routin[$ip]-$R1[$ip])) - $phi;
 		push @{$x[$ip]}, ($r0b, $r1b, $phi, $phi+$Dphi);
 	    }
 	}
