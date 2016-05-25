@@ -309,7 +309,7 @@ sub make_target_tail_nose
  my @y    = (-2.65,2.65);
  my @Rin  = (0.0,0.0);
  my @Rout = (1.613,1.613);
- my @Dz   = (0.006345,0.0.006345);
+ my @Dz   = (0.006345,0.006345);
  my @name = ("up_tail_nose","down_tail_nose"); 
  my @mother = ("$DetectorName\_SC_in","$DetectorName\_SC_in"); 
  my @mat  = ("G4_Al","G4_Al");
@@ -347,7 +347,7 @@ sub make_target_4Kshield
  my @y    = (-3.65,3.65);
  my @Rin  = (0.0,0.0);
  my @Rout = (1.613,1.613);
- my @Dz   = (0.0006345,0.0.0006345);
+ my @Dz   = (0.0006345,0.0006345);
  my @name = ("up_4Kshield","down_4Kshield"); 
  my @mother = ("$DetectorName\_SC_in","$DetectorName\_SC_in"); 
  my @mat  = ("G4_Al","G4_Al");
@@ -385,7 +385,7 @@ sub make_target_LN2shield
  my @y    = (-4.65,4.65);
  my @Rin  = (0.0,0.0);
  my @Rout = (1.613,1.613);
- my @Dz   = (0.0019,0.0.0019);
+ my @Dz   = (0.0019,0.0019);
  my @name = ("up_LN2shield","down_LN2shield"); 
  my @mother = ("$DetectorName\_SC_in","$DetectorName\_SC_in"); 
  my @mat  = ("G4_Al","G4_Al");
