@@ -1,0 +1,132 @@
+   Simulation Conditions, TAG 5:
+   > beam  is loaded with factory TEXT, variation Original and run number 1
+   > option ACTIVEFIELDS solenoid_CLEOv8 solenoid_ptarget 
+   > option ALIGN_ZAXIS no
+   > option ALLRAWS no
+   > option BANK_VERBOSITY 1
+   > option BEAM_P e-,11*GeV,180*deg,0*deg
+   > option BEAM_V (0,0,0)cm
+   > option CATCH Maurizio
+   > option CHECK_OVERLAPS 0
+   > option DATABASE test
+   > option DAWN_N 0
+   > option DBHOST soliddb
+   > option DBPORT 0
+   > option DBPSWD ilovesolid
+   > option DBUSER soliduser
+   > option DC_MSTAG_R2 0
+   > option DC_MSTAG_R3 0
+   > option DEFAULT_MATERIAL none
+   > option DF no
+   > option ENERGY_CUT -1
+   > option EVN 1
+   > option EXEC_MACRO no
+   > option FIELD_DIR ../../../solid_gemc2/field
+   > option FIELD_VERBOSITY 0
+   > option G4P_VERBOSITY 1
+   > option G4TRACK_VERBOSITY 0
+   > option GEN_VERBOSITY 0
+   > option GEO_VERBOSITY 1
+   > option GUIPOS (150, 150)
+   > option GUI_VERBOSITY 1
+   > option HALL_DIMENSIONS 20*m,20*m,20*m
+   > option HALL_FIELD solenoid_CLEOv8
+   > option HALL_MATERIAL G4_Galactic
+   > option HIGH_RES 1
+   > option HIT_PROCESS_LIST solid
+   > option HIT_VERBOSITY 1
+   > option INPUT_GEN_FILE gemc_internal
+   > option INTEGRATEDDGT yes
+   > option INTEGRATEDRAW flux
+   > option LOG_MSG 0
+   > option LOG_VERBOSITY 0
+   > option LUMI2_EVENT 0, 2*ns
+   > option LUMI2_P proton, 50*GeV, 175*deg, 180*deg
+   > option LUMI2_SPREAD_P 0*GeV, 0*deg, 0*deg
+   > option LUMI2_SPREAD_V (0, 0)cm
+   > option LUMI2_V (4, 0, 50)cm
+   > option LUMI_EVENT 0, 0*ns, 2*ns
+   > option LUMI_P e-, 11*GeV, 0*deg, 0*deg
+   > option LUMI_SPREAD_P 0*GeV, 0*deg, 0*deg
+   > option LUMI_SPREAD_V (0, 0)cm
+   > option LUMI_V (0, 0, -20)cm
+   > option MATERIAL_VERBOSITY 0
+   > option MAX_FIELD_STEP 0
+   > option MAX_X_POS 20000
+   > option MAX_Y_POS 20000
+   > option MAX_Z_POS 20000
+   > option MERGE_FILE no
+   > option MIRROR_VERBOSITY 0
+   > option N 1
+   > option NGENP 10
+   > option NO_FIELD none
+   > option OUTPUT txt,beam_withsolenoid.txt
+   > option PARAMETER_VERBOSITY 0
+   > option PHYSICS QGSP_BERT+STD+Optical
+   > option PHYS_VERBOSITY 0
+   > option PHY_VERBOSITY 1
+   > option POLAR 100, 0*deg, 0*deg
+   > option PRINT_EVENT 1000
+   > option QTSTYLE no
+   > option RANDOM TIME
+   > option RECORD_MIRRORS 0
+   > option RECORD_PASSBY 1
+   > option RUNNO 1
+   > option SAVE_ALL_MOTHERS 0
+   > option SCALE_FIELD solenoid_ptarget,-1
+   > option SIGNALVT no
+   > option SPREAD_P 0*GeV,0*deg,0*deg
+   > option SPREAD_V (0,0)cm
+   > option STEER_BEAM 0
+   > option USE_GUI 0
+   > option gcard beam.gcard
+   > option geometry 620x620
+ --- Header Bank -- 
+    - (10, 1) time:	Thu, 05.26.2016 16:08:11
+    - (10, 4) beamPol:	0
+    - (10, 2) evn:	1
+    - (10, 3) evn_type:	-1
+    - (10, 5) var1:	0
+    - (10, 6) var2:	0
+    - (10, 7) var3:	0
+    - (10, 8) var4:	0
+    - (10, 9) var5:	0
+    - (10, 10) var6:	0
+    - (10, 11) var7:	0
+    - (10, 12) var8:	0
+ --- End of Header Bank -- 
+ --- flux  (50, 0) ---- 
+   -- integrated true infos bank  (51, 0) -- 
+    - (51, 1) pid:	11	
+    - (51, 2) mpid:	0	
+    - (51, 3) tid:	1	
+    - (51, 4) mtid:	0	
+    - (51, 5) otid:	0	
+    - (51, 6) trackE:	11000	
+    - (51, 7) totEdep:	1.02304e-29	
+    - (51, 8) avg_x:	4.86034e-13	
+    - (51, 9) avg_y:	-26.7172	
+    - (51, 10) avg_z:	-4000	
+    - (51, 11) avg_lx:	4.86034e-13	
+    - (51, 12) avg_ly:	-26.7172	
+    - (51, 13) avg_lz:	-0.0001	
+    - (51, 14) px:	1.46048e-12	
+    - (51, 15) py:	-626.614	
+    - (51, 16) pz:	-10982.1	
+    - (51, 17) vx:	0	
+    - (51, 18) vy:	0	
+    - (51, 19) vz:	0	
+    - (51, 20) mvx:	0	
+    - (51, 21) mvy:	0	
+    - (51, 22) mvz:	0	
+    - (51, 23) avg_t:	13.3446	
+    - (51, 99) hitn:	1	
+   -- end of integrated raw bank.
+   -- integrated digitized bank  (52, 0) -- 
+    - (52, 1) id:	1	
+    - (52, 99) hitn:	1	
+   -- End of integrated digitized bank.
+ --- Generated Particles Bank -- 
+    - Particle 1 pid: 11   -  mom: (1.34707e-12,0,-11000) MeV   -  vert: (0,0,0) mm
+    - Hit >na< Has 0 hit --- End of Generated Particles Bank -- 
+ ---- End of Event  ---- 

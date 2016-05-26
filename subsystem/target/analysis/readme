@@ -1,0 +1,25 @@
+== test NH3 target beam ==
+
+This is to find where we should shoot beam into NH3 target field
+
+NH3 field is a  solenoid along -x direction
+
+the field holder and a virtual plane in "beam__geometry_Original.txt"
+
+run "solid_gemc beam.gcard" which shoots 11GeV electron from origin backwards with reverse NH3 solenoid field, (or we could just use positron)
+
+the output "beam.txt" has hit on the plane
+
+avg_y and avg_z tells the position in mm, avg_y should be negative because the chicane design.
+
+atan(py/pz) tells the theta angle in rad,
+
+atan(py/px) tells the phi angle in rad, it should be 90 deg because NH3 solenoid field is along -x direction
+
+Zhiwen Zhao, 2016/05/26
+
+
+
+
+
+
