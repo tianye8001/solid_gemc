@@ -55,8 +55,8 @@ our %parameters    = get_parameters(%configuration);
 #Geometry definition
 require "solid_PVDIS_ec_forwardangle_geometry.pl";
 solid_PVDIS_ec_forwardangle();
-require "solid_PVDIS_ec_forwardangle_virtualplane.pl";
-solid_PVDIS_ec_forwardangle_virtualplane();
+# require "solid_PVDIS_ec_forwardangle_virtualplane.pl";
+# solid_PVDIS_ec_forwardangle_virtualplane();
 
 
 #hit and bank definition Execute only when there are changes
