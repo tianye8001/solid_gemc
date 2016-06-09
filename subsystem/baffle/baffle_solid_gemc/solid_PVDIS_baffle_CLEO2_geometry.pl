@@ -214,7 +214,7 @@ sub solid_PVDIS_baffle_CLEO2_geometry
     
     if ($WDBFILE)
     {
-	open (DBFILE, ">solid_PVDIS_baffle__dbfile_$configuration{'variation'}.out") || die "Can't open solid_PVDIS_baffle__dbfile_$configuration{'variation'}.out\n";
+	open (DBFILE, ">$configuration{'detector_name'}__dbfile_$configuration{'variation'}.out") || die "Can't open $configuration{'detector_name'}__dbfile_$configuration{'variation'}.out\n";
 	print DBFILE $Nplate . "\n";
     }
     
