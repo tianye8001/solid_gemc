@@ -14,11 +14,10 @@ x axis is horizontal and +x pointing left relative to the electron beam
 refer to https://hallaweb.jlab.org/wiki/index.php/Solid_Software#Coordinate_System
 
 Imaging we are riding along the beam and facing EC from front
-
 EC module ID consist of idx,idy,id,sector
 idx and idy are given by column and row number of the module
 Their values increase from bottom to top for idy, from right to left for idx
-idx=0 and idy=0 module is the most bottom right module.
+(idx=1,idy=1) module is the most bottom right module and its coordinate x<0 and y<0
 In the script, module center coordinate in lab frame is recorded in x[idy][idx], y[idy][idx]
 id is the total id of the module, its value increase by following idx first, then idy
 sector is the sector number, it matches baffle for FAEC
@@ -30,6 +29,9 @@ idy: 1-54 rows
 idx direction: 1-46 coll. in maximum row
 
 keyword status is 1 for module existing or 0 for not, this is to ensure PVDIS and SIDIS have same module id
+
+One hidden information in ANL layout is the angle of hexgon module.
+It has two side parellel to y-axis, no side parellel to x-axis
 
 = log ==========
 
