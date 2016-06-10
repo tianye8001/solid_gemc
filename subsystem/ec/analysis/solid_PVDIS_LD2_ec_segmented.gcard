@@ -4,7 +4,7 @@
 <option name="DBUSER" value="soliduser"/>
 <option name="DBPSWD" value="ilovesolid"/>
 
-<detector name="../ec_solid_gemc_segmented/solid_PVDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
+<detector name="../ec_segmented_solid_gemc/solid_PVDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
