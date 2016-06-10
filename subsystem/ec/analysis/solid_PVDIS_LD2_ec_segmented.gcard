@@ -21,11 +21,14 @@
 <option name="FIELD_DIR" value="../../../solid_gemc2/field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
-<option name="BEAM_P"   value="e-,5*GeV,12*deg,0*deg"/>
+<option name="BEAM_P"   value="e-,5*GeV,25*deg,0*deg"/>
 <option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
-<option name="BEAM_V"   value="(0,0,-350)cm"/>
-<option name="SPREAD_V" value="(0.21,20)cm"/>
+<option name="BEAM_V"   value="(0,0,10)cm"/>
+<option name="SPREAD_V" value="(0,0)cm"/>
 
+<option name="EXEC_MACRO" value="solid_slice.vis"/>
+<option name="geometry" value="1000x1000"/>
+<option name="HIGH_RES" value="1"/>
 <option name="USE_GUI"  value="2"/>
 
 </gcard>
