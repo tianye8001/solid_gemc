@@ -42,7 +42,8 @@ my $material_wrap="G4_MYLAR";
 #   my $Rmax = 265;
 #   my $Sphi  = 0;
 #   my $Dphi  = 360;
-  
+
+#length in cm, angle in deg
 my $Nlayer		= $parameters{"Nlayer"};
 my $Thickness_lead	= $parameters{"Thickness_lead"};
 my $Thickness_scint 	= $parameters{"Thickness_scint"};
@@ -50,7 +51,8 @@ my $Thickness_gap 	= $parameters{"Thickness_gap"};
 my $Thickness_shield 	= $parameters{"Thickness_shield"};
 my $Thickness_prescint 	= $parameters{"Thickness_prescint"};
 my $Thickness_support 	= $parameters{"Thickness_support"};
-my $Sidelength_shower 	= $parameters{"Sidelength_shower"};
+my $Angle_module        = $parameters{"Angle_module"};
+my $Radius_shower 	= $parameters{"Radius_shower"};
 my $z_shower 		= $parameters{"z_shower"};
 my $Rmin 		= $parameters{"Rmin"};
 my $Rmax 		= $parameters{"Rmax"};
@@ -70,8 +72,6 @@ for(my $i=1; $i<=$total_module; $i++)
   $status[$i-1] = $parameters{"id$i\_status"};
   $idy[$i-1] = $parameters{"id$i\_idy"};
   $idx[$i-1] = $parameters{"id$i\_idx"};
-#   $x[$i-1] = $parameters{"id$i\_y"};
-#   $y[$i-1] = $parameters{"id$i\_x"};  
   $y[$i-1] = $parameters{"id$i\_y"};
   $x[$i-1] = $parameters{"id$i\_x"};  
   $sector[$i-1] = $parameters{"id$i\_sector"};
@@ -88,7 +88,7 @@ my $z_shield = $z_prescint-$Thickness_prescint/2-$Thickness_shield/2;  #about 32
 
 sub solid_PVDIS_ec_forwardangle
 {
-# make_ec_shield();
+make_ec_shield();
 make_ec_module();
 }
 
@@ -120,13 +120,13 @@ sub make_ec_shield
 
 sub make_ec_module
 {   
-#    for(my $i=1; $i<=1; $i++)   
+#    for(my $i=1; $i<=100; $i++)   
    for(my $i=1; $i<=$total_module; $i++)   
     {    
       if($status[$i-1] eq 1) {
 	  make_ec_module_shower($i);
-# 	  make_ec_module_prescint($i);
-# 	  make_ec_module_support($i);
+	  make_ec_module_prescint($i);
+	  make_ec_module_support($i);
       }
     }
 }
@@ -137,32 +137,33 @@ sub make_ec_module_shower()
 
     my %detector=init_det();
  
-    my $Dr = $Sidelength_shower;
-    my $Dr_wrap = $Sidelength_shower+0.2;        
+    my $Dr = $Radius_shower;
+    my $Dr_wrap = $Radius_shower+0.2;        
     my $Dz_shower = $Thickness_shower/2;
             
     $detector{"name"}        = "$DetectorName\_shower$id";
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "$x[$id-1]*cm $y[$id-1]*cm $z_shower*cm";
-    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+    $detector{"rotation"}   = "0*deg 0*deg $Angle_module*deg";
     if ($sector[$id-1]%2 eq 0) {$detector{"color"}      = $color_wrap_sectoreven;}
     else {$detector{"color"}      = $color_wrap_sectorodd;}
     if($id == 1){ 
     $detector{"type"}       = "Pgon";
-    $detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr_wrap*cm $Dr_wrap*cm -$Dz_shower*cm $Dz_shower*cm";
-    $detector{"material"}   = "$material_wrap";
+    $detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_shower*cm $Dz_shower*cm";
     }    
-    else {  $detector{"type"}       = "CopyOf $DetectorName\_shower1";}     
+    else {  $detector{"type"}       = "CopyOf $DetectorName\_shower1";}         
+    $detector{"material"}   = "$material_scint";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
-    $detector{"style"}       = 0;   
-    $detector{"sensitivity"} = "no";
-    $detector{"hit_type"}    = "no";
-    $detector{"identifiers"} = "no";
+    $detector{"style"}       = 1;   
+	$detector{"sensitivity"} = $ec_sen;
+	$detector{"hit_type"}    = $ec_sen;
+	my $ID = 3100000+$id;
+	$detector{"identifiers"} = "id manual $ID";
     print_det(\%configuration, \%detector); 
 
    if($id == 1){
@@ -202,9 +203,9 @@ sub make_ec_module_shower()
 	if($j == 1){
 	$detector{"type"}       = "Pgon";
 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_lead*cm $Dz_lead*cm";
-        $detector{"material"}   = $material_abs;
 	}
-	else {  $detector{"type"}       = "CopyOf $DetectorName\_shower1_lead1";}           
+	else {  $detector{"type"}       = "CopyOf $DetectorName\_shower1_lead1";}	
+        $detector{"material"}   = $material_abs;
         $detector{"mfield"}     = "no";
         $detector{"ncopy"}      = 1;
         $detector{"pMany"}       = 1;
@@ -214,34 +215,34 @@ sub make_ec_module_shower()
 	$detector{"sensitivity"} = "no";
 	$detector{"hit_type"}    = "no";
 	$detector{"identifiers"} = "no";	
-	print_det(\%configuration, \%detector);
+	print_det(\%configuration, \%detector);  # comment out this to minimize mem at gui mode
 
-	my $scintZ = $layerZ-$Dz_layer+$Thickness_lead+$Thickness_scint/2;
-	my $Dz_scint = $Thickness_scint/2;	
-
-        $detector{"name"}        = "$DetectorName\_shower$id\_scint$j";
-        $detector{"mother"}      = "$DetectorName\_shower$id";
-        $detector{"description"} = $detector{"name"};
-        $detector{"pos"}        = "0*cm 0*cm $scintZ*cm";
-        $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-        $detector{"color"}      = "$color_scint";
-        if($j == 1){        
-	$detector{"type"}       = "Pgon";
-	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_scint*cm $Dz_scint*cm";
-        $detector{"material"}   = $material_scint;
-	}
-	else {  $detector{"type"}       = "CopyOf $DetectorName\_shower1_scint1";}        
-        $detector{"mfield"}     = "no";
-        $detector{"ncopy"}      = 1;
-        $detector{"pMany"}       = 1;
-        $detector{"exist"}       = 1;
-	$detector{"visible"}     = 1;
-	$detector{"style"}       = 1;
-	$detector{"sensitivity"} = $ec_sen;
-	$detector{"hit_type"}    = $ec_sen;
-	my $ID = 3100000+$id;
-	$detector{"identifiers"} = "id manual $ID";	
-	print_det(\%configuration, \%detector);	
+# 	my $scintZ = $layerZ-$Dz_layer+$Thickness_lead+$Thickness_scint/2;
+# 	my $Dz_scint = $Thickness_scint/2;	
+# 
+#         $detector{"name"}        = "$DetectorName\_shower$id\_scint$j";
+#         $detector{"mother"}      = "$DetectorName\_shower$id";
+#         $detector{"description"} = $detector{"name"};
+#         $detector{"pos"}        = "0*cm 0*cm $scintZ*cm";
+#         $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+#         $detector{"color"}      = "$color_scint";
+#         if($j == 1){        
+# 	$detector{"type"}       = "Pgon";
+# 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_scint*cm $Dz_scint*cm";
+# 	}
+# 	else {  $detector{"type"}       = "CopyOf $DetectorName\_shower$id\_scint1";}       	
+#         $detector{"material"}   = $material_scint;
+#         $detector{"mfield"}     = "no";
+#         $detector{"ncopy"}      = 1;
+#         $detector{"pMany"}       = 1;
+#         $detector{"exist"}       = 1;
+# 	$detector{"visible"}     = 1;
+# 	$detector{"style"}       = 1;
+# 	$detector{"sensitivity"} = $ec_sen;
+# 	$detector{"hit_type"}    = $ec_sen;
+# 	my $ID = 3100000+$id;
+# 	$detector{"identifiers"} = "id manual $ID";	
+# 	print_det(\%configuration, \%detector);	
 	
 # 	my $gapZ = $layerZ-$Dz_layer+$Thickness_lead+$Thickness_scint+$Thickness_gap/2;
 # 	my $Dz_gap = $Thickness_gap/2;
@@ -375,7 +376,7 @@ sub make_ec_module_prescint()
 {   
     my $id = $_[0];
  
-    my $Dr = $Sidelength_shower;
+    my $Dr = $Radius_shower;
     my $Dz_prescint = $Thickness_prescint/2;
     
     my %detector=init_det();
@@ -384,10 +385,13 @@ sub make_ec_module_prescint()
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "$x[$id-1]*cm $y[$id-1]*cm $z_prescint*cm";
-    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+    $detector{"rotation"}   = "0*deg 0*deg $Angle_module*deg";
     $detector{"color"}      = $color_scint;
+    if($id == 1){ 
     $detector{"type"}       = "Pgon";
     $detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_prescint*cm $Dz_prescint*cm";
+    }    
+    else {  $detector{"type"}       = "CopyOf $DetectorName\_prescint1";}      
     $detector{"material"}   = "$material_scint";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
@@ -406,7 +410,7 @@ sub make_ec_module_support()
 {   
     my $id = $_[0];
  
-    my $Dr = $Sidelength_shower;
+    my $Dr = $Radius_shower;
     my $Dz_support = $Thickness_support/2;
     
     my %detector=init_det();
@@ -415,10 +419,13 @@ sub make_ec_module_support()
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "$x[$id-1]*cm $y[$id-1]*cm $z_support*cm";
-    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+    $detector{"rotation"}   = "0*deg 0*deg $Angle_module*deg";
     $detector{"color"}      = $color_support;
+    if($id == 1){ 
     $detector{"type"}       = "Pgon";
     $detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_support*cm $Dz_support*cm";
+    }    
+    else {  $detector{"type"}       = "CopyOf $DetectorName\_support1";}         
     $detector{"material"}   = "$material_support";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
