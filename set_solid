@@ -2,7 +2,7 @@
 #source this script to setup SoLID software
 
 #the default version, change it to use other version you want
-setenv JLAB_VERSION 1.2
+setenv JLAB_VERSION 1.3
 
 #default installation on ifarm and farm nodes, change it to use different installation
 # setenv JLAB_ROOT /site/12gev_phys
