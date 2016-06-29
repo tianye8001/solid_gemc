@@ -51,7 +51,7 @@ else cout << "open file " << input_filename << endl;
 TTree *tree_header = (TTree*) file->Get("header");
 vector <int> *evn=0,*evn_type=0;
 vector <double> *beamPol=0;
-vector <int> *var1=0,*var2=0,*var3=0,*var4=0,*var5=0,*var6=0,*var7=0,*var8=0;
+ vector <int> *var1=0,*var2=0,*var3=0,*var4=0,*var5=0,*var6=0,*var7=0,*var8=0; //var8 is the rate
 tree_header->SetBranchAddress("evn",&evn);
 tree_header->SetBranchAddress("evn_type",&evn_type);
 tree_header->SetBranchAddress("beamPol",&beamPol);
@@ -79,7 +79,7 @@ TTree *tree_flux = (TTree*) file->Get("flux");
 vector<int> *flux_id=0,*flux_hitn=0;
 vector<int> *flux_pid=0,*flux_mpid=0,*flux_tid=0,*flux_mtid=0,*flux_otid=0;
 vector<double> *flux_trackE=0,*flux_totEdep=0,*flux_avg_x=0,*flux_avg_y=0,*flux_avg_z=0,*flux_avg_lx=0,*flux_avg_ly=0,*flux_avg_lz=0,*flux_px=0,*flux_py=0,*flux_pz=0,*flux_vx=0,*flux_vy=0,*flux_vz=0,*flux_mvx=0,*flux_mvy=0,*flux_mvz=0,*flux_avg_t=0;
-tree_flux->SetBranchAddress("hitn",&flux_hitn);
+ tree_flux->SetBranchAddress("hitn",&flux_hitn);
 tree_flux->SetBranchAddress("id",&flux_id);
 tree_flux->SetBranchAddress("pid",&flux_pid);
 tree_flux->SetBranchAddress("mpid",&flux_mpid);
@@ -152,7 +152,7 @@ for (Int_t i=0;i<nevent;i++) {
       
     }													
   tree_solid_ec->GetEntry(i);  
-  
+   
   double totEdep_ec=process_tree_solid_ec(tree_solid_ec);
   cout << "totEdep_ec " << totEdep_ec << endl;
 
