@@ -1,11 +1,9 @@
 = how to use it = 
 setup root, then compile simu_p.C by
 make O=simu_p
-or 
-doit
 
 run by
-simu_p -n[nevents as integer like 1000000] -b[Ebeam in GeV] -c[acceptance_root_file produced by acceptance.C from SoLID_GEMC] -o[output_root_file]
+./simu_p -n[nevents as integer like 1000000] -t[e for electroproduction,g for photoproduction] -b[Ebeam in GeV] -o[output_root_file]
 
 ./simu_p -n10000 -tg -b11 -ooutput.root
 ./simu_p -n1e6 -te -b11 -ooutput.root
