@@ -1,5 +1,6 @@
 = how to use it = 
-setup root, then compile simu_p.C by
+compile it (an example on ifarm, with tsch)
+source /apps/root/5.34.21/setroot_CUE.csh
 make O=simu_p
 
 run by
