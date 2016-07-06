@@ -59,6 +59,10 @@ solid_PVDIS_baffle_CLEO2_geometry("EnclosureKill");
 # require "solid_PVDIS_baffle_babarbafflemore1_photonblock_kill.pl";
 # solid_PVDIS_baffle_babarbafflemore1_photonblock_kill();
 
+require "solid_PVDIS_baffle_CLEO2_shldPOLY_geometry.pl";
+$configuration{"detector_name"} = "solid_PVDIS_baffle_CLEO2_shldPOLY";
+solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("Original");
+
 #hit and bank definition Execute only when there are changes
 #hit
 #require "./solid_baffle_hit.pl";
