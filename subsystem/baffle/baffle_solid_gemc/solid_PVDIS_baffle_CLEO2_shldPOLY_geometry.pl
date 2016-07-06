@@ -305,7 +305,6 @@ sub make_CLEO2_baffle_shldPOLY_plate_inner
 	my $n_c     = cnumber($n-1, 1);
 	my %detector=init_det();
 	$detector{"name"}        = "$DetectorName\_plateinner$n_c";
-    warn "$n $detector{'name'}";
 	$detector{"mother"}      = "$mother[$n-1]" ;
 	$detector{"description"} = $detector{"name"};
 	$detector{"pos"}        = "0*cm 0*cm " . ($PlateZ[$n-1] + $Dz) . "*cm";
