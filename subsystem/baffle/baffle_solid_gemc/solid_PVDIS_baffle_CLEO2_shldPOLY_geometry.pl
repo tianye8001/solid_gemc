@@ -530,8 +530,8 @@ sub make_CLEO2_baffle_shldPOLY_blocks
 		my $Rout = $x[$n-1][($j-1)*4+1];
 		my $Rout2 = $x[$n][($j-1)*4+1];
 		my $Sphi =  0.5*($x[$n-1][($j-1)*4+2]+$x[$n][($j-1)*4+2]);
-		my $Dphi =  0.5*($x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2]+1+$x[$n][($j-1)*4+3]-$x[$n][($j-1)*4+2]+1)
-		    + $Dphi_adj[$n-1];
+		my $Dphi =  0.5*($x[$n-1][($j-1)*4+3]-$x[$n-1][($j-1)*4+2]+$Dphi_adj[$n-1]
+				 +$x[$n][($j-1)*4+3]-$x[$n][($j-1)*4+2]+$Dphi_adj[$n]);
 		$detector{"dimensions"}  = "$Sphi*deg $Dphi*deg 2*counts $Rin*cm $Rin2*cm $Rout*cm $Rout2*cm 0.0*cm $Dz_shld*cm";
 		$detector{"material"}    = "$material_abs[$n-1]";
 		$detector{"mfield"}      = "no";
