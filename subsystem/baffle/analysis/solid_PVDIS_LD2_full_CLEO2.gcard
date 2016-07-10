@@ -5,7 +5,7 @@
 <option name="DBPSWD" value="ilovesolid"/>
 
 <detector name="../baffle_solid_gemc/solid_PVDIS_baffle_CLEO2" factory="TEXT" variation="Enclosure"/>
-<!--  comment out <detector name="../baffle_solid_gemc/solid_PVDIS_baffle_babarbafflemore1_enclosure" factory="TEXT" variation="Original"/>  -->
+<detector name="../baffle_solid_gemc/solid_PVDIS_baffle_observer_CLEO2" factory="TEXT" variation="Enclosure"/>
 
 <detector name="../../../solid_gemc2/geometry/magnet/solid_solenoid" factory="TEXT" variation="Original"/>
 <detector name="../../../solid_gemc2/geometry/lgc/lg_cherenkov" factory="TEXT" variation="PVDIS"/>
@@ -49,4 +49,8 @@
 <option name="CHECK_OVERLAPS"  value="1"/>
 <option name="USE_GUI"  value="0"/>
 
+
+<detector name="../baffle_solid_gemc/solid_PVDIS_baffle_CLEO2" factory="TEXT" variation="Enclosure"/>
+<detector name="../baffle_solid_gemc/solid_PVDIS_baffle_observer_CLEO2" factory="TEXT" variation="Original"/>
+<detector name="../baffle_solid_gemc/solid_PVDIS_baffle_CLEO2_shldPOLY" factory="TEXT" variation="Enclosure"/>
 -->

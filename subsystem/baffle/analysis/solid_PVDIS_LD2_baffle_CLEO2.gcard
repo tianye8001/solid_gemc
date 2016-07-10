@@ -5,6 +5,7 @@
 <option name="DBPSWD" value="ilovesolid"/>
 
 <detector name="../baffle_solid_gemc/solid_PVDIS_baffle_CLEO2" factory="TEXT" variation="Original"/>
+<detector name="../baffle_solid_gemc/solid_PVDIS_baffle_observer_CLEO2" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
