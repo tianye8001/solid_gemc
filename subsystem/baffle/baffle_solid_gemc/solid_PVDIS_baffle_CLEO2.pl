@@ -46,22 +46,18 @@ $configuration{"variation"} = "Original";
 our %parameters    = get_parameters(%configuration);
 
 require "solid_PVDIS_baffle_CLEO2_geometry.pl";
-solid_PVDIS_baffle_CLEO2_geometry("Original");
-# require "solid_PVDIS_baffle_babarbafflemore1_photonblock.pl";
-# solid_PVDIS_baffle_babarbafflemore1_photonblock();
-solid_PVDIS_baffle_CLEO2_geometry("Kill");
-# require "solid_PVDIS_baffle_babarbafflemore1_photonblock_kill.pl";
-# solid_PVDIS_baffle_babarbafflemore1_photonblock_kill();
-solid_PVDIS_baffle_CLEO2_geometry("Enclosure");
-# require "solid_PVDIS_baffle_babarbafflemore1_photonblock.pl";
-# solid_PVDIS_baffle_babarbafflemore1_photonblock();
-solid_PVDIS_baffle_CLEO2_geometry("EnclosureKill");
-# require "solid_PVDIS_baffle_babarbafflemore1_photonblock_kill.pl";
-# solid_PVDIS_baffle_babarbafflemore1_photonblock_kill();
-
 require "solid_PVDIS_baffle_CLEO2_shldPOLY_geometry.pl";
-$configuration{"detector_name"} = "solid_PVDIS_baffle_CLEO2_shldPOLY";
+solid_PVDIS_baffle_CLEO2_geometry("Original");
 solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("Original");
+solid_PVDIS_baffle_CLEO2_geometry("Kill");
+solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("Kill");
+solid_PVDIS_baffle_CLEO2_geometry("Enclosure");
+solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("Enclosure");
+solid_PVDIS_baffle_CLEO2_geometry("EnclosureKill");
+solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("EnclosureKill");
+
+#materials definition 
+require "solid_PVDIS_baffle_materials.pl";
 
 #hit and bank definition Execute only when there are changes
 #hit
