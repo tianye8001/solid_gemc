@@ -40,6 +40,7 @@ sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_
 // TFile *outputfile=new TFile(output_filename, "recreate");
 
 TH1F *htotEdep_ec=new TH1F("htotEdep_ec","ec;totEdep(MeV);",100,900,1600);
+TH2F *hp_gen_flux=new TH2F("hp_gen_flux",";p_gen(MeV);p_flux(MeV)",110,0,11000,110,0,11000);
 
 TFile *file=new TFile(input_filename.c_str());
 if (file->IsZombie()) {
@@ -112,9 +113,9 @@ int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
 cout << "nevent " << nevent << endl;
 
-for (Int_t i=0;i<nevent;i++) { 
+for (Int_t i=0;i<nevent/10;i++) { 
 // for (Int_t i=0;i<2;i++) { 
-//   cout << i << "\r";
+  cout << i << "\r";
 //   cout << i << "\n";
 
   tree_header->GetEntry(i);
@@ -135,26 +136,41 @@ for (Int_t i=0;i<nevent;i++) {
       theta_gen=acos(pz_gen/p_gen);
       phi_gen=atan2(py_gen,px_gen);
       
-      cout << "p_gen " << p_gen << endl;
+//       cout << "p_gen " << p_gen << endl;
   }
 
     tree_flux->GetEntry(i);  
     
     for (Int_t j=0;j<flux_hitn->size();j++) {
-//       cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
+//       cout << "event " << i << " flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
 
       int detector_ID=flux_id->at(j)/1000000;
       int subdetector_ID=(flux_id->at(j)%1000000)/100000;
       int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
       int component_ID=flux_id->at(j)%10000;      
            
-      if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1)   cout << "particle mom entering EC " << flux_trackE->at(j) << endl;         
+      double p_flux=sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j));
+
+      if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1){
+//  cout << "particle mom entering EC " << flux_trackE->at(j) << " with pid " << flux_pid->at(j) << endl;         
+	
+// 	if(flux_pid->at(j)==pid_gen) {	
+	if(flux_tid->at(j)==1) {
+	  hp_gen_flux->Fill(p_gen,p_flux);
+	  
+	  if(fabs(p_gen-p_flux)>1)   {
+	    cout << "event " << i << " gen " << pid_gen << " " << px_gen << " " <<py_gen << " " <<pz_gen << " " <<vx_gen << " " <<vy_gen << " " <<vz_gen << " " << endl; 
+
+	    cout << "event " << i << " flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
+	  }
+	}
+      }
       
     }													
   tree_solid_ec->GetEntry(i);  
    
   double totEdep_ec=process_tree_solid_ec(tree_solid_ec);
-  cout << "totEdep_ec " << totEdep_ec << endl;
+//   cout << "totEdep_ec " << totEdep_ec << endl;
 
   htotEdep_ec->Fill(totEdep_ec);    
   
@@ -164,8 +180,13 @@ file->Close();
 // outputfile->Write();
 // outputfile->Flush();
 
-TCanvas *c = new TCanvas("totEdep_ec","totEdep_ec",1600,900);
+TCanvas *c_totEdep_ec = new TCanvas("totEdep_ec","totEdep_ec",1600,900);
 htotEdep_ec->Draw();
 htotEdep_ec->Fit("gaus");
-c->SaveAs("totEdep_ec.png");
+// c->SaveAs("totEdep_ec.png");
+
+TCanvas *c_p_gen_flux = new TCanvas("p_gen_flux","p_gen_flux",1600,900);
+hp_gen_flux->Draw("colz");
+
+
 }
