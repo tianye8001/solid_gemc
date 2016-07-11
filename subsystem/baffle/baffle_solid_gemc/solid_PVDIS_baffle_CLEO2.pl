@@ -47,6 +47,7 @@ our %parameters    = get_parameters(%configuration);
 
 require "solid_PVDIS_baffle_CLEO2_geometry.pl";
 require "solid_PVDIS_baffle_CLEO2_shldPOLY_geometry.pl";
+
 solid_PVDIS_baffle_CLEO2_geometry("Original");
 solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("Original");
 solid_PVDIS_baffle_CLEO2_geometry("Kill");
@@ -58,6 +59,9 @@ solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("EnclosureKill");
 
 #materials definition 
 require "solid_PVDIS_baffle_materials.pl";
+define_material("Original");
+define_material("Enclosure");
+
 
 #hit and bank definition Execute only when there are changes
 #hit
