@@ -335,7 +335,7 @@ sub make_CLEO2_baffle_shldPOLY_plate_outer_absorber
     my @Rout = ();
     my @Zabs = ();
  
-    for (my $n=2; $n<=$Nplate && $routout[$n-1] < 140; $n++)
+    for (my $n=2; $n<=$Nplate; $n++)
     {
 	my $z0 = $PlateZ[$n-1]-$Dz-$Dz_gap;
 	my $z1 = $n < 9 ? $PlateZ[$n-1]+$Dz+$Dz_gap
