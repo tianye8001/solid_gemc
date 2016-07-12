@@ -8,7 +8,7 @@ https://hallaweb.jlab.org/wiki/index.php/Solid_GEM_Digitization#GEM_response
 
 The output of the simulation can be used for digitization program
 
-= how to use it ===================
+= how to run it ===================
 you need to have solid software installed and "solid_gemc" compiled, refer 
 https://hallaweb.jlab.org/wiki/index.php/Solid_Software
 
@@ -19,15 +19,27 @@ source your_set_solid_script
 solid_gemc UVatest_gem.gcard  
 
 (batch mode to produce output file)
-solid_gemc UVatest_gem.gcard -N=1e3 -OUTPUT="evio,output.evio" -USE_GUI=0 
+(txt file for debug)
+solid_gemc UVatest_gem.gcard -N=1 -OUTPUT="txt,output.txt" -USE_GUI=0 
+(evio file for real use)
+solid_gemc UVatest_gem.gcard -N=1 -OUTPUT="evio,output.evio" -USE_GUI=0 
 
 (convert evio file to root file)
 evio2root -INPUTF=output.evio -B="UVatest_gem"
 
-(edit geometry in perl script and generate new setup)
+= how to modify it ==========================
+
+(edit geometry and hit defination in perl script and generate new setup)
 ./UVatest_gem.pl config_UVatest_gem.dat
 
-=  note ===================
+= how to analyse result ==========================
+
+for real analysis, need to use Solid_GEM_Digitization program
+
+just read the root tree, do this in root
+.x analysis.C("output.root")
+
+= general note ===================
 
 To edit geometry, change running condition, and understanding tree content in root file,
 refer to general note 
