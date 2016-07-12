@@ -104,6 +104,7 @@ sub make_CLEO2_baffle_observer_plate
 	$detector{"name"}        = "$DetectorName\_plate${n_c}\_up";
 	$detector{"description"} = $detector{"name"};
 	my $z = $PlateZ[$n-1] - $Dz - $obsthick;
+	$z -= ($n == 1 && $configuration{"variation"} =~ /Enclosure/) ? 10: 0;
 	$detector{"pos"}        = "0*cm 0*cm $z*cm";
 	my $id = (7000 + 10*$n + 1) * 10000;
 	$detector{"identifiers"} = "id manual $id";
@@ -112,6 +113,7 @@ sub make_CLEO2_baffle_observer_plate
 	$detector{"name"}        = "$DetectorName\_plate${n_c}\_down";
 	$detector{"description"} = $detector{"name"};
 	$z = $PlateZ[$n-1] + $Dz + $obsthick;
+	$z -= ($n == 1 && $configuration{"variation"} =~ /Enclosure/) ? 10: 0;
 	$detector{"pos"}        = "0*cm 0*cm $z*cm";
 	$id = (7000 + 10*$n + 2) * 10000;
 	$detector{"identifiers"} = "id manual $id";

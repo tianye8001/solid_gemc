@@ -262,10 +262,11 @@ sub make_CLEO2_baffle_plate_inner
 	next if ($rinout[$n-1] <= $rinin[$n-1]); # make no ring if zero (or neg) thickness
 	my $n_c     = cnumber($n-1, 1);
 	my %detector=init_det();
+	my $zn = ($n == 1 && $configuration{"variation"} =~ /Enclosure/) ? $PlateZ[$n-1] - 10: $PlateZ[$n-1];
 	$detector{"name"}        = "$DetectorName\_plateinner$n_c";
 	$detector{"mother"}      = "$mother[$n-1]" ;
 	$detector{"description"} = $detector{"name"};
-	$detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
+	$detector{"pos"}        = "0*cm 0*cm $zn*cm";
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "$color_baffle[$n-1]";
 	$detector{"type"}       = "Tube";
@@ -295,10 +296,11 @@ sub make_CLEO2_baffle_plate_outer
     {
 	my $n_c     = cnumber($n-1, 1);
 	my %detector=init_det();
+	my $zn = ($n == 1 && $configuration{"variation"} =~ /Enclosure/) ? $PlateZ[$n-1] - 10: $PlateZ[$n-1];
 	$detector{"name"}        = "$DetectorName\_plateouter$n_c";
 	$detector{"mother"}      = "$mother[$n-1]" ;
 	$detector{"description"} = $detector{"name"};
-	$detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
+	$detector{"pos"}        = "0*cm 0*cm $zn*cm";
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "$color_baffle[$n-1]";
 	$detector{"type"}       = "Tube";
@@ -328,10 +330,11 @@ sub make_CLEO2_baffle_plate   #virtual container for baffle plate
     {
 	my $n_c     = cnumber($n-1, 1);
 	my %detector=init_det();
+	my $zn = ($n == 1 && $configuration{"variation"} =~ /Enclosure/) ? $PlateZ[$n-1] - 10: $PlateZ[$n-1];
 	$detector{"name"}        = "$DetectorName\_plate$n_c";
 	$detector{"mother"}      = "$mother[$n-1]";
 	$detector{"description"} = $detector{"name"};
-	$detector{"pos"}        = "0*cm 0*cm $PlateZ[$n-1]*cm";
+	$detector{"pos"}        = "0*cm 0*cm $zn*cm";
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "000000";
 	$detector{"type"}       = "Tube";

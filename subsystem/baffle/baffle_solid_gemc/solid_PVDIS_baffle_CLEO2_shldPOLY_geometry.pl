@@ -105,6 +105,7 @@ my @PlateZ;
 my @Dphi_adj; # adjustments to Dphi
 
 # Absorber parameters
+my $Dz_gap;  # gap between absorber and baffle
 my $Dz_shld;
 
 sub solid_PVDIS_baffle_CLEO2_shldPOLY_geometry
@@ -148,11 +149,12 @@ sub solid_PVDIS_baffle_CLEO2_shldPOLY_geometry
 
 
     $Dz   = $parameters{"Dz"};  
-    $Dz_shld =  5.0; #full length (Polycone)
     $Nslit  = $parameters{"Nslit"};
     $Nblock  = $parameters{"Nblock"};
     $zc0 = $parameters{"zc0"}; 
     $Dzc = $parameters{"Dzc"};
+    $Dz_gap = 0.002; # space for baffle observers (full length)
+    $Dz_shld =  $Dzc - 2 * $Dz - 2 * $Dz_gap ; #full length (Polycone)
     @rinin = ($parameters{"rinin1"}, $parameters{"rinin2"}, 
 	      $parameters{"rinin3"}, $parameters{"rinin4"}, 
 	      $parameters{"rinin5"}, $parameters{"rinin6"}, 
@@ -252,8 +254,8 @@ sub make_CLEO2_baffle_shldPOLY_plate_inner_absorber
 
     for (my $n=2; $n<=$Nplate; $n++)
     {
-	my $z0 = $PlateZ[$n-1]-$Dz;
-	my $z1 = $n < 8 ? $PlateZ[$n-1]+$Dz
+	my $z0 = $PlateZ[$n-1]-$Dz-$Dz_gap;
+	my $z1 = $n < 9 ? $PlateZ[$n-1]+$Dz+$Dz_gap
 	    : $n < 11 ? $PlateZ[$n-1] + 6.0
 	    : 188.99;
 	my $rad0 = $z0 >= 114.5 ? 20.03 :
@@ -307,7 +309,7 @@ sub make_CLEO2_baffle_shldPOLY_plate_inner
 	$detector{"name"}        = "$DetectorName\_plateinner$n_c";
 	$detector{"mother"}      = "$mother[$n-1]" ;
 	$detector{"description"} = $detector{"name"};
-	$detector{"pos"}        = "0*cm 0*cm " . ($PlateZ[$n-1] + $Dz) . "*cm";
+	$detector{"pos"}        = "0*cm 0*cm " . ($PlateZ[$n-1] + $Dz + $Dz_gap) . "*cm";
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "$color_abs[$n-1]";
 	$detector{"type"}       = "Polycone";
@@ -333,22 +335,22 @@ sub make_CLEO2_baffle_shldPOLY_plate_outer_absorber
     my @Rout = ();
     my @Zabs = ();
  
-    for (my $n=2; $n<=$Nplate; $n++)
+    for (my $n=2; $n<=$Nplate && $routout[$n-1] < 140; $n++)
     {
-	my $z0 = $PlateZ[$n-1]-$Dz;
-	my $z1 = $n < 8 ? $PlateZ[$n-1]+$Dz
+	my $z0 = $PlateZ[$n-1]-$Dz-$Dz_gap;
+	my $z1 = $n < 9 ? $PlateZ[$n-1]+$Dz+$Dz_gap
 	    : $n < 11 ? $PlateZ[$n-1] + 6.0
 	    : 188.99;
-	push @Rin, $routout[$n-1]-0.1, $routout[$n-1]-0.1;
+	push @Rin, $routout[$n-1], $routout[$n-1];
 	push @Rout, 140, 140;
 	push @Zabs, $z0, $z1;
     }
 
-    my $dims0 = "0*deg 360*deg 20*counts ";
+    my $dims0 = "0*deg 360*deg " . ($#Rin+1) . "*counts ";
     my $dims1 = "";
     my $dims2 = "";
     my $dims3 = "";
-    for (my $i = 0; $i < 20; ++$i)
+    for (my $i = 0; $i <= $#Rin; ++$i)
     {
 	$dims1 .= "$Rin[$i]*cm ";
 	$dims2 .= "$Rout[$i]*cm ";
@@ -385,7 +387,7 @@ sub make_CLEO2_baffle_shldPOLY_plate_outer
 	$detector{"name"}        = "$DetectorName\_plateouter$n_c";
 	$detector{"mother"}      = "$mother[$n-1]" ;
 	$detector{"description"} = $detector{"name"};
-	$detector{"pos"}        = "0*cm 0*cm " . ($PlateZ[$n-1] + $Dz) . "*cm";
+	$detector{"pos"}        = "0*cm 0*cm " . ($PlateZ[$n-1] + $Dz + $Dz_gap) . "*cm";
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "$color_abs[$n-1]";
 	$detector{"type"}       = "Polycone";
@@ -414,7 +416,7 @@ sub make_CLEO2_baffle_shldPOLY_plate   #virtual container for baffle plate
 	$detector{"name"}        = "$DetectorName\_plate$n_c";
 	$detector{"mother"}      = "$mother[$n-1]";
 	$detector{"description"} = $detector{"name"};
-	$detector{"pos"}        = "0*cm 0*cm " . ($PlateZ[$n-1] + $Dz) . "*cm";
+	$detector{"pos"}        = "0*cm 0*cm " . ($PlateZ[$n-1] + $Dz + $Dz_gap) . "*cm";
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "000000";
 	$detector{"type"}       = "Polycone";
