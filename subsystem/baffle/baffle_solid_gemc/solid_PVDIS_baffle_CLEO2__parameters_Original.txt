@@ -1,7 +1,7 @@
 Nplate                  | 11                   |             | Nplate                  | - | - | - | - | - | -
 Dz                      | 4.5                  | cm          | Dz                      | - | - | - | - | - | -
 Nslit                   | 30                   |             | Nslit                   | - | - | - | - | - | -
-Nblock                  | 40                   |             | Nblock                  | - | - | - | - | - | -
+Nblock                  | 20                   |             | Nblock                  | - | - | - | - | - | -
 zc0                     | 110.0                | cm          | zc0                     | - | - | - | - | - | -
 Dzc                     | 14.0                 | cm          | Dzc                     | - | - | - | - | - | -
 rinin1                  | 3.89                 | cm          | rinin1                  | - | - | - | - | - | -
