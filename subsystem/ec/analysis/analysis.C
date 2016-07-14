@@ -113,7 +113,7 @@ int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
 cout << "nevent " << nevent << endl;
 
-for (Int_t i=0;i<nevent/10;i++) { 
+for (Int_t i=0;i<nevent;i++) { 
 // for (Int_t i=0;i<2;i++) { 
   cout << i << "\r";
 //   cout << i << "\n";

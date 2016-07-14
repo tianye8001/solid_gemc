@@ -71,7 +71,8 @@ double process_tree_solid_ec(TTree *tree_solid_ec)
       
       //cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_ec_totEdep->at(j) << endl; 
            
-      if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 0) {
+//       if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 0) {       
+      if (detector_ID==3 && subdetector_ID == 1) {
 	totEdep +=solid_ec_totEdep->at(j); 
       }     
       
