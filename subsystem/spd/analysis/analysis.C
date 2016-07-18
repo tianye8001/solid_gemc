@@ -19,6 +19,8 @@
 #include <TSystem.h>
 #include <TArc.h>
 
+#include "analysis_tree_solid_spd.C"
+
 using namespace std;
 
 void analysis(string input_filename)
@@ -35,6 +37,10 @@ sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_
 char output_filename[200];
 sprintf(output_filename, "%s_output.root",the_filename);
 TFile *outputfile=new TFile(output_filename, "recreate");
+
+TH1F *htotEdep_spd=new TH1F("htotEdep_spd","htotEdep_spd",100,0,5);
+
+TH2F *htotEdep_spd_gen=new TH2F("htotEdep_spd_gen","htotEdep_spd_gen",110,0,11,100,0,5);
 
 TFile *file=new TFile(input_filename.c_str());
 if (file->IsZombie()) {
@@ -100,12 +106,8 @@ tree_flux->SetBranchAddress("mvy",&flux_mvy);
 tree_flux->SetBranchAddress("mvz",&flux_mvz);
 tree_flux->SetBranchAddress("avg_t",&flux_avg_t);
 
-// TTree *tree_solid_mrpc = (TTree*) file->Get("solid_mrpc");
-// vector<int> *solid_mrpc_id=0,*solid_mrpc_hitn=0;
-// tree_solid_mrpc->SetBranchAddress("hitn",&solid_mrpc_hitn);
-// tree_solid_mrpc->SetBranchAddress("id",&solid_mrpc_id);
-
-// cout << tree_solid_gem->GetEntries() << " " << tree_header->GetEntries() << " " << tree_generated->GetEntries() << endl;
+TTree *tree_solid_spd = (TTree*) file->Get("solid_spd");
+setup_tree_solid_spd(tree_solid_spd);
 
 int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
@@ -113,7 +115,7 @@ cout << "nevent " << nevent << endl;
 
 for (Int_t i=0;i<nevent;i++) { 
 //   cout << i << "\r";
-  cout << i << "\n";
+//   cout << i << "\n";
 
   tree_header->GetEntry(i);
   
@@ -138,7 +140,7 @@ for (Int_t i=0;i<nevent;i++) {
     tree_flux->GetEntry(i);    
     
     for (Int_t j=0;j<flux_hitn->size();j++) {
-            cout << "flux " << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
+//             cout << "flux " << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
     
     int detector_ID=flux_id->at(j)/1000000;
     int subdetector_ID=(flux_id->at(j)%1000000)/100000;
@@ -147,8 +149,24 @@ for (Int_t i=0;i<nevent;i++) {
      
     }
     
+  tree_solid_spd->GetEntry(i);  
+  
+  double totEdep_spd=process_tree_solid_spd(tree_solid_spd);
+//   cout << "totEdep_spd " << totEdep_spd << endl;  
+
+  htotEdep_spd->Fill(totEdep_spd);      
+
+  htotEdep_spd_gen->Fill(p_gen,totEdep_spd);   
 }
 file->Close();
+
+
+TCanvas *c = new TCanvas("totEdep","totEdep",1600,900);
+c->Divide(2,1);
+c->cd(1);
+htotEdep_spd->Draw();
+c->cd(2);
+htotEdep_spd_gen->Draw("colz");
 
 outputfile->Write();
 outputfile->Flush();

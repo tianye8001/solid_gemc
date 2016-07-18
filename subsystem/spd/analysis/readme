@@ -1,4 +1,14 @@
-$SoLID_GEMC/geometry/solid_materials.pl config_solid_SIDIS_He3.dat
-./solid_SIDIS_He3.pl config_solid_SIDIS_He3.dat
-solid_gemc solid_SIDIS_He3.gcard
-evio2root -INPUTF=output.evio -B=solid_SIDIS_He3
+(run simulation)
+solid_gemc solid_SIDIS_spd.gcard
+
+(convert root file)
+evio2root -B="../spd_solid_gemc/solid_SIDIS_spd_forwardangle" -INPUTF=output.evio
+
+(analysze result)
+root [0] .x analysis.C+("output.root")
+
+
+==================
+FASPD.C and LASPD.C, old script used by Zhihong Ye
+
+
