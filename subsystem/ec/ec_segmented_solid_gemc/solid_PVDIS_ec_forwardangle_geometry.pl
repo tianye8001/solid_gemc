@@ -23,8 +23,8 @@ my $color_wrap_sectoreven="ffff00";
 my $material_abs="G4_Pb";
 my $material_scint="G4_POLYSTYRENE";
 # my $material_scint="G4_PLASTIC_SC_VINYLTOLUENE";
-my $material_gap="G4_AIR";
-my $material_support="G4_AIR";
+my $material_gap="G4_MYLAR";
+my $material_support="G4_Al";
 my $material_wrap="G4_MYLAR";
 
 # config mostly from CaloSim/include/Config.h
