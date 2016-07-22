@@ -4,7 +4,7 @@ Thickness_scint		| 0.15                 | cm   | Thickness_scint     	| - |  - |
 Thickness_gap		| 0.024                | cm   | Thickness_gap 		| - |  - | - | - | - | -
 Thickness_shield	| 1.12                 | cm   | Thickness_shield  	| - |  - | - | - | - | -
 Thickness_prescint	| 2	               | cm   | Thickness_prescint      | - |  - | - | - | - | -
-Thickness_support	| 2	               | cm   | Thickness_support       | - |  - | - | - | - | -
+Thickness_support	| 0.000002	               | cm   | Thickness_support       | - |  - | - | - | - | -
 Angle_module		| 30	               | deg  | Angle_module            | - |  - | - | - | - | -
 Radius_shower		| 5.4                  | cm   | Radius_shower	  	| - |  - | - | - | - | -
 z_shower		| 350                  | cm   | z_shower       		| - |  - | - | - | - | -

@@ -22,8 +22,9 @@ my $color_wrap_sectoreven="ffff00";
 
 my $material_abs="G4_Pb";
 my $material_scint="G4_POLYSTYRENE";
-my $material_gap="G4_MYLAR";
-my $material_support="G4_Al";
+# my $material_scint="G4_PLASTIC_SC_VINYLTOLUENE";
+my $material_gap="G4_AIR";
+my $material_support="G4_AIR";
 my $material_wrap="G4_MYLAR";
 
 # config mostly from CaloSim/include/Config.h
@@ -216,7 +217,59 @@ sub make_ec_module_shower()
 	$detector{"hit_type"}    = "no";
 	$detector{"identifiers"} = "no";	
 	print_det(\%configuration, \%detector);  # comment out this to minimize mem at gui mode
+	
+	my $Dz_gap = $Thickness_gap/4;	
+	
+	my $gapfrontZ = $layerZ-$Dz_layer+$Thickness_lead+$Dz_gap;
 
+        $detector{"name"}        = "$DetectorName\_shower$id\_gapfront$j";
+        $detector{"mother"}      = "$DetectorName\_shower$id";
+        $detector{"description"} = $detector{"name"};
+        $detector{"pos"}        = "0*cm 0*cm $gapfrontZ*cm";
+        $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+        $detector{"color"}      = "$color_gap";
+	if($j == 1){
+	$detector{"type"}       = "Pgon";
+	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_gap*cm $Dz_gap*cm";
+	}
+	else {  $detector{"type"}       = "CopyOf $DetectorName\_shower1_gapfront1";}	
+        $detector{"material"}   = "$material_gap";
+        $detector{"mfield"}     = "no";
+        $detector{"ncopy"}      = 1;
+        $detector{"pMany"}       = 1;
+        $detector{"exist"}       = 1;
+	$detector{"visible"}     = 1;
+	$detector{"style"}       = 1;
+	$detector{"sensitivity"} = "no";
+	$detector{"hit_type"}    = "no";
+	$detector{"identifiers"} = "no";
+	print_det(\%configuration, \%detector);
+	
+	my $gapbackZ = $layerZ-$Dz_layer+$Thickness_lead+$Dz_gap*2+$Thickness_scint+$Dz_gap;
+
+        $detector{"name"}        = "$DetectorName\_shower$id\_gapback$j";
+        $detector{"mother"}      = "$DetectorName\_shower$id";
+        $detector{"description"} = $detector{"name"};
+        $detector{"pos"}        = "0*cm 0*cm $gapbackZ*cm";
+        $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+        $detector{"color"}      = "$color_gap";
+	if($j == 1){
+	$detector{"type"}       = "Pgon";
+	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_gap*cm $Dz_gap*cm";
+	}
+	else {  $detector{"type"}       = "CopyOf $DetectorName\_shower1_gapback1";}	
+        $detector{"material"}   = "$material_gap";
+        $detector{"mfield"}     = "no";
+        $detector{"ncopy"}      = 1;
+        $detector{"pMany"}       = 1;
+        $detector{"exist"}       = 1;
+	$detector{"visible"}     = 1;
+	$detector{"style"}       = 1;
+	$detector{"sensitivity"} = "no";
+	$detector{"hit_type"}    = "no";
+	$detector{"identifiers"} = "no";
+	print_det(\%configuration, \%detector);	
+	
 # 	my $scintZ = $layerZ-$Dz_layer+$Thickness_lead+$Thickness_scint/2;
 # 	my $Dz_scint = $Thickness_scint/2;	
 # 
