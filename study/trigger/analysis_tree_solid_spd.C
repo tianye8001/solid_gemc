@@ -22,6 +22,8 @@
 
 using namespace std;
 
+const double DEG=180./TMath::Pi();
+
 vector<int> *solid_spd_id=0,*solid_spd_hitn=0;
 vector<int> *solid_spd_pid=0,*solid_spd_mpid=0,*solid_spd_tid=0,*solid_spd_mtid=0,*solid_spd_otid=0;
 vector<double> *solid_spd_trackE=0,*solid_spd_totEdep=0,*solid_spd_avg_x=0,*solid_spd_avg_y=0,*solid_spd_avg_z=0,*solid_spd_avg_lx=0,*solid_spd_avg_ly=0,*solid_spd_avg_lz=0,*solid_spd_px=0,*solid_spd_py=0,*solid_spd_pz=0,*solid_spd_vx=0,*solid_spd_vy=0,*solid_spd_vz=0,*solid_spd_mvx=0,*solid_spd_mvy=0,*solid_spd_mvz=0,*solid_spd_avg_t=0;
@@ -57,6 +59,45 @@ tree_solid_spd->SetBranchAddress("avg_t",&solid_spd_avg_t);
 return ;
 
 }
+
+Bool_t spd_trigger(TTree *tree_solid_spd,int trigsector_spd_FA[30],int trigsector_spd_LA[30],double totEdep_FA_threshhold = 0.35, double totEdep_LA_threshhold = 0.35){
+  Double_t totEdep_FA[30] = {0};
+  Double_t totEdep_LA[30] = {0};
+  Int_t ntrigsecs_FA =0;
+  Int_t ntrigsecs_LA =0;  
+  
+    for (Int_t j=0;j<solid_spd_hitn->size();j++) {
+//       cout << "solid_spd " << " !!! " << solid_spd_hitn->at(j) << " " << solid_spd_id->at(j) << " " << solid_spd_pid->at(j) << " " << solid_spd_mpid->at(j) << " " << solid_spd_tid->at(j) << " " << solid_spd_mtid->at(j) << " " << solid_spd_trackE->at(j) << " " << solid_spd_totEdep->at(j) << " " << solid_spd_avg_x->at(j) << " " << solid_spd_avg_y->at(j) << " " << solid_spd_avg_z->at(j) << " " << solid_spd_avg_lx->at(j) << " " << solid_spd_avg_ly->at(j) << " " << solid_spd_avg_lz->at(j) << " " << solid_spd_px->at(j) << " " << solid_spd_py->at(j) << " " << solid_spd_pz->at(j) << " " << solid_spd_vx->at(j) << " " << solid_spd_vy->at(j) << " " << solid_spd_vz->at(j) << " " << solid_spd_mvx->at(j) << " " << solid_spd_mvy->at(j) << " " << solid_spd_mvz->at(j) << " " << solid_spd_avg_t->at(j) << endl;  
+
+      double phi=atan2(solid_spd_avg_y->at(j),solid_spd_avg_x->at(j))*DEG; // range (-180,180)
+      if (phi<0) phi=phi+360;  //range (0,360)
+      
+      int sector=int(phi/12.)+1;
+      if (sector<1 || sector >30) count << "spd sector problem " << sector << endl;
+      
+      int detector_ID=solid_spd_id->at(j)/1000000;
+      int subdetector_ID=(solid_spd_id->at(j)%1000000)/100000;
+      int subsubdetector_ID=((solid_spd_id->at(j)%1000000)%100000)/10000;
+      int component_ID=solid_spd_id->at(j)%10000;
+      
+//     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_spd_totEdep->at(j) << endl;       
+      
+      if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 0) totEdep_FA[sector-1] +=solid_spd_totEdep->at(j);     
+      
+      if (detector_ID==5 && subdetector_ID == 2 && subsubdetector_ID == 0) totEdep_LA[sector-1] +=solid_spd_totEdep->at(j);         
+    }
+    
+  for(Int_t i = 0; i < 30; i++){
+      if(totEdep_FA[i] >= totEdep_FA_threshhold) {trigsector_spd_FA[i]=1; ntrigsecs_FA++;}
+      else {trigsector_spd_FA[i]=0;}
+      if(totEdep_LA[i] >= totEdep_LA_threshhold) {trigsector_spd_LA[i]=1; ntrigsecs_LA++;}
+      else {trigsector_spd_LA[i]=0;}
+  }
+
+    if(ntrigsecs_FA>0 || ntrigsecs_LA>0) return true;
+    else return flase;
+}
+
 
 double process_tree_solid_spd(TTree *tree_solid_spd)
 {
