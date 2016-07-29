@@ -6,7 +6,7 @@ Thickness_shield	| 1.12                 | cm   | Thickness_shield  	| - |  - | -
 Thickness_prescint	| 2	               | cm   | Thickness_prescint      | - |  - | - | - | - | -
 Thickness_support	| 2	               | cm   | Thickness_support       | - |  - | - | - | - | -
 Angle_module		| 30	               | deg  | Angle_module            | - |  - | - | - | - | -
-Radius_shower		| 5.4                  | cm   | Radius_shower	  	| - |  - | - | - | - | -
+Radius_shower		| 5.413                | cm   | Radius_shower	  	| - |  - | - | - | - | -
 z_shower		| 350                  | cm   | z_shower       		| - |  - | - | - | - | -
 Rmin			| 110   	       | cm   | Rmin       		| - |  - | - | - | - | -
 Rmax			| 265	               | cm   | Rmax      		| - |  - | - | - | - | -
