@@ -7,7 +7,7 @@ our %parameters;
 use Getopt::Long;
 use Math::Trig;
 
-my $DetectorName = 'solid_PVDIS_ec_forwardangle';
+my $DetectorName = 'solid_SIDIS_ec_largeangle';
 
 my $DetectorMother="root";
 
@@ -86,8 +86,7 @@ my $z_support = $z_shower-$Thickness_shower/2-$Thickness_support/2;  #cm
 my $z_prescint = $z_support-$Thickness_support/2-$Thickness_prescint/2; #cm 
 my $z_shield = $z_prescint-$Thickness_prescint/2-$Thickness_shield/2;  #about 323.4cm
 
-
-sub solid_PVDIS_ec_forwardangle
+sub solid_SIDIS_ec_largeangle
 {
 make_ec_shield();
 make_ec_module();
@@ -130,7 +129,8 @@ sub make_ec_module
 #    for(my $i=1; $i<=34; $i++)   
    for(my $i=1; $i<=$total_module; $i++)   
     {
-      if($i==424) {next;}
+      if($i==424) {next;}  # skip the original
+#       if($i==854 || $i==863 || $i==1281 || $i==1106) {next;}   #skip these overlap with solid_solenoid_CryostatInner
       if($status[$i-1] eq 1) {      
 	my $R=sqrt($x[$i-1]*$x[$i-1]+$y[$i-1]*$y[$i-1]);
 # 	if (130<$R && $R<140 ){

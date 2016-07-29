@@ -7,7 +7,7 @@ our %parameters;
 use Getopt::Long;
 use Math::Trig;
 
-my $DetectorName = 'solid_PVDIS_ec_forwardangle';
+my $DetectorName = 'solid_SIDIS_ec_forwardangle';
 
 my $DetectorMother="root";
 
@@ -87,7 +87,7 @@ my $z_prescint = $z_support-$Thickness_support/2-$Thickness_prescint/2; #cm
 my $z_shield = $z_prescint-$Thickness_prescint/2-$Thickness_shield/2;  #about 323.4cm
 
 
-sub solid_PVDIS_ec_forwardangle
+sub solid_SIDIS_ec_forwardangle
 {
 make_ec_shield();
 make_ec_module();
