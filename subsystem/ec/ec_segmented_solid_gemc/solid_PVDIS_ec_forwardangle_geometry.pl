@@ -211,7 +211,7 @@ sub make_ec_module_shower()
         $detector{"ncopy"}      = 1;
         $detector{"pMany"}       = 1;
         $detector{"exist"}       = 1;
-	$detector{"visible"}     = 1;
+	$detector{"visible"}     = 0;
 	$detector{"style"}       = 1;     	
 	$detector{"sensitivity"} = "no";
 	$detector{"hit_type"}    = "no";
@@ -238,7 +238,7 @@ sub make_ec_module_shower()
         $detector{"ncopy"}      = 1;
         $detector{"pMany"}       = 1;
         $detector{"exist"}       = 1;
-	$detector{"visible"}     = 1;
+	$detector{"visible"}     = 0;
 	$detector{"style"}       = 1;
 	$detector{"sensitivity"} = "no";
 	$detector{"hit_type"}    = "no";
@@ -263,7 +263,7 @@ sub make_ec_module_shower()
         $detector{"ncopy"}      = 1;
         $detector{"pMany"}       = 1;
         $detector{"exist"}       = 1;
-	$detector{"visible"}     = 1;
+	$detector{"visible"}     = 0;
 	$detector{"style"}       = 1;
 	$detector{"sensitivity"} = "no";
 	$detector{"hit_type"}    = "no";
