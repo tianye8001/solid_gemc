@@ -23,24 +23,27 @@ my $PlateZ3	= $parameters{"PlateZ3"};
 my $PlateZ4	= $parameters{"PlateZ4"};
 my $PlateZ5	= $parameters{"PlateZ5"};
 my $PlateZ6	= $parameters{"PlateZ6"};
+my $PlateZ7	= $parameters{"PlateZ7"};
 my $Rin1	= $parameters{"Rin1"};
 my $Rin2	= $parameters{"Rin2"};
 my $Rin3	= $parameters{"Rin3"};
 my $Rin4	= $parameters{"Rin4"};
 my $Rin5	= $parameters{"Rin5"};
 my $Rin6	= $parameters{"Rin6"};
+my $Rin7	= $parameters{"Rin7"};
 my $Rout1	= $parameters{"Rout1"};
 my $Rout2	= $parameters{"Rout2"};
 my $Rout3	= $parameters{"Rout3"};
 my $Rout4	= $parameters{"Rout4"};
 my $Rout5	= $parameters{"Rout5"};
 my $Rout6	= $parameters{"Rout6"};
+my $Rout7	= $parameters{"Rout7"};
 
-my @PlateZ = ($PlateZ1,$PlateZ2,$PlateZ3,$PlateZ4,$PlateZ5,$PlateZ6);
-my @Rin    = ($Rin1,$Rin2,$Rin3,$Rin4,$Rin5,$Rin6);
-my @Rout   = ($Rout1,$Rout2,$Rout3,$Rout4,$Rout5,$Rout6);
+my @PlateZ = ($PlateZ1,$PlateZ2,$PlateZ3,$PlateZ4,$PlateZ5,$PlateZ6,$PlateZ7);
+my @Rin    = ($Rin1,$Rin2,$Rin3,$Rin4,$Rin5,$Rin6,$Rin7);
+my @Rout   = ($Rout1,$Rout2,$Rout3,$Rout4,$Rout5,$Rout6,$Rout7);
  
-my @offrot = (0,0,0,0,0,0);  # angular offsets in degrees (w.r.t. center on 12*$n for $n-th sector) 
+my @offrot = (0,0,0,0,0,0,0);  # angular offsets in degrees (w.r.t. center on 12*$n for $n-th sector) 
 my $angle_start=-6;
 my $angle_width=12;
 
