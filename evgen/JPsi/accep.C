@@ -34,7 +34,7 @@ TH2F *hf,*hl;
 file1 = new TFile(acceptance_filename.c_str());    
 if (file1->IsZombie()) {
   cout << "Error opening acceptance file" << acceptance_filename << endl;       
-  return 0;
+  return;
 }
 else {
   cout << "open acceptance file " << acceptance_filename << endl;    

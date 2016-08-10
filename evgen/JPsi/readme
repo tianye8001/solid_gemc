@@ -1,4 +1,14 @@
-= how to use it = 
+= overview = 
+
+simu_p.C to generate events in root tree
+
+accept.C to add acceptance entry in tree
+
+other scripts to analysis results
+
+= how it works =
+1. simu_p.C
+
 compile it (an example on ifarm, with tsch)
 source /apps/root/5.34.21/setroot_CUE.csh
 make O=simu_p
@@ -6,16 +16,7 @@ make O=simu_p
 run by
 ./simu_p -n[nevents as integer like 1000000] -t[e for electroproduction,g for photoproduction] -b[Ebeam in GeV] -o[output_root_file]
 
-./simu_p -n10000 -tg -b11 -ooutput.root
 ./simu_p -n1e6 -te -b11 -ooutput.root
-
-Other macro is for analysis the results from simu_p
-proj.C plots results
-compare.C compare total detected events (FOM) from different simulation files.
-plot_acceptance.C compare acceptance from different simulation files
-
-= how it works =
-1. simu_p.C
 
 refer to PAC39 proposal for the crossection formula
 
@@ -39,16 +40,26 @@ The similation throw events evenly in the ranges of the all degree of freedom an
 
 output root file has a tree "T"
 
-2. accep.C 
-it will take the output root file from simu_o.C and add acceptance entries.
+2. accep.C
+root [0] .x accep.C+("output.root","acceptance_solid_JPsi_electron_target315_output.root")
+it will take the output root file from simu_p and add acceptance entries.
 acceptance can be read from acceptance root file which are just histograms from simulation code or some rough cut estimation
 
-3. proj.C
+3. others
+proj.C
+root [0] .x proj.C+("output_accep.root","e")
+plots results, output total events on terminal
 
-4. plot_crossection.C
+plot_crossection.C
 plot photon crossection fit function, matching paper "Brodsky Physics Letters B 498 (2001) 23¨C28" Fig 3
 
-5. plot_brem.C
+plot_brem.C
+
+compare.C 
+compare total detected events (as FOM) from different simulation files.
+
+plot_acceptance.C
+compare acceptance from different simulation files
 
 = history =
 
