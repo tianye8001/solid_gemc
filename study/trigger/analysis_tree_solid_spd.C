@@ -62,6 +62,9 @@ return ;
 
 Bool_t spd_trigger(TTree *tree_solid_spd,int trigsector_spd_FA[30][2][4],int trigsector_spd_LA[30][2],double totEdep_FA_threshhold = 0.35, double totEdep_LA_threshhold = 0.35){
   //totEdep threshhold value is in MeV
+  //FASPD has 60x4 segementation including 30 sectors,2 strips and 4 blocks
+  //LASPD has 60x2 segementation including 30 sectors,2 strips
+  //trigsector_spd_FA and trigsector_spd_LA return 1 as triggered, 0 as untriggered for all segmentation
   
   Double_t totEdep_FA[30][2][4] = {0};
   Double_t totEdep_LA[30][2] = {0};
