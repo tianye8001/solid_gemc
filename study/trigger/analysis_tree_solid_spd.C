@@ -60,23 +60,44 @@ return ;
 
 }
 
-Bool_t spd_trigger(TTree *tree_solid_spd,int trigsector_spd_FA[30],int trigsector_spd_LA[30],double totEdep_FA_threshhold = 0.35, double totEdep_LA_threshhold = 0.35){
+Bool_t spd_trigger(TTree *tree_solid_spd,int trigsector_spd_FA[30][2][4],int trigsector_spd_LA[30][2],double totEdep_FA_threshhold = 0.35, double totEdep_LA_threshhold = 0.35){
   //totEdep threshhold value is in MeV
   
-  Double_t totEdep_FA[30] = {0};
-  Double_t totEdep_LA[30] = {0};
-  Int_t ntrigsecs_FA =0;
-  Int_t ntrigsecs_LA =0;  
+  Double_t totEdep_FA[30][2][4] = {0};
+  Double_t totEdep_LA[30][2] = {0};
+  Int_t ntrig_FA =0;
+  Int_t ntrig_LA =0;  
   
     for (Int_t j=0;j<solid_spd_hitn->size();j++) {
 //       cout << "solid_spd " << " !!! " << solid_spd_hitn->at(j) << " " << solid_spd_id->at(j) << " " << solid_spd_pid->at(j) << " " << solid_spd_mpid->at(j) << " " << solid_spd_tid->at(j) << " " << solid_spd_mtid->at(j) << " " << solid_spd_trackE->at(j) << " " << solid_spd_totEdep->at(j) << " " << solid_spd_avg_x->at(j) << " " << solid_spd_avg_y->at(j) << " " << solid_spd_avg_z->at(j) << " " << solid_spd_avg_lx->at(j) << " " << solid_spd_avg_ly->at(j) << " " << solid_spd_avg_lz->at(j) << " " << solid_spd_px->at(j) << " " << solid_spd_py->at(j) << " " << solid_spd_pz->at(j) << " " << solid_spd_vx->at(j) << " " << solid_spd_vy->at(j) << " " << solid_spd_vz->at(j) << " " << solid_spd_mvx->at(j) << " " << solid_spd_mvy->at(j) << " " << solid_spd_mvz->at(j) << " " << solid_spd_avg_t->at(j) << endl;  
 
       double phi=atan2(solid_spd_avg_y->at(j),solid_spd_avg_x->at(j))*DEG; // range (-180,180)
       if (phi<0) phi=phi+360;  //range (0,360)
+
+//       int sector=int(phi/12.)+1;
+      int sector_strip_temp=0;
+      if (phi>=90) sector_strip_temp=int((phi-90)/6+1);
+      else sector_strip_temp=int((phi+360-90)/6+1);          
       
-      int sector=int(phi/12.)+1;
-      if (sector<1 || sector >30) count << "spd sector problem " << sector << endl;
+      if (sector_strip_temp<1 || sector_strip_temp >60){
+	count << "spd sector_strip_temp problem " << " phi=" << phi << " sector_strip_temp=" << sector_strip_temp << endl;
+	return false;
+      }         
       
+      int sector=sector_strip_temp/2+1;
+      int strip=sector_strip_temp%2+1;
+     
+      if (sector<1 || sector >30){
+	count << "spd sector problem " << " phi=" << phi << " sector=" << sector << endl;
+	return false;
+      }      
+      if (strip !=1 || strip !=2){
+	count << "spd strip problem " << " phi=" << phi << " strip=" << strip << endl;
+	return false;	
+      }
+      
+      double r=sqrt(solid_spd_avg_y->at(j)*solid_spd_avg_y->at(j)+solid_spd_avg_x->at(j)*solid_spd_avg_x->at(j))/10.; // in cm
+                  
       int detector_ID=solid_spd_id->at(j)/1000000;
       int subdetector_ID=(solid_spd_id->at(j)%1000000)/100000;
       int subsubdetector_ID=((solid_spd_id->at(j)%1000000)%100000)/10000;
@@ -84,20 +105,39 @@ Bool_t spd_trigger(TTree *tree_solid_spd,int trigsector_spd_FA[30],int trigsecto
       
 //     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_spd_totEdep->at(j) << endl;       
       
-      if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 0) totEdep_FA[sector-1] +=solid_spd_totEdep->at(j);     
+      if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 0){
+	int block=0;
+	if (96<=r && r<105) block=1;
+	else if (105<=r && r<125) block=2;
+	else if (125<=r && r<160) block=3;
+	else if (160<=r && r<210) block=4;	
+	else {
+	  count << "spd block problem " << " r=" << r << " block=" << block << endl;
+	  return false;
+	}      	  
+	
+	totEdep_FA[sector-1][strip-1][block-1] +=solid_spd_totEdep->at(j);     	
+      }
       
-      if (detector_ID==5 && subdetector_ID == 2 && subsubdetector_ID == 0) totEdep_LA[sector-1] +=solid_spd_totEdep->at(j);         
+      if (detector_ID==5 && subdetector_ID == 2 && subsubdetector_ID == 0){
+	totEdep_LA[sector-1][strip-1] +=solid_spd_totEdep->at(j);         
+      }
     }
     
   for(Int_t i = 0; i < 30; i++){
-      if(totEdep_FA[i] >= totEdep_FA_threshhold) {trigsector_spd_FA[i]=1; ntrigsecs_FA++;}
-      else {trigsector_spd_FA[i]=0;}
-      if(totEdep_LA[i] >= totEdep_LA_threshhold) {trigsector_spd_LA[i]=1; ntrigsecs_LA++;}
-      else {trigsector_spd_LA[i]=0;}
+  for(Int_t k = 0; k < 2; k++){    
+      for(Int_t l = 0; l < 4; l++){    
+	if(totEdep_FA[i][k][l] >= totEdep_FA_threshhold) {trigsector_spd_FA[i][k][l]=1; ntrig_FA++;}
+	else {trigsector_spd_FA[i][k][l]=0;}
+      }
+      
+      if(totEdep_LA[i][k] >= totEdep_LA_threshhold) {trigsector_spd_LA[i][k]=1; ntrig_LA++;}
+      else {trigsector_spd_LA[i][k]=0;}
+  }
   }
 
-    if(ntrigsecs_FA>0 || ntrigsecs_LA>0) return true;
-    else return flase;
+    if(ntrig_FA>0 || ntrig_LA>0) return true;
+    else return false;
 }
 
 
