@@ -60,11 +60,11 @@ return ;
 
 }
 
-Bool_t spd_trigger(TTree *tree_solid_spd,int trigsector_spd_FA[30][2][4],int trigsector_spd_LA[30][2],double totEdep_FA_threshhold = 0.35, double totEdep_LA_threshhold = 0.35){
+Bool_t process_trigger_spd(TTree *tree_solid_spd,int trigger_spd_FA[30][2][4],int trigger_spd_LA[30][2],double totEdep_FA_threshhold = 0.35, double totEdep_LA_threshhold = 0.35){
   //totEdep threshhold value is in MeV
   //FASPD has 60x4 segementation including 30 sectors,2 strips and 4 blocks
   //LASPD has 60x2 segementation including 30 sectors,2 strips
-  //trigsector_spd_FA and trigsector_spd_LA return 1 as triggered, 0 as untriggered for all segmentation
+  //trigger_spd_FA and trigger_spd_LA return 1 as triggered, 0 as untriggered for all segmentation
   
   Double_t totEdep_FA[30][2][4] = {0};
   Double_t totEdep_LA[30][2] = {0};
@@ -130,12 +130,12 @@ Bool_t spd_trigger(TTree *tree_solid_spd,int trigsector_spd_FA[30][2][4],int tri
   for(Int_t i = 0; i < 30; i++){
   for(Int_t k = 0; k < 2; k++){    
       for(Int_t l = 0; l < 4; l++){    
-	if(totEdep_FA[i][k][l] >= totEdep_FA_threshhold) {trigsector_spd_FA[i][k][l]=1; ntrig_FA++;}
-	else {trigsector_spd_FA[i][k][l]=0;}
+	if(totEdep_FA[i][k][l] >= totEdep_FA_threshhold) {trigger_spd_FA[i][k][l]=1; ntrig_FA++;}
+	else {trigger_spd_FA[i][k][l]=0;}
       }
       
-      if(totEdep_LA[i][k] >= totEdep_LA_threshhold) {trigsector_spd_LA[i][k]=1; ntrig_LA++;}
-      else {trigsector_spd_LA[i][k]=0;}
+      if(totEdep_LA[i][k] >= totEdep_LA_threshhold) {trigger_spd_LA[i][k]=1; ntrig_LA++;}
+      else {trigger_spd_LA[i][k]=0;}
   }
   }
 
