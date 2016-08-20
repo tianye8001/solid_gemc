@@ -7,7 +7,7 @@ similar result comparing to LPAIR, see http://research.kek.jp/people/tabe/grape/
 ** virtual machine **
 It was written in early 2000 and depends on an older version of cernlib.
 To repeat its exact environment, I built a redhat7 virtual machine to run it.
-download the file [http://hallaweb.jlab.org/12GeV/SoLID/download/sim/package/RH7.zip here] and decompress it using zip. You need free vmplayer [http://www.vmware.com/go/downloadplayer] on linux or windows to run the virtual machine. On Mac, download the tool [https://my.vmware.com/group/vmware/get-download?downloadGroup=OVFTOOL352] and convert "ovftool name.vmx name.ova", then use virtualbox [https://www.virtualbox.org/wiki/Downloads] to import the ova file run the virtual machine
+download the file [http://hallaweb.jlab.org/12GeV/SoLID/download/sim/package/RH7.zip here] and decompress it using zip. You need free vmplayer [http://www.vmware.com/go/downloadplayer] on linux or windows to run the virtual machine. On Mac, download the ovftool  [https://my.vmware.com/group/vmware/details?productId=491&downloadGroup=OVFTOOL410] and convert "ovftool name.vmx name.ova", then use virtualbox [https://www.virtualbox.org/wiki/Downloads] to import the ova file run the virtual machine
 
 The virtual machine only has terminal, Xwindow is not working, so use "ctr+F*" to swtich between terminals. both user "zwzhao" and root has passwrod "111111", 
 The code is under /home/zwzhao/grape-dilpeton_v1.1k ( I had to modify its makefile to compile it)
@@ -47,7 +47,7 @@ anaGrape.C can be used to analyze the output tree "grp.root" from grape-dilepton
 It's too slow to run as script, need to run after compiling
 
 root file with acceptance histogram is needed for anaGrape.C to work
-download
+download 
 acceptance_solid_JPsi_electron_target315_output.root
 clasev_acceptance.root
 from
@@ -55,9 +55,9 @@ http://hallaweb.jlab.org/12GeV/SoLID/download/sim/acceptance/
 
 cd your_directoty_where_grp.root_is 
 cp acceptance_root_file ../
-.x anaGrape.C+("SoLID_DDVCS_JPsiSetup",false)
+.x /home/zwzhao/solid/solid_svn/solid/evgen/BH/anaGrape.C+("SoLID_JPsi",false)
 
-The parameter can be SoLID or CLAS12 for detector, true or false for inter or not
+The parameter can be SoLID or CLAS12 for detector, true or false for smearing track or not
 
 root2lund.C to convert "grp.root" to "grp.lund" with vertex info added in, use it after compiling otherwise it takes large mem and too slow, run it in the dir where "grp.root" is
 root -b -q 'root2lund.C+'
