@@ -129,7 +129,7 @@ double Get_SIDIS_trigger_efficiency_EC(TString det_ID,TString pid,double hit_R, 
 		}
 		
 		if(hit_Mom>=momentum_grid[points_num-1]){
-			trigger_efficiency=momentum_grid[points_num-1];
+			trigger_efficiency=efficiency_grid[points_num-1];
 		}
 	
 		
