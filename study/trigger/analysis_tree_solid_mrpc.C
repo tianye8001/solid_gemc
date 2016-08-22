@@ -78,10 +78,10 @@ Bool_t process_trigger_mrpc(TTree *tree_solid_mrpc,int trigger_mrpc_FA[30][2][4]
 
 //       int sector=int(phi/12.)+1;
       int sector_strip_temp=0;
-      if (phi>=90) sector_strip_temp=int((phi-90)/6+1);
-      else sector_strip_temp=int((phi+360-90)/6+1);          
+      if (phi>=90) sector_strip_temp=int((phi-90)/6);
+      else sector_strip_temp=int((phi+360-90)/6);          
       
-      if (sector_strip_temp<1 || sector_strip_temp >60){
+      if (sector_strip_temp<0 || sector_strip_temp >59){
 	count << "mrpc sector_strip_temp problem " << " phi=" << phi << " sector_strip_temp=" << sector_strip_temp << endl;
 	return false;
       }         
