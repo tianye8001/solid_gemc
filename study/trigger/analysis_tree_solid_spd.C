@@ -62,10 +62,12 @@ return ;
 
 Bool_t process_trigger_spd(TTree *tree_solid_spd,int trigger_spd_FA[30][2][4],int trigger_spd_LA[30][2],double totEdep_FA_threshhold = 0.35, double totEdep_LA_threshhold = 0.35){
   //totEdep threshhold value is in MeV
-  //FASPD has 60x4 segementation including 30 sectors,2 strips and 4 blocks
-  //LASPD has 60x2 segementation including 30 sectors,2 strips
+  //segmentation has 30 sectors along phi direction,each sector has 2 strip along phi direction, each strip has 4 blocks along radial direction
+  //FASPD has 60x4 segementation including 30 sectors (index 0-29),2 strips(index 0-1) and 4 blocks(index 0-3)
+  //LASPD has 60x2 segementation including 30 sectors (index 0-29),2 strips (index 0-1)
   //trigger_spd_FA and trigger_spd_LA return 1 as triggered, 0 as untriggered for all segmentation
   
+    
   Double_t totEdep_FA[30][2][4] = {0};
   Double_t totEdep_LA[30][2] = {0};
   Int_t ntrig_FA =0;

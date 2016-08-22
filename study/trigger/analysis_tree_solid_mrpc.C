@@ -59,8 +59,10 @@ return ;
 }
 
 Bool_t process_trigger_mrpc(TTree *tree_solid_mrpc,int trigger_mrpc_FA[30][2][4],double nlayer_FA_threshhold = 5){
+ 
   //totEdep threshhold value is in MeV
-  //FA has 60x4 segementation including 30 sectors,2 strips and 4 blocks
+  //segmentation has 30 sectors along phi direction,each sector has 2 strip along phi direction, each strip has 4 blocks along radial direction
+  //FAmrpc has 60x4 segementation including 30 sectors (index 0-29),2 strips(index 0-1) and 4 blocks(index 0-3)
   //trigger_mrpc_FA return 1 as triggered, 0 as untriggered for all segmentation
   
   //assume
