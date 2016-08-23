@@ -47,21 +47,25 @@ our %parameters    = get_parameters(%configuration);
 
 require "solid_PVDIS_baffle_CLEO2_geometry.pl";
 require "solid_PVDIS_baffle_CLEO2_shldPOLY_geometry.pl";
+require "solid_PVDIS_baffle_CLEO2_photonblock.pl";
 
 solid_PVDIS_baffle_CLEO2_geometry("Original");
 solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("Original");
+solid_PVDIS_baffle_CLEO2_photonblock("Original");
 solid_PVDIS_baffle_CLEO2_geometry("Kill");
 solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("Kill");
+solid_PVDIS_baffle_CLEO2_photonblock("Kill");
 solid_PVDIS_baffle_CLEO2_geometry("Enclosure");
 solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("Enclosure");
+solid_PVDIS_baffle_CLEO2_photonblock("Enclosure");
 solid_PVDIS_baffle_CLEO2_geometry("EnclosureKill");
 solid_PVDIS_baffle_CLEO2_shldPOLY_geometry("EnclosureKill");
+solid_PVDIS_baffle_CLEO2_photonblock("EnclosureKill");
 
 #materials definition 
 require "solid_PVDIS_baffle_materials.pl";
 define_material("Original");
 define_material("Enclosure");
-
 
 #hit and bank definition Execute only when there are changes
 #hit
