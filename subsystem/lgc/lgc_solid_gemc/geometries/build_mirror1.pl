@@ -42,7 +42,7 @@ sub make_mirror1
 
     for(my $n=1; $n<=$Nsec; $n++)
     {
-	$PosV_temp = &rotateZv($PosV_temp,12.0*$D2R);
+	$PosV_temp = &rotateZv($PosV_temp, 12.0*$D2R);
 
 	$detector{"name"}        = $namePre."Mirror1s_$n";
 	$detector{"mother"}      = $namePre."Tank" ;
@@ -90,9 +90,9 @@ sub make_mirror1
 
 	$PosV_temp_CM = &rotateZv($PosV_temp_CM,12.0*$D2R);	
 	
-	$detector{"name"}        = $namePre."Mirror1_$n";
+	$detector{"name"}        = $namePre."Mirror1_".&sec($n);
 	$detector{"mother"}      = $namePre."Tank" ;
-	$detector{"description"} = "Mirror1 segment $n";
+	$detector{"description"} = "Mirror1 segment ".&sec($n);
 	$detector{"pos"}        = sprintf('%.3f',$PosV_temp_CM->x())."*cm ".sprintf('%.3f',$PosV_temp_CM->y())."*cm ".sprintf('%.3f',$PosV_temp_CM->z())."*cm";
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "661111";
@@ -108,6 +108,7 @@ sub make_mirror1
 	$detector{"hit_type"}    = "mirrors";
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);
+	
     }
 }1;
 

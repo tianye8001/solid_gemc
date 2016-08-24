@@ -91,7 +91,7 @@ sub makePMTs
 
 			$temp_pos_V = $temp_init_V + $temp_off_V;
 
-			$detector{"name"} = $namePre."PMT_".$n."_".$curr_pmt."_".$curr_pix;
+			$detector{"name"} = $namePre."PMT_".&sec($n)."_".$curr_pmt."_".$curr_pix;
 			$detector{"mother"} = $namePre."Tank";
 			$detector{"description"} = "PMT number $n $j $k $jpix $kpix";
 			$detector{"pos"} = sprintf('%.3f',$temp_pos_V->x())."*cm ".sprintf('%.3f',$temp_pos_V->y())."*cm ".sprintf('%.3f',$temp_pos_V->z())."*cm";
@@ -110,7 +110,7 @@ sub makePMTs
 			    }
 			}
 			$detector{"type"}       = "Box";
-			$detector{"dimensions"} = ($pmt_x/8.0)."*cm ".($pmt_x/8.0)."*cm 0.0001*mm";
+			$detector{"dimensions"} = ($pmt_x/8.0 - 0.0001)."*cm ".($pmt_x/8.0 - 0.0001)."*cm 0.0001*mm"; #shrink pixels by a um to keep away overlaps, since this is a half length, it equates to a total of 4um gap between pixels...  Probably smaller than actual dead area.
 			$detector{"material"}   = "SL_H12700";
 			$detector{"mfield"}     = "no";
 			$detector{"ncopy"}      = 1;
@@ -120,7 +120,7 @@ sub makePMTs
 			$detector{"style"}       = 1;
 			$detector{"sensitivity"} = "solid_lgc";
 			$detector{"hit_type"}    = "solid_lgc";
-			$detector{"identifiers"} = "sector manual $n pmt manual $curr_pmt pixel manual $curr_pix";
+			$detector{"identifiers"} = "sector manual ".&sec($n)." pmt manual $curr_pmt pixel manual $curr_pix";
 			if($writedet){
 			    print_det(\%configuration, \%detector);
 			}
@@ -130,9 +130,9 @@ sub makePMTs
 #window
 	
 
-		$detector{"name"} = $namePre."PMT_Window_".$n."_".$j."_".$k;
+		$detector{"name"} = $namePre."PMT_Window_".&sec($n)."_".$j."_".$k;
 		$detector{"mother"} = $namePre."Tank";
-		$detector{"description"} = "PMT number window $n $j $k";
+		$detector{"description"} = "PMT number window ".&sec($n)." $j $k";
 		$detector{"pos"} = sprintf('%.3f',$tempWindow_pos_V->x())."*cm ".sprintf('%.3f',$tempWindow_pos_V->y())."*cm ".sprintf('%.3f',$tempWindow_pos_V->z())."*cm";
 		$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 		$detector{"color"}      = "ff00ff";
@@ -154,9 +154,9 @@ sub makePMTs
 
 		
 #light catch at back of pmt:
-		$detector{"name"} = $namePre."PMT_lightBlock_".$n."_".$j."_".$k;
+		$detector{"name"} = $namePre."PMT_lightBlock_".&sec($n)."_".$j."_".$k;
 		$detector{"mother"} = $namePre."Tank";
-		$detector{"description"} = "PMT number lightBlock $n $j $k";
+		$detector{"description"} = "PMT number lightBlock ".&sec($n)." $j $k";
 		$detector{"pos"} = sprintf('%.3f',$tempBack_pos_V->x())."*cm ".sprintf('%.3f',$tempBack_pos_V->y())."*cm ".sprintf('%.3f',$tempBack_pos_V->z())."*cm";
 		$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 		$detector{"color"}      = "0000ff";

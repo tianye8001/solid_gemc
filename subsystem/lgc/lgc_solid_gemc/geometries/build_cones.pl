@@ -38,9 +38,9 @@ sub makeCones
 	my $temp_pos_V = $Pos_winstonCone_V;
 	$temp_pos_V = $temp_pos_V*$RpMc;
 
-	$detector{"name"} = $namePre."wcone_".$n;
+	$detector{"name"} = $namePre."wcone_".&sec($n);
 	$detector{"mother"} = $namePre."Tank";
-	$detector{"description"} = "Winston Cone number $n";
+	$detector{"description"} = "Winston Cone number ".&sec($n);
 	$detector{"pos"} = sprintf('%.3f',$temp_pos_V->x())."*cm ".sprintf('%.3f',$temp_pos_V->y())."*cm ".sprintf('%.3f',$temp_pos_V->z())."*cm";
 	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 	$detector{"color"}      = "F0F0F0";
@@ -64,9 +64,9 @@ sub makeCones
 	my $temp_pos_Vc = $Pos_winstonCone_V + $shield_offV;
 	$temp_pos_Vc = $temp_pos_Vc*$RpMc;
 
-	$detector{"name"} = $namePre."coneshield_in_".$n;
+	$detector{"name"} = $namePre."coneshield_in_".&sec($n);
 	$detector{"mother"} = $namePre."Tank";
-	$detector{"description"} = "Cone shield in number $n";
+	$detector{"description"} = "Cone shield in number ".&sec($n);
 	$detector{"pos"} = sprintf('%.3f',$temp_pos_Vc->x())."*cm ".sprintf('%.3f',$temp_pos_Vc->y())."*cm ".sprintf('%.3f',$temp_pos_Vc->z())."*cm";
 	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 	$detector{"color"}      = "606060";
@@ -86,9 +86,9 @@ sub makeCones
 	
 
 	#Shield outer cylinder
-	$detector{"name"} = $namePre."coneshield_out_".$n;
+	$detector{"name"} = $namePre."coneshield_out_".&sec($n);
 	$detector{"mother"} = $namePre."Tank";
-	$detector{"description"} = "Cone shield_out number $n";
+	$detector{"description"} = "Cone shield_out number ".&sec($n);
 	$detector{"pos"} = sprintf('%.3f',$temp_pos_Vc->x())."*cm ".sprintf('%.3f',$temp_pos_Vc->y())."*cm ".sprintf('%.3f',$temp_pos_Vc->z())."*cm";
 	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 	$detector{"color"}      = "606060";
@@ -106,6 +106,7 @@ sub makeCones
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);
 
+	
     }
 }1;
 

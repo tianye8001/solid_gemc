@@ -89,9 +89,9 @@ sub make_mirror2
 
 	$PosV_temp_CM = &rotateZv($PosV_temp_CM,12.0*$D2R);	
 	
-	$detector{"name"}        = $namePre."Mirror2_$n";
+	$detector{"name"}        = $namePre."Mirror2_".&sec($n);
 	$detector{"mother"}      = $namePre."Tank" ;
-	$detector{"description"} = "Mirror2 segment $n";
+	$detector{"description"} = "Mirror2 segment ".&sec($n);
 	$detector{"pos"}        = sprintf('%.3f',$PosV_temp_CM->x())."*cm ".sprintf('%.3f',$PosV_temp_CM->y())."*cm ".sprintf('%.3f',$PosV_temp_CM->z())."*cm";
 	$detector{"rotation"}   = "0*deg 0*deg 0*deg";
 	$detector{"color"}      = "111166";
