@@ -26,8 +26,8 @@
 <option name="BEAM_V"   value="(0,0,10)cm"/>
 <option name="SPREAD_V" value="(0.3,20)cm"/>
 
-<option name="N" value="1e2"/>
-<option name="OUTPUT" value="evio,output.evio"/>
+
+<option name="CHECK_OVERLAPS"  value="1"/>
 <option name="USE_GUI"  value="0"/>
 
 </gcard>
