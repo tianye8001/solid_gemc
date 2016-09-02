@@ -40,7 +40,7 @@ sub make_tank_BaBar_pvdis
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = "FF9900";
     $detector{"type"}       = "Polycone";
-    $detector{"dimensions"} = "0.0*deg 360.0*deg 2 65.25*cm 70.65*cm 150.54*cm 169.57*cm 200.00*cm 225.0*cm";
+    $detector{"dimensions"} = "0.0*deg 360.0*deg 2*counts 65.25*cm 70.65*cm 150.54*cm 169.57*cm 200.00*cm 225.0*cm";
     $detector{"material"}   = "Component";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
@@ -61,7 +61,7 @@ sub make_tank_BaBar_pvdis
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = "FF9900";
     $detector{"type"}       = "Polycone";
-    $detector{"dimensions"} = "0.0*deg 360.0*deg 4  240.0*cm  190.0*cm  70.65*cm  87.05*cm 257.0*cm  265.0*cm  265.0*cm  265.0*cm 209.0*cm  225.0*cm  225.0*cm  301.0*cm";
+    $detector{"dimensions"} = "0.0*deg 360.0*deg 4*counts  240.0*cm  190.0*cm  70.65*cm  87.05*cm 257.0*cm  265.0*cm  265.0*cm  265.0*cm 209.0*cm  225.0*cm  225.0*cm  301.0*cm";
     $detector{"material"}   = "Component";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
