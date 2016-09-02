@@ -6,7 +6,7 @@ setenv JLAB_VERSION 1.3
 
 #default installation on ifarm and farm nodes, change it to use different installation
 # setenv JLAB_ROOT /site/12gev_phys
-setenv JLAB_ROOT /home/zwzhao/apps/jlab_root
+setenv JLAB_ROOT /work/halla/solid/apps/jlab_root
 
 #default SVN checkout on ifarm and farm nodes, change it to your local SVN checkout location
 setenv SoLID_GEMC /home/zwzhao/solid/solid_svn/solid/solid_gemc2 #solid_gemc location
