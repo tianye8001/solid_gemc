@@ -476,7 +476,11 @@ my @x =( #Rin     Rout   SPhi    DPhi
  for(my $n=2; $n<=($Nplate-3); $n++){
 	my $n_c     = cnumber($n-1, 1);
   for(my $i=1; $i<=$Nslit; $i++){  # making all slits
-	my $slit_rotation = ($i-1)*12-$offset[$n-1]; #note the minus sign here
+# was
+#	my $slit_rotation = ($i-1)*12-$offset[$n-1]; #note the minus sign here
+
+	my $slit_rotation = 96.0 + ($i-1) * 12.0 + $offset[$n-1];
+	$slit_rotation -= 360.0 if $slit_rotation > 360.0;
 	my $i_c     = cnumber($i-1, 10);
 	my %detector=init_det();
 	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c";

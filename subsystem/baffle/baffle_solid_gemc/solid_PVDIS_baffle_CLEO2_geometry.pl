@@ -414,7 +414,7 @@ sub make_CLEO2_baffle_blocks
 # was
 #	    my $slit_rotation = ($i-1)*12-$offset[$n-1]; #note the minus sign here
 
-	    my $slit_rotation = 96.0 + ($sec-1) * 12.0 + $offset[$n-1];
+	    my $slit_rotation = 96.0 + ($i-1) * 12.0 + $offset[$n-1];
 	    $slit_rotation -= 360.0 if $slit_rotation > 360.0;
 
 	    my $i_c     = cnumber($i-1, 10);
