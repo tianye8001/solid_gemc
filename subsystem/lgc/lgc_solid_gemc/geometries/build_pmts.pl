@@ -26,9 +26,12 @@ sub makePMTs
 
     $Pos_obs_V = $Pos_obs_V + $Pos_obs_hfloff;
 
+	$RpM = &rotateZ($RpM,$initRot*$D2R);
+	my $angRot = $initRot;
 
     for(my $n=1; $n <= $Nsec; $n++)
     {
+	$angRot += 12.0;
 	$RpM = &rotateZ($RpM,12.0*$D2R);
 	my $RpMc = &VMconvert($RpM);
 
@@ -95,7 +98,7 @@ sub makePMTs
 			$detector{"mother"} = $namePre."Tank";
 			$detector{"description"} = "PMT number $n $j $k $jpix $kpix";
 			$detector{"pos"} = sprintf('%.3f',$temp_pos_V->x())."*cm ".sprintf('%.3f',$temp_pos_V->y())."*cm ".sprintf('%.3f',$temp_pos_V->z())."*cm";
-			$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
+			$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $angRot)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 			if(($j + $k)%2){
 			    if(($jpix + $kpix)%2){
 				$detector{"color"}      = "ff9999";
@@ -134,7 +137,7 @@ sub makePMTs
 		$detector{"mother"} = $namePre."Tank";
 		$detector{"description"} = "PMT number window ".&sec($n)." $j $k";
 		$detector{"pos"} = sprintf('%.3f',$tempWindow_pos_V->x())."*cm ".sprintf('%.3f',$tempWindow_pos_V->y())."*cm ".sprintf('%.3f',$tempWindow_pos_V->z())."*cm";
-		$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
+		$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $angRot)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 		$detector{"color"}      = "ff00ff";
 		$detector{"type"}       = "Box";
 		$detector{"dimensions"} = ($pmt_x - $pmt_shell)."*cm ".($pmt_x -$pmt_shell)."*cm ".($PMTwindow_hfthk)."*cm";
@@ -158,7 +161,7 @@ sub makePMTs
 		$detector{"mother"} = $namePre."Tank";
 		$detector{"description"} = "PMT number lightBlock ".&sec($n)." $j $k";
 		$detector{"pos"} = sprintf('%.3f',$tempBack_pos_V->x())."*cm ".sprintf('%.3f',$tempBack_pos_V->y())."*cm ".sprintf('%.3f',$tempBack_pos_V->z())."*cm";
-		$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
+		$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $angRot)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 		$detector{"color"}      = "0000ff";
 		$detector{"type"}       = "Box";
 		$detector{"dimensions"} = ($pmt_x - $pmt_shell)."*cm ".($pmt_x -$pmt_shell)."*cm 0.01*cm";
@@ -187,7 +190,7 @@ sub makePMTs
 	$detector{"description"} = "PMTbulk number $n";
 	$detector{"pos"} = sprintf('%.3f',$temp_posW_V->x())."*cm ".sprintf('%.3f',$temp_posW_V->y())."*cm ".sprintf('%.3f',$temp_posW_V->z())."*cm";
 #	$detector{"rotation"}   = "ordered: zyx ".(-$ang_zrot + $n*12.0)."*deg 0*deg -".$ang_xrot."*deg";
-	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
+	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $angRot)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 	$detector{"color"}      = "ff0000";
 	$detector{"type"}       = "Box";
 	$detector{"dimensions"} = $pmtN*$pmt_x."*cm ".$pmtN*$pmt_x."*cm ".$PMT_hflngth."*cm";
@@ -208,7 +211,7 @@ sub makePMTs
 	$detector{"description"} = "PMTframe number $n";
 	$detector{"pos"} = sprintf('%.3f',$temp_posW_V->x())."*cm ".sprintf('%.3f',$temp_posW_V->y())."*cm ".sprintf('%.3f',$temp_posW_V->z())."*cm";
 #	$detector{"rotation"}   = "ordered: zyx ".(-$ang_zrot + $n*12.0)."*deg 0*deg -".$ang_xrot."*deg";
-	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
+	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $angRot)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 	$detector{"color"}      = "ff0000";
 	$detector{"type"}       = "Box";
 	$detector{"dimensions"} = ($pmtN*$pmt_x + $PMTbox_HL)."*cm ".($pmtN*$pmt_x + $PMTbox_HL)."*cm ".$PMT_hflngth."*cm";
@@ -229,7 +232,7 @@ sub makePMTs
 	$detector{"description"} = "PMTenc number $n";
 	$detector{"pos"} = sprintf('%.3f',$temp_posW_V->x())."*cm ".sprintf('%.3f',$temp_posW_V->y())."*cm ".sprintf('%.3f',$temp_posW_V->z())."*cm";
 #	$detector{"rotation"}   = "ordered: zyx ".(-$ang_zrot + $n*12.0)."*deg 0*deg -".$ang_xrot."*deg";
-	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $n*12.0)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
+	$detector{"rotation"}   = "ordered: zxy ".(-$ang_zrot + $angRot)."*deg -".$ang_xrot."*deg -".$ang_yrot."*deg";
 	$detector{"color"}      = "000000";
 	$detector{"type"}       = "Operation:@ ".$namePre."PMTframe_$n - ".$namePre."PMTbulk_$n";
 	$detector{"material"}   = "Kryptonite"; 

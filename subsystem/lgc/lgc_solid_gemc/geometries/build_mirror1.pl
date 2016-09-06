@@ -40,8 +40,15 @@ sub make_mirror1
 
     &calcIntPoints($R, $PosV_temp, $PosV_cone, 0.5*($Z_end - $Z_front), $R_front_in, $R_front_out, $R_end_in, $R_end_out, -$mirrAng1);
 
+	my $rotAng = $initRot;
+	$PosV_temp = &rotateZv($PosV_temp, $initRot*$D2R);
+	$PosV_cone = &rotateZv($PosV_cone, $initRot*$D2R);
+	$PosV_temp_CM = &rotateZv($PosV_temp_CM, $initRot*$D2R);	
+	
     for(my $n=1; $n<=$Nsec; $n++)
     {
+	$rotAng += 12.0;	
+		
 	$PosV_temp = &rotateZv($PosV_temp, 12.0*$D2R);
 
 	$detector{"name"}        = $namePre."Mirror1s_$n";
@@ -71,7 +78,8 @@ sub make_mirror1
 	$detector{"mother"}      = $namePre."Tank" ;
 	$detector{"description"} = "Mirror1 cone $n";
 	$detector{"pos"}        = sprintf('%.3f',$PosV_cone->x())."*cm ".sprintf('%.3f',$PosV_cone->y())."*cm ".sprintf('%.3f',$PosV_cone->z())."*cm";
-	$detector{"rotation"}   = "ordered: zyx ".(12.0*$n)."*deg 0*deg ".(-$mirrAng1)."*deg";	
+	#$detector{"rotation"}   = "ordered: zyx ".(12.0*$n)."*deg 0*deg ".(-$mirrAng1)."*deg";	
+	$detector{"rotation"}   = "ordered: zyx ".$rotAng."*deg 0*deg ".(-$mirrAng1)."*deg";	
 	$detector{"color"}      = "66bbff";
 	$detector{"type"}       = "Cons";
 	$detector{"dimensions"} = sprintf('%.3f',$R_front_in)."*cm ". sprintf('%.3f',$R_front_out)."*cm ".sprintf('%.3f',$R_end_in)."*cm ".sprintf('%.3f',$R_end_out)."*cm ".sprintf('%.3f',0.5*($Z_end - $Z_front))."*cm "." 84*deg 12*deg";

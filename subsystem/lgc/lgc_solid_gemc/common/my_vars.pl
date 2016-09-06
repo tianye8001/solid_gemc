@@ -17,6 +17,8 @@ our $buildSupport = 0;
 our $buildBaffle = 0;
 our $buildBlinders = 0;
 
+our $initRot = -6.0;  #initial rotation of sectors in degrees...  useful for lining up detectors.
+
 our $D2R = 3.14159265/180.0;
 
 our $detMom = "root";  #This is the mother volume that the geometries are placed in.
