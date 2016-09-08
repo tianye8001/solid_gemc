@@ -470,7 +470,9 @@ my @x =( #Rin     Rout   SPhi    DPhi
  my $Nblock  = 20;
 
 # my @offset =(-5.6, -4.4, -3.3, -2.1, -0.9, 0.1);  #according to Seamus, it's substraction 
- my @offset =(-5.6, -5.00,-4.4, -3.85,-3.3, -2.70,-2.1, -1.55,-0.9, -0.4,0.1);  #according above values, I extrapolated for new z locations. Rakitha Thu Aug 29 15:05:57 EDT 2013
+# was
+# my @offset =(-5.6, -5.00,-4.4, -3.85,-3.3, -2.70,-2.1, -1.55,-0.9, -0.4,0.1);  #according above values, I extrapolated for new z locations. Rakitha Thu Aug 29 15:05:57 EDT 2013
+ my @offset =(8.6, 8.00,7.4, 6.85,6.3, 5.70,5.1, 4.55,3.9, 3.4,3.1);  #according above values, I extrapolated for new z locations. Rakitha Thu Aug 29 15:05:57 EDT 2013; inverted sign and added 3 RSH 9/6/2016
  
 
  for(my $n=2; $n<=($Nplate-3); $n++){

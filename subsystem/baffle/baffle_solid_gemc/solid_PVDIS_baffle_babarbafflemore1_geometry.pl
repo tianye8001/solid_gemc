@@ -397,7 +397,6 @@ my @x =( #Rin     Rout   SPhi    DPhi
 # my @offset =(-5.6, -5.00,-4.4, -3.85,-3.3, -2.70,-2.1, -1.55,-0.9, -0.4,0.1);  #according above values, I extrapolated for new z locations. Rakitha Thu Aug 29 15:05:57 EDT 2013
  my @offset =(8.6, 8.00,7.4, 6.85,6.3, 5.70,5.1, 4.55,3.9, 3.4,3.1);  #according above values, I extrapolated for new z locations. Rakitha Thu Aug 29 15:05:57 EDT 2013; inverted sign and added 3 RSH 9/6/2016
  
-
  for(my $n=1; $n<=$Nplate; $n++){
 	my $n_c     = cnumber($n-1, 1);
   for(my $i=1; $i<=$Nslit; $i++){  # making all slits
