@@ -172,8 +172,8 @@ my @hittype = ("no","no","no","no","solid_gem","solid_gem","solid_gem","no","sol
 
 # $thisrot is central angle of sector
 
-	my $thisrot = 96.0 + ($sec-1) * 12.0 + $offrot[$n-1];
-	$thisrot -= 360.0 if $thisrot > 360.0;
+	my $thisrot = -(96.0 + ($sec-1) * 12.0 + $offrot[$n-1]);
+# 	$thisrot -= 360.0 if $thisrot > 360.0;
     
       for(my $i=1; $i<=$Nlayer; $i++)
       {
