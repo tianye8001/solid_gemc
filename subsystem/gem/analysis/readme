@@ -9,7 +9,7 @@ solid_gemc solid_SIDIS_gem.gcard
 solid_gemc solid_PVDIS_gem.gcard
 
 #convert evio file in standalone simulation to root file
-evio2root -INPUTF=output.evio -B="../gem_solid_gemc/solid_SIDIS_gem" -W
+evio2root -INPUTF=output.evio -B="../gem_solid_gemc/solid_SIDIS_gem"
 evio2root -INPUTF=output.evio -B="../gem_solid_gemc/solid_PVDIS_gem"
 
 == analysis == 
