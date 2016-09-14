@@ -401,19 +401,13 @@ my @x =( #Rin     Rout   SPhi    DPhi
  my $Nblock  = 20;
 
 # my @offset =(-5.6, -4.4, -3.3, -2.1, -0.9, 0.1);  #according to Seamus, it's substraction 
-# was
-# my @offset =(-5.6, -5.00,-4.4, -3.85,-3.3, -2.70,-2.1, -1.55,-0.9, -0.4,0.1);  #according above values, I extrapolated for new z locations. Rakitha Thu Aug 29 15:05:57 EDT 2013
- my @offset =(8.6, 8.00,7.4, 6.85,6.3, 5.70,5.1, 4.55,3.9, 3.4,3.1);  #according above values, I extrapolated for new z locations. Rakitha Thu Aug 29 15:05:57 EDT 2013; inverted sign and added 3 RSH 9/6/2016
+ my @offset =(-5.6, -5.00,-4.4, -3.85,-3.3, -2.70,-2.1, -1.55,-0.9, -0.4,0.1);  #according above values, I extrapolated for new z locations. Rakitha Thu Aug 29 15:05:57 EDT 2013
  
 
  for(my $n=1; $n<=$Nplate; $n++){
 	my $n_c     = cnumber($n-1, 1);
   for(my $i=1; $i<=$Nslit; $i++){  # making all slits
-# was
-#	my $slit_rotation = ($i-1)*12-$offset[$n-1]; #note the minus sign here
-
-	my $slit_rotation = 96.0 + ($i-1) * 12.0 + $offset[$n-1];
-	$slit_rotation -= 360.0 if $slit_rotation > 360.0;
+	my $slit_rotation = ($i-1)*12-$offset[$n-1]; #note the minus sign here
 	my $i_c     = cnumber($i-1, 10);
 	my %detector=init_det();
 	$detector{"name"}        = "$DetectorName\_plate$n_c.slit$i_c";
