@@ -165,7 +165,7 @@ sub make_tank_CLEO_pvdis
     $detector{"rotation"}    = "0*deg 0*deg 0*deg";
     $detector{"color"}       = "FF9900";
     $detector{"type"}        = "Polycone";
-    $detector{"dimensions"}  = "0*deg 360*deg 4 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
+    $detector{"dimensions"}  = "0*deg 360*deg 4*counts 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
     $detector{"mfield"}      = "no";
     $detector{"material"}   = "Component";
     $detector{"ncopy"}       = 1;
@@ -291,7 +291,7 @@ sub make_tank_CLEO_sidis
     $detector{"color"}       = "FF9900";
     $detector{"type"}        = "Polycone";
     #$detector{"dimensions"}  = "0*deg 360*deg 2 58*cm 71*cm 127*cm 144*cm 97*cm 194*cm";
-    $detector{"dimensions"}  = "0*deg 360*deg 2 58*cm 65*cm 127*cm 144*cm 97*cm 194*cm";
+    $detector{"dimensions"}  = "0*deg 360*deg 2*counts 58*cm 65*cm 127*cm 144*cm 97*cm 194*cm";
     #$detector{"material"}    = "SIDIS_CO2_gas";
     $detector{"material"}   = "SL_LGCCgas_SIDIS";
     $detector{"mfield"}      = "no";
