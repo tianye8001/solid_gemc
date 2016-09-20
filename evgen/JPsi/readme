@@ -15,26 +15,27 @@ make O=simu_p
 
 run by
 ./simu_p -n[nevents as integer like 1000000] -t[e for electroproduction,g for photoproduction] -b[Ebeam in GeV] -o[output_root_file]
-
+for example
 ./simu_p -n1e6 -te -b11 -ooutput.root
 
 refer to PAC39 proposal for the crossection formula
 
 electroproduction
-scattered electon p,theta,phi and recoil proton theta, phi are degree of freedom for electron beam
+scattered electon p,theta,phi and recoil proton theta, phi, decay angle theta and phi are degree of freedom
 special Jacob J
 special decay distribution
 
-photoproduction (unfinished)
-Gbeam,recoil proton theta, phi are degree of freedom for photoproduction (by bremstrlung from a fix energy electron beam on a radiator)
+(***unfinished!!!!!!!****) photoproduction (by bremstrlung from a fix energy electron beam on a radiator)
+Gbeam,recoil proton theta, phi,decay angle theta and phi are degree of freedom
+decay angle theta and phi are two addtionl degree of freedom,but are handled differently by  weight_decay integrated to 4pi
 special Jacob J
 special decay distribution
 
 The similation throw events evenly in the ranges of the all degree of freedom and only keep the events with right kinematics 
 
-"phasespace" is the total phase including momemtum and solid angle
-"weight" is for weighting of two possible kinematic solutions
-"weight_decay" is for for JPsi decay weight
+"phasespace" is the total phasespace
+"weight" is for weighting (0 or 0.5 or 1) of two possible kinematic solutions of proton mom
+"weight_decay" is for JPsi decay weight
 "dxs*" three crossection models, t-channel "dxs", 2g model "dxs_2g", "dxs_23g", in unit nb/GeV2
 "neve" the thrown number of events while only events passing kinematics are recorded which ouput until the number of events defined in command line option
 
@@ -47,7 +48,7 @@ acceptance can be read from acceptance root file which are just histograms from 
 
 3. others
 proj.C
-root [0] .x proj.C+("output_accep.root","e")
+root [0] .x proj.C("output_accep.root","e")
 plots results, output total events on terminal
 
 plot_crossection.C

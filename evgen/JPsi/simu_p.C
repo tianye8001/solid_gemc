@@ -257,7 +257,10 @@ int main (Int_t argc, char *argv[])
     Int_t qflag = 1;
     Int_t counter[4]={0,0,0,0};
        
-    if(Is_e){    
+    if(Is_e){ 
+      
+	phasespace = (5.-0.)*(4*3.1415926)*(4.*3.1415926)*(4.*3.1415926);
+	
     while(qflag){  
       
 	//sample electron's angle and momentum
@@ -289,8 +292,6 @@ int main (Int_t argc, char *argv[])
 // 	theta_p = acos(gRandom->Uniform(cos(40./DEG),cos(0./DEG))); //random selection in solid angle need to go with cos(theta)    
 	theta_p = acos(gRandom->Uniform(-1,1)); //random selection in solid angle need to go with cos(theta)
 	phi_p = gRandom->Uniform(0.,2.*3.1415926);
-	
-	phasespace = (5.-0.)*(4*3.1415926)*(4.*3.1415926);
 
 	//solve recoil proton mom	
 	TVector3 p3_p(sin(theta_p)*cos(phi_p),sin(theta_p)*sin(phi_p),cos(theta_p));
@@ -329,7 +330,7 @@ int main (Int_t argc, char *argv[])
 
 		if (p4_jpsi->M()>0.){
 		  gen1->SetDecay(*p4_jpsi,2,&mass[0]);
-		  weight_decay = gen1->Generate();
+ 		  weight_decay = gen1->Generate();  //decay by phasespace, return weight as 1, replace it later with actual distribution
 		  p4_je1 = gen1->GetDecay(0);
 		  p4_je2 = gen1->GetDecay(1);
 		  
@@ -396,9 +397,13 @@ int main (Int_t argc, char *argv[])
 		  // phi_cm = p4_je1->Phi()*DEG;
 		  //theta_cm = 0.;
 		  
-		  weight_decay = 3./2.*(1-r + (3*r-1)*pow(cos(theta_cm/DEG),2));
-		  //eq 92 of "K. Schilling and G. Wolf. How to analyze vector meson production in inelastic lepton scattering. Nucl. Phys., B61:381, 1973.", after removing all phi related term and times 4*pi
-		  // this is verified to be normalized to perfect 1 even with r varying
+		  weight_decay = 3./2./4./3.1415926*(1-r + (3*r-1)*pow(cos(theta_cm/DEG),2));	  
+// 		  cout << weight_decay << endl;
+		  //eq 92 of "K. Schilling and G. Wolf. How to analyze vector meson production in inelastic lepton scattering. Nucl. Phys., B61:381, 1973.", 
+		  // eq 32 and 31 from K. Schilling, P. Seyboth and G. Wolf, "ON THE ANALYSIS OF VECTOR-MESON PRODUCTION BY POLARIZED PHOTONS"  NucL Phys. B15 (1970) 397, B18 (1970) 332.		  
+		  // eq 32 and 31 from K. Schilling, P. Seyboth and G. Wolf, "ON THE ANALYSIS OF VECTOR-MESON PRODUCTION BY POLARIZED PHOTONS"  NucL Phys. B15 (1970) 397, B18 (1970) 332.		  
+		  //after removing all phi related term
+		  //theta_cm and phi_cm as two degree of freedom, their phasespace size is 4pi, integral over them will give 1 with r cancls out
 		  
 		  // calculate tmin
 		  *ps2 = *pq + *pTarget;
@@ -431,6 +436,10 @@ int main (Int_t argc, char *argv[])
     } // end of e beam
     
     if(Is_g){    
+      
+	phasespace = (Ebeam-Gbeam_min)*(4*3.1415926)*(4*3.1415926);
+// 	phasespace = (4*3.1415926);	
+      
     while(qflag){      
             
       //sample photon energy
@@ -456,10 +465,7 @@ int main (Int_t argc, char *argv[])
 // 	theta_p = acos(gRandom->Uniform(0.85,cos(8./DEG)));
 	theta_p = acos(gRandom->Uniform(-1,1)); //random selection in solid angle need to go with cos(theta)    	
 	phi_p = gRandom->Uniform(0.,2.*3.1415926);
-	
-	phasespace = (Ebeam-Gbeam_min)*(4*3.1415926);
-// 	phasespace = (4*3.1415926);	
-	
+		
 	//solve recoil proton mom	
 	TVector3 p3_p(sin(theta_p)*cos(phi_p),sin(theta_p)*sin(phi_p),cos(theta_p));
 	Double_t aa = (ps1->M2()+mass_p*mass_p-mass_jpsi*mass_jpsi)/2.;
@@ -497,7 +503,7 @@ int main (Int_t argc, char *argv[])
 
 		if (p4_jpsi->M()>0.){
 		  gen1->SetDecay(*p4_jpsi,2,&mass[0]);
-		  weight_decay = gen1->Generate();
+		  weight_decay = gen1->Generate();   //decay by phasespace, return weight as 1, replace it later with actual distribution
 		  p4_je1 = gen1->GetDecay(0);
 		  p4_je2 = gen1->GetDecay(1);
 		  
@@ -562,13 +568,15 @@ int main (Int_t argc, char *argv[])
 		  if (phi_cm>360) phi_cm-=360;
 		  // phi_cm = p4_je1->Phi()*DEG;
 		  //theta_cm = 0.;
-		  
-		  //is it valid ????????????		  
-		  weight_decay = 3./2*(1 - pow(cos(theta_cm/DEG),2));
-		  // eq 32 and 31 from K. Schilling, P. Seyboth and G. Wolf, "ON THE ANALYSIS OF VECTOR-MESON PRODUCTION BY POLARIZED PHOTONS"  NucL Phys. B15 (1970) 397, B18 (1970) 332. and Nuclear Physics B18 (1970) 332
-		  //removing all phi terms and times 4*pi and treat rho^0_00=0
-		  weight_decay = weight_decay/2.35619;
-		  // this is need to normalization factor to make the whole integral as 1
+
+		  r=0; //real photon has no transverse component
+		  weight_decay = 3./2./4./3.1415916*(1-r + (3*r-1)*pow(cos(theta_cm/DEG),2));	  
+// 		  cout << weight_decay << endl;
+		  //eq 92 of "K. Schilling and G. Wolf. How to analyze vector meson production in inelastic lepton scattering. Nucl. Phys., B61:381, 1973.", 
+		  // eq 32 and 31 from K. Schilling, P. Seyboth and G. Wolf, "ON THE ANALYSIS OF VECTOR-MESON PRODUCTION BY POLARIZED PHOTONS"  NucL Phys. B15 (1970) 397, B18 (1970) 332.		  
+		  // eq 32 and 31 from K. Schilling, P. Seyboth and G. Wolf, "ON THE ANALYSIS OF VECTOR-MESON PRODUCTION BY POLARIZED PHOTONS"  NucL Phys. B15 (1970) 397, B18 (1970) 332.		  
+		  //after removing all phi related term
+		  //theta_cm and phi_cm as two degree of freedom, their phasespace size is 4pi, integral over them will give 1 with r cancls out
 		  
 		  // calculate tmin
 		  *ps2 = *pq + *pTarget;
