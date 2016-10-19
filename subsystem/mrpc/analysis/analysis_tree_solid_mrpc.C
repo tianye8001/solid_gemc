@@ -82,14 +82,14 @@ bool find_id_mrpc_FA(double hit_phi,double r,int &sector,int &block,bool Is_debu
   else return true; 
 }
 
-bool process_tree_solid_mrpc(TTree *tree_solid_mrpc,int *trigger_mrpc_FA,int *ntrigsecs_mrpc_FA,double mrpc_block_threshold_FA = 5,bool Is_debug=false)
+bool process_tree_solid_mrpc(TTree *tree_solid_mrpc,int *trigger_mrpc_FA,int &ntrigsecs_mrpc_FA,double mrpc_block_threshold_FA = 5,bool Is_debug=false)
 {
     double DEG=180./3.1415926;   //rad to degree  
   
     double mrpc_edep_threshold=16.0e-6; //in unit of MeV
 
     double  counter_mrpc_FA[50][3][10] = {0};    //50 sector, 3 blocks, 10 gas layers
-    ntrigsecs_mrpc_FA[0]=0;
+    ntrigsecs_mrpc_FA=0;
     
     //loop over data tree
     for (int j=0;j<solid_mrpc_hitn->size();j++) {
@@ -128,7 +128,7 @@ bool process_tree_solid_mrpc(TTree *tree_solid_mrpc,int *trigger_mrpc_FA,int *nt
 		}
 		
 		if(sum_hit>mrpc_block_threshold_FA) {
-		  ntrigsecs_mrpc_FA[0]++;
+		  ntrigsecs_mrpc_FA++;
 // 		  trigger_mrpc_FA[l_sec][l_block]=1;
 		  trigger_mrpc_FA[l_sec*3+l_block]=1;		  
 		}
