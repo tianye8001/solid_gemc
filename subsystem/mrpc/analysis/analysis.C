@@ -163,7 +163,7 @@ for (Int_t i=0;i<nevent;i++) {
     
     int mrpc_block_threshold_FA=5;
     
-    process_tree_solid_mrpc(tree_solid_mrpc,trigger_mrpc_FA,ntrigsecs_mrpc_FA,mrpc_block_threshold_FA);
+    process_tree_solid_mrpc_trigger(tree_solid_mrpc,trigger_mrpc_FA,ntrigsecs_mrpc_FA,mrpc_block_threshold_FA);
 
     int pass_mrpc=0;		
     if(ntrigsecs_mrpc_FA){
