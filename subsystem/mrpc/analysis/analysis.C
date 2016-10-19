@@ -159,12 +159,14 @@ for (Int_t i=0;i<nevent;i++) {
     
 // 		int trigger_mrpc_FA[50][3]={0};		
     int trigger_mrpc_FA[150]={0};			
+    int ntrigsecs_mrpc_FA[1]={0};
     
-    int mrpc_block_threshold=5;
-    int ntrigsecs_mrpc=process_tree_solid_mrpc(tree_solid_mrpc,trigger_mrpc_FA,mrpc_block_threshold);
+    int mrpc_block_threshold_FA=5;
+    
+    process_tree_solid_mrpc(tree_solid_mrpc,trigger_mrpc_FA,ntrigsecs_mrpc_FA,mrpc_block_threshold_FA);
 
     int pass_mrpc=0;		
-    if(ntrigsecs_mrpc){
+    if(ntrigsecs_mrpc_FA[0]){
 	    pass_mrpc=1;
     }else{
 	    pass_mrpc=0;
@@ -172,8 +174,8 @@ for (Int_t i=0;i<nevent;i++) {
 
     //only mrpc
     if(pass_mrpc){
-// 	    h_n_trigger_sectors_mrpc->Fill(ntrigsecs_mrpc,rate);
-	    h_n_trigger_sectors_mrpc->Fill(ntrigsecs_mrpc);      
+// 	    h_n_trigger_sectors_mrpc->Fill(ntrigsecs_mrpc_FA[0],rate);
+	    h_n_trigger_sectors_mrpc->Fill(ntrigsecs_mrpc_FA[0]);      
     }
 
     
