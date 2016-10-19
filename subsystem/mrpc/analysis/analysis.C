@@ -21,6 +21,8 @@
 
 using namespace std;
 
+#include "analysis_tree_solid_mrpc.C"
+
 void analysis(string input_filename)
 {
 gROOT->Reset();
@@ -32,9 +34,18 @@ const double DEG=180./3.1415926;
 char the_filename[200];
 sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_str());
 
+double filenum=1;
+if (input_filename.find("_filenum",0) != string::npos) {
+  filenum=atof(input_filename.substr(input_filename.find("_filenum")+8,input_filename.find("_")).c_str());
+    cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+}
+else {cout << "this file has no filnum, please check if you need filenum for addtional normalization" << endl;}
+
 char output_filename[200];
 sprintf(output_filename, "%s_output.root",the_filename);
 TFile *outputfile=new TFile(output_filename, "recreate");
+
+TH1F *h_n_trigger_sectors_mrpc=new TH1F("h_n_trigger_sectors_mrpc","number of triggered sectors for mrpc",150,0,150);
 
 TFile *file=new TFile(input_filename.c_str());
 if (file->IsZombie()) {
@@ -101,21 +112,18 @@ tree_flux->SetBranchAddress("mvz",&flux_mvz);
 tree_flux->SetBranchAddress("avg_t",&flux_avg_t);
 
 TTree *tree_solid_mrpc = (TTree*) file->Get("solid_mrpc");
-vector<int> *solid_mrpc_id=0,*solid_mrpc_hitn=0;
-tree_solid_mrpc->SetBranchAddress("hitn",&solid_mrpc_hitn);
-tree_solid_mrpc->SetBranchAddress("id",&solid_mrpc_id);
-
-// cout << tree_solid_gem->GetEntries() << " " << tree_header->GetEntries() << " " << tree_generated->GetEntries() << endl;
+setup_tree_solid_mrpc(tree_solid_mrpc);
 
 int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
 cout << "nevent " << nevent << endl;
 
 for (Int_t i=0;i<nevent;i++) { 
-//   cout << i << "\r";
-  cout << i << "\n";
+  cout << i << "\r";
+//   cout << i << "\n";
 
   tree_header->GetEntry(i);
+  double rate=var8->at(0);  
   
   tree_generated->GetEntry(i);  
   
@@ -147,14 +155,35 @@ for (Int_t i=0;i<nevent;i++) {
      
     }
     
-    tree_solid_mrpc->GetEntry(i);   
+    tree_solid_mrpc->GetEntry(i);
     
-    for (Int_t j=0;j<solid_mrpc_hitn->size();j++) {     
-//       cout << "solid_gem " << j << " !!! " << solid_gem_id->at(j) << " " << solid_gem_hitn->at(j) << " " << solid_gem_pid->at(j) << " " << solid_gem_trid->at(j) << " " << solid_gem_x->at(j) << " " << solid_gem_y->at(j) << " " << solid_gem_z->at(j) << " " << solid_gem_lxin->at(j) << " " << solid_gem_lyin->at(j) << " " << solid_gem_lzin->at(j) << " " << solid_gem_tin->at(j) << " " << solid_gem_lxout->at(j) << " " << solid_gem_lyout->at(j) << " " << solid_gem_lzout->at(j) << " " << solid_gem_tout->at(j) << " " << solid_gem_px->at(j) << " " << solid_gem_py->at(j) << " " << solid_gem_pz->at(j) << " " << solid_gem_vx->at(j) << " " << solid_gem_vy->at(j) << " " << solid_gem_vz->at(j) << " " << solid_gem_ETot->at(j) << " " << solid_gem_trE->at(j) << " " << solid_gem_weight->at(j) << endl; 
-    }    
+// 		int trigger_mrpc_FA[50][3]={0};		
+    int trigger_mrpc_FA[150]={0};			
+    
+    int mrpc_block_threshold=5;
+    int ntrigsecs_mrpc=process_tree_solid_mrpc(tree_solid_mrpc,trigger_mrpc_FA,mrpc_block_threshold);
+
+    int pass_mrpc=0;		
+    if(ntrigsecs_mrpc){
+	    pass_mrpc=1;
+    }else{
+	    pass_mrpc=0;
+    }
+
+    //only mrpc
+    if(pass_mrpc){
+// 	    h_n_trigger_sectors_mrpc->Fill(ntrigsecs_mrpc,rate);
+	    h_n_trigger_sectors_mrpc->Fill(ntrigsecs_mrpc);      
+    }
+
     
 }
 file->Close();
+
+TCanvas *c = new TCanvas("c","c",1600,900);
+c->Divide(1,1);
+c->cd(2);
+h_n_trigger_sectors_mrpc->Draw();
 
 outputfile->Write();
 outputfile->Flush();

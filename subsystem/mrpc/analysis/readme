@@ -1,4 +1,9 @@
-$SoLID_GEMC/geometry/solid_materials.pl config_solid_SIDIS_mrpc.dat
-./solid_SIDIS_mrpc.pl config_solid_SIDIS_mrpc.dat
+(run simulation)
 solid_gemc solid_SIDIS_mrpc.gcard
-evio2root -INPUTF=output.evio -B=solid_SIDIS_mrpc -WRITE_RAWS=no
+
+(convert root file)
+evio2root -INPUTF=output.evio -B="../mrpc_solid_gemc/solid_SIDIS_mrpc_forwardangle" 
+
+(analyze result)
+root [0] .x analysis.C+("output.root")
+
