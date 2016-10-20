@@ -408,7 +408,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    }
 		    else if(int(flux_pid->at(j)) == 2212){
 		      double hit_Ekin=sqrt(hit_p*hit_p+0.938*0.938)-0.938;		       
-		      EC_efficiency=0.5*get_forward_hadron_trigger_proton_eff(hit_Ekin);
+		      EC_efficiency=get_forward_hadron_trigger_proton_eff(hit_Ekin);
 		    }
 		    else {EC_efficiency=0; 
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
