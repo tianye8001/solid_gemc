@@ -18,7 +18,7 @@ created by Jin huang around 2013/09
 
 use plot_PVDIS.C or plot_SIDIS.C to plot trigger summary plot
 
-============ wrapper to get trigger value from the trigger curve =========
+============ wrapper 1 to get trigger value from the trigger curve =========
 
 
 This is a collection of data (Jin's trigger curve) and functions to get trigger efficiency on EC.
@@ -79,3 +79,23 @@ SIDIS FAEC MIP trigger Assumption
 trig_eff (Ek>Max)=trig_eff(P=Max)
 trig_eff (Ek<Min)=0
 
+============ wrapper 2 to get trigger value directly =========
+
+ trigger value from the trigger curve stored in array, no root file needed
+ 
+ unit in cm and GeV
+
+#include "SIDIS_He3_FAEC_electron_trigger_WiserJinHuang.C"
+#include "SIDIS_He3_LAEC_electron_trigger_WiserJinHuang.C"
+#include "SIDIS_He3_FAEC_hadron_trigger_WiserJinHuang.C"
+
+EC_efficiency=get_forward_electron_trigger_e_eff(hit_r, hit_p);		      
+EC_efficiency=get_forward_electron_trigger_pi_eff(hit_r, hit_p)
+		    
+EC_efficiency=get_forward_hadron_trigger_e_eff(hit_Ekin);
+EC_efficiency=get_forward_hadron_trigger_gamma_eff(hit_Ekin);	    
+EC_efficiency=get_forward_hadron_trigger_pion_eff(hit_Ekin);		      
+EC_efficiency=get_forward_hadron_trigger_proton_eff(hit_Ekin);
+
+EC_efficiency=get_large_electron_trigger_e_eff(hit_r, hit_p);		      
+EC_efficiency=get_large_electron_trigger_pi_eff(hit_r, hit_p);
