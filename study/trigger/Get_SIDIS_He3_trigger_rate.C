@@ -63,7 +63,7 @@ const double spd_threshold_LA=1.5;         //1.5 MeV
 const double mrpc_block_threshold_FA=5;  //how many layers are required to be fired
 
 //check if original particle
-bool Is_tellorig=false;
+// bool Is_tellorig=false;
 // bool Is_tellorig=true;
 
 bool Is_debug=false;
@@ -72,9 +72,27 @@ const double DEG=180./3.1415926;   //rad to degree
 
 //#####################################################################################################################################################
 
-int Get_SIDIS_He3_trigger_rate(string inputfile_name){
+int Get_SIDIS_He3_trigger_rate(string inputfile_name,string filetype,bool Is_tellorig=false){
 
 gStyle->SetOptStat(11111111);
+
+bool Is_singlefile=false;
+if(filetype.find("single",0) != string::npos) {
+  Is_singlefile=true;
+  cout << "this is a single file" << endl;  
+}
+else if(filetype.find("sidis",0) != string::npos) {
+  Is_singlefile=false;
+  cout << "this is a sidis file" << endl;      
+}
+else {cout << "unknown file type, choose either single or sidis" << endl;return 0;}
+
+bool Is_pi0=false;
+if (inputfile_name.find("pi0",0) != string::npos) {
+  Is_pi0=true;
+  cout << "this is a pi0 file" << endl;  
+}
+else {cout << "this is NOT a pi0 file" << endl;}
 
 double filenum=1;
 if (inputfile_name.find("_filenum",0) != string::npos) {
@@ -231,7 +249,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 	for(int loop_id=1;loop_id<=loop_time;loop_id++){
 		cout<<"loop.....  "<<loop_id<<endl;
 	
-// 	for(long int i=0;i<N_events/10;i++){
+// 	for(long int i=0;i<N_events/100;i++){
 	for(long int i=0;i<N_events;i++){	  
 // 			cout<<"event " << i<<endl;
 			cout<<i<<"\r";
@@ -347,8 +365,23 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    }
 		    
 		    if (rand.Uniform(0,1)<EC_efficiency){
-		      if (!Is_tellorig || flux_tid->at(j)==1){		      
-// 		      if (!Is_tellorig || abs(flux_tid->at(j))==11){		      			
+		      bool Is_ok=false;
+		      if (Is_tellorig){
+			if (Is_singlefile){
+			  if(Is_pi0){
+			    if(abs(flux_pid->at(j))==11) Is_ok=true;
+			  }
+			  else {
+			    if(flux_tid->at(j)==1) Is_ok=true;
+			  }
+			}
+			else {
+			  if(flux_tid->at(j)==1) Is_ok=true;
+			}
+		      }
+		      else Is_ok=true;
+			    
+		      if(Is_ok){						
 			pass_EC_electron_forward=1;
 			counter_e_FA_EC++;
 			trigger_e_FA_EC_sec[counter_e_FA_EC-1]=sec_ec;
@@ -357,7 +390,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 			trigger_e_FA_EC_x[counter_e_FA_EC-1]=hit_x;
 			trigger_e_FA_EC_y[counter_e_FA_EC-1]=hit_y;
 			trigger_e_FA_EC_r[counter_e_FA_EC-1]=hit_r;		      		      
-			}		      
+		      }		      
 		    }
 		    
 		    //check trigger_h_FA_EC
@@ -382,8 +415,23 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    }
 		    
 		    if (rand.Uniform(0,1)<EC_efficiency){
-		      if (!Is_tellorig || flux_tid->at(j)==2){		     
-// 		      if (!Is_tellorig || abs(flux_tid->at(j))==11){		      		     
+		      bool Is_ok=false;
+		      if (Is_tellorig){
+			if (Is_singlefile){
+			  if(Is_pi0){
+			    if(abs(flux_pid->at(j))==11) Is_ok=true;
+			  }
+			  else {
+			    if(flux_tid->at(j)==1) Is_ok=true;
+			  }
+			}
+			else {
+			  if(flux_tid->at(j)==2) Is_ok=true;
+			}
+		      }
+		      else Is_ok=true;
+			    
+		      if(Is_ok){     
 		      pass_EC_hadron=1;		      
 		      counter_h_FA_EC++;
 		      trigger_h_FA_EC_sec[counter_h_FA_EC-1]=sec_ec;
@@ -418,8 +466,23 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    }
 		    
 		    if (rand.Uniform(0,1)<EC_efficiency){
-		      if (!Is_tellorig || flux_tid->at(j)==1){	
-// 		      if (!Is_tellorig || abs(flux_tid->at(j))==11){		      		      
+		      bool Is_ok=false;		      
+		      if (Is_tellorig){
+			if (Is_singlefile){
+			  if(Is_pi0){
+			    if(abs(flux_pid->at(j))==11) Is_ok=true;
+			  }
+			  else {
+			    if(flux_tid->at(j)==1) Is_ok=true;
+			  }
+			}
+			else {
+			  if(flux_tid->at(j)==1) Is_ok=true;
+			}
+		      }
+		      else Is_ok=true;
+		      
+		      if(Is_ok){
 		      pass_EC_electron_large=1;
 		      counter_e_LA_EC++;
 		      trigger_e_LA_EC_sec[counter_e_LA_EC-1]=sec_ec;
