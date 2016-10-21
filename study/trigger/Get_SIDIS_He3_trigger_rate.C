@@ -45,9 +45,9 @@ using namespace std;
 // const double filenum=50; //file numbers while running GEMC in order to be correct for normalization
 const int loop_time=1;   //electron to be 1, pion to be many times to take advantage of statistics, pion has low efficiency on EC
 const int add_norm=1; // additional normalization factor
-const double threshold_distance=0;
+// const double threshold_distance=0;
 // const double threshold_distance=0.1;
-// const double threshold_distance=32.5;
+const double threshold_distance=32.5;
 
 // lgc threshold
 const double PEthresh=2; //lgc pe shreshold for each pmt
@@ -72,11 +72,13 @@ const double DEG=180./3.1415926;   //rad to degree
 
 //#####################################################################################################################################################
 
-int Get_SIDIS_He3_trigger_rate(string inputfile_name,string filetype,bool Is_tellorig=false){
+int Get_SIDIS_He3_trigger_rate(string inputfile_name,bool Is_tellorig=false,string filetype=""){
 
 gStyle->SetOptStat(11111111);
 
 bool Is_singlefile=false;
+bool Is_pi0=false;
+if(Is_tellorig){
 if(filetype.find("single",0) != string::npos) {
   Is_singlefile=true;
   cout << "this is a single file" << endl;  
@@ -87,12 +89,12 @@ else if(filetype.find("sidis",0) != string::npos) {
 }
 else {cout << "unknown file type, choose either single or sidis" << endl;return 0;}
 
-bool Is_pi0=false;
 if (inputfile_name.find("pi0",0) != string::npos) {
   Is_pi0=true;
   cout << "this is a pi0 file" << endl;  
 }
 else {cout << "this is NOT a pi0 file" << endl;}
+}
 
 double filenum=1;
 if (inputfile_name.find("_filenum",0) != string::npos) {
@@ -120,17 +122,22 @@ TFile *file=new TFile(inputfile_name.c_str());
 	//MRPC
 	TH1F *h_n_trigger_sectors_mrpc=new TH1F("h_n_trigger_sectors_mrpc","number of triggered sectors for mrpc",150,0,150);
 	
-	TH1F *h_counter_e_FA_EC=new TH1F("h_counter_e_FA_EC","e counter rate at forward angle", 5,0,5);
-	TH1F *h_counter_e_FA_EC_lgc=new TH1F("h_counter_e_FA_EC_lgc","e counter rate at forward angle", 5,0,5);
-	TH1F *h_counter_e_FA_EC_lgc_spd=new TH1F("h_counter_e_FA_EC_lgc_spd","e counter rate at forward angle", 5,0,5);	
-	TH1F *h_counter_e_FA_EC_lgc_spd_mrpc=new TH1F("h_counter_e_FA_EC_lgc_spd_mrpc","e counter rate at forward angle", 5,0,5);
+	TH1F *h_counter_e_FA_EC=new TH1F("h_counter_e_FA_EC","e counter rate at forward angle", 10,0,10);
+	TH1F *h_counter_e_FA_EC_lgc=new TH1F("h_counter_e_FA_EC_lgc","e counter rate at forward angle", 10,0,10);
+	TH1F *h_counter_e_FA_EC_lgc_spd=new TH1F("h_counter_e_FA_EC_lgc_spd","e counter rate at forward angle", 10,0,10);	
+	TH1F *h_counter_e_FA_EC_lgc_spd_mrpc=new TH1F("h_counter_e_FA_EC_lgc_spd_mrpc","e counter rate at forward angle", 10,0,10);
 	
-	TH1F *h_counter_e_LA_EC=new TH1F("h_counter_e_LA_EC","e counter rate at large angle", 5,0,5);
-	TH1F *h_counter_e_LA_EC_spd=new TH1F("h_counter_e_LA_EC_spd","e counter rate at large angle", 5,0,5);
+	TH1F *h_counter_e_LA_EC=new TH1F("h_counter_e_LA_EC","e counter rate at large angle", 10,0,10);
+	TH1F *h_counter_e_LA_EC_spd=new TH1F("h_counter_e_LA_EC_spd","e counter rate at large angle", 10,0,10);
 
-	TH1F *h_counter_h_FA_EC=new TH1F("h_counter_h_FA_EC","h counter rate on at forward angle", 5,0,5);
-	TH1F *h_counter_h_FA_EC_spd=new TH1F("h_counter_h_FA_EC_spd","h counter rate on at forward angle", 5,0,5);
-	TH1F *h_counter_h_FA_EC_spd_mrpc=new TH1F("h_counter_h_FA_EC_spd_mrpc","h counter rate on at forward angle", 5,0,5);
+	TH1F *h_counter_h_FA_EC=new TH1F("h_counter_h_FA_EC","h counter rate on at forward angle", 10,0,10);
+	TH1F *h_counter_h_FA_EC_spd=new TH1F("h_counter_h_FA_EC_spd","h counter rate on at forward angle", 10,0,10);
+	TH1F *h_counter_h_FA_EC_spd_mrpc=new TH1F("h_counter_h_FA_EC_spd_mrpc","h counter rate on at forward angle", 10,0,10);
+	
+	// coin trigger rate with e forward angle and h forward angle
+	TH1F *h_counter_e_FA_h_FA=new TH1F("h_counter_e_FA_h_FA","coincidence counter rate with e forward angle and h forward angle", 10,0,10);
+	// coin counter rate with e large angle and h forward angle
+	TH1F *h_counter_e_LA_h_FA=new TH1F("h_counter_e_LA_h_FA","coincidence counter rate with e large angle and h forward angle", 10,0,10);	
 
 	TH1F *h_trigger_e_FA_EC=new TH1F("h_trigger_e_FA_EC","e trigger rate at forward angle", 60, 0, 300);
 	TH1F *h_trigger_e_FA_EC_lgc=new TH1F("h_trigger_e_FA_EC_lgc","e trigger rate at forward angle", 60, 0, 300);
@@ -260,9 +267,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 		tree_header->GetEntry(i);
 		double rate=var8->at(0);
 		rate=rate/filenum/loop_time*add_norm;     ///---warning, should make sure filenum is right
-		double x=var4->at(0);
-		double Q2=var7->at(0);
+		double x=var4->at(0);	
 		double y=var5->at(0);
+		double W=var6->at(0);		
+		double Q2=var7->at(0);		
 		//cout<<"header tree: "<<rate<<endl;
 		
 
@@ -763,19 +771,39 @@ TFile *file=new TFile(inputfile_name.c_str());
 			}	  
 		}	
 		
-		
+		int counter_e_FA_h_FA=0;
 		for(int k=0; k<counter_e_FA_EC_lgc_spd_mrpc; k++){		
 		  for(int j=0; j<counter_h_FA_EC_spd_mrpc; j++){
 		    double dist=sqrt(pow(trigger_e_FA_EC_y[i_e_FA_EC_good[k]]-trigger_h_FA_EC_y[i_h_FA_EC_good[j]],2)+pow(trigger_e_FA_EC_x[i_e_FA_EC_good[k]]-trigger_h_FA_EC_x[i_h_FA_EC_good[j]],2));
-		    if (dist>=threshold_distance) h_trigger_e_FA_h_FA->Fill(trigger_e_FA_EC_r[i_e_FA_EC_good[k]],rate);
+		    if (dist>=threshold_distance){
+		      counter_e_FA_h_FA++;
+		      
+// 		      cout << "event " << i<< " counter_e_FA_h_FA " << counter_e_FA_h_FA << "\t" << trigger_e_FA_EC_pid[i_e_FA_EC_good[k]] << " " << trigger_h_FA_EC_pid[i_h_FA_EC_good[j]] << " " <<  trigger_e_FA_EC_sec[i_e_FA_EC_good[k]] << " " << trigger_h_FA_EC_sec[i_h_FA_EC_good[j]] << " " <<		      trigger_e_FA_EC_p[i_e_FA_EC_good[k]] << " " << trigger_h_FA_EC_p[i_h_FA_EC_good[j]] << endl;			      		      
+		    }
+		  }
+		}
+		h_counter_e_FA_h_FA->Fill(counter_e_FA_h_FA);
+		for(int k=0; k<counter_e_FA_EC_lgc_spd_mrpc; k++){		
+		  for(int j=0; j<counter_h_FA_EC_spd_mrpc; j++){
+		    double dist=sqrt(pow(trigger_e_FA_EC_y[i_e_FA_EC_good[k]]-trigger_h_FA_EC_y[i_h_FA_EC_good[j]],2)+pow(trigger_e_FA_EC_x[i_e_FA_EC_good[k]]-trigger_h_FA_EC_x[i_h_FA_EC_good[j]],2));
+		    if (dist>=threshold_distance) h_trigger_e_FA_h_FA->Fill(trigger_e_FA_EC_r[i_e_FA_EC_good[k]],rate/counter_e_FA_h_FA);
 		  }
 		}	
 		
+		int counter_e_LA_h_FA=0;		
 		for(int k=0; k<counter_e_LA_EC_spd; k++){		
 		  for(int j=0; j<counter_h_FA_EC_spd_mrpc; j++){
-		    h_trigger_e_LA_h_FA->Fill(trigger_e_LA_EC_r[i_e_LA_EC_good[k]],rate);
+		    counter_e_LA_h_FA++;
+		    
+// 		      cout << "event " << i<< " counter_e_LA_h_FA " << counter_e_LA_h_FA << "\t" << trigger_e_LA_EC_pid[i_e_LA_EC_good[k]] << " " << trigger_h_FA_EC_pid[i_h_FA_EC_good[j]] << " " << trigger_e_LA_EC_sec[i_e_LA_EC_good[k]] << " " << trigger_h_FA_EC_sec[i_h_FA_EC_good[j]] << " " << trigger_e_LA_EC_sec[i_e_LA_EC_good[k]] << " " << trigger_h_FA_EC_sec[i_h_FA_EC_good[j]] << endl;	 		      
 		  }
-		}	
+		}
+		h_counter_e_LA_h_FA->Fill(counter_e_LA_h_FA);
+		for(int k=0; k<counter_e_LA_EC_spd; k++){		
+		  for(int j=0; j<counter_h_FA_EC_spd_mrpc; j++){
+		    h_trigger_e_LA_h_FA->Fill(trigger_e_LA_EC_r[i_e_LA_EC_good[k]],rate/counter_e_LA_h_FA);
+		  }
+		}		
 		
 
 	} //end event loop
@@ -838,7 +866,7 @@ cout<<"only mrpc: "<<h_n_trigger_sectors_mrpc->Integral(1,240)/1e3<<endl;
 // cout<<"$$$$$$$$$$$$$$$   :"<<h_flux_EC_electron->Integral(1,60)<<"	"<<h_flux_EC_hadron->Integral(1,60)<<endl;
 
 TCanvas *c_counter = new TCanvas("counter", "counter",1400,900);
-c_counter->Divide(4,3);
+c_counter->Divide(4,4);
 c_counter->cd(1);
 h_counter_e_FA_EC->Draw();
 gPad->SetLogy();
@@ -866,9 +894,17 @@ gPad->SetLogy();
 c_counter->cd(11);
 h_counter_h_FA_EC_spd_mrpc->Draw();
 gPad->SetLogy();
+c_counter->cd(13);
+h_counter_e_FA_h_FA->Draw();
+gPad->SetLogy();
+c_counter->cd(14);
+h_counter_e_LA_h_FA->Draw();
+gPad->SetLogy();
+
+
 
 TCanvas *c_trigger = new TCanvas("trigger", "trigger",1400,900);
-c_trigger->Divide(4,3);
+c_trigger->Divide(4,4);
 c_trigger->cd(1);
 h_trigger_e_FA_EC->Draw();
 c_trigger->cd(2);
@@ -887,6 +923,11 @@ c_trigger->cd(10);
 h_trigger_h_FA_EC_spd->Draw();
 c_trigger->cd(11);
 h_trigger_h_FA_EC_spd_mrpc->Draw();
+c_trigger->cd(13);
+h_trigger_e_FA_h_FA->Draw();
+c_trigger->cd(14);
+h_trigger_e_LA_h_FA->Draw();
+
    
 cout<<"only h_trigger_e_FA: "<<h_trigger_e_FA_EC->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc_spd->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc_spd_mrpc->Integral(1,60)/1e3<< endl;
 cout<<"only h_trigger_e_LA: "<<h_trigger_e_LA_EC->Integral(1,60)/1e3<<" "<<h_trigger_e_LA_EC_spd->Integral(1,60)/1e3<< endl;
