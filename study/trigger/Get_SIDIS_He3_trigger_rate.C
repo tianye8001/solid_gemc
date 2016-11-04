@@ -113,7 +113,9 @@ TFile *file=new TFile(inputfile_name.c_str());
 	
 // prepare for outputs
 // define histograms, output txt files etc...
-	
+
+	TH2F *hvertex_rz=new TH2F("hvertex_rz","hvertex_rz",1800,-400,500,600,0,300);
+
 	//LGC
 	TH1F *h_n_trigger_sectors_LGC=new TH1F("h_n_trigger_sectors_LGC","number of triggered sectors",30,0,30);	
 	//SPD
@@ -256,7 +258,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 	for(int loop_id=1;loop_id<=loop_time;loop_id++){
 		cout<<"loop.....  "<<loop_id<<endl;
 	
-// 	for(long int i=0;i<N_events/100;i++){
+// 	for(long int i=0;i<N_events/10;i++){
 	for(long int i=0;i<N_events;i++){	  
 // 			cout<<"event " << i<<endl;
 			cout<<i<<"\r";
@@ -317,7 +319,11 @@ TFile *file=new TFile(inputfile_name.c_str());
 		double trigger_e_FA_EC_p[100],trigger_e_LA_EC_p[100],trigger_h_FA_EC_p[100];
 		double trigger_e_FA_EC_x[100],trigger_e_LA_EC_x[100],trigger_h_FA_EC_x[100];
 		double trigger_e_FA_EC_y[100],trigger_e_LA_EC_y[100],trigger_h_FA_EC_y[100];
-		double trigger_e_FA_EC_r[100],trigger_e_LA_EC_r[100],trigger_h_FA_EC_r[100];		
+		double trigger_e_FA_EC_r[100],trigger_e_LA_EC_r[100],trigger_h_FA_EC_r[100];
+		double trigger_e_FA_EC_vx[100],trigger_e_LA_EC_vx[100],trigger_h_FA_EC_vx[100];
+		double trigger_e_FA_EC_vy[100],trigger_e_LA_EC_vy[100],trigger_h_FA_EC_vy[100];		
+		double trigger_e_FA_EC_vr[100],trigger_e_LA_EC_vr[100],trigger_h_FA_EC_vr[100];
+		double trigger_e_FA_EC_vz[100],trigger_e_LA_EC_vz[100],trigger_h_FA_EC_vz[100];		
 		
 		int counter_e_FA_EC=0,counter_e_LA_EC=0,counter_h_FA_EC=0;
 
@@ -329,8 +335,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 		  int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;		  
 		  int component_ID=flux_id->at(j)%10000;      
 
+		double hit_vr=sqrt(pow(flux_vx->at(j),2)+pow(flux_vy->at(j),2))/1e1; //mm to cm
+		double hit_vy=flux_vy->at(j)/1e1,hit_vx=flux_vx->at(j)/1e1,hit_vz=flux_vz->at(j)/1e1;           //mm to cm		  
 		double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/1e1; //mm to cm
-		double hit_y=flux_avg_y->at(j)/1e1,hit_x=flux_avg_x->at(j)/1e1,hit_z=flux_avg_z->at(j)/1e1;           //mm to cm
+		double hit_y=flux_avg_y->at(j)/1e1,hit_x=flux_avg_x->at(j)/1e1,hit_z=flux_avg_z->at(j)/1e1;           //mm to cm		
 		double hit_phi=atan2(hit_y,hit_x)*DEG;       //rad to  deg
 		double hit_p=sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j))/1e3;  //MeV to GeV
 		  
@@ -398,6 +406,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 			trigger_e_FA_EC_x[counter_e_FA_EC-1]=hit_x;
 			trigger_e_FA_EC_y[counter_e_FA_EC-1]=hit_y;
 			trigger_e_FA_EC_r[counter_e_FA_EC-1]=hit_r;		      		      
+			trigger_e_FA_EC_vx[counter_e_FA_EC-1]=hit_vx;
+			trigger_e_FA_EC_vy[counter_e_FA_EC-1]=hit_vy;
+			trigger_e_FA_EC_vr[counter_e_FA_EC-1]=hit_vr;
+			trigger_e_FA_EC_vz[counter_e_FA_EC-1]=hit_vz;			
 		      }		      
 		    }
 		    
@@ -448,6 +460,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 		      trigger_h_FA_EC_x[counter_h_FA_EC-1]=hit_x;
 		      trigger_h_FA_EC_y[counter_h_FA_EC-1]=hit_y;		      
 		      trigger_h_FA_EC_r[counter_h_FA_EC-1]=hit_r;
+		      trigger_h_FA_EC_vx[counter_h_FA_EC-1]=hit_vx;
+		      trigger_h_FA_EC_vy[counter_h_FA_EC-1]=hit_vy;		      
+		      trigger_h_FA_EC_vr[counter_h_FA_EC-1]=hit_vr;	
+		      trigger_h_FA_EC_vz[counter_h_FA_EC-1]=hit_vz;		      
 		      }
 		    }		    
 		  }
@@ -499,6 +515,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 		      trigger_e_LA_EC_x[counter_e_LA_EC-1]=hit_x;
 		      trigger_e_LA_EC_y[counter_e_LA_EC-1]=hit_y;		      
 		      trigger_e_LA_EC_r[counter_e_LA_EC-1]=hit_r;
+		      trigger_e_LA_EC_vx[counter_e_LA_EC-1]=hit_vx;
+		      trigger_e_LA_EC_vy[counter_e_LA_EC-1]=hit_vy;		      
+		      trigger_e_LA_EC_vr[counter_e_LA_EC-1]=hit_vr;
+		      trigger_e_LA_EC_vz[counter_e_LA_EC-1]=hit_vz;		      
 		      }
 		    }
 		  }
@@ -621,17 +641,21 @@ TFile *file=new TFile(inputfile_name.c_str());
 			counter_e_FA_EC_lgc++;			      
 				
 			double hit_phi=atan2(trigger_e_FA_EC_y[i_e_FA_EC], trigger_e_FA_EC_x[i_e_FA_EC])*DEG;			
-			double r=trigger_e_FA_EC_r[i_e_FA_EC]; // in cm
+			double hit_r=trigger_e_FA_EC_r[i_e_FA_EC]; // in cm			
+			double hit_vr=trigger_e_FA_EC_vr[i_e_FA_EC]; // in cm
+			double hit_vz=trigger_e_FA_EC_vz[i_e_FA_EC]; // in cm		
 			
 			int sector_spd=0,block_spd=0;
-			if(find_id_spd_FA(hit_phi,r,sector_spd,block_spd)){
+			if(find_id_spd_FA(hit_phi,hit_r,sector_spd,block_spd)){
 // 			 if(trigger_spd_FA[sector_spd-1][block_spd-1]==1){
-			 if(trigger_spd_FA[(sector_spd-1)*4+block_spd-1]==1){			   	
-			   
-			    counter_e_FA_EC_lgc_spd++;	
+			 if(trigger_spd_FA[(sector_spd-1)*4+block_spd-1]==1){	
+// 			  cout << ntrigsecs_spd_FA << endl;
+// 			  if(ntrigsecs_spd_FA>0){			  
+			    hvertex_rz->Fill(hit_vz,hit_vr);
+			    counter_e_FA_EC_lgc_spd++;
 			   
 			    int sector_mrpc=0,block_mrpc=0;
-// 			    if(find_id_mrpc_FA(hit_phi,r,sector_mrpc,block_mrpc)){
+// 			    if(find_id_mrpc_FA(hit_phi,hit_r,sector_mrpc,block_mrpc)){
 // 			      if(trigger_mrpc_FA[sector_mrpc-1][block_mrpc-1]==1){			
 
 				i_e_FA_EC_good[counter_e_FA_EC_lgc_spd_mrpc]=i_e_FA_EC;			
@@ -664,17 +688,20 @@ TFile *file=new TFile(inputfile_name.c_str());
 			h_trigger_e_FA_EC_lgc->Fill(trigger_e_FA_EC_r[i_e_FA_EC], rate/counter_e_FA_EC_lgc);		      
 				
 			double hit_phi=atan2(trigger_e_FA_EC_y[i_e_FA_EC], trigger_e_FA_EC_x[i_e_FA_EC])*DEG;			
-			double r=trigger_e_FA_EC_r[i_e_FA_EC]; // in cm
+			double hit_r=trigger_e_FA_EC_r[i_e_FA_EC]; // in cm
+			double hit_vr=trigger_e_FA_EC_vr[i_e_FA_EC]; // in cm
+			double hit_vz=trigger_e_FA_EC_vz[i_e_FA_EC]; // in cm		
 			
 			int sector_spd=0,block_spd=0;
-			if(find_id_spd_FA(hit_phi,r,sector_spd,block_spd)){
+			if(find_id_spd_FA(hit_phi,hit_r,sector_spd,block_spd)){
 // 			 if(trigger_spd_FA[sector_spd-1][block_spd-1]==1){			   
 			 if(trigger_spd_FA[(sector_spd-1)*4+block_spd-1]==1){			 
-			   
+// 			  if(ntrigsecs_spd_FA>0){			  
+
 			    h_trigger_e_FA_EC_lgc_spd->Fill(trigger_e_FA_EC_r[i_e_FA_EC], rate/counter_e_FA_EC_lgc_spd);	
 			   
 			    int sector_mrpc=0,block_mrpc=0;
-// 			    if(find_id_mrpc_FA(hit_phi,r,sector_mrpc,block_mrpc)){
+// 			    if(find_id_mrpc_FA(hit_phi,hit_r,sector_mrpc,block_mrpc)){
 // 			      if(trigger_mrpc_FA[sector_mrpc-1][block_mrpc-1]==1){			   							
 				h_trigger_e_FA_EC_lgc_spd_mrpc->Fill(trigger_e_FA_EC_r[i_e_FA_EC], rate/counter_e_FA_EC_lgc_spd_mrpc);	
 // 			      }
@@ -688,10 +715,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 		for(int i_e_LA_EC=0; i_e_LA_EC<counter_e_LA_EC; i_e_LA_EC++){
 		  
 		    double hit_phi=atan2(trigger_e_LA_EC_y[i_e_LA_EC],trigger_e_LA_EC_x[i_e_LA_EC])*DEG;			
-		    double r=trigger_e_LA_EC_r[i_e_LA_EC]; // in cm
+		    double hit_r=trigger_e_LA_EC_r[i_e_LA_EC]; // in cm
 		    
 		    int sector_spd=0;
-		    if(find_id_spd_LA(hit_phi,r,sector_spd)){
+		    if(find_id_spd_LA(hit_phi,hit_r,sector_spd)){
 		      if(trigger_spd_LA[sector_spd-1]==1){			   
 
 			    i_e_LA_EC_good[counter_e_LA_EC_spd]=i_e_LA_EC;
@@ -707,10 +734,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 
 		    h_trigger_e_LA_EC->Fill(trigger_e_LA_EC_r[i_e_LA_EC],rate/counter_e_LA_EC);			    
 		    double hit_phi=atan2(trigger_e_LA_EC_y[i_e_LA_EC], trigger_e_LA_EC_x[i_e_LA_EC])*DEG;			
-		    double r=trigger_e_LA_EC_r[i_e_LA_EC]; // in cm
+		    double hit_r=trigger_e_LA_EC_r[i_e_LA_EC]; // in cm
 		    
 		    int sector_spd=0;
-		    if(find_id_spd_LA(hit_phi,r,sector_spd)){
+		    if(find_id_spd_LA(hit_phi,hit_r,sector_spd)){
 		      if(trigger_spd_LA[sector_spd-1]==1){			   
 										    
 			    h_trigger_e_LA_EC_spd->Fill(trigger_e_LA_EC_r[i_e_LA_EC], rate/counter_e_LA_EC_spd);	
@@ -722,17 +749,17 @@ TFile *file=new TFile(inputfile_name.c_str());
 		for(int i_h_FA_EC=0; i_h_FA_EC<counter_h_FA_EC; i_h_FA_EC++){
 		  
 			double hit_phi=atan2(trigger_h_FA_EC_y[i_h_FA_EC], trigger_h_FA_EC_x[i_h_FA_EC])*DEG;			
-			double r=trigger_h_FA_EC_r[i_h_FA_EC]; // in cm
+			double hit_r=trigger_h_FA_EC_r[i_h_FA_EC]; // in cm
 			
 			int sector_spd=0,block_spd=0;
-			if(find_id_spd_FA(hit_phi,r,sector_spd,block_spd)){
+			if(find_id_spd_FA(hit_phi,hit_r,sector_spd,block_spd)){
 // 			 if(trigger_spd_FA[sector_spd-1][block_spd-1]==1){
 			 if(trigger_spd_FA[(sector_spd-1)*4+block_spd-1]==1){			   
 
 			    counter_h_FA_EC_spd++;			   
 			   
 			    int sector_mrpc=0,block_mrpc=0;
-// 			    if(find_id_mrpc_FA(hit_phi,r,sector_mrpc,block_mrpc)){
+// 			    if(find_id_mrpc_FA(hit_phi,hit_r,sector_mrpc,block_mrpc)){
 // 			      if(trigger_mrpc_FA[sector_mrpc-1][block_mrpc-1]==1){		   					
 				i_h_FA_EC_good[counter_h_FA_EC_spd_mrpc]=i_h_FA_EC;
 				
@@ -752,17 +779,17 @@ TFile *file=new TFile(inputfile_name.c_str());
 			h_trigger_h_FA_EC->Fill(trigger_h_FA_EC_r[i_h_FA_EC], rate/counter_h_FA_EC);    
 		    
 			double hit_phi=atan2(trigger_h_FA_EC_y[i_h_FA_EC], trigger_h_FA_EC_x[i_h_FA_EC])*DEG;			
-			double r=trigger_h_FA_EC_r[i_h_FA_EC]; // in cm
+			double hit_r=trigger_h_FA_EC_r[i_h_FA_EC]; // in cm
 			
 			int sector_spd=0,block_spd=0;
-			if(find_id_spd_FA(hit_phi,r,sector_spd,block_spd)){
+			if(find_id_spd_FA(hit_phi,hit_r,sector_spd,block_spd)){
 // 			 if(trigger_spd_FA[sector_spd-1][block_spd-1]==1){			   
 			 if(trigger_spd_FA[(sector_spd-1)*4+block_spd-1]==1){			   	
 
 			    h_trigger_h_FA_EC_spd->Fill(trigger_h_FA_EC_r[i_h_FA_EC], rate/counter_h_FA_EC_spd);				    
 			   
 			    int sector_mrpc=0,block_mrpc=0;
-// 			    if(find_id_mrpc_FA(hit_phi,r,sector_mrpc,block_mrpc)){
+// 			    if(find_id_mrpc_FA(hit_phi,hit_r,sector_mrpc,block_mrpc)){
 // 			      if(trigger_mrpc_FA[sector_mrpc-1][block_mrpc-1]==1){		   							
 				h_trigger_h_FA_EC_spd_mrpc->Fill(trigger_h_FA_EC_r[i_h_FA_EC], rate/counter_h_FA_EC_spd_mrpc);	
 // 			      }
@@ -934,6 +961,9 @@ cout<<"only h_trigger_e_LA: "<<h_trigger_e_LA_EC->Integral(1,60)/1e3<<" "<<h_tri
 cout<<"only h_trigger_h_FA: "<<h_trigger_h_FA_EC->Integral(1,60)/1e3<<" "<<h_trigger_h_FA_EC_spd->Integral(1,60)/1e3<<" "<<h_trigger_h_FA_EC_spd_mrpc->Integral(1,60)/1e3<<" "<<endl;
 cout<<"only h_trigger_e_FA_h_FA: "<<h_trigger_e_FA_h_FA->Integral(1,60)/1e3<< endl; 
 cout<<"only h_trigger_e_LA_h_FA: "<<h_trigger_e_LA_h_FA->Integral(1,60)/1e3<< endl;
+
+TCanvas *c_vertex = new TCanvas("vertex_rz", "vertex",1400,900);
+hvertex_rz->Draw("colz");
 
 // 	h_flux_EC_electron->SetDirectory(output_file);
 // 	output_file->Write();
