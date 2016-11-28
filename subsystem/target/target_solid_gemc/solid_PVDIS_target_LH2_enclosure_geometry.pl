@@ -42,7 +42,7 @@ sub make_PVDIS_target
 
  my @name = ("$DetectorName\_TACH","$DetectorName\_TACV","$DetectorName\_TAW1","$DetectorName\_TAW2","$DetectorName\_TALU","$DetectorName\_TAH2"); 
  my @mother=("$DetectorMother","$DetectorName\_TACH","$DetectorName\_TACH","$DetectorName\_TACH","$DetectorName\_TACV","$DetectorName\_TALU");
- my @mat  = ("G4_Al","G4_Galactic","G4_Galactic","G4_Al","G4_Al","G4_lH2");
+ my @mat  = ("G4_Al","G4_Galactic","G4_Al","G4_Al","G4_Al","G4_lH2");
  my @color = ("0000ff","808080","0000ff","0000ff","0000ff","ff0000");
 
  for(my $n=1; $n<=$NUM; $n++)
