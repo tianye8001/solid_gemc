@@ -8,8 +8,14 @@ We also use EC trigger function from "WiserJinHuang"
 run the scripts with compliation to avoid error or slowness
 
 = SIDIS_He3 ==
-root[0].x Get_SIDIS_He3_trigger_rate.C+("/w/work6501/zwzhao/solid/solid_svn/solid/study/background/SIDIS_He3_JLAB_VERSION_1.3/pass6/background_solid_SIDIS_He3_dirty_weighted_eDIS_filenum50_0.5e6.root")
-root[0].x Get_SIDIS_He3_trigger_rate.C+("/w/work6501/zwzhao/solid/solid_svn/solid/study/background/SIDIS_He3_JLAB_VERSION_1.3/pass6/background_solid_SIDIS_He3_dirty_weighted_eDIS_filenum50_0.5e6.root",true,"single")
+run it like this on ifarm
 
-root [0] .x Get_SIDIS_He3_trigger_rate.C+("/w/work6501/zwzhao/solid/solid_svn/solid/study/background/SIDIS_He3_JLAB_VERSION_1.3/pass6/background_solid_SIDIS_He3_dirty_weighted_SIDISDukeepip_filenum75_0.375e6.root")
-root [0] .x Get_SIDIS_He3_trigger_rate.C+("/w/work6501/zwzhao/solid/solid_svn/solid/study/background/SIDIS_He3_JLAB_VERSION_1.3/pass6/background_solid_SIDIS_He3_dirty_weighted_SIDISDukeepip_filenum75_0.375e6.root",true,"sidis")
+ssh ifarm1102
+source /work/halla/solid/zwzhao/solid/solid_svn/solid/set_solid
+cd /work/halla/solid/zwzhao/solid/solid_svn/solid/study/trigger
+
+root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_weighted_eDIS_filenum50_0.5e6.root")'
+root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_weighted_eDIS_filenum50_0.5e6.root",true,"single")'
+
+root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_weighted_SIDISDuke_epip_followtheta_filenum75_0.375e6.root")'
+root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_weighted_SIDISDuke_epip_followtheta_filenum75_0.375e6.root",true,"sidis")'
