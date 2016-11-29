@@ -26,6 +26,9 @@ double get_large_electron_trigger_e_eff(double hit_R, double hit_E){
 	}else{
 		int P_index=-1;
 
+	    if(hit_E<large_electron_trigger_low_P[0]){
+		e_eff=0;
+	    }else{		
 		for(int Pj=0;Pj<19;Pj++){
 			if(hit_E>=large_electron_trigger_low_P[Pj] && hit_E<large_electron_trigger_high_P[Pj]){
 				P_index=Pj;
@@ -40,6 +43,7 @@ double get_large_electron_trigger_e_eff(double hit_R, double hit_E){
 		e_eff=(large_electron_trigger_e_high_eff[P_index] - large_electron_trigger_e_low_eff[P_index]  )/( large_electron_trigger_high_P[P_index] -  large_electron_trigger_low_P[P_index]) * (hit_E- large_electron_trigger_low_P[P_index]) + large_electron_trigger_e_low_eff[P_index] ;
 
 		//e_eff=0.5*(large_electron_trigger_e_low_eff[P_index]+large_electron_trigger_e_high_eff[P_index]);
+	    }
 	}
 
 	return e_eff;
@@ -53,7 +57,9 @@ double get_large_electron_trigger_pi_eff(double hit_R, double hit_E){
 		e_eff=0;
 	}else{
 		int P_index=-1;
-
+	    if(hit_E<large_electron_trigger_low_P[0]){
+		e_eff=0;
+	    }else{	
 		for(int Pj=0;Pj<19;Pj++){
 			if(hit_E>=large_electron_trigger_low_P[Pj] && hit_E<large_electron_trigger_high_P[Pj]){
 				P_index=Pj;
@@ -67,6 +73,7 @@ double get_large_electron_trigger_pi_eff(double hit_R, double hit_E){
 		 e_eff=(large_electron_trigger_pi_high_eff[P_index] - large_electron_trigger_pi_low_eff[P_index]  )/( large_electron_trigger_high_P[P_index] -  large_electron_trigger_low_P[P_index]) * (hit_E- large_electron_trigger_low_P[P_index]) + large_electron_trigger_pi_low_eff[P_index] ;
 
 		//e_eff=0.5*(large_electron_trigger_pi_low_eff[P_index]+large_electron_trigger_pi_high_eff[P_index]);
+	    }
 	}
 
 	return e_eff;
