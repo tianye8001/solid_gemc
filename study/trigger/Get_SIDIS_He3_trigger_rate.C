@@ -389,7 +389,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    else {EC_efficiency=0; 
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
 		    }
-		    
+
+		    //check to make sure eff is ok
+		    if(isnan(EC_efficiency)) cout << "trigger_e_FA_EC " << EC_efficiency << " " << flux_pid->at(j) << endl;		    
+
 		    if (rand.Uniform(0,1)<EC_efficiency){
 		      bool Is_ok=false;
 		      if (Is_tellorig){
@@ -443,6 +446,9 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    else {EC_efficiency=0; 
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
 		    }
+		    
+		    //check to make sure eff is ok
+		    if(isnan(EC_efficiency)) cout << "trigger_h_FA_EC " << EC_efficiency << " " << flux_pid->at(j) << endl;		    
 		    
 		    if (rand.Uniform(0,1)<EC_efficiency){
 		      bool Is_ok=false;
@@ -498,6 +504,9 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    else {EC_efficiency=0; 
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
 		    }
+		    
+		    //check to make sure eff is ok
+		    if(isnan(EC_efficiency)) cout << "trigger_e_LA_EC " << EC_efficiency << " " << flux_pid->at(j) << endl;				    
 		    
 		    if (rand.Uniform(0,1)<EC_efficiency){
 		      bool Is_ok=false;		      
