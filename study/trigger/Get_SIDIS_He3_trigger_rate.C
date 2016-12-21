@@ -261,7 +261,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 	for(int loop_id=1;loop_id<=loop_time;loop_id++){
 		cout<<"loop.....  "<<loop_id<<endl;
 	
-// 	for(long int i=0;i<N_events/100;i++){
+// 	for(long int i=0;i<N_events/10;i++){
 	for(long int i=0;i<N_events;i++){	  
 // 			cout<<"event " << i<<endl;
 // 			cout<<i<<"\r";
@@ -381,10 +381,60 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    
 		    //check trigger_e_FA_EC
 		    double EC_efficiency=0;
+
+// 		    double hit_r_tmp;
+// 		    if (105<=hit_r && hit_r<120) hit_r_tmp=100;     //trigger at 5GeV
+// 		    else if(120<=hit_r && hit_r<135) hit_r_tmp=110; //trigger at 4GeV
+// 		    else if(135<=hit_r && hit_r<149) hit_r_tmp=120; //trigger at 3GeV
+// 		    else if(149<=hit_r && hit_r<163) hit_r_tmp=120; //trigger at 3GeV		    
+// 		    else if(163<=hit_r && hit_r<177) hit_r_tmp=140; //trigger at 2GeV
+// 		    else if(177<=hit_r && hit_r<191) hit_r_tmp=170; //trigger at 1GeV		    
+// 		    else if(191<=hit_r && hit_r<235) hit_r_tmp=170; //trigger at 1GeV		       
+// 		    else {hit_r_tmp=0; cout << "hit_r " << hit_r << " out of range"  << endl;}
+		    
+		    
+// 		    double hit_r_tmp;
+// 		    if (105<=hit_r && hit_r<115) hit_r_tmp=100;     //trigger at 5GeV
+// 		    else if(115<=hit_r && hit_r<130) hit_r_tmp=110; //trigger at 4GeV
+// 		    else if(130<=hit_r && hit_r<150) hit_r_tmp=120; //trigger at 3GeV
+// 		    else if(150<=hit_r && hit_r<170) hit_r_tmp=120; //trigger at 3GeV		    
+// 		    else if(170<=hit_r && hit_r<235) hit_r_tmp=120; //trigger at 3GeV		    
+// 		    else {hit_r_tmp=0; cout << "hit_r " << hit_r << " out of range"  << endl;}
+		    
+		    //cut Q2>1.3		    
+// 		    double hit_r_tmp;
+// 		    if (105<=hit_r && hit_r<115) hit_r_tmp=100;     //trigger at 5GeV
+// 		    else if(115<=hit_r && hit_r<130) hit_r_tmp=110; //trigger at 4GeV
+// 		    else if(130<=hit_r && hit_r<150) hit_r_tmp=120; //trigger at 3GeV
+// 		    else if(150<=hit_r && hit_r<170) hit_r_tmp=140; //trigger at 2GeV		    
+// 		    else if(170<=hit_r && hit_r<235) hit_r_tmp=170; //trigger at 1GeV		    
+// 		    else {hit_r_tmp=0; cout << "hit_r " << hit_r << " out of range"  << endl;}
+
+
+		    //cut P>5GeV when theta<10deg, Q2>1.7GeV when theta>10deg		    
+// 		    double hit_r_tmp;
+// 		    if (105<=hit_r && hit_r<115) hit_r_tmp=100;     //trigger at 5GeV
+// 		    else if(115<=hit_r && hit_r<130) hit_r_tmp=100; //trigger at 4GeV
+// 		    else if(130<=hit_r && hit_r<150) hit_r_tmp=110; //trigger at 3GeV
+// 		    else if(150<=hit_r && hit_r<170) hit_r_tmp=120; //trigger at 2GeV		    
+// 		    else if(170<=hit_r && hit_r<235) hit_r_tmp=140; //trigger at 1GeV		    
+// 		    else {hit_r_tmp=0; cout << "hit_r " << hit_r << " out of range"  << endl;}
+		    
+/*		    if(abs(int(flux_pid->at(j))) == 11)		      EC_efficiency=get_forward_electron_trigger_e_eff(hit_r_tmp, hit_p);		      
+		    else if(int(flux_pid->at(j)) == 22)		      EC_efficiency=get_forward_electron_trigger_e_eff(hit_r_tmp, hit_p);	    
+		    else if(abs(int(flux_pid->at(j))) == 211)		      EC_efficiency=get_forward_electron_trigger_pi_eff(hit_r_tmp, hit_p);		      
+		    else if(abs(int(flux_pid->at(j))) == 321)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r_tmp, hit_p);		
+		    else if(int(flux_pid->at(j)) == 130)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r_tmp, hit_p);   
+		    else if(int(flux_pid->at(j)) == 2212)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r_tmp, hit_p);
+		    else {EC_efficiency=0; 
+		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
+		    }	*/	    
 		    
 		    if(abs(int(flux_pid->at(j))) == 11)		      EC_efficiency=get_forward_electron_trigger_e_eff(hit_r, hit_p);		      
 		    else if(int(flux_pid->at(j)) == 22)		      EC_efficiency=get_forward_electron_trigger_e_eff(hit_r, hit_p);	    
 		    else if(abs(int(flux_pid->at(j))) == 211)		      EC_efficiency=get_forward_electron_trigger_pi_eff(hit_r, hit_p);		      
+		    else if(abs(int(flux_pid->at(j))) == 321)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);		
+		    else if(int(flux_pid->at(j)) == 130)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);   
 		    else if(int(flux_pid->at(j)) == 2212)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);
 		    else {EC_efficiency=0; 
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
@@ -439,6 +489,14 @@ TFile *file=new TFile(inputfile_name.c_str());
 		      double hit_Ekin=sqrt(hit_p*hit_p+0.14*0.14)-0.14;		      
 		      EC_efficiency=get_forward_hadron_trigger_pion_eff(hit_Ekin);		      
 		    }
+		    else if(abs(int(flux_pid->at(j))) == 321){ 		
+		      double hit_Ekin=sqrt(hit_p*hit_p+0.494*0.494)-0.494;		      
+		      EC_efficiency=get_forward_hadron_trigger_pion_eff(hit_Ekin);		      
+		    }
+		    else if(int(flux_pid->at(j)) == 130){ 		
+		      double hit_Ekin=sqrt(hit_p*hit_p+0.498*0.498)-0.498;		      
+		      EC_efficiency=get_forward_hadron_trigger_pion_eff(hit_Ekin);		      
+		    }		    
 		    else if(int(flux_pid->at(j)) == 2212){
 		      double hit_Ekin=sqrt(hit_p*hit_p+0.938*0.938)-0.938;		       
 		      EC_efficiency=get_forward_hadron_trigger_proton_eff(hit_Ekin);
@@ -500,6 +558,8 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    if(abs(int(flux_pid->at(j))) == 11)		      EC_efficiency=get_large_electron_trigger_e_eff(hit_r, hit_p);		      
 		    else if(int(flux_pid->at(j)) == 22)		      EC_efficiency=get_large_electron_trigger_e_eff(hit_r, hit_p);	    
 		    else if(abs(int(flux_pid->at(j))) == 211)		      EC_efficiency=get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
+		    else if(abs(int(flux_pid->at(j))) == 321)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
+		    else if(int(flux_pid->at(j)) == 130)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
 		    else if(int(flux_pid->at(j)) == 2212)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);
 		    else {EC_efficiency=0; 
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
