@@ -51,6 +51,8 @@ else if (Is_SIDIS_He3 || Is_SIDIS_NH3){
   rout_cut_FA=220;     //target at -350,ec front at 415 with angle 15
 //   rin_cut_FA=98;   //cut at the actual edge 
   rin_cut_FA=105;   //cut at the actual edge
+//   rout_cut_FA=250;     //target at -350,ec front at 415 with angle 15  
+//   rin_cut_FA=80;   //cut at the actual edge
   rout_cut_LA=127;   //target at -350,ec front at -65 with angle 24
   rin_cut_LA=83;   //cut at the actual edge
   cout << " SIDIS_He3 and SIDIS_NH3 rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
@@ -82,30 +84,47 @@ else if(Is_DDVCS_JPsi_LH2 || Is_DDVCS_PVDIS_LH2){
   rin_cut_FA=0;   //cut at the actual edge
   rout_cut_LA=1000;   //target at -350,ec front at -65 with angle 24
   rin_cut_LA=0;   //cut at the actual edge
-  cout << " DDVCS rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;  
+  cout << " DDVCS rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
 }
 else {cout << "not PVDIS or SIDIS or JPsi or DDVCS" << endl; return;}
 
 double theta_max,theta_min;
-if (Is_SIDIS_He3 || Is_JPsi ){
+double vz_max,vz_min;
+if (Is_SIDIS_He3){
     theta_max=40;
     theta_min=0;    
+    vz_max=-320;    
+    vz_min=-380;
 }
 else if(Is_SIDIS_NH3) {
     theta_max=50;
-    theta_min=0;    
+    theta_min=0; 
+    vz_max=-345;    
+    vz_min=-355;    
 }
 else if(Is_PVDIS) {
     theta_max=50;
-    theta_min=10;    
+    theta_min=10;  
+    vz_max=40;    
+    vz_min=-20;    
+}
+else if (Is_JPsi){
+    theta_max=40;
+    theta_min=0;    
+    vz_max=-305;    
+    vz_min=-325;
 }
 else if(Is_DDVCS_JPsi_LH2) {
     theta_max=40;
     theta_min=0;    
+    vz_max=-305;    
+    vz_min=-325;    
 }
 else if(Is_DDVCS_PVDIS_LH2) {
-    theta_max=40;
-    theta_min=0;    
+    theta_max=50;
+    theta_min=10;    
+    vz_max=40;    
+    vz_min=-20;        
 }
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
@@ -116,23 +135,28 @@ char output_filename[200];
 sprintf(output_filename, "%s_output.root",the_filename);
 TFile *outputfile=new TFile(output_filename, "recreate");
 
+// int binfactor_theta=5;
+// int binfactor_p=20;
+// int binfactor_phi=1;
+
+int binfactor_theta=2;
+int binfactor_p=100;
+int binfactor_phi=1;
+int binfactor_vz=2;
+
 TH2F *hacceptance_ThetaP_forwardangle,*hacceptance_ThetaP_largeangle,*hacceptance_ThetaP_overall;
 TH3F *hacceptance_ThetaPhiP_forwardangle,*hacceptance_ThetaPhiP_largeangle;
 
-TH1F *hgen_P=new TH1F("gen_P","gen_P",220,0,11);
-TH1F *hgen_Theta=new TH1F("gen_Theta","gen_Theta",int(theta_max*5-theta_min*5),theta_min,theta_max);
-TH1F *hgen_Phi=new TH1F("gen_Phi","gen_Phi",360,-180,180);
-TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","gen_ThetaP",int(theta_max*5-theta_min*5),theta_min,theta_max,220,0,11);
-TH2F *hgen_ThetaPhi=new TH2F("gen_ThetaPhi","gen_ThetaPhi",int(theta_max*5-theta_min*5),theta_min,theta_max,360,-180,180);     
-TH2F *hgen_PhiP=new TH2F("gen_PhiP","gen_PhiP",360,-180,180,220,0,11);
-TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",int(theta_max*5-theta_min*5),theta_min,theta_max,180,-180,180,110,0,11);   
+TH1F *hgen_P=new TH1F("gen_P","gen_P",int(11*binfactor_p),0,11);
+TH1F *hgen_Theta=new TH1F("gen_Theta","gen_Theta",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);
+TH1F *hgen_Phi=new TH1F("gen_Phi","gen_Phi",int(360*binfactor_phi),-180,180);
+TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","gen_ThetaP",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(11*binfactor_p),0,11);
+TH2F *hgen_ThetaPhi=new TH2F("gen_ThetaPhi","gen_ThetaPhi",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(360*binfactor_phi),-180,180);     
+TH2F *hgen_PhiP=new TH2F("gen_PhiP","gen_PhiP",int(360*binfactor_phi),-180,180,int(11*binfactor_p),0,11);
+TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,110,0,11);   
 
-TH2F *hgen_ThetaVz=new TH2F("gen_ThetaVz","gen_ThetaVz",350,15,50,50,-15,35);
-TH2F *hgen_ThetaVr=new TH2F("gen_ThetaVr","gen_ThetaVr",350,15,50,50,0,1);
-
-TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);  
-
-TH2F *hlinearity_GEM34=new TH2F("linearity_GEM34","linearity_GEM34",1000,theta_min,theta_max,2200,0,11);
+TH2F *hgen_ThetaVz=new TH2F("gen_ThetaVz","gen_ThetaVz",int((vz_max-vz_min)*binfactor_vz),vz_min,vz_max,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);   
+TH2F *hgen_ThetaVr=new TH2F("gen_ThetaVr","gen_ThetaVr",20,0,1,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);
 
 const int m=2;
 
@@ -150,64 +174,78 @@ for(int i=0;i<m;i++){
    char hstname[100];
    
    sprintf(hstname,"flux_P_%i",i);
-   hflux_P[i]=new TH1F(hstname,hstname,220,0,11);
+   hflux_P[i]=new TH1F(hstname,hstname,int(11*binfactor_p),0,11);
    sprintf(hstname,"flux_Theta_%i",i);
-   hflux_Theta[i]=new TH1F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max); 
+   hflux_Theta[i]=new TH1F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max); 
    sprintf(hstname,"flux_Phi_%i",i);
-   hflux_Phi[i]=new TH1F(hstname,hstname,360,-180,180); 
+   hflux_Phi[i]=new TH1F(hstname,hstname,int(360*binfactor_phi),-180,180); 
    
    sprintf(hstname,"flux_ThetaP_%i",i);
-   hflux_ThetaP[i]=new TH2F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max,220,0,11);        
+   hflux_ThetaP[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(11*binfactor_p),0,11);        
    hflux_ThetaP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);P (GeV)",title[i]));   
    sprintf(hstname,"flux_ThetaPhi_%i",i);   
-   hflux_ThetaPhi[i]=new TH2F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max,360,-180,180); 
+   hflux_ThetaPhi[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(360*binfactor_phi),-180,180); 
    hflux_ThetaPhi[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (GeV)",title[i]));   
    sprintf(hstname,"flux_PhiP_%i",i);   
-   hflux_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
+   hflux_PhiP[i]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,int(11*binfactor_p),0,11);
    hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));  
    sprintf(hstname,"flux_ThetaPhiP_%i",i);   
-   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max,180,-180,180,110,0,11);   
+   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,110,0,11);   
    hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
-   
+    
    sprintf(hstname,"flux_ThetaVz_%i",i);
-   hflux_ThetaVz[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
-   hflux_ThetaVz[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Z (cm)",title[i]));   
+   hflux_ThetaVz[i]=new TH2F(hstname,hstname,int((vz_max-vz_min)*binfactor_vz),vz_min,vz_max,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);   
+   hflux_ThetaVz[i]->SetTitle("flux;vertex Z (cm);vertex Theta (deg)");      
    sprintf(hstname,"flux_ThetaVr_%i",i);
-   hflux_ThetaVr[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
-   hflux_ThetaVr[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex R (cm)",title[i]));  
-   sprintf(hstname,"flux_ThetaPhiP_%i",i);   
+   hflux_ThetaVr[i]=new TH2F(hstname,hstname,20,0,1,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);
+   hflux_ThetaVr[i]->SetTitle("flux;vertex R (cm);vertex Theta (deg)");            
   
    sprintf(hstname,"acceptance_P_%i",i);
-   hacceptance_P[i]=new TH1F(hstname,hstname,220,0,11);
+   hacceptance_P[i]=new TH1F(hstname,hstname,int(11*binfactor_p),0,11);
    hacceptance_P[i]->SetTitle(Form("acceptance by %s;P (GeV);",title[i]));
    sprintf(hstname,"acceptance_Theta_%i",i);
-   hacceptance_Theta[i]=new TH1F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max);    
+   hacceptance_Theta[i]=new TH1F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);    
    hacceptance_Theta[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);",title[i]));   
    sprintf(hstname,"acceptance_Phi_%i",i);
-   hacceptance_Phi[i]=new TH1F(hstname,hstname,360,-180,180);    
+   hacceptance_Phi[i]=new TH1F(hstname,hstname,int(360*binfactor_phi),-180,180);    
    hacceptance_Phi[i]->SetTitle(Form("acceptance by %s;vertex Phi (deg));",title[i]));   
    
    sprintf(hstname,"acceptance_ThetaP_%i",i);
-   hacceptance_ThetaP[i]=new TH2F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max,220,0,11);     
+   hacceptance_ThetaP[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(11*binfactor_p),0,11);     
    hacceptance_ThetaP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);P (GeV)",title[i]));
    sprintf(hstname,"acceptance_ThetaPhi_%i",i);
-   hacceptance_ThetaPhi[i]=new TH2F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max,360,-180,180);     
+   hacceptance_ThetaPhi[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(360*binfactor_phi),-180,180);     
    hacceptance_ThetaPhi[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg)",title[i]));
    sprintf(hstname,"acceptance_PhiP_%i",i);
-   hacceptance_PhiP[i]=new TH2F(hstname,hstname,360,-180,180,220,0,11);
+   hacceptance_PhiP[i]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,int(11*binfactor_p),0,11);
    hacceptance_PhiP[i]->SetTitle(Form("acceptance by %s;vertex Phi (deg);P (GeV)",title[i]));      
    sprintf(hstname,"acceptance_ThetaPhiP_%i",i);   
-   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,int(theta_max*5-theta_min*5),theta_min,theta_max,180,-180,180,110,0,11);
+   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,110,0,11);
    hacceptance_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));
 
    sprintf(hstname,"acceptance_ThetaVz_%i",i);
-   hacceptance_ThetaVz[i]=new TH2F(hstname,hstname,350,15,50,50,-15,35);
-   hacceptance_ThetaVz[i]->SetTitle("acceptance;vertex Theta (deg);vertex Z (cm)");      
+   hacceptance_ThetaVz[i]=new TH2F(hstname,hstname,int((vz_max-vz_min)*binfactor_vz),vz_min,vz_max,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);   
+   hacceptance_ThetaVz[i]->SetTitle("acceptance;vertex Z (cm);vertex Theta (deg)");      
    sprintf(hstname,"acceptance_ThetaVr_%i",i);
-   hacceptance_ThetaVr[i]=new TH2F(hstname,hstname,350,15,50,50,0,1);
-   hacceptance_ThetaVr[i]->SetTitle("acceptance;vertex Theta (deg);vertex R (cm)");         
-   
+   hacceptance_ThetaVr[i]=new TH2F(hstname,hstname,20,0,1,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);
+   hacceptance_ThetaVr[i]->SetTitle("acceptance;vertex R (cm);vertex Theta (deg)");            
 }
+
+TH2F *hhit_PR[2][2];
+hhit_PR[0][0]=new TH2F("hit_PR_0_0","all electrons reach FAEC and GEM;R(cm);Mom(GeV)",160,80,240,1100,0,11);
+hhit_PR[0][1]=new TH2F("hit_PR_0_1","electrons (Q2>1) reach FAEC and GEM;R(cm);Mom(GeV)",160,80,240,1100,0,11);
+hhit_PR[1][0]=new TH2F("hit_PR_1_0","all electrons reach LAEC and GEM;R(cm);Mom(GeV)",80,70,150,1100,0,11);
+hhit_PR[1][1]=new TH2F("hit_PR_1_1","electrons (Q2>1) reach LAEC and GEM;R(cm);Mom(GeV)",80,70,150,1100,0,11);  
+
+TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);  
+
+TH2F *hlinearity_GEM34=new TH2F("linearity_GEM34","linearity_GEM34",1000,theta_min,theta_max,2200,0,11);
+
+TH1F *hmissingGEM_forwardangle=new TH1F("missingGEM_forwardangle","missingGEM_forwardangle",6,0.5,6.5);
+TH1F *hmissingGEM_largeangle=new TH1F("missingGEM_largeangle","missingGEM_largeangle",6,0.5,6.5);
+
+TH1F *htotal_lgc_nphe=new TH1F("total_lgc_nphe","total_lgc_nphe",110,-10,100);
+TH1F *htotal_hgc_nphe=new TH1F("total_hgc_nphe","total_hgc_nphe",110,-10,100);  
 
 const int n=10;  //include 6 GEM and 2 calorimeter and 2 muon detector
 
@@ -219,67 +257,49 @@ for(int i=0;i<n;i++){
    char hstname[100];
 
    sprintf(hstname,"hit_rMom_%i",i);
-   hhit_rMom[i]=new TH2F(hstname,hstname,300,0,300,220,0,11);  
+   hhit_rMom[i]=new TH2F(hstname,hstname,300,0,300,int(11*binfactor_p),0,11);  
    
 //    sprintf(hstname,"hit_phidiffMom_%i",i);
-//    hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,220,0,11);  
+//    hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,int(11*binfactor_p),0,11);  
 //    sprintf(hstname,"hit_thetadiffMom_%i",i);
-//    hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,220,0,11);  
+//    hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,int(11*binfactor_p),0,11);  
 //    sprintf(hstname,"hit_anglediffMom_%i",i);
-//    hhit_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,180,220,0,11);     
+//    hhit_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,180,int(11*binfactor_p),0,11);     
 //    
 //    sprintf(hstname,"mom_phidiffMom_%i",i);
-//    hmom_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,220,0,11);  
+//    hmom_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,int(11*binfactor_p),0,11);  
 //    sprintf(hstname,"mom_thetadiffMom_%i",i);
-//    hmom_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,220,0,11);  
+//    hmom_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,int(11*binfactor_p),0,11);  
 //    sprintf(hstname,"mom_anglediffMom_%i",i);
-//    hmom_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,180,220,0,11);        
+//    hmom_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,180,int(11*binfactor_p),0,11);        
    sprintf(hstname,"hit_phidiffMom_%i",i);
-   hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-10,10,220,0,11);  
+   hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-10,10,int(11*binfactor_p),0,11);  
    sprintf(hstname,"hit_thetadiffMom_%i",i);
-   hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-10,10,220,0,11);  
+   hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-10,10,int(11*binfactor_p),0,11);  
    sprintf(hstname,"hit_anglediffMom_%i",i);
-   hhit_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,20,220,0,11);     
+   hhit_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,20,int(11*binfactor_p),0,11);     
    
    sprintf(hstname,"mom_phidiffMom_%i",i);
-   hmom_phidiffMom[i]=new TH2F(hstname,hstname,100,-360,360,220,0,11);  
+   hmom_phidiffMom[i]=new TH2F(hstname,hstname,100,-360,360,int(11*binfactor_p),0,11);  
    sprintf(hstname,"mom_thetadiffMom_%i",i);
-   hmom_thetadiffMom[i]=new TH2F(hstname,hstname,100,-5,5,220,0,11);  
+   hmom_thetadiffMom[i]=new TH2F(hstname,hstname,100,-5,5,int(11*binfactor_p),0,11);  
    sprintf(hstname,"mom_anglediffMom_%i",i);
-   hmom_anglediffMom[i]=new TH2F(hstname,hstname,100,0,20,220,0,11);        
+   hmom_anglediffMom[i]=new TH2F(hstname,hstname,100,0,20,int(11*binfactor_p),0,11);        
    
 }
 
-TH2F *hhit_xy_gem[6][2],*hhit_PhiR_gem[6][2];
-for(int i=0;i<6;i++){
+TH2F *hhit_xy[n][2],*hhit_PhiR[n][2],*hhit_PhiZ[n][2],*hPloss[n][2];
+for(int i=0;i<n;i++){
   for(int j=0;j<2;j++){
    char hstname[100];
-   sprintf(hstname,"hit_xy_gem_%i_%i",i,j);
-   hhit_xy_gem[i][j]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
-   sprintf(hstname,"hit_PhiR_gem_%i_%i",i,j);
-   hhit_PhiR_gem[i][j]=new TH2F(hstname,hstname,360,-180,180,300,0,150);   
-}}
-
-TH2F *hhit_xy_ec[n][2],*hhit_PhiR_ec[n][2];
-for(int i=0;i<2;i++){
-  for(int j=0;j<2;j++){
-   char hstname[100];
-   sprintf(hstname,"hit_xy_ec_%i_%i",i,j);
-   hhit_xy_ec[i][j]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
-   sprintf(hstname,"hit_PhiR_ec_%i_%i",i,j);
-   hhit_PhiR_ec[i][j]=new TH2F(hstname,hstname,360,-180,180,300,0,300);       
-}}
-
-TH2F *hhit_xy_muon[n][2],*hhit_PhiR_muon[n][2],*hhit_PhiZ_muon[n][2];
-for(int i=0;i<2;i++){
-  for(int j=0;j<2;j++){
-   char hstname[100];
-   sprintf(hstname,"hit_xy_muon_%i_%i",i,j);
-   hhit_xy_muon[i][j]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
-   sprintf(hstname,"hit_PhiR_muon_%i_%i",i,j);
-   hhit_PhiR_muon[i][j]=new TH2F(hstname,hstname,360,-180,180,300,0,300);       
-   sprintf(hstname,"hit_PhiZ_muon_%i_%i",i,j);
-   hhit_PhiZ_muon[i][j]=new TH2F(hstname,hstname,360,-180,180,400,150,550);          
+   sprintf(hstname,"hit_xy_%i_%i",i,j);
+   hhit_xy[i][j]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
+   sprintf(hstname,"hit_PhiR_%i_%i",i,j);
+   hhit_PhiR[i][j]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,300,0,300);       
+   sprintf(hstname,"hit_PhiZ_%i_%i",i,j);
+   hhit_PhiZ[i][j]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,400,-300,700);          
+   sprintf(hstname,"Ploss_%i_%i",i,j);   
+   hPloss[i][j]=new TH2F(hstname,hstname,110,0,1.1,110,0,11);
 }}
   
 const int Nplate=22;
@@ -299,7 +319,7 @@ for (int i=0;i<Nplate;i++){
 TTree *tree_header = (TTree*) file->Get("header");
 vector <int> *evn=0,*evn_type=0;
 vector <double> *beamPol=0;
-vector <int> *var1=0,*var2=0,*var3=0,*var4=0,*var5=0,*var6=0,*var7=0,*var8=0;
+vector <double> *var1=0,*var2=0,*var3=0,*var4=0,*var5=0,*var6=0,*var7=0,*var8=0;
 tree_header->SetBranchAddress("evn",&evn);
 tree_header->SetBranchAddress("evn_type",&evn_type);
 tree_header->SetBranchAddress("beamPol",&beamPol);
@@ -355,28 +375,78 @@ tree_flux->SetBranchAddress("mvy",&flux_mvy);
 tree_flux->SetBranchAddress("mvz",&flux_mvz);
 tree_flux->SetBranchAddress("avg_t",&flux_avg_t);
 
+// TTree *tree_solid_lgc = (TTree*) file->Get("solid_lgc");
+// vector<int> *solid_lgc_hitn=0;
+// vector<int> *solid_lgc_sector=0,*solid_lgc_pmt=0,*solid_lgc_pixel=0,*solid_lgc_nphe=0;
+// vector<double> *solid_lgc_avg_t=0;
+// tree_solid_lgc->SetBranchAddress("hitn",&solid_lgc_hitn);
+// tree_solid_lgc->SetBranchAddress("sector",&solid_lgc_sector);
+// tree_solid_lgc->SetBranchAddress("pmt",&solid_lgc_pmt);
+// tree_solid_lgc->SetBranchAddress("pixel",&solid_lgc_pixel);
+// tree_solid_lgc->SetBranchAddress("nphe",&solid_lgc_nphe);
+// tree_solid_lgc->SetBranchAddress("avg_t",&solid_lgc_avg_t);
+// 
+// TTree *tree_solid_hgc = (TTree*) file->Get("solid_hgc");
+// vector<int> *solid_hgc_id=0,*solid_hgc_hitn=0;
+// vector<int> *solid_hgc_pid=0,*solid_hgc_mpid=0,*solid_hgc_tid=0,*solid_hgc_mtid=0,*solid_hgc_otid=0;
+// vector<double> *solid_hgc_trackE=0,*solid_hgc_totEdep=0,*solid_hgc_avg_x=0,*solid_hgc_avg_y=0,*solid_hgc_avg_z=0,*solid_hgc_avg_lx=0,*solid_hgc_avg_ly=0,*solid_hgc_avg_lz=0,*solid_hgc_px=0,*solid_hgc_py=0,*solid_hgc_pz=0,*solid_hgc_vx=0,*solid_hgc_vy=0,*solid_hgc_vz=0,*solid_hgc_mvx=0,*solid_hgc_mvy=0,*solid_hgc_mvz=0,*solid_hgc_avg_t=0;
+// tree_solid_hgc->SetBranchAddress("hitn",&solid_hgc_hitn);
+// tree_solid_hgc->SetBranchAddress("id",&solid_hgc_id);
+// tree_solid_hgc->SetBranchAddress("pid",&solid_hgc_pid);
+// tree_solid_hgc->SetBranchAddress("mpid",&solid_hgc_mpid);
+// tree_solid_hgc->SetBranchAddress("tid",&solid_hgc_tid);
+// tree_solid_hgc->SetBranchAddress("mtid",&solid_hgc_mtid);
+// tree_solid_hgc->SetBranchAddress("otid",&solid_hgc_otid);
+// tree_solid_hgc->SetBranchAddress("trackE",&solid_hgc_trackE);
+// tree_solid_hgc->SetBranchAddress("totEdep",&solid_hgc_totEdep);
+// tree_solid_hgc->SetBranchAddress("avg_x",&solid_hgc_avg_x);
+// tree_solid_hgc->SetBranchAddress("avg_y",&solid_hgc_avg_y);
+// tree_solid_hgc->SetBranchAddress("avg_z",&solid_hgc_avg_z);
+// tree_solid_hgc->SetBranchAddress("avg_lx",&solid_hgc_avg_lx);
+// tree_solid_hgc->SetBranchAddress("avg_ly",&solid_hgc_avg_ly);
+// tree_solid_hgc->SetBranchAddress("avg_lz",&solid_hgc_avg_lz);
+// tree_solid_hgc->SetBranchAddress("px",&solid_hgc_px);
+// tree_solid_hgc->SetBranchAddress("py",&solid_hgc_py);
+// tree_solid_hgc->SetBranchAddress("pz",&solid_hgc_pz);
+// tree_solid_hgc->SetBranchAddress("vx",&solid_hgc_vx);
+// tree_solid_hgc->SetBranchAddress("vy",&solid_hgc_vy);
+// tree_solid_hgc->SetBranchAddress("vz",&solid_hgc_vz);
+// tree_solid_hgc->SetBranchAddress("mvx",&solid_hgc_mvx);
+// tree_solid_hgc->SetBranchAddress("mvy",&solid_hgc_mvy);
+// tree_solid_hgc->SetBranchAddress("mvz",&solid_hgc_mvz);
+// tree_solid_hgc->SetBranchAddress("avg_t",&solid_hgc_avg_t);
+
 // cout << tree_flux->GetEntries() << " " << tree_header->GetEntries() << " " << tree_generated->GetEntries() << endl;
 
 int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
 cout << "nevent " << nevent << endl;
 
-int counter_decay_incomplete=0;
+int counter_decay=0;
+int counter_loss=0;
 
-for (Int_t i=0;i<nevent;i++) { 
+double rate=1;
+
+// for (Int_t i=0;i<1000;i++) { 
+// for (Int_t i=0;i<nevent/10;i++) { 
+for (Int_t i=0;i<nevent;i++) {
   cout << i << "\r";
 //   cout << i << "\n";
 
   tree_header->GetEntry(i);
+//   rate=var8->at(0);
   
   tree_generated->GetEntry(i);  
   
-  int pid_gen=0;
-  double theta_gen=0,phi_gen=0,p_gen=0,px_gen=0,py_gen=0,pz_gen=0,vx_gen=0,vy_gen=0,vz_gen=0;      
       TVector3 coor_gen(0,0,0);
       TVector3 mom_gen(0,0,0);
-      TVector3 coor_acc(0,0,0);
-      TVector3 mom_acc(0,0,0);      
+      
+      TLorentzVector beam(0,0,11000,11000);      
+      TLorentzVector mom4_gen(0,0,0,0);
+      double Q2=0;
+      
+  int pid_gen=0;
+  double theta_gen=0,phi_gen=0,p_gen=0,px_gen=0,py_gen=0,pz_gen=0,vx_gen=0,vy_gen=0,vz_gen=0;         
   for (int j=0;j<gen_pid->size();j++) {
 //       cout << gen_pid->at(j) << " " << gen_px->at(j) << " " << gen_py->at(j) << " " << gen_pz->at(j) << " " << gen_vx->at(j) << " " << gen_vy->at(j) << " " << gen_vz->at(j) << endl; 
       pid_gen=gen_pid->at(j);
@@ -388,13 +458,18 @@ for (Int_t i=0;i<nevent;i++) {
       vz_gen=gen_vz->at(j);     //in mm
 
       coor_gen.SetXYZ(vx_gen,vy_gen,vz_gen);
-      mom_gen.SetXYZ(px_gen,py_gen,pz_gen);    
+      mom_gen.SetXYZ(px_gen,py_gen,pz_gen);
 //       p_gen=sqrt(px_gen*px_gen+py_gen*py_gen+pz_gen*pz_gen);
 //       theta_gen=acos(pz_gen/p_gen);  	//in rad
 //       phi_gen=atan2(py_gen,px_gen);     //in rad
       p_gen=mom_gen.Mag();
       theta_gen=mom_gen.Theta();
       phi_gen=mom_gen.Phi();     //in rad
+
+      if (pid_gen==11) {
+	mom4_gen.SetXYZT(px_gen,py_gen,pz_gen,sqrt(0.511*0.511+p_gen*p_gen));                
+	Q2=-(beam-mom4_gen).Mag2()/1e6;
+      }
       
       hgen_P->Fill(p_gen/1e3);      
       hgen_Theta->Fill(theta_gen*DEG);            
@@ -404,29 +479,43 @@ for (Int_t i=0;i<nevent;i++) {
       hgen_PhiP->Fill(phi_gen*DEG,p_gen/1e3);
       hgen_ThetaPhiP->Fill(theta_gen*DEG,phi_gen*DEG,p_gen/1e3);   
       
-      hgen_ThetaVz->Fill(theta_gen*DEG,vz_gen/1e1);
-      hgen_ThetaVr->Fill(theta_gen*DEG,sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1);      
+      hgen_ThetaVz->Fill(vz_gen/1e1,theta_gen*DEG,rate);
+      hgen_ThetaVr->Fill(sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1,theta_gen*DEG,rate);      
   }  
   
     tree_flux->GetEntry(i);    
 
     //check all hits, begin ============================================================    
+      TVector3 coor_acc(0,0,0);
+      TVector3 mom_acc(0,0,0);
       TVector3 coor_GEM3(0,0,0);      
       TVector3 mom_GEM3(0,0,0);      
       TVector3 coor_GEM4(0,0,0);      
       TVector3 mom_GEM4(0,0,0);     
+      
+      double R_hit_EC=0;
+      
     bool Is_out=false;
     bool Is_decay=false;
     int acc[10]={0,0,0,0,0,0,0,0,0,0};
     for (Int_t j=0;j<flux_hitn->size();j++) {
-//       cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
+//           cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
     
     // remove decay product
-    if (flux_pid->at(j)!= pid_gen) {
+    if (flux_tid->at(j)!= 1) {
+//     if (flux_pid->at(j)!= pid_gen) {
+//     if (abs(flux_pid->at(j)) != 13 && abs(flux_pid->at(j)) != 211 ) {      
       Is_decay=true; 
-      counter_decay_incomplete++;            
+      counter_decay++;            
 // 	cout << "pid " << pid_gen << " change to " << flux_pid->at(j) << ", "; 
       continue;
+    }
+    
+    double p_flux=sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j));
+    if (p_flux/p_gen<0.8) {
+      counter_loss++;            
+// 	cout << "mom " << p_gen << " change to " << p_flux << " at " << flux_id->at(j) << endl;       
+//       continue;
     }
     
     int hit_id=-1;
@@ -438,17 +527,23 @@ for (Int_t i=0;i<nevent;i++) {
     else if (flux_id->at(j)==1610000) hit_id=5;    
     else if (flux_id->at(j)==3110000) hit_id=6;
     else if (flux_id->at(j)==3210000) hit_id=7;	
-    else if (flux_id->at(j)==6110000) hit_id=8;
-    else if (flux_id->at(j)==6210000) hit_id=9;
+//     else if (flux_id->at(j)==6110000) hit_id=8;
+//     else if (flux_id->at(j)==6120000) hit_id=8;    
+    else if (flux_id->at(j)==6130000) hit_id=8;        
+//     else if (flux_id->at(j)==6140000) hit_id=8;            
+//     else if (flux_id->at(j)==6210000) hit_id=9;
+    else if (flux_id->at(j)==6100000) hit_id=9;    
     else continue;  //skip other detector for now
-	
+
+//     if (hit_id==9) cout << "flux_id->at(j) " << flux_avg_z->at(j) << endl;
+
 //     int detector_ID=flux_id->at(j)/1000000;
 //     int subdetector_ID=(flux_id->at(j)%1000000)/100000;
 //     int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;
     int detector_ID=int(flux_id->at(j))/1000000;
     int subdetector_ID=(int(flux_id->at(j))%1000000)/100000;
     int subsubdetector_ID=((int(flux_id->at(j))%1000000)%100000)/10000;
-    cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID << endl;  
+//     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID << endl;  
         
     coor_acc.SetXYZ(flux_avg_x->at(j),flux_avg_y->at(j),flux_avg_z->at(j));
     mom_acc.SetXYZ(flux_px->at(j),flux_py->at(j),flux_pz->at(j));   
@@ -482,7 +577,12 @@ for (Int_t i=0;i<nevent;i++) {
       hmom_thetadiffMom[hit_id]->Fill((mom_acc.Theta()-mom_gen.Theta())*DEG,p_gen/1e3);
       hmom_anglediffMom[hit_id]->Fill(mom_acc.Angle(mom_gen)*DEG,p_gen/1e3);      
       
-      hhit_rMom[hit_id]->Fill(hit_r/1e1,p_gen/1e3);              
+      hhit_rMom[hit_id]->Fill(hit_r/1e1,p_gen/1e3);    
+      
+     hhit_xy[hit_id][0]->Fill(hit_x/1e1,hit_y/1e1);    
+     hhit_PhiR[hit_id][0]->Fill(hit_phi*DEG,hit_r/1e1);
+     hhit_PhiZ[hit_id][0]->Fill(hit_phi*DEG,hit_z/1e1);
+     hPloss[hit_id][0]->Fill(p_flux/p_gen,p_gen/1e3);      
      
     //check hit on baffleplate
 //     if (detector_ID==0 && subsubdetector_ID==0) hbaffleplate[subdetector_ID-1]->Fill(flux_avg_x->at(j)/1e1,flux_avg_y->at(j)/1e1);
@@ -491,10 +591,6 @@ for (Int_t i=0;i<nevent;i++) {
     
     //check hit on GEM
     if (detector_ID==1) {
-//       if (flux_pid->at(j)==11) {
-      hhit_xy_gem[subdetector_ID-1][0]->Fill(hit_x/1e1,hit_y/1e1);    
-      hhit_PhiR_gem[subdetector_ID-1][0]->Fill(hit_phi*DEG,hit_r/1e1);
-//       }
       // some low mom tracks spiral and travel back in field and go through one plane twice or more,   flux bank average these steps to get hit position which is wrong and can be outside of the virtual plane.
 //       for PVDIS
 //  my @Rin = (48,59,65,105,109);
@@ -502,8 +598,8 @@ for (Int_t i=0;i<nevent;i++) {
 //       for SIDIS
 //        my @Rin = (36,21,25,32,42,55);
 //        my @Rout = (87,98,112,135,100,123);
-      double Rin[6],Rout[6];
-      if (Is_PVDIS){
+      double Rin[6]={0,0,0,0,0,0},Rout[6]={0,0,0,0,0,0};
+      if (Is_PVDIS || Is_DDVCS_PVDIS_LH2){
 	Rin[0]=48;Rin[1]=59;Rin[2]=65;Rin[3]=105;Rin[4]=109;Rin[5]=0;     
         Rout[0]=122;Rout[1]=143;Rout[2]=143;Rout[3]=230;Rout[4]=237;Rout[5]=300;
       }
@@ -511,38 +607,43 @@ for (Int_t i=0;i<nevent;i++) {
 	Rin[0]=36;Rin[1]=21;Rin[2]=25;Rin[3]=32;Rin[4]=42;Rin[5]=55;     
         Rout[0]=87;Rout[1]=98;Rout[2]=112;Rout[3]=135;Rout[4]=100;Rout[5]=123;
       }
-      
+
       if (hit_r/1e1<Rin[subdetector_ID-1] || Rout[subdetector_ID-1]<hit_r/1e1) {
 	Is_out=true;
 // 	cout << flux_id->at(j) << endl; 	
 	continue;	
       }  
+                      
     }       
 
     //check hit on EC    
-    if (detector_ID==3) {
-     hhit_xy_ec[subdetector_ID-1][0]->Fill(hit_x/1e1,hit_y/1e1);    
-     hhit_PhiR_ec[subdetector_ID-1][0]->Fill(hit_phi*DEG,hit_r/1e1);
-      
+    if (detector_ID==3) {  
       //cut out some part of viritual plane to consider "good" part of EC
-//       if ((detector_ID==3 && subdetector_ID==1) && (hit_r/1e1 < rin_cut_FA || rout_cut_FA < hit_r/1e1)) continue;        
-//       if ((detector_ID==3 && subdetector_ID==2) && (hit_r/1e1 < rin_cut_LA || rout_cut_LA < hit_r/1e1)) continue;
-      if ((detector_ID==3 && subdetector_ID==1) && (hit_r/1e1 < rin_cut_FA)) continue;        
-      if ((detector_ID==3 && subdetector_ID==2) && (hit_r/1e1 < rin_cut_LA)) continue;
+      if ((detector_ID==3 && subdetector_ID==1) && (hit_r/1e1 < rin_cut_FA || rout_cut_FA < hit_r/1e1)) continue;        
+      if ((detector_ID==3 && subdetector_ID==2) && (hit_r/1e1 < rin_cut_LA || rout_cut_LA < hit_r/1e1)) continue;
+//       if ((detector_ID==3 && subdetector_ID==1) && (hit_r/1e1 < rin_cut_FA)) continue;        
+//       if ((detector_ID==3 && subdetector_ID==2) && (hit_r/1e1 < rin_cut_LA)) continue;
+
+//       if(detector_ID==3 && subdetector_ID==1){	
+// 	if (105<=hit_r/1e1 && hit_r/1e1<120)     {if(p_gen/1e3<5) continue;}
+// 	else if(120<=hit_r/1e1 && hit_r/1e1<135) {if(p_gen/1e3<4) continue;}
+// 	else if(135<=hit_r/1e1 && hit_r/1e1<149) {if(p_gen/1e3<3) continue;}
+// 	else if(149<=hit_r/1e1 && hit_r/1e1<163) {if(p_gen/1e3<3) continue;}
+// 	else if(163<=hit_r/1e1 && hit_r/1e1<177) {if(p_gen/1e3<1.5) continue;}
+// 	else if(177<=hit_r/1e1 && hit_r/1e1<191) {if(p_gen/1e3<1.5) continue;}
+// 	else if(191<=hit_r/1e1 && hit_r/1e1<235) {if(p_gen/1e3<1) continue;}
+// 	else {cout << "hit_r " << hit_r << " out of range"  << endl;}	
+//       }      
+      
+      R_hit_EC=hit_r/1e1;
     }
     
-    if (detector_ID==6) {
-     hhit_xy_muon[subdetector_ID-1][0]->Fill(hit_x/1e1,hit_y/1e1);    
-     hhit_PhiR_muon[subdetector_ID-1][0]->Fill(hit_phi*DEG,hit_r/1e1);
-     hhit_PhiZ_muon[subdetector_ID-1][0]->Fill(hit_phi*DEG,hit_z/1e1);
-    }                
-   
     if (Is_PVDIS){
       acc[hit_id]=1;      
     }
     else if (Is_SIDIS_He3){
-      if(theta_gen<8) continue;  //only acceptance 8 deg above      
-      acc[hit_id]=1;      
+//       if(theta_gen*DEG<8) continue;  //only acceptance 8 deg above      
+      acc[hit_id]=1;
     }
     else if (Is_SIDIS_NH3){     
       // only acceptance area not in sheet of flame
@@ -565,7 +666,8 @@ for (Int_t i=0;i<nevent;i++) {
       acc[hit_id]=1;      
     }
     else if (Is_DDVCS_PVDIS_LH2){
-      acc[hit_id]=1;      
+      acc[hit_id]=1;
+
     }    
        
        ///DIRC cut
@@ -581,7 +683,23 @@ for (Int_t i=0;i<nevent;i++) {
 //         if (vz_gen != flux_vz->at(j)/1e1) cout << "vz " << vz_gen << " " << flux_vz->at(j)/1e1 <<endl;		  
     }        
     //check all hits, end ============================================================
-    
+
+//   int total_lgc_nphe=0;  
+//       tree_solid_lgc->GetEntry(i);      
+//   for(Int_t j = 0; j < solid_lgc_hitn->size(); j++){
+// //       cout << j << " !!! " << solid_lgc_hitn->at(j) << " " << solid_lgc_sector->at(j) << " " << solid_lgc_pmt->at(j) << " " << solid_lgc_pixel->at(j) << " " << solid_lgc_nphe->at(j) << " " << solid_lgc_avg_t->at(j) << endl;     
+//     total_lgc_nphe += solid_lgc_nphe->at(j);
+//   }  
+//   htotal_lgc_nphe->Fill(total_lgc_nphe);
+// 
+//   int total_hgc_nphe=0;  
+//       tree_solid_hgc->GetEntry(i);      
+//   for(Int_t j = 0; j < solid_hgc_hitn->size(); j++){
+// //       cout << "solid_hgc " << " !!! " << solid_hgc_hitn->at(j) << " " << solid_hgc_id->at(j) << " " << solid_hgc_pid->at(j) << " " << solid_hgc_mpid->at(j) << " " << solid_hgc_tid->at(j) << " " << solid_hgc_mtid->at(j) << " " << solid_hgc_trackE->at(j) << " " << solid_hgc_totEdep->at(j) << " " << solid_hgc_avg_x->at(j) << " " << solid_hgc_avg_y->at(j) << " " << solid_hgc_avg_z->at(j) << " " << solid_hgc_avg_lx->at(j) << " " << solid_hgc_avg_ly->at(j) << " " << solid_hgc_avg_lz->at(j) << " " << solid_hgc_px->at(j) << " " << solid_hgc_py->at(j) << " " << solid_hgc_pz->at(j) << " " << solid_hgc_vx->at(j) << " " << solid_hgc_vy->at(j) << " " << solid_hgc_vz->at(j) << " " << solid_hgc_mvx->at(j) << " " << solid_hgc_mvy->at(j) << " " << solid_hgc_mvz->at(j) << " " << solid_hgc_avg_t->at(j) << endl;      
+//     if(solid_hgc_pid->at(j)==0)  total_hgc_nphe++;
+//   }  
+//   htotal_hgc_nphe->Fill(total_hgc_nphe);
+  
     //analysis hit result, begin ============================================================    
 //     if(Is_out){
 //     for (Int_t j=0;j<flux_hitn->size();j++) {
@@ -600,11 +718,33 @@ for (Int_t i=0;i<nevent;i++) {
     int pattern_id=-1;       
     if (Is_PVDIS){    
 //       if (acc[6]==1) pattern_id=0;  //hit on FAEC
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM      
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[6]==1) pattern_id=0;
+      //hit on FAEC and GEM      
+//       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[6]==1&&total_lgc_nphe>10) pattern_id=0;            //hit on FAEC and GEM and LGC
     }
     else if (Is_SIDIS_He3){
-      if (acc[6]==1) pattern_id=0;  //hit on FAEC
-      if (acc[7]==1) pattern_id=1;	  //hit on LAEC
+//       if (acc[6]==1) pattern_id=0;  //hit on FAEC
+//       if (acc[7]==1) pattern_id=1;	  //hit on LAEC
+      if (acc[1]==1&acc[2]==1&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM      
+//       if (acc[1]&acc[2]&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&total_lgc_nphe>10) pattern_id=0; //hit on FAEC and GEM and LGC      
+//       if (acc[1]&acc[2]&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&total_hgc_nphe>10) pattern_id=0; //hit on FAEC and GEM and LGC            
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) pattern_id=1; //hit on LAEC and GEM  
+
+      if (acc[6]==1) {
+	for (Int_t k=0;k<6;k++) {      
+	    if (acc[k]==1) {
+	      hmissingGEM_forwardangle->Fill(k+1);
+	    }
+	}      
+      }
+      if (acc[7]==1) {
+	for (Int_t k=0;k<6;k++) {      
+	    if (acc[k]==1) {
+	      hmissingGEM_largeangle->Fill(k+1);
+	    }
+	}      
+      }
+      
     }
     else if (Is_SIDIS_NH3){
 //       if (acc[6]==1) pattern_id=0;
@@ -628,7 +768,6 @@ for (Int_t i=0;i<nevent;i++) {
     else if (Is_DDVCS_PVDIS_LH2){
 //       if (acc[8]==1) pattern_id=0;  //hit on FAEC      
       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[8]==1) pattern_id=0; //hit on forward angle muon det behind endcap and all gem
-//       cout << "ok" << endl;
     }        
     
 
@@ -644,14 +783,22 @@ for (Int_t i=0;i<nevent;i++) {
       hflux_PhiP[pattern_id]->Fill(phi_gen*DEG,p_gen/1e3);	
       hflux_ThetaPhiP[pattern_id]->Fill(theta_gen*DEG,phi_gen*DEG,p_gen/1e3);
       
-      hflux_ThetaVz[pattern_id]->Fill(theta_gen*DEG,vz_gen/1e1);
-      hflux_ThetaVr[pattern_id]->Fill(theta_gen*DEG,sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1);
-    }    
-    
+      hflux_ThetaVz[pattern_id]->Fill(vz_gen/1e1,theta_gen*DEG,rate);
+      hflux_ThetaVr[pattern_id]->Fill(sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1,theta_gen*DEG,rate);
+    }
+      
     if (counter_hit[0]>1 || counter_hit[1]>1) {
       cout << endl;
       cout << "more than 1 hit? " << counter_hit[0] << " " << counter_hit[1] << endl;
     }
+    
+    if(pattern_id != -1){
+//       hhit_PR[pattern_id][0]->Fill(R_hit_EC,p_gen/1e3);
+//       if(Q2>1.7) hhit_PR[pattern_id][1]->Fill(R_hit_EC,p_gen/1e3);
+      hhit_PR[pattern_id][0]->Fill(R_hit_EC,p_gen/1e3,rate);
+      if(Q2>1.7) hhit_PR[pattern_id][1]->Fill(R_hit_EC,p_gen/1e3,rate);      
+    }
+    
     
 //     for (Int_t j=0;j<flux_hitn->size();j++) {
 //     int detector_ID=flux_id->at(j)/1000000;
@@ -687,7 +834,8 @@ for (Int_t i=0;i<nevent;i++) {
 }
 file->Close();
 
-cout << "counter_decay_incomplete " << counter_decay_incomplete << endl;
+cout << "counter_decay " << counter_decay << endl;
+cout << "counter_loss " << counter_loss << endl;
 
 if (Is_PVDIS){ 
 //   double planeZ[6]={40,68,96,124,152,180};
@@ -781,16 +929,19 @@ c_acc->cd(12);
 hacceptance_Phi[1]->Draw();
 c_acc->SaveAs(Form("%s_%s",the_filename,"acc.png"));
 
-TCanvas *c_acc_vertex = new TCanvas("acc_vertex","acc_vertex",1200,800);
-c_acc_vertex->Divide(2,2);
+TCanvas *c_acc_vertex = new TCanvas("acc_vertex","acc_vertex",1600,800);
+c_acc_vertex->Divide(2,1);
 c_acc_vertex->cd(1);
 hacceptance_ThetaVz[0]->Draw("colz");
+hacceptance_ThetaVz[0]->SetTitle(Form("FA sum %i",int(hacceptance_ThetaVz[0]->Integral())));
 c_acc_vertex->cd(2);
-hacceptance_ThetaVr[0]->Draw("colz");
-c_acc_vertex->cd(3);
 hacceptance_ThetaVz[1]->Draw("colz");
-c_acc_vertex->cd(4);
-hacceptance_ThetaVr[1]->Draw("colz");
+hacceptance_ThetaVz[1]->SetTitle(Form("LA sum %i",int(hacceptance_ThetaVz[1]->Integral())));
+// c_acc_vertex->cd(3);
+// hacceptance_ThetaVr[0]->Draw("colz");
+// c_acc_vertex->cd(4);
+// hacceptance_ThetaVr[1]->Draw("colz");
+c_acc_vertex->SaveAs(Form("%s_%s",the_filename,"acc_vertex.png"));
 
 TCanvas *c_gen = new TCanvas("gen","gen",1800,600);
 c_gen->Divide(3,3);
@@ -831,6 +982,18 @@ hgen_ThetaVr->Draw("colz");
 // c_flux->cd(6);
 // hflux_ThetaVr[1]->Draw("colz");
 // c_flux->SaveAs(Form("%s_%s",the_filename,"flux.png"));
+
+
+TCanvas *c_hit_PR = new TCanvas("hit_PR","hit_PR",1800,800);
+c_hit_PR->Divide(2,1);
+c_hit_PR->cd(1);
+hhit_PR[0][0]->Draw("colz");
+c_hit_PR->cd(2);
+hhit_PR[0][1]->Draw("colz");
+// c_hit_PR->cd(3);
+// hhit_PR[1][0]->Draw("colz");
+// c_hit_PR->cd(4);
+// hhit_PR[1][1]->Draw("colz");
 
 TCanvas *c_hit_rz = new TCanvas("hit_rz","hit_rz",1800,800);
 hhit_rz->Draw("colz");
@@ -882,68 +1045,31 @@ gPad->SetLogz(1);
 hmom_anglediffMom[k]->Draw("colz");
 }
 
-TCanvas *c_hit_xy_gem = new TCanvas("hit_xy_gem","hit_xy_gem",1800,800);
-c_hit_xy_gem->Divide(6,2);
-for(int j=0;j<2;j++){
-for(int i=0;i<6;i++){
-c_hit_xy_gem->cd(j*6+i+1);
+TCanvas *c_hit = new TCanvas("hit","hit",1800,800);
+c_hit->Divide(n,4);
+for(int j=0;j<1;j++){
+for(int i=0;i<n;i++){
+c_hit->cd(j*6+0*n+i+1);
 gPad->SetLogz(1);
-hhit_xy_gem[i][j]->Draw("colz");
+hhit_xy[i][j]->Draw("colz");
+c_hit->cd(j*6+1*n+i+1);
+gPad->SetLogz(1);
+hhit_PhiR[i][j]->Draw("colz");
+c_hit->cd(j*6+2*n+i+1);
+gPad->SetLogz(1);
+hhit_PhiZ[i][j]->Draw("colz");
+c_hit->cd(j*6+3*n+i+1);
+gPad->SetLogz(1);
+hPloss[i][j]->Draw("colz");
 }}
 
-TCanvas *c_hit_PhiR_gem = new TCanvas("hit_PhiR_gem","hit_PhiR_gem",1800,800);
-c_hit_PhiR_gem->Divide(6,2);
-for(int j=0;j<2;j++){
-for(int i=0;i<6;i++){
-c_hit_PhiR_gem->cd(j*6+i+1);
-gPad->SetLogz(1);
-hhit_PhiR_gem[i][j]->Draw("colz");
-}}
+TCanvas *c_total_lgc_nphe = new TCanvas("total_lgc_nphe","total_lgc_nphe",1000,800);
+gPad->SetLogy();
+htotal_lgc_nphe->Draw();
 
-TCanvas *c_hit_xy_ec = new TCanvas("hit_xy_ec","hit_xy_ec",1800,800);
-c_hit_xy_ec->Divide(2,2);
-for(int j=0;j<2;j++){
-for(int i=0;i<2;i++){
-c_hit_xy_ec->cd(j*2+i+1);
-gPad->SetLogz(1);
-hhit_xy_ec[i][j]->Draw("colz");
-}}
-
-TCanvas *c_hit_PhiR_ec = new TCanvas("hit_PhiR_ec","hit_PhiR_ec",1800,800);
-c_hit_PhiR_ec->Divide(2,2);
-for(int j=0;j<2;j++){
-for(int i=0;i<2;i++){
-c_hit_PhiR_ec->cd(j*2+i+1);
-gPad->SetLogz(1);
-hhit_PhiR_ec[i][j]->Draw("colz");
-}}
-
-TCanvas *c_hit_xy_muon = new TCanvas("hit_xy_muon","hit_xy_muon",1800,800);
-c_hit_xy_muon->Divide(2,2);
-for(int j=0;j<2;j++){
-for(int i=0;i<2;i++){
-c_hit_xy_muon->cd(j*2+i+1);
-gPad->SetLogz(1);
-hhit_xy_muon[i][j]->Draw("colz");
-}}
-
-TCanvas *c_hit_PhiR_muon = new TCanvas("hit_PhiR_muon","hit_PhiR_muon",1800,800);
-c_hit_PhiR_muon->Divide(2,2);
-for(int j=0;j<2;j++){
-for(int i=0;i<2;i++){
-c_hit_PhiR_muon->cd(j*2+i+1);
-gPad->SetLogz(1);
-hhit_PhiR_muon[i][j]->Draw("colz");
-}}
-
-TCanvas *c_hit_PhiZ_muon = new TCanvas("hit_PhiZ_muon","hit_PhiZ_muon",1800,800);
-c_hit_PhiZ_muon->Divide(2,2);
-for(int j=0;j<2;j++){
-for(int i=0;i<2;i++){
-c_hit_PhiZ_muon->cd(j*2+i+1);
-gPad->SetLogz(1);
-hhit_PhiZ_muon[i][j]->Draw("colz");
-}}
+TCanvas *c_total_hgc_nphe = new TCanvas("total_hgc_nphe","total_hgc_nphe",1000,800);
+gPad->SetLogy();
+htotal_hgc_nphe->Draw();
 
 // TCanvas *c_acceptance_all_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
 // c_acceptance_all_gem->Divide(2,3);
@@ -982,7 +1108,7 @@ hacceptance_ThetaPhiP_largeangle->SetNameTitle("acceptance_ThetaPhiP_largeangle"
 
 // gStyle->SetOptStat(0);
 
-if (Is_PVDIS){ 
+if (Is_PVDIS || Is_DDVCS_PVDIS_LH2){ 
 TCanvas *c_acceptance_2D = new TCanvas("acceptance_2D","acceptance_2D",800,600);
 // c_acceptance_all->Divide(1,3);
 // c_acceptance_all->cd(1);
@@ -1018,6 +1144,14 @@ c_acceptance_3D->SaveAs(Form("%s_%s",the_filename,"acceptance_3D.png"));
 
 TCanvas *c_linearity_GEM34 = new TCanvas("linearity_GEM34","linearity_GEM34",800,600);
 hlinearity_GEM34->Draw("colz");
+
+TCanvas *c_missingGEM = new TCanvas("missingGEM","missingGEM",1700,800);
+c_missingGEM->Divide(2,1);
+c_missingGEM->cd(1);
+hmissingGEM_forwardangle->Draw();
+c_missingGEM->cd(2);
+hmissingGEM_largeangle->Draw();
+
 
 cout << "checking holes in acceptance plots" << endl;
 int NbinsX,NbinsY,NbinsZ;
