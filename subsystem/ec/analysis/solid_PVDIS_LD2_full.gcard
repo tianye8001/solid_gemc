@@ -4,10 +4,10 @@
 <option name="DBUSER" value="soliduser"/>
 <option name="DBPSWD" value="ilovesolid"/>
 
-<detector name="../ec_solid_gemc/solid_PVDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
+<detector name="../ec_segmented_solid_gemc/solid_PVDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
 
 <detector name="../../../solid_gemc2/geometry/magnet/solid_solenoid" factory="TEXT" variation="Original"/>
-<detector name="../../../solid_gemc2/geometry/lgc/solid_PVDIS_lgc" factory="TEXT" variation="Original"/>
+<detector name="../../../solid_gemc2/geometry/lgc/lg_cherenkov" factory="TEXT" variation="PVDIS"/>
 <detector name="../../../solid_gemc2/geometry/gem/solid_PVDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../../../solid_gemc2/geometry/target/solid_PVDIS_target_LD2_enclosure" factory="TEXT" variation="Original"/>
 <detector name="../../../solid_gemc2/geometry/beamline/solid_PVDIS_beamline" factory="TEXT" variation="Original"/>
@@ -28,16 +28,6 @@
 
 <option name="FIELD_DIR" value="../../../solid_gemc2/field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
-
-<option name="BEAM_P"   value="e-,5.5*GeV,20*deg,0*deg"/>
-<option name="SPREAD_P" value="5.5*GeV,20*deg,180*deg"/>
-<option name="BEAM_V"   value="(0,0,10)cm"/>
-<option name="SPREAD_V" value="(0.3,20)cm"/>
-
-<option name="EXEC_MACRO" value="solid_slice.vis"/>
-<option name="geometry" value="1000x1000"/>
-<option name="HIGH_RES" value="1"/>
-<option name="USE_GUI"  value="1"/>
 
 </gcard>
 

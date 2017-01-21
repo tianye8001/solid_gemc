@@ -39,6 +39,7 @@ sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_
 // sprintf(output_filename, "%s_output.root",the_filename);
 // TFile *outputfile=new TFile(output_filename, "recreate");
 
+// TH1F *htotEdep_ec=new TH1F("htotEdep_ec","ec;totEdep(MeV);",100,0,500);
 TH1F *htotEdep_ec=new TH1F("htotEdep_ec","ec;totEdep(MeV);",100,900,1600);
 TH2F *hp_gen_flux=new TH2F("hp_gen_flux",";p_gen(MeV);p_flux(MeV)",110,0,11000,110,0,11000);
 
