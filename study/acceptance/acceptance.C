@@ -725,9 +725,9 @@ for (Int_t i=0;i<nevent;i++) {
     else if (Is_SIDIS_He3){
 //       if (acc[6]==1) pattern_id=0;  //hit on FAEC
 //       if (acc[7]==1) pattern_id=1;	  //hit on LAEC
-      if (acc[1]==1&acc[2]==1&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM      
-//       if (acc[1]&acc[2]&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&total_lgc_nphe>10) pattern_id=0; //hit on FAEC and GEM and LGC      
-//       if (acc[1]&acc[2]&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&total_hgc_nphe>10) pattern_id=0; //hit on FAEC and GEM and LGC            
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM      
+//       if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&total_lgc_nphe>10) pattern_id=0; //hit on FAEC and GEM and LGC      
+//       if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&total_hgc_nphe>10) pattern_id=0; //hit on FAEC and GEM and LGC            
       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) pattern_id=1; //hit on LAEC and GEM  
 
       if (acc[6]==1) {
