@@ -193,7 +193,7 @@ for (Int_t i=0;i<nevent/10;i++) {
       if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=10;
       if (detector_ID==3 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=11;	                    
       
-      if (0<=hit_id && hit_id<=11) hflux_hitxy[hit_id]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.);
+      if (0<=hit_id && hit_id<=m) hflux_hitxy[hit_id]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.);
 //       else cout << "flux_id->at(j) " << flux_id->at(j) << endl;
     }
 
@@ -251,7 +251,7 @@ c_totEdep_compare->cd(3);
 htotEdep_spd_mrpc->Draw("colz");
 
 TCanvas *c_flux_hitxy = new TCanvas("flux_hitxy","flux_hitxy",1800,900);
-c_flux_hitxy->Divide(5,2);
+c_flux_hitxy->Divide(6,2);
 for (Int_t i=0;i<m;i++) {
 c_flux_hitxy->cd(i+1);
 gPad->SetLogz();
