@@ -13,7 +13,7 @@ cd this_dir
 
 = PVDIS_LD2 ===================================
 
-root -l 'Get_PVDIS_trigger_rate.C+("/w/work6501/zwzhao/solid_simulation/PVDIS_LD2_JLAB_VERSION_1.3/pass4/background_solid_PVDIS_LD2_dirty_weighted_eDIS_filenum100_1e6.root")'
+root -l 'Get_PVDIS_trigger_rate.C+("/home/zwzhao/solid_simulation/PVDIS_LD2_JLAB_VERSION_1.3/pass4/background_solid_PVDIS_LD2_dirty_weighted_eDIS_filenum100_1e6.root")'
 
 = SIDIS_He3 ===================================
 
