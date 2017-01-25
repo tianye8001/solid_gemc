@@ -25,55 +25,49 @@
 #include "TGraphErrors.h"
 #include "TString.h"
 
-
-#include "Get_PVDIS_trigger_efficiency_EC.C"
+#include "PVDIS_LD2_FAEC_electron_trigger_HallDRakitha.C"
 
 using namespace std;
 
-/* some numbers to be hard coded
- *
- * make sure they are correct while using this script
- *
- */
-
-const double filenum=500; //file numbers while running GEMC in order to be correct for normalization
+// some numbers to be hard coded 
+// make sure they are correct while using this script
+ 
 const int loop_time=5;   //electron to be 1, pion to be many times to take advantage of statistics, pion has low efficiency on EC
 const double PEthresh=2; //lgc pe shreshold for each pmt
 const double PMTthresh=2; //lgc pmt shreshold, at least 2pmts are fired in each sector
+const int with_background_on_lgc=1;     //0: no background on lgc, 1: yes background on lgc
+
 const double DEG=180./3.1415926;   //rad to degree
-const int with_background_on_lgc=0;     //0: no background on lgc, 1: yes background on lgc
 
+int Get_PVDIS_LD2_trigger_rate(string inputfile_name,bool Is_tellorig=false,string filetype=""){
 
-//void Get_PVDIS_lgc_singles(){
-int main(){
+gStyle->SetOptStat(11111111);
+
+double filenum=1;
+if (inputfile_name.find("_filenum",0) != string::npos) {
+  filenum=atof(inputfile_name.substr(inputfile_name.find("_filenum")+8,inputfile_name.find("_")).c_str());
+    cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+}
+else {cout << "this file has no filnum, please check if you need filenum for addtional normalization" << endl;}
+
+TFile *file=new TFile(inputfile_name.c_str());
 	
 	//--- root file, output of GEMC
 	// electron
-	//TString file_name="./PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_eDIS_filenum100_1e6.root";
+	//TString file_name="../PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_eDIS_filenum100_1e6.root";
  	//---pim hall D
-	//TString file_name="./PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_pimHallD_filenum600_6e6.root";
-	
-	//pim wiser
-	TString file_name="./PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_pimWiser_filenum500_5e6.root";
-	
-	
+	//TString file_name="../PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_pimHallD_filenum600_6e6.root";
 	//---pip hall D
-	//TString file_name="./PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_pipHallD_filenum600_6e6.root";
+	//TString file_name="../PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_pipHallD_filenum600_6e6.root";
 	//---pi0 hall D
-	//TString file_name="./PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_pi0HallD_filenum600_6e6.root";
+	//TString file_name="../PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_pi0HallD_filenum600_6e6.root";
+	//---all hadrons
+// 	TString file_name="../PVDIS_new_DATA/background_solid_PVDIS_LD2_dirty_normalized_allnoeHallD_filenum497_4.97e8.root";
 	
-	//---EM background
-	//TString background_file_name="./PVDIS_DATA/background_solid_PVDIS_LD2_EM_0.98e8_skim225433.root";
-	//---EM background
-	TString background_file_name="./PVDIS_new_DATA/background_solid_PVDIS_LD2_EM_4.98e8_skim960975.root";
 	
-	double prob_get_background_entry=960975/4.98e8;
-	double num_of_events_running=4.98e8;
-	int total_30ns_background=9375000;   // 9.375 million
-	
-	TFile *file=new TFile(file_name);
+	TString background_file_name="parametrized_lgc.root";      //h_pe is here
 	TFile *background_file=new TFile(background_file_name);
-
+	TH1F *h_pe=(TH1F*)background_file->Get("h_pe");
 
 	//-------------------------
 	//   get trees in the real data file
@@ -154,19 +148,6 @@ int main(){
 	tree_lgc->SetBranchAddress("nphe", &lgc_n_p_e);  //number of p.e for a specific hit
 	tree_lgc->SetBranchAddress("avg_t", &lgc_avg_t);  //no idea what is this
 	
-	//--- background lgc
-	//information recorded by lgc
-	TTree* background_tree_lgc= (TTree*) background_file->Get("solid_lgc");
-	vector<double> *background_lgc_hitn=0;
-	vector<double> *background_lgc_sector=0, *background_lgc_pmt=0, *background_lgc_pixel=0, *background_lgc_n_p_e=0;
-	vector<double> *background_lgc_avg_t=0;
-	background_tree_lgc->SetBranchAddress("hitn", &background_lgc_hitn);
-	background_tree_lgc->SetBranchAddress("sector", &background_lgc_sector);   //1->30
-	background_tree_lgc->SetBranchAddress("pmt", &background_lgc_pmt);  //1->9
-	background_tree_lgc->SetBranchAddress("pixel", &background_lgc_pixel);  //no idea what is this
-	background_tree_lgc->SetBranchAddress("nphe", &background_lgc_n_p_e);  //number of p.e for a specific hit
-	background_tree_lgc->SetBranchAddress("avg_t", &background_lgc_avg_t);  //no idea what is this
-
 
 
 	long int N_events = (long int)tree_header->GetEntries();
@@ -178,6 +159,7 @@ int main(){
 // prepare for outputs
 // define histograms, output txt files etc...
 	TH1F *h_flux_EC=new TH1F("h_flux_EC","trigger rate on EC", 60, 0, 300);
+	TH1F *h_flux_lgc=new TH1F("h_flux_lgc","trigger rate on LGC", 60, 0, 300);	
 	TH1F *h_flux_EC_lgc=new TH1F("h_flux_EC_lgc","trigger rate EC & lgc", 60, 0, 300);
 	TH1F *h_flux_EC_no_lgc=new TH1F("h_flux_EC_no_lgc","rates fire EC but not lgc", 60, 0, 300);
 	
@@ -236,39 +218,31 @@ int main(){
 		for(int j=0;j<n_hits;j++){ //loop hits in flux to get a hit on EC
 			if( fabs(flux_id->at(j) - 3110000)<0.01 ){ //  hit at EC
 				//cout<<"hit at EC"<<endl;
-				
+			
+				//---hit R, in unit of cm
 				hit_R=sqrt(flux_avg_x->at(j)*flux_avg_x->at(j) + flux_avg_y->at(j)*flux_avg_y->at(j));
 				hit_R=hit_R/10.0;  //convert mm to cm
 				
-
+				//hit p, in unit of GeV
 				hit_momen=sqrt(flux_px->at(j)*flux_px->at(j) + flux_py->at(j)*flux_py->at(j) + flux_pz->at(j)*flux_pz->at(j));
 				hit_momen=hit_momen/1000.0;  //covert MeV to GeV
-			
-
-
-				TVector3 hit_vector(flux_avg_x->at(j), flux_avg_y->at(j), flux_avg_z->at(j));
 				
-				hit_phi=hit_vector.Phi()*DEG;
-				
-				if(hit_phi - (int(hit_phi/12.0)*12) < 6){
-					phi_range="high";
-				}else{
-					phi_range="low";
-				}
 
+				//using Rakitha's curve, no need to have phi dependent
 				double EC_efficiency=0;
+
 				if(   fabs( fabs(flux_pid->at(j)) - 11 )<0.1    ){
 					pid="electron";
-					EC_efficiency=Get_PVDIS_trigger_efficiency_EC(hit_R, phi_range, hit_momen, pid);
+					EC_efficiency=GetElectronTriggerEffi(GetRadiusIndex(hit_R), GetMomentumIndex(hit_momen));
 				}else if(  fabs( fabs(flux_pid->at(j)) - 211 )<0.1 ){
 					pid="pion";
-					EC_efficiency=Get_PVDIS_trigger_efficiency_EC(hit_R, phi_range, hit_momen, pid);
+					EC_efficiency=GetPionTriggerEffi( GetRadiusIndex(hit_R), GetMomentumIndex(hit_momen) );
 				}else if(  fabs( fabs(flux_pid->at(j)) - 22 )<0.1 ){
 					pid="gamma";
-					EC_efficiency=Get_PVDIS_trigger_efficiency_EC(hit_R, phi_range, hit_momen, pid);
+					EC_efficiency=GetElectronTriggerEffi(GetRadiusIndex(hit_R), GetMomentumIndex(hit_momen));
 				}else if( fabs( fabs(flux_pid->at(j)) - 2212 )<0.1  ){
 					pid="proton";
-					EC_efficiency=Get_PVDIS_trigger_efficiency_EC(hit_R, phi_range, hit_momen, pid);
+					EC_efficiency=GetPionTriggerEffi( GetRadiusIndex(hit_R), GetMomentumIndex(hit_momen) )/2.0;
 				}else{
 					EC_efficiency=0;
 				}
@@ -291,6 +265,7 @@ int main(){
 
 		
 
+		
 		
 		//---lgc trigger
 		tree_lgc->GetEntry(i);
@@ -315,33 +290,18 @@ int main(){
 			}  //end loop hits on lgc for data tree
 		
 			
-	
-			
+		//---------------------------------------------------------------------------------------------------------
+		//add in backgrounds based on parametrized lgc study	
 			if(with_background_on_lgc){	
-			
-			//add in 30ns background
-			//int background_counter=0;
-			for(int i_background=0; i_background<total_30ns_background; i_background++){
-				double test_background=rand.Uniform(0,1);
-				if(test_background<prob_get_background_entry){   //need to have an entry
-					
-					background_tree_lgc->GetEntry(long(test_background*num_of_events_running));  //randomly get a background event in background file
-					
-					if(!background_lgc_hitn->size()){
-						//do nothing
-					}else{
-						for(int k_background=0; k_background< background_lgc_hitn->size(); k_background++){
-							if(background_lgc_n_p_e->at(k_background)){
-								sectorhits[int(background_lgc_sector->at(k_background)-1)][int(background_lgc_pmt->at(k_background)-1)] +=background_lgc_n_p_e->at(k_background);
-							}
-						}
+				int N_random_pe=(int)h_pe->GetRandom();
+				if(N_random_pe!=0){
+					for(int id_random_pe=0; id_random_pe<N_random_pe;id_random_pe++){
+						sectorhits[rand.Integer(30)][rand.Integer(9)] += 1;
 					}
 				}
-			}
-			//finish adding in background
 			
-			}
-
+			}  //scater random electrons on pmts based on parametrized EM-only performance
+		//---------------------------------------------------------------------------------------------------------
 			
 			
 			
@@ -351,31 +311,39 @@ int main(){
 				ntrigpmts = 0;
 				for(int m = 0; m < 9; m++){
 					if(sectorhits[l][m] >= PEthresh) ntrigpmts++;
+// 					if(sectorhits[l][m] > 0) cout << sectorhits[l][m]<<" ";
 				}
+// 				cout << ntrigpmts <<endl;
 				if(ntrigpmts >= PMTthresh) ntrigsecs++;
 			}
 	
 			if(ntrigsecs){
 				pass_lgc=1;
-				//cout<<"passed lgc"<<endl;
 			}else{
 				pass_lgc=0;
 			}
 		}
 
+		
+
 
 		//---
 		//---fill histograms based on trigger flag
 		//---
-		// only EC
+		//only EC
 		if(pass_EC){
-			h_flux_EC->Fill(hit_R, rate);
+			h_flux_EC->Fill(hit_R,rate);
 		}
-		// EC and LGC
+		
+		if(pass_lgc){
+			h_flux_lgc->Fill(hit_R,rate);
+		}		
+		
+		// fire EC && lgc
 		if(pass_EC && pass_lgc){
 			h_flux_EC_lgc->Fill(hit_R, rate);
 		}
-		// EC but no LGC
+
 		if(pass_EC && !pass_lgc){
 			h_flux_EC_no_lgc->Fill(hit_R,rate);
 		}
@@ -390,28 +358,31 @@ int main(){
 	TCanvas *can=new TCanvas("can","can");
 	can->cd();
 	h_flux_EC_lgc->Draw();
-	cout<<"EC&lgc trigger rate:"<<h_flux_EC_lgc->Integral(1,60)<<endl;
+
+	cout<<"EC be fired: "<<h_flux_EC->Integral(1,60)<<" Hz"<<endl;
+	cout<<"LGC be fired: "<<h_flux_lgc->Integral(1,60)<<" Hz"<<endl;
+	cout<<"EC&lgc both fired:"<<h_flux_EC_lgc->Integral(1,60)<<" Hz"<<endl;
+	cout<<"EC but no lgc fired:"<<h_flux_EC_no_lgc->Integral(1,60)<<" Hz"<<endl;
 
 	//do outputs
 
-	ofstream OUTPUT_rate;
-	OUTPUT_rate.open("EC_and_lgc_both.txt");
-	if(!OUTPUT_rate){
-		cout<<"can't open output file"<<endl;
-		return 1;
-	}
-
-	OUTPUT_rate<<" only EC: "<<h_flux_EC->Integral(1,60)<<endl;
-	OUTPUT_rate<<"EC&lgc both fired:"<<h_flux_EC_lgc->Integral(1,60)<<endl;
-	OUTPUT_rate<<"EC but no lgc fired:"<<h_flux_EC_no_lgc->Integral(1,60)<<endl;
-
-
-	TFile *output_file=new TFile("EC_and_lgc_both.root","RECREATE");
-	h_flux_EC->SetDirectory(output_file);
-	h_flux_EC_lgc->SetDirectory(output_file);
-	h_flux_EC_no_lgc->SetDirectory(output_file);
-	output_file->Write();
-
+// 	ofstream OUTPUT_rate;
+// 	OUTPUT_rate.open("EC_and_lgc_both.txt");
+// 	if(!OUTPUT_rate){
+// 		cout<<"can't open output file"<<endl;
+// 		return 1;
+// 	}
+// 	
+// 	OUTPUT_rate<<"EC be fired: "<<h_flux_EC->Integral(1,60)<<endl;
+// 	OUTPUT_rate<<"EC&lgc both fired:"<<h_flux_EC_lgc->Integral(1,60)<<endl;
+// 	OUTPUT_rate<<"EC but no lgc fired:"<<h_flux_EC_no_lgc->Integral(1,60)<<endl;
+// 
+// 
+// 	TFile *output_file=new TFile("EC_and_lgc_both.root","RECREATE");
+// 	h_flux_EC->SetDirectory(output_file);
+// 	h_flux_EC_lgc->SetDirectory(output_file);
+// 	h_flux_EC_no_lgc->SetDirectory(output_file);
+// 	output_file->Write();
 
 }
 

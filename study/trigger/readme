@@ -3,19 +3,32 @@ This is trigger study using GEMC output files
 each subdetector is processed by the production version of its trigger function at
 solid/solid_gemc2/analysis
 
-We also use EC trigger function from "WiserJinHuang"
+We use EC trigger function from "WiserJinHuang" and "HallDRakitha"
 
 run the scripts with compliation to avoid error or slowness
 
-= SIDIS_He3 ==
-run it like this on ifarm
-
-ssh ifarm1102
+run it like this on ifarm1401
 source /work/halla/solid/zwzhao/solid/solid_svn/solid/set_solid
-cd /work/halla/solid/zwzhao/solid/solid_svn/solid/study/trigger
+cd this_dir
+
+= PVDIS_LD2 ===================================
+
+root -l 'Get_PVDIS_trigger_rate.C+("/w/work6501/zwzhao/solid_simulation/PVDIS_LD2_JLAB_VERSION_1.3/pass4/background_solid_PVDIS_LD2_dirty_weighted_eDIS_filenum100_1e6.root")'
+
+root -l 'Get_PVDIS_trigger_rate.C+("/w/work6501/zwzhao/solid_simulation/PVDIS_LD2_JLAB_VERSION_1.3/pass4/background_solid_PVDIS_LD2_dirty_normalized_pimHallD_filenum600_6e6.root")'
+
+root -l 'Get_PVDIS_trigger_rate.C+("/w/work6501/zwzhao/solid_simulation/PVDIS_LD2_JLAB_VERSION_1.3/pass4/background_solid_PVDIS_LD2_dirty_normalized_pi0HallD_filenum600_6e6.root")'
+
+= SIDIS_He3 ===================================
 
 root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_weighted_eDIS_filenum50_0.5e6.root")'
 root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_weighted_eDIS_filenum50_0.5e6.root",true,"single")'
 
+root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_normalized_pi0HallD_filenum500_5e6.root")'
+root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_normalized_pi0HallD_filenum500_5e6.root",true,"single")'
+
 root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_weighted_SIDISDuke_epip_followtheta_filenum75_0.375e6.root")'
 root -l   'Get_SIDIS_He3_trigger_rate.C+("/home/zwzhao/solid_simulation/SIDIS_He3_JLAB_VERSION_1.3/pass7/background_solid_SIDIS_He3_dirty_weighted_SIDISDuke_epip_followtheta_filenum75_0.375e6.root",true,"sidis")'
+
+= JPsi_LH2 ===================================
+
