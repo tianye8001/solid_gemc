@@ -8,8 +8,6 @@ gStyle->SetOptFit(11111);
    // To see the output of this macro, click begin_html <a href="gif/graph.gif">here</a>. end_html
    //Author: Rene Brun
    
-   TCanvas *c1 = new TCanvas("c1","A Simple Graph Example",200,10,700,500);
-
 //    c1->SetFillColor(42);
 //    c1->SetGrid();
 
@@ -26,23 +24,39 @@ gStyle->SetOptFit(11111);
    Double_t res_error[n];   
 
    for (Int_t i=0;i<n;i++) {
-     res[i]=Sigma[i]/1e3/E[i];
-     res_error[i]=Sigma_error[i]/1e3/E[i]; 
+     res[i]=Sigma[i]/Mean[i];
+     res_error[i]=Sigma_error[i]/Mean[i]; 
 //      res_error[i]=sqrt(1000.)/E[i];      
 //      printf(" i %i %f %f \n",i,x[i],y[i]);
    }
-   gr = new TGraphErrors(n,E,res,E_error,res_error);
+   
+   TCanvas *c1=new TCanvas();
+   gr1 = new TGraphErrors(n,E,res,E_error,res_error);
 //    gr->SetLineColor(2);
 //    gr->SetLineWidth(4);
 //    gr->SetMarkerColor(4);
-   gr->SetMarkerStyle(1);
-   gr->SetTitle("EC energy resolution");
-   gr->GetXaxis()->SetTitle("E");
-   gr->GetYaxis()->SetTitle("#sigma/E");
-   gr->Draw("AP");
+   gr1->SetMarkerStyle(1);
+   gr1->SetTitle("EC energy resolution");
+   gr1->GetXaxis()->SetTitle("E (GeV)");
+   gr1->GetYaxis()->SetTitle("#sigmaE/E");
+   gr1->Draw("AP");
    
-   TF1 *fun = new TF1("fun","sqrt(pow([0]/sqrt(x),2)+pow([1],2))",0,12);
-   gr->Fit("fun");
+   TF1 *fun1 = new TF1("fun1","sqrt(pow([0]/sqrt(x),2)+pow([1],2))",0,12);   
+   gr1->Fit("fun1");
+   
+   TCanvas *c2=new TCanvas();   
+   gr2 = new TGraphErrors(n,E,res,E_error,res_error);
+//    gr->SetLineColor(2);
+//    gr->SetLineWidth(4);
+//    gr->SetMarkerColor(4);
+   gr2->SetMarkerStyle(1);
+   gr2->SetTitle("EC energy resolution");
+   gr2->GetXaxis()->SetTitle("E (GeV)");
+   gr2->GetYaxis()->SetTitle("#sigmaE/E");
+   gr2->Draw("AP");   
+   
+   TF1 *fun2 = new TF1("fun2","sqrt(pow([0]/sqrt(x),2)+pow([1],2)+pow([2]/x,2))",0,12);
+   gr2->Fit("fun2");
    
    // TCanvas::Update() draws the frame, after which one can change it
 //    c1->Update();
