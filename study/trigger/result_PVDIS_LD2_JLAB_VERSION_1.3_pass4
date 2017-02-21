@@ -3,16 +3,15 @@ Processing Get_PVDIS_LD2_trigger_rate.C+("/home/zwzhao/solid_simulation/PVDIS_LD
 filenum 100 for addtional normalization, YOU Need to Make Sure It's CORRECT!
 total number of events : 1000000
 loop.....  1
-X11 connection rejected because of wrong authentication.
 loop.....  2
 loop.....  3
 loop.....  4
 loop.....  5
-EC be fired: 211952 Hz
-LGC be fired: 338145 Hz
-EC&lgc both fired:204124 Hz
-EC but no lgc fired:7827.75 Hz
-(int)32065808
+EC be fired: 177820 Hz
+LGC be fired: 304387 Hz
+EC&lgc both fired:174193 Hz
+EC but no lgc fired:3627.05 Hz
+(int)38079120
 
 Processing Get_PVDIS_LD2_trigger_rate.C+("/home/zwzhao/solid_simulation/PVDIS_LD2_JLAB_VERSION_1.3/pass4/background_solid_PVDIS_LD2_dirty_weighted_eDIS_filenum100_1e6.root")...
 filenum 100 for addtional normalization, YOU Need to Make Sure It's CORRECT!
