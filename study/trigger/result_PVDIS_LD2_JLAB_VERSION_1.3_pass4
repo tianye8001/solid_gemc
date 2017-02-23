@@ -1,3 +1,16 @@
+Processing Get_PVDIS_LD2_trigger_rate.C+("/home/zwzhao/solid_simulation/PVDIS_LD2_JLAB_VERSION_1.3/pass4/background_solid_PVDIS_LD2_dirty_weighted_eAll_allgood_filenum100_1e6.root")...
+filenum 100 for addtional normalization, YOU Need to Make Sure It's CORRECT!
+total number of events : 538692
+loop.....  1
+loop.....  2
+loop.....  3
+loop.....  4
+loop.....  5
+EC be fired: 176033 Hz
+LGC be fired: 290194 Hz
+EC&lgc both fired:172025 Hz
+EC but no lgc fired:4008.11 Hz
+(int)34838048
 
 Processing Get_PVDIS_LD2_trigger_rate.C+("/home/zwzhao/solid_simulation/PVDIS_LD2_JLAB_VERSION_1.3/pass4/background_solid_PVDIS_LD2_dirty_weighted_eAll_filenum100_1e6.root")...
 filenum 100 for addtional normalization, YOU Need to Make Sure It's CORRECT!
