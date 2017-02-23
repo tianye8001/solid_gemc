@@ -16,6 +16,9 @@ atan(py/pz) tells the theta angle in rad,
 
 atan(py/px) tells the phi angle in rad, it should be 90 deg because NH3 solenoid field is along -x direction
 
+modify beam.gcard a bit to include solid main solenoid field, the output "beam_withsolenoid.txt" has no change comparing to no solid main solenoid field case.
+This is expected because solid main solenoid field should have no effect on a particle going along beamline.
+
 Zhiwen Zhao, 2016/05/26
 
 
