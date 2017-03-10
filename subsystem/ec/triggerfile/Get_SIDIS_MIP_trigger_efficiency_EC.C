@@ -14,6 +14,8 @@
 #include<fstream>
 using namespace std;
 
+// refer to http://hallaweb.jlab.org/12GeV/SoLID/download/sim/talk/solid_SIDIS_background_zwzhao_20131118.pdf
+// FAEC MIP trigger cut on 200MeV curve on slide 14
 
 double Get_SIDIS_MIP_trigger_efficiency_EC(TString pid,double hit_Mom,bool Is_debug){
 	//hit_Mom, momentum of the hit

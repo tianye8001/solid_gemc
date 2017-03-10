@@ -34,6 +34,11 @@
 
 using namespace std;
 
+// refer to slide 3 of http://hallaweb.jlab.org/12GeV/SoLID/download/baffle/talk/solid_baffle_zwzhao_20130910.pdf
+// EC trigger cut near x=0.35 curve
+// EC trigger cut R edge 110,116,124,165,205,265 cm
+// EC trigger cut P value 3.8,3.5,2.5,2.0,1.5 GeV
+
 	//trigger curve using different baffle
 	//---this is for more1 block
 	TFile* file_high_phi=new TFile("PVDIS_LD2_201309/baffle_babarbafflemore1_block/Lead2X0PbBlock_Hex.1.PVDIS_RunALL_GetEfficiencies_Full_bgd_BackGround_Sept2013_Block_Real_Eklog_R_high_R0_ALL.rootTriggerSummaryhigh.root");

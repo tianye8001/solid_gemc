@@ -10,6 +10,11 @@
  * 2016-2-19
 */
 
+// refer to http://hallaweb.jlab.org/12GeV/SoLID/download/sim/talk/solid_SIDIS_background_zwzhao_20131118.pdf
+// FAEC e trigger cut on Q2=1 curve on slide 5
+// FAEC e trigger cut R edge 90,105,115,130,150,200,230 cm
+// FAEC e trigger cut P value 5,4,3,2,1,2 GeV
+// LAEC e trigger cut P>3GeV on slide 3
 
 double Get_SIDIS_trigger_efficiency_EC(TString det_ID,TString pid,double hit_R, double hit_Mom, bool Is_debug){
 	//det_ID="large", "forward"
