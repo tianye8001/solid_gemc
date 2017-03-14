@@ -182,53 +182,53 @@ for(int i=0;i<m;i++){
    
    sprintf(hstname,"flux_ThetaP_%i",i);
    hflux_ThetaP[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(11*binfactor_p),0,11);        
-   hflux_ThetaP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);P (GeV)",title[i]));   
+   hflux_ThetaP[i]->SetTitle(Form("particles detected by %s;vertex #theta (deg);vertex P (GeV)",title[i]));   
    sprintf(hstname,"flux_ThetaPhi_%i",i);   
    hflux_ThetaPhi[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(360*binfactor_phi),-180,180); 
-   hflux_ThetaPhi[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (GeV)",title[i]));   
+   hflux_ThetaPhi[i]->SetTitle(Form("particles detected by %s;vertex #theta (deg);vertex Phi (GeV)",title[i]));   
    sprintf(hstname,"flux_PhiP_%i",i);   
    hflux_PhiP[i]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,int(11*binfactor_p),0,11);
-   hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex Phi (deg);P (GeV)",title[i]));  
+   hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex #phi (deg);vertex P (GeV)",title[i]));  
    sprintf(hstname,"flux_ThetaPhiP_%i",i);   
    hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,110,0,11);   
-   hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));   
+   hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex #theta (deg);vertex #phi (deg);vertex P (GeV)",title[i]));   
     
    sprintf(hstname,"flux_ThetaVz_%i",i);
    hflux_ThetaVz[i]=new TH2F(hstname,hstname,int((vz_max-vz_min)*binfactor_vz),vz_min,vz_max,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);   
-   hflux_ThetaVz[i]->SetTitle("flux;vertex Z (cm);vertex Theta (deg)");      
+   hflux_ThetaVz[i]->SetTitle("flux;vertex Z (cm);vertex #theta (deg)");      
    sprintf(hstname,"flux_ThetaVr_%i",i);
    hflux_ThetaVr[i]=new TH2F(hstname,hstname,20,0,1,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);
-   hflux_ThetaVr[i]->SetTitle("flux;vertex R (cm);vertex Theta (deg)");            
+   hflux_ThetaVr[i]->SetTitle("flux;vertex R (cm);vertex #theta (deg)");            
   
    sprintf(hstname,"acceptance_P_%i",i);
    hacceptance_P[i]=new TH1F(hstname,hstname,int(11*binfactor_p),0,11);
-   hacceptance_P[i]->SetTitle(Form("acceptance by %s;P (GeV);",title[i]));
+   hacceptance_P[i]->SetTitle(Form("acceptance by %s;vertex P (GeV);",title[i]));
    sprintf(hstname,"acceptance_Theta_%i",i);
    hacceptance_Theta[i]=new TH1F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);    
-   hacceptance_Theta[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);",title[i]));   
+   hacceptance_Theta[i]->SetTitle(Form("acceptance by %s;vertex #theta (deg);",title[i]));   
    sprintf(hstname,"acceptance_Phi_%i",i);
    hacceptance_Phi[i]=new TH1F(hstname,hstname,int(360*binfactor_phi),-180,180);    
-   hacceptance_Phi[i]->SetTitle(Form("acceptance by %s;vertex Phi (deg));",title[i]));   
+   hacceptance_Phi[i]->SetTitle(Form("acceptance by %s;vertex #phi (deg));",title[i]));   
    
    sprintf(hstname,"acceptance_ThetaP_%i",i);
    hacceptance_ThetaP[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(11*binfactor_p),0,11);     
-   hacceptance_ThetaP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);P (GeV)",title[i]));
+   hacceptance_ThetaP[i]->SetTitle(Form("acceptance by %s;vertex #theta (deg);vertex P (GeV)",title[i]));
    sprintf(hstname,"acceptance_ThetaPhi_%i",i);
    hacceptance_ThetaPhi[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(360*binfactor_phi),-180,180);     
-   hacceptance_ThetaPhi[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg)",title[i]));
+   hacceptance_ThetaPhi[i]->SetTitle(Form("acceptance by %s;vertex #theta (deg);vertex #phi (deg)",title[i]));
    sprintf(hstname,"acceptance_PhiP_%i",i);
    hacceptance_PhiP[i]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,int(11*binfactor_p),0,11);
-   hacceptance_PhiP[i]->SetTitle(Form("acceptance by %s;vertex Phi (deg);P (GeV)",title[i]));      
+   hacceptance_PhiP[i]->SetTitle(Form("acceptance by %s;vertex #phi (deg);vertex P (GeV)",title[i]));      
    sprintf(hstname,"acceptance_ThetaPhiP_%i",i);   
    hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,110,0,11);
-   hacceptance_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex Theta (deg);vertex Phi (deg);P (GeV)",title[i]));
+   hacceptance_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex #theta (deg);vertex #phi (deg);vertex P (GeV)",title[i]));
 
    sprintf(hstname,"acceptance_ThetaVz_%i",i);
    hacceptance_ThetaVz[i]=new TH2F(hstname,hstname,int((vz_max-vz_min)*binfactor_vz),vz_min,vz_max,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);   
-   hacceptance_ThetaVz[i]->SetTitle("acceptance;vertex Z (cm);vertex Theta (deg)");      
+   hacceptance_ThetaVz[i]->SetTitle("acceptance;vertex Z (cm);vertex #theta (deg)");      
    sprintf(hstname,"acceptance_ThetaVr_%i",i);
    hacceptance_ThetaVr[i]=new TH2F(hstname,hstname,20,0,1,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);
-   hacceptance_ThetaVr[i]->SetTitle("acceptance;vertex R (cm);vertex Theta (deg)");            
+   hacceptance_ThetaVr[i]->SetTitle("acceptance;vertex R (cm);vertex #theta (deg)");            
 }
 
 TH2F *hhit_PR[2][2];
@@ -427,8 +427,6 @@ int counter_loss=0;
 
 double rate=1;
 
-// for (Int_t i=0;i<1000;i++) { 
-// for (Int_t i=0;i<nevent/10;i++) { 
 for (Int_t i=0;i<nevent;i++) {
   cout << i << "\r";
 //   cout << i << "\n";
@@ -904,6 +902,7 @@ c_acc->Divide(3,4);
 c_acc->cd(1);
 gPad->SetLogy(1);
 hacceptance_ThetaP[0]->Draw("colz");
+hacceptance_ThetaP[0]->SetAxisRange(0.1,11,"Y");
 c_acc->cd(2);
 hacceptance_ThetaPhi[0]->Draw("colz");
 c_acc->cd(3);
@@ -911,6 +910,7 @@ hacceptance_PhiP[0]->Draw("colz");
 c_acc->cd(4);
 gPad->SetLogy(1);
 hacceptance_ThetaP[1]->Draw("colz");
+hacceptance_ThetaP[1]->SetAxisRange(0.1,11,"Y");
 c_acc->cd(5);
 hacceptance_ThetaPhi[1]->Draw("colz");
 c_acc->cd(6);
@@ -1077,7 +1077,7 @@ htotal_hgc_nphe->Draw();
 // c_acceptance_all_gem->cd(k+1);
 // hacceptance_ThetaP[k]->Draw("colz");
 // char hsttitle[80];
-// sprintf(hsttitle,"acceptance at GEM plane %i;theta (degree);P (GeV)",k+1);
+// sprintf(hsttitle,"acceptance at GEM plane %i;theta (deg);vertex P (GeV)",k+1);
 // hacceptance_ThetaP[k]->SetTitle(hsttitle);
 // }
 // c_acceptance_all_gem->SaveAs("acceptance_gem.png");
@@ -1092,19 +1092,20 @@ htotal_hgc_nphe->Draw();
 // }
 
 hacceptance_ThetaP_forwardangle=(TH2F*) hacceptance_ThetaP[0]->Clone();
-hacceptance_ThetaP_forwardangle->SetNameTitle("acceptance_ThetaP_forwardangle","acceptance_ThetaP_forwardangle;vertex Theta (degree);P (GeV)");
+hacceptance_ThetaP_forwardangle->SetNameTitle("acceptance_ThetaP_forwardangle","acceptance by FA;vertex #theta (deg);vertex P (GeV)");
 hacceptance_ThetaP_largeangle=(TH2F*) hacceptance_ThetaP[1]->Clone();
-hacceptance_ThetaP_largeangle->SetNameTitle("acceptance_ThetaP_largeangle","acceptance_ThetaP_largeangle;vertex Theta (degree);P (GeV)");
+hacceptance_ThetaP_largeangle->SetNameTitle("acceptance_ThetaP_largeangle","acceptance by LA;vertex #theta (deg);vertex P (GeV)");
 hacceptance_ThetaP_overall=(TH2F*) hacceptance_ThetaP_forwardangle->Clone();
 hacceptance_ThetaP_overall->Add(hacceptance_ThetaP_largeangle);
-hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","acceptance_ThetaP_overall;vertex Theta (degree);P (GeV)");
+// hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","acceptance by FA and LA;vertex #theta (deg);vertex P (GeV)");
+hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","SIDIS acceptance;vertex #theta (deg);vertex P (GeV)");
 hacceptance_ThetaP_overall->SetMinimum(0);  
 hacceptance_ThetaP_overall->SetMaximum(1);  
 
 hacceptance_ThetaPhiP_forwardangle=(TH3F*) hacceptance_ThetaPhiP[0]->Clone();
-hacceptance_ThetaPhiP_forwardangle->SetNameTitle("acceptance_ThetaPhiP_forwardangle","acceptance_ThetaPhiP_forwardangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
+hacceptance_ThetaPhiP_forwardangle->SetNameTitle("acceptance_ThetaPhiP_forwardangle","acceptance by FA;vertex #theta (deg);vertex #phi (deg);vertex P (GeV)");
 hacceptance_ThetaPhiP_largeangle=(TH3F*) hacceptance_ThetaPhiP[1]->Clone();
-hacceptance_ThetaPhiP_largeangle->SetNameTitle("acceptance_ThetaPhiP_largeangle","acceptance_ThetaPhiP_largeangle;vertex Theta (degree);vertex Phi (degree);P (GeV)");
+hacceptance_ThetaPhiP_largeangle->SetNameTitle("acceptance_ThetaPhiP_largeangle","acceptance by LA;vertex #theta (deg);vertex #phi (deg);vertex P (GeV)");
 
 // gStyle->SetOptStat(0);
 
@@ -1132,6 +1133,26 @@ gPad->SetLogy();
 gPad->SetGrid();
 hacceptance_ThetaP_overall->Draw("colz");
 c_acceptance_2D->SaveAs(Form("%s_%s",the_filename,"acceptance_2D.png"));
+
+TCanvas *c_acceptance_2D_sep = new TCanvas("acceptance_2D_sep","acceptance_2D_sep",1200,500);
+c_acceptance_2D_sep->Divide(2,1);
+c_acceptance_2D_sep->cd(1);
+gPad->SetLogy();
+gPad->SetGrid();
+hacceptance_ThetaP_forwardangle->Draw("colz");
+c_acceptance_2D_sep->cd(2);
+gPad->SetLogy();
+gPad->SetGrid();
+hacceptance_ThetaP_largeangle->Draw("colz");
+c_acceptance_2D_sep->SaveAs(Form("%s_%s",the_filename,"acceptance_2D_sep.png"));
+
+TCanvas *c_acceptance_2D_both = new TCanvas("acceptance_2D_both","acceptance_2D_both",1200,1000);
+c_acceptance_2D_both->Divide(1,1);
+c_acceptance_2D_both->cd(1);
+gPad->SetLogy();
+gPad->SetGrid();
+hacceptance_ThetaP_overall->Draw("colz");
+c_acceptance_2D_both->SaveAs(Form("%s_%s",the_filename,"acceptance_2D_both.png"));
 
 TCanvas *c_acceptance_3D = new TCanvas("acceptance_3D","acceptance_3D",1200,800);
 c_acceptance_3D->Divide(2,1);
@@ -1212,12 +1233,19 @@ cout << endl;
 // }}
 // cout << endl;
 
-hacceptance_ThetaP_forwardangle->SetDirectory(outputfile);
-hacceptance_ThetaP_largeangle->SetDirectory(outputfile);
-hacceptance_ThetaP_overall->SetDirectory(outputfile);
-hacceptance_ThetaPhiP_forwardangle->SetDirectory(outputfile);
-hacceptance_ThetaPhiP_largeangle->SetDirectory(outputfile);
-
 outputfile->Write();
 outputfile->Flush();
+
+char output_filename_final[200];
+sprintf(output_filename_final, "%s_output_final.root",the_filename);
+TFile *outputfile_final=new TFile(output_filename_final, "recreate");
+
+hacceptance_ThetaP_forwardangle->SetDirectory(outputfile_final);
+hacceptance_ThetaP_largeangle->SetDirectory(outputfile_final);
+hacceptance_ThetaP_overall->SetDirectory(outputfile_final);
+hacceptance_ThetaPhiP_forwardangle->SetDirectory(outputfile_final);
+hacceptance_ThetaPhiP_largeangle->SetDirectory(outputfile_final);
+
+outputfile_final->Write();
+outputfile_final->Flush();
 }
