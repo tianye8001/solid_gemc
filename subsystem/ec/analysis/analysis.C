@@ -23,7 +23,7 @@
 
 using namespace std;
 
-void analysis(string input_filename)
+void analysis(string input_filename,string par)
 {
 gROOT->Reset();
 gStyle->SetPalette(1);
@@ -39,9 +39,39 @@ sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_
 // sprintf(output_filename, "%s_output.root",the_filename);
 // TFile *outputfile=new TFile(output_filename, "recreate");
 
-// TH1F *htotEdep_ec=new TH1F("htotEdep_ec","ec;totEdep(MeV);",100,0,500);
-TH1F *htotEdep_ec=new TH1F("htotEdep_ec","ec;totEdep(MeV);",100,900,1600);
-TH2F *hp_gen_flux=new TH2F("hp_gen_flux",";p_gen(MeV);p_flux(MeV)",110,0,11000,110,0,11000);
+
+double Min_preshower=0,Max_preshower=0,Min_shower=0,Max_shower=0;
+if (par=="e"){
+  Min_preshower=0;
+  Max_preshower=200;
+  Min_shower=500;
+  Max_shower=1500;
+}
+else if (par=="h"){
+  Min_preshower=0;
+  Max_preshower=10;
+  Min_shower=0;
+  Max_shower=200;  
+}
+else {cout << "particle other than e or h" << endl; return;}
+
+TH1F *htotEdep_ec_preshower_FA=new TH1F("totEdep_ec_preshower_FA","EC FA preshower;totEdep(MeV);",100,Min_preshower,Max_preshower);
+TH1F *htotEdep_ec_preshower_LA=new TH1F("totEdep_ec_preshower_LA","EC LA preshower;totEdep(MeV);",100,Min_preshower,Max_preshower);
+TH1F *htotEdep_ec_shower_FA=new TH1F("totEdep_ec_shower_FA","EC FA shower;totEdep(MeV);",100,Min_shower,Max_shower);
+TH1F *htotEdep_ec_shower_LA=new TH1F("totEdep_ec_shower_LA","EC LA shower;totEdep(MeV);",100,Min_shower,Max_shower);
+TH1F *htotEdep_ec_FA=new TH1F("totEdep_ec_FA","EC FA;totEdep(MeV);",100,Min_shower,Max_shower);
+TH1F *htotEdep_ec_LA=new TH1F("totEdep_ec_LA","EC LA;totEdep(MeV);",100,Min_shower,Max_shower);
+
+	TH1F *hhit_ec_preshower_FA=new TH1F("hit_ec_preshower_FA","hit,EC FA preshower;module;Edep rate (MeV/kHz)",2000,0,2000);
+	TH1F *hocc_ec_preshower_FA=new TH1F("occ_ec_preshower_FA","occupancy,EC FA preshower(Edep>MIP);module;event rate (kHz)",2000,0,2000);	
+	TH1F *hhit_ec_preshower_LA=new TH1F("hit_ec_preshower_LA","hit,EC LA preshower;module;Edep rate (MeV/kHz)",2000,0,2000);
+	TH1F *hocc_ec_preshower_LA=new TH1F("occ_ec_preshower_LA","occupancy,EC LA preshower(Edep>MIP);module;event rate (kHz)",2000,0,2000);	
+	TH1F *hhit_ec_shower_FA=new TH1F("hit_ec_shower_FA","hit,EC FA shower;module;Edep rate (MeV/kHz)",2000,0,2000);
+	TH1F *hocc_ec_shower_FA=new TH1F("occ_ec_shower_FA","occupancy,EC FA shower(Edep>MIP);module;event rate (kHz)",2000,0,2000);	
+	TH1F *hhit_ec_shower_LA=new TH1F("hit_ec_shower_LA","hit,EC LA shower;module;Edep rate (MeV/kHz)",2000,0,2000);
+	TH1F *hocc_ec_shower_LA=new TH1F("occ_ec_shower_LA","occupancy,EC LA shower(Edep>MIP);module;event rate (kHz)",2000,0,2000);
+	
+TH2F *hp_gen_flux=new TH2F("hp_gen_flux",";p_gen(MeV);p_flux(MeV)",110,0,11000,110,0,11000);	
 
 TFile *file=new TFile(input_filename.c_str());
 if (file->IsZombie()) {
@@ -114,9 +144,11 @@ int nevent = (int)tree_generated->GetEntries();
 int nselected = 0;
 cout << "nevent " << nevent << endl;
 
-for (Int_t i=0;i<nevent;i++) { 
+double rate=1;
+
+for (Int_t i=0;i<1e4;i++) { 
 // for (Int_t i=0;i<2;i++) { 
-  cout << i << "\r";
+//   cout << i << "\r";
 //   cout << i << "\n";
 
   tree_header->GetEntry(i);
@@ -160,20 +192,52 @@ for (Int_t i=0;i<nevent;i++) {
 	  hp_gen_flux->Fill(p_gen,p_flux);
 	  
 	  if(fabs(p_gen-p_flux)>1)   {
-	    cout << "event " << i << " gen " << pid_gen << " " << px_gen << " " <<py_gen << " " <<pz_gen << " " <<vx_gen << " " <<vy_gen << " " <<vz_gen << " " << endl; 
+/*	    cout << "event " << i << " gen " << pid_gen << " " << px_gen << " " <<py_gen << " " <<pz_gen << " " <<vx_gen << " " <<vy_gen << " " <<vz_gen << " " << endl; 
 
-	    cout << "event " << i << " flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
+	    cout << "event " << i << " flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl; */ 
 	  }
 	}
       }
       
-    }													
-  tree_solid_ec->GetEntry(i);  
+    }	
    
-  double totEdep_ec=process_tree_solid_ec(tree_solid_ec);
-//   cout << "totEdep_ec " << totEdep_ec << endl;
+    tree_solid_ec->GetEntry(i);  
+   
+    double totEdep_ec_preshower_FA=0,totEdep_ec_preshower_LA=0,totEdep_ec_shower_FA=0,totEdep_ec_shower_LA=0;  
 
-  htotEdep_ec->Fill(totEdep_ec);    
+    double hit_ec_preshower_FA[2000]={0},hit_ec_preshower_LA[2000]={0};
+    double hit_ec_shower_FA[2000]={0},hit_ec_shower_LA[2000]={0};				
+    
+    process_tree_solid_ec(tree_solid_ec,hit_ec_preshower_FA,hit_ec_preshower_LA,hit_ec_shower_FA,hit_ec_shower_LA);
+		    
+    double cut_occ_ec_preshower=0.4,cut_occ_ec_shower=6; //in MeV
+    for(int index=0;index<2000;index++){
+      if(hit_ec_preshower_FA[index]>0) hhit_ec_preshower_FA->Fill(index,hit_ec_preshower_FA[index]*rate/1e3);
+      if(hit_ec_shower_FA[index]>0) hhit_ec_shower_FA->Fill(index,hit_ec_shower_FA[index]*rate/1e3);
+      if(hit_ec_preshower_FA[index]>cut_occ_ec_preshower) hocc_ec_preshower_FA->Fill(index,rate/1e3);
+      if(hit_ec_shower_FA[index]>cut_occ_ec_shower) hocc_ec_shower_FA->Fill(index,rate/1e3);
+      
+      if(hit_ec_preshower_FA[index]>0) totEdep_ec_preshower_FA += hit_ec_preshower_FA[index]; 
+      if(hit_ec_shower_FA[index]>0) totEdep_ec_shower_FA += hit_ec_shower_FA[index];       
+    }
+    for(int index=0;index<500;index++){
+      if(hit_ec_preshower_LA[index]>0) hhit_ec_preshower_LA->Fill(index,hit_ec_preshower_LA[index]*rate/1e3);
+      if(hit_ec_shower_LA[index]>0) hhit_ec_shower_LA->Fill(index,hit_ec_shower_LA[index]*rate/1e3);	
+      if(hit_ec_preshower_LA[index]>cut_occ_ec_preshower) hocc_ec_preshower_LA->Fill(index,rate/1e3);
+      if(hit_ec_shower_LA[index]>cut_occ_ec_shower) hocc_ec_shower_LA->Fill(index,rate/1e3);
+      
+      if(hit_ec_preshower_LA[index]>0) totEdep_ec_preshower_LA += hit_ec_preshower_LA[index]; 
+      if(hit_ec_shower_LA[index]>0) totEdep_ec_shower_LA += hit_ec_shower_LA[index];             
+    }		
+  
+//   cout << totEdep_ec_preshower_FA<< " " << totEdep_ec_shower_FA<< " " << totEdep_ec_preshower_LA<< " " << totEdep_ec_shower_LA << endl;
+  
+  if (totEdep_ec_preshower_FA>0) htotEdep_ec_preshower_FA->Fill(totEdep_ec_preshower_FA);    
+  if (totEdep_ec_preshower_LA>0) htotEdep_ec_preshower_LA->Fill(totEdep_ec_preshower_LA);     
+  if (totEdep_ec_shower_FA>0) htotEdep_ec_shower_FA->Fill(totEdep_ec_shower_FA);    
+  if (totEdep_ec_shower_LA>0) htotEdep_ec_shower_LA->Fill(totEdep_ec_shower_LA);       
+  if ((totEdep_ec_preshower_FA+totEdep_ec_shower_FA)>0) htotEdep_ec_FA->Fill(totEdep_ec_preshower_FA+totEdep_ec_shower_FA);    
+  if ((totEdep_ec_preshower_LA+totEdep_ec_shower_LA)>0) htotEdep_ec_LA->Fill(totEdep_ec_preshower_LA+totEdep_ec_shower_LA);     
   
 }
 file->Close();
@@ -182,12 +246,21 @@ file->Close();
 // outputfile->Flush();
 
 TCanvas *c_totEdep_ec = new TCanvas("totEdep_ec","totEdep_ec",1600,900);
-htotEdep_ec->Draw();
-htotEdep_ec->Fit("gaus");
-// c->SaveAs("totEdep_ec.png");
+c_totEdep_ec->Divide(3,2);
+c_totEdep_ec->cd(1);
+htotEdep_ec_preshower_FA->Draw();
+c_totEdep_ec->cd(2);
+htotEdep_ec_shower_FA->Draw();
+c_totEdep_ec->cd(3);
+htotEdep_ec_FA->Draw();
+c_totEdep_ec->cd(4);
+htotEdep_ec_preshower_LA->Draw();
+c_totEdep_ec->cd(5);
+htotEdep_ec_shower_LA->Draw();
+c_totEdep_ec->cd(6);
+htotEdep_ec_LA->Draw();
 
 TCanvas *c_p_gen_flux = new TCanvas("p_gen_flux","p_gen_flux",1600,900);
 hp_gen_flux->Draw("colz");
-
 
 }

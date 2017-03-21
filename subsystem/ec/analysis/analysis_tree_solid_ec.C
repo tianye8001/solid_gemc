@@ -57,30 +57,30 @@ tree_solid_ec->SetBranchAddress("avg_t",&solid_ec_avg_t);
 return;
 }
 
-double process_tree_solid_ec(TTree *tree_solid_ec)
+Bool_t process_tree_solid_ec(TTree *tree_solid_ec,double *hit_ec_preshower_FA,double *hit_ec_preshower_LA,double *hit_ec_shower_FA,double *hit_ec_shower_LA)
 {
-  double totEdep=0;
-//     for (Int_t j=0;j<1;j++) {  
     for (Int_t j=0;j<solid_ec_hitn->size();j++) {
-      //cout << j<< " solid_ec " << " !!! " << solid_ec_hitn->at(j) << " " << solid_ec_id->at(j) << " " << solid_ec_pid->at(j) << " " << solid_ec_mpid->at(j) << " " << solid_ec_tid->at(j) << " " << solid_ec_mtid->at(j) << " " << solid_ec_trackE->at(j) << " " << solid_ec_totEdep->at(j) << " " << solid_ec_avg_x->at(j) << " " << solid_ec_avg_y->at(j) << " " << solid_ec_avg_z->at(j) << " " << solid_ec_avg_lx->at(j) << " " << solid_ec_avg_ly->at(j) << " " << solid_ec_avg_lz->at(j) << " " << solid_ec_px->at(j) << " " << solid_ec_py->at(j) << " " << solid_ec_pz->at(j) << " " << solid_ec_vx->at(j) << " " << solid_ec_vy->at(j) << " " << solid_ec_vz->at(j) << " " << solid_ec_mvx->at(j) << " " << solid_ec_mvy->at(j) << " " << solid_ec_mvz->at(j) << " " << solid_ec_avg_t->at(j) << endl;  
+//       cout << j<< " solid_ec " << " !!! " << solid_ec_hitn->at(j) << " " << solid_ec_id->at(j) << " " << solid_ec_pid->at(j) << " " << solid_ec_mpid->at(j) << " " << solid_ec_tid->at(j) << " " << solid_ec_mtid->at(j) << " " << solid_ec_trackE->at(j) << " " << solid_ec_totEdep->at(j) << " " << solid_ec_avg_x->at(j) << " " << solid_ec_avg_y->at(j) << " " << solid_ec_avg_z->at(j) << " " << solid_ec_avg_lx->at(j) << " " << solid_ec_avg_ly->at(j) << " " << solid_ec_avg_lz->at(j) << " " << solid_ec_px->at(j) << " " << solid_ec_py->at(j) << " " << solid_ec_pz->at(j) << " " << solid_ec_vx->at(j) << " " << solid_ec_vy->at(j) << " " << solid_ec_vz->at(j) << " " << solid_ec_mvx->at(j) << " " << solid_ec_mvy->at(j) << " " << solid_ec_mvz->at(j) << " " << solid_ec_avg_t->at(j) << endl;    
 
       int detector_ID=solid_ec_id->at(j)/1000000;
       int subdetector_ID=(solid_ec_id->at(j)%1000000)/100000;
       int subsubdetector_ID=((solid_ec_id->at(j)%1000000)%100000)/10000;
-      int component_ID=solid_ec_id->at(j)%10000;
+      int component_ID=solid_ec_id->at(j)%10000;  
       
-      //cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_ec_totEdep->at(j) << endl; 
+//       cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_ec_avg_z->at(j) << endl; 
            
-//       if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 0) {       
-      if (detector_ID==3 && subdetector_ID == 1) {
-	totEdep +=solid_ec_totEdep->at(j); 
+      if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1) {       
+	if (solid_ec_avg_z->at(j)>2000) hit_ec_preshower_FA[component_ID]=solid_ec_totEdep->at(j);
+	if (solid_ec_avg_z->at(j)<2000) hit_ec_preshower_LA[component_ID]=solid_ec_totEdep->at(j);	
       }     
-      
-//       if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1) totEdep +=solid_ec_trackE->at(j);           
-    }
-    
+      if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 0) {       
+	if (solid_ec_avg_z->at(j)>2000) hit_ec_shower_FA[component_ID]=solid_ec_totEdep->at(j);
+	if (solid_ec_avg_z->at(j)<2000) hit_ec_shower_LA[component_ID]=solid_ec_totEdep->at(j);	
+      }
+         
+    }    
 
-return totEdep;
+return 0;
 
 }
 

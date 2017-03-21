@@ -13,8 +13,8 @@ solid_gemc solid_PVDIS_LD2_ec_segmented.gcard -BEAM_P="e-,5*GeV,25*deg,0*deg" -S
 solid_gemc solid_SIDIS_He3_ec_segmented.gcard   -BEAM_P="e-,5*GeV,12*deg,0*deg" -SPREAD_P="0*GeV,0*deg,0*deg" -BEAM_V="(0,0,-350)cm" -N=1e3 -OUTPUT="evio,output.evio" -PRINT_EVENT=1 -USE_GUI=0
 
 #convert evio file in standalone simulation to root file
-evio2root -INPUTF=output.evio -B="../ec_solid_gemc/solid_PVDIS_ec_forwardangle"
-evio2root -INPUTF=output.evio -B="../ec_solid_gemc/solid_SIDIS_ec_forwardangle ../ec_solid_gemc/solid_SIDIS_ec_largeangle"
+evio2root -INPUTF=output.evio -B="../ec_segmented_solid_gemc/solid_PVDIS_ec_forwardangle"
+evio2root -INPUTF=output.evio -B="../ec_segmented_solid_gemc/solid_SIDIS_ec_forwardangle ../ec_segmented_solid_gemc/solid_SIDIS_ec_largeangle"
 
 == run ec simulation with other subsystems =====
 same commands as in standalone mode, just replace the gcards with these two 
@@ -22,13 +22,14 @@ solid_PVDIS_LD2_full.gcard
 solid_SIDIS_He3_full.gcard
 
 #convert evio file in full simulation to root file
-evio2root -INPUTF=output.evio -B="../ec_solid_gemc/solid_PVDIS_ec_forwardangle ../../../solid_gemc2/geometry/lgc/solid_PVDIS_lgc ../../../solid_gemc2/geometry/gem/solid_PVDIS_gem"
-evio2root -INPUTF=output.evio -B="../ec_solid_gemc/solid_SIDIS_ec_forwardangle ../ec_solid_gemc/solid_SIDIS_ec_largeangle ../../../solid_gemc2/geometry/hgc/solid_SIDIS_hgc ../../../solid_gemc2/geometry/lgc/solid_SIDIS_lgc ../../../solid_gemc2/geometry/hgc/solid_SIDIS_hgc ../../../solid_gemc2/geometry/gem/solid_SIDIS_gem ../../../solid_gemc2/geometry/mrpc/solid_SIDIS_mrpc_forwardangle ../../../solid_gemc2/geometry/spd/solid_SIDIS_spd_forwardangle ../../../solid_gemc2/geometry/spd/solid_SIDIS_spd_largeangle"
+evio2root -INPUTF=output.evio -B="../ec_segmented_solid_gemc/solid_PVDIS_ec_forwardangle ../../../solid_gemc2/geometry/lgc/solid_PVDIS_lgc ../../../solid_gemc2/geometry/gem/solid_PVDIS_gem"
+evio2root -INPUTF=output.evio -B="../ec_segmented_solid_gemc/solid_SIDIS_ec_forwardangle ../ec_segmented_solid_gemc/solid_SIDIS_ec_largeangle ../../../solid_gemc2/geometry/hgc/solid_SIDIS_hgc ../../../solid_gemc2/geometry/lgc/solid_SIDIS_lgc ../../../solid_gemc2/geometry/hgc/solid_SIDIS_hgc ../../../solid_gemc2/geometry/gem/solid_SIDIS_gem ../../../solid_gemc2/geometry/mrpc/solid_SIDIS_mrpc_forwardangle ../../../solid_gemc2/geometry/spd/solid_SIDIS_spd_forwardangle ../../../solid_gemc2/geometry/spd/solid_SIDIS_spd_largeangle"
 
 == analysis ============================
 the general script analysis.C calls the ec script analysis_tree_solid_ec.C
 run it as compiled script in root as follows
-root> .x analysis.C+("output.root")
+root> .x analysis.C+("output.root","e")
+root> .x analysis.C+("output.root","h")
 
 == how to obain energy resolution ===========
 
