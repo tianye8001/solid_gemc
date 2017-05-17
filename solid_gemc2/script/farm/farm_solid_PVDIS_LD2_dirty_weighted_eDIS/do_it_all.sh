@@ -17,7 +17,7 @@ solid_gemc solid.gcard -INPUT_GEN_FILE="LUND,gen.lund" -N=1e4 | cat >> out.log
 
 #convert evio to root
 #need more option for banks other than flux
-/home/zwzhao/banks/1.2/bin/evio2root -INPUTF=out.evio -B="/group/solid/solid_svn/solid_gemc2/geometry/ec_segmented/solid_PVDIS_ec_forwardangle   /group/solid/solid_svn/solid_gemc2/geometry/lgc/lg_cherenkov  /group/solid/solid_svn/solid_gemc2/geometry/gem/solid_PVDIS_gem" | cat >> out.log
+evio2root -INPUTF=out.evio -B="/group/solid/solid_svn/solid_gemc2/geometry/ec_segmented/solid_PVDIS_ec_forwardangle   /group/solid/solid_svn/solid_gemc2/geometry/lgc/lg_cherenkov  /group/solid/solid_svn/solid_gemc2/geometry/gem/solid_PVDIS_gem" | cat >> out.log
 
 
 
