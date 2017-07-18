@@ -1,0 +1,18 @@
+1) mergeHallDBkgTrees.cc: 
+Rakitha's script, which is used to merge backgrounds from HallD event generator (pim, pi0, and pip) with Remoll PVDIS configuration simulation fiels. The corresponding output txt file: rakitha_merge_output.txt, and root file /work/halla/solid/tianye/mergBKG_output/remoll_merged_HallDpions_EMbkg_LD_test_1.root 
+
+2) mergeHallDBkgTrees_SIDIS.cc: 
+Ye follows rakitha's method to merge backgrounds from HallD event generator (pim, pi0, and pip) with the GEMC SIDIS configuration simulation files. It is simplized to only merge branches (from flux and solid_ec trees) used to study the ECAL trigger curves. 07182017----need to be debuged. 
+
+3) The GEMC backgrouds simulation files are at: /work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass7/
+   The Remoll backgrounds simulation files are at /work/halla/solid/tianye/mergBKG_output/
+
+4) The ecal.h and ecal_merge.h are in the folder "include". 
+
+5) To compile the program:  make 
+
+6) To run the program:  ./mergeHallDBkgTrees or ./mergeHallDBkgTrees_SIDIS 
+
+
+  
+
