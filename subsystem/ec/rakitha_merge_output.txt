@@ -1,0 +1,47 @@
+Error in <TUnixSystem::Load>: version mismatch, /home/rakithab/softwares/jlab_software/solid/remoll_solid_new/build/libremollroot.so = 53404, ROOT = 53434
+ tree 0 has 1000000 
+ tree 1 has 1000000 
+ tree 2 has 1000000 
+ tree 3 has 0 
+ e-beam tree  has 10000000 
+pi- = 28510143.472 kHz, pi0 = 27359099.079 kHz, pi+ = 28510143.472 kHz e-beam = 346032245.000 kHz 
+pi- Total Rate 28510143.472 kHz detlaT = 1e9/Rate = 0.035 ns Total events 1000000 
+pi0 Total Rate 27359099.079 kHz detlaT = 1e9/Rate = 0.037 ns Total events 1000000 
+pi+ Total Rate 28510143.472 kHz detlaT = 1e9/Rate = 0.035 ns Total events 1000000 
+e-beam Total Rate 346032245.000 kHz detlaT = 1e9/Rate = 2.890e-03 ns Total events 11089 11089 
+Total time from pi- 35075.235625 ns 
+ Total events 1000000 
+Time window = 30 ns, total windows = 1170  
+Total time in the time loop 35100 ns 
+Total time from pi0 36550.911165 ns 
+ Total events 1000000 
+Time window = 30 ns, total windows = 1219  
+Total time in the time loop 36570 ns 
+Total time from pi+ 35075.235625 ns 
+ Total events 1000000 
+Time window = 30 ns, total windows = 1170  
+Total time in the time loop 35100 ns 
+ Total e-beam events to be merged 12145732 
+ Time windows added to merged root file 1170 
+Merging Trees Started 
+Debug: Total events in the even_list vector 15145732 
+Current entry 0 and 0.0 completed 
+Current entry 1000000 and 6.6 completed 
+Current entry 2000000 and 13.2 completed 
+Current entry 3000000 and 19.8 completed 
+Current entry 4000000 and 26.4 completed 
+Current entry 5000000 and 33.0 completed 
+Current entry 6000000 and 39.6 completed 
+Current entry 7000000 and 46.2 completed 
+Current entry 8000000 and 52.8 completed 
+Current entry 9000000 and 59.4 completed 
+Current entry 10000000 and 66.0 completed 
+Current entry 11000000 and 72.6 completed 
+Current entry 12000000 and 79.2 completed 
+Current entry 13000000 and 85.8 completed 
+Current entry 14000000 and 92.4 completed 
+Current entry 15000000 and 99.0 completed 
+Minimum time windows allowed has reached : 1170 
+Writing output to remoll_merged_HallDpions_EMbkg_LD_test_1.root... written
+Total Time 37.8302 min 
+ Completed, Exit now :) 
