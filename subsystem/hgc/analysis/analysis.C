@@ -34,8 +34,8 @@ double PhotonEnergy[42]={
 3.82396, 3.99949, 4.13281, 4.27679, 
 4.48244, 4.65057, 4.89476, 5.02774, 
 5.16816, 5.31437, 5.63821, 5.90401, 
-// 6.19921,6.49921,
-6.19921,8.3,
+6.19921,6.49921,
+// 8.3,  //down to 150nm
 };  // in ev
 
 const int n=41;
@@ -82,6 +82,7 @@ void analysis(string input_filename)
 gROOT->Reset();
 gStyle->SetPalette(1);
 gStyle->SetOptStat(0);
+// gStyle->SetOptStat(1111111);
 gStyle->SetOptFit(111111);
 gStyle->SetPadRightMargin(0.15); 
 
@@ -101,6 +102,9 @@ TFile *outputfile=new TFile(output_filename, "recreate");
 TH1F *hcount=new TH1F("hcount","hcount;number of photoelectron;count",100,0,50);
 
 TH2F *hhitxy_hgc=new TH2F("hhitxy_hgc","p.e. pattern; r (mm); #phi (mm)",32,-102,102,32,-102,102);
+
+TH2F *hhitxy_hgc_mirror=new TH2F("hhitxy_hgc_mirror","photon pattern on mirror; r (mm); #phi (mm)",140,800,2200,60,-300,300);
+TH2F *hhitxy_hgc_cone=new TH2F("hhitxy_hgc_cone","photon pattern on cone; r (mm); #phi (mm)",60,-300,300,60,-300,300);
 
 TFile *file=new TFile(input_filename.c_str());
 if (file->IsZombie()) {
@@ -211,6 +215,11 @@ for (Int_t i=0;i<nevent;i++) {
            
 //       if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1)   cout << "particle mom entering EC " << flux_trackE->at(j) << endl;         
       
+      if (flux_pid->at(j)!=0) continue;      
+      
+      if (flux_id->at(j)==2211023) hhitxy_hgc_mirror->Fill(flux_avg_lx->at(j),flux_avg_ly->at(j));	
+      if (flux_id->at(j)==2212023) hhitxy_hgc_cone->Fill(flux_avg_lx->at(j),flux_avg_ly->at(j));	
+      
     }	
     
     tree_solid_hgc->GetEntry(i);  
@@ -230,10 +239,10 @@ for (Int_t i=0;i<nevent;i++) {
                  
       if (solid_hgc_pid->at(j)!=0) continue;
       
-      if (detector_ID==2 && subdetector_ID == 2 && subsubdetector_ID == 1) {	  
+      if (detector_ID==2 && subdetector_ID == 4 && subsubdetector_ID == 3) {	  
 	  double E_photon=solid_hgc_trackE->at(j)*1e6; //in eV
 	  double weight=0; 	  
-	  for (Int_t k=0;k<42;k++) {	      
+	  for (Int_t k=0;k<n;k++) {	      
 // 	  for (Int_t k=0;k<25;k++) {	 // cut on 360nm/3.35eV
 	    if (PhotonEnergy[k]<=E_photon && E_photon<PhotonEnergy[k+1]) {
 	    weight=eff_PMT[k];
@@ -245,7 +254,7 @@ for (Int_t i=0;i<nevent;i++) {
       }
       else {
 	count_that +=1;
-// 	cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_hgc_avg_lx->at(j) << endl; 	
+// 	cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_hgc_id->at(j) << endl; 	
       }
     }
 
@@ -259,9 +268,18 @@ file->Close();
 outputfile->Write();
 outputfile->Flush();
 
-TCanvas *c = new TCanvas("hhitxy_hgc","hhitxy_hgc",1000,1000);
+TCanvas *c_hitxy_hgc = new TCanvas("hhitxy_hgc","hhitxy_hgc",1000,1000);
 hhitxy_hgc->Draw("colz");
-c->SaveAs(Form("%s.png",the_filename));
+c_hitxy_hgc->SaveAs(Form("%s.png",the_filename));
+
+TCanvas *c_hitxy_hgc_mirror = new TCanvas("hitxy_hgc_mirror","hitxy_hgc_mirror",1000,1000);
+hhitxy_hgc_mirror->Draw("colz");
+c_hitxy_hgc_mirror->SaveAs(Form("%s_mirror.png",the_filename));
+
+TCanvas *c_hitxy_hgc_cone = new TCanvas("hitxy_hgc_cone","hitxy_hgc_cone",1000,1000);
+hhitxy_hgc_cone->Draw("colz");
+c_hitxy_hgc_cone->SaveAs(Form("%s_cone.png",the_filename));
+
 
 cout << hhitxy_hgc->GetSum() << endl;
 
