@@ -23,7 +23,6 @@ make_cone();
 # make_cone_front();
 make_pmt();
 make_mirror();
-# make_mirror_front();
 }
 
 #BaBar
@@ -300,8 +299,8 @@ print "cone $pos_r $pos_z\n";
       $detector{"style"}       = 1;
       $detector{"sensitivity"} = "mirror: SL_HGC_mirror";
       $detector{"hit_type"}    = "mirror";
-      $detector{"identifiers"} = "id manual 999999";      
-      print_det(\%configuration, \%detector);      
+      $detector{"identifiers"} = "no";      
+      print_det(\%configuration, \%detector);                
     }
 }
 
@@ -409,10 +408,7 @@ sub make_pmt
       $detector{"pMany"}       = 1;
       $detector{"exist"}       = 1;
       $detector{"visible"}     = 1;
-      $detector{"style"}       = 0;
-#       $detector{"sensitivity"} = "mirror: SL_HGC_mirror_pmt";
-#       $detector{"hit_type"}    = "mirror";
-#       $detector{"identifiers"} = "no";      
+      $detector{"style"}       = 0; 
       print_det(\%configuration, \%detector); 
       
       %detector=init_det();
@@ -434,13 +430,10 @@ sub make_pmt
       $detector{"exist"}       = 1;
       $detector{"visible"}     = 1;
       $detector{"style"}       = 1;
-#       $detector{"sensitivity"} = "mirror: SL_HGC_mirror_pmt";
-#       $detector{"hit_type"}    = "mirror";
-#       $detector{"identifiers"} = "no";
-#       $detector{"sensitivity"} = $hitype;
-#       $detector{"hit_type"}    = $hitype;
-#       my $id=2200000+$i*10000;      
-#       $detector{"identifiers"} = "id manual $id";      
+      $detector{"sensitivity"} = $hitype;
+      $detector{"hit_type"}    = $hitype;
+      my $id=2200000+$i*10000;      
+      $detector{"identifiers"} = "id manual $id";      
       print_det(\%configuration, \%detector);
    
 #       %detector=init_det();      
@@ -660,186 +653,29 @@ print "$ang\n";   #33.19
       $detector{"style"}       = 1;        
       $detector{"sensitivity"} = "mirror: SL_HGC_mirror";
       $detector{"hit_type"}    = "mirror";
-      $detector{"identifiers"} = "id manual 888888";      
-      print_det(\%configuration, \%detector);           
-    }
-}
-
-sub make_mirror_front
-{
-#=== cons of mirror ========================================  
-#   // max and min polar angles in SIDIS in degree
-#   my $Angle_in = 7.5;
-#   my $Angle_in = 7.3;
-#   my $Angle_out = 15.5; 
-#   my $Angle_avg = ($Angle_in+$Angle_out)/2;   # 11.5
-  my $Angle_in = 7;
-  my $Angle_out = 15; 
-  my $Angle_avg = ($Angle_in+$Angle_out)/2;   # 11
- 
-#   // z dist. between the target and front/back walls of the tank: 350 + 306 & 350 + 396
-#   // add 15*cm to R_in because the mirror is sticking out
-  my $Z_front = $Z_target+$Zmin_chamber;
-  my $Z_end = $Z_target+$Zmax_chamber;
-  my $Z_half_w = ($Z_end-$Z_front)/2.;  
-  
-#   // this is where the center of the cone should stay w.r.t. (0,0,0)
-#   // i.e. in the middle of the tank: (306+406)/2=356*cm
-#   my $cons_z=356;
-#   my $cons_z=($Zmin_chamber+$Zmax_chamber)/2;  
-  my $cons_z=($Zmin_chamber+$Zmax_chamber)/2;  
-
-  my $R_front_in = $Z_front*tan($Angle_in/$DEG);
-  my $R_front_out = $Z_front*tan($Angle_out/$DEG);
-  my $R_end_in = $Z_end*tan($Angle_in/$DEG);
-  my $R_end_out = $Z_end*tan($Angle_out/$DEG);
-print "$R_front_in $R_front_out $R_end_in $R_end_out\n";  
-#   86.3640091200709 181.92483680982 99.5292544127646 209.657281445463
-
-  my $ang_start=-0.5*$ang_width;  
-#   my $ang_start=0;  
-
-#===============================================================  
-  
-#=== sphere of mirror ========================================  
-#   my $Z_mirror = 388;
-  my $Z_mirror = 388+20;  
-  my $T_M1 = 0.3;
-  my $P1 = vector(0,0,-$Z_target);    
-  my $P2 = vector($image_x, $image_y, $image_z);
-  my $V0 = vector(0., sin($Angle_avg/$DEG), cos($Angle_avg/$DEG));
-  
-my $V;
-my $V_theta;
-#         // Calculate the incident vector w.r.t. the source (i.e. target)
-        my $Vi = (($Z_mirror - $P1->z())/$V0->z()) * $V0;
-$V=$Vi; 
-$V_theta=atan(sqrt(($V->x()*$V->x()+$V->y()*$V->y())/($V->z()*$V->z())))*$DEG;
-print "$V_theta\n";  #11.5
-#         // Crossing point on mirror plane w.r.t. the origin of coordinates
-        my $Pm = $P1 + $Vi;
-$V=$Pm;
-$V_theta=atan(sqrt(($V->x()*$V->x()+$V->y()*$V->y())/($V->z()*$V->z())))*$DEG;
-print "$V_theta\n"; #21.15
-#         // Reflected vector: P2 w.r.t. the origin of coordinates; Vr doesn't matter
-        my $Vr = $P2 - $Pm;  
-$V=$Vr; 	#54.8
-$V_theta=atan(sqrt(($V->x()*$V->x()+$V->y()*$V->y())/($V->z()*$V->z())))*$DEG;
-print "$V_theta\n";                   
-#         // Calculate the unitory normal vector
-        my $Vn = $Vr->norm() - $Vi->norm();
-        $Vn = $Vn->norm();
-$V=$Vn; 
-$V_theta=atan(sqrt(($V->x()*$V->x()+$V->y()*$V->y())/($V->z()*$V->z())))*$DEG;
-print "$V_theta\n";    #21.69                       
-#         // Calculate Angle
-        my $ang_cos = -($Vi->norm().$Vn);  
-my $ang=acos($ang_cos)*$DEG;                 
-print "$ang\n";   #33.19
-#         // Radius
-        my $R = 2./$ang_cos/(1./$Vr->length() + 1./$Vi->length());        
-# print "$R\n";        
-#         // Spherical Center w.r.t. the origin of coordinates
-        my $Position = $Pm + $R * $Vn;
-
-# 	my $pos_x_sphere=sprintf('%f',$Position->x());
-# 	my $pos_y_sphere=sprintf('%f',$Position->y());
-# 	my $pos_z_sphere=sprintf('%f',$Position->z());	
-
-	my $pos_x_sphere=sprintf('%f',$Position->y());
-	my $pos_y_sphere=sprintf('%f',$Position->x());
-	my $pos_z_sphere=sprintf('%f',$Position->z());
-# print "$pos_x_sphere $pos_y_sphere $pos_z_sphere \n";
-# # print "$Position->x()";
-        
-#         G4cout <<"Radius of Spherical Mirror: "<< R/cm << " " << "and pos mirror 1 is: " 
-#                << Position/cm  << " " << "vi_mag is: " << Vi.mag() << " " << "Z_mirror: " 
-#                << Z_mirror << " " << "P1z is: " << P1.z() << " " << "v0z is: " 
-#                << V0.z() << " ang_cos is: " << ang_cos << G4endl;        
-#
-# Radius of Spherical Mirror: 228.451 and pos mirror 1 is: (0,234.568,175.719) vi_mag is: 7531.19 Z_mirror: 3880 P1z is: -3500 v0z is: 0.979925 ang_cos is: 0.83689
-# rfin is: 86.364 rfout is: 181.925 rein is: 99.5293 reout is: 209.657 z_half is: 50
-
-#   sphere radius
-  my $R_in = $R;
-  my $R_out = $R + $T_M1;  
-#===============================================================
-  
-#       // make a cone to intersect a sphere      
-     for(my $i=1; $i<=$N; $i++){      
-      my %detector=init_det();
-      $detector{"name"}        = "$DetectorName\_mirror_front_cons_$i";
-      $detector{"mother"}      = "$DetectorName\_gas";
-      $detector{"description"} = $detector{"name"};
-#       $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";
-#       $detector{"pos"}         = "$pos_x*cm $pos_y*cm $cons_z*cm";
-#       $detector{"rotation"}    = "$ang_xrot*deg $ang_yrot*deg 0*deg";
-      $detector{"pos"}         = "0*cm 0*cm $cons_z*cm";
-      $detector{"rotation"}    = "0*deg 0*deg 0*deg";
-      $detector{"color"}       = "808080";  #gray
-      $detector{"type"}        = "Cons";
-      $detector{"dimensions"}  = "$R_front_in*cm $R_front_out*cm $R_end_in*cm $R_end_out*cm $Z_half_w*cm $ang_start*deg $ang_width*deg";
-      $detector{"material"}    = "Component";
-#       $detector{"material"}    = "$material_pmt_backend";
-#       $detector{"mfield"}      = "no";
+      $detector{"identifiers"} = "no";      
+      print_det(\%configuration, \%detector);  
+      
+#       $detector{"name"}        = "$DetectorName\_mirror_front_$i";
+#       $detector{"mother"}      = "$DetectorName\_gas";
+#       $detector{"description"} = $detector{"name"};
+# #       $detector{"pos"}         = "0*cm 0*cm $cons_z*cm";            
+#       my $cons_z_new=$cons_z-1;      
+#       $detector{"pos"}         = "0*cm 0*cm $cons_z_new*cm";      
+#       $detector{"rotation"}    = "0*deg 0*deg $ang_zrot*deg";
+#       $detector{"color"}       = "101010";  #gray				
+#       $detector{"type"}        = "CopyOf $DetectorName\_mirror_$i";
+# #       $detector{"material"}    = "$material_mirror";      
+#       $detector{"material"}    = "$material_gas";      
 #       $detector{"ncopy"}       = 1;
 #       $detector{"pMany"}       = 1;
 #       $detector{"exist"}       = 1;
 #       $detector{"visible"}     = 1;
-#       $detector{"style"}       = 1;      
-      print_det(\%configuration, \%detector);
-      
-      %detector=init_det();
-      $detector{"name"}        = "$DetectorName\_mirror_front_sphere_$i";
-      $detector{"mother"}      = "$DetectorName\_gas";
-      $detector{"description"} = $detector{"name"};
-#       $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";
-#       $detector{"pos"}         = "0*cm 0*cm $Z_mirror*cm";
-#       $detector{"pos"}         = "$pos_x*cm $pos_y*cm $cons_z*cm";
-#       $detector{"rotation"}    = "$ang_xrot*deg $ang_yrot*deg 0*deg";
-      $detector{"pos"}         = "$pos_x_sphere*cm $pos_y_sphere*cm $pos_z_sphere*cm";
-      $detector{"rotation"}    = "0*deg 0*deg 0*deg";
-      $detector{"color"}       = "808080";  #gray
-      $detector{"type"}        = "Sphere";
-      $detector{"dimensions"}  = "$R_in*cm $R_out*cm 0*deg 360*deg 0*deg 90*deg";
-      $detector{"material"}    = "Component";
-#       $detector{"material"}    = "$material_pmt_backend";      
-#       $detector{"ncopy"}       = 1;
-#       $detector{"pMany"}       = 1;
-#       $detector{"exist"}       = 1;
-#       $detector{"visible"}     = 1;
-#       $detector{"style"}       = 1;            
-      print_det(\%configuration, \%detector);      
-      
-      my $ang_zrot = -($sec_start+($i-1)*$ang_width);      
-      
-# Make the subtraction of the inner ellipsoid from the outer barrel:
-# the "Operation:@" indicates that gemc should assume the coordinates
-# and rotations of the mirror ellipsoid are given in its mother coordinate system,
-# not relative to the outer barrel coordinate system:      
-      %detector=init_det();
-      $detector{"name"}        = "$DetectorName\_mirror_front_$i";
-      $detector{"mother"}      = "$DetectorName\_gas";
-      $detector{"description"} = $detector{"name"};
-#       $detector{"pos"}         = "0*cm 0*cm $cons_z*cm";            
-      my $cons_z_new=$cons_z-1;      
-      $detector{"pos"}         = "0*cm 0*cm $cons_z_new*cm";      
-      $detector{"rotation"}    = "0*deg 0*deg $ang_zrot*deg";
-      $detector{"color"}       = "101010";  #gray				
-      $detector{"type"}        = "Operation:@ $DetectorName\_mirror_front_cons_$i * $DetectorName\_mirror_front_sphere_$i";
-      $detector{"dimensions"}  = "0";
-#       $detector{"material"}    = "Component";      
-#       $detector{"material"}    = "$material_mirror";      
-      $detector{"material"}    = "$material_gas";      
-      $detector{"ncopy"}       = 1;
-      $detector{"pMany"}       = 1;
-      $detector{"exist"}       = 1;
-      $detector{"visible"}     = 1;
-      $detector{"style"}       = 1;        
-      $detector{"sensitivity"} = "flux";
-      $detector{"hit_type"}    = "flux";
-      my $id=2211000+$i;
-      $detector{"identifiers"} = "id manual $id";         
-      print_det(\%configuration, \%detector);           
+#       $detector{"style"}       = 1;        
+#       $detector{"sensitivity"} = "flux";
+#       $detector{"hit_type"}    = "flux";
+#       my $id=2211000+$i;
+#       $detector{"identifiers"} = "id manual $id";         
+#       print_det(\%configuration, \%detector);        
     }
 }
