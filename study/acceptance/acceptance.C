@@ -67,7 +67,8 @@ else if (Is_JPsi){
 //   rout_cut_LA=125.9;   //target at -340,ec front at -65 with angle 24.6
 //   rout_cut_LA=125.3;   //target at -330,ec front at -65 with angle 25.3    
 //   rout_cut_LA=124.9;   //target at -320,ec front at -65 with angle 26.1
-  rout_cut_LA=124.5;   //target at -315,ec front at -65 with angle 26.9
+//   rout_cut_LA=124.5;   //target at -315,ec front at -65 with angle 26.5
+  rout_cut_LA=135;   //target at -315,ec front at -65 with angle 28.4
 //   rout_cut_LA=124.3;   //target at -310,ec front at -65 with angle 26.9
 //      rout_cut_LA=124.0;   //target at -305,ec front at -65 with angle 27.3
 //      rout_cut_LA=123.9;   //target at -300,ec front at -65 with angle 27.8
