@@ -5,6 +5,7 @@ This is to find where we should shoot beam into NH3 target field
 NH3 field is a  solenoid along +x direction
 
 in "beam__geometry_Original.txt", the field holder and several planes 
+please note the field holder is made larger to include large area while it still stop at solenoid entrance
 
 run "solid_gemc beam.gcard" which shoots positron from origin at solenoid center backwards with NH3 target Helmholtz field/
 change its beam energy to see different results
