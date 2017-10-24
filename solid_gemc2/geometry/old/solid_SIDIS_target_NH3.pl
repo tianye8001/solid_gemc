@@ -22,13 +22,14 @@ make_target();
 sub make_target_field
 {
  my $NUM  = 1;
- my @z    = (-350);
+#  my @z    = (-350);
+ my @z    = (-350+65-(200+65)/2);
 #  my @Rin  = (0);
 #  my @Rout = (65);
 #  my @Dz   = (65);
-#   my @Dx = (37);
-#   my @Dy = (37);
-#   my @Dz = (25);
+  my @Dx = (65);
+  my @Dy = (65);
+  my @Dz = ((200+65)/2);
  my @name = ("field"); 
  my @mother = ("$DetectorMother");
  my @mat  = ("G4_AIR");
@@ -43,13 +44,13 @@ sub make_target_field
     $detector{"pos"}        = "0*cm 0*cm $z[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = "ff0000";
-#     $detector{"type"}       = "Box";
-#     $detector{"dimensions"} = "$Dx[$n-1]*cm $Dy[$n-1]*cm $Dz[$n-1]*cm";    
+    $detector{"type"}       = "Box";
+    $detector{"dimensions"} = "$Dx[$n-1]*cm $Dy[$n-1]*cm $Dz[$n-1]*cm";    
+#     $detector{"type"}       = "Tube";
 #     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
-    $detector{"type"}       = "Polycone";
-    $detector{"dimensions"} = "0*deg 360*deg 4*counts 0*cm 0*cm 1.1*cm 3*cm 65*cm 65*cm 65*cm 65*cm -65*cm 25*cm 25*cm 65*cm";
     $detector{"material"}   = $mat[$n-1];
-    $detector{"mfield"}     = "solenoid_ptarget";
+#     $detector{"mfield"}     = "solenoid_ptarget";
+    $detector{"mfield"}     = "g2p_ptarget";
     $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
@@ -61,6 +62,7 @@ sub make_target_field
     print_det(\%configuration, \%detector);
  }
 }
+
 
 #1. Scattering chamber : cylinder of  74cm(height) with inner diameter of 45cm and thickness of 2.5cm made of Aluminum.
 

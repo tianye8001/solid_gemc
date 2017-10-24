@@ -22,13 +22,14 @@ make_target_field();
 sub make_target_field
 {
  my $NUM  = 1;
- my @z    = (-350);
+#  my @z    = (-350);
+ my @z    = (-350+65-(200+65)/2);
 #  my @Rin  = (0);
 #  my @Rout = (65);
 #  my @Dz   = (65);
   my @Dx = (65);
   my @Dy = (65);
-  my @Dz = (65);
+  my @Dz = ((200+65)/2);
  my @name = ("field"); 
  my @mother = ("$DetectorMother");
  my @mat  = ("G4_AIR");
@@ -45,9 +46,11 @@ sub make_target_field
     $detector{"color"}      = "ff0000";
     $detector{"type"}       = "Box";
     $detector{"dimensions"} = "$Dx[$n-1]*cm $Dy[$n-1]*cm $Dz[$n-1]*cm";    
+#     $detector{"type"}       = "Tube";
 #     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
-    $detector{"mfield"}     = "solenoid_ptarget";
+#     $detector{"mfield"}     = "solenoid_ptarget";
+    $detector{"mfield"}     = "g2p_ptarget";
     $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
