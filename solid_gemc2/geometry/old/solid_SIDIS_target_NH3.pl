@@ -22,14 +22,13 @@ make_target();
 sub make_target_field
 {
  my $NUM  = 1;
-#  my @z    = (-350);
- my @z    = (-350+65-(200+65)/2);
+ my @z    = (-350);
 #  my @Rin  = (0);
 #  my @Rout = (65);
 #  my @Dz   = (65);
   my @Dx = (65);
   my @Dy = (65);
-  my @Dz = ((200+65)/2);
+  my @Dz = (65);
  my @name = ("field"); 
  my @mother = ("$DetectorMother");
  my @mat  = ("G4_AIR");
