@@ -1,6 +1,6 @@
    Simulation Conditions, TAG 5:
    > beam  is loaded with factory TEXT, variation Original and run number 1
-   > option ACTIVEFIELDS solenoid_ptarget 
+   > option ACTIVEFIELDS g2p_ptarget solenoid_CLEOv8 
    > option ALIGN_ZAXIS no
    > option ALLRAWS no
    > option BANK_VERBOSITY 1
@@ -31,7 +31,7 @@
    > option GUIPOS (150, 150)
    > option GUI_VERBOSITY 1
    > option HALL_DIMENSIONS 20*m,20*m,20*m
-   > option HALL_FIELD no
+   > option HALL_FIELD solenoid_CLEOv8
    > option HALL_MATERIAL G4_Galactic
    > option HIGH_RES 1
    > option HIT_PROCESS_LIST solid
@@ -87,7 +87,7 @@
    > option gcard beam.gcard
    > option geometry 620x620
  --- Header Bank -- 
-    - (10, 1) time:	Fri, 10.06.2017 10:20:05
+    - (10, 1) time:	Mon, 10.23.2017 22:09:11
     - (10, 5) beamPol:	0
     - (10, 3) evn:	1
     - (10, 4) evn_type:	-1
@@ -109,23 +109,23 @@
     - (51, 4) mtid:	0	0	
     - (51, 5) otid:	0	0	
     - (51, 6) trackE:	1100.00011869	1100.00011869	
-    - (51, 7) totEdep:	9.12179148213e-30	1.04139143987e-29	
-    - (51, 8) avg_x:	3.99875874333e-13	4.51429905835e-13	
-    - (51, 9) avg_y:	-27.3896204214	-290.336637281	
-    - (51, 10) avg_z:	-3500.0001	-4000.0001	
-    - (51, 11) avg_lx:	3.99875874333e-13	4.51429905835e-13	
-    - (51, 12) avg_ly:	-27.3896204214	-290.336637281	
+    - (51, 7) totEdep:	9.4597448103e-30	9.44728860397e-30	
+    - (51, 8) avg_x:	0.0860676455059	0.0265732711139	
+    - (51, 9) avg_y:	-264.719615456	-458.893355231	
+    - (51, 10) avg_z:	-4175.0001	-4675.0001	
+    - (51, 11) avg_lx:	0.0860676455059	0.0265732711139	
+    - (51, 12) avg_ly:	-264.719615456	-458.893355231	
     - (51, 13) avg_lz:	-0.000100000000202	-0.000100000000202	
-    - (51, 14) px:	-6.69144706598e-14	1.94040215756e-13	
-    - (51, 15) py:	-284.068291416	-586.375798661	
-    - (51, 16) pz:	-1062.68772733	-930.67901166	
+    - (51, 14) px:	-0.119681605676	-0.123132316549	
+    - (51, 15) py:	-400.415381627	-396.93583908	
+    - (51, 16) pz:	-1024.53282419	-1025.88592177	
     - (51, 17) vx:	0	0	
     - (51, 18) vy:	0	0	
     - (51, 19) vz:	0	0	
     - (51, 20) mvx:	0	0	
     - (51, 21) mvy:	0	0	
     - (51, 22) mvz:	0	0	
-    - (51, 23) avg_t:	11.6822984316	13.5734261203	
+    - (51, 23) avg_t:	14.0888078158	15.8779795177	
     - (51, 24) nsteps:	1	1	
     - (51, 25) procID:	90	90	
     - (51, 99) hitn:	1	2	
