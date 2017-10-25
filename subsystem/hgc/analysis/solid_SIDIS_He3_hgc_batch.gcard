@@ -14,6 +14,9 @@
 <option name="PHYSICS" value="QGSP_BERT+STD+Optical"/>
 <option name="HALL_MATERIAL" value="G4_Galactic"/>
 
+<option name="FIELD_DIR" value="../../../solid_gemc2/field"/>
+<option name="HALL_FIELD" value="solenoid_CLEOv8"/>
+
 <option name="MAX_X_POS" value="20000"/>
 <option name="MAX_Y_POS" value="20000"/>
 <option name="MAX_Z_POS" value="20000"/>

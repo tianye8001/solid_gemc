@@ -101,6 +101,17 @@ TFile *outputfile=new TFile(output_filename, "recreate");
 
 TH1F *hcount=new TH1F("hcount","hcount;number of photoelectron;count",100,0,50);
 
+const int Nbin_Theta=35,Nbin_Phi=180;
+TH1F *hcount_ThetaPhi[Nbin_Theta][Nbin_Phi];
+for(int i=0;i<Nbin_Theta;i++){
+  for(int j=0;j<Nbin_Phi;j++){
+   char hstname[100];   
+   sprintf(hstname,"hcount_ThetaPhi_%i_%i",i,j);
+   hcount_ThetaPhi[i][j]=new TH1F(hstname,";number of photoelectron;count",100,0,50);
+  }
+}
+TH2F *havg_pe=new TH2F("havg_pe","avg number of photoelectron;#theta(deg);#phi(deg)",Nbin_Theta,0,Nbin_Theta,Nbin_Phi,-180,180);
+
 TH2F *hhitxy_hgc=new TH2F("hhitxy_hgc","p.e. pattern; r (mm); #phi (mm)",32,-102,102,32,-102,102);
 
 TH2F *hhitxy_hgc_mirror=new TH2F("hhitxy_hgc_mirror","photon pattern on mirror; r (mm); #phi (mm)",140,800,2200,60,-300,300);
@@ -197,8 +208,8 @@ for (Int_t i=0;i<nevent;i++) {
       vy_gen=gen_vy->at(j);
       vz_gen=gen_vz->at(j);
       p_gen=sqrt(px_gen*px_gen+py_gen*py_gen+pz_gen*pz_gen);
-      theta_gen=acos(pz_gen/p_gen);
-      phi_gen=atan2(py_gen,px_gen);
+      theta_gen=acos(pz_gen/p_gen)*DEG;
+      phi_gen=atan2(py_gen,px_gen)*DEG;
       
 //       cout << "p_gen " << p_gen << endl;
   }
@@ -238,8 +249,9 @@ for (Int_t i=0;i<nevent;i++) {
       int component_ID=solid_hgc_id->at(j)%10000;
                  
       if (solid_hgc_pid->at(j)!=0) continue;
-      
-      if (detector_ID==2 && subdetector_ID == 4 && subsubdetector_ID == 3) {	  
+//       cout << "solid_hgc " << solid_hgc_id->at(j) << endl;
+//       if (detector_ID==2 && subdetector_ID == 4 && subsubdetector_ID == 3) {	  
+      if (true) {	        
 	  double E_photon=solid_hgc_trackE->at(j)*1e6; //in eV
 	  double weight=0; 	  
 	  for (Int_t k=0;k<n;k++) {	      
@@ -250,36 +262,57 @@ for (Int_t i=0;i<nevent;i++) {
 	    }
 	  }
 	  count_this +=weight;	  
-	  hhitxy_hgc->Fill(solid_hgc_avg_lx->at(j),solid_hgc_avg_ly->at(j),weight*0.001);	  	
+	  hhitxy_hgc->Fill(solid_hgc_avg_lx->at(j),solid_hgc_avg_ly->at(j),weight/double(nevent));	
       }
       else {
 	count_that +=1;
 // 	cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_hgc_id->at(j) << endl; 	
       }
+      
     }
 
-       hcount->Fill(count_this*factor);    
+    if (count_this>0){
+       hcount->Fill(count_this*factor);
+       
+      if (theta_gen<=Nbin_Theta) {
+       hcount_ThetaPhi[int(theta_gen)][(int(phi_gen)-(-180))/2]->Fill(count_this*factor);       
+//        cout << "count_this " << count_this << endl;
+      }
+      else cout << "theta_gen too large " << theta_gen << endl;
+      
+    }
      
 //     cout << " count_this " << count_this << " count_that " << count_that << endl;    
   
 }
 file->Close();
 
+for(int i=0;i<Nbin_Theta;i++){
+  for(int j=0;j<Nbin_Phi;j++){
+    havg_pe->SetBinContent(i+1,j+1,hcount_ThetaPhi[i][j]->GetMean());
+    havg_pe->SetBinError(i+1,j+1,hcount_ThetaPhi[i][j]->GetRMS());
+  }
+}
+
 outputfile->Write();
 outputfile->Flush();
 
 TCanvas *c_hitxy_hgc = new TCanvas("hhitxy_hgc","hhitxy_hgc",1000,1000);
 hhitxy_hgc->Draw("colz");
-c_hitxy_hgc->SaveAs(Form("%s.png",the_filename));
+c_hitxy_hgc->SaveAs(Form("%s_hitpmt.png",the_filename));
 
 TCanvas *c_hitxy_hgc_mirror = new TCanvas("hitxy_hgc_mirror","hitxy_hgc_mirror",1000,1000);
 hhitxy_hgc_mirror->Draw("colz");
-c_hitxy_hgc_mirror->SaveAs(Form("%s_mirror.png",the_filename));
+c_hitxy_hgc_mirror->SaveAs(Form("%s_hitmirror.png",the_filename));
 
 TCanvas *c_hitxy_hgc_cone = new TCanvas("hitxy_hgc_cone","hitxy_hgc_cone",1000,1000);
 hhitxy_hgc_cone->Draw("colz");
-c_hitxy_hgc_cone->SaveAs(Form("%s_cone.png",the_filename));
+c_hitxy_hgc_cone->SaveAs(Form("%s_hitcone.png",the_filename));
 
+TCanvas *c_havg_pe = new TCanvas("havg_pe","havg_pe",1000,1000);
+havg_pe->SetMaximum(50);
+havg_pe->Draw("colz");
+c_havg_pe->SaveAs(Form("%s_avg_pe.png",the_filename));
 
 cout << hhitxy_hgc->GetSum() << endl;
 

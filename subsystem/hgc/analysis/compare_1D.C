@@ -354,28 +354,30 @@ const int n=6;
 string input_filename[n][m];
 for(int i=0;i<m;i++) {
   char name[200]; 
-
-  sprintf(name,Form("data/JLAB_VERSION_1.3/pmtmove10cm_cone10cmtilt65deg/output_pim_z0_p%s_theta7.5_phi0_blockoff_fieldoff_1e3_output.root",var[i]));  
-  input_filename[0][i]=name;  
-  sprintf(name,Form("data/JLAB_VERSION_1.3/pmtmove10cm_cone10cmtilt65deg/output_pim_z0_p%s_theta8.0_phi0_blockoff_fieldoff_1e3_output.root",var[i]));  
-  input_filename[1][i]=name;
-  sprintf(name,Form("data/JLAB_VERSION_1.3/pmtmove10cm_cone10cmtilt65deg/output_pim_z0_p%s_theta14.8_phi0_blockoff_fieldoff_1e3_output.root",var[i]));   
-  input_filename[2][i]=name;  
+// pmtmove10cm_cone10cmtilt65deg
   
-  sprintf(name,Form("data/JLAB_VERSION_1.3/new/output_pim_z0_p%s_theta7.5_phi0_blockoff_fieldoff_1e3_output.root",var[i]));  
+  sprintf(name,Form("data/JLAB_VERSION_1.3/He3_shift20cmdown_new/output_pim_z0_p%s_theta7.5_phi0_blockoff_fieldoff_1e3_output.root",var[i]));  
+  input_filename[0][i]=name;  
+  sprintf(name,Form("data/JLAB_VERSION_1.3/He3_shift20cmdown_new/output_pim_z0_p%s_theta8.0_phi0_blockoff_fieldoff_1e3_output.root",var[i]));  
+  input_filename[1][i]=name;
+  sprintf(name,Form("data/JLAB_VERSION_1.3/He3_shift20cmdown_new/output_pim_z0_p%s_theta14.8_phi0_blockoff_fieldoff_1e3_output.root",var[i]));   
+  input_filename[2][i]=name; 
+  
+  sprintf(name,Form("data/JLAB_VERSION_1.3/He3_what/output_pim_z0_p%s_theta7.5_phi0_blockoff_fieldoff_1e3_output.root",var[i]));  
   input_filename[3][i]=name;  
-  sprintf(name,Form("data/JLAB_VERSION_1.3/new/output_pim_z0_p%s_theta8.0_phi0_blockoff_fieldoff_1e3_output.root",var[i]));  
+  sprintf(name,Form("data/JLAB_VERSION_1.3/He3_what/output_pim_z0_p%s_theta8.0_phi0_blockoff_fieldoff_1e3_output.root",var[i]));  
   input_filename[4][i]=name;
-  sprintf(name,Form("data/JLAB_VERSION_1.3/new/output_pim_z0_p%s_theta14.8_phi0_blockoff_fieldoff_1e3_output.root",var[i]));   
-  input_filename[5][i]=name;  
+  sprintf(name,Form("data/JLAB_VERSION_1.3/He3_what/output_pim_z0_p%s_theta14.8_phi0_blockoff_fieldoff_1e3_output.root",var[i]));   
+  input_filename[5][i]=name;   
+ 
 }
 char* label[n]={
-"(current) alone,#pi-,field off,block off,z=0cm,#theta=7.5deg,#phi=0deg",  
-"(current) alone,#pi-,field off,block off,z=0cm,#theta=8.0deg,#phi=0deg",
-"(current) alone,#pi-,field off,block off,z=0cm,#theta=14.8deg,#phi=0deg",  
-"(shift20cmdown) alone,#pi-,field off,block off,z=0cm,#theta=7.5deg,#phi=0deg",
-"(shift20cmdown) alone,#pi-,field off,block off,z=0cm,#theta=8.0deg,#phi=0deg",
-"(shift20cmdown) alone,#pi-,field off,block off,z=0cm,#theta=14.8deg,#phi=0deg",  
+"(new) alone,#pi-,field off,block off,z=0cm,#theta=7.5deg,#phi=0deg",  
+"(new) alone,#pi-,field off,block off,z=0cm,#theta=8.0deg,#phi=0deg",
+"(new) alone,#pi-,field off,block off,z=0cm,#theta=14.8deg,#phi=0deg",  
+"(NH3_shift20cmdown) alone,#pi-,field off,block off,z=0cm,#theta=7.5deg,#phi=0deg",
+"(NH3_shift20cmdown) alone,#pi-,field off,block off,z=0cm,#theta=8.0deg,#phi=0deg",
+"(NH3_shift20cmdown) alone,#pi-,field off,block off,z=0cm,#theta=14.8deg,#phi=0deg",  
 };
 int MarkerStyle[n]={4,4,4,26,26,26};
 int color[n]={1,2,3,1,2,3};
