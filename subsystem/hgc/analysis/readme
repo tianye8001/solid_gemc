@@ -27,10 +27,12 @@ evio2root -INPUTF=output.evio -B="../ec_solid_gemc/solid_SIDIS_ec_forwardangle .
 
 use run option -NO_FIELD="all" to turn off all field temporally.
 
-run_all_He3 and run_all_NH3 are example scripts to producde many root files
-
 == analysis == 
 
 root> .x analysis.C+("output.root")
 
-getplot_all_He3 and getplot_all_NH3 are example scripts 
+== run and analysis of many setting==
+
+run and run_all are example scripts to producde many root files
+
+getplot and getplot_all are example scripts 
