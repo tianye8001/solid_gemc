@@ -9,8 +9,8 @@ solid_gemc solid_SIDIS_hgc.gcard
 solid_gemc solid_SIDIS_hgc_moved.gcard
 
 #run simulation standalone in batch mode
-solid_gemc solid_SIDIS_He3_hgc_batch.gcard -BEAM_P="pi-,5*GeV,10*deg,0*deg" -BEAM_V="(0,0,-350)cm" -OUTPUT=evio,output.evio -N=1e3
-solid_gemc solid_SIDIS_NH3_hgc_batch.gcard -BEAM_P="pi-,5*GeV,10*deg,0*deg" -BEAM_V="(0,0,-350)cm" -OUTPUT=evio,output.evio -N=1e3
+solid_gemc solid_SIDIS_He3_hgc_batch.gcard -BEAM_P="pi-,5*GeV,10*deg,0*deg" -BEAM_V="(0,0,-350)cm" -OUTPUT=evio,output.evio -N=1e3 -NO_FIELD="all"
+solid_gemc solid_SIDIS_NH3_hgc_batch.gcard -BEAM_P="pi-,5*GeV,10*deg,0*deg" -BEAM_V="(0,0,-350)cm" -OUTPUT=evio,output.evio -N=1e3 -NO_FIELD="all"
 solid_gemc solid_SIDIS_He3_hgc_moved_batch.gcard -BEAM_P="pi-,5*GeV,10*deg,0*deg" -BEAM_V="(0,0,-350)cm" -OUTPUT=evio,output.evio -N=1e3
 solid_gemc solid_SIDIS_NH3_hgc_moved_batch.gcard -BEAM_P="pi-,5*GeV,10*deg,0*deg" -BEAM_V="(0,0,-350)cm" -OUTPUT=evio,output.evio -N=1e3
 
