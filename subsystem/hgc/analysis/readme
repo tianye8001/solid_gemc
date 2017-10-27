@@ -33,10 +33,12 @@ root> .x analysis.C+("output.root")
 
 == run and analysis ==
 
-do this first "mkdir output"
+do  "mkdir output" first
 
 run and run_all are example scripts to producde many root files
 
 getplot and getplot_all are example scripts to run analysis.C on files output by the run scripts
+
+remember to "mv output output_test" and "mkdir output" again to seprate files by different dir when running different tests
 
 
