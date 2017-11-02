@@ -49,7 +49,8 @@ sub make_target_field
 #     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
 #     $detector{"mfield"}     = "solenoid_ptarget";
-    $detector{"mfield"}     = "g2p_ptarget";
+#     $detector{"mfield"}     = "g2p_ptarget";
+    $detector{"mfield"}     = "oxford_ptarget";
     $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
