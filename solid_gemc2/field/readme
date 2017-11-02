@@ -1,0 +1,13 @@
+previsou field map at solid_gemc/database_io/field/
+
+== map list ==
+
+CLEOv8, SoLID CLEO2 magnet map,using POSSION, by Zhiwen Zhao 
+
+CLEOv9, longer endcap than CLEOv8,using POSSION, by Zhiwen Zhao using POSSION
+
+solenoid_target, SoLID SIDIS NH3 target field, converted from g2p map incorrectly, by Kalyan Allada and Zhiwen Zhao
+
+g2p_target, SoLID SIDIS NH3 target field, original g2p map, using code "g2p_hallbfield.f", by Chao Gu
+
+oxford_target,  SoLID SIDIS NH3 target field, map according to oxford 2012 design, using code "oxford_field.f", by Chao Gu
