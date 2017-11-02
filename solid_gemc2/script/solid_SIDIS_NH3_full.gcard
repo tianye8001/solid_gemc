@@ -32,9 +32,9 @@
 <option name="FIELD_DIR" value="../field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
-<option name="BEAM_P"   value="e-,11*GeV,2.179*deg,90*deg"/>
+<option name="BEAM_P"   value="e-,11*GeV,2.555*deg,90*deg"/>
 <option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
-<option name="BEAM_V"   value="(0,-18.7856763758,-4000)mm"/>
+<option name="BEAM_V"   value="(0,-21.95,-4000)mm"/>
 <option name="SPREAD_V" value="(0,0)cm"/>
 
 <option name="EXEC_MACRO" value="solid_slice.vis"/>
