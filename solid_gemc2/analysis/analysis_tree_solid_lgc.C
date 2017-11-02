@@ -54,7 +54,7 @@ Bool_t process_tree_solid_lgc_trigger(TTree *tree_solid_lgc,Int_t *trigger_lgc, 
   
   Int_t ntrigpmts =0;
  
-  for(Int_t i = 0; i < solid_lgc_hitn->size(); i++){
+  for(UInt_t i = 0; i < solid_lgc_hitn->size(); i++){
     if(solid_lgc_nphe->at(i)){
       sectorhits[solid_lgc_sector->at(i)-1][solid_lgc_pmt->at(i)-1] += solid_lgc_nphe->at(i);
     }
@@ -83,7 +83,7 @@ double process_tree_solid_lgc(TTree *tree_solid_lgc, Int_t *nphe_lgc)
   //std::vector<std::vector<int>> sectorhits (30, std::vector<int>(9,0));  //initialize a 30x9 vector array
   Int_t pmt[30][9] = {0};  //need to intialize to zero or bad stuff
  
-  for(Int_t i = 0; i < solid_lgc_hitn->size(); i++){
+  for(UInt_t i = 0; i < solid_lgc_hitn->size(); i++){
     if(solid_lgc_nphe->at(i)>0){
       pmt[solid_lgc_sector->at(i)-1][solid_lgc_pmt->at(i)-1] += solid_lgc_nphe->at(i);
     }
