@@ -27,4 +27,15 @@ For solid_PVDIS, histogram "acceptance_ThetaP_forwardangle" is in Theta and P
 For solid_SIDIS_He3, solid_JPsi, histogram "acceptance_ThetaP_forwardangle" and "acceptance_ThetaP_largeangle" is in Theta and P
 For solid_SIDIS_NH3, histogram "acceptance_ThetaPhiP_largeangle" and "acceptance_ThetaPhiP_forwardangle" are in Theta, Phi and P
 
+= result =============================
+
+result_PVDIS/ ,with baffle babarmore1 and photon blocker before EC
+
+result_SIDIS_He3/*3he*, acceptance with target window collimator for forward angle
+
+result_SIDIS_He3/*201701*, acceptance with target window collimator, downstream blocking forward angle, upstream block both forward and large angle
+
+result_SIDIS_JPsi/
+
+= log ================================
 created 2014_08_14 by Zhiwen Zhao 
