@@ -8,8 +8,6 @@ The binary code used are at
 /home/zwzhao/apps/jlab_software_1.7
 All SoLID related files are in SVN at revision 457, get it this way
 svn co -r 457 https://jlabsvn.jlab.org/svnroot/solid/solid_gemc/database_io/
-other info are here
-https://hallaweb.jlab.org/wiki/index.php/Solid_Background#run_1
 
 geometry:
 1. some file may not use prothreshold 0.01mm for sensitive detector
@@ -30,19 +28,6 @@ Normalization for hadron background:
 	  if (Is_Ks || Is_Kl) thisrate=1750.;
 	  if (Is_p) thisrate=27000.;
 
-files:
-main result is in dir baffle_babarbafflemore1_block which has photon block before EC
-while baffle_babarbafflemore1 has result without the photon block
-"other" in file name means kryptonite for all geometry 
-"real" in file name mean lead baffle and kryptonite for everything else
 
-/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/PVDIS_LD2/baffle_babarbafflemore1_block
-background_solid_CLEO_PVDIS_LD2_1e8.root     
-background_solid_CLEO_PVDIS_LD2_real_Kl_1e6.root 
-background_solid_CLEO_PVDIS_LD2_real_Km_1e6.root 
-background_solid_CLEO_PVDIS_LD2_real_Kp_1e6.root 
-background_solid_CLEO_PVDIS_LD2_real_Ks_1e6.root 
-background_solid_CLEO_PVDIS_LD2_real_p_1e6.root  
-background_solid_CLEO_PVDIS_LD2_real_pi0_1e6.root
-background_solid_CLEO_PVDIS_LD2_real_pim_1e6.root
-background_solid_CLEO_PVDIS_LD2_real_pip_1e6.root
+see output files and how to interpret the file content here
+https://hallaweb.jlab.org/wiki/index.php/Solid_Background#run_1  

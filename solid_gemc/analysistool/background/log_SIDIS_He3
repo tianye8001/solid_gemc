@@ -56,37 +56,8 @@ Normalization for hadron background:
 	  if (Is_p) thisrate=37.;  
 	}	
 
-files:
-"other" in file name means kryptonite for all geometry 
-"actual" in file name mean all real materials
-
-/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/SIDIS_He3
-background_solid_CLEO_SIDIS_He3_1e8.root
-background_solid_CLEO_SIDIS_He3_actual_Kl_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_Km_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_Kp_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_Ks_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_p_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_pi0_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_pim_1e6.root
-background_solid_CLEO_SIDIS_He3_actual_pip_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_Kl_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_Km_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_Kp_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_Ks_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_p_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_pi0_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_pim_1e6.root
-background_solid_CLEO_SIDIS_He3_window_downstream_actual_pip_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_Kl_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_Km_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_Kp_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_Ks_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_p_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_pi0_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_pim_1e6.root
-background_solid_CLEO_SIDIS_He3_window_upstream_actual_pip_1e6.root	
-
+see output files and how to interpret the file content here
+https://hallaweb.jlab.org/wiki/index.php/Solid_Background#run_1
 
 ====== old_20130422 =============
 change based on previous version

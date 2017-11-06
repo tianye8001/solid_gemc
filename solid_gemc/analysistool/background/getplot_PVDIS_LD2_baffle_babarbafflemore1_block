@@ -1,0 +1,25 @@
+#!/bin/sh
+root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/background_solid_CLEO_PVDIS_LD2_nobaffle_2e8.txt",2e8)'
+
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_1e8.txt",1e8)'
+
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_pip_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_pim_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_pi0_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_Kp_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_Km_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_Ks_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_Kl_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_p_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_eES_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_other_eDIS_1e6.txt",1e6)'
+ 
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_real_pip_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_real_pim_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_real_pi0_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_real_Kp_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_real_Km_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_real_Ks_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_real_Kl_1e6.txt",1e6)'
+# root -b -q '/home/zwzhao/work_halla/solid/solid_svn/solid/solid_gemc/analysistool/background/background.C+("PVDIS_LD2/baffle_babarbafflemore1_block/background_solid_CLEO_PVDIS_LD2_real_p_1e6.txt",1e6)'
+# 
