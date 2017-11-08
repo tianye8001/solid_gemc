@@ -1,4 +1,19 @@
-====== current 20141022======
+== output file location and how to interpret the file content ==
+
+https://hallaweb.jlab.org/wiki/index.php/SoLID_full_simulation_and_file_sharing
+
+====== run3 2016 =======
+
+files
+SIDIS_He3_JLAB_VERSION_1.2/pass1, new GEM, no LGC, no EC, in 2016/01
+SIDIS_He3_JLAB_VERSION_1.2/pass2, optimize hgc,has LGC, has EC as whole, in 2016/02
+SIDIS_He3_JLAB_VERSION_1.3/pass3, turn on mother particle, add LGC virtual plane, use TungstenPowder for He3 collimator which 60% density of Tungsten, use external materail for H3 as SL_target_He3_He3_10amg instead of internal He3_10amg and the result should be same (in 2016/07)
+SIDIS_He3_JLAB_VERSION_1.3/pass4, ,change SPD scintilator material from PVT alike to PS, 
+SIDIS_He3_JLAB_VERSION_1.3/pass5, fix LASPD overlap with GEM, change LASPD from 5mm to 20mm, FASPD from 3mm to 5mm, use SPD with scintilator material PVT alike, use segemented EC with scintilator material PS
+SIDIS_He3_JLAB_VERSION_1.3/pass6,svn rev1153,change LGC mirror,HGC,GEM sector numbering to make its 1st sector center at 96deg, LGC PMT 1st is center at 97.7deg, fix LGC H12700 QE near 200nm from 0.03 to 0.3,GEM has 7 planes and grouped
+SIDIS_He3_JLAB_VERSION_1.3/pass7,svn rev1169,GEM change back to 6 planes
+
+====== run2 20141022======
 change based on previous version
 
 general:
@@ -25,15 +40,11 @@ http://hallaweb.jlab.org/12GeV/SoLID/download/sim/background/normalization_facto
 http://hallaweb.jlab.org/12GeV/SoLID/download/sim/background/normalization_factor_comparison.pptx
 Please note in both mode of running, "weighted" evenly distributed events in phase space with "rate" per event or "normalized" events distributed accroding to crossection with same "rate" for every events, the normalization only applies to a single file. If you produce several files with same number of events, then add them together, you need to divide by the addtional normalization, the number of files.
 
-file:
-"EM" in file name means all real materials and beam on target which needs normalization by current/nevent (same as "EM" previously)
-"clean_weighted" in file name means kryptonite for all geometry and weighted generator (same as "other" previously)
-"dirty_normalized" in file name mean all real materials and normalized generator (same as "actual" previously)
+files
+SIDIS_He3_geant4.9.5.p01/pass0
+SIDIS_He3_geant4.9.6.p02/pass0
 
-/home/zwzhao/work_halla/solid/solid_svn/solid/study/background/SIDIS_He3_geant4.9.5.p01/*root
-/home/zwzhao/work_halla/solid/solid_svn/solid/study/background/SIDIS_He3_geant4.9.6.p02/*root
-
-====== previous run =======
+====== run1 2013 =======
 
 see log at 
 https://jlabsvn.jlab.org/svnroot/solid/solid_gemc/analysistool/background/log_SIDIS_He3

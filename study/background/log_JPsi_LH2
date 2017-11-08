@@ -1,4 +1,16 @@
-====== current 20150122======
+== output file location and how to interpret the file content ==
+
+https://hallaweb.jlab.org/wiki/index.php/SoLID_full_simulation_and_file_sharing
+
+====== run3 2016 =======
+
+files
+JPsi_LH2_JLAB_VERSION_1.2/pass1,in 2016/01, new GEM, no LGC, no EC,
+JPsi_LH2_JLAB_VERSION_1.2/pass3,has LGC,in 2016/03, has EC as whole, with mother particles,add LGC virtual plane
+JPsi_LH2_JLAB_VERSION_1.2/pass4,in 2016/05,add another virtual plane for muon large angle
+JPsi_LH2_JLAB_VERSION_1.2/pass5,svn rev1171, in 2016/11, similar to SIDIS_He3_JLAB_VERSION_1.3/pass7
+
+====== run2 20150122======
 change based on previous version
 
 general:
@@ -9,8 +21,6 @@ The binary code used are at
 /home/zwzhao/apps/jlab_root_geant4.9.5.p01
 All SoLID related files are in SVN at revision 667, get it this way
 svn co -r 667 https://jlabsvn.jlab.org/svnroot/solid/solid_gemc2/
-other info are here
-https://hallaweb.jlab.org/wiki/index.php/Solid_Background#run_2
 
 geometry:
 15cm LH2 target is at -315cm and beamline, everything else is same like SIDIS setup
@@ -23,11 +33,13 @@ event generator:
 event generator eicRate is updated to produce "normalized" output directly, the single normalization factor (corresponding to total crosssection) is "rate" in output
 Please note in both mode of running, "weighted" evenly distributed events in phase space with "rate" per event or "normalized" events distributed accroding to crossection with same "rate" for every events, the normalization only applies to a single file. If you produce several files with same number of events, then add them together, you need to divide by the addtional normalization, the number of files.
 
-file:
-"EM" in file name means all real materials and beam on target which needs normalization by current/nevent (same as "EM" previously)
-"clean_weighted" in file name means kryptonite for all geometry and weighted generator (same as "other" previously)
-"dirty_normalized" in file name mean all real materials and normalized generator (same as "actual" previously)
+files
+JPsi_LH2_geant4.9.6.p02/pass0
 
-/home/zwzhao/work_halla/solid/solid_svn/solid/study/background/JPsi_LH2_geant4.9.5.p01/*root
-/home/zwzhao/work_halla/solid/solid_svn/solid/study/background/JPsi_LH2_geant4.9.6.p02/*root
+see output file location and how to interpret the file content here
+https://hallaweb.jlab.org/wiki/index.php/SoLID_full_simulation_and_file_sharing#run_2
+
+====== run1 2013 =======
+
+JPsi_LH2 was not studied at the time
 
