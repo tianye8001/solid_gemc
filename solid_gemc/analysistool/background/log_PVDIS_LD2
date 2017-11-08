@@ -28,6 +28,5 @@ Normalization for hadron background:
 	  if (Is_Ks || Is_Kl) thisrate=1750.;
 	  if (Is_p) thisrate=27000.;
 
-
-see output files and how to interpret the file content here
-https://hallaweb.jlab.org/wiki/index.php/Solid_Background#run_1  
+see output file location and how to interpret the file content here
+https://hallaweb.jlab.org/wiki/index.php/SoLID_full_simulation_and_file_sharing#run_1
