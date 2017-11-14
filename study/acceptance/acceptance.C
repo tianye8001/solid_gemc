@@ -146,6 +146,8 @@ int binfactor_phi=1;
 int binfactor_vz=2;
 
 TH2F *hacceptance_ThetaP_forwardangle,*hacceptance_ThetaP_largeangle,*hacceptance_ThetaP_overall;
+TH2F *hacceptance_ThetaPhi_forwardangle,*hacceptance_ThetaPhi_largeangle;
+TH2F *hacceptance_PhiP_forwardangle,*hacceptance_PhiP_largeangle;
 TH3F *hacceptance_ThetaPhiP_forwardangle,*hacceptance_ThetaPhiP_largeangle;
 
 TH1F *hgen_P=new TH1F("gen_P","gen_P",int(11*binfactor_p),0,11);
@@ -245,10 +247,7 @@ TH2F *hlinearity_GEM34=new TH2F("linearity_GEM34","linearity_GEM34",1000,theta_m
 TH1F *hmissingGEM_forwardangle=new TH1F("missingGEM_forwardangle","missingGEM_forwardangle",6,0.5,6.5);
 TH1F *hmissingGEM_largeangle=new TH1F("missingGEM_largeangle","missingGEM_largeangle",6,0.5,6.5);
 
-TH1F *htotal_lgc_nphe=new TH1F("total_lgc_nphe","total_lgc_nphe",110,-10,100);
-TH1F *htotal_hgc_nphe=new TH1F("total_hgc_nphe","total_hgc_nphe",110,-10,100);  
-
-const int n=10;  //include 6 GEM and 2 calorimeter and 2 muon detector
+const int n=15;
 
 TH2F *hhit_rMom[n];
 TH2F *hhit_phidiffMom[n],*hhit_thetadiffMom[n],*hhit_anglediffMom[n];
@@ -496,7 +495,7 @@ for (Int_t i=0;i<nevent;i++) {
       
     bool Is_out=false;
     bool Is_decay=false;
-    int acc[10]={0,0,0,0,0,0,0,0,0,0};
+    int acc[n]={0};
     for (Int_t j=0;j<flux_hitn->size();j++) {
 //           cout << j << " !!! " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;           
     
@@ -524,14 +523,21 @@ for (Int_t i=0;i<nevent;i++) {
     else if (flux_id->at(j)==1410000) hit_id=3;
     else if (flux_id->at(j)==1510000) hit_id=4;
     else if (flux_id->at(j)==1610000) hit_id=5;    
-    else if (flux_id->at(j)==3110000) hit_id=6;
-    else if (flux_id->at(j)==3210000) hit_id=7;	
+    else if (flux_id->at(j)==2110000) hit_id=6;
+    else if (flux_id->at(j)==2210000) hit_id=7;
+    else if (flux_id->at(j)==5110000) hit_id=8;
+    else if (flux_id->at(j)==5210000) hit_id=9;	
+    else if (flux_id->at(j)==3110000) hit_id=10;
+    else if (flux_id->at(j)==3210000) hit_id=11;
+    else if (flux_id->at(j)==4110000) hit_id=12;	        
+    else if (flux_id->at(j)==6110000) hit_id=13;
+    else if (flux_id->at(j)==6100000) hit_id=14;	    
 //     else if (flux_id->at(j)==6110000) hit_id=8;
 //     else if (flux_id->at(j)==6120000) hit_id=8;    
-    else if (flux_id->at(j)==6130000) hit_id=8;        
+//     else if (flux_id->at(j)==6130000) hit_id=8;        
 //     else if (flux_id->at(j)==6140000) hit_id=8;            
 //     else if (flux_id->at(j)==6210000) hit_id=9;
-    else if (flux_id->at(j)==6100000) hit_id=9;    
+//     else if (flux_id->at(j)==6100000) hit_id=9;    
     else continue;  //skip other detector for now
 
 //     if (hit_id==9) cout << "flux_id->at(j) " << flux_avg_z->at(j) << endl;
@@ -565,6 +571,7 @@ for (Int_t i=0;i<nevent;i++) {
 
      double hit_phi=(coor_acc-coor_gen).Phi();
      double hit_theta=(coor_acc-coor_gen).Theta();     
+//      cout << hit_phi << " " << hit_theta << endl;
      
      hhit_rz->Fill(flux_avg_z->at(j)/1e1,hit_r/1e1);
      
@@ -646,16 +653,45 @@ for (Int_t i=0;i<nevent;i++) {
     }
     else if (Is_SIDIS_NH3){     
       // only acceptance area not in sheet of flame
-      if ((detector_ID==3 && subdetector_ID==1) && ((-74<hit_phi && hit_phi<-38 && hit_r/1e1<195)||(-92<hit_phi && hit_phi<-88 && hit_r/1e1<120)||(50<hit_phi && hit_phi<80 && hit_r/1e1<195))) continue;                
-      if ((detector_ID==3 && subdetector_ID==2) && ((-85<hit_phi && hit_phi<-60)||(65<hit_phi && hit_phi<85))) continue;                
       
-      if ((detector_ID==1 && subdetector_ID==1) && ((-93<hit_phi && hit_phi<-82)||(80<hit_phi && hit_phi<92))) continue;          
-      if ((detector_ID==1 && subdetector_ID==2) && ((-93<hit_phi && hit_phi<-82)||(80<hit_phi && hit_phi<92))) continue;          
-      if ((detector_ID==1 && subdetector_ID==3) && ((-92<hit_phi && hit_phi<-75)||(77<hit_phi && hit_phi<92))) continue;          
-      if ((detector_ID==1 && subdetector_ID==4) && ((-92<hit_phi && hit_phi<-62)||(66<hit_phi && hit_phi<92))) continue;          
-      if ((detector_ID==1 && subdetector_ID==5) && ((-92<hit_phi && hit_phi<-65)||(66<hit_phi && hit_phi<92))) continue;          
-      if ((detector_ID==1 && subdetector_ID==6) && ((-92<hit_phi && hit_phi<-58)||(66<hit_phi && hit_phi<95))) continue;          
-	  
+      //wrong ptarget field
+//       if ((detector_ID==3 && subdetector_ID==1) && ((-74<hit_phi*DEG && hit_phi*DEG<-38 && hit_r/1e1<195)||(-92<hit_phi*DEG && hit_phi*DEG<-88 && hit_r/1e1<120)||(50<hit_phi*DEG && hit_phi*DEG<80 && hit_r/1e1<195))) continue;                
+//       if ((detector_ID==3 && subdetector_ID==2) && ((-85<hit_phi*DEG && hit_phi*DEG<-60)||(65<hit_phi*DEG && hit_phi*DEG<85))) continue;                
+//       
+//       if ((detector_ID==1 && subdetector_ID==1) && ((-93<hit_phi*DEG && hit_phi*DEG<-82)||(80<hit_phi*DEG && hit_phi*DEG<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==2) && ((-93<hit_phi*DEG && hit_phi*DEG<-82)||(80<hit_phi*DEG && hit_phi*DEG<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==3) && ((-92<hit_phi*DEG && hit_phi*DEG<-75)||(77<hit_phi*DEG && hit_phi*DEG<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==4) && ((-92<hit_phi*DEG && hit_phi*DEG<-62)||(66<hit_phi*DEG && hit_phi*DEG<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==5) && ((-92<hit_phi*DEG && hit_phi*DEG<-65)||(66<hit_phi*DEG && hit_phi*DEG<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==6) && ((-92<hit_phi*DEG && hit_phi*DEG<-58)||(66<hit_phi*DEG && hit_phi*DEG<95))) continue;    
+
+      //oxford ptarget field
+      //cut gem      
+      if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi*DEG && hit_phi*DEG<-75)||(75<hit_phi*DEG && hit_phi*DEG<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi*DEG && hit_phi*DEG<-75)||(75<hit_phi*DEG && hit_phi*DEG<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi*DEG && hit_phi*DEG<-75)||(75<hit_phi*DEG && hit_phi*DEG<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi*DEG && hit_phi*DEG<-75)||(75<hit_phi*DEG && hit_phi*DEG<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi*DEG && hit_phi*DEG<-55)||(70<hit_phi*DEG && hit_phi*DEG<90))) continue;          
+      if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi*DEG && hit_phi*DEG<-55)||(70<hit_phi*DEG && hit_phi*DEG<90))) continue;  
+      //cut LGC
+      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi*DEG && hit_phi*DEG<-55)||(70<hit_phi*DEG && hit_phi*DEG<90))) continue;
+      //cut HGC
+      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi*DEG && hit_phi*DEG<-40 && hit_r/1e1<180)||(65<hit_phi*DEG && hit_phi*DEG<90 && hit_r/1e1<180))) continue;                
+      //cut FASPD
+      if ((detector_ID==5 && subdetector_ID==1) && ((-75<hit_phi*DEG && hit_phi*DEG<-40)||(70<hit_phi*DEG && hit_phi*DEG<95))) continue; 
+      //cut LASPD
+      if ((detector_ID==5 && subdetector_ID==2) && ((-90<hit_phi*DEG && hit_phi*DEG<-60)||(60<hit_phi*DEG && hit_phi*DEG<90))) continue;       
+      //cut FAMRPC
+      if ((detector_ID==4 && subdetector_ID==1) && ((-75<hit_phi*DEG && hit_phi*DEG<-40)||(70<hit_phi*DEG && hit_phi*DEG<95))) continue; 
+      //cut EC    
+      if ((detector_ID==3 && subdetector_ID==1) && ((-75<hit_phi*DEG && hit_phi*DEG<-40 && hit_r/1e1<195)||(70<hit_phi*DEG && hit_phi*DEG<90 && hit_r/1e1<195))) continue;                
+      if ((detector_ID==3 && subdetector_ID==2) && ((-90<hit_phi*DEG && hit_phi*DEG<-60)||(60<hit_phi*DEG && hit_phi*DEG<95))) continue;
+      
+// double cut1[12]={-95,-95,-95,-95,-85,-85,-85,-85,-75,-90,-75,-90};
+// double cut2[12]={-75,-75,-75,-75,-55,-55,-55,-40,-40,-60,-40,-60};
+// double cut3[12]={ 75, 75, 75, 75, 70, 70, 70, 65, 70, 60, 70, 60};
+// double cut4[12]={ 95, 95, 95, 95, 90, 90, 90, 90, 90, 95, 90, 95};
+      
       acc[hit_id]=1; 
     }
     else if (Is_JPsi){
@@ -683,22 +719,6 @@ for (Int_t i=0;i<nevent;i++) {
     }        
     //check all hits, end ============================================================
 
-//   int total_lgc_nphe=0;  
-//       tree_solid_lgc->GetEntry(i);      
-//   for(Int_t j = 0; j < solid_lgc_hitn->size(); j++){
-// //       cout << j << " !!! " << solid_lgc_hitn->at(j) << " " << solid_lgc_sector->at(j) << " " << solid_lgc_pmt->at(j) << " " << solid_lgc_pixel->at(j) << " " << solid_lgc_nphe->at(j) << " " << solid_lgc_avg_t->at(j) << endl;     
-//     total_lgc_nphe += solid_lgc_nphe->at(j);
-//   }  
-//   htotal_lgc_nphe->Fill(total_lgc_nphe);
-// 
-//   int total_hgc_nphe=0;  
-//       tree_solid_hgc->GetEntry(i);      
-//   for(Int_t j = 0; j < solid_hgc_hitn->size(); j++){
-// //       cout << "solid_hgc " << " !!! " << solid_hgc_hitn->at(j) << " " << solid_hgc_id->at(j) << " " << solid_hgc_pid->at(j) << " " << solid_hgc_mpid->at(j) << " " << solid_hgc_tid->at(j) << " " << solid_hgc_mtid->at(j) << " " << solid_hgc_trackE->at(j) << " " << solid_hgc_totEdep->at(j) << " " << solid_hgc_avg_x->at(j) << " " << solid_hgc_avg_y->at(j) << " " << solid_hgc_avg_z->at(j) << " " << solid_hgc_avg_lx->at(j) << " " << solid_hgc_avg_ly->at(j) << " " << solid_hgc_avg_lz->at(j) << " " << solid_hgc_px->at(j) << " " << solid_hgc_py->at(j) << " " << solid_hgc_pz->at(j) << " " << solid_hgc_vx->at(j) << " " << solid_hgc_vy->at(j) << " " << solid_hgc_vz->at(j) << " " << solid_hgc_mvx->at(j) << " " << solid_hgc_mvy->at(j) << " " << solid_hgc_mvz->at(j) << " " << solid_hgc_avg_t->at(j) << endl;      
-//     if(solid_hgc_pid->at(j)==0)  total_hgc_nphe++;
-//   }  
-//   htotal_hgc_nphe->Fill(total_hgc_nphe);
-  
     //analysis hit result, begin ============================================================    
 //     if(Is_out){
 //     for (Int_t j=0;j<flux_hitn->size();j++) {
@@ -717,26 +737,23 @@ for (Int_t i=0;i<nevent;i++) {
     int pattern_id=-1;       
     if (Is_PVDIS){    
 //       if (acc[6]==1) pattern_id=0;  //hit on FAEC
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[6]==1) pattern_id=0;
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[10]==1) pattern_id=0;
       //hit on FAEC and GEM      
-//       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[6]==1&&total_lgc_nphe>10) pattern_id=0;            //hit on FAEC and GEM and LGC
     }
     else if (Is_SIDIS_He3){
 //       if (acc[6]==1) pattern_id=0;  //hit on FAEC
 //       if (acc[7]==1) pattern_id=1;	  //hit on LAEC
-      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM      
-//       if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&total_lgc_nphe>10) pattern_id=0; //hit on FAEC and GEM and LGC      
-//       if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&total_hgc_nphe>10) pattern_id=0; //hit on FAEC and GEM and LGC            
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) pattern_id=1; //hit on LAEC and GEM  
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[10]==1) pattern_id=0; //hit on FAEC and GEM             
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[11]==1) pattern_id=1; //hit on LAEC and GEM  
 
-      if (acc[6]==1) {
+      if (acc[10]==1) {
 	for (Int_t k=0;k<6;k++) {      
 	    if (acc[k]==1) {
 	      hmissingGEM_forwardangle->Fill(k+1);
 	    }
 	}      
       }
-      if (acc[7]==1) {
+      if (acc[11]==1) {
 	for (Int_t k=0;k<6;k++) {      
 	    if (acc[k]==1) {
 	      hmissingGEM_largeangle->Fill(k+1);
@@ -748,25 +765,43 @@ for (Int_t i=0;i<nevent;i++) {
     else if (Is_SIDIS_NH3){
 //       if (acc[6]==1) pattern_id=0;
 //       if (acc[7]==1) pattern_id=1;	        
-      if (acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) pattern_id=1; //hit on LAEC and GEM
+      if (abs(pid_gen)==11){      
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1&&acc[8]==1&&acc[10]==1) pattern_id=0; //hit on GEM, LGC, FASPD, FAEC for electron 
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[9]==1&&acc[11]==1) pattern_id=1; //hit on GEM, LASPD, LAEC for electron
+      }
+      
+      if (abs(pid_gen)==211){      
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[7]==1&&acc[8]==1) pattern_id=0; //hit on GEM,HGC,FASPD for pion 
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[9]==1) pattern_id=1; //hit on GEM, LASPD for pion
+      }
+      
+      if (abs(pid_gen)==321){      
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[8]==1) pattern_id=0; //hit on GEM, FASPD for kaon 
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[9]==1) pattern_id=1; //hit on GEM, LASPD for kaon
+      }
+      
+      if (abs(pid_gen)==22){      
+      if (acc[10]==1) pattern_id=0; //hit on FAEC for photon
+      if (acc[11]==1) pattern_id=1; //hit on LAEC for photon      
+      }      
+      
     }
     else if (Is_JPsi){
 //       if (acc[6]==1) pattern_id=0;  //hit on FAEC
 //       if (acc[7]==1) pattern_id=1;	  //hit on LAEC      
       
-      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[6]==1) pattern_id=0; //hit on FAEC and GEM
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[7]==1) pattern_id=1; //hit on LAEC and GEM
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[10]==1) pattern_id=0; //hit on FAEC and GEM
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[11]==1) pattern_id=1; //hit on LAEC and GEM
     }
     else if (Is_DDVCS_JPsi_LH2){
 //       if (acc[8]==1) pattern_id=0;  //hit on forward angle muon det behind endcap
 //       if (acc[9]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut
-      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[8]==1) pattern_id=0;  //hit on forward angle muon det behind endcap and all gem
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[9]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut and all gem      
+      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[13]==1) pattern_id=0;  //hit on forward angle muon det behind endcap and all gem
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[14]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut and all gem      
     }    
     else if (Is_DDVCS_PVDIS_LH2){
 //       if (acc[8]==1) pattern_id=0;  //hit on FAEC      
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[8]==1) pattern_id=0; //hit on forward angle muon det behind endcap and all gem
+      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[13]==1) pattern_id=0; //hit on forward angle muon det behind endcap and all gem
     }        
     
 
@@ -898,8 +933,8 @@ for(int i=0;i<m;i++) {
   hacceptance_ThetaVr[i]->SetMaximum(1);      
 }
 
-TCanvas *c_acc = new TCanvas("acc","acc",1200,1000);
-c_acc->Divide(3,4);
+TCanvas *c_acc = new TCanvas("acc","acc",1800,1000);
+c_acc->Divide(4,2);
 c_acc->cd(1);
 gPad->SetLogy(1);
 hacceptance_ThetaP[0]->Draw("colz");
@@ -907,27 +942,35 @@ hacceptance_ThetaP[0]->SetAxisRange(0.1,11,"Y");
 c_acc->cd(2);
 hacceptance_ThetaPhi[0]->Draw("colz");
 c_acc->cd(3);
+gPad->SetLogy(1);
 hacceptance_PhiP[0]->Draw("colz");
+hacceptance_PhiP[0]->SetAxisRange(0.1,11,"Y");
 c_acc->cd(4);
+hacceptance_ThetaPhiP[0]->Draw("box");
+c_acc->cd(5);
 gPad->SetLogy(1);
 hacceptance_ThetaP[1]->Draw("colz");
 hacceptance_ThetaP[1]->SetAxisRange(0.1,11,"Y");
-c_acc->cd(5);
-hacceptance_ThetaPhi[1]->Draw("colz");
 c_acc->cd(6);
-hacceptance_PhiP[1]->Draw("colz");
+hacceptance_ThetaPhi[1]->Draw("colz");
 c_acc->cd(7);
-hacceptance_P[0]->Draw();
+gPad->SetLogy(1);
+hacceptance_PhiP[1]->Draw("colz");
+hacceptance_PhiP[1]->SetAxisRange(0.1,11,"Y");
 c_acc->cd(8);
-hacceptance_Theta[0]->Draw();
-c_acc->cd(9);
-hacceptance_Phi[0]->Draw();
-c_acc->cd(10);
-hacceptance_P[1]->Draw();
-c_acc->cd(11);
-hacceptance_Theta[1]->Draw();
-c_acc->cd(12);
-hacceptance_Phi[1]->Draw();
+hacceptance_ThetaPhiP[1]->Draw("box");
+// c_acc->cd(7);
+// hacceptance_P[0]->Draw();
+// c_acc->cd(8);
+// hacceptance_Theta[0]->Draw();
+// c_acc->cd(9);
+// hacceptance_Phi[0]->Draw();
+// c_acc->cd(10);
+// hacceptance_P[1]->Draw();
+// c_acc->cd(11);
+// hacceptance_Theta[1]->Draw();
+// c_acc->cd(12);
+// hacceptance_Phi[1]->Draw();
 c_acc->SaveAs(Form("%s_%s",the_filename,"acc.png"));
 
 TCanvas *c_acc_vertex = new TCanvas("acc_vertex","acc_vertex",1600,800);
@@ -1064,14 +1107,6 @@ gPad->SetLogz(1);
 hPloss[i][j]->Draw("colz");
 }}
 
-TCanvas *c_total_lgc_nphe = new TCanvas("total_lgc_nphe","total_lgc_nphe",1000,800);
-gPad->SetLogy();
-htotal_lgc_nphe->Draw();
-
-TCanvas *c_total_hgc_nphe = new TCanvas("total_hgc_nphe","total_hgc_nphe",1000,800);
-gPad->SetLogy();
-htotal_hgc_nphe->Draw();
-
 // TCanvas *c_acceptance_all_gem = new TCanvas("acceptance_gem","acceptance_gem",1800,800);
 // c_acceptance_all_gem->Divide(2,3);
 // for(int k=0;k<6;k++){
@@ -1093,15 +1128,25 @@ htotal_hgc_nphe->Draw();
 // }
 
 hacceptance_ThetaP_forwardangle=(TH2F*) hacceptance_ThetaP[0]->Clone();
-hacceptance_ThetaP_forwardangle->SetNameTitle("acceptance_ThetaP_forwardangle","acceptance by FA;vertex #theta (deg);vertex P (GeV)");
+hacceptance_ThetaP_forwardangle->SetName("acceptance_ThetaP_forwardangle");
 hacceptance_ThetaP_largeangle=(TH2F*) hacceptance_ThetaP[1]->Clone();
-hacceptance_ThetaP_largeangle->SetNameTitle("acceptance_ThetaP_largeangle","acceptance by LA;vertex #theta (deg);vertex P (GeV)");
+hacceptance_ThetaP_largeangle->SetName("acceptance_ThetaP_largeangle");
+
 hacceptance_ThetaP_overall=(TH2F*) hacceptance_ThetaP_forwardangle->Clone();
 hacceptance_ThetaP_overall->Add(hacceptance_ThetaP_largeangle);
-// hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","acceptance by FA and LA;vertex #theta (deg);vertex P (GeV)");
-hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","SIDIS acceptance;vertex #theta (deg);vertex P (GeV)");
+hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","acceptance;vertex #theta (deg);vertex P (GeV)");
 hacceptance_ThetaP_overall->SetMinimum(0);  
 hacceptance_ThetaP_overall->SetMaximum(1);  
+
+hacceptance_ThetaPhi_forwardangle=(TH2F*) hacceptance_ThetaPhi[0]->Clone();
+hacceptance_ThetaPhi_forwardangle->SetName("acceptance_ThetaPhi_forwardangle");
+hacceptance_ThetaPhi_largeangle=(TH2F*) hacceptance_ThetaPhi[1]->Clone();
+hacceptance_ThetaPhi_largeangle->SetName("acceptance_ThetaPhi_largeangle");
+
+hacceptance_PhiP_forwardangle=(TH2F*) hacceptance_PhiP[0]->Clone();
+hacceptance_PhiP_forwardangle->SetName("acceptance_PhiP_forwardangle");
+hacceptance_PhiP_largeangle=(TH2F*) hacceptance_PhiP[1]->Clone();
+hacceptance_PhiP_largeangle->SetName("acceptance_PhiP_largeangle");
 
 hacceptance_ThetaPhiP_forwardangle=(TH3F*) hacceptance_ThetaPhiP[0]->Clone();
 hacceptance_ThetaPhiP_forwardangle->SetNameTitle("acceptance_ThetaPhiP_forwardangle","acceptance by FA;vertex #theta (deg);vertex #phi (deg);vertex P (GeV)");
