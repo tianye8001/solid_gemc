@@ -1,8 +1,4 @@
 <gcard>
-<option name="DBHOST" value="soliddb"/>
-<option name="DATABASE" value="test"/>
-<option name="DBUSER" value="soliduser"/>
-<option name="DBPSWD" value="ilovesolid"/>
 
 <detector name="../../solid_gemc2/geometry/old/solid_DDVCS_JPsi_LH2" factory="TEXT" variation="Original"/>
 
@@ -26,8 +22,8 @@
 <option name="BEAM_V"   value="(0,0,-315)cm"/>
 <option name="SPREAD_V" value="(0.21,7.5)cm"/>
 
-<option name="N" value="2e5"/>
-<option name="OUTPUT" value="evio,acceptance_solid_DDVCS_JPsi_LH2_muonm_target315.evio"/>
+<option name="N" value="1e7"/>
+<option name="OUTPUT" value="evio,acceptance_solid_DDVCS_JPsi_LH2_muonm_target315_1e7.evio"/>
 <option name="USE_GUI"  value="0"/>
 
 </gcard>
