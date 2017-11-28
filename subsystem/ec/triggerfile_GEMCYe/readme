@@ -1,3 +1,0 @@
-SIDIS_LD2_FAEC_trigger_Ye.C  :  It includes both electron and pion trigger effeciencies for the forward anlge EC setup.
-SIDIS_LD2_LAEC_trigger_Ye.C  :  It includes both electron and pion trigger effeciencies for the large anlge EC setup.
-SIDIS_LD2_FAEC_electron_Ye_25bin.C: for forwad angle EC and bin the monentum to 25 bins.
