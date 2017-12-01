@@ -10,7 +10,8 @@
 <detector name="../geometry/gem/solid_PVDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_PVDIS_target_enclosure" factory="TEXT" variation="LD2"/>
 <detector name="../geometry/beamline/solid_PVDIS_beamline" factory="TEXT" variation="Original"/>
-<detector name="../geometry/baffle/solid_PVDIS_baffle_babarbafflemore1_enclosure" factory="TEXT" variation="Original"/>
+<detector name="../geometry/baffle/solid_PVDIS_baffle_CLEO2" factory="TEXT" variation="Original"/>
+<detector name="../geometry/baffle/solid_PVDIS_baffle_observer_CLEO2" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
