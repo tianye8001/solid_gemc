@@ -461,8 +461,8 @@ for (Int_t i=0;i<nevent;i++) {
 //       theta_gen=acos(pz_gen/p_gen);  	//in rad
 //       phi_gen=atan2(py_gen,px_gen);     //in rad
       p_gen=mom_gen.Mag();
-      theta_gen=mom_gen.Theta();
-      phi_gen=mom_gen.Phi();     //in rad
+      theta_gen=mom_gen.Theta()*DEG;
+      phi_gen=mom_gen.Phi()*DEG;     //in deg
 
       if (pid_gen==11) {
 	mom4_gen.SetXYZT(px_gen,py_gen,pz_gen,sqrt(0.511*0.511+p_gen*p_gen));                
@@ -470,15 +470,15 @@ for (Int_t i=0;i<nevent;i++) {
       }
       
       hgen_P->Fill(p_gen/1e3);      
-      hgen_Theta->Fill(theta_gen*DEG);            
-      hgen_Phi->Fill(phi_gen*DEG);      
-      hgen_ThetaP->Fill(theta_gen*DEG,p_gen/1e3);      
-      hgen_ThetaPhi->Fill(theta_gen*DEG,phi_gen*DEG);            
-      hgen_PhiP->Fill(phi_gen*DEG,p_gen/1e3);
-      hgen_ThetaPhiP->Fill(theta_gen*DEG,phi_gen*DEG,p_gen/1e3);   
+      hgen_Theta->Fill(theta_gen);            
+      hgen_Phi->Fill(phi_gen);      
+      hgen_ThetaP->Fill(theta_gen,p_gen/1e3);      
+      hgen_ThetaPhi->Fill(theta_gen,phi_gen);            
+      hgen_PhiP->Fill(phi_gen,p_gen/1e3);
+      hgen_ThetaPhiP->Fill(theta_gen,phi_gen,p_gen/1e3);   
       
-      hgen_ThetaVz->Fill(vz_gen/1e1,theta_gen*DEG,rate);
-      hgen_ThetaVr->Fill(sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1,theta_gen*DEG,rate);      
+      hgen_ThetaVz->Fill(vz_gen/1e1,theta_gen,rate);
+      hgen_ThetaVr->Fill(sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1,theta_gen,rate);      
   }  
   
     tree_flux->GetEntry(i);    
@@ -567,16 +567,16 @@ for (Int_t i=0;i<nevent;i++) {
      
 //      double hit_phi=atan2(flux_avg_y->at(j)-vy_gen,flux_avg_x->at(j)-vx_gen);
 // //      double hit_theta=atan((hit_r/1e1-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;        
-//      double hit_theta=atan(sqrt(pow(flux_avg_x->at(j)-vx_gen,2)+pow(flux_avg_y->at(j)-vy_gen,2))/(flux_avg_z->at(j)-vz_gen));
+//      double hit_theta=atan(sqrt(pow(flux_avg_x->at(j)-vx_gen,2)+pow(flux_avg_y->at(j)-vy_gen,2))/(flux_avg_z->at(j)-vz_gen))*DEG;
 
-     double hit_phi=(coor_acc-coor_gen).Phi();
-     double hit_theta=(coor_acc-coor_gen).Theta();     
+     double hit_phi=(coor_acc-coor_gen).Phi()*DEG;
+     double hit_theta=(coor_acc-coor_gen).Theta()*DEG;     
 //      cout << hit_phi << " " << hit_theta << endl;
      
      hhit_rz->Fill(flux_avg_z->at(j)/1e1,hit_r/1e1);
      
-      hhit_phidiffMom[hit_id]->Fill((hit_phi-phi_gen)*DEG,p_gen/1e3);
-      hhit_thetadiffMom[hit_id]->Fill((hit_theta-theta_gen)*DEG,p_gen/1e3);
+      hhit_phidiffMom[hit_id]->Fill((hit_phi-phi_gen),p_gen/1e3);
+      hhit_thetadiffMom[hit_id]->Fill((hit_theta-theta_gen),p_gen/1e3);
       hhit_anglediffMom[hit_id]->Fill((coor_acc-coor_gen).Angle(mom_gen)*DEG,p_gen/1e3);
       
       hmom_phidiffMom[hit_id]->Fill((mom_acc.Phi()-mom_gen.Phi())*DEG,p_gen/1e3);
@@ -586,8 +586,8 @@ for (Int_t i=0;i<nevent;i++) {
       hhit_rMom[hit_id]->Fill(hit_r/1e1,p_gen/1e3);    
       
      hhit_xy[hit_id][0]->Fill(hit_x/1e1,hit_y/1e1);    
-     hhit_PhiR[hit_id][0]->Fill(hit_phi*DEG,hit_r/1e1);
-     hhit_PhiZ[hit_id][0]->Fill(hit_phi*DEG,hit_z/1e1);
+     hhit_PhiR[hit_id][0]->Fill(hit_phi,hit_r/1e1);
+     hhit_PhiZ[hit_id][0]->Fill(hit_phi,hit_z/1e1);
      hPloss[hit_id][0]->Fill(p_flux/p_gen,p_gen/1e3);      
      
     //check hit on baffleplate
@@ -648,44 +648,44 @@ for (Int_t i=0;i<nevent;i++) {
       acc[hit_id]=1;      
     }
     else if (Is_SIDIS_He3){
-//       if(theta_gen*DEG<8) continue;  //only acceptance 8 deg above      
+//       if(theta_gen<8) continue;  //only acceptance 8 deg above      
       acc[hit_id]=1;
     }
     else if (Is_SIDIS_NH3){     
       // only acceptance area not in sheet of flame
       
       //wrong ptarget field
-//       if ((detector_ID==3 && subdetector_ID==1) && ((-74<hit_phi*DEG && hit_phi*DEG<-38 && hit_r/1e1<195)||(-92<hit_phi*DEG && hit_phi*DEG<-88 && hit_r/1e1<120)||(50<hit_phi*DEG && hit_phi*DEG<80 && hit_r/1e1<195))) continue;                
-//       if ((detector_ID==3 && subdetector_ID==2) && ((-85<hit_phi*DEG && hit_phi*DEG<-60)||(65<hit_phi*DEG && hit_phi*DEG<85))) continue;                
+//       if ((detector_ID==3 && subdetector_ID==1) && ((-74<hit_phi && hit_phi<-38 && hit_r/1e1<195)||(-92<hit_phi && hit_phi<-88 && hit_r/1e1<120)||(50<hit_phi && hit_phi<80 && hit_r/1e1<195))) continue;                
+//       if ((detector_ID==3 && subdetector_ID==2) && ((-85<hit_phi && hit_phi<-60)||(65<hit_phi && hit_phi<85))) continue;                
 //       
-//       if ((detector_ID==1 && subdetector_ID==1) && ((-93<hit_phi*DEG && hit_phi*DEG<-82)||(80<hit_phi*DEG && hit_phi*DEG<92))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==2) && ((-93<hit_phi*DEG && hit_phi*DEG<-82)||(80<hit_phi*DEG && hit_phi*DEG<92))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==3) && ((-92<hit_phi*DEG && hit_phi*DEG<-75)||(77<hit_phi*DEG && hit_phi*DEG<92))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==4) && ((-92<hit_phi*DEG && hit_phi*DEG<-62)||(66<hit_phi*DEG && hit_phi*DEG<92))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==5) && ((-92<hit_phi*DEG && hit_phi*DEG<-65)||(66<hit_phi*DEG && hit_phi*DEG<92))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==6) && ((-92<hit_phi*DEG && hit_phi*DEG<-58)||(66<hit_phi*DEG && hit_phi*DEG<95))) continue;    
+//       if ((detector_ID==1 && subdetector_ID==1) && ((-93<hit_phi && hit_phi<-82)||(80<hit_phi && hit_phi<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==2) && ((-93<hit_phi && hit_phi<-82)||(80<hit_phi && hit_phi<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==3) && ((-92<hit_phi && hit_phi<-75)||(77<hit_phi && hit_phi<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==4) && ((-92<hit_phi && hit_phi<-62)||(66<hit_phi && hit_phi<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==5) && ((-92<hit_phi && hit_phi<-65)||(66<hit_phi && hit_phi<92))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==6) && ((-92<hit_phi && hit_phi<-58)||(66<hit_phi && hit_phi<95))) continue;    
 
       //oxford ptarget field
       //cut gem      
-      if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi*DEG && hit_phi*DEG<-75)||(75<hit_phi*DEG && hit_phi*DEG<95))) continue;          
-      if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi*DEG && hit_phi*DEG<-75)||(75<hit_phi*DEG && hit_phi*DEG<95))) continue;          
-      if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi*DEG && hit_phi*DEG<-75)||(75<hit_phi*DEG && hit_phi*DEG<95))) continue;          
-      if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi*DEG && hit_phi*DEG<-75)||(75<hit_phi*DEG && hit_phi*DEG<95))) continue;          
-      if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi*DEG && hit_phi*DEG<-55)||(70<hit_phi*DEG && hit_phi*DEG<90))) continue;          
-      if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi*DEG && hit_phi*DEG<-55)||(70<hit_phi*DEG && hit_phi*DEG<90))) continue;  
+      if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;          
+      if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;  
       //cut LGC
-      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi*DEG && hit_phi*DEG<-55)||(70<hit_phi*DEG && hit_phi*DEG<90))) continue;
+      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;
       //cut HGC
-      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi*DEG && hit_phi*DEG<-40 && hit_r/1e1<180)||(65<hit_phi*DEG && hit_phi*DEG<90 && hit_r/1e1<180))) continue;                
+      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-40 && hit_r/1e1<180)||(65<hit_phi && hit_phi<90 && hit_r/1e1<180))) continue;                
       //cut FASPD
-      if ((detector_ID==5 && subdetector_ID==1) && ((-75<hit_phi*DEG && hit_phi*DEG<-40)||(70<hit_phi*DEG && hit_phi*DEG<95))) continue; 
+      if ((detector_ID==5 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
       //cut LASPD
-      if ((detector_ID==5 && subdetector_ID==2) && ((-90<hit_phi*DEG && hit_phi*DEG<-60)||(60<hit_phi*DEG && hit_phi*DEG<90))) continue;       
+      if ((detector_ID==5 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<90))) continue;       
       //cut FAMRPC
-      if ((detector_ID==4 && subdetector_ID==1) && ((-75<hit_phi*DEG && hit_phi*DEG<-40)||(70<hit_phi*DEG && hit_phi*DEG<95))) continue; 
+      if ((detector_ID==4 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
       //cut EC    
-      if ((detector_ID==3 && subdetector_ID==1) && ((-75<hit_phi*DEG && hit_phi*DEG<-40 && hit_r/1e1<195)||(70<hit_phi*DEG && hit_phi*DEG<90 && hit_r/1e1<195))) continue;                
-      if ((detector_ID==3 && subdetector_ID==2) && ((-90<hit_phi*DEG && hit_phi*DEG<-60)||(60<hit_phi*DEG && hit_phi*DEG<95))) continue;
+      if ((detector_ID==3 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40 && hit_r/1e1<195)||(70<hit_phi && hit_phi<90 && hit_r/1e1<195))) continue;                
+      if ((detector_ID==3 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<95))) continue;
       
 // double cut1[12]={-95,-95,-95,-95,-85,-85,-85,-85,-75,-90,-75,-90};
 // double cut2[12]={-75,-75,-75,-75,-55,-55,-55,-40,-40,-60,-40,-60};
@@ -730,8 +730,8 @@ for (Int_t i=0;i<nevent;i++) {
 //     }
 
     if (mom_GEM3.Mag()>0 && mom_GEM4.Mag()>0){ // hit on both GEM3 and GEM4
-//       hlinearity_GEM34->Fill(theta_gen*DEG,p_gen/1e3,(coor_GEM4-coor_GEM3).Angle(mom_GEM3)*DEG);      
-      hlinearity_GEM34->SetBinContent(int((theta_gen*DEG-theta_min)/((theta_max-theta_min)/1000.)),p_gen/1e3/(11/2200.),(coor_GEM4-coor_GEM3).Angle(mom_GEM3)*DEG);            
+//       hlinearity_GEM34->Fill(theta_gen,p_gen/1e3,(coor_GEM4-coor_GEM3).Angle(mom_GEM3)*DEG);      
+      hlinearity_GEM34->SetBinContent(int((theta_gen-theta_min)/((theta_max-theta_min)/1000.)),p_gen/1e3/(11/2200.),(coor_GEM4-coor_GEM3).Angle(mom_GEM3)*DEG);            
     }
     
     int pattern_id=-1;       
@@ -810,15 +810,15 @@ for (Int_t i=0;i<nevent;i++) {
       counter_hit[pattern_id]++;      
       
       hflux_P[pattern_id]->Fill(p_gen/1e3);
-      hflux_Theta[pattern_id]->Fill(theta_gen*DEG);            
-      hflux_Phi[pattern_id]->Fill(phi_gen*DEG);	      
-      hflux_ThetaP[pattern_id]->Fill(theta_gen*DEG,p_gen/1e3);
-      hflux_ThetaPhi[pattern_id]->Fill(theta_gen*DEG,phi_gen*DEG);            
-      hflux_PhiP[pattern_id]->Fill(phi_gen*DEG,p_gen/1e3);	
-      hflux_ThetaPhiP[pattern_id]->Fill(theta_gen*DEG,phi_gen*DEG,p_gen/1e3);
+      hflux_Theta[pattern_id]->Fill(theta_gen);            
+      hflux_Phi[pattern_id]->Fill(phi_gen);	      
+      hflux_ThetaP[pattern_id]->Fill(theta_gen,p_gen/1e3);
+      hflux_ThetaPhi[pattern_id]->Fill(theta_gen,phi_gen);            
+      hflux_PhiP[pattern_id]->Fill(phi_gen,p_gen/1e3);	
+      hflux_ThetaPhiP[pattern_id]->Fill(theta_gen,phi_gen,p_gen/1e3);
       
-      hflux_ThetaVz[pattern_id]->Fill(vz_gen/1e1,theta_gen*DEG,rate);
-      hflux_ThetaVr[pattern_id]->Fill(sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1,theta_gen*DEG,rate);
+      hflux_ThetaVz[pattern_id]->Fill(vz_gen/1e1,theta_gen,rate);
+      hflux_ThetaVr[pattern_id]->Fill(sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1,theta_gen,rate);
     }
       
     if (counter_hit[0]>1 || counter_hit[1]>1) {
