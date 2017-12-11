@@ -200,7 +200,7 @@ g_reflectivity_WL->SetMaximum(1);
 g_reflectivity_WL->SetMinimum(0.5);
 g_reflectivity_WL->GetXaxis()->SetRangeUser(200,800);
 
-double RefractiveIndex_C4F8O[n] = {
+double RefractiveIndex_C4F8O_oneandhalfatm[n] = {
 1.00205, 1.00205, 1.00205, 1.00206,
 1.00206, 1.00206, 1.00206, 1.00206,
 1.00206, 1.00206, 1.00206, 1.00207,
@@ -212,25 +212,122 @@ double RefractiveIndex_C4F8O[n] = {
 1.00219, 1.0022, 1.00222, 1.00223,
 1.00224, 1.00225, 1.00228, 1.00231,
 1.00234
-}; //at 1.5atm
+}; //at oneandhalfatm
 
-TGraph *g_RefractiveIndex_C4F8O_E=new TGraph(n,PhotonEnergy,RefractiveIndex_C4F8O);
-g_RefractiveIndex_C4F8O_E->SetTitle(";E(eV);RefractiveIndex_C4F8O");
-TGraph *g_RefractiveIndex_C4F8O_WL=new TGraph(n,Wavelength,RefractiveIndex_C4F8O);
-g_RefractiveIndex_C4F8O_WL->SetTitle(";wavelength(nm);RefractiveIndex_C4F8O");
- 
+double RefractiveIndex_C4F8O_oneatm[n] = {
+(1.00205-1)/1.5+1, (1.00205-1)/1.5+1, (1.00205-1)/1.5+1, (1.00206-1)/1.5+1,
+(1.00206-1)/1.5+1, (1.00206-1)/1.5+1, (1.00206-1)/1.5+1, (1.00206-1)/1.5+1,
+(1.00206-1)/1.5+1, (1.00206-1)/1.5+1, (1.00206-1)/1.5+1, (1.00207-1)/1.5+1,
+(1.00207-1)/1.5+1, (1.00207-1)/1.5+1, (1.00207-1)/1.5+1, (1.00207-1)/1.5+1,
+(1.00207-1)/1.5+1, (1.00208-1)/1.5+1, (1.00208-1)/1.5+1, (1.00208-1)/1.5+1,
+(1.00209-1)/1.5+1, (1.00209-1)/1.5+1, (1.00209-1)/1.5+1, (1.0021-1)/1.5+1,
+(1.00211-1)/1.5+1, (1.00211-1)/1.5+1, (1.00212-1)/1.5+1, (1.00213-1)/1.5+1,
+(1.00214-1)/1.5+1, (1.00215-1)/1.5+1, (1.00216-1)/1.5+1, (1.00217-1)/1.5+1,
+(1.00219-1)/1.5+1, (1.0022-1)/1.5+1, (1.00222-1)/1.5+1, (1.00223-1)/1.5+1,
+(1.00224-1)/1.5+1, (1.00225-1)/1.5+1, (1.00228-1)/1.5+1, (1.00231-1)/1.5+1,
+(1.00234-1)/1.5+1
+}; //at 1atm
+
+double RefractiveIndex_C4F10_oneandhalfatm[n] = { 
+// 1.0012258504, 1.001225763, 1.0012265232, 1.0012264533, 
+(1.0012272134-1)*1.5+1, (1.0012288123-1)*1.5+1, (1.001232115-1)*1.5+1, (1.0012294938-1)*1.5+1, 
+(1.001230254-1)*1.5+1, (1.0012310141-1)*1.5+1, (1.0012309355-1)*1.5+1, (1.0012316956-1)*1.5+1, 
+(1.0012324557-1)*1.5+1, (1.0012349196-1)*1.5+1, (1.0012356798-1)*1.5+1, (1.0012364486-1)*1.5+1, 
+(1.0012363525-1)*1.5+1, (1.0012379689-1)*1.5+1, (1.0012395853-1)*1.5+1, (1.0012411842-1)*1.5+1,
+(1.0012436481-1)*1.5+1, (1.0012444169-1)*1.5+1, (1.0012477021-1)*1.5+1, (1.001248471-1)*1.5+1, 
+(1.0012492399-1)*1.5+1, (1.001251695-1)*1.5+1, (1.0012533027-1)*1.5+1, (1.001256614-1)*1.5+1, 
+(1.0012599254-1)*1.5+1, (1.0012623719-1)*1.5+1, (1.0012656745-1)*1.5+1, (1.0012698334-1)*1.5+1, 
+(1.0012731361-1)*1.5+1, (1.0012781425-1)*1.5+1, (1.0012848264-1)*1.5+1, (1.0012889853-1)*1.5+1, 
+(1.001295678-1)*1.5+1, (1.0013032182-1)*1.5+1, (1.0013099196-1)*1.5+1, (1.0013174685-1)*1.5+1,
+(1.0013292375-1)*1.5+1, (1.0013401678-1)*1.5+1, (1.0013553268-1)*1.5+1, (1.0013713595-1)*1.5+1,
+(1.0013941548-1)*1.5+1, 
+// 1.0014118738, 1.0014465255, 1.0014761009, 1.0015183889  
+};
+
+double RefractiveIndex_C4F10_oneatm[n] = { 
+// 1.0012258504, 1.001225763, 1.0012265232, 1.0012264533, 
+1.0012272134, 1.0012288123, 1.001232115, 1.0012294938, 
+1.001230254, 1.0012310141, 1.0012309355, 1.0012316956, 
+1.0012324557, 1.0012349196, 1.0012356798,1.0012364486, 
+1.0012363525, 1.0012379689, 1.0012395853, 1.0012411842,
+1.0012436481, 1.0012444169, 1.0012477021, 1.001248471, 
+1.0012492399, 1.001251695, 1.0012533027, 1.001256614, 
+1.0012599254, 1.0012623719, 1.0012656745, 1.0012698334, 
+1.0012731361, 1.0012781425, 1.0012848264, 1.0012889853, 
+1.001295678, 1.0013032182, 1.0013099196, 1.0013174685,
+1.0013292375, 1.0013401678, 1.0013553268, 1.0013713595,
+1.0013941548, 
+// 1.0014118738, 1.0014465255, 1.0014761009, 1.0015183889  
+};
+
+TGraph *g_RefractiveIndex_C4F8O_oneandhalfatm_E=new TGraph(n,PhotonEnergy,RefractiveIndex_C4F8O_oneandhalfatm);
+g_RefractiveIndex_C4F8O_oneandhalfatm_E->SetTitle(";E(eV);RefractiveIndex");
+g_RefractiveIndex_C4F8O_oneandhalfatm_E->SetName("n C4F8O 1.5atm");
+TGraph *g_RefractiveIndex_C4F8O_oneandhalfatm_WL=new TGraph(n,Wavelength,RefractiveIndex_C4F8O_oneandhalfatm);
+g_RefractiveIndex_C4F8O_oneandhalfatm_WL->SetTitle(";wavelength(nm);RefractiveIndex");
+g_RefractiveIndex_C4F8O_oneandhalfatm_WL->SetName("n C4F8O 1.5atm");
+
+TGraph *g_RefractiveIndex_C4F8O_oneatm_E=new TGraph(n,PhotonEnergy,RefractiveIndex_C4F8O_oneatm);
+g_RefractiveIndex_C4F8O_oneatm_E->SetTitle(";E(eV);RefractiveIndex");
+g_RefractiveIndex_C4F8O_oneatm_E->SetName("n C4F8O 1.0atm");
+TGraph *g_RefractiveIndex_C4F8O_oneatm_WL=new TGraph(n,Wavelength,RefractiveIndex_C4F8O_oneatm);
+g_RefractiveIndex_C4F8O_oneatm_WL->SetTitle(";wavelength(nm);RefractiveIndex");
+g_RefractiveIndex_C4F8O_oneatm_WL->SetName("n C4F8O 1.0atm");
+
+TGraph *g_RefractiveIndex_C4F10_oneandhalfatm_E=new TGraph(n,PhotonEnergy,RefractiveIndex_C4F10_oneandhalfatm);
+g_RefractiveIndex_C4F10_oneandhalfatm_E->SetTitle(";E(eV);RefractiveIndex");
+g_RefractiveIndex_C4F10_oneandhalfatm_E->SetName("n C4F10 1.5atm");
+TGraph *g_RefractiveIndex_C4F10_oneandhalfatm_WL=new TGraph(n,Wavelength,RefractiveIndex_C4F10_oneandhalfatm);
+g_RefractiveIndex_C4F10_oneandhalfatm_WL->SetTitle(";wavelength(nm);RefractiveIndex");
+g_RefractiveIndex_C4F10_oneandhalfatm_WL->SetName("n C4F10 1.5atm");
+
+TGraph *g_RefractiveIndex_C4F10_oneatm_E=new TGraph(n,PhotonEnergy,RefractiveIndex_C4F10_oneatm);
+g_RefractiveIndex_C4F10_oneatm_E->SetTitle(";E(eV);RefractiveIndex");
+g_RefractiveIndex_C4F10_oneatm_E->SetName("n C4F10 1.0atm");
+TGraph *g_RefractiveIndex_C4F10_oneatm_WL=new TGraph(n,Wavelength,RefractiveIndex_C4F10_oneatm);
+g_RefractiveIndex_C4F10_oneatm_WL->SetTitle(";wavelength(nm);RefractiveIndex");
+g_RefractiveIndex_C4F10_oneatm_WL->SetName("n C4F10 1.0atm");
+
+TLegend* leg_Re_E = new TLegend(0.8, 0.8, .95, .95);
+leg_Re_E->AddEntry(g_RefractiveIndex_C4F8O_oneandhalfatm_E,g_RefractiveIndex_C4F8O_oneandhalfatm_E->GetName());
+leg_Re_E->AddEntry(g_RefractiveIndex_C4F8O_oneatm_E,g_RefractiveIndex_C4F8O_oneatm_E->GetName());
+leg_Re_E->AddEntry(g_RefractiveIndex_C4F10_oneandhalfatm_E,g_RefractiveIndex_C4F10_oneandhalfatm_E->GetName());
+leg_Re_E->AddEntry(g_RefractiveIndex_C4F10_oneatm_E,g_RefractiveIndex_C4F10_oneatm_E->GetName());
+
+TLegend* leg_Re_WL = new TLegend(0.8, 0.8, .95, .95);
+leg_Re_WL->AddEntry(g_RefractiveIndex_C4F8O_oneandhalfatm_WL,g_RefractiveIndex_C4F8O_oneandhalfatm_WL->GetName());
+leg_Re_WL->AddEntry(g_RefractiveIndex_C4F8O_oneatm_WL,g_RefractiveIndex_C4F8O_oneatm_WL->GetName());
+leg_Re_WL->AddEntry(g_RefractiveIndex_C4F10_oneandhalfatm_WL,g_RefractiveIndex_C4F10_oneandhalfatm_WL->GetName());
+leg_Re_WL->AddEntry(g_RefractiveIndex_C4F10_oneatm_WL,g_RefractiveIndex_C4F10_oneatm_WL->GetName());
+
 TCanvas *c_RefractiveIndex = new TCanvas("RefractiveIndex","RefractiveIndex",1600,800);
 c_RefractiveIndex->Divide(2,1);
 c_RefractiveIndex->cd(1);
-g_RefractiveIndex_C4F8O_E->Draw("AC*");
-g_RefractiveIndex_C4F8O_E->SetMaximum(1.003);
-g_RefractiveIndex_C4F8O_E->SetMinimum(1.001);
-g_RefractiveIndex_C4F8O_E->GetXaxis()->SetRangeUser(2,7);
+g_RefractiveIndex_C4F8O_oneandhalfatm_E->SetMaximum(1.0025);
+g_RefractiveIndex_C4F8O_oneandhalfatm_E->SetMinimum(1.0010);
+g_RefractiveIndex_C4F8O_oneandhalfatm_E->GetXaxis()->SetRangeUser(2,7);
+g_RefractiveIndex_C4F8O_oneandhalfatm_E->SetMarkerColor(kBlack);
+g_RefractiveIndex_C4F8O_oneandhalfatm_E->Draw("AC*");
+g_RefractiveIndex_C4F8O_oneatm_E->SetMarkerColor(kBlack);
+g_RefractiveIndex_C4F8O_oneatm_E->Draw("C* same");
+g_RefractiveIndex_C4F10_oneandhalfatm_E->SetMarkerColor(kRed);
+g_RefractiveIndex_C4F10_oneandhalfatm_E->Draw("C* same");
+g_RefractiveIndex_C4F10_oneatm_E->SetMarkerColor(kRed);
+g_RefractiveIndex_C4F10_oneatm_E->Draw("C* same");
+leg_Re_E->Draw();
 c_RefractiveIndex->cd(2);
-g_RefractiveIndex_C4F8O_WL->Draw("AC*");
-g_RefractiveIndex_C4F8O_WL->SetMaximum(1.003);
-g_RefractiveIndex_C4F8O_WL->SetMinimum(1.001);
-g_RefractiveIndex_C4F8O_WL->GetXaxis()->SetRangeUser(200,800);
+g_RefractiveIndex_C4F8O_oneandhalfatm_WL->SetMaximum(1.0025);
+g_RefractiveIndex_C4F8O_oneandhalfatm_WL->SetMinimum(1.0010);
+g_RefractiveIndex_C4F8O_oneandhalfatm_WL->GetXaxis()->SetRangeUser(200,800);
+g_RefractiveIndex_C4F8O_oneandhalfatm_WL->SetMarkerColor(kBlack);
+g_RefractiveIndex_C4F8O_oneandhalfatm_WL->Draw("AC*");
+g_RefractiveIndex_C4F8O_oneatm_WL->SetMarkerColor(kBlack);
+g_RefractiveIndex_C4F8O_oneatm_WL->Draw("C* same");
+g_RefractiveIndex_C4F10_oneandhalfatm_WL->SetMarkerColor(kRed);
+g_RefractiveIndex_C4F10_oneandhalfatm_WL->Draw("C* same");
+g_RefractiveIndex_C4F10_oneatm_WL->SetMarkerColor(kRed);
+g_RefractiveIndex_C4F10_oneatm_WL->Draw("C* same");
+leg_Re_WL->Draw();
 
 double abs_length_C4F8O[n] = {
 87.7642, 87.7642, 87.7642, 87.7642, 
