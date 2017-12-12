@@ -111,13 +111,11 @@ tree_solid_hgc->SetBranchAddress("avg_t",&solid_hgc_avg_t);
 return;
 }
 
-// double process_tree_solid_hgc(TTree *tree_solid_hgc,TH2F *hhitxy_hgc)
-double process_tree_solid_hgc(TTree *tree_solid_hgc)
-{
-// TH2F *hhitxy_hgc=new TH2F("hhitxy_hgc","p.e. pattern; r (mm); #phi (mm)",32,-102,102,32,-102,102);  
+Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc)
+{ 
+  double npe_hgc=0;
   
   double count_this=0,count_that=0;  
-//     for (Int_t j=0;j<1;j++) {  
     for (Int_t j=0;j<solid_hgc_hitn->size();j++) {
 //       cout << "solid_hgc " << " !!! " << solid_hgc_hitn->at(j) << " " << solid_hgc_id->at(j) << " " << solid_hgc_pid->at(j) << " " << solid_hgc_mpid->at(j) << " " << solid_hgc_tid->at(j) << " " << solid_hgc_mtid->at(j) << " " << solid_hgc_trackE->at(j) << " " << solid_hgc_totEdep->at(j) << " " << solid_hgc_avg_x->at(j) << " " << solid_hgc_avg_y->at(j) << " " << solid_hgc_avg_z->at(j) << " " << solid_hgc_avg_lx->at(j) << " " << solid_hgc_avg_ly->at(j) << " " << solid_hgc_avg_lz->at(j) << " " << solid_hgc_px->at(j) << " " << solid_hgc_py->at(j) << " " << solid_hgc_pz->at(j) << " " << solid_hgc_vx->at(j) << " " << solid_hgc_vy->at(j) << " " << solid_hgc_vz->at(j) << " " << solid_hgc_mvx->at(j) << " " << solid_hgc_mvy->at(j) << " " << solid_hgc_mvz->at(j) << " " << solid_hgc_avg_t->at(j) << endl;  
 
@@ -126,29 +124,39 @@ double process_tree_solid_hgc(TTree *tree_solid_hgc)
       int subsubdetector_ID=((solid_hgc_id->at(j)%1000000)%100000)/10000;
       int component_ID=solid_hgc_id->at(j)%10000;
       
-//     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_hgc_avg_lx->at(j) << endl; 
+//     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_hgc_avg_lx->at(j) << ", " << solid_hgc_avg_ly->at(j) << endl; 
       
       if (solid_hgc_pid->at(j)!=0) continue;
       
       if (detector_ID==2 && subdetector_ID == 2 && subsubdetector_ID == 1) {	  
 	  double E_photon=solid_hgc_trackE->at(j)*1e6; //in eV
 	  double weight=0; 	  
-	  for (Int_t k=0;k<42;k++) {	      
+	  for (Int_t k=0;k<n;k++) {	      
 // 	  for (Int_t k=0;k<25;k++) {	 // cut on 360nm/3.35eV
 	    if (PhotonEnergy[k]<=E_photon && E_photon<PhotonEnergy[k+1]) {
 	    weight=eff_PMT[k];
 	    break;
 	    }
 	  }
-	  count_this +=weight;	  
-// 	  hhitxy_hgc->Fill(solid_hgc_avg_lx->at(j),solid_hgc_avg_ly->at(j),weight*0.001);	  	
+	  npe_hgc +=weight;
+
+	  int sector=solid_hgc_id->at(j)/100000-22;
+	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-101.6))/50.8),pmt_y=int((solid_hgc_avg_ly->at(j)-(-101.6))/50.8);    
+	  if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<4 && 0<=pmt_y && pmt_y<4){	    
+	    hit_hgc[16*sector+4*(3-pmt_y)+pmt_x] += weight;    
+	  }
+	  else cout << "wrong sector or pmt " << sector << " " << pmt_x << " " << pmt_y << endl;
+	  
+	count_this +=1;		  
       }
       else {
 	count_that +=1;	
       }
-    }    
-
-return count_that*factor;
+    }   
+   
+    npe_hgc = npe_hgc*factor;
+    
+if (npe_hgc>0) return true;
+else return false;
 
 }
-

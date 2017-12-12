@@ -35,8 +35,10 @@ using namespace std;
 // EC efficiency table inside
 
 #include "analysis_tree_solid_lgc.C"
+#include "analysis_tree_solid_hgc.C"
 #include "analysis_tree_solid_spd.C"
 #include "analysis_tree_solid_mrpc.C"
+#include "analysis_tree_solid_ec.C"
 
 
 // some numbers to be hard coded 
@@ -45,26 +47,45 @@ using namespace std;
 // const double filenum=50; //file numbers while running GEMC in order to be correct for normalization
 const int loop_time=1;   //electron to be 1, pion to be many times to take advantage of statistics, pion has low efficiency on EC
 const int add_norm=1; // additional normalization factor
+
+//distance between two ec cluster to have coincidance trigger
 // const double threshold_distance=0;
 // const double threshold_distance=0.1;
-const double threshold_distance=32.5;
+const double threshold_distance=32.5; 
 
-// lgc threshold
-const double PEthresh=2; //lgc pe shreshold for each pmt
-const double PMTthresh=2; //lgc pmt shreshold, at least 2pmts are fired in each sector
 const int with_background_on_lgc=0;     //0: no background on lgc, 1: yes background on lgc
 
-//spd threshold
-// const double spd_threshold=0.35;         //0.35 MeV
-const double spd_threshold_FA=0.5;         //0.5 MeV
-const double spd_threshold_LA=1.5;         //1.5 MeV
-
+//trigger threshold
+// lgc 
+const double PEthresh=2; //lgc pe shreshold for each pmt
+const double PMTthresh=2; //lgc pmt shreshold, at least 2pmts are fired in each sector
+//spd 
+// const double trigger_threshold_spd_FA=0.35;         //in MeV
+const double trigger_threshold_spd_FA=0.5;         //in MeV
+const double trigger_threshold_spd_LA=1.5;         //in MeV
 //mrpc threshold
 const double mrpc_block_threshold_FA=5;  //how many layers are required to be fired
 
-//check if original particle
-// bool Is_tellorig=false;
-// bool Is_tellorig=true;
+//occupancy threshold
+// double occ_threshold_lgc=0,occ_threshold_hgc=0; //in N_p.e.
+// double occ_threshold_spd_FA=trigger_threshold_spd_FA/5.,occ_threshold_spd_LA=trigger_threshold_spd_LA/5.; //in MeV
+// double occ_threshold_ec_preshower=0.4,occ_threshold_ec_shower=6; //in MeV
+
+double occ_threshold_lgc=1,occ_threshold_hgc=1; //in N_p.e.
+// double occ_threshold_spd_FA=trigger_threshold_spd_FA/2.,occ_threshold_spd_LA=trigger_threshold_spd_LA/2.; //in MeV
+double occ_threshold_spd_FA=0.5,occ_threshold_spd_LA=3.; 
+double occ_threshold_ec_preshower=0.8,occ_threshold_ec_shower=12; //in MeV
+
+//EC radius cut for physics result
+double rout_cut_FA_phys=220;
+double rin_cut_FA_phys=105;
+double rout_cut_LA_phys=127;
+double rin_cut_LA_phys=83; 
+//EC radius cut for trigger
+double rout_cut_FA_trigger=235;
+double rin_cut_FA_trigger=105;
+double rout_cut_LA_trigger=140; 
+double rin_cut_LA_trigger=80;
 
 bool Is_debug=false;
 
@@ -72,11 +93,27 @@ const double DEG=180./3.1415926;   //rad to degree
 
 //#####################################################################################################################################################
 
-int analysis_SIDIS(string inputfile_name,bool Is_tellorig=false,string filetype=""){
+int analysis_SIDIS(string inputfile_name,string runmode, bool Is_tellorig=false,string filetype=""){
 
 // gStyle->SetOptStat(11111111);
   gStyle->SetOptStat(0);
 
+double rout_cut_FA=0,rin_cut_FA=0,rout_cut_LA=0,rin_cut_LA=0;
+if (runmode=="phys"){
+ cout << "runmode: phys" << endl;  
+ rout_cut_FA=rout_cut_FA_phys;
+ rin_cut_FA=rin_cut_FA_phys;
+ rout_cut_LA=rout_cut_LA_phys;
+ rin_cut_LA=rin_cut_LA_phys;   
+}else if(runmode=="trigger"){
+ cout << "runmode: trigger" << endl;
+ rout_cut_FA=rout_cut_FA_trigger;
+ rin_cut_FA=rin_cut_FA_trigger;
+ rout_cut_LA=rout_cut_LA_trigger;
+ rin_cut_LA=rin_cut_LA_trigger;   
+}
+else {cout << "need to know runmode: phys or trigger" << endl; return 0;}
+  
 bool Is_singlefile=false;
 bool Is_pi0=false;
 if(Is_tellorig){
@@ -97,7 +134,47 @@ if (inputfile_name.find("pi0",0) != string::npos) {
 else {cout << "this is NOT a pi0 file" << endl;}
 }
 
-bool Is_SIDIS_He3=false,Is_SIDIS_NH3=false;
+string filemode;
+double event_actual=1;
+if (inputfile_name.find("BeamOnTargetEM",0) != string::npos) {
+  filemode="BeamOnTargetEM";
+  cout << "this is a BeamOnTargetEM file" << endl;  
+  
+  event_actual=atof(inputfile_name.substr(inputfile_name.find("BeamOnTargetEM",0)+15,inputfile_name.find("_")).c_str());
+  cout << "event_actual " << event_actual <<  endl;  
+}
+else if (inputfile_name.find("BeamOnTarget",0) != string::npos) {
+  filemode="BeamOnTarget";
+  cout << "this is a BeamOnTarget file" << endl;  
+  
+  event_actual=atof(inputfile_name.substr(inputfile_name.find("BeamOnTarget",0)+13,inputfile_name.find("_")).c_str());
+  cout << "event_actual " << event_actual <<  endl;  
+}
+else if (inputfile_name.find("even",0) != string::npos) {
+  filemode="even";
+  cout << "this is a evenly distributed file" << endl;  
+}
+else {
+  filemode="rate";  
+  cout << "this is rate dependent file" << endl;  
+}
+
+double filenum=1;
+if (inputfile_name.find("_filenum",0) != string::npos) {
+  filenum=atof(inputfile_name.substr(inputfile_name.find("_filenum")+8,inputfile_name.find("_")).c_str());
+    cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
+}
+else {
+  if (filemode=="rate"){
+    cout << "this file is rate dependent, but has no filenum, something is wrong" << endl;  
+    return 0;
+  }
+  else{
+    cout << "this file has no filenum, please check if you need filenum for addtional normalization" << endl;      
+  }
+}
+
+bool Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false;
 if(inputfile_name.find("SIDIS_He3",0) != string::npos) {
   Is_SIDIS_He3=true;
   cout << "SIDIS_He3 setup" << endl;  
@@ -106,17 +183,14 @@ else if(inputfile_name.find("SIDIS_NH3",0) != string::npos) {
   Is_SIDIS_NH3=true;
   cout << "SIDIS_NH3 setup" << endl;  
 }
+else if(inputfile_name.find("JPsi_LH2",0) != string::npos) {
+  Is_JPsi_LH2=true;
+  cout << "JPsi_LH2 setup" << endl;  
+}
 else {
-    cout << "Not SIDIS_He3 or SIDIS_NH3 setup" << endl;    
+    cout << "Not SIDIS_He3 or SIDIS_NH3 or JPsi_LH2 setup" << endl;    
     return 0;
 }
-
-double filenum=1;
-if (inputfile_name.find("_filenum",0) != string::npos) {
-  filenum=atof(inputfile_name.substr(inputfile_name.find("_filenum")+8,inputfile_name.find("_")).c_str());
-    cout << "filenum " << filenum << " for addtional normalization, YOU Need to Make Sure It's CORRECT!" <<  endl;
-}
-else {cout << "this file has no filnum, please check if you need filenum for addtional normalization" << endl;}
 
 TFile *file=new TFile(inputfile_name.c_str());
 
@@ -124,12 +198,43 @@ TFile *file=new TFile(inputfile_name.c_str());
 // 	TFile *background_file=new TFile(background_inputfile_name);
 // 	TH1F *h_pe=(TH1F*)background_file->Get("h_pe");
 
-// 	TFile *output_file=new TFile("SIDIS_trigger.root","RECREATE");
-	
+std::size_t found = inputfile_name.rfind("cache");
+if (found!=std::string::npos)  inputfile_name.replace(found,5,"work");
+
+char the_filename[200];
+sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+
+char outputfile_name[200];
+sprintf(outputfile_name, "%s_output.root",the_filename);
+TFile *outputfile=new TFile(outputfile_name, "recreate");
+
 // prepare for outputs
 // define histograms, output txt files etc...
 
+	TH1F *hhit_lgc=new TH1F("hit_lgc","hit,LGC;PMT;N_{p.e.} rate(kHz)",9,0,9);
+	TH1F *hocc_lgc=new TH1F("occ_lgc","occupancy,LGC;PMT;event rate(kHz)",9,0,9);
+	TH2F *hhit_lgc_2D=new TH2F("hit_lgc_2D","hit,LGC (rear view),N_{p.e.} rate(kHz);PMT_{#phi};PMT_{#theta}",3,0,3,3,0,3);
+	TH2F *hocc_lgc_2D=new TH2F("occ_lgc_2D","occupancy,LGC (rear view),event rate(kHz);PMT_{#phi};PMT_{#theta}",3,0,3,3,0,3);
 
+	TH1F *hhit_hgc=new TH1F("hit_hgc","hit,HGC;PMT;N_{p.e.} rate(kHz)",16,0,16);
+	TH1F *hocc_hgc=new TH1F("occ_hgc","occupancy,HGC;PMT;event rate(kHz)",16,0,16);
+	TH2F *hhit_hgc_2D=new TH2F("hit_hgc_2D","hit,HGC (rear view),N_{p.e.} rate(kHz);PMT_{#phi};PMT_{#theta}",4,0,4,4,0,4);
+	TH2F *hocc_hgc_2D=new TH2F("occ_hgc_2D","occupancy,HGC (rear view),event rate(kHz);PMT_{#phi};PMT_{#theta}",4,0,4,4,0,4);
+
+	TH1F *hhit_spd_FA=new TH1F("hit_spd_FA","hit,SPD FA;module;Edep rate (MeV/kHz)",240,0,240);
+	TH1F *hocc_spd_FA=new TH1F("occ_spd_FA","occupancy,SPD FA;module;event rate (kHz)",240,0,240);	
+	TH1F *hhit_spd_LA=new TH1F("hit_spd_LA","hit,SPD LA;module;Edep rate (MeV/kHz)",60,0,60);
+	TH1F *hocc_spd_LA=new TH1F("occ_spd_LA","occupancy,SPD LA;module;event rate (kHz)",60,0,60);	
+	
+	TH1F *hhit_ec_preshower_FA=new TH1F("hit_ec_preshower_FA","hit,EC FA preshower;module;Edep rate (MeV/kHz)",2000,0,2000);
+	TH1F *hocc_ec_preshower_FA=new TH1F("occ_ec_preshower_FA","occupancy,EC FA preshower;module;event rate (kHz)",2000,0,2000);	
+	TH1F *hhit_ec_preshower_LA=new TH1F("hit_ec_preshower_LA","hit,EC LA preshower;module;Edep rate (MeV/kHz)",2000,0,2000);
+	TH1F *hocc_ec_preshower_LA=new TH1F("occ_ec_preshower_LA","occupancy,EC LA preshower;module;event rate (kHz)",2000,0,2000);	
+	TH1F *hhit_ec_shower_FA=new TH1F("hit_ec_shower_FA","hit,EC FA shower;module;Edep rate (MeV/kHz)",2000,0,2000);
+	TH1F *hocc_ec_shower_FA=new TH1F("occ_ec_shower_FA","occupancy,EC FA shower;module;event rate (kHz)",2000,0,2000);	
+	TH1F *hhit_ec_shower_LA=new TH1F("hit_ec_shower_LA","hit,EC LA shower;module;Edep rate (MeV/kHz)",2000,0,2000);
+	TH1F *hocc_ec_shower_LA=new TH1F("occ_ec_shower_LA","occupancy,EC LA shower;module;event rate (kHz)",2000,0,2000);
+	
 	TH2F *hvertex_rz=new TH2F("hvertex_rz","hvertex_rz",1800,-400,500,600,0,300);
 	
 	TH1F *hangle_FAEC_FASPD=new TH1F("hangle_FAEC_FASPD","hangle_FAEC_FASPD",720,-360,360);
@@ -177,19 +282,35 @@ TFile *file=new TFile(inputfile_name.c_str());
 	// coin trigger rate with e large angle and h forward angle
 	TH1F *h_trigger_e_LA_h_FA=new TH1F("h_trigger_e_LA_h_FA","coincidence trigger rate with e large angle and h forward angle", 60, 0, 300);
 	
-	TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","generated events;vertex Theta (deg);vertex P (GeV)",60,5,35,110,0,11);     
-	TH2F *hacceptance_ThetaP[2];
-	hacceptance_ThetaP[0]=new TH2F("acceptance_ThetaP_FA","acceptance by FA;vertex Theta (deg);vertex P (GeV)",60,5,35,110,0,11);     
-	hacceptance_ThetaP[1]=new TH2F("acceptance_ThetaP_LA","acceptance by LA;vertex Theta (deg);vertex P (GeV)",60,5,35,110,0,11);
+	TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","generated events;vertex #theta (deg);vertex P (GeV)",100,0,50,110,0,11);  
+	TH2F *hgen_ThetaPhi=new TH2F("gen_ThetaPhi","generated events;vertex #theta (deg);vertex #phi (deg)",100,0,50,360,-180,180);     
+	TH2F *hgen_PhiP=new TH2F("gen_PhiP","generated events;vertex #phi (deg);vertex P (GeV)",360,-180,180,110,0,11);	
 	
+	TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",50,0,50,180,-180,180,55,0,11);   
+	
+	TH2F *hacceptance_ThetaP[2],*hacceptance_ThetaPhi[2],*hacceptance_PhiP[2];
+	hacceptance_ThetaP[0]=new TH2F("acceptance_ThetaP_FA","acceptance by FA;vertex #theta (deg);vertex P (GeV)",100,0,50,110,0,11);     
+	hacceptance_ThetaP[1]=new TH2F("acceptance_ThetaP_LA","acceptance by LA;vertex #theta (deg);vertex P (GeV)",100,0,50,110,0,11);
+	hacceptance_ThetaPhi[0]=new TH2F("acceptance_ThetaPhi_FA","acceptance by FA;vertex #theta (deg);vertex #phi (deg)",100,0,50,360,-180,180);     
+	hacceptance_ThetaPhi[1]=new TH2F("acceptance_ThetaPhi_LA","acceptance by LA;vertex #theta (deg);vertex #phi (deg)",100,0,50,360,-180,180);
+	hacceptance_PhiP[0]=new TH2F("acceptance_PhiP_FA","acceptance by FA;vertex #phi (deg);vertex P (GeV)",360,-180,180,110,0,11);     
+	hacceptance_PhiP[1]=new TH2F("acceptance_PhiP_LA","acceptance by LA;vertex #phi (deg);vertex P (GeV)",360,-180,180,110,0,11);
+
+	TH3F *hacceptance_ThetaPhiP[2];
+	hacceptance_ThetaPhiP[0]=new TH3F("acceptance_ThetaPhiP_FA","acceptance by FA",50,0,50,180,-180,180,55,0,11);   
+	hacceptance_ThetaPhiP[1]=new TH3F("acceptance_ThetaPhiP_LA","acceptance by LA",50,0,50,180,-180,180,55,0,11);
+	
+// 	const int n=15;
+// 	char *detname[n]={"GEM 1","GEM 2","GEM 3","GEM 4","GEM 5","GEM 6","LGC","HGC","FASPD","LASPD","FAEC","LAEC","FAMRPC","FAMUON","LAMUON"};	
 	const int n=12;
+	char *detname[n]={"GEM 1","GEM 2","GEM 3","GEM 4","GEM 5","GEM 6","LGC","HGC","FASPD","LASPD","FAEC","LAEC"};		
 	TH2F *hhit_xy[n],*hhit_PhiR[n];
 	for(int i=0;i<n;i++){
 	  char hstname[100];
 	  sprintf(hstname,"hit_xy_%i",i);
-	  hhit_xy[i]=new TH2F(hstname,hstname,600,-300,300,600,-300,300);        
+	  hhit_xy[i]=new TH2F(hstname,detname[i],600,-300,300,600,-300,300);        
 	  sprintf(hstname,"hit_PhiR_%i",i);
-	  hhit_PhiR[i]=new TH2F(hstname,hstname,360,-180,180,300,0,300);
+	  hhit_PhiR[i]=new TH2F(hstname,detname[i],360,-180,180,300,0,300);
 	}
 	
 	//-------------------------
@@ -262,6 +383,11 @@ TFile *file=new TFile(inputfile_name.c_str());
 	//information recorded by lgc
 	TTree* tree_solid_lgc= (TTree*) file->Get("solid_lgc");
 	setup_tree_solid_lgc(tree_solid_lgc);
+	
+	//---hgc
+	//information recorded by hgc
+	TTree* tree_solid_hgc= (TTree*) file->Get("solid_hgc");
+	setup_tree_solid_hgc(tree_solid_hgc);	
 
 	//---SPD
 	//information recorded by SPD
@@ -273,12 +399,17 @@ TFile *file=new TFile(inputfile_name.c_str());
 	TTree *tree_solid_mrpc = (TTree*) file->Get("solid_mrpc");
 	setup_tree_solid_mrpc(tree_solid_mrpc);
 
+
+	//---EC
+	//information recorded by EC
+	TTree *tree_solid_ec = (TTree*) file->Get("solid_ec");
+	setup_tree_solid_ec(tree_solid_ec);
+
 	TRandom3 rand;
 	rand.SetSeed(0);
 	
 	long int N_events = (long int)tree_header->GetEntries();
-	//debug
-	//N_events=10000;
+
 	cout << "total number of events : " << N_events << endl;	
 
 	//----------------------------
@@ -290,19 +421,34 @@ TFile *file=new TFile(inputfile_name.c_str());
 	for(long int i=0;i<N_events;i++){	  
 // 			cout<<"event " << i<<endl;
 // 			cout<<i<<"\r";
+// 			cout<<i<<"\n";	  
 		
 		//---
 		//---header tree
 		//---
 		tree_header->GetEntry(i);
 		double rate=var8->at(0);
-		rate=rate/filenum/loop_time*add_norm;     ///---warning, should make sure filenum is right
+		if (filemode=="BeamOnTargetEM" || filemode=="BeamOnTarget") {
+		  if(Is_SIDIS_He3) rate=15e-6/1.6e-19/event_actual/loop_time*add_norm;
+		  else if(Is_SIDIS_NH3) rate=100e-9/1.6e-19/event_actual/loop_time*add_norm;
+		  else if(Is_JPsi_LH2) rate=3e-6/1.6e-19/event_actual/loop_time*add_norm; 	  
+		  else {
+		    cout << "Not SIDIS_He3 or SIDIS_NH3  or JPsi_LH2 setup" << endl;    
+		    return 0;
+		  }
+		}
+		else if (filemode=="even") rate=1;
+		else if (filemode=="rate") rate=rate/filenum/loop_time*add_norm;
+		else {
+		    cout << "Not right filemode" << endl;    
+		    return 0; 
+		}
+		
 		double x=var4->at(0);	
 		double y=var5->at(0);
 		double W=var6->at(0);		
 		double Q2=var7->at(0);		
-		//cout<<"header tree: "<<rate<<endl;
-		
+		//cout<<"header tree: "<<rate<<endl;	
 
 		//---
 		//---generated tree
@@ -314,7 +460,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 		double theta_gen=0,phi_gen=0,p_gen=0,px_gen=0,py_gen=0,pz_gen=0,vx_gen=0,vy_gen=0,vz_gen=0;      
 	      //       cout << "gen_pid->size() " << gen_pid->size() << endl;        
 		for (int j=0;j<gen_pid->size();j++) {
-	      //       cout << gen_pid->at(j) << " " << gen_px->at(j) << endl;//<< " " << gen_py->at(j) << " " << gen_pz->at(j) << " " << gen_vx->at(j) << " " << gen_vy->at(j) << " " << gen_vz->at(j) << endl; 
+// 	            cout << gen_pid->at(j) << " " << gen_px->at(j) << " " << gen_py->at(j) << " " << gen_pz->at(j) << " " << gen_vx->at(j) << " " << gen_vy->at(j) << " " << gen_vz->at(j) << endl; 
 		    pid_gen=gen_pid->at(j);
 		    px_gen=gen_px->at(j);
 		    py_gen=gen_py->at(j);
@@ -323,13 +469,18 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    vy_gen=gen_vy->at(j);
 		    vz_gen=gen_vz->at(j);
 		    p_gen=sqrt(px_gen*px_gen+py_gen*py_gen+pz_gen*pz_gen);
-		    theta_gen=acos(pz_gen/p_gen);
-		    phi_gen=atan2(py_gen,px_gen);
-		    
+		    theta_gen=acos(pz_gen/p_gen)*DEG;
+		    phi_gen=atan2(py_gen,px_gen)*DEG;
 	      //       cout << "p_gen " << p_gen << endl; 
-		    hgen_ThetaP->Fill(theta_gen*DEG,p_gen/1e3,rate);                  
+		    
 		}		
 
+// 		if (vz_gen<-3550 || -3450<vz_gen) continue;
+
+		hgen_ThetaP->Fill(theta_gen,p_gen/1e3,rate);
+		hgen_ThetaPhi->Fill(theta_gen,phi_gen,rate);                  		
+		hgen_PhiP->Fill(phi_gen,p_gen/1e3,rate);                  				
+		hgen_ThetaPhiP->Fill(theta_gen,phi_gen,p_gen/1e3,rate);                  			
 		///////////////////////////////////////////////////////////////////////////////////////
 		//       do trigger
 		////////////////////////////////////////////////////////////////////////////////////////
@@ -338,6 +489,37 @@ TFile *file=new TFile(inputfile_name.c_str());
 		//---
 		tree_flux->GetEntry(i);
 		
+		//check on GEM by flux
+		bool Is_passGEM=true;		
+		for (Int_t j=0;j<flux_hitn->size();j++) {
+	    //       cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
+
+		  int detector_ID=flux_id->at(j)/1000000;
+		  int subdetector_ID=(flux_id->at(j)%1000000)/100000;
+		  int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;		  
+		  int component_ID=flux_id->at(j)%10000;      
+
+		double hit_vr=sqrt(pow(flux_vx->at(j),2)+pow(flux_vy->at(j),2))/1e1; //mm to cm
+		double hit_vy=flux_vy->at(j)/1e1,hit_vx=flux_vx->at(j)/1e1,hit_vz=flux_vz->at(j)/1e1;           //mm to cm		  
+		double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/1e1; //mm to cm
+		double hit_y=flux_avg_y->at(j)/1e1,hit_x=flux_avg_x->at(j)/1e1,hit_z=flux_avg_z->at(j)/1e1;           //mm to cm		
+		double hit_phi=atan2(hit_y,hit_x)*DEG;       //rad to  deg
+		double hit_p=sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j))/1e3;  //MeV to GeV
+		
+		  if(Is_SIDIS_NH3){
+		    if (flux_tid->at(j)==1){		      
+		      if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
+		      if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
+		      if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
+		      if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
+		      if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) Is_passGEM=false;          
+		      if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) Is_passGEM=false;
+		    }
+		  }
+		  
+		}
+		
+		//check on EC and other by flux
 		double hit_phi_FAEC=1000,hit_phi_FASPD=1000,hit_phi_LASPD=1000;
 
 		int pass_EC_electron_forward=0;
@@ -386,9 +568,26 @@ TFile *file=new TFile(inputfile_name.c_str());
 		  if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=10;
 		  if (detector_ID==3 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=11;
 		  
-		  if (0<=hit_id && hit_id<=11){
-		    hhit_xy[hit_id]->Fill(hit_x,hit_y);
-		    hhit_PhiR[hit_id]->Fill(hit_phi,hit_r);		  
+		  if (detector_ID==4 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=12;  
+	 
+		  if (detector_ID==6 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=13;
+		  if (detector_ID==6 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=14;  
+		  
+// 		  if ((0<=hit_id && hit_id<=9) || hit_id==12){
+		  if (0<=hit_id && hit_id<=9){		  
+		    if(abs(int(flux_pid->at(j))) == 11)	{		    
+		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate);
+		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate);		  
+		    }
+		    else if (int(flux_pid->at(j))==22){		      
+		      //assume 5% photon conversion to hits for detector other than EC
+		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate*0.05);
+		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate*0.05);	
+		    }
+		  }
+		  else if (10<=hit_id && hit_id<=11){	      
+		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate);
+		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate);		  		      
 		  }
 // 		  else cout << flux_id->at(j) << endl;
 		  
@@ -401,7 +600,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 		  
 		  //check hit on EC and find sec_ec
 		  if(hit_id==10){   //FAEC 
-		    if (hit_r<105 || hit_r>235) continue; //trigger cut on R
+		    if (hit_r<rin_cut_FA || hit_r>rout_cut_FA) continue; //trigger cut on R
 
 		    int sec_ec=0;
 		    int sec_shift=1.7;  // shift to match electron turning in field
@@ -472,9 +671,11 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    }
 		    }
 		    else if(Is_SIDIS_NH3){
-// 		      EC_efficiency=1;		      
-		      if ((-74<hit_phi && hit_phi<-38 && hit_r/1e1<195)||(-92<hit_phi && hit_phi<-88 && hit_r/1e1<120)||(50<hit_phi && hit_phi<80 && hit_r/1e1<195)) EC_efficiency=0;
-		      else EC_efficiency=1;
+		      EC_efficiency=1;	
+
+// 		      if ( ((-75<hit_phi && hit_phi<-40 && hit_r/1e1<195)||(70<hit_phi && hit_phi<90 && hit_r/1e1<195))) EC_efficiency=0;
+// 		      else EC_efficiency=1;		      
+// 		      if (Is_passGEM==false) EC_efficiency=0;
 		    }
 
 		    //check to make sure eff is ok
@@ -544,9 +745,9 @@ TFile *file=new TFile(inputfile_name.c_str());
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
 		    }
 		    }
-		    else if(Is_SIDIS_NH3){
-		      EC_efficiency=1;
-		    }
+// 		    else if(Is_SIDIS_NH3){
+// 		      EC_efficiency=1;
+// 		    }
 		    
 		    //check to make sure eff is ok
 		    if(isnan(EC_efficiency)) cout << "trigger_h_FA_EC " << EC_efficiency << " " << flux_pid->at(j) << endl;		    
@@ -588,7 +789,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 		  
 		  if(hit_id==11){   //LAEC 
 
-		    if (hit_r<80 || hit_r>140) continue; //trigger cut on R
+		    if (hit_r<rin_cut_LA || hit_r>rout_cut_LA) continue; //trigger cut on R
 
 		    int sec_ec=0;
 		    int sec_shift=0;  // shift to match electron turning in field
@@ -612,9 +813,11 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    }
 		    }
 		    else if(Is_SIDIS_NH3){
-// 		      EC_efficiency=1;
-		      if ((-85<hit_phi && hit_phi<-60)||(65<hit_phi && hit_phi<85)) EC_efficiency=0;
-		      else EC_efficiency=1;		      
+		      EC_efficiency=1;
+
+// 		      if (((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<95))) EC_efficiency=0;		      
+// 		      else EC_efficiency=1;
+// 		      if (Is_passGEM==false) EC_efficiency=0;		      
 		    }		    
 		    
 		    //check to make sure eff is ok
@@ -667,15 +870,67 @@ TFile *file=new TFile(inputfile_name.c_str());
 		if(counter_e_FA_EC>0) hangle_FAEC_FASPD->Fill(hit_phi_FAEC-hit_phi_FASPD);
 		if(counter_e_FA_EC>0) hangle_FAEC_LASPD->Fill(hit_phi_FAEC-hit_phi_LASPD);	
 // 		hangle_FAEC_FASPD->Fill(hit_phi_FAEC-hit_phi_FASPD);
+
+		//---------------------
+		//--- ec
+		//---------------------
+		tree_solid_ec->GetEntry(i);
+
+		double hit_ec_preshower_FA[2000]={0},hit_ec_preshower_LA[2000]={0};
+		double hit_ec_shower_FA[2000]={0},hit_ec_shower_LA[2000]={0};				
+		process_tree_solid_ec(tree_solid_ec,hit_ec_preshower_FA,hit_ec_preshower_LA,hit_ec_shower_FA,hit_ec_shower_LA);
+				
+		for(int index=0;index<2000;index++){
+		  if(hit_ec_preshower_FA[index]>0) hhit_ec_preshower_FA->Fill(index,hit_ec_preshower_FA[index]*rate/1e3);
+		  if(hit_ec_shower_FA[index]>0) hhit_ec_shower_FA->Fill(index,hit_ec_shower_FA[index]*rate/1e3);
+		  if(hit_ec_preshower_FA[index]>occ_threshold_ec_preshower) hocc_ec_preshower_FA->Fill(index,rate/1e3);
+		  if(hit_ec_shower_FA[index]>occ_threshold_ec_shower) hocc_ec_shower_FA->Fill(index,rate/1e3);
+		}
+		for(int index=0;index<2000;index++){
+		  if(hit_ec_preshower_LA[index]>0) hhit_ec_preshower_LA->Fill(index,hit_ec_preshower_LA[index]*rate/1e3);
+		  if(hit_ec_shower_LA[index]>0) hhit_ec_shower_LA->Fill(index,hit_ec_shower_LA[index]*rate/1e3);		    
+		  if(hit_ec_preshower_LA[index]>occ_threshold_ec_preshower) hocc_ec_preshower_LA->Fill(index,rate/1e3);
+		  if(hit_ec_shower_LA[index]>occ_threshold_ec_shower) hocc_ec_shower_LA->Fill(index,rate/1e3);
+		}		
+		
 		
 		//-----------------------	
-		//--- lgc trigger
+		//--- lgc 
 		//-----------------------
 		tree_solid_lgc->GetEntry(i);
 
+		double hit_lgc[270]={0};
 		int trigger_lgc[30]={0};
 		int ntrigsecs_lgc=0;
-		process_tree_solid_lgc_trigger(tree_solid_lgc,trigger_lgc,ntrigsecs_lgc,PMTthresh,PEthresh);	//---------------------------------------------------------------------------------------------------------
+		
+		process_tree_solid_lgc(tree_solid_lgc,hit_lgc,trigger_lgc,ntrigsecs_lgc,PMTthresh,PEthresh);
+
+		for(int index=0;index<270;index++){
+		      int pmt_lgc=index%9;
+			int pmt_x=0,pmt_y=0;
+			switch (pmt_lgc){
+			  case 0:	pmt_x=0; pmt_y=2; break;
+			  case 1:	pmt_x=1; pmt_y=2; break;
+			  case 2:	pmt_x=2; pmt_y=2; break;
+			  case 3:	pmt_x=0; pmt_y=1; break;
+			  case 4:	pmt_x=1; pmt_y=1; break;
+			  case 5:	pmt_x=2; pmt_y=1; break;
+			  case 6:	pmt_x=0; pmt_y=0; break;
+			  case 7:	pmt_x=1; pmt_y=0; break;
+			  case 8:	pmt_x=2; pmt_y=0; break;			  
+			  default:      break;      
+			}				
+		      
+		      if(hit_lgc[index]>0){		      
+			hhit_lgc->Fill(pmt_lgc,hit_lgc[index]*rate/1e3/30.);	    
+			hhit_lgc_2D->Fill(pmt_x,pmt_y,hit_lgc[index]*rate/1e3/30.);
+		      }
+		      if(hit_lgc[index]>occ_threshold_lgc){
+			hocc_lgc->Fill(pmt_lgc,rate/1e3/30.);
+			hocc_lgc_2D->Fill(pmt_x,pmt_y,rate/1e3/30.);
+		      }		      
+		}
+//---------------------------------------------------------------------------------------------------------
 		//add in backgrounds based on parametrized lgc study	
 // 			if(with_background_on_lgc){	
 // 				int N_random_pe=(int)h_pe->GetRandom();
@@ -685,7 +940,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 // 					}
 // 				}
 // 			
-// 			}  //scater random electrons on pmts based on parametrized EM-only performance
+// 			}  //scater random electrons on pmts based on parametrized EM-performance
 
 	
 		int pass_lgc=0;	
@@ -697,15 +952,77 @@ TFile *file=new TFile(inputfile_name.c_str());
 		}		
 		
 		//-----------------------	
-		//--- spd trigger
+		//--- hgc 
+		//-----------------------
+		tree_solid_hgc->GetEntry(i);
+
+		double hit_hgc[480]={0};
+
+		process_tree_solid_hgc(tree_solid_hgc,hit_hgc);
+
+		for(int index=0;index<480;index++){
+		      int pmt_hgc=index%16;
+		      int pmt_x=0,pmt_y=0;
+		      switch (pmt_hgc){
+			case 0:	pmt_x=0; pmt_y=3; break;
+			case 1:	pmt_x=1; pmt_y=3; break;
+			case 2:	pmt_x=2; pmt_y=3; break;
+			case 3:	pmt_x=3; pmt_y=3; break;			  
+			case 4:	pmt_x=0; pmt_y=2; break;
+			case 5:	pmt_x=1; pmt_y=2; break;
+			case 6:	pmt_x=2; pmt_y=2; break;
+			case 7:	pmt_x=3; pmt_y=2; break;			  
+			case 8:	pmt_x=0; pmt_y=1; break;
+			case 9:	pmt_x=1; pmt_y=1; break;
+			case 10:	pmt_x=2; pmt_y=1; break;
+			case 11:	pmt_x=3; pmt_y=1; break;			  
+			case 12:	pmt_x=0; pmt_y=0; break;
+			case 13:	pmt_x=1; pmt_y=0; break;
+			case 14:	pmt_x=2; pmt_y=0; break;
+			case 15:	pmt_x=3; pmt_y=0; break;			  
+			default:      break;      
+		      }				      
+		      
+		      if(hit_hgc[index]>0){		      
+			hhit_hgc->Fill(pmt_hgc,hit_hgc[index]*rate/1e3/30.);	    
+			hhit_hgc_2D->Fill(pmt_x,pmt_y,hit_hgc[index]*rate/1e3/30.);
+		      } 
+
+		      if(hit_hgc[index]>occ_threshold_hgc){
+			hocc_hgc->Fill(pmt_hgc,rate/1e3/30.);
+			hocc_hgc_2D->Fill(pmt_x,pmt_y,rate/1e3/30.);
+		      }		      
+		}
+		
+		//-----------------------	
+		//--- spd 
 		//-----------------------
 		tree_solid_spd->GetEntry(i);
-		
+
+		double hit_spd_FA[240]={0},hit_spd_LA[60]={0};		
 // 		int trigger_spd_FA[60][4]={0},trigger_spd_LA[60]={0};
 		int trigger_spd_FA[240]={0},trigger_spd_LA[60]={0};
 		int ntrigsecs_spd_FA=0,ntrigsecs_spd_LA=0;					
-		process_tree_solid_spd_trigger(tree_solid_spd,trigger_spd_FA,trigger_spd_LA,ntrigsecs_spd_FA,ntrigsecs_spd_LA,spd_threshold_FA,spd_threshold_LA);
+		process_tree_solid_spd(tree_solid_spd,hit_spd_FA,hit_spd_LA,trigger_spd_FA,trigger_spd_LA,ntrigsecs_spd_FA,ntrigsecs_spd_LA,trigger_threshold_spd_FA,trigger_threshold_spd_LA);
 
+		for(int index=0;index<240;index++){
+		  if(hit_spd_FA[index]>0){		      
+		    hhit_spd_FA->Fill(index,hit_spd_FA[index]*rate/1e3);	
+		  } 
+		  if(hit_spd_FA[index]>occ_threshold_spd_FA){
+		    hocc_spd_FA->Fill(index,rate/1e3);
+		  }			
+		}
+		
+		for(int index=0;index<60;index++){
+		  if(hit_spd_LA[index]>0){		      
+		    hhit_spd_LA->Fill(index,hit_spd_LA[index]*rate/1e3);	
+		  } 
+		  if(hit_spd_LA[index]>occ_threshold_spd_LA){
+		    hocc_spd_LA->Fill(index,rate/1e3);
+		  }			
+		}		
+		
 		int pass_spd_forward=0;		
 		if(ntrigsecs_spd_FA){
 			pass_spd_forward=1;
@@ -721,7 +1038,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 		}
 		
 		//---------------------
-		//--- MRPC trigger
+		//--- MRPC 
 		//---------------------
 		tree_solid_mrpc->GetEntry(i);
 		
@@ -740,12 +1057,12 @@ TFile *file=new TFile(inputfile_name.c_str());
 		//---
 		//---fill histograms based on trigger flag
 		//---		
-		//only LGC
+		//LGC
 		if(pass_lgc){
 			h_n_trigger_sectors_LGC->Fill(ntrigsecs_lgc,rate);
 		}
 
-		//only spd
+		//spd
 		if(pass_spd_forward){
 			h_n_trigger_sectors_spd_FA->Fill(ntrigsecs_spd_FA,rate);
 		}		
@@ -753,7 +1070,7 @@ TFile *file=new TFile(inputfile_name.c_str());
 			h_n_trigger_sectors_spd_LA->Fill(ntrigsecs_spd_LA,rate);
 		}
 		
-		//only mrpc
+		//mrpc
 		if(pass_mrpc){
 			h_n_trigger_sectors_mrpc->Fill(ntrigsecs_mrpc_FA,rate);
 		}				
@@ -838,7 +1155,11 @@ TFile *file=new TFile(inputfile_name.c_str());
 
 			h_trigger_e_FA_EC_lgc->Fill(trigger_e_FA_EC_r[i_e_FA_EC], rate/counter_e_FA_EC_lgc);		      
 // 			h_trigger_e_FA_EC_lgc->Fill(trigger_e_FA_EC_r[i_e_FA_EC], rate);		      		      
-				
+			hacceptance_ThetaP[0]->Fill(theta_gen,p_gen/1e3,rate/counter_e_FA_EC_lgc);		
+			hacceptance_ThetaPhi[0]->Fill(theta_gen,phi_gen,rate/counter_e_FA_EC_lgc);			
+			hacceptance_PhiP[0]->Fill(phi_gen,p_gen/1e3,rate/counter_e_FA_EC_lgc);
+			hacceptance_ThetaPhiP[0]->Fill(theta_gen,phi_gen,p_gen/1e3,rate/counter_e_FA_EC_lgc);
+
 			double hit_phi=atan2(trigger_e_FA_EC_y[i_e_FA_EC], trigger_e_FA_EC_x[i_e_FA_EC])*DEG;			
 			double hit_r=trigger_e_FA_EC_r[i_e_FA_EC]; // in cm
 			double hit_vr=trigger_e_FA_EC_vr[i_e_FA_EC]; // in cm
@@ -872,7 +1193,8 @@ TFile *file=new TFile(inputfile_name.c_str());
 // 			      if(trigger_mrpc_FA[sector_mrpc-1][block_mrpc-1]==1){			   							
 				h_trigger_e_FA_EC_lgc_spd_mrpc->Fill(trigger_e_FA_EC_r[i_e_FA_EC], rate/counter_e_FA_EC_lgc_spd_mrpc);	
 				
-				hacceptance_ThetaP[0]->Fill(theta_gen*DEG,p_gen/1e3,rate/counter_e_FA_EC_lgc_spd_mrpc);             		
+// 				hacceptance_ThetaP[0]->Fill(theta_gen,p_gen/1e3,rate/counter_e_FA_EC_lgc_spd_mrpc);
+				
 // 			      }
 // 			    }				   
 			 }
@@ -901,7 +1223,8 @@ TFile *file=new TFile(inputfile_name.c_str());
 		h_counter_e_LA_EC_spd->Fill(counter_e_LA_EC_spd);
 		for(int i_e_LA_EC=0; i_e_LA_EC<counter_e_LA_EC; i_e_LA_EC++){
 
-		    h_trigger_e_LA_EC->Fill(trigger_e_LA_EC_r[i_e_LA_EC],rate/counter_e_LA_EC);			    
+		    h_trigger_e_LA_EC->Fill(trigger_e_LA_EC_r[i_e_LA_EC],rate/counter_e_LA_EC);	
+		    
 		    double hit_phi=atan2(trigger_e_LA_EC_y[i_e_LA_EC], trigger_e_LA_EC_x[i_e_LA_EC])*DEG;			
 		    double hit_r=trigger_e_LA_EC_r[i_e_LA_EC]; // in cm
 		    
@@ -911,7 +1234,10 @@ TFile *file=new TFile(inputfile_name.c_str());
 										    
 			    h_trigger_e_LA_EC_spd->Fill(trigger_e_LA_EC_r[i_e_LA_EC], rate/counter_e_LA_EC_spd);
 			    
-			    hacceptance_ThetaP[1]->Fill(theta_gen*DEG,p_gen/1e3,rate/counter_e_LA_EC_spd);             
+			    hacceptance_ThetaP[1]->Fill(theta_gen,p_gen/1e3,rate/counter_e_LA_EC_spd);             
+			    hacceptance_ThetaPhi[1]->Fill(theta_gen,phi_gen,rate/counter_e_LA_EC_spd);			
+			    hacceptance_PhiP[1]->Fill(phi_gen,p_gen/1e3,rate/counter_e_LA_EC_spd);
+			    hacceptance_ThetaPhiP[1]->Fill(theta_gen,phi_gen,p_gen/1e3,rate/counter_e_LA_EC_spd);     				    
 		      }
 		    }	      		  
 		}		
@@ -992,6 +1318,8 @@ TFile *file=new TFile(inputfile_name.c_str());
 			}	  
 		}	
 		
+
+		//=========== start get coin trigger from single trigger			
 		int counter_e_FA_h_FA=0;
 		for(int k=0; k<counter_e_FA_EC_lgc_spd_mrpc; k++){		
 		  for(int j=0; j<counter_h_FA_EC_spd_mrpc; j++){
@@ -1009,8 +1337,8 @@ TFile *file=new TFile(inputfile_name.c_str());
 		    double dist=sqrt(pow(trigger_e_FA_EC_y[i_e_FA_EC_good[k]]-trigger_h_FA_EC_y[i_h_FA_EC_good[j]],2)+pow(trigger_e_FA_EC_x[i_e_FA_EC_good[k]]-trigger_h_FA_EC_x[i_h_FA_EC_good[j]],2));
 		    if (dist>=threshold_distance) h_trigger_e_FA_h_FA->Fill(trigger_e_FA_EC_r[i_e_FA_EC_good[k]],rate/counter_e_FA_h_FA);
 		  }
-		}	
-		
+		}			
+				
 		int counter_e_LA_h_FA=0;		
 		for(int k=0; k<counter_e_LA_EC_spd; k++){		
 		  for(int j=0; j<counter_h_FA_EC_spd_mrpc; j++){
@@ -1042,33 +1370,176 @@ TFile *file=new TFile(inputfile_name.c_str());
 */
 	//do outputs
 
-TCanvas *c_hit = new TCanvas("hit","hit",1800,800);
-c_hit->Divide(n,2);
+TCanvas *c_flux_hit_xy = new TCanvas("flux_hit_xy","flux_hit_xy",1800,800);
+c_flux_hit_xy->Divide(n/2,2);
 for(int i=0;i<n;i++){
-c_hit->cd(i+1);
+c_flux_hit_xy->cd(i+1);
 gPad->SetLogz(1);
 hhit_xy[i]->Draw("colz");
-c_hit->cd(n+i+1);
+}
+
+double cut1[12]={-95,-95,-95,-95,-85,-85,-85,-85,-75,-90,-75,-90};
+double cut2[12]={-75,-75,-75,-75,-55,-55,-55,-40,-40,-60,-40,-60};
+double cut3[12]={ 75, 75, 75, 75, 70, 70, 70, 65, 70, 60, 70, 60};
+double cut4[12]={ 95, 95, 95, 95, 90, 90, 90, 90, 90, 95, 90, 95};
+TCanvas *c_flux_hit_PhiR = new TCanvas("flux_hit_PhiR","flux_hit_PhiR",1800,800);
+c_flux_hit_PhiR->Divide(n/2,2);
+for(int i=0;i<n;i++){
+c_flux_hit_PhiR->cd(i+1);
 gPad->SetLogz(1);
 hhit_PhiR[i]->Draw("colz");
-}	
-	
-TCanvas *c_gen = new TCanvas("gen","gen",900,800);
-hgen_ThetaP->Draw("colz");
-gPad->SetLogz(1);
+TLine *l1=new TLine(cut1[i],0,cut1[i],195); l1->Draw();
+TLine *l2=new TLine(cut2[i],0,cut2[i],195); l2->Draw();
+TLine *l3=new TLine(cut3[i],0,cut3[i],195); l3->Draw();
+TLine *l4=new TLine(cut4[i],0,cut4[i],195); l4->Draw();
+}
 
-TCanvas *c_acc = new TCanvas("acc","acc",1800,800);
-c_acc->Divide(2,1);
-c_acc->cd(1);
+TCanvas *c_hitocc_LGC = new TCanvas("hitocc_LGC","hitocc_LGC",1600,1000);
+c_hitocc_LGC->Divide(2,2);
+c_hitocc_LGC->cd(1);
+hhit_lgc->Draw();
+c_hitocc_LGC->cd(2);
+hhit_lgc_2D->Draw("colz");
+c_hitocc_LGC->cd(3);
+hocc_lgc->Draw();
+c_hitocc_LGC->cd(4);
+hocc_lgc_2D->Draw("colz");
+
+TCanvas *c_hitocc_HGC = new TCanvas("hitocc_HGC","hitocc_HGC",1600,1000);
+c_hitocc_HGC->Divide(2,2);
+c_hitocc_HGC->cd(1);
+hhit_hgc->Draw();
+c_hitocc_HGC->cd(2);
+hhit_hgc_2D->Draw("colz");
+c_hitocc_HGC->cd(3);
+hocc_hgc->Draw();
+c_hitocc_HGC->cd(4);
+hocc_hgc_2D->Draw("colz");
+
+TCanvas *c_hitocc_SPD = new TCanvas("hitocc_SPD","hitocc_SPD",1600,1000);
+c_hitocc_SPD->Divide(2,2);
+c_hitocc_SPD->cd(1);
+hhit_spd_FA->Draw();
+c_hitocc_SPD->cd(2);
+hhit_spd_LA->Draw();
+c_hitocc_SPD->cd(3);
+hocc_spd_FA->Draw();
+c_hitocc_SPD->cd(4);
+hocc_spd_LA->Draw();
+
+TCanvas *c_hitocc_EC = new TCanvas("hitocc_EC","hitocc_EC",1800,1000);
+c_hitocc_EC->Divide(4,2);
+c_hitocc_EC->cd(1);
+hhit_ec_preshower_FA->Draw();
+c_hitocc_EC->cd(2);
+hhit_ec_shower_FA->Draw();
+c_hitocc_EC->cd(3);
+hhit_ec_preshower_LA->Draw();
+c_hitocc_EC->cd(4);
+hhit_ec_shower_LA->Draw();
+c_hitocc_EC->cd(5);
+hocc_ec_preshower_FA->Draw();
+c_hitocc_EC->cd(6);
+hocc_ec_shower_FA->Draw();
+c_hitocc_EC->cd(7);
+hocc_ec_preshower_LA->Draw();
+c_hitocc_EC->cd(8);
+hocc_ec_shower_LA->Draw();
+
+TCanvas *c_gen = new TCanvas("gen","gen",1800,500);
+c_gen->Divide(4,1);
+c_gen->cd(1);
+hgen_ThetaP->Draw("colz");
+c_gen->cd(2);
+hgen_ThetaPhi->Draw("colz");
+c_gen->cd(3);
+hgen_PhiP->Draw("colz");
+c_gen->cd(4);
+hgen_ThetaPhiP->Draw("colz");
+
+
 hacceptance_ThetaP[0]->Divide(hacceptance_ThetaP[0],hgen_ThetaP);  
-hacceptance_ThetaP[0]->SetMinimum(0);  
-hacceptance_ThetaP[0]->SetMaximum(1);    
-hacceptance_ThetaP[0]->Draw("colz");
-c_acc->cd(2);
 hacceptance_ThetaP[1]->Divide(hacceptance_ThetaP[1],hgen_ThetaP);  
-hacceptance_ThetaP[1]->SetMinimum(0);  
-hacceptance_ThetaP[1]->SetMaximum(1);    
+hacceptance_ThetaPhi[0]->Divide(hacceptance_ThetaPhi[0],hgen_ThetaPhi);  
+hacceptance_ThetaPhi[1]->Divide(hacceptance_ThetaPhi[1],hgen_ThetaPhi);  
+hacceptance_PhiP[0]->Divide(hacceptance_PhiP[0],hgen_PhiP);  
+hacceptance_PhiP[1]->Divide(hacceptance_PhiP[1],hgen_PhiP);  
+hacceptance_ThetaPhiP[0]->Divide(hacceptance_ThetaPhiP[0],hgen_ThetaPhiP);  
+hacceptance_ThetaPhiP[1]->Divide(hacceptance_ThetaPhiP[1],hgen_ThetaPhiP);  
+
+// hacceptance_ThetaP[0]->SetMinimum(0);  
+// hacceptance_ThetaP[0]->SetMaximum(1);  
+// hacceptance_ThetaP[1]->SetMinimum(0);  
+// hacceptance_ThetaP[1]->SetMaximum(1);  
+// hacceptance_ThetaPhi[0]->SetMinimum(0);  
+// hacceptance_ThetaPhi[0]->SetMaximum(1);    
+// hacceptance_ThetaPhi[1]->SetMinimum(0);  
+// hacceptance_ThetaPhi[1]->SetMaximum(1);    
+// hacceptance_PhiP[0]->SetMinimum(0);  
+// hacceptance_PhiP[0]->SetMaximum(1);  
+// hacceptance_PhiP[1]->SetMinimum(0);  
+// hacceptance_PhiP[1]->SetMaximum(1); 
+// hacceptance_ThetaPhiP[0]->SetMinimum(0);  
+// hacceptance_ThetaPhiP[0]->SetMaximum(1);
+// hacceptance_ThetaPhiP[1]->SetMinimum(0);  
+// hacceptance_ThetaPhiP[1]->SetMaximum(1);
+
+TCanvas *c_acceptance_ThetaP = new TCanvas("acceptance_ThetaP","acceptance_ThetaP",1800,800);
+c_acceptance_ThetaP->Divide(2,1);
+c_acceptance_ThetaP->cd(1);
+hacceptance_ThetaP[0]->Draw("colz");
+c_acceptance_ThetaP->cd(2);  
 hacceptance_ThetaP[1]->Draw("colz");
+
+TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1800,800);
+c_acceptance->Divide(4,2);
+c_acceptance->cd(1);
+hacceptance_ThetaP[0]->Draw("colz");
+c_acceptance->cd(5);
+hacceptance_ThetaP[1]->Draw("colz");
+c_acceptance->cd(2);
+hacceptance_ThetaPhi[0]->Draw("colz");
+c_acceptance->cd(6);
+hacceptance_ThetaPhi[1]->Draw("colz");
+c_acceptance->cd(3);  
+hacceptance_PhiP[0]->Draw("colz");
+c_acceptance->cd(7);   
+hacceptance_PhiP[1]->Draw("colz");
+c_acceptance->cd(4);    
+hacceptance_ThetaPhiP[0]->Draw("colz");
+c_acceptance->cd(8);    
+hacceptance_ThetaPhiP[1]->Draw("colz");
+
+TH2F *hacceptance_ThetaP_overall=(TH2F*) hacceptance_ThetaP[0]->Clone();
+hacceptance_ThetaP_overall->Add(hacceptance_ThetaP[1]);
+hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","SIDIS electron acceptance & efficiency;vertex #theta (deg);vertex P (GeV)");
+// hacceptance_ThetaP_overall->SetNameTitle("acceptance_ThetaP_overall","SIDIS electron efficiency;vertex #theta (deg);vertex P (GeV)");
+hacceptance_ThetaP_overall->SetMinimum(0);  
+hacceptance_ThetaP_overall->SetMaximum(1); 
+
+TCanvas *c_acceptance_2D_both = new TCanvas("acceptance_2D_both","acceptance_2D_both",1200,1000);
+c_acceptance_2D_both->Divide(1,1);
+c_acceptance_2D_both->cd(1);
+// gPad->SetLogy();
+gPad->SetGrid();
+hacceptance_ThetaP_overall->Draw("colz");
+// c_acceptance_2D_both->SaveAs(Form("%s_%s",inputfile_name,"acceptance_2D_both.png"));
+
+int NbinsX,NbinsY,NbinsZ;
+NbinsX=hacceptance_ThetaP_overall->GetXaxis()->GetNbins();
+NbinsY=hacceptance_ThetaP_overall->GetYaxis()->GetNbins();
+double count_bincontent=0;
+int count_bin=0;
+for(int j=1;j<NbinsY;j++){
+  for(int i=1;i<NbinsX;i++){
+//         if (hacceptance_ThetaP_overall->GetBinContent(i,j)>1) cout << "what ? " <<   hacceptance_ThetaP_overall->GetBinContent(i,j) << endl;
+    if (hacceptance_ThetaP_overall->GetBinContent(i,j)>0){
+      count_bin++;
+      count_bincontent += hacceptance_ThetaP_overall->GetBinContent(i,j);
+    }
+  }
+}
+// cout << "hacceptance_ThetaP_overall average is " << count_bincontent/count_bin << endl;
 
 TCanvas *c_trigger_onedet = new TCanvas("trigger_onedet", "trigger_onedet",1400,900);
 c_trigger_onedet->Divide(4,2);
@@ -1087,13 +1558,13 @@ h_n_trigger_sectors_spd_LA->Draw();
 c_trigger_onedet->cd(7);
 h_n_trigger_sectors_mrpc->Draw();
 
-cout<<"only h_trigger_e_FA_EC in kHz: "<<h_trigger_e_FA_EC->Integral(1,60)/1e3<<endl;
-cout<<"only h_trigger_e_LA_EC in kHz: "<<h_trigger_e_LA_EC->Integral(1,60)/1e3<<endl;
-cout<<"only h_trigger_h_FA_EC in kHz: "<<h_trigger_h_FA_EC->Integral(1,60)/1e3<<endl;
-cout<<"only lgc in kHz: "<<h_n_trigger_sectors_LGC->Integral(1,30)/1e3<<endl;
-cout<<"only spd FA in kHz: "<<h_n_trigger_sectors_spd_FA->Integral(1,240)/1e3<<endl;
-cout<<"only spd LA in kHz: "<<h_n_trigger_sectors_spd_LA->Integral(1,240)/1e3<<endl;
-cout<<"only mrpc in kHz: "<<h_n_trigger_sectors_mrpc->Integral(1,240)/1e3<<endl;
+cout<<"h_trigger_e_FA_EC in kHz: "<<h_trigger_e_FA_EC->Integral(1,60)/1e3<<endl;
+cout<<"h_trigger_e_LA_EC in kHz: "<<h_trigger_e_LA_EC->Integral(1,60)/1e3<<endl;
+cout<<"h_trigger_h_FA_EC in kHz: "<<h_trigger_h_FA_EC->Integral(1,60)/1e3<<endl;
+cout<<"lgc in kHz: "<<h_n_trigger_sectors_LGC->Integral(1,30)/1e3<<endl;
+cout<<"spd FA in kHz: "<<h_n_trigger_sectors_spd_FA->Integral(1,240)/1e3<<endl;
+cout<<"spd LA in kHz: "<<h_n_trigger_sectors_spd_LA->Integral(1,240)/1e3<<endl;
+cout<<"mrpc in kHz: "<<h_n_trigger_sectors_mrpc->Integral(1,240)/1e3<<endl;
 // cout<<"EC lgc spd mrpc be fired in kHz: "<<h_flux_EC_lgc_spd_mrpc->Integral(1,60)<<endl;	
 
 // cout<<"$$$$$$$$$$$$$$$   :"<<h_flux_EC_electron->Integral(1,60)<<"	"<<h_flux_EC_hadron->Integral(1,60)<<endl;
@@ -1162,11 +1633,11 @@ c_trigger->cd(14);
 h_trigger_e_LA_h_FA->Draw();
 
    
-cout<<"only h_trigger_e_FA in kHz: "<<h_trigger_e_FA_EC->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc_spd->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc_spd_mrpc->Integral(1,60)/1e3<< endl;
-cout<<"only h_trigger_e_LA in kHz: "<<h_trigger_e_LA_EC->Integral(1,60)/1e3<<" "<<h_trigger_e_LA_EC_spd->Integral(1,60)/1e3<< endl;
-cout<<"only h_trigger_h_FA in kHz: "<<h_trigger_h_FA_EC->Integral(1,60)/1e3<<" "<<h_trigger_h_FA_EC_spd->Integral(1,60)/1e3<<" "<<h_trigger_h_FA_EC_spd_mrpc->Integral(1,60)/1e3<<" "<<endl;
-cout<<"only h_trigger_e_FA_h_FA in kHz: "<<h_trigger_e_FA_h_FA->Integral(1,60)/1e3<< endl; 
-cout<<"only h_trigger_e_LA_h_FA in kHz: "<<h_trigger_e_LA_h_FA->Integral(1,60)/1e3<< endl;
+cout<<"h_trigger_e_FA in kHz: "<<h_trigger_e_FA_EC->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc_spd->Integral(1,60)/1e3<<" "<<h_trigger_e_FA_EC_lgc_spd_mrpc->Integral(1,60)/1e3<< endl;
+cout<<"h_trigger_e_LA in kHz: "<<h_trigger_e_LA_EC->Integral(1,60)/1e3<<" "<<h_trigger_e_LA_EC_spd->Integral(1,60)/1e3<< endl;
+cout<<"h_trigger_h_FA in kHz: "<<h_trigger_h_FA_EC->Integral(1,60)/1e3<<" "<<h_trigger_h_FA_EC_spd->Integral(1,60)/1e3<<" "<<h_trigger_h_FA_EC_spd_mrpc->Integral(1,60)/1e3<<" "<<endl;
+cout<<"h_trigger_e_FA_h_FA in kHz: "<<h_trigger_e_FA_h_FA->Integral(1,60)/1e3<< endl; 
+cout<<"h_trigger_e_LA_h_FA in kHz: "<<h_trigger_e_LA_h_FA->Integral(1,60)/1e3<< endl;
 
 TCanvas *c_vertex = new TCanvas("vertex", "vertex",1400,900);
 hvertex_rz->Draw("colz");
@@ -1176,6 +1647,10 @@ hangle_FAEC_FASPD->Draw();
 
 TCanvas *c_angle_FAEC_LASPD = new TCanvas("angle_FAEC_LASPD", "angle_FAEC_LASPD",1400,900);
 hangle_FAEC_LASPD->Draw();
+
+outputfile->Write();	
+outputfile->Flush();
+
 
 // 	h_flux_EC_electron->SetDirectory(output_file);
 // 	output_file->Write();
@@ -1221,7 +1696,6 @@ hangle_FAEC_LASPD->Draw();
 	h_flux_EC->SetDirectory(output_file);
 	
 	output_file->Write();
-
-*/
+*/	
 
 }

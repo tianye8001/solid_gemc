@@ -97,7 +97,7 @@ bool find_id_spd_LA(double hit_phi,double hit_r,int &sector,bool Is_debug=false)
   else return true;
 }
 
-bool process_tree_solid_spd_trigger(TTree *tree_solid_spd,int *trigger_spd_FA,int *trigger_spd_LA,int &ntrigsecs_spd_FA,int &ntrigsecs_spd_LA,double spd_threshold_FA =0.5,double spd_threshold_LA=1.5,bool Is_debug=false)
+bool process_tree_solid_spd(TTree *tree_solid_spd,double *hit_spd_FA,double *hit_spd_LA,int *trigger_spd_FA,int *trigger_spd_LA,int &ntrigsecs_spd_FA,int &ntrigsecs_spd_LA,double spd_threshold_FA =0.5,double spd_threshold_LA=1.5,bool Is_debug=false)
 {
     double DEG=180./3.1415926;   //rad to degree  
     
@@ -127,10 +127,13 @@ bool process_tree_solid_spd_trigger(TTree *tree_solid_spd,int *trigger_spd_FA,in
 	    }			
 	    
     } //loop over hits
+   
 
 
     for(int l_sec=0; l_sec< 60; l_sec++){
 	for(int l_block=0; l_block<4; l_block++){
+	   hit_spd_FA[l_sec*4+l_block] = tot_edep_spd_forward[l_sec][l_block];
+	   
 		if(tot_edep_spd_forward[l_sec][l_block] >= spd_threshold_FA){
 		  ntrigsecs_spd_FA++;
 // 		  trigger_spd_FA[l_sec][l_block]=1;
@@ -138,8 +141,10 @@ bool process_tree_solid_spd_trigger(TTree *tree_solid_spd,int *trigger_spd_FA,in
 		}
 	}
     }
-    
-    for(int l_sec=0; l_sec< 60; l_sec++){				
+
+    for(int l_sec=0; l_sec< 60; l_sec++){		
+      hit_spd_LA[l_sec] = tot_edep_spd_large[l_sec];      
+      
       if(tot_edep_spd_large[l_sec] >= spd_threshold_LA){
 	ntrigsecs_spd_LA++;				
 	trigger_spd_LA[l_sec]=1;
@@ -150,27 +155,27 @@ bool process_tree_solid_spd_trigger(TTree *tree_solid_spd,int *trigger_spd_FA,in
 
 }
 		
-double process_tree_solid_spd(TTree *tree_solid_spd)
-{
-  double totEdep=0;
-//     for (Int_t j=0;j<1;j++) {  
-    for (Int_t j=0;j<solid_spd_hitn->size();j++) {
-//       cout << "solid_spd " << " !!! " << solid_spd_hitn->at(j) << " " << solid_spd_id->at(j) << " " << solid_spd_pid->at(j) << " " << solid_spd_mpid->at(j) << " " << solid_spd_tid->at(j) << " " << solid_spd_mtid->at(j) << " " << solid_spd_trackE->at(j) << " " << solid_spd_totEdep->at(j) << " " << solid_spd_avg_x->at(j) << " " << solid_spd_avg_y->at(j) << " " << solid_spd_avg_z->at(j) << " " << solid_spd_avg_lx->at(j) << " " << solid_spd_avg_ly->at(j) << " " << solid_spd_avg_lz->at(j) << " " << solid_spd_px->at(j) << " " << solid_spd_py->at(j) << " " << solid_spd_pz->at(j) << " " << solid_spd_vx->at(j) << " " << solid_spd_vy->at(j) << " " << solid_spd_vz->at(j) << " " << solid_spd_mvx->at(j) << " " << solid_spd_mvy->at(j) << " " << solid_spd_mvz->at(j) << " " << solid_spd_avg_t->at(j) << endl;  
-
-      int detector_ID=solid_spd_id->at(j)/1000000;
-      int subdetector_ID=(solid_spd_id->at(j)%1000000)/100000;
-      int subsubdetector_ID=((solid_spd_id->at(j)%1000000)%100000)/10000;
-      int component_ID=solid_spd_id->at(j)%10000;
-      
-    cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_spd_totEdep->at(j) << endl; 
-           
-      if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 0) totEdep +=solid_spd_totEdep->at(j);     
-         
-    }    
-
-return totEdep;
-
-}
+// double process_tree_solid_spd(TTree *tree_solid_spd)
+// {
+//   double totEdep=0;
+// //     for (Int_t j=0;j<1;j++) {  
+//     for (Int_t j=0;j<solid_spd_hitn->size();j++) {
+// //       cout << "solid_spd " << " !!! " << solid_spd_hitn->at(j) << " " << solid_spd_id->at(j) << " " << solid_spd_pid->at(j) << " " << solid_spd_mpid->at(j) << " " << solid_spd_tid->at(j) << " " << solid_spd_mtid->at(j) << " " << solid_spd_trackE->at(j) << " " << solid_spd_totEdep->at(j) << " " << solid_spd_avg_x->at(j) << " " << solid_spd_avg_y->at(j) << " " << solid_spd_avg_z->at(j) << " " << solid_spd_avg_lx->at(j) << " " << solid_spd_avg_ly->at(j) << " " << solid_spd_avg_lz->at(j) << " " << solid_spd_px->at(j) << " " << solid_spd_py->at(j) << " " << solid_spd_pz->at(j) << " " << solid_spd_vx->at(j) << " " << solid_spd_vy->at(j) << " " << solid_spd_vz->at(j) << " " << solid_spd_mvx->at(j) << " " << solid_spd_mvy->at(j) << " " << solid_spd_mvz->at(j) << " " << solid_spd_avg_t->at(j) << endl;  
+// 
+//       int detector_ID=solid_spd_id->at(j)/1000000;
+//       int subdetector_ID=(solid_spd_id->at(j)%1000000)/100000;
+//       int subsubdetector_ID=((solid_spd_id->at(j)%1000000)%100000)/10000;
+//       int component_ID=solid_spd_id->at(j)%10000;
+//       
+//     cout << detector_ID << " " << subdetector_ID << " "  << subsubdetector_ID  << " " << component_ID << ", " << solid_spd_totEdep->at(j) << endl; 
+//            
+//       if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 0) totEdep +=solid_spd_totEdep->at(j);     
+//          
+//     }    
+// 
+// return totEdep;
+// 
+// }
 		
 
 

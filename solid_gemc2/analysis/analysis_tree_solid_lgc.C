@@ -43,10 +43,7 @@ return;
 //Simple trigger, no timing information is used.  If at least 1 sector meets the criteria for trigger, then the trigger fires.
 //Must imput the lgc_tree, the event number, and the PMT and PEperPMT thresholds (default is a 2x2 trigger).
 
-
-// Bool_t lgc_trigger(TTree *tree_solid_lgc, Int_t eventn, Int_t PMTthresh = 2, Int_t PEthresh = 2){
-//   tree_solid_lgc->GetEntry(eventn);
-Bool_t process_tree_solid_lgc_trigger(TTree *tree_solid_lgc,Int_t *trigger_lgc, Int_t &ntrigsecs, Int_t PMTthresh = 2, Int_t PEthresh = 2){
+Bool_t process_tree_solid_lgc(TTree *tree_solid_lgc,double *hit_lgc, Int_t *trigger_lgc, Int_t &ntrigsecs, Int_t PMTthresh = 2, Int_t PEthresh = 2){
   if(!solid_lgc_hitn->size()) return 0;
    //if using root6, uncomment line below, and comment out following line
   //std::vector<std::vector<int>> sectorhits (30, std::vector<int>(9,0));  //initialize a 30x9 vector array
@@ -59,9 +56,12 @@ Bool_t process_tree_solid_lgc_trigger(TTree *tree_solid_lgc,Int_t *trigger_lgc, 
       sectorhits[solid_lgc_sector->at(i)-1][solid_lgc_pmt->at(i)-1] += solid_lgc_nphe->at(i);
     }
   }
-  for(Int_t i = 0; i < 30; i++){
+   
+  for(UInt_t i = 0; i < 30; i++){
     ntrigpmts = 0;
-    for(Int_t j = 0; j < 9; j++){
+    for(Int_t j = 0; j < 9; j++){      
+      hit_lgc[i*9+j]=sectorhits[i][j];            
+      
       if(sectorhits[i][j] >= PEthresh) ntrigpmts++;
     }
     if(ntrigpmts >= PMTthresh) {
@@ -74,27 +74,6 @@ Bool_t process_tree_solid_lgc_trigger(TTree *tree_solid_lgc,Int_t *trigger_lgc, 
   }else{
     return 0;
   }
-}
-
-double process_tree_solid_lgc(TTree *tree_solid_lgc, Int_t *nphe_lgc)
-{
-  if(!solid_lgc_hitn->size()) return 0;
-   //if using root6, uncomment line below, and comment out following line
-  //std::vector<std::vector<int>> sectorhits (30, std::vector<int>(9,0));  //initialize a 30x9 vector array
-  Int_t pmt[30][9] = {0};  //need to intialize to zero or bad stuff
- 
-  for(UInt_t i = 0; i < solid_lgc_hitn->size(); i++){
-    if(solid_lgc_nphe->at(i)>0){
-      pmt[solid_lgc_sector->at(i)-1][solid_lgc_pmt->at(i)-1] += solid_lgc_nphe->at(i);
-    }
-  }
-  for(Int_t i = 0; i < 30; i++){
-    for(Int_t j = 0; j < 9; j++){
-      if(pmt[i][j] > 0) nphe_lgc[i] += pmt[i][j];
-    }
-  }
-  
-  return 1;
 }
 
 
