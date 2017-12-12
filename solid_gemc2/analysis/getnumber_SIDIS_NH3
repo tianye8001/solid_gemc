@@ -1,0 +1,8 @@
+#!/bin/tcsh -f
+
+root -l -b -q  'analysis_SIDIS.C+("/cache/halla/solid/sim/solid_gemc/SIDIS_NH3_JLAB_VERSION_1.3/pass3/background_solid_SIDIS_NH3_dirty_weighted_eDIS_filenum73_0.73e6.root","trigger",true,"single")'
+root -l -b -q  'analysis_SIDIS.C+("/cache/halla/solid/sim/solid_gemc/SIDIS_NH3_JLAB_VERSION_1.3/pass3/background_solid_SIDIS_NH3_dirty_normalized_pi0Wiser_filenum100_1e6.root","trigger",true,"single")'
+root -l -b -q  'analysis_SIDIS.C+("/cache/halla/solid/sim/solid_gemc/SIDIS_NH3_JLAB_VERSION_1.3/pass3/background_solid_SIDIS_NH3_dirty_normalized_pipWiser_filenum99_0.99e6.root","trigger",true,"single")'
+root -l -b -q  'analysis_SIDIS.C+("/cache/halla/solid/sim/solid_gemc/SIDIS_NH3_JLAB_VERSION_1.3/pass3/background_solid_SIDIS_NH3_dirty_normalized_pimWiser_filenum98_0.98e6.root","trigger",true,"single")'
+root -l -b -q  'analysis_SIDIS.C+("/cache/halla/solid/sim/solid_gemc/SIDIS_NH3_JLAB_VERSION_1.3/pass3/background_solid_SIDIS_NH3_dirty_normalized_pWiser_filenum99_0.99e6.root","trigger",true,"single")'
+
