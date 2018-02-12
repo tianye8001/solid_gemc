@@ -1,4 +1,13 @@
-This tries to study acceptane and record the results in some histograms
+===== general idea  ================================================
+Acceptance is basic information about the detector. Running simulation is usually the only way to have it accurately when there's field and complicated geometry involved. But once the simulation is done and the info stored in some format. You don't need to run simulation again to obtain it. 
+
+In general, a particle accepted or not by a detector somewhere is determined by the particle type, momentum, angle and vertex position.
+We can run simulation with a single particle type with various mom and angle from a fixed vertex and summarize the acceptance as histogram with value 0 or 1 in dimension of mom, theta, phi angle of this kind of particle at this vertex
+Assuming physics reaction is not vertex dependent, we can run the above simulation with the particles evenly distributed within a known target length and raster size, and the resulting 3D acceptance  histogram can have values between 0 and 1 as averaging effect over vertex
+If an experiment setup have azimuthal symmetry, the result can be summrized in mom and theta only.
+
+===== How we do it for SoLID =====================================================
+Here we try to do it for SoLID to study acceptane and record the results in some histograms
 
 shoot particles from target position over target length into the detector and look for the hits on various detectors, if there is a hit, this event is considered detected and the generated particle P and theta, phi are recorded.
 
@@ -24,25 +33,40 @@ In the output root file, acceptance in P, theta, phi histograms are stored.
 By definition, acceptance of a particle should be 0 or 1 if all degree of freedom are taken into consideration, including particle 3 momentum and particle 3 vertex.
 Here we only record results in 3 momentum and integral over 3 vertex with a assumption that particles are evenly distributed over their 3 vertex, thus we have acceptance value between 0 and 1
 
-For solid_PVDIS, histogram "acceptance_ThetaP_forwardangle" is in Theta and P
-For solid_SIDIS_He3, solid_JPsi, histogram "acceptance_ThetaP_forwardangle" and "acceptance_ThetaP_largeangle" is in Theta and P
-For solid_SIDIS_NH3, histogram "acceptance_ThetaPhiP_largeangle" and "acceptance_ThetaPhiP_forwardangle" are in Theta, Phi and P
+= result ===================================================
 
-= result =============================
+For output, we have png and root files containing acceptance histograms.
 
-result_PVDIS/201503, with baffle "babarmore1_block" babarmore1 and photon blocker before EC
+The files are 
+* result_PVDIS/201503, with baffle "babarmore1_block" babarmore1 and photon blocker before EC
+* result_SIDIS_He3/201402, with target window collimator, both downstream and upstream blocking forward angle
+* result_SIDIS_He3/201701, with target window collimator, downstream blocking forward angle, upstream block both forward and large angle
+* result_SIDIS_NH3/201503, with wrong ptarget field and the sheet of flame cut is NOT applied
+* result_SIDIS_NH3/201710, with oxford ptarget field and  the sheet of flame cut is applied
+* result_SIDIS_JPsi/201501, with new target position
 
-result_SIDIS_He3/201402, with target window collimator, both downstream and upstream blocking forward angle
+The histograms are
+* For solid_PVDIS, histogram "acceptance_ThetaP_forwardangle" is in Theta and P
+* For solid_SIDIS_He3 and solid_JPsi, histogram "acceptance_ThetaP_forwardangle" and "acceptance_ThetaP_largeangle" is in Theta and P
+* For solid_SIDIS_NH3, histogram "acceptance_ThetaPhiP_largeangle" and "acceptance_ThetaPhiP_forwardangle" are in Theta, Phi and P
 
-result_SIDIS_He3/201701, with target window collimator, downstream blocking forward angle, upstream block both forward and large angle
+== how to use result in histogram ======================
 
-result_SIDIS_NH3/201503, with wrong ptarget field and the sheet of flame cut is NOT applied
+All histogram are defined in cetain range of XYZ and bin size.
+You can read acceptance without knowing range or bin size this way.
 
-result_SIDIS_NH3/201710, with oxford ptarget field and  the sheet of flame cut is applied
-
-result_SIDIS_JPsi/201501, with new target position
+  int bin,binx,biny,binz;
+  bin=h_2D->FindBin(theta,p);
+  h_2D->GetBinXYZ(bin,binx,biny,binz);
+  acceptance = h_2D->GetBinContent(binx,biny);  
+  bin=h_3D->FindBin(theta,phi,p);
+  h_3D->GetBinXYZ(bin,binx,biny,binz);
+  acceptance = h_3D->GetBinContent(binx,biny,binz);  
+  
+see a complete example using solid_JPsi acceptance to add entries in JPsi generator output root tree for every final particles  
+https://jlabsvn.jlab.org/svnroot/solid/evgen/JPsi/accep.C 
 
 = log ================================
-previous version at solid_gemc/analysistool/acceptance
+updated 2017_11_14 by Zhiwen Zhao 
 created 2014_08_14 by Zhiwen Zhao 
-created 2017_11_14 by Zhiwen Zhao 
+previous version at solid_gemc/analysistool/acceptance
