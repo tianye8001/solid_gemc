@@ -101,7 +101,8 @@ TFile *outputfile=new TFile(output_filename, "recreate");
 
 TH1F *hcount=new TH1F("hcount","hcount;number of photoelectron;count",100,0,50);
 
-const int Nbin_Theta=35,Nbin_Phi=180;
+const int Nbin_Theta=140,Nbin_Phi=180;
+double Max_Theta=35;
 TH1F *hcount_ThetaPhi[Nbin_Theta][Nbin_Phi];
 for(int i=0;i<Nbin_Theta;i++){
   for(int j=0;j<Nbin_Phi;j++){
@@ -110,7 +111,7 @@ for(int i=0;i<Nbin_Theta;i++){
    hcount_ThetaPhi[i][j]=new TH1F(hstname,";number of photoelectron;count",100,0,50);
   }
 }
-TH2F *havg_pe=new TH2F("havg_pe","avg number of photoelectron;#theta(deg);#phi(deg)",Nbin_Theta,0,Nbin_Theta,Nbin_Phi,-180,180);
+TH2F *havg_pe=new TH2F("havg_pe","avg number of photoelectron;#theta(deg);#phi(deg)",Nbin_Theta,0,Max_Theta,Nbin_Phi,-180,180);
 
 TH2F *hhitxy_hgc=new TH2F("hhitxy_hgc","p.e. pattern; r (mm); #phi (mm)",32,-102,102,32,-102,102);
 
@@ -274,9 +275,11 @@ for (Int_t i=0;i<nevent;i++) {
     if (count_this>0){
        hcount->Fill(count_this*factor);
        
-      if (theta_gen<=Nbin_Theta) {
-       hcount_ThetaPhi[int(theta_gen)][(int(phi_gen)-(-180))/2]->Fill(count_this*factor);       
-//        cout << "count_this " << count_this << endl;
+      if (theta_gen<=Max_Theta) {
+	int bin_Theta=int(theta_gen/(Max_Theta/Nbin_Theta));
+	int bin_Phi=int((phi_gen-(-180))/(360./Nbin_Phi));
+// 	 cout << "bin_Theta " << bin_Theta << "theta_gen " << theta_gen << endl;	
+	hcount_ThetaPhi[bin_Theta][bin_Phi]->Fill(count_this*factor);       
       }
       else cout << "theta_gen too large " << theta_gen << endl;
       
