@@ -3,8 +3,9 @@
 #He3
 for mom in 2.5 3.0 3.5 4.0 4.5 5.0 5.5 6.0 6.5 7.0 7.5
 do
-    solid_gemc solid_SIDIS_He3_hgc_moved_batch.gcard -BEAM_P="pi-,$mom*GeV,15*deg,0*deg" -SPREAD_P="0*GeV,15*deg,180*deg" -BEAM_V="(0,0,-350)cm" -N=1e6 -OUTPUT=evio,output/output_pim_z0_p$mom\_blockoff.evio 
+    solid_gemc solid_SIDIS_He3_hgc_moved_batch.gcard -BEAM_P="pi-,$mom*GeV,11*deg,0*deg" -SPREAD_P="0*GeV,6*deg,180*deg" -BEAM_V="(0,0,-350)cm" -N=1e6 -OUTPUT=evio,output/output_pim_z0_p$mom\_blockoff.evio 
     evio2root -INPUTF=output/output_pim_z0_p$mom\_blockoff.evio  -B="../hgc_moved_solid_gemc/solid_SIDIS_hgc"
+    rm -f output/output_pim_z0_p$mom\_blockoff.evio
 done
 
 #NH3
