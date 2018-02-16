@@ -20,6 +20,7 @@ make_block();
 make_window_front();
 make_window_back();
 make_cone();
+#make_shield();
 # make_cone_front();
 make_pmt();
 make_mirror();
@@ -35,7 +36,61 @@ make_mirror();
 # Rin(86,98)
 # Rout(265,265)
 
-my $DEG=180/3.1415916;
+my $ang_tilt = 39; #degree  #  this is tilt angle of cone and PMTs around the focus axis
+my $rmin_w_end = 16; 
+my $z_w_half = 8.90;
+my $dis_P_PMT = 135;
+my $z_angle_min = 390;
+my $sphere_r_inner = 210;
+
+my $shield_front_half_length = 5;
+my $shield_back_half_length = 10;
+my $shield_inner_radius = 20;
+
+
+
+my $image_x = 0.;
+my $rmin_w_front_cone = 10.16; 
+my $rmax_w_front_cone = $rmin_w_front_cone+0.57;
+my $rmax_w_end = $rmin_w_end+0.57;
+my $z_angle_max = 423;
+my $shield_total_half_length = $shield_front_half_length+$shield_back_half_length;
+my $shield_outer_radius = $shield_inner_radius+0.3;
+my $thickness_sphere = 0.3;
+my $sphere_r_outer = $sphere_r_inner+$thickness_sphere;
+my $Angle_in = 7;
+my $Angle_out = 15;
+my $Angle_opt = 6.8;
+my $Z_target=350;
+my $DEG=180/3.1415926;
+
+my $y_angle_min = ($z_angle_min+$Z_target)*tan($Angle_in/$DEG);
+my $y_angle_max = ($z_angle_max+$Z_target)*tan($Angle_out/$DEG);
+my $pos_A = vector(0, $y_angle_max, $z_angle_max);
+my $pos_B = vector(0, $y_angle_min, $z_angle_min);
+my $vec_BA = $pos_A - $pos_B;
+my $dir_BA = $vec_BA->norm();
+my $dir_BA_ortho = vector(0, $dir_BA->z(),-$dir_BA->y());
+my $dis_BA = sqrt($vec_BA->x()*$vec_BA->x()+$vec_BA->y()*$vec_BA->y()+$vec_BA->z()*$vec_BA->z());
+my $dis_C_BA = sqrt($sphere_r_inner*$sphere_r_inner-$dis_BA*$dis_BA/4);
+my $pos_sphere_center = $pos_B+$vec_BA/2+$dir_BA_ortho*$dis_C_BA;
+#print "sphere center $pos_sphere_center->x() $pos_sphere_center->y() $pos_sphere_center->z()\n";
+
+my $dis_C_PT = ($pos_sphere_center->y()-tan($Angle_opt/$DEG)*$pos_sphere_center->z()-tan($Angle_opt/$DEG)*350)/sqrt(1+tan($Angle_opt/$DEG)*tan($Angle_opt/$DEG));
+my $ang_CPT = asin($dis_C_PT/$sphere_r_inner);
+my $dir_P_PMT = vector(0,sin(2*$ang_CPT-$Angle_opt/$DEG),-cos(2*$ang_CPT-$Angle_opt/$DEG));
+my $pos_P = vector(0,$pos_sphere_center->y()-$sphere_r_inner*sin($ang_CPT-$Angle_opt/$DEG),$pos_sphere_center->z()+$sphere_r_inner*cos($ang_CPT-$Angle_opt/$DEG));             
+my $pos_PMT = $pos_P+$dis_P_PMT*$dir_P_PMT;
+my $image_y = $pos_PMT->y();#239.7
+my $image_z = $pos_PMT->z();#345
+print "PMT position $image_y $image_z\n";
+my $pos_x_sphere=sprintf('%f',$pos_sphere_center->y());
+my $pos_y_sphere=sprintf('%f',$pos_sphere_center->x());
+my $pos_z_sphere=sprintf('%f',$pos_sphere_center->z());
+
+
+
+
 
 my $hitype="solid_hgc";
 # my $hitype="flux";
@@ -60,16 +115,10 @@ my $material_mirror= "SL_HGC_CFRP";
 my $N=30; # number of sectors
 my $ang_width=360/$N;  #in degree
 # my $ang_tilt = 44.; #degree  #  this is tilt angle of cone and PMTs around the focus axis
-my $ang_tilt = 65; #degree  #  this is tilt angle of cone and PMTs around the focus axis
+
 
 my $sec_start = 96; #degree where the 1st sector starts
 
-#  all in cm
-my $image_x = 0.;
-# my $image_y = 239.7;
-# my $image_z = 325;
-my $image_y = 239.7;
-my $image_z = 325+20;
 
 my $halfthickness_window_front_1=0.0215;
 my $halfthickness_window_front_2=0.0065;
@@ -87,7 +136,7 @@ my $Rmax1_gas=$Rmax1_chamber-0.5;
 my $Rmin2_gas=$Rmin2_chamber+0.5;
 my $Rmax2_gas=$Rmax2_chamber-0.5;
 
-my $Z_target=350;
+
 
 # my $Zmin_chamber=306;
 # my $Zmax_chamber=406;
@@ -251,19 +300,13 @@ sub make_block
 }
 
 sub make_cone
-{
-  my $rmin_w_front_cone = 14.16; 
-  my $rmax_w_front_cone = 14.73; 
-  my $rmin_w_end = 22.04; 
-  my $rmax_w_end = 22.61;
-#   my $z_w_half = 19. + 0.1;
-  my $z_w_half = 18.5;  
+{  
 
 #   my $Dz = 18.;
   
-  my $pos_r = $image_y-sin($ang_tilt/$DEG)*$z_w_half+10;  
-  my $pos_z = $image_z+cos($ang_tilt/$DEG)*$z_w_half+10;
-print "cone $pos_r $pos_z\n";
+  my $pos_r = $image_y-sin($ang_tilt/$DEG)*$z_w_half;  
+  my $pos_z = $image_z+cos($ang_tilt/$DEG)*$z_w_half;
+#print "cone $pos_r $pos_z\n";
      for(my $i=1; $i<=$N; $i++){
       my $pos_x = $pos_r*cos(($i-1)*$ang_width/$DEG+$sec_start/$DEG);
       my $pos_y = $pos_r*sin(($i-1)*$ang_width/$DEG+$sec_start/$DEG);    
@@ -278,16 +321,43 @@ print "cone $pos_r $pos_z\n";
 #       my $z3=$pos_z-$z_w_half;
 #       my $z4=$pos_z+$z_w_half;      
       
-      
       my %detector=init_det();
+      $detector{"name"}        = "$DetectorName\_coneout_$i";
+      $detector{"mother"}      = "$DetectorName\_gas";
+      $detector{"description"} = $detector{"name"};
+      $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";  
+      $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
+      $detector{"color"}       = "3dff84";  
+      $detector{"type"}        = "Trd";
+      $detector{"dimensions"}  = "$rmax_w_front_cone*cm 21.92*cm $rmax_w_front_cone*cm $rmax_w_end*cm 8.09*cm";   
+#       $detector{"type"}        = "Polycone";
+#       $detector{"dimensions"}  = "0*deg 360*deg 4*counts 0*cm 0*cm $rmin_w_front_cone*cm $rmin_w_end*cm $rmin_w_front_cone*cm $rmin_w_front_cone*cm $rmax_w_front_cone*cm $rmin_w_end*cm $z1*cm $z2*cm $z3*cm $z4*cm";
+      $detector{"material"}    = "Component";
+      print_det(\%configuration, \%detector);  
+
+      %detector=init_det();
+      $detector{"name"}        = "$DetectorName\_conein_$i";
+      $detector{"mother"}      = "$DetectorName\_gas";
+      $detector{"description"} = $detector{"name"};
+      $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";  
+      $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
+      $detector{"color"}       = "3dff84";  
+      $detector{"type"}        = "Trd";
+      $detector{"dimensions"}  = "$rmin_w_front_cone*cm 21.92*cm $rmin_w_front_cone*cm $rmin_w_end*cm 8.09*cm";   
+#       $detector{"type"}        = "Polycone";
+#       $detector{"dimensions"}  = "0*deg 360*deg 4*counts 0*cm 0*cm $rmin_w_front_cone*cm $rmin_w_end*cm $rmin_w_front_cone*cm $rmin_w_front_cone*cm $rmax_w_front_cone*cm $rmin_w_end*cm $z1*cm $z2*cm $z3*cm $z4*cm";
+      $detector{"material"}    = "Component";
+      print_det(\%configuration, \%detector);
+      
+      %detector=init_det();
       $detector{"name"}        = "$DetectorName\_cone_$i";
       $detector{"mother"}      = "$DetectorName\_gas";
       $detector{"description"} = $detector{"name"};
       $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";  
       $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
       $detector{"color"}       = "3dff84";  
-      $detector{"type"}        = "Cons";
-      $detector{"dimensions"}  = "$rmin_w_front_cone*cm $rmax_w_front_cone*cm $rmin_w_end*cm $rmax_w_end*cm $z_w_half*cm 0*deg 360*deg";   
+      $detector{"type"}        = "Operation:@ $DetectorName\_coneout_$i - $DetectorName\_conein_$i";
+      $detector{"dimensions"}  = "0";   
 #       $detector{"type"}        = "Polycone";
 #       $detector{"dimensions"}  = "0*deg 360*deg 4*counts 0*cm 0*cm $rmin_w_front_cone*cm $rmin_w_end*cm $rmin_w_front_cone*cm $rmin_w_front_cone*cm $rmax_w_front_cone*cm $rmin_w_end*cm $z1*cm $z2*cm $z3*cm $z4*cm";
       $detector{"material"}    = $material_cone;
@@ -300,26 +370,63 @@ print "cone $pos_r $pos_z\n";
       $detector{"sensitivity"} = "mirror: SL_HGC_mirror";
       $detector{"hit_type"}    = "mirror";
       $detector{"identifiers"} = "no";      
-      print_det(\%configuration, \%detector);                
+      print_det(\%configuration, \%detector);
+
+               
     }
 }
 
+
+sub make_shield
+{
+  my $pos_r = $image_y+sin($ang_tilt/$DEG)*($shield_back_half_length-$shield_front_half_length);  
+  my $pos_z = $image_z-cos($ang_tilt/$DEG)*($shield_back_half_length-$shield_front_half_length);
+     for(my $i=1; $i<=$N; $i++){
+      my $pos_x = $pos_r*cos(($i-1)*$ang_width/$DEG+$sec_start/$DEG);
+      my $pos_y = $pos_r*sin(($i-1)*$ang_width/$DEG+$sec_start/$DEG);    
+      my $ang_zrot=-(($i+-1)*$ang_width+$sec_start);
+      my $ang_xrot=0;
+      my $ang_yrot=$ang_tilt; 
+
+
+      my %detector=init_det();
+      $detector{"name"}        = "$DetectorName\_shield_$i";
+      $detector{"mother"}      = "$DetectorName\_gas";
+      $detector{"description"} = $detector{"name"};
+      $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";  
+      $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
+      $detector{"color"}       = "808080";  
+      $detector{"type"}        = "Tube";
+      $detector{"dimensions"}  = "$shield_inner_radius*cm $shield_outer_radius*cm $shield_total_half_length*cm 0*deg 360*deg";   
+      $detector{"material"}    = $material_cone;
+      $detector{"mfield"}      = "no";
+      $detector{"ncopy"}       = 1;
+      $detector{"pMany"}       = 1;
+      $detector{"exist"}       = 1;
+      $detector{"visible"}     = 1;
+      $detector{"style"}       = 1;
+      $detector{"sensitivity"} = "mirror: SL_HGC_mirror";
+      $detector{"hit_type"}    = "mirror";      
+      $detector{"identifiers"} = "no";         
+      print_det(\%configuration, \%detector);           
+    }
+}
+
+
+
+
+
+
 sub make_cone_front
 {
-  my $rmin_w_front_cone = 14.16; 
-  my $rmax_w_front_cone = 14.73; 
-  my $rmin_w_end = 22.04; 
-  my $rmax_w_end = 22.61;
-#   my $z_w_half = 19. + 0.1;
-  my $z_w_half = 18.5;  
 
 #   my $Dz = 18.;
   
 #   my $pos_r = $image_y-sin($ang_tilt/$DEG)*$z_w_half+10;  
 #   my $pos_z = $image_z+cos($ang_tilt/$DEG)*$z_w_half+10;
-  my $pos_r = $image_y-sin($ang_tilt/$DEG)*$z_w_half+10-sin($ang_tilt/$DEG);  
-  my $pos_z = $image_z+cos($ang_tilt/$DEG)*$z_w_half+10+cos($ang_tilt/$DEG);
-print "cone $pos_r $pos_z\n";
+  my $pos_r = $image_y-sin($ang_tilt/$DEG)*$z_w_half-sin($ang_tilt/$DEG);  
+  my $pos_z = $image_z+cos($ang_tilt/$DEG)*$z_w_half+cos($ang_tilt/$DEG);
+#print "cone $pos_r $pos_z\n";
      for(my $i=1; $i<=$N; $i++){
       my $pos_x = $pos_r*cos(($i-1)*$ang_width/$DEG+$sec_start/$DEG);
       my $pos_y = $pos_r*sin(($i-1)*$ang_width/$DEG+$sec_start/$DEG);    
@@ -374,9 +481,9 @@ sub make_pmt
  my $backendhalf_z = 0.001; 
  my $half_z = $windowhalf_z + $backendhalf_z; 
  
-  my $pos_r = $image_y+sin($ang_tilt/$DEG)*$half_z+10;  
-  my $pos_z = $image_z-cos($ang_tilt/$DEG)*$half_z+10;
-  print "pmt $pos_r $pos_z\n";
+  my $pos_r = $image_y+sin($ang_tilt/$DEG)*$half_z;  
+  my $pos_z = $image_z-cos($ang_tilt/$DEG)*$half_z;
+  #print "pmt $pos_r $pos_z\n";
      for(my $i=1; $i<=$N; $i++){
       my $pos_x = $pos_r*cos(($i-1)*$ang_width/$DEG+$sec_start/$DEG);
       my $pos_y = $pos_r*sin(($i-1)*$ang_width/$DEG+$sec_start/$DEG);    
@@ -492,9 +599,7 @@ sub make_mirror
 #   my $Angle_in = 7.3;
 #   my $Angle_out = 15.5; 
 #   my $Angle_avg = ($Angle_in+$Angle_out)/2;   # 11.5
-  my $Angle_in = 7;
-  my $Angle_out = 15; 
-  my $Angle_avg = ($Angle_in+$Angle_out)/2;   # 11
+
  
 #   // z dist. between the target and front/back walls of the tank: 350 + 306 & 350 + 396
 #   // add 15*cm to R_in because the mirror is sticking out
@@ -507,11 +612,11 @@ sub make_mirror
 #   my $cons_z=356;
   my $cons_z=($Zmin_chamber+$Zmax_chamber)/2;  
 
-  my $R_front_in = $Z_front*tan($Angle_in/$DEG);
-  my $R_front_out = $Z_front*tan($Angle_out/$DEG);
-  my $R_end_in = $Z_end*tan($Angle_in/$DEG);
-  my $R_end_out = $Z_end*tan($Angle_out/$DEG);
-print "$R_front_in $R_front_out $R_end_in $R_end_out\n";  
+  my $R_front_in = $Z_front*tan(6.8/$DEG);
+  my $R_front_out = $Z_front*tan(16/$DEG);
+  my $R_end_in = $Z_end*tan(6.8/$DEG);
+  my $R_end_out = $Z_end*tan(16/$DEG);
+#print "$R_front_in $R_front_out $R_end_in $R_end_out\n";  
 #   86.3640091200709 181.92483680982 99.5292544127646 209.657281445463
 
   my $ang_start=-0.5*$ang_width;  
@@ -519,68 +624,6 @@ print "$R_front_in $R_front_out $R_end_in $R_end_out\n";
 
 #===============================================================  
   
-#=== sphere of mirror ========================================  
-#   my $Z_mirror = 388;
-  my $Z_mirror = 388+20;  
-  my $T_M1 = 0.3;
-  my $P1 = vector(0,0,-$Z_target);    
-  my $P2 = vector($image_x, $image_y, $image_z);
-  my $V0 = vector(0., sin($Angle_avg/$DEG), cos($Angle_avg/$DEG));
-  
-my $V;
-my $V_theta;
-#         // Calculate the incident vector w.r.t. the source (i.e. target)
-        my $Vi = (($Z_mirror - $P1->z())/$V0->z()) * $V0;
-$V=$Vi; 
-$V_theta=atan(sqrt(($V->x()*$V->x()+$V->y()*$V->y())/($V->z()*$V->z())))*$DEG;
-print "$V_theta\n";  #11.5
-#         // Crossing point on mirror plane w.r.t. the origin of coordinates
-        my $Pm = $P1 + $Vi;
-$V=$Pm;
-$V_theta=atan(sqrt(($V->x()*$V->x()+$V->y()*$V->y())/($V->z()*$V->z())))*$DEG;
-print "$V_theta\n"; #21.15
-#         // Reflected vector: P2 w.r.t. the origin of coordinates; Vr doesn't matter
-        my $Vr = $P2 - $Pm;  
-$V=$Vr; 	#54.8
-$V_theta=atan(sqrt(($V->x()*$V->x()+$V->y()*$V->y())/($V->z()*$V->z())))*$DEG;
-print "$V_theta\n";                   
-#         // Calculate the unitory normal vector
-        my $Vn = $Vr->norm() - $Vi->norm();
-        $Vn = $Vn->norm();
-$V=$Vn; 
-$V_theta=atan(sqrt(($V->x()*$V->x()+$V->y()*$V->y())/($V->z()*$V->z())))*$DEG;
-print "$V_theta\n";    #21.69                       
-#         // Calculate Angle
-        my $ang_cos = -($Vi->norm().$Vn);  
-my $ang=acos($ang_cos)*$DEG;                 
-print "$ang\n";   #33.19
-#         // Radius
-        my $R = 2./$ang_cos/(1./$Vr->length() + 1./$Vi->length());        
-# print "$R\n";        
-#         // Spherical Center w.r.t. the origin of coordinates
-        my $Position = $Pm + $R * $Vn;
-
-# 	my $pos_x_sphere=sprintf('%f',$Position->x());
-# 	my $pos_y_sphere=sprintf('%f',$Position->y());
-# 	my $pos_z_sphere=sprintf('%f',$Position->z());	
-
-	my $pos_x_sphere=sprintf('%f',$Position->y());
-	my $pos_y_sphere=sprintf('%f',$Position->x());
-	my $pos_z_sphere=sprintf('%f',$Position->z());
-# print "$pos_x_sphere $pos_y_sphere $pos_z_sphere \n";
-# # print "$Position->x()";
-        
-#         G4cout <<"Radius of Spherical Mirror: "<< R/cm << " " << "and pos mirror 1 is: " 
-#                << Position/cm  << " " << "vi_mag is: " << Vi.mag() << " " << "Z_mirror: " 
-#                << Z_mirror << " " << "P1z is: " << P1.z() << " " << "v0z is: " 
-#                << V0.z() << " ang_cos is: " << ang_cos << G4endl;        
-#
-# Radius of Spherical Mirror: 228.451 and pos mirror 1 is: (0,234.568,175.719) vi_mag is: 7531.19 Z_mirror: 3880 P1z is: -3500 v0z is: 0.979925 ang_cos is: 0.83689
-# rfin is: 86.364 rfout is: 181.925 rein is: 99.5293 reout is: 209.657 z_half is: 50
-
-#   sphere radius
-  my $R_in = $R;
-  my $R_out = $R + $T_M1;  
 #===============================================================
   
 #       // make a cone to intersect a sphere      
@@ -619,7 +662,7 @@ print "$ang\n";   #33.19
       $detector{"rotation"}    = "0*deg 0*deg 0*deg";
       $detector{"color"}       = "808080";  #gray
       $detector{"type"}        = "Sphere";
-      $detector{"dimensions"}  = "$R_in*cm $R_out*cm 0*deg 360*deg 0*deg 90*deg";
+      $detector{"dimensions"}  = "$sphere_r_inner*cm $sphere_r_outer*cm 0*deg 360*deg 0*deg 90*deg";
       $detector{"material"}    = "Component";
 #       $detector{"material"}    = "$material_pmt_backend";      
 #       $detector{"ncopy"}       = 1;
@@ -655,27 +698,5 @@ print "$ang\n";   #33.19
       $detector{"hit_type"}    = "mirror";
       $detector{"identifiers"} = "no";      
       print_det(\%configuration, \%detector);  
-      
-#       $detector{"name"}        = "$DetectorName\_mirror_front_$i";
-#       $detector{"mother"}      = "$DetectorName\_gas";
-#       $detector{"description"} = $detector{"name"};
-# #       $detector{"pos"}         = "0*cm 0*cm $cons_z*cm";            
-#       my $cons_z_new=$cons_z-1;      
-#       $detector{"pos"}         = "0*cm 0*cm $cons_z_new*cm";      
-#       $detector{"rotation"}    = "0*deg 0*deg $ang_zrot*deg";
-#       $detector{"color"}       = "101010";  #gray				
-#       $detector{"type"}        = "CopyOf $DetectorName\_mirror_$i";
-# #       $detector{"material"}    = "$material_mirror";      
-#       $detector{"material"}    = "$material_gas";      
-#       $detector{"ncopy"}       = 1;
-#       $detector{"pMany"}       = 1;
-#       $detector{"exist"}       = 1;
-#       $detector{"visible"}     = 1;
-#       $detector{"style"}       = 1;        
-#       $detector{"sensitivity"} = "flux";
-#       $detector{"hit_type"}    = "flux";
-#       my $id=2211000+$i;
-#       $detector{"identifiers"} = "id manual $id";         
-#       print_det(\%configuration, \%detector);        
-    }
+      }
 }
