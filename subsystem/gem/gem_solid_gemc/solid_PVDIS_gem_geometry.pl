@@ -17,6 +17,13 @@ make_gem();
 }
 
 my $Nplate	= $parameters{"Nplate"};
+my $Nsect       = $parameters{"Nsect"};
+# my $angle_start=-5;
+# my $angle_width=10;
+# my $angle_start=-6;
+# my $angle_width=12;
+my $angle_width = 360.0 / $Nsect;
+my $angle_start = -$angle_width * 0.5;
 my $PlateZ1	= $parameters{"PlateZ1"};
 my $PlateZ2	= $parameters{"PlateZ2"};
 my $PlateZ3	= $parameters{"PlateZ3"};
@@ -32,7 +39,7 @@ my $Rout2	= $parameters{"Rout2"};
 my $Rout3	= $parameters{"Rout3"};
 my $Rout4	= $parameters{"Rout4"};
 my $Rout5	= $parameters{"Rout5"};
-my $offrot1	= $parameters{"offrot1"}; # angular offsets in degrees (w.r.t. center on 12*$n for $n-th sector) 
+my $offrot1	= $parameters{"offrot1"}; # angular offsets in degrees (w.r.t. start at 90+$angle_width*$n for $n-th sector) 
 my $offrot2	= $parameters{"offrot2"};
 my $offrot3	= $parameters{"offrot3"};
 my $offrot4	= $parameters{"offrot4"};
@@ -44,10 +51,6 @@ my @Rout   = ($Rout1,$Rout2,$Rout3,$Rout4,$Rout5);
 my @offrot = ($offrot1,$offrot2,$offrot3,$offrot4,$offrot5);
 
 #my @offrot = (3.5,3.0,3.0,2.5,2.5);  
-# my $angle_start=-5;
-# my $angle_width=10;
-my $angle_start=-6;
-my $angle_width=12;
  
 sub make_gem
 {
@@ -151,29 +154,22 @@ my @hittype = ("no","no","no","no","solid_gem","solid_gem","solid_gem","no","sol
     $detector{"identifiers"} = "no";
     print_det(\%configuration, \%detector);
 
-    for( my $sec = 1; $sec <= 30; $sec++ ){
+    for( my $sec = 1; $sec <= $Nsect; $sec++ ){
 
 # was
 #      my $thisrot = -($sec-1)*12.0 + $offrot[$n-1];
 
 # If offset is 0,
-#   if (phi>=90) sector_number=int((phi-90)/12+1)
-#   else sector_number=int((phi+360-90)/12+1)
+#   sector_number=int((phi-90)/$angle_width+1)
 # So 
-# sector 1, phi(90-102)deg
-# sector 2, phi(102-114)deg
+# sector 1, phi(90 to 90+$angle_width)deg
+# sector 2, phi(90+$angle_width to 90+2*$angle_width)deg
 # .............
-# sector 15, phi(258-270)deg
-# sector 16, phi(270-282)deg
-# .......
-# sector 23, phi(354-6)deg
-# .......
-# sector 30, phi(78-90)deg
+# sector $Nsect, phi(450-$angle_width to 450)deg
 
-# $thisrot is central angle of sector
+# $thisrot is central angle of sector (with a minus sign)
 
-	my $thisrot = -(96.0 + ($sec-1) * 12.0 + $offrot[$n-1]);
-# 	$thisrot -= 360.0 if $thisrot > 360.0;
+      my $thisrot = -(90.0 - $angle_start + ($sec-1) * $angle_width + $offrot[$n-1]);
     
       for(my $i=1; $i<=$Nlayer; $i++)
       {
