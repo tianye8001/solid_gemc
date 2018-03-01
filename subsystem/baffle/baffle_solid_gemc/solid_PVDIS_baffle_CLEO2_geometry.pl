@@ -8,7 +8,7 @@ our %parameters;
 use Getopt::Long;
 use Math::Trig;
 
-my $WDBFILE = 0; # write file for DB.C?
+my $WDBFILE = 1; # write file for DB.C?
 
 my $DetectorName = 'solid_PVDIS_baffle_CLEO2';
 
@@ -154,8 +154,9 @@ sub solid_PVDIS_baffle_CLEO2_geometry
     }
 
 
-    $Dz   = $parameters{"Dz"};  
+    $Dz   = $parameters{"Dz"};
     $Nslit  = $parameters{"Nslit"};
+
     $Nblock  = $parameters{"Nblock"};
     $zc0 = $parameters{"zc0"}; 
     $Dzc = $parameters{"Dzc"};
@@ -393,6 +394,7 @@ sub make_CLEO2_baffle_blocks
 		    ($phi02a-$phi01a) / ($routin[$ip]-$R1[$ip]);
 		my $Dphi = $phi11a + ($rc - $R1[$ip]) *
 		    ($phi12a-$phi11a) / ($routin[$ip]-$R1[$ip]) - $phi;
+		$Dphi += 360.0/$Nslit - 12.0; # adjust for non 30 sectors
 		push @{$x[$ip]}, ($r0b, $r1b, $phi, $phi+$Dphi);
 	    }
 	    else
@@ -403,6 +405,7 @@ sub make_CLEO2_baffle_blocks
 		my $Dphi = $phi11a + ($rc - $R1[$ip]) *
 		    ($rc < $R1[$ip] ? ($phi10a-$phi11a) / ($rinout[$ip]-$R1[$ip])
 		     : ($phi12a-$phi11a) / ($routin[$ip]-$R1[$ip])) - $phi;
+		$Dphi += 360.0/$Nslit - 12.0; # adjust for non 30 sectors
 		push @{$x[$ip]}, ($r0b, $r1b, $phi, $phi+$Dphi);
 	    }
 	}
@@ -414,7 +417,7 @@ sub make_CLEO2_baffle_blocks
 # was
 #	    my $slit_rotation = ($i-1)*12-$offset[$n-1]; #note the minus sign here
 
-	    my $slit_rotation = -(96.0 + ($i-1) * 12.0 + $offset[$n-1]);
+	    my $slit_rotation = -(96.0 + ($i-1) * 360.0/$Nslit + $offset[$n-1]);
 # 	    $slit_rotation -= 360.0 if $slit_rotation > 360.0;
 
 	    my $i_c     = cnumber($i-1, 10);
@@ -429,7 +432,7 @@ sub make_CLEO2_baffle_blocks
 	    my $Rin  = $x[$n-1][0];
 	    my $Rout = $x[$n-1][$Nblock*4-3];
 	    my $Sphi = $x[$n-1][2];
-	    my $Dphi = 12;
+	    my $Dphi = 360./$Nslit;
 	    $detector{"dimensions"}  = "$Rin*cm $Rout*cm $Dz*cm $Sphi*deg $Dphi*deg";
 	    $detector{"material"}    = "$material_baffle_within[$n-1]";
 	    $detector{"mfield"}      = "no";

@@ -52,7 +52,7 @@ sub make_ec_forwardangle_block
     for (my $n=1; $n<=$Nsect; $n++)
     {
 	my %detector=init_det();
-	my $sect_rotation = -(96.0 + ($n-1) * 12.0 + $offset);
+	my $sect_rotation = -(96.0 + ($n-1) * 360.0/$Nsect + $offset);
 # 	$sect_rotation -= 360.0 if $sect_rotation > 360.0;
 
 	$detector{"name"}        = "$DetectorName\_$n";
