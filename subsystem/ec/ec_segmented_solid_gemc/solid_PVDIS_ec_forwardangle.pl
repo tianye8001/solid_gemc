@@ -62,6 +62,9 @@ solid_PVDIS_ec_forwardangle_virtualplane();
 #hit and bank definition Execute only when there are changes
 #hit
 require "./solid_ec_hit.pl";
+require "./solid_ec_ps_hit.pl";
 
 # banks
 require "./solid_ec_bank.pl";
+require "./solid_ec_ps_bank.pl";
+
