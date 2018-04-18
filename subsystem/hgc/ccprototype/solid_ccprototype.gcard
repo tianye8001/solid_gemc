@@ -25,7 +25,7 @@
 <option name="SPREAD_V" value="(0.0,0)cm"/>
 
 <option name="FIELD_DIR" value="../../../solid_gemc2/field"/>
-<option name="HALL_FIELD" value="solenoid_CLEOv9"/>
+<!-- <option name="HALL_FIELD" value="solenoid_CLEOv9"/> -->
 
 <option name="EXEC_MACRO" value="solid_slice.vis"/>
 <option name="geometry" value="1000x1000"/>
