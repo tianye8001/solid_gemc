@@ -132,6 +132,20 @@ my @RefractiveIndex_C4F8O = (1.00205, 1.00205, 1.00205, 1.00206,
                                               1.00219, 1.0022, 1.00222, 1.00223,
                                               1.00224, 1.00225, 1.00228, 1.00231,
                                               1.00234);  
+                                              
+my @RefractiveIndex_C4F8O_oneatm = (
+(1.00205-1)/1.5+1, (1.00205-1)/1.5+1, (1.00205-1)/1.5+1, (1.00206-1)/1.5+1,
+(1.00206-1)/1.5+1, (1.00206-1)/1.5+1, (1.00206-1)/1.5+1, (1.00206-1)/1.5+1,
+(1.00206-1)/1.5+1, (1.00206-1)/1.5+1, (1.00206-1)/1.5+1, (1.00207-1)/1.5+1,
+(1.00207-1)/1.5+1, (1.00207-1)/1.5+1, (1.00207-1)/1.5+1, (1.00207-1)/1.5+1,
+(1.00207-1)/1.5+1, (1.00208-1)/1.5+1, (1.00208-1)/1.5+1, (1.00208-1)/1.5+1,
+(1.00209-1)/1.5+1, (1.00209-1)/1.5+1, (1.00209-1)/1.5+1, (1.0021-1)/1.5+1,
+(1.00211-1)/1.5+1, (1.00211-1)/1.5+1, (1.00212-1)/1.5+1, (1.00213-1)/1.5+1,
+(1.00214-1)/1.5+1, (1.00215-1)/1.5+1, (1.00216-1)/1.5+1, (1.00217-1)/1.5+1,
+(1.00219-1)/1.5+1, (1.0022-1)/1.5+1, (1.00222-1)/1.5+1, (1.00223-1)/1.5+1,
+(1.00224-1)/1.5+1, (1.00225-1)/1.5+1, (1.00228-1)/1.5+1, (1.00231-1)/1.5+1,
+(1.00234-1)/1.5+1
+);
 
     my @CO2_1atm_index = (
 	"1.000418", "1.000418", "1.000418", "1.000419", 
@@ -205,24 +219,26 @@ sub define_materials
 	%mat = init_mat();
 	$mat{"name"}          = "SL_HGC_C4F8O";
 	$mat{"description"}   = "SL_HGC_C4F8O";
-	$mat{"density"}       = "13.47255e-3";  # in g/cm3
+# 	$mat{"density"}       = "13.47255e-3";  # in g/cm3 at 1.5atm
+ 	$mat{"density"}       = "8.9846e-3";  # in g/cm3 at 1atm
 	$mat{"ncomponents"}   = "3";
 	$mat{"components"}    = "C 4 F 8 O 1";
 	$mat{"photonEnergy"}      = arrayToString(@PhotonEnergy);
-	$mat{"indexOfRefraction"} = arrayToString(@RefractiveIndex_C4F8O);
+# 	$mat{"indexOfRefraction"} = arrayToString(@RefractiveIndex_C4F8O);
+	$mat{"indexOfRefraction"} = arrayToString(@RefractiveIndex_C4F8O_oneatm);	
 # 	$mat{"absorptionLength"}  = arrayToString(@AgelAbsLength);	
 	print_mat(\%configuration, \%mat);
 	
-    %mat = init_mat();
-    $mat{"name"}          = "SL_LGCCgas_SIDIS";
-    $mat{"description"}   = "Gas in LGCC of SIDIS";
-    $mat{"density"}       = "0.00184212";  #in g/cm3
-    $mat{"ncomponents"}   = "1";
-    $mat{"components"}    = "G4_CARBON_DIOXIDE 1";
-    $mat{"photonEnergy"}      = arrayToString(@PhotonEnergy);
-    $mat{"indexOfRefraction"} = arrayToString(@CO2_1atm_index);
-    $mat{"absorptionLength"}  = arrayToString(@CO2_1atm_AbsLen_alt);	
-    print_mat(\%configuration, \%mat);
+	%mat = init_mat();
+	$mat{"name"}          = "SL_LGCCgas_SIDIS";
+	$mat{"description"}   = "Gas in LGCC of SIDIS";
+	$mat{"density"}       = "0.00184212";  #in g/cm3
+	$mat{"ncomponents"}   = "1";
+	$mat{"components"}    = "G4_CARBON_DIOXIDE 1";
+	$mat{"photonEnergy"}      = arrayToString(@PhotonEnergy);
+	$mat{"indexOfRefraction"} = arrayToString(@CO2_1atm_index);
+	$mat{"absorptionLength"}  = arrayToString(@CO2_1atm_AbsLen_alt);	
+	print_mat(\%configuration, \%mat);
 
 	%mat = init_mat();
 	$mat{"name"}          = "SL_HGC_mylar";

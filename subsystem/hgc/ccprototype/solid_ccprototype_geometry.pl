@@ -97,8 +97,12 @@ my $hitype="solid_hgc";
 
 my $material_chamber="G4_Al";
 # my $material_gas="G4_Al";
-my $material_gas="SL_HGC_C4F8O";
-my $material_block="SL_HGC_C4F8O";
+my $material_gas="";
+my $material_block="";
+# my $material_gas="SL_HGC_C4F8O";
+# my $material_block="SL_HGC_C4F8O";
+# my $material_gas="SL_LGCCgas_SIDIS";
+# my $material_block="SL_LGCCgas_SIDIS";
 # my $material_block="G4_Al";
 my $material_window_front_1 = "SL_HGC_kevlar";
 my $material_window_front_2 = "SL_HGC_mylar";
@@ -108,7 +112,9 @@ my $material_window_back = "G4_Al";
 my $material_cone= "G4_GLASS_PLATE";
 # my $material_pmt_surface = "SL_HGC_pmt_surface";
 # my $material_pmt_surface = "G4_GLASS_PLATE";
-my $material_pmt_surface = "SL_HGC_C4F8O";
+my $material_pmt_surface = "";
+# my $material_pmt_surface = "SL_HGC_C4F8O";
+# my $material_pmt_surface = "SL_LGCCgas_SIDIS";
 my $material_pmt_backend= "Kryptonite";
 my $material_mirror= "SL_HGC_CFRP";
 
