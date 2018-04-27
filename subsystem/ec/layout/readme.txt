@@ -22,13 +22,16 @@ In the script, module center coordinate in lab frame is recorded in x[idy][idx],
 id is the total id of the module, its value increase by following idx first, then idy
 sector is the sector number, it matches baffle for FAEC
 
-for FAEC, the range are
+The module layout is for PVDIS FAEC
+the range are
 sector: 1-30 
 id:1-1748
 idy: 1-54 rows
 idx direction: 1-46 coll. in maximum row
+status can be 1 (default) or 0, which can be used to enable or disable a particular module
 
-keyword status is 1 for module existing or 0 for not, this is to ensure PVDIS and SIDIS have same module id
+SIDIS FAEC and LAEC are using the PVDIS FAEC module layout with certain modules removed when not in the right radius range.
+To remove module, we can just use raius from x y info instead of keyword status
 
 One hidden information in ANL layout is the angle of hexgon module.
 It has two side parellel to y-axis, no side parellel to x-axis
