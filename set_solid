@@ -10,7 +10,7 @@ if( "$1" != "" ) setenv JLAB_VERSION $1
 
 #default installation on ifarm and farm nodes, comment this out for your installation
 if( "$JLAB_VERSION" == "1.2" || "$JLAB_VERSION" == "1.3"  ) setenv JLAB_ROOT /group/solid/apps/jlab_root
-if( "$JLAB_VERSION" == "2.0" || "$JLAB_VERSION" == "devel" ) setenv JLAB_ROOT /site/12gev_phys
+if( "$JLAB_VERSION" == "2.0" || "$JLAB_VERSION" == "2.2" || "$JLAB_VERSION" == "devel" ) setenv JLAB_ROOT /site/12gev_phys
 #uncomment this for your_installation_path, the path below is just an example
 #setenv JLAB_ROOT /home/$USER/apps/jlab_root
 
@@ -20,7 +20,7 @@ source $JLAB_ROOT/$JLAB_VERSION/ce/jlab.csh       #setup basic enviroment variab
 
 # add path for "libgemc.so"
 if( "$JLAB_VERSION" == "1.2" || "$JLAB_VERSION" == "1.3"  ) setenv LD_LIBRARY_PATH ${GEMC}/source:${LD_LIBRARY_PATH}   
-if( "$JLAB_VERSION" == "2.0" || "$JLAB_VERSION" == "devel" ) setenv LD_LIBRARY_PATH ${GEMC}:${LD_LIBRARY_PATH}   
+if( "$JLAB_VERSION" == "2.0" || "$JLAB_VERSION" == "2.2" || "$JLAB_VERSION" == "devel" ) setenv LD_LIBRARY_PATH ${GEMC}:${LD_LIBRARY_PATH}
 
 # add path for "solid_gemc" binary
 setenv PATH ${SoLID_GEMC}/source/${GEMC_VERSION}:${PATH} 
