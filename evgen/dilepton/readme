@@ -36,15 +36,15 @@ root
 .x accep.C+("~/volatile/halla/solid/mboer/Generator/TCS_electro2_CLAS12_TCS_FTSetup_ele.root")
 .x accep.C+("/u/scratch/zwzhao/DDVCS_allxbj_SoLID_DDVCS_JPsiSetup_muon.root")
 
-for SoLID_TCS_JPsiSetup_ele,
-accep_3fold_recoildecaypair means all three particles in forward or large angle detector
-accep_3fold_eloutdecaypair is always 0 
-accep_4fold is always 0
-
 for CLAS12_TCS_FTSetup_ele, 
-accep_3fold_recoildecaypair means decaypair in forward detector and recoil proton in either forwrd or central detector, 
-accep_3fold_eloutdecaypair means decaypair in forward detector and elout in forward tagger by 2.5 and 4.5 degree cut,  
-accep_4fold means decaypair in forward detector and recoil proton in either forwrd or central detector and elout in forward tagger by 2.5 and 4.5 degree cut
+accep_3fold_recoildecaypair_FALA means decaypair in forward detector and recoil proton in either forwrd or central detector, 
+accep_3fold_eloutdecaypair_FALA means decaypair in forward detector and elout in forward tagger by 2.5 and 4.5 degree cut,  
+accep_4fold_FALA means decaypair in forward detector and recoil proton in either forwrd or central detector and elout in forward tagger by 2.5 and 4.5 degree cut
+
+for SoLID_TCS_JPsiSetup_ele and SoLID_TCS_SIDISHe3Setup_ele
+accep_3fold_recoildecaypair_FALA means all three particles in forward or large angle detector (at least one decay particles goes forward to use Cherenkov 4.9GeV threshold)
+accep_3fold_eloutdecaypair_FALA is always 0 
+accep_4fold_FALA is always 0
 
 for SoLID_DDVCS_JPsiSetup_muon,
 accep_3fold_recoildecaypair means decaypair in forward or large angle muon detector and recoil proton in forwrd or large angle detector (channel with low Q2 and high stat)
