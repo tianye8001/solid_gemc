@@ -1,18 +1,26 @@
 #!/bin/tcsh
 #source this script to setup SoLID software
 
-#default SVN checkout on ifarm and farm nodes, change it to your local SVN checkout location if you want to use it
-setenv SoLID_GEMC /group/solid/solid_svn/solid_gemc2 #solid_gemc location
-
 #the default version, or use command option to use other version
 setenv JLAB_VERSION 1.3
 if( "$1" != "" ) setenv JLAB_VERSION $1
+
+#default SVN checkout on ifarm and farm nodes, change it to your local SVN checkout location if you want to use it
+setenv SoLID_GEMC /group/solid/solid_svn/solid_gemc2 #solid_gemc location
+if( "$2" != "" ) setenv SoLID_GEMC $2
 
 #default installation on ifarm and farm nodes, comment this out for your installation
 if( "$JLAB_VERSION" == "1.2" || "$JLAB_VERSION" == "1.3"  ) setenv JLAB_ROOT /group/solid/apps/jlab_root
 if( "$JLAB_VERSION" == "2.0" || "$JLAB_VERSION" == "2.2" || "$JLAB_VERSION" == "devel" ) setenv JLAB_ROOT /site/12gev_phys
 #uncomment this for your_installation_path, the path below is just an example
 #setenv JLAB_ROOT /home/$USER/apps/jlab_root
+
+if( "$1" == "1.3c")  setenv JLAB_VERSION 1.3
+if( "$1" == "1.3c")  setenv JLAB_ROOT /jlabsolidapps/JLAB_ROOT
+if( "$1" == "1.3c")  setenv SoLID_GEMC /solid_repo/solid_gemc2  
+if( "$1" == "2.2c")  setenv JLAB_VERSION 2.2
+if( "$1" == "2.2c")  setenv JLAB_ROOT /jlab_root
+if( "$1" == "2.2c")  setenv SoLID_GEMC /solid_repo/solid_gemc2
 
 #no need to modify variables below generally
 #========================================================================
