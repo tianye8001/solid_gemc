@@ -179,7 +179,7 @@ sub make_ec_module_shower()
     $detector{"style"}       = 1;   
     $detector{"sensitivity"} = $ec_sen;
     $detector{"hit_type"}    = $ec_sen;
-    my $ID = 3100000+$id;
+    my $ID = 3200000+$id;
     $detector{"identifiers"} = "id manual $ID";
     print_det(\%configuration, \%detector); 
 
@@ -471,7 +471,7 @@ sub make_ec_module_prescint()
     $detector{"style"}       = 1;
     $detector{"sensitivity"} = $ec_sen;
     $detector{"hit_type"}    = $ec_sen;
-    my $ID = 3110000+$id;
+    my $ID = 3210000+$id;
     $detector{"identifiers"} = "id manual $ID";
     print_det(\%configuration, \%detector); 
 }

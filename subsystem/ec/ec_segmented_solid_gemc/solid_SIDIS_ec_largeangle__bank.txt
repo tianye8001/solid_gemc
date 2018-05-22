@@ -22,5 +22,39 @@
             solid_ec  |                 mvy  |y component of primary vertex of the mother of the particle entering the sensitive volume  |   21   |                  Dd  
             solid_ec  |                 mvz  |z component of primary vertex of the mother of the particle entering the sensitive volume  |   22   |                  Dd  
             solid_ec  |               avg_t  |                                      Average time  |   23   |                  Dd  
-            solid_ec  |                  id  |                                         id number  |   24   |                  Di  
+            solid_ec  |              nsteps  |                            Number of geant4 steps  |   24   |                  Di  
+            solid_ec  |              procID  |           Process that created the first particle  |   25   |                  Di  
+            solid_ec  |            totEdepB  |                                                    |   26   |                  Dd  
+            solid_ec  |             totEend  |                                                    |   27   |                  Dd  
+            solid_ec  |           Edep_seg0  |                                                    |   30   |                  Dd  
+            solid_ec  |           Edep_seg1  |                                                    |   31   |                  Dd  
+            solid_ec  |           Edep_seg2  |                                                    |   32   |                  Dd  
+            solid_ec  |           Edep_seg3  |                                                    |   33   |                  Dd  
+            solid_ec  |           Edep_seg4  |                                                    |   34   |                  Dd  
+            solid_ec  |           Edep_seg5  |                                                    |   35   |                  Dd  
+            solid_ec  |           Edep_seg6  |                                                    |   36   |                  Dd  
+            solid_ec  |           Edep_seg7  |                                                    |   37   |                  Dd  
+            solid_ec  |           Edep_seg8  |                                                    |   38   |                  Dd  
+            solid_ec  |           Edep_seg9  |                                                    |   39   |                  Dd  
+            solid_ec  |          EdepB_seg0  |                                                    |   40   |                  Dd  
+            solid_ec  |          EdepB_seg1  |                                                    |   41   |                  Dd  
+            solid_ec  |          EdepB_seg2  |                                                    |   42   |                  Dd  
+            solid_ec  |          EdepB_seg3  |                                                    |   43   |                  Dd  
+            solid_ec  |          EdepB_seg4  |                                                    |   44   |                  Dd  
+            solid_ec  |          EdepB_seg5  |                                                    |   45   |                  Dd  
+            solid_ec  |          EdepB_seg6  |                                                    |   46   |                  Dd  
+            solid_ec  |          EdepB_seg7  |                                                    |   47   |                  Dd  
+            solid_ec  |          EdepB_seg8  |                                                    |   48   |                  Dd  
+            solid_ec  |          EdepB_seg9  |                                                    |   49   |                  Dd  
+            solid_ec  |           Eend_seg0  |                                                    |   50   |                  Dd  
+            solid_ec  |           Eend_seg1  |                                                    |   51   |                  Dd  
+            solid_ec  |           Eend_seg2  |                                                    |   52   |                  Dd  
+            solid_ec  |           Eend_seg3  |                                                    |   53   |                  Dd  
+            solid_ec  |           Eend_seg4  |                                                    |   54   |                  Dd  
+            solid_ec  |           Eend_seg5  |                                                    |   55   |                  Dd  
+            solid_ec  |           Eend_seg6  |                                                    |   56   |                  Dd  
+            solid_ec  |           Eend_seg7  |                                                    |   57   |                  Dd  
+            solid_ec  |           Eend_seg8  |                                                    |   58   |                  Dd  
+            solid_ec  |           Eend_seg9  |                                                    |   59   |                  Dd  
+            solid_ec  |                  id  |                                         id number  |   98   |                  Di  
             solid_ec  |                hitn  |                                        Hit Number  |   99   |                  Di  
