@@ -1,12 +1,13 @@
 from init_env import init_environment
 
-env = init_environment("qt5 geant4 clhep evio xercesc")
+env = init_environment("geant4 clhep evio xercesc qt5")
 
 # env.Replace(CXX = "/apps/gcc/4.7.2/bin/g++")
 
 # Hit Processes (addtional)
 env.Append(CPPPATH = ['hitprocess'])
 hitp_sources = Split("""
+	hitprocess/solid_ec_ps_hitprocess.cc		     
 	hitprocess/solid_ec_hitprocess.cc
 	hitprocess/solid_gem_hitprocess.cc
 	hitprocess/solid_hgc_hitprocess.cc

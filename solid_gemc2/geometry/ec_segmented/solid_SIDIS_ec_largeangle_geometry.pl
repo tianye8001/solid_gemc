@@ -12,6 +12,7 @@ my $DetectorName = 'solid_SIDIS_ec_largeangle';
 my $DetectorMother="root";
 
 my $ec_sen="solid_ec";
+my $ec_ps_sen="solid_ec_ps";
 
 my $color_abs="0000ff";
 my $color_scint="f1ffe1";
@@ -179,7 +180,7 @@ sub make_ec_module_shower()
     $detector{"style"}       = 1;   
     $detector{"sensitivity"} = $ec_sen;
     $detector{"hit_type"}    = $ec_sen;
-    my $ID = 3100000+$id;
+    my $ID = 3200000+$id;
     $detector{"identifiers"} = "id manual $ID";
     print_det(\%configuration, \%detector); 
 
@@ -469,9 +470,9 @@ sub make_ec_module_prescint()
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
     $detector{"style"}       = 1;
-    $detector{"sensitivity"} = $ec_sen;
-    $detector{"hit_type"}    = $ec_sen;
-    my $ID = 3110000+$id;
+    $detector{"sensitivity"} = $ec_ps_sen;
+    $detector{"hit_type"}    = $ec_ps_sen;
+    my $ID = 3210000+$id;
     $detector{"identifiers"} = "id manual $ID";
     print_det(\%configuration, \%detector); 
 }
