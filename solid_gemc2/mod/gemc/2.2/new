@@ -1,0 +1,5 @@
+based on https://www.jlab.org/12gev_phys/packages/sources/gemc/gemc-2.2.tar.gz
+
+use some fine tuned field parameters, support linear interpolation for field map,fix a bug to run on farm
+
+by Zhiwen Zhao <zwzhao@jlab.org>
