@@ -24,6 +24,9 @@ class solid_spd_HitProcess : public HitProcess
 	
 		// creates the HitProcess
 		static HitProcess *createHitClass() {return new solid_spd_HitProcess;}
+		
+		double BirksAttenuation(double,double,int,double);
+		double BirksAttenuation2(double,double,int,double);		
 };
 
 #endif
