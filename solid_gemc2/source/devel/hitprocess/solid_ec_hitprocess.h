@@ -33,6 +33,9 @@ public:
 
 	// - electronicNoise: returns a vector of hits generated / by electronics.
 	vector<MHit*> electronicNoise();
+	
+		double BirksAttenuation(double,double,int,double);
+		double BirksAttenuation2(double,double,int,double);			
 };
 
 #endif

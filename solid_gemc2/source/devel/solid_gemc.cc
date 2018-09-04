@@ -29,7 +29,7 @@
 /// \author \n &copy; Maurizio Ungaro
 /// \author e-mail: ungaro@jlab.org\n\n\n
 
-const char *GEMC_VERSION = "gemc 2.6";
+const char *GEMC_VERSION = "gemc 2.7";
 
 // G4 headers
 #include "G4RunManager.hh"
@@ -168,6 +168,7 @@ int main( int argc, char **argv )
 	gemc_splash.message(" Registering Detectors Factories...");
 	// Initializing Detector Factory
 	map<string, detectorFactoryInMap> detectorFactoryMap = registerDetectorFactory();
+
 	// Building detector with factories
 	map<string, detector> hallMap = buildDetector(detectorFactoryMap, gemcOpt, runConds);
 	
@@ -196,8 +197,8 @@ int main( int argc, char **argv )
 	gemc_splash.message(" Building gemc Process Hit Factory...");
 	map<string, HitProcess_Factory> hitProcessMap = HitProcess_Map(gemcOpt.optMap["HIT_PROCESS_LIST"].args);
 
- 	//addtional hit process
- 	solid_hitprocess(hitProcessMap);
+	//addtional hit process
+ 	solid_hitprocess(hitProcessMap);	
 	
 	///< magnetic Field Map
 	gemc_splash.message(" Creating fields Map...");
@@ -242,8 +243,7 @@ int main( int argc, char **argv )
 
 	///< User Interface manager
 	gemc_splash.message(" Initializing User Interface...");
-	G4UIsession *session = NULL;
-	
+
 	///< Vis Manager
 	G4VisManager *visManager = NULL;
 	if(use_gui)
@@ -255,6 +255,7 @@ int main( int argc, char **argv )
 		visManager->Initialize();
 	}
 
+	G4UIsession *session = NULL;
 	if(use_gui)
 		session = new G4UIQt(1, argv);
 

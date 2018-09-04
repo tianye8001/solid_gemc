@@ -4,15 +4,11 @@
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
-#include <CCDB/Calibration.h>
-#include <CCDB/Model/Assignment.h>
-#include <CCDB/CalibrationGenerator.h>
-using namespace ccdb;
 
 // gemc headers
-#include "solid_ec_hitprocess.h"
+#include "solid_ec_ps_hitprocess.h"
 
-map<string, double> solid_ec_HitProcess :: integrateDgt(MHit* aHit, int hitn)
+map<string, double> solid_ec_ps_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 {
 	map<string, double> dgtz;	
 	vector<identifier> identity = aHit->GetId();
@@ -48,7 +44,7 @@ map<string, double> solid_ec_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 	dgtz["mvz"]     = aHit->GetmVert().getZ();		
 	dgtz["avg_t"]   = tInfos.time;	
 	dgtz["nsteps"] 	= aHit->GetPIDs().size();	
-	dgtz["procID"]  = aHit->GetProcID();
+	dgtz["procID"]  = aHit->GetProcID();	
 	
 // 	cout<<"==============================================================================" <<endl;		  	
 // 	cout<<"id "<<id << " procID " <<aHit->GetProcID() <<endl;		  
@@ -93,29 +89,28 @@ map<string, double> solid_ec_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 // 	    cout<< "step " << s << "\t"  << "dx "<<dx[s]<< "\t" <<"charge  "<<charge[s] << "\t" << "Edep " << Edep[s] << "\t" <<  "EdepB " << EdepB << "\t";
 
 	    // Integrate energy over entire hit.
-	    totEdepB = totEdepB + EdepB;		  
+// 	    totEdepB = totEdepB + EdepB;		  
 	    
-	    // Distances travelled backward to the module end
-	    dz1   = length_half - Lpos[s].z();
-	    // Distances travelled forward, then reflect back to the module end		  
-	    dz2   = 2 * length_half - (length_half - Lpos[s].z());
+	    // Distances travelled one end of WLS fiber in preshower
+	    dz1   = 100; //assume 100mm, can change to hit dependance later
+	    // Distances travelled the other end of WLS fiber in preshower
+	    dz2   = 100; //assume 100mm, can change to hit dependance later
 // 	    cout<<"Lpos "<<Lpos[s].z()<< "\t" <<"dz1 "<<dz1 << "\t";
 	    
 	    // Calculate attenuated energy which reach module end
 	    double attlength_D=3600; //Unit mm, WLS Y11(200)  http://kuraraypsf.jp/psf/ws.html
-	    //assume 50% light goes forward, 50% goes backward, assume 40% loss from reflection at front fiber end
-	    Eend  = 0.5 * EdepB * exp(-dz1/attlength_D) + 0.3 * EdepB * exp(-dz2/attlength_D);  
+	    Eend  = 0.5 * EdepB * exp(-dz1/attlength_D) + 0.5 * EdepB * exp(-dz2/attlength_D);
 	    
 	    // Integrate energy over entire hit.
 	    totEend = totEend + Eend;		  
 // 	    cout << "Eend " << Eend << "\t" << "totEend " << totEend << endl;	
 	    
-	    int i_dz=int((length_half - Lpos[s].z())/(length_half/5.)); //shower depth in 10 blocks
-	    if (0<=i_dz && i_dz<=9){
-	      Edep_seg[i_dz]=Edep_seg[i_dz]+Edep[s];
-	      EdepB_seg[i_dz]=EdepB_seg[i_dz]+EdepB;
-	      Eend_seg[i_dz]=Eend_seg[i_dz]+Eend;
-	    }
+// 	    int i_dz=int((length_half - Lpos[s].z())/(length_half/5.)); //shower depth in 10 blocks
+// 	    if (0<=i_dz && i_dz<=9){
+// 	      Edep_seg[i_dz]=Edep_seg[i_dz]+Edep[s];
+// 	      EdepB_seg[i_dz]=EdepB_seg[i_dz]+EdepB;
+// 	      Eend_seg[i_dz]=Eend_seg[i_dz]+Eend;
+// 	    }
 	    
 	  }   // close loop over steps s		
 	}  // closes tInfos.eTot>0
@@ -127,21 +122,22 @@ map<string, double> solid_ec_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 
 	dgtz["totEdepB"] = totEdepB;		
 	dgtz["totEend"] = totEend;		
-	dgtz["Edep_seg0"] = Edep_seg[0];dgtz["Edep_seg1"] = Edep_seg[1];dgtz["Edep_seg2"] = Edep_seg[2];dgtz["Edep_seg3"] = Edep_seg[3];dgtz["Edep_seg4"] = Edep_seg[4];dgtz["Edep_seg5"] = Edep_seg[6];dgtz["Edep_seg6"] = Edep_seg[7];dgtz["Edep_seg7"] = Edep_seg[7];dgtz["Edep_seg8"] = Edep_seg[8];dgtz["Edep_seg9"] = Edep_seg[9];
-	dgtz["EdepB_seg0"] = EdepB_seg[0];dgtz["EdepB_seg1"] = EdepB_seg[1];dgtz["EdepB_seg2"] = EdepB_seg[2];dgtz["EdepB_seg3"] = EdepB_seg[3];dgtz["EdepB_seg4"] = EdepB_seg[4];dgtz["EdepB_seg5"] = EdepB_seg[6];dgtz["EdepB_seg6"] = EdepB_seg[7];dgtz["EdepB_seg7"] = EdepB_seg[7];dgtz["EdepB_seg8"] = EdepB_seg[8];dgtz["EdepB_seg9"] = EdepB_seg[9];
-	dgtz["Eend_seg0"] = Eend_seg[0];dgtz["Eend_seg1"] = Eend_seg[1];dgtz["Eend_seg2"] = Eend_seg[2];dgtz["Eend_seg3"] = Eend_seg[3];dgtz["Eend_seg4"] = Eend_seg[4];dgtz["Eend_seg5"] = Eend_seg[6];dgtz["Eend_seg6"] = Eend_seg[7];dgtz["Eend_seg7"] = Eend_seg[7];dgtz["Eend_seg8"] = Eend_seg[8];dgtz["Eend_seg9"] = Eend_seg[9];
-	
+// 	dgtz["Edep_seg0"] = Edep_seg[0];dgtz["Edep_seg1"] = Edep_seg[1];dgtz["Edep_seg2"] = Edep_seg[2];dgtz["Edep_seg3"] = Edep_seg[3];dgtz["Edep_seg4"] = Edep_seg[4];dgtz["Edep_seg5"] = Edep_seg[6];dgtz["Edep_seg6"] = Edep_seg[7];dgtz["Edep_seg7"] = Edep_seg[7];dgtz["Edep_seg8"] = Edep_seg[8];dgtz["Edep_seg9"] = Edep_seg[9];
+// 	dgtz["EdepB_seg0"] = EdepB_seg[0];dgtz["EdepB_seg1"] = EdepB_seg[1];dgtz["EdepB_seg2"] = EdepB_seg[2];dgtz["EdepB_seg3"] = EdepB_seg[3];dgtz["EdepB_seg4"] = EdepB_seg[4];dgtz["EdepB_seg5"] = EdepB_seg[6];dgtz["EdepB_seg6"] = EdepB_seg[7];dgtz["EdepB_seg7"] = EdepB_seg[7];dgtz["EdepB_seg8"] = EdepB_seg[8];dgtz["EdepB_seg9"] = EdepB_seg[9];
+// 	dgtz["Eend_seg0"] = Eend_seg[0];dgtz["Eend_seg1"] = Eend_seg[1];dgtz["Eend_seg2"] = Eend_seg[2];dgtz["Eend_seg3"] = Eend_seg[3];dgtz["Eend_seg4"] = Eend_seg[4];dgtz["Eend_seg5"] = Eend_seg[6];dgtz["Eend_seg6"] = Eend_seg[7];dgtz["Eend_seg7"] = Eend_seg[7];dgtz["Eend_seg8"] = Eend_seg[8];dgtz["Eend_seg9"] = Eend_seg[9];
+		
 	return dgtz;
 }
 
-vector<identifier>  solid_ec_HitProcess :: processID(vector<identifier> id, G4Step* aStep, detector Detector)
+
+vector<identifier>  solid_ec_ps_HitProcess :: processID(vector<identifier> id, G4Step* aStep, detector Detector)
 {
 	id[id.size()-1].id_sharing = 1;
 	return id;
 }
 
 // - electronicNoise: returns a vector of hits generated / by electronics.
-vector<MHit*> solid_ec_HitProcess :: electronicNoise()
+vector<MHit*> solid_ec_ps_HitProcess :: electronicNoise()
 {
 	vector<MHit*> noiseHits;
 
@@ -157,7 +153,7 @@ vector<MHit*> solid_ec_HitProcess :: electronicNoise()
 }
 
 
-map< string, vector <int> >  solid_ec_HitProcess :: multiDgt(MHit* aHit, int hitn)
+map< string, vector <int> >  solid_ec_ps_HitProcess :: multiDgt(MHit* aHit, int hitn)
 {
 	map< string, vector <int> > MH;
 	return MH;
@@ -165,7 +161,7 @@ map< string, vector <int> >  solid_ec_HitProcess :: multiDgt(MHit* aHit, int hit
 
 
 // - charge: returns charge/time digitized information / step
-map< int, vector <double> > solid_ec_HitProcess :: chargeTime(MHit* aHit, int hitn)
+map< int, vector <double> > solid_ec_ps_HitProcess :: chargeTime(MHit* aHit, int hitn)
 {
 	map< int, vector <double> >  CT;
 
@@ -175,12 +171,12 @@ map< int, vector <double> > solid_ec_HitProcess :: chargeTime(MHit* aHit, int hi
 // - voltage: returns a voltage value for a given time. The inputs are:
 // charge value (coming from chargeAtElectronics)
 // time (coming from timeAtElectronics)
-double solid_ec_HitProcess :: voltage(double charge, double time, double forTime)
+double solid_ec_ps_HitProcess :: voltage(double charge, double time, double forTime)
 {
 	return 0.0;
 }
 
-double solid_ec_HitProcess::BirksAttenuation(double destep, double stepl, int charge, double birks)
+double solid_ec_ps_HitProcess::BirksAttenuation(double destep, double stepl, int charge, double birks)
 {
 	//Example of Birk attenuation law in organic scintillators.
 	//adapted from Geant3 PHYS337. See MIN 80 (1970) 239-244
@@ -196,7 +192,7 @@ double solid_ec_HitProcess::BirksAttenuation(double destep, double stepl, int ch
 }
 
 
-double solid_ec_HitProcess::BirksAttenuation2(double destep,double stepl,int charge,double birks)
+double solid_ec_ps_HitProcess::BirksAttenuation2(double destep,double stepl,int charge,double birks)
 {
 	//Extension of Birk attenuation law proposed by Chou
 	// see G.V. O'Rielly et al. Nucl. Instr and Meth A368(1996)745
@@ -210,4 +206,3 @@ double solid_ec_HitProcess::BirksAttenuation2(double destep,double stepl,int cha
 	}
 	return response;
 }
-
