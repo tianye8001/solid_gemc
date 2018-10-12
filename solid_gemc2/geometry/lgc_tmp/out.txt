@@ -1,0 +1,83 @@
+   Simulation Conditions, TAG 5:
+   > lg_cherenkov  is loaded with factory TEXT, variation PVDIS and run number 1
+   > option ACTIVEFIELDS none
+   > option ALIGN_ZAXIS no
+   > option ALLRAWS no
+   > option BANK_VERBOSITY 1
+   > option BEAM_P e-, 50*MeV, 45*deg, 160*deg
+   > option BEAM_V (0.0, 0.0, 10.0)cm
+   > option CATCH Maurizio
+   > option CHECK_OVERLAPS 0
+   > option DATABASE no
+   > option DAWN_N 0
+   > option DBHOST no
+   > option DBPORT 0
+   > option DBPSWD no
+   > option DBUSER gemc
+   > option DC_MSTAG_R2 0
+   > option DC_MSTAG_R3 0
+   > option DEFAULT_MATERIAL none
+   > option DF no
+   > option ENERGY_CUT -1
+   > option EVN 1
+   > option EXEC_MACRO no
+   > option FIELD_DIR env
+   > option FIELD_VERBOSITY 0
+   > option G4P_VERBOSITY 1
+   > option G4TRACK_VERBOSITY 0
+   > option GEN_VERBOSITY 0
+   > option GEO_VERBOSITY 1
+   > option GUIPOS (150, 150)
+   > option GUI_VERBOSITY 4
+   > option HALL_DIMENSIONS 20*m, 20*m, 20*m
+   > option HALL_FIELD no
+   > option HALL_MATERIAL Air_Opt
+   > option HIGH_RES 1
+   > option HIT_PROCESS_LIST clas12
+   > option HIT_VERBOSITY 1
+   > option INPUT_GEN_FILE gemc_internal
+   > option INTEGRATEDDGT yes
+   > option INTEGRATEDRAW solid_lgc
+   > option LOG_MSG 0
+   > option LOG_VERBOSITY 0
+   > option LUMI2_EVENT 0, 2*ns
+   > option LUMI2_P proton, 50*GeV, 175*deg, 180*deg
+   > option LUMI2_SPREAD_P 0*GeV, 0*deg, 0*deg
+   > option LUMI2_SPREAD_V (0, 0)cm
+   > option LUMI2_V (4, 0, 50)cm
+   > option LUMI_EVENT 0, 0*ns, 2*ns
+   > option LUMI_P e-, 11*GeV, 0*deg, 0*deg
+   > option LUMI_SPREAD_P 0*GeV, 0*deg, 0*deg
+   > option LUMI_SPREAD_V (0, 0)cm
+   > option LUMI_V (0, 0, -20)cm
+   > option MATERIAL_VERBOSITY 0
+   > option MAX_FIELD_STEP 0
+   > option MAX_X_POS 20000
+   > option MAX_Y_POS 20000
+   > option MAX_Z_POS 20000
+   > option MERGE_FILE no
+   > option MIRROR_VERBOSITY 0
+   > option N 0
+   > option NGENP 10
+   > option NO_FIELD none
+   > option OUTPUT txt, out.txt
+   > option PARAMETER_VERBOSITY 0
+   > option PHYSICS QGSP_BERT + STD + Optical
+   > option PHYS_VERBOSITY 0
+   > option PHY_VERBOSITY 1
+   > option POLAR 100, 0*deg, 0*deg
+   > option PRINT_EVENT 1000
+   > option QTSTYLE no
+   > option RANDOM TIME
+   > option RECORD_MIRRORS 0
+   > option RECORD_PASSBY 1
+   > option RUNNO 1
+   > option SAVE_ALL_MOTHERS 0
+   > option SCALE_FIELD no, 1
+   > option SIGNALVT solid_lgc
+   > option SPREAD_P 0*GeV, 0*deg, 0*deg
+   > option SPREAD_V (0, 0)cm
+   > option STEER_BEAM 0
+   > option USE_GUI 1
+   > option gcard simple.gcard
+   > option geometry 620x620
