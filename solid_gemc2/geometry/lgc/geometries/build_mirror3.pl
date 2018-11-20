@@ -103,8 +103,8 @@ sub make_mirror3
 	$detector{"exist"}       = 1;
 	$detector{"visible"}     = 1;
 	$detector{"style"}       = 1;
-	$detector{"sensitivity"} = "Mirrors";
-	$detector{"hit_type"}    = "Mirrors";
+	$detector{"sensitivity"} = "mirror";
+	$detector{"hit_type"}    = "mirror";
 	$detector{"identifiers"} = "Mirror WithSurface: 0 With id: ".($n+230)." WithBorderVolume: MirrorSkin 0 WithMaterial: PVDIS_mirror";
 
 	print_det(\%configuration, \%detector);

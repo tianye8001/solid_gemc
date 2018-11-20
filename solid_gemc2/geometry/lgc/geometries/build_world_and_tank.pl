@@ -106,12 +106,12 @@ sub make_tank_CLEO_pvdis
     $detector{"rotation"}    = "0*deg 0*deg 0*deg";
     $detector{"color"}       = "FF9900";
     $detector{"type"}        = "Polycone";
-  #  $detector{"dimensions"}  = "0*deg 360*deg 4 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
- #   $detector{"dimensions"}  = "0*deg 180*deg 4 65*cm 67*cm 85*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
- #   $detector{"dimensions"}  = "0*deg 180*deg 4 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm"; #for cross-section of tank
+  #  $detector{"dimensions"}  = "0*deg 360*deg 4*counts 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
+ #   $detector{"dimensions"}  = "0*deg 180*deg 4*counts 65*cm 67*cm 85*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
+ #   $detector{"dimensions"}  = "0*deg 180*deg 4*counts 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm"; #for cross-section of tank
 
-    $detector{"dimensions"}  = "0*deg 360*deg 4 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
-#    $detector{"dimensions"}  = "0*deg 180*deg 4 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
+    $detector{"dimensions"}  = "0*deg 360*deg 4*counts 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
+#    $detector{"dimensions"}  = "0*deg 180*deg 4*counts 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
 
 
     if($use_pvdis){
@@ -338,8 +338,8 @@ sub make_snout
     $detector{"color"}       = "FF9900";
     $detector{"type"}        = "Polycone";
     #$detector{"dimensions"}  = "0*deg 360*deg 4 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
-    $detector{"dimensions"}  = "0*deg 360*deg 4 65*cm 67*cm 85*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
-#    $detector{"dimensions"}  = "0*deg 180*deg 4 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm"; #for cross-section of tank
+    $detector{"dimensions"}  = "0*deg 360*deg 4*counts 65*cm 67*cm 85*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
+#    $detector{"dimensions"}  = "0*deg 180*deg 4*counts 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm"; #for cross-section of tank
     $detector{"material"}    = "Lead";
     $detector{"mfield"}      = "no";
     $detector{"ncopy"}       = 1;
