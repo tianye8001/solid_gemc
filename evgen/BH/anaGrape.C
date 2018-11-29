@@ -25,8 +25,8 @@ void anaGrape(string detector="",bool Is_res=false){
 //  set_style();
 // gROOT->Reset();
 gStyle->SetPalette(1);
-// gStyle->SetOptStat(11111111);
-gStyle->SetOptStat(0);
+gStyle->SetOptStat(11111111);
+// gStyle->SetOptStat(0);
 gStyle->SetOptFit(1);
 
       double count_convert;
@@ -193,9 +193,39 @@ else if (detector=="SoLID_DDVCS_PVDISSetup"){
       rate_convert = 1e-36*0.53e39*0.85;  
       count_convert = rate_convert*3600*24*120;
 }
+else if (detector=="JLEIC"){
+//   TFile *acceptancefile=new TFile("../acceptance_solid_PVDIS_electron_output.root");  
+//   
+//   hacceptance_ThetaP_forwardangle=(TH2F*) acceptancefile->Get("acceptance_ThetaP_forwardangle");  
+//     
+//   TCanvas *c_acceptance = new TCanvas("acceptance","acceptance",1000,900);
+//   c_acceptance->Divide(1,1);
+//   c_acceptance->cd(1);
+//   hacceptance_ThetaP_forwardangle->Draw("colz");
+//   
+//    TFile *acceptancefile_muonm=new TFile("../acceptance_solid_DDVCS_PVDIS_LH2_full_muonm_1e5_output_1stFAMD.root");             
+//    TFile *acceptancefile_muonp=new TFile("../acceptance_solid_DDVCS_PVDIS_LH2_full_muonp_1e5_output_1stFAMD.root");             
+//    
+//    hacceptance_ThetaP_forwardangle_muonm=(TH2F*) acceptancefile_muonm->Get("acceptance_ThetaP_forwardangle"); 
+//    hacceptance_ThetaP_forwardangle_muonp=(TH2F*) acceptancefile_muonp->Get("acceptance_ThetaP_forwardangle");    
+//   
+//   TCanvas *c_acceptance_muon = new TCanvas("acceptance_muon","acceptance_muon",1200,900);
+//   c_acceptance_muon->Divide(2,1);
+//   c_acceptance_muon->cd(1);
+//   hacceptance_ThetaP_forwardangle_muonm->Draw("colz");
+//   c_acceptance_muon->cd(2);
+//   hacceptance_ThetaP_forwardangle_muonp->Draw("colz");  
+   
+  thetamin=0;    
+  thetamax=180;  
+  
+//      pb = 1e-36 cm2, lumi 1e34/cm2/s, 365 days, 0.85 eff
+      rate_convert = 1e-36*1e34*0.85;  
+      count_convert = rate_convert*3600*24*365;
+}
 else {cout << "wrong detector" << endl; return;}
 
-  Lresolution track("JPsi"); 
+//   Lresolution track("JPsi"); 
   TRandom3 rnd;  
   
 //   TFile *acceptancefile=new TFile("accep.root");
@@ -308,11 +338,11 @@ for(int k=0;k<m;k++){
   hlepIM_2D[k] = new TH2F(hstname,";e+ e-(1st) Inv Mass (GeV);e+ e-(2nd) Inv Mass (GeV)",80,0,4.0,80,0,4.0);   
   
   sprintf(hstname,"lepIM1_%i",k);
-  hlepIM1[k] = new TH1F(hstname,hstname,80,0,4.0);   
+  hlepIM1[k] = new TH1F(hstname,hstname,200,0,10.0);   
   sprintf(hstname,"lepIM2_%i",k);
-  hlepIM2[k] = new TH1F(hstname,hstname,80,0,4.0);   
+  hlepIM2[k] = new TH1F(hstname,hstname,200,0,10.0);   
   sprintf(hstname,"lepIM_%i",k);
-  hlepIM[k] = new TH1F(hstname,hstname,80,0,4.0);
+  hlepIM[k] = new TH1F(hstname,hstname,200,0,10.0);
 
   sprintf(hstname,"lepIM1_error_%i",k);
   hlepIM1_error[k] = new TH1F(hstname,hstname,20,0,4.0);   
@@ -461,13 +491,16 @@ char* input_filename[1]={"grp.root"};
     em.SetXYZT(px[13],py[13],pz[13],pe[13]);
 // cout <<  prot.M()  << " " <<  kp.M() << " " << ep.M() << " " << em.M() << endl;
     
-    //this is before grape-dilepton use coordinate where electron beam goes along -z
+    //grape-dilepton use coordinate where electron beam goes along -z
+    //for SoLID, it need a rotation
+    if (detector != "JLEIC"){
     ki.RotateY(pi1);
     targ.RotateY(pi1);    
     prot.RotateY(pi1);    
     kp.RotateY(pi1);
     ep.RotateY(pi1);
     em.RotateY(pi1);  
+    }
 
     //get acceptance
       int whichone=0;      
@@ -650,6 +683,16 @@ char* input_filename[1]={"grp.root"};
 // 	  acc=acc_prot*acc_ep*acc_em;	  	  	  	  
 	  
       }     
+      else if (detector == "JLEIC"){
+	if(5<ep.Theta()*DEG && ep.Theta()*DEG<175) acc_ep=1;
+	if(5<em.Theta()*DEG && em.Theta()*DEG<175) acc_em=1;	
+	acc=acc_ep*acc_em;
+	
+// 	if(5<ep.Theta()*DEG && ep.Theta()*DEG<175) acc_ep=1;
+// 	if(5<em.Theta()*DEG && em.Theta()*DEG<175) acc_em=1;
+// 	if(5<kp.Theta()*DEG && kp.Theta()*DEG<175) acc_kp=1;		
+// 	acc=acc_ep*acc_em*acc_kp;	
+      }
       else {cout << "wrong detector" << endl;}
 
       
@@ -659,7 +702,7 @@ char* input_filename[1]={"grp.root"};
   Particle: e+(1), e-(-1), mu+(2), mu-(-2), pi+(3), pi-(-3), K+(4), K-(-4), p(5). Default with e-(-1)
   Return O:normal, 1:error */    
 if (Is_res &&  acc>0){
-//     Lresolution track("JPsi");
+    Lresolution track("JPsi");
     double new_p,new_theta,new_phi;    
     double kin[3];
     double res[4];
