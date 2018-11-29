@@ -469,6 +469,7 @@ sub make_CLEO2_baffle_shldPOLY_blocks
 		    ($phi02a-$phi01a) / ($routin[$ip]-$R1[$ip]);
 		my $Dphi = $phi11a + ($rc - $R1[$ip]) *
 		    ($phi12a-$phi11a) / ($routin[$ip]-$R1[$ip]) - $phi;
+		$Dphi += 360.0/$Nslit - 12.0; # adjust for non 30 sectors
 		push @{$x[$ip]}, ($r0b, $r1b, $phi, $phi+$Dphi);
 	    }
 	    else
@@ -479,6 +480,7 @@ sub make_CLEO2_baffle_shldPOLY_blocks
 		my $Dphi = $phi11a + ($rc - $R1[$ip]) *
 		    ($rc < $R1[$ip] ? ($phi10a-$phi11a) / ($rinout[$ip]-$R1[$ip])
 		     : ($phi12a-$phi11a) / ($routin[$ip]-$R1[$ip])) - $phi;
+		$Dphi += 360.0/$Nslit - 12.0; # adjust for non 30 sectors
 		push @{$x[$ip]}, ($r0b, $r1b, $phi, $phi+$Dphi);
 	    }
 	}
@@ -491,7 +493,7 @@ sub make_CLEO2_baffle_shldPOLY_blocks
 # was
 #	my $slit_rotation = ($i-1)*12-$offset[$n-1]; #note the minus sign here
 
-	    my $slit_rotation = -(96.0 + ($i-1) * 12.0 + $offset[$n-1]);
+	    my $slit_rotation = -(96.0 + ($i-1) * 360.0/$Nslit + $offset[$n-1]);
 # 	    $slit_rotation -= 360.0 if $slit_rotation > 360.0;
 
 	    my $i_c     = cnumber($i-1, 10);
@@ -508,7 +510,7 @@ sub make_CLEO2_baffle_shldPOLY_blocks
 	    my $Rout = $x[$n-1][$Nblock*4-3];
 	    my $Rout2 = $x[$n][$Nblock*4-3];
 	    my $Sphi = 0.5*($x[$n-1][2]+$x[$n][2]+$offset[$n-1]-$offset[$n]);
-	    my $Dphi = 12;
+	    my $Dphi = 360./$Nslit;
 	    $detector{"dimensions"}  = "$Sphi*deg $Dphi*deg 2*counts $Rin*cm $Rin2*cm $Rout*cm $Rout2*cm 0.0*cm $Dz_shld*cm";
 	    $detector{"material"}    = "$material_abs_within[$n-1]";
 	    $detector{"mfield"}      = "no";
