@@ -1,9 +1,0 @@
-(run simulation)
-solid_gemc solid_SIDIS_mrpc.gcard
-
-(convert root file)
-evio2root -INPUTF=output.evio -B="../mrpc_solid_gemc/solid_SIDIS_mrpc_forwardangle" 
-
-(analyze result)
-root [0] .x analysis.C+("output.root")
-

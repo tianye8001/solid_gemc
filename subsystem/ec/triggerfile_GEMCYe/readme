@@ -1,2 +1,0 @@
-SIDIS_LD2_FAEC_trigger_Ye.C  :  It includes both electron and pion trigger effeciencies for the forward anlge EC setup. Due to #theta [16.3,24]cut,there are only 5 radius bins.
-SIDIS_LD2_LAEC_trigger_Ye.C  :  It includes both electron and pion trigger effeciencies for the large anlge EC setup. Due to #theta [7.5,14.85]cut, there are only 3 radius bins.

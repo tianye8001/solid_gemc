@@ -1,3 +1,0 @@
-solid_gemc solid_ccprototype.gcard -DEFAULT_MATERIAL="SL_HGC_C4F8O"
-
-solid_gemc solid_ccprototype.gcard -DEFAULT_MATERIAL="SL_LGCCgas_SIDIS"

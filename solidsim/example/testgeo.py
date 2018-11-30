@@ -1,3 +1,0 @@
-from defaultgeo import *
-
-Construct()

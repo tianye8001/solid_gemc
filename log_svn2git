@@ -1,0 +1,40 @@
+Converting SoLID svn to github by Zhiwen Zhao 2018/11/30
+
+svn location
+https://jlabsvn.jlab.org/svnroot/solid/
+
+github location
+https://github.com/JeffersonLab/solid_gemc
+
+command used for conversion and reorganization
+===============================================================
+svn co https://jlabsvn.jlab.org/svnroot/solid solid_svn
+cd solid_svn
+svn log -q | awk -F '|' '/^r/ {sub("^ ", "", $2); sub(" $", "", $2); print $2" = "$2" <"$2"@jlab.org>"}' | sort -u > authors-transform.txt
+cd ../
+mkdir JeffersonLab
+cd JeffersonLab
+cp ../solid_svn/authors-transform.txt ./
+git svn clone https://jlabsvn.jlab.org/svnroot/solid --no-metadata -A authors-transform.txt
+mv solid solid_gemc
+cd solid_gemc
+git mv solid_gemc2/* ./
+git mv study/acceptance analysis/
+git mv subsystem/ec/layout analysis/ec_layout
+mkdir analysis/ec_triggerfile
+git mv analysis/*trigger*.C analysis/ec_triggerfile/
+git mv subsystem/ec/triggerfile_GEMCYe/*.C analysis/ec_triggerfile/
+git mv subsystem/ec/mergeBKG analysis/ec_mergebackground
+git mv subsystem/hgc/hgc_moved_solid_gemc geometry/hgc_moved
+git mv subsystem/gem/resolution/v1  analysis/tracking_resolution
+git mv subsystem/spd/tool analysis/timeofflight
+mkdir digitization
+git add digitization
+vi log_svn2git  (to put this log in)
+git add log_svn2git
+git rm -r evgen libsolgem solgemc solid_gemc solid_gemc2 solidsim study subsystem
+rm -rf evgen solidsim subsystem
+git commit -a
+git remote add origin https://github.com/JeffersonLab/solid_gemc.git
+git push origin master
+===============================================================
