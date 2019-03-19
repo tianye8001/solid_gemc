@@ -26,7 +26,7 @@ make_front();
 
 sub make_front
 {
- my $z_vp = $z_shower-25+0.1;
+ my $z_vp = $z_shower-27-0.01;
 
  my %detector=init_det();
  $detector{"name"}        = "$DetectorName\_front";

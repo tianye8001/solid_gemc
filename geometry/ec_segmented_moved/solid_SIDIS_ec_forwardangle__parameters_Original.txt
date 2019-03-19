@@ -7,7 +7,7 @@ Thickness_prescint	| 2	               | cm   | Thickness_prescint      | - |  - 
 Thickness_support	| 2	               | cm   | Thickness_support       | - |  - | - | - | - | -
 Angle_module		| 30	               | deg  | Angle_module            | - |  - | - | - | - | -
 Radius_shower		| 5.413                | cm   | Radius_shower	  	| - |  - | - | - | - | -
-z_shower		| 465                  | cm   | z_shower       		| - |  - | - | - | - | -
+z_shower		| 467                  | cm   | z_shower       		| - |  - | - | - | - | -
 Rmin			| 95     	       | cm   | Rmin       		| - |  - | - | - | - | -
 Rmax			| 240	               | cm   | Rmax      		| - |  - | - | - | - | -
 Sphi			| 0  	               | deg  | Sphi       		| - |  - | - | - | - | -
