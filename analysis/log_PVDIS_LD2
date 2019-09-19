@@ -1,0 +1,47 @@
+== output file location and how to interpret the file content ==
+
+https://hallaweb.jlab.org/wiki/index.php/SoLID_full_simulation_and_file_sharing
+
+====== run3 2016 =======
+
+files
+PVDIS_LD2_JLAB_VERSION_1.2/pass1,in 2016/01, new GEM, no LGC, no EC
+PVDIS_LD2_JLAB_VERSION_1.2/pass2,in 2016/02, has LGC, has EC as whole, with mother particles
+PVDIS_LD2_JLAB_VERSION_1.3/pass3,in 2016/03, add LGC virtual plane,add ec_photon_block,add neutron shielding
+PVDIS_LD2_JLAB_VERSION_1.3/pass4, svn 1193,in 2016/12, use CLEO2 baffle to replace babarmore1 baffle, use ec_segmented to replace ec as a whole, change scattering chamber front and back windows from 200um Al to vacuum, GEM size match 21-36 deg
+PVDIS_LD2_JLAB_VERSION_1.3/pass5, same like pass4, but on centos7.2 instead of centos 6.5
+
+====== run2 20141022 =======
+change based on previous version
+
+general:
+running simulation with a devel version of GEMC which is similar to GEMC 2.1 within JLAB_VERSION=1.1 framework.
+And QGSP_BERT_HP physics list and two version of geant4 are tried, 4.9.5.p01 and 5.9.6.p02, so that we check changes from previous simulation using geant4.9.5.p01 and QGSP_BERT_HP
+The binary code used are at
+/home/zwzhao/apps/jlab_root_geant4.9.6.p02
+/home/zwzhao/apps/jlab_root_geant4.9.5.p01
+All SoLID related files are in SVN at revision 667, get it this way
+svn co -r 667 https://jlabsvn.jlab.org/svnroot/solid/solid_gemc2/
+other info are here
+https://hallaweb.jlab.org/wiki/index.php/Solid_Background#run_2
+
+geometry:
+fixed previously known problem
+all geometry converted to GEMC 2 format and store in text format, not using datbase
+
+event generator:
+event generator eicRate is updated to produce "normalized" output directly, the single normalization factor (corresponding to total crosssection) is "rate" in output
+A comparasion to the normalization factor used previously is here
+http://hallaweb.jlab.org/12GeV/SoLID/download/sim/background/normalization_factor_comparison.pdf
+http://hallaweb.jlab.org/12GeV/SoLID/download/sim/background/normalization_factor_comparison.pptx
+Please note in both mode of running, "weighted" evenly distributed events in phase space with "rate" per event or "normalized" events distributed accroding to crossection with same "rate" for every events, the normalization only applies to a single file. If you produce several files with same number of events, then add them together, you need to divide by the addtional normalization, the number of files.
+
+files
+PVDIS_LD2_geant4.9.5.p01/pass0
+PVDIS_LD2_geant4.9.6.p02/pass0
+PVDIS_LD2_geant4.9.6.p02/baffle_material
+
+====== run1 2013=======
+
+see log at 
+https://jlabsvn.jlab.org/svnroot/solid/solid_gemc/analysistool/background/log_PVDIS_LD2
