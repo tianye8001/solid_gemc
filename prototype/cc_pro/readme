@@ -1,0 +1,3 @@
+cc_pro.pl config_cc_pro.dat
+
+change $material_gas in geometry file and config_cc_pro.dat for other gas
