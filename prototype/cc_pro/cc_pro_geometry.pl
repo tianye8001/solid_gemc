@@ -77,8 +77,8 @@ my $half_z = $windowhalf_z + $backendhalf_z;  # total half length of the PMT
 # Hittype and materials
 my $hitype="solid_hgc";  # alternative: "flux"
 my $material_chamber="G4_POLYVINYL_CHLORIDE";
-# my $material_gas="SL_HGC_C4F8_oneatm";  
-my $material_gas="SL_LGCCgas";  
+my $material_gas="SL_HGC_C4F8_oneatm";  
+# my $material_gas="SL_LGCCgas";  
 my $material_window_front = "G4_Al";  
 my $material_window_back = "G4_Al";
 # my $material_pmt_surface = "SL_HGC_C4F8_oneatm";

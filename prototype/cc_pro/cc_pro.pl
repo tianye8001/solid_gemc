@@ -38,8 +38,6 @@ if( scalar @ARGV == 0 )
 my $config_file   = $ARGV[0];
 our %configuration = load_configuration($config_file);
 
-my $material_gas="CO2";
-
 # my $type = $ARGV[1];
 # my $material_gas="";
 # if (char $type=="C4F8") $material_gas="SL_HGC_C4F8_oneatm";  
