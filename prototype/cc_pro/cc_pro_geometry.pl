@@ -12,12 +12,14 @@ my $DetectorMother="root";
 
 sub cc_pro_geometry
 {
-make_chamber();
-make_gas();
-make_window_front();
-make_window_back();
-make_mirror();
-make_pmt();
+#make_chamber();
+#make_gas();
+#make_window_front();
+#make_window_back();
+#make_mirror();
+#make_pmt();
+make_scplane_front();
+make_scplane_back();
 }
 
 # N.B.
@@ -29,7 +31,8 @@ my $Z_target=350;  # distance between the target center and the origin
 
 # Parameters
 ## Chamber
-my $Ang_chamber=-25;
+#my $Ang_chamber=-25;
+my $Ang_chamber=0.0;
 my $Rmin1_chamber=0;  # inner radius of the chamber at the upstream side
 my $Rmax1_chamber=17.78;  # outer radius of the chamber at the upstream side, 14 inch diameter
 my $Rmin2_chamber=0;  # inner radius of the chamber at the downstream side
@@ -49,7 +52,10 @@ my $Rmax2_gas=$Rmax2_chamber-1.91;  # outer radius of the gas at the downstream 
 
 ## Windows
 my $halfthickness_window_front=0.00635;  # half thickness of the front window, 0.005 inch 
-my $halfthickness_window_back=0.00635;  # half thickness of the back window, 0.005 inch 
+#my $halfthickness_window_back=0.00635;  # half thickness of the back window, 0.005 inch if Al
+my $halfthickness_window_back=0.75*2.54;  #PVC thickness is 3/4 inch.
+
+
 my $Z_window_front=$Zmin_chamber+$halfthickness_window_front;  # z position of the 1st front window
 my $Z_window_back=$Zmax_chamber-$halfthickness_window_back;   # z position of the back window
 my $Rmin_window_front=$Rmin1_gas;  # inner radius of the front windows
@@ -74,17 +80,38 @@ my $windowhalf_z = 0.001;  # half thickness of the front side of PMT
 my $backendhalf_z = 0.001;   # half thickness of the back side of PMT
 my $half_z = $windowhalf_z + $backendhalf_z;  # total half length of the PMT
 
+## Scintillators:
+my $sc1_x_hlfln = 7.0*2.54;  #for now, we assume the same size as the outer radius of the tube
+my $sc1_y_hlfln = 7.0*2.54;  
+my $sc2_x_hlfln = 7.0*2.54;
+my $sc2_y_hlfln = 7.0*2.54;
+my $sc_z_hlfln = 2.54/2.0;  #need exact measurement, but we assume they are 1" thick
+
+my $sc1_zpos_loc = $Z_window_front - 10.; #10cm infront of front window
+my $sc2_zpos_loc = $Z_window_back + 10.; #10cm behind of front window
+
+my $sc1x = sin(-$Ang_chamber/$DEG)*$sc1_zpos_loc;
+my $sc1y = 0.0;
+my $sc1z = cos($Ang_chamber/$DEG)*$sc1_zpos_loc;
+
+my $sc2x = sin(-$Ang_chamber/$DEG)*$sc2_zpos_loc;
+my $sc2y = 0.0;
+my $sc2z = cos($Ang_chamber/$DEG)*$sc2_zpos_loc;
+
+
 # Hittype and materials
 my $hitype="solid_hgc";  # alternative: "flux"
 my $material_chamber="G4_POLYVINYL_CHLORIDE";
 my $material_gas="SL_HGC_C4F8_oneatm";  
 # my $material_gas="SL_LGCCgas";  
 my $material_window_front = "G4_Al";  
-my $material_window_back = "G4_Al";
+# my $material_window_back = "G4_Al";
+my $material_window_back = "G4_POLYVINYL_CHLORIDE";  #actually, the back will be PVC
 # my $material_pmt_surface = "SL_HGC_C4F8_oneatm";
 my $material_pmt_surface = "SL_LGCCgas";
 my $material_pmt_backend= "Kryptonite";
 my $material_mirror= "SL_HGC_CFRP";
+my $material_scint = "G4_PLASTIC_SC_VINYLTOLUENE";
 
 sub make_chamber
 {
@@ -269,3 +296,54 @@ sub make_pmt
       $detector{"style"}       = 1;
       print_det(\%configuration, \%detector);
 }
+
+sub make_scplane_front
+{
+	my %detector=init_det();
+	$detector{"name"}        = "$DetectorName\_scfront";
+	$detector{"mother"}      = "$DetectorMother";
+	$detector{"description"} = $detector{"name"};
+	$detector{"pos"}         = "$sc1x*cm $sc1y*cm $sc1z*cm"; 
+	$detector{"rotation"}    = "0*deg $Ang_chamber*deg 0*deg";
+	$detector{"color"}       = "CC6633";
+	$detector{"type"}        = "Box";
+	$detector{"dimensions"}  = "$sc1_x_hlfln*cm $sc1_y_hlfln*cm $sc_z_hlfln*cm";
+	$detector{"material"}    = $material_scint;
+	$detector{"mfield"}      = "no";
+	$detector{"ncopy"}       = 1;
+	$detector{"pMany"}       = 1;
+	$detector{"exist"}       = 1;
+	$detector{"visible"}     = 1;
+	$detector{"style"}       = 1;
+	$detector{"sensitivity"} = "FLUX";
+	$detector{"hit_type"}    = "FLUX";
+	$detector{"identifiers"} = "id manual 1";
+	print_det(\%configuration, \%detector);
+ 
+}
+
+sub make_scplane_back
+{
+	my %detector=init_det();
+	$detector{"name"}        = "$DetectorName\_scback";
+	$detector{"mother"}      = "$DetectorMother";
+	$detector{"description"} = $detector{"name"};
+	$detector{"pos"}         = "$sc2x*cm $sc2y*cm $sc2z*cm"; 
+	$detector{"rotation"}    = "0*deg $Ang_chamber*deg 0*deg";
+	$detector{"color"}       = "CC6633";
+	$detector{"type"}        = "Box";
+	$detector{"dimensions"}  = "$sc2_x_hlfln*cm $sc2_y_hlfln*cm $sc_z_hlfln*cm";
+	$detector{"material"}    = $material_scint;
+	$detector{"mfield"}      = "no";
+	$detector{"ncopy"}       = 1;
+	$detector{"pMany"}       = 1;
+	$detector{"exist"}       = 1;
+	$detector{"visible"}     = 1;
+	$detector{"style"}       = 1;
+	$detector{"sensitivity"} = "flux";
+	$detector{"hit_type"}    = "flux";
+	$detector{"identifiers"} = "id manual 2230000";
+	print_det(\%configuration, \%detector);
+ 
+}
+

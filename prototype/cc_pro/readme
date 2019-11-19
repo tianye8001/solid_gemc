@@ -1,3 +1,7 @@
 cc_pro.pl config_cc_pro.dat
 
 change $material_gas in geometry file and config_cc_pro.dat for other gas
+
+Do this to get the root file:
+
+evio2root -INPUTF=output.evio -B="cc_pro"
