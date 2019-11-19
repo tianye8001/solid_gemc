@@ -85,7 +85,7 @@ my $sc1_x_hlfln = 7.0*2.54;  #for now, we assume the same size as the outer radi
 my $sc1_y_hlfln = 7.0*2.54;  
 my $sc2_x_hlfln = 7.0*2.54;
 my $sc2_y_hlfln = 7.0*2.54;
-my $sc_z_hlfln = 2.54/2.0;  #need exact measurement, but we assume they are 1" thick
+my $sc_z_hlfln = 2.54/8.0;  #need exact measurement, but we assume they are 1/4" thick
 
 my $sc1_zpos_loc = $Z_window_front - 10.; #10cm infront of front window
 my $sc2_zpos_loc = $Z_window_back + 10.; #10cm behind of front window
