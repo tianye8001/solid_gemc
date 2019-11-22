@@ -1,7 +1,13 @@
+for different gas, change "$material_gas" in cc_pro_geometry.pl and "variation" in config_cc_pro.dat  
+
+generate detector description 
 cc_pro.pl config_cc_pro.dat
 
-change $material_gas in geometry file and config_cc_pro.dat for other gas
+do this for interactive with graphic
+solid_gemc cc_pro.gcard
 
-Do this to get the root file:
+do this for batch 
+solid_gemc cc_pro_batch.gcard
 
+convert evio to root, the bank is "solid_hgc"
 evio2root -INPUTF=output.evio -B="cc_pro"

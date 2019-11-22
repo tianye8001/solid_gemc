@@ -2,7 +2,7 @@
 
 # Detector name and variation
 detector_name: cc_pro
-variation:     CO2
+variation:     C4F8
 
 # Factory can be MYQL or TEXT
 factory:       TEXT

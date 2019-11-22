@@ -39,6 +39,7 @@ my $config_file   = $ARGV[0];
 our %configuration = load_configuration($config_file);
 
 # my $type = $ARGV[1];
+# echo $type;
 # my $material_gas="";
 # if (char $type=="C4F8") $material_gas="SL_HGC_C4F8_oneatm";  
 # else if (char $type=="CO2") $material_gas="SL_LGCCgas"; 
@@ -52,7 +53,7 @@ our %configuration = load_configuration($config_file);
 
 # One can change the "variation" here if one is desired different from the config.dat
 # $configuration{"detector_name"} = "cc_pro";
-# $configuration{"variation"} = "Original";
+# $configuration{"variation"} = "CO2";
 
 # To get the parameters proper authentication is needed.
 # our %parameters    = get_parameters(%configuration);
