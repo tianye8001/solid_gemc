@@ -1,5 +1,4 @@
 for different gas, change "$material_gas" in cc_pro_geometry.pl and "variation" in config_cc_pro.dat  
-
 generate detector description 
 cc_pro.pl config_cc_pro.dat
 
@@ -11,3 +10,10 @@ solid_gemc cc_pro_batch.gcard
 
 convert evio to root, the bank is "solid_hgc"
 evio2root -INPUTF=output.evio -B="cc_pro"
+
+analysis result
+root -l -b -q 'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim.root","trigger",false,"single")'
+
+working dir
+/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/
+
