@@ -1,0 +1,14 @@
+machining learning testing
+
+for hgc, run it likes
+root -l -b -q 'analysis_hgc.C+("/work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_inter/farm_solid_SIDIS_He3_moved_e_even_12deg_1-11GeV_1e4.root","trigger",false,"single")'
+
+signal files at
+/work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_inter/
+-rw-r--r-- 1 zwzhao 12gev_solid   1034162170 2019-09-26 08:16 farm_solid_SIDIS_He3_moved_e_even_12deg_1-11GeV_1e4.root
+-rw-r--r-- 1 zwzhao 12gev_solid    145826060 2019-09-26 00:07 farm_solid_SIDIS_He3_moved_pip_even_12deg_2.5-7.5GeV_1e3.root
+-rw-r--r-- 1 zwzhao 12gev_solid  14457201458 2019-09-29 21:00 farm_solid_SIDIS_He3_moved_pip_even_12deg_2.5-7.5GeV_1e5.root
+-rw-r--r-- 1 zwzhao 12gev_solid 144836636314 2019-09-29 23:53 farm_solid_SIDIS_He3_moved_pip_even_12deg_2.5-7.5GeV_1e6.root
+
+background files at
+/cache/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_BeamOnTarget_0.561e10_skim_HGCwinCF1.root
