@@ -147,6 +147,18 @@ my @RefractiveIndex_C4F8_oneatm = (
 (1.00234-1)/1.6+1
 );
 
+
+ my @N2_1atm_index = (
+#  "1.0002984584","1.0002986106", 
+ "1.000298771", "1.0002989402", "1.0002991188", "1.0002993075", "1.0002995072",
+"1.0002997188", "1.0002999431", "1.0003001812", "1.0003004344", "1.0003007039", "1.0003009912",
+"1.0003012978", "1.0003016257", "1.0003019767", "1.0003023533", "1.0003027578", "1.0003031934",
+"1.0003036631", "1.0003041708", "1.0003047208", "1.0003053179", "1.0003059678", "1.0003066769",
+"1.0003074530", "1.0003083049", "1.0003092430",  "1.0003102796", "1.0003114294", "1.0003127099",
+"1.0003141423", "1.0003157525", "1.0003175720",  "1.0003196403", "1.0003220065", "1.0003247334",
+"1.0003279015", "1.0003316163", "1.0003360187", "1.0003412998", "1.0003477265", "1.0003556817"
+);
+
     my @CO2_1atm_index = (
 	"1.000418", "1.000418", "1.000418", "1.000419", 
 	"1.000419", "1.000419", "1.000419", "1.000419",
@@ -187,6 +199,7 @@ my @RefractiveIndex_C4F8_oneatm = (
          "962.586*m", "846.065*m", "643.562*m", "80.0*m",
          "4.0*m"
          );
+
 
 sub define_materials
 {
@@ -279,6 +292,17 @@ sub define_materials
     $mat{"components"}    = "G4_CARBON_DIOXIDE 1";
     $mat{"photonEnergy"}      = arrayToString(@PhotonEnergy);
     $mat{"indexOfRefraction"} = arrayToString(@CO2_1atm_index);
+    $mat{"absorptionLength"}  = arrayToString(@CO2_1atm_AbsLen_alt);	
+    print_mat(\%configuration, \%mat);    
+
+    %mat = init_mat();
+    $mat{"name"}          = "SL_N2gas";
+    $mat{"description"}   = "Gas N2";
+    $mat{"density"}       = "0.00125053";  #in g/cm3
+    $mat{"ncomponents"}   = "1";
+    $mat{"components"}    = "G4_N 1";
+    $mat{"photonEnergy"}      = arrayToString(@PhotonEnergy);
+    $mat{"indexOfRefraction"} = arrayToString(@N2_1atm_index);
     $mat{"absorptionLength"}  = arrayToString(@CO2_1atm_AbsLen_alt);	
     print_mat(\%configuration, \%mat);    
 

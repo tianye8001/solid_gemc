@@ -196,19 +196,19 @@ Float_t npe_lgc[ch_lgc],npe_hgc[ch_hgc];
 Float_t npe_lgc_total=0;
 Float_t npe_hgc_total=0;
 		  
-char mlpfile_lgc_name[200];
-sprintf(mlpfile_lgc_name, "%s_mlp_lgc.root",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
-TFile *mlpfile_lgc=new TFile(mlpfile_lgc_name, "recreate");
-TTree *mlptree_lgc = new TTree("lgc", "npe");
-for(int i=0;i<ch_lgc;i++) mlptree_lgc->Branch(Form("npe_lgc%i",i), &npe_lgc[i], Form("npe_lgc%i/F",i));
-mlptree_lgc->Branch("npe_lgc_total", &npe_lgc_total, "npe_lgc_total/F");
-
-char mlpfile_hgc_name[200];
-sprintf(mlpfile_hgc_name, "%s_mlp_hgc.root",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
-TFile *mlpfile_hgc=new TFile(mlpfile_hgc_name, "recreate");
-TTree *mlptree_hgc = new TTree("hgc", "npe");
-for(int i=0;i<ch_hgc;i++) mlptree_hgc->Branch(Form("npe_hgc%i",i), &npe_hgc[i], Form("npe_hgc%i/F",i));
-mlptree_hgc->Branch("npe_hgc_total", &npe_hgc_total, "npe_hgc_total/F");
+// char mlpfile_lgc_name[200];
+// sprintf(mlpfile_lgc_name, "%s_mlp_lgc.root",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+// TFile *mlpfile_lgc=new TFile(mlpfile_lgc_name, "recreate");
+// TTree *mlptree_lgc = new TTree("lgc", "npe");
+// for(int i=0;i<ch_lgc;i++) mlptree_lgc->Branch(Form("npe_lgc%i",i), &npe_lgc[i], Form("npe_lgc%i/F",i));
+// mlptree_lgc->Branch("npe_lgc_total", &npe_lgc_total, "npe_lgc_total/F");
+// 
+// char mlpfile_hgc_name[200];
+// sprintf(mlpfile_hgc_name, "%s_mlp_hgc.root",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+// TFile *mlpfile_hgc=new TFile(mlpfile_hgc_name, "recreate");
+// TTree *mlptree_hgc = new TTree("hgc", "npe");
+// for(int i=0;i<ch_hgc;i++) mlptree_hgc->Branch(Form("npe_hgc%i",i), &npe_hgc[i], Form("npe_hgc%i/F",i));
+// mlptree_hgc->Branch("npe_hgc_total", &npe_hgc_total, "npe_hgc_total/F");
 
 TFile *file=new TFile(inputfile_name.c_str());
 
@@ -350,6 +350,8 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	
 	TRandom3 rand;
 	rand.SetSeed(0);
+
+	int counter_good=0;
 	
 // 	long int N_events = (long int)tree_header->GetEntries();
 	long int N_events = (long int)tree_generated->GetEntries();	
@@ -553,26 +555,6 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc);
 
 		bool Is_ok=false;
-		for(int index=0;index<ch_hgc;index++){
-// 		      int pmt_sec=index/16;		  
-// 		      int pmt_hgc=index%16;
-// 		      int pmt_x=pmt_hgc%4,pmt_y=pmt_hgc/4;
-
-		      int pmt_sec=index/1024;		  
-		      int pmt_hgc=index%1024;
-		      int pmt_x=pmt_hgc%32,pmt_y=pmt_hgc/32;
-		  
-// 		      cout << "hgc " << index << "\t" << pmt_sec << "\t" << pmt_hgc << "\t" << pmt_y<< "\t" << pmt_x << endl; 
-		      if(hit_hgc[index]>0) {
-// 			cout<< i << " " << pmt_sec << endl;						
-// 		      if(pmt_sec==21) {		      
-		      if(true) {	    		      
-			hpattern_hgc->Fill(pmt_x,pmt_y,hit_hgc[index]);		
-			Is_ok=true;
-		      }
-		      }
-		}		
-// 		if (Is_ok) continue;	
 		
 // 		if(ntrigsecs_hgc){
 		if(true){
@@ -600,7 +582,8 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 			default:      break;      
 		      }				      
 		      
-		      if(hit_hgc[index]>occ_threshold_hgc){	
+		      if(hit_hgc[index]>occ_threshold_hgc){
+			Is_ok=true;
 			hhit_hgc->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    
 			hhit_hgc_2D->Fill(pmt_x,pmt_y,hit_hgc[index]*rate/1e3);
 // 			cout << pmt_hgc << " " << pmt_x << " " << pmt_y << endl;
@@ -613,6 +596,8 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		      
 		}		
 
+		if (Is_ok) counter_good++;
+		
 		} //pass hgc trigger in offline		
 		
 // 		if (1<=sec_hgc && sec_hgc<=30){
@@ -640,7 +625,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  hnpe_hgc->Fill(npe_hgc_total);
 		  
 // 		  for(int pmt_id=0;pmt_id<ch_hgc;pmt_id++) cout << npe_hgc[pmt_id] << "\t";
-		  if (npe_hgc_total>0) mlptree_hgc->Fill();
+// 		  if (npe_hgc_total>0) mlptree_hgc->Fill();
 		  
 // 		if (-365< vz_gen/10. && vz_gen/10. < -335){
 		if (7<=theta_gen && theta_gen <=15){ //has to cut to prevent int(-1)=0 !!!!!
@@ -675,15 +660,15 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	
 	} //end loop time
 
-
+cout <<" counter_good " << counter_good << endl;
 //do outputs
 
 outputfile->Write();	
 outputfile->Flush();
 
-mlpfile_lgc->Write();	
-mlpfile_lgc->Flush();
-mlpfile_hgc->Write();	
-mlpfile_hgc->Flush();
+// mlpfile_lgc->Write();	
+// mlpfile_lgc->Flush();
+// mlpfile_hgc->Write();	
+// mlpfile_hgc->Flush();
 
 }

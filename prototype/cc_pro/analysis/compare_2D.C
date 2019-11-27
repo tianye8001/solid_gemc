@@ -12,10 +12,10 @@ char input_dir[200]="/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3";
 const int m=2;
 char* input_filename[m]={
 
-"cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
-"cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
+"cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
+"cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_output.root",
@@ -23,9 +23,8 @@ char* input_filename[m]={
   
 }; 
 // int pid[m]={5,1,5,1};
-char *hst[m]={
-"hit_hgc_2D","hit_hgc_2D"
-};
+// char *hst[m]={"hit_hgc_2D","hit_hgc_2D"};
+char *hst[m]={"gen_ThetaP","gen_ThetaP"};
 int color[m]={
 1,2,
 // 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,29,
@@ -49,8 +48,11 @@ double xmin=0,xmax=200;
 // int hit_id[m]={8,8,8,8};
 // char *title[m]={"HGC signal Np.e.;MaPMT;MaPMT","HGC signal Np.e.;pixel;pixel"};
 // char *title[m]={"HGC background Np.e.;MaPMT;MaPMT","HGC background Np.e.;pixel;pixel"};
-TCanvas *c = new TCanvas("compare_2D","compare_2D",1700,800);
-c->Divide(2,1);		
+// TCanvas *c = new TCanvas("compare_2D","compare_2D",1700,800);
+// c->Divide(2,1);		
+TCanvas *c[2];
+c[0]= new TCanvas("compare_2D_1","compare_2D_1",1000,800);
+c[1]= new TCanvas("compare_2D_2","compare_2D_2",1000,800);
 // TCanvas *cc = new TCanvas("compare_2D_proj","compare_2D_proj",1200,800);
 // cc->Divide(2,1);
 ///option
@@ -58,7 +60,6 @@ bool Is_R=true,Is_Phi=false;
 bool Is_log=false;
 // bool Is_log=true;
 bool Is_cut=false;
-
 
 
 TFile *input[m];
@@ -89,7 +90,8 @@ for(int i=0;i<m;i++){
     for(int j=0;j<h[i]->GetXaxis()->FindBin(cut[i]);j++)  h[i]->SetBinContent(j+1,0);
   }
   
-  c->cd(i+1);
+//   c->cd(i+1);
+  c[i]->cd(1);  
 //   gPad->SetLogz();
 //   gPad->SetLogy();
 //   h[i]->SetLineWidth(3);  
