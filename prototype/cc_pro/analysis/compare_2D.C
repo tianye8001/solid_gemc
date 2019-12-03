@@ -12,10 +12,12 @@ char input_dir[200]="/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3";
 const int m=2;
 char* input_filename[m]={
 
+"cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
+"cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
 // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
-"cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
-"cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_output.root",
@@ -24,7 +26,8 @@ char* input_filename[m]={
 }; 
 // int pid[m]={5,1,5,1};
 // char *hst[m]={"hit_hgc_2D","hit_hgc_2D"};
-char *hst[m]={"gen_ThetaP","gen_ThetaP"};
+// char *hst[m]={"gen_ThetaP","gen_ThetaP"};
+char *hst[m]={"hit_vz_0","hit_vz_1"};
 int color[m]={
 1,2,
 // 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,29,
@@ -63,9 +66,9 @@ bool Is_cut=false;
 
 
 TFile *input[m];
-TH2F *h[m];
+TH1F *h[m];
+// TH2F *h[m];
 TH1D *h_p[m];
-TH1F *h1[m];
 for(int i=0;i<m;i++){
   input[i]=new TFile(Form("%s/%s",input_dir,input_filename[i]));
   if (input[i]->IsZombie()) {
@@ -83,12 +86,12 @@ for(int i=0;i<m;i++){
 //   sprintf(hstname,"%s","hit_mom_7");
 //   sprintf(hstname,"%s","pattern_hgc");    
   cout << hstname << endl;
-  h[i]=(TH2F*) input[i]->Get(hstname);
-//   h1[i]=(TH1F*) input[i]->Get("hit_loss_7");  
+//   h2[i]=(TH2F*) input[i]->Get(hstname);
+  h1[i]=(TH1F*) input[i]->Get(hstname);  
 
-  if (Is_cut) {
-    for(int j=0;j<h[i]->GetXaxis()->FindBin(cut[i]);j++)  h[i]->SetBinContent(j+1,0);
-  }
+//   if (Is_cut) {
+//     for(int j=0;j<h[i]->GetXaxis()->FindBin(cut[i]);j++)  h[i]->SetBinContent(j+1,0);
+//   }
   
 //   c->cd(i+1);
   c[i]->cd(1);  
@@ -105,8 +108,9 @@ for(int i=0;i<m;i++){
 //   h[i]->SetAxisRange(xmin,xmax);  
 //   h[i]->SetTitle(title[i]);
 //   h[i]->GetXaxis()->CenterTitle();
+      h[i]->Draw();
 
-  h[i]->Draw("colz");
+//   h[i]->Draw("colz");
 
 //   h_p[i]=h[i]->ProjectionX();
 //   cc->cd(i+1);    
@@ -117,10 +121,6 @@ for(int i=0;i<m;i++){
 
 //     if (i==0 || i==2) cc->cd(1);
 //     if (i==1 || i==3) cc->cd(2);        
-//     h1[i]->Scale(scale[i]);
-//     h1[i]->SetMinimum(0);
-//     h1[i]->SetMaximum(1);
-//     h1[i]->Draw("same");
   
 //   else if (i!=7 && i!=8 && i!=9 && i!=15 && i!=16 && i!=17 && i!=25 && i!=26 && i!=27 && i!=33 && i!=34 && i!=35) h[i]->Draw("same");
   

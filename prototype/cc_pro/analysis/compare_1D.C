@@ -25,23 +25,23 @@ char* input_filename[m]={
 // "cc_pro_SIDIS_He3_BeamOnTarget_5.956e10_CO2_skim_output.root",
 // "cc_pro_SIDIS_He3_BeamOnTarget_5.87e10_C4F8_skim_output.root",
 
-// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_BeamOnTarget_2e10_N2_skim_output.root",
-// "cc_pro_SIDIS_He3_BeamOnTarget_1.871e10_C4F8_skim_output.root",
-
-"cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_output.root",
 "cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7_output.root",
-"cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
+"cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
 "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7_output.root",
-"cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7_output.root",
+"cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
 "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7_output.root",
-"cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_output.root",
+"cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7_output.root",
 "cc_pro_SIDIS_He3_BeamOnTarget_2e10_N2_skim_output.root",
+"cc_pro_SIDIS_He3_BeamOnTarget_1.871e10_C4F8_skim_output.root",
+
+// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7_output.root",
+// "cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_output.root",
+// "cc_pro_SIDIS_He3_BeamOnTarget_2e10_N2_skim_output.root",
 
 
 };
@@ -53,15 +53,14 @@ char* input_filename[m]={
 // char *label[m]={"LGC Np.e.>=1","LGC Np.e.>=2","LGC Np.e.>=2 & 2X2","CF_10","HGC winAl 1%","Al_5"};
 // char *label[m]={"LGC Np.e.>=1","LGC Np.e.>=2","LGC Np.e.>=2 & 2X2","CF_10","HGC winAl 1%","Al_5"};
 // char *label[m]={"HGC Np.e.>=1","HGC Np.e.>=2","HGC Np.e.>=2 & 2X2","CF_10","HGC winAl 1%","Al_5"};
-char *label[m]={,"eDIS (CO2)","eDIS (C4F8)","pimWiser (CO2)","pimWiser (C4F8)","pi0Wiser (CO2)","pi0Wiser (C4F8)","BeamOnTarget (CO2)","BeamOnTarget (C4F8)"};
+// char *label[m]={,"eDIS (CO2)","eDIS (C4F8)","pimWiser (CO2)","pimWiser (C4F8)","pi0Wiser (CO2)","pi0Wiser (C4F8)","BeamOnTarget (CO2)","BeamOnTarget (C4F8)"};
+char *label[m]={,"eDIS (N2)","eDIS (C4F8)","pimWiser (N2)","pimWiser (C4F8)","pi0Wiser (N2)","pi0Wiser (C4F8)","BeamOnTarget (N2)","BeamOnTarget (C4F8)"};
 // int MarkerStyle[m]={20,24,26,21,22,23};
 // int MarkerStyle[m]={20,26,20,20,20,20,20,20};
 int MarkerStyle[m]={20,24,21,25,22,26,23,32};
 // int color[m]={1,1,2,2,3,3};
 int color[m]={1,1,2,2,3,3,4,4};
 int style[m]={1,2,1,2,1,2,1,2};
-// char *hst[m]={"hit_lgc","hit_lgc","hit_lgc","hit_lgc","hit_lgc","hit_lgc","hit_lgc"};
-// char *hst[m]={"occ_lgc","occ_lgc","occ_lgc","occ_lgc","occ_lgc","occ_lgc","occ_lgc"};
 // char *hst[m]={"hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc"};
 // char *title="hit;PMT;N_{p.e.} rate(kHz) = (event rate * N_{p.e.})";
 char *hst[m]={"occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc"};

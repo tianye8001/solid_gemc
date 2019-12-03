@@ -257,17 +257,18 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	
 	TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",50,0,50,180,-180,180,55,0,11);   
 	
-	const int n=16;
-	char *detname[n]={"GEM 1","GEM 2","GEM 3","GEM 4","GEM 5","GEM 6","LGC","HGC","FASPD","LASPD","FAEC","LAEC","FAMRPC","FAMUON","LAMUON","new"};	
-// 	const int n=12;
-// 	char *detname[n]={"GEM 1","GEM 2","GEM 3","GEM 4","GEM 5","GEM 6","LGC","HGC","FASPD","LASPD","FAEC","LAEC"};		
+	const int n=2;
+	char *detname[n]={"hodoscope front","hodoscope back"};	
+	TH1F *hhit_vz[n];	
 	TH2F *hhit_xy[n],*hhit_PhiR[n];
 	TH1F *hhit_loss[n];
 	TH2F *hhit_momloss[n];
 	for(int i=0;i<n;i++){
 	  char hstname[100];
+	  sprintf(hstname,"hit_vz_%i",i);
+	  hhit_vz[i]=new TH1F(hstname,detname[i],1600,-100,1500);  
 	  sprintf(hstname,"hit_xy_%i",i);
-	  hhit_xy[i]=new TH2F(hstname,detname[i],600,-300,300,600,-300,300);        
+	  hhit_xy[i]=new TH2F(hstname,detname[i],400,-20,20,400,-20,20);        
 	  sprintf(hstname,"hit_PhiR_%i",i);
 	  hhit_PhiR[i]=new TH2F(hstname,detname[i],360,-180,180,300,0,300);
 	  sprintf(hstname,"hit_loss_%i",i);
@@ -365,7 +366,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		cout<<"loop.....  "<<loop_id<<endl;
 	
 	for(long int i=0;i<N_events;i++){	  		
-// 	for(long int i=0;i<N_events/10;i++){	  
+// 	for(long int i=0;i<N_events/100;i++){	  
 // 	for(long int i=N_events/2;i<N_events;i++){	  		
 // 	for(long int i=520;i<521;i++){  //pip event
 // 	for(long int i=5289;i<5290;i++){	  // background event			  
@@ -449,11 +450,6 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		for (Int_t j=0;j<flux_hitn->size();j++) {
 // 	          cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
 
-		  int detector_ID=flux_id->at(j)/1000000;
-		  int subdetector_ID=(flux_id->at(j)%1000000)/100000;
-		  int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;		  
-		  int component_ID=flux_id->at(j)%10000;      
-
 		double hit_vr=sqrt(pow(flux_vx->at(j),2)+pow(flux_vy->at(j),2))/1e1; //mm to cm
 		double hit_vy=flux_vy->at(j)/1e1,hit_vx=flux_vx->at(j)/1e1,hit_vz=flux_vz->at(j)/1e1;           //mm to cm		  
 		double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/1e1; //mm to cm
@@ -465,82 +461,29 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 // 		TVector3 *vec_path=vec_hit-vec_v_gen;
 		  
 		  int hit_id=-1;
-		  if (detector_ID==1 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=0;
-		  if (detector_ID==1 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=1;	  
-		  if (detector_ID==1 && subdetector_ID == 3 && subsubdetector_ID == 1) hit_id=2;	  
-		  if (detector_ID==1 && subdetector_ID == 4 && subsubdetector_ID == 1) hit_id=3;	  
-		  if (detector_ID==1 && subdetector_ID == 5 && subsubdetector_ID == 1) hit_id=4;	  
-		  if (detector_ID==1 && subdetector_ID == 6 && subsubdetector_ID == 1) hit_id=5;	        
-		  if (detector_ID==2 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=6;
-		  if (detector_ID==2 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=7;	              
-		  if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=8;
-		  if (detector_ID==5 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=9;	                          
-		  if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=10;
-		  if (detector_ID==3 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=11;
-		  
-		  if (detector_ID==4 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=12;  
-	 
-		  if (detector_ID==6 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=13;
-		  if (detector_ID==6 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=14;  
-		  
-// 		  if ((0<=hit_id && hit_id<=9) || hit_id==12){
-		  if (0<=hit_id && hit_id<=9){		  
-		    if(abs(int(flux_pid->at(j))) == 11)	{		    
-		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate);
-		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate);		  
-		    }
-		    else if (int(flux_pid->at(j))==22){		      
-		      //assume 5% photon conversion to hits for detector other than EC
-		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate*0.05);
-		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate*0.05);	
-		    }
-		  }
-		  else if (10<=hit_id && hit_id<n){	      
-		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate);
-		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate);		  		      
-		  }
-// 		  else cout << flux_id->at(j) << endl
-
+		  if(flux_id->at(j)==1) hit_id=0;
+		  else if(flux_id->at(j)==2) hit_id=1;
+		  else cout << "wrong flux_id" << flux_id->at(j) << endl;
 // 		  if (hit_id==-1) {/cout << flux_id->at(j) << " " << flux_avg_z->at(j) << endl;
+		  
+		  hhit_xy[hit_id]->Fill(flux_avg_lx->at(j)/1e1,flux_avg_ly->at(j)/1e1,rate);
+		  hhit_vz[hit_id]->Fill(hit_vz,rate);
 
-		  if (0<=hit_id && hit_id<n){
-		    if (flux_tid->at(j)==1) {
-// 		      if (7< theta_gen && theta_gen < 8){
-// 		      if (-365< vz_gen/10. && vz_gen/10. < -335){
-			hhit_loss[hit_id]->Fill(p_gen/1e3,rate);
-			hhit_momloss[hit_id]->Fill(p_gen/1e3,1-hit_p/(p_gen/1e3),rate);
-// 		      }
-// 		      }
-		    }
-		  }
+// 		  if (0<=hit_id && hit_id<n){
+// 		    if (flux_tid->at(j)==1) {
+// // 		      if (7< theta_gen && theta_gen < 8){
+// // 		      if (-365< vz_gen/10. && vz_gen/10. < -335){
+// 			hhit_loss[hit_id]->Fill(p_gen/1e3,rate);
+// 			hhit_momloss[hit_id]->Fill(p_gen/1e3,1-hit_p/(p_gen/1e3),rate);
+// // 		      }
+// // 		      }
+// 		    }
+// 		  }
 		  
 	  
 // 		  if (0<=hit_id && hit_id<=11) hflux_hitxy[hit_id]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.);
 	    //       else cout << "flux_id->at(j) " << flux_id->at(j) << endl;
-		  
-// 		  if(hit_id==7) {		  
-		  if(hit_id==7 && flux_tid->at(j)==1) {		  		  
-// 		  if(hit_id==7 && (abs(flux_pid->at(j))==211 || abs(flux_pid->at(j))==13 || abs(flux_pid->at(j))==321)) {	  
-// 		    int sec_hgc=0;
-		    int sec_hgc_shift=0;
-		    if (hit_phi>=90+sec_hgc_shift) sec_hgc=int((hit_phi-90-sec_hgc_shift)/12+1);
-		    else sec_hgc=int((hit_phi+360-90-sec_hgc_shift)/12+1);
 		    
-// 		    cout<<  " " << sec_hgc << " " << hit_phi << " 				"  <<  hit_p << endl;
-// 		    theta_gen=acos(pz_gen/p_gen)*DEG;
-// 		    phi_gen=atan2(py_gen,px_gen)*DEG;		    
-// 
-// 		TVector3 *vec_hit(hit_x,hit_y,hit_z), *vec_v(hit_vx,hit_vy,hit_vz),*vec_p(flux_px->at(j),flux_py->at(j),flux_pz->at(j));
-// 		TVector3 *vec_path=vec_hit-vec_v_gen;
-// 		
-// 		    hhit_thetadiff->Fill(theta_gen-atan2(hit_z,hit_r)*DEG));
-// 		    hhit_phidiff->Fill(vec_path.Phi()*DEG-);
-		  }
-// 		  else  cout << hit_id << " " << flux_tid->at(j) << endl;
-// 		    if (hit_id==7) cout<<  " " << flux_tid->at(j) << endl;
-
-		  if(hit_id==7 && abs(flux_pid->at(j))==11 && flux_pz->at(j)>0) hhit_mom_hgc_e->Fill(hit_p);
-		  
 		}			
 
 		//-----------------------	
