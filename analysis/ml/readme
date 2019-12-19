@@ -1,14 +1,35 @@
-machining learning testing
+machining learning testing ground
 
-for hgc, run it likes
+for hgc, run it on jlab ifarm like
 root -l -b -q 'analysis_hgc.C+("/work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_inter/farm_solid_SIDIS_He3_moved_e_even_12deg_1-11GeV_1e4.root","trigger",false,"single")'
 
-signal files at
+SoLID HGC signal files at
 /work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_inter/
 -rw-r--r-- 1 zwzhao 12gev_solid   1034162170 2019-09-26 08:16 farm_solid_SIDIS_He3_moved_e_even_12deg_1-11GeV_1e4.root
 -rw-r--r-- 1 zwzhao 12gev_solid    145826060 2019-09-26 00:07 farm_solid_SIDIS_He3_moved_pip_even_12deg_2.5-7.5GeV_1e3.root
 -rw-r--r-- 1 zwzhao 12gev_solid  14457201458 2019-09-29 21:00 farm_solid_SIDIS_He3_moved_pip_even_12deg_2.5-7.5GeV_1e5.root
 -rw-r--r-- 1 zwzhao 12gev_solid 144836636314 2019-09-29 23:53 farm_solid_SIDIS_He3_moved_pip_even_12deg_2.5-7.5GeV_1e6.root
 
-background files at
-/cache/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_BeamOnTarget_0.561e10_skim_HGCwinCF1.root
+SoLID background files at
+/cache/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/
+farm_solid_SIDIS_He3_moved_BeamOnTarget_0.561e10_skim_HGCwinCF1.root
+
+2019 HallC Cerenkov test, signal and background file
+/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3
+-rw-r--r-- 1 zwzhao 12gev_solid 20318201903 2019-11-24 15:37 cc_pro_SIDIS_He3_BeamOnTarget_1.871e10_C4F8_skim.root
+-rw-r--r-- 1 zwzhao 12gev_solid 21042463079 2019-11-24 15:38 cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim.root
+-rw-r--r-- 1 zwzhao 12gev_solid 21478165642 2019-11-27 12:03 cc_pro_SIDIS_He3_BeamOnTarget_2e10_N2_skim.root
+-rw-r--r-- 1 zwzhao 12gev_solid 43435835935 2019-11-24 14:07 cc_pro_SIDIS_He3_BeamOnTarget_3.999e10_C4F8_skim.root
+-rw-r--r-- 1 zwzhao 12gev_solid 43001661199 2019-11-24 14:07 cc_pro_SIDIS_He3_BeamOnTarget_3.999e10_CO2_skim.root
+-rw-r--r-- 1 zwzhao 12gev_solid 63754741273 2019-11-25 23:12 cc_pro_SIDIS_He3_BeamOnTarget_5.87e10_C4F8_skim.root
+-rw-r--r-- 1 zwzhao 12gev_solid 61861527552 2019-11-25 08:48 cc_pro_SIDIS_He3_BeamOnTarget_5.956e10_CO2_skim.root
+-rw-r--r-- 1 zwzhao 12gev_solid  2604298006 2019-11-22 12:33 cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7.root
+-rw-r--r-- 1 zwzhao 12gev_solid  2457977020 2019-11-22 12:33 cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7.root
+-rw-r--r-- 1 zwzhao 12gev_solid  4818269187 2019-11-27 09:04 cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7.root
+-rw-r--r-- 1 zwzhao 12gev_solid  4786762308 2019-11-22 12:23 cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7.root
+-rw-r--r-- 1 zwzhao 12gev_solid  4785949091 2019-11-22 12:23 cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7.root
+-rw-r--r-- 1 zwzhao 12gev_solid  4785524885 2019-11-27 11:55 cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7.root
+-rw-r--r-- 1 zwzhao 12gev_solid  5737705243 2019-11-22 10:26 cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7.root
+-rw-r--r-- 1 zwzhao 12gev_solid  5713403078 2019-11-22 10:26 cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7.root
+-rw-r--r-- 1 zwzhao 12gev_solid  5706368291 2019-11-27 09:03 cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7.root
+
