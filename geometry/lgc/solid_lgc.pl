@@ -49,6 +49,7 @@ require 'geometries/build_world_and_tank.pl';
 require 'geometries/build_pmts.pl';
 require 'geometries/build_cones.pl';
 require 'geometries/build_mirror1.pl';
+#require 'geometries/build_flatMirrorArray_test.pl';
 require 'geometries/build_mirror2.pl';
 require 'geometries/build_mirror3.pl';
 require 'geometries/build_support.pl';

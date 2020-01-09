@@ -17,10 +17,15 @@ our $buildSupport = 0;
 our $buildBaffle = 0;
 our $buildBlinders = 0;
 
-our $initRot = -6.0;  #initial rotation of sectors in degrees...  useful for lining up detectors.
+#our $initRot = -6.0;  #initial rotation of sectors in degrees...  useful for lining up detectors.
+our $initRot = -12.0;  #initial rotation of sectors in degrees...  useful for lining up detectors.
 
 our $D2R = 3.14159265/180.0;
 
+
+#some tank settings
+our $backPlaneZ = 301.0; #this is the location of the back plane of the gas tank
+our $frontPlaneZ = 200.0; #this is the location of the front plane of the gas tank
 our $detMom = "root";  #This is the mother volume that the geometries are placed in.
 # our $detMom = "hall";
 our $namePre = "cher_lg_"; #naming convention for light gas cherenkov (so as not to conflict with other subdetector geometry names when we put everything together).
@@ -37,7 +42,8 @@ our $PosV = vector(0.,0.,0.);  #generic position vector
 #initialize PMT settings:
 our $ang_xrot = 55.0; #deg  for pmt orientation about x-dir, default is PVDIS for CLEO map
 our $ang_yrot = 0.0; #deg  for pmt orientation about y-dir, default is PVDIS for CLEO map
-our $ang_zrot = 2.3; #deg  for pmt orientation about z-dir, default is PVDIS for CLEO map
+#our $ang_zrot = 2.3; #deg  for pmt orientation about z-dir, default is PVDIS for CLEO map
+our $ang_zrot = 0.0; #deg  for pmt orientation about z-dir, default is PVDIS for CLEO map
 our $pmtN = 3;  #pmt array size
 our $pmt232 = 0;  #special option to use the 2x3x2 pmt array.
 our $image_x = 0.; #cm  pmt central location
@@ -48,7 +54,7 @@ our $PMTwindow_hfthk = 0.075; #cm;  for wall thickness of pmt enclosure
 our $PMTbox_HL = 0.15; #cm  also for wall thickness of enclosure
 our $pmt_x = 2.6; #cm  The actual length/width of the PMT
 our $pmt_shell = 0.0001; #cm  This is how thick the PMT is (thin to minimize secondary reactions in PMT material);
-our $z_w_half = 15.0;
+our $z_w_half = 15.0; #cone half length
 
 #Vectors for PMT and Winston cone placement:
 our $Pos_im_Obs_V = vector($image_x, $image_y, $image_z);  #position of PMT center

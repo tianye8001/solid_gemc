@@ -37,7 +37,7 @@ sub rotateYv #same but for vector
 
 sub rotateXv #same but for vector
 {
-    print "$_[0]  $_[1]\n";
+    #print "$_[0]  $_[1]\n";
     my $nyV = vector(0, cos($_[1]),-sin($_[1]));
     my $nzV = vector(0, sin($_[1]), cos($_[1]));
     my $nxV = vector(1, 0, 0);
@@ -114,7 +114,11 @@ sub buildSPmirror
     }
 
 #and return PosV
-    $PosV = $PmV + $R*$VnV;  # PosV is the center of the sphere in space.   
+    $PosV = $PmV + $R*$VnV;  # PosV is the center of the sphere in space. 
+	
+	my $VZ = vector(0.,0.,1.0)  ;
+	
+	print "Rotation for PMT array to point at mirror center: ".(acos(($VZ . $VnV)/($VnV->length))*180.0/3.1415)." deg\n";
     
 #    print "$R\n";
 #    print "$PosV\n";
@@ -305,7 +309,29 @@ sub calcIntPoints
     my $inz = $int2[0]->z();
     my $outy = $int2[2]->y();
     my $outz = $int2[2]->z();
+	
+	my $sphereY = $sphereV->y();
+	my $sphereZ = $sphereV->z();
+	
     print " mirror inside y,z: $iny  $inz \n mirror outside y,z: $outy  $outz \n";
+	
+	#lets calculate arc-lengths:
+	#horizontal arc-length top: 
+	
+	my $ydiffTop = ($outy - $sphereY);
+	my $ydiffBot = ($iny - $sphereY);
+	my $zdiffTop = ($outz - $sphereZ);
+	my $zdiffBot = ($inz - $sphereZ);
+	
+	my $angTop = atan($ydiffTop/$zdiffTop);
+	my $angBot = atan($ydiffBot/$zdiffBot);
+	
+	#print "$ydiffTop  $ydiffBot     $zdiffTop    $zdiffBot  $angTop    $angBot\n";
+	
+	my $arcL = $sphereR*(abs($angTop - $angBot));
+	
+	print "arc length along y: $arcL \n";
+	
 
 
 }1;
