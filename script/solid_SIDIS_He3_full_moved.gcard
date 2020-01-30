@@ -1,14 +1,9 @@
 <gcard>
-<option name="DBHOST" value="soliddb"/>
-<option name="DATABASE" value="test"/>
-<option name="DBUSER" value="soliduser"/>
-<option name="DBPSWD" value="ilovesolid"/>
-
 <detector name="../geometry/magnet_moved/solid_solenoid" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_largeangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/hgc_moved/solid_SIDIS_hgc" factory="TEXT" variation="Original"/>
-<detector name="../geometry/lgc/lg_cherenkov" factory="TEXT" variation="SIDIS"/>
+<detector name="../geometry/lgc_moved/lg_cherenkov" factory="TEXT" variation="SIDIS"/>
 <detector name="../geometry/mrpc_moved/solid_SIDIS_mrpc_forwardangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/spd_moved/solid_SIDIS_spd_forwardangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/spd_moved/solid_SIDIS_spd_largeangle" factory="TEXT" variation="Original"/>
@@ -29,9 +24,9 @@
 <option name="MAX_Z_POS" value="20000"/>
 <option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
 
+
 <option name="FIELD_DIR" value="../field"/>
-<option name="HALL_FIELD" value="solenoid_v1"/>
-<option name="FIELD_PROPERTIES" value="solenoid_v1, 0.01*mm, G4ClassicalRK4,linear"/>
+<option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
 <option name="BEAM_P"   value="e-,5.5*GeV,20*deg,0*deg"/>
 <option name="SPREAD_P" value="5.5*GeV,20*deg,180*deg"/>
