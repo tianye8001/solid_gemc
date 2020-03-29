@@ -171,14 +171,17 @@ Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigg
     // 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-102))/51),pmt_y=int((solid_hgc_avg_ly->at(j)-(-102))/51); // hgc
     //hgc_moved
     //	for whole pmt
-	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-107))/53.5),pmt_y=int((solid_hgc_avg_ly->at(j)-(-107))/53.5);
-//   	  cout << sector << " " << 4*(3-pmt_y)+pmt_x << " " << solid_hgc_avg_lx->at(j) << " " << pmt_x << " " << solid_hgc_avg_ly->at(j) << " " << pmt_y << endl;    
-	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<4 && 0<=pmt_y && pmt_y<4){	    
-		hit_hgc[16*sector+4*(3-pmt_y)+pmt_x] += 1;
+// 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-107))/53.5),pmt_y=int((solid_hgc_avg_ly->at(j)-(-107))/53.5);
+// // 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-107))/53.5),pmt_y=int((solid_hgc_avg_lz->at(j)-(-107))/53.5); //cc_pro	
+// 	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<4 && 0<=pmt_y && pmt_y<4){	    
+// 		hit_hgc[16*sector+4*(3-pmt_y)+pmt_x] += 1;
 // 	  for 64 pixel
 // 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-107))/6.69),pmt_y=int((solid_hgc_avg_ly->at(j)-(-107))/6.69); 
-// 	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<32 && 0<=pmt_y && pmt_y<32){	    	  
-// 		hit_hgc[1024*sector+32*(31-pmt_y)+pmt_x] += 1;		
+	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-107))/6.69),pmt_y=int((solid_hgc_avg_lz->at(j)-(-107))/6.69); //cc_pro	
+	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<32 && 0<=pmt_y && pmt_y<32){	    	  
+		hit_hgc[1024*sector+32*(31-pmt_y)+pmt_x] += 1;		
+
+// //   	  cout << sector << " " << 4*(3-pmt_y)+pmt_x << " " << solid_hgc_avg_lx->at(j) << " " << pmt_x << " " << solid_hgc_avg_ly->at(j) << " " << pmt_y << endl;    
 		
     // 	    hit_hgc[16*sector+4*(3-pmt_y)+pmt_x] += weight;		
 	      }
@@ -193,11 +196,11 @@ Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigg
   for(UInt_t i = 0; i < 30; i++){
     Int_t ntrigpmts_hgc =0;
     //for whole pmt
-    for(Int_t j = 0; j < 16; j++){       
-      if(hit_hgc[i*16+j] >= PEthresh_hgc) ntrigpmts_hgc++;
+//     for(Int_t j = 0; j < 16; j++){       
+//       if(hit_hgc[i*16+j] >= PEthresh_hgc) ntrigpmts_hgc++;
       //for 64 pixel
-//     for(Int_t j = 0; j < 1024; j++){       
-//       if(hit_hgc[i*1024+j] >= PEthresh_hgc) ntrigpmts_hgc++;    
+    for(Int_t j = 0; j < 1024; j++){       
+      if(hit_hgc[i*1024+j] >= PEthresh_hgc) ntrigpmts_hgc++;    
     }
     if(ntrigpmts_hgc >= PMTthresh_hgc) {
       ntrigsecs_hgc++;

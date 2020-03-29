@@ -189,26 +189,30 @@ else {
 }
 
 const int ch_lgc=270;
-const int ch_hgc=480;    //use pmt readout
-// const int ch_hgc=30720;		//use pixel readout
+// const int ch_hgc=480;    //use pmt readout
+const int ch_hgc=30720;		//use pixel readout
 
 Float_t npe_lgc[ch_lgc],npe_hgc[ch_hgc];
 Float_t npe_lgc_total=0;
 Float_t npe_hgc_total=0;
 		  
-char mlpfile_lgc_name[200];
-sprintf(mlpfile_lgc_name, "%s_mlp_lgc.root",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
-TFile *mlpfile_lgc=new TFile(mlpfile_lgc_name, "recreate");
-TTree *mlptree_lgc = new TTree("lgc", "npe");
-for(int i=0;i<ch_lgc;i++) mlptree_lgc->Branch(Form("npe_lgc%i",i), &npe_lgc[i], Form("npe_lgc%i/F",i));
-mlptree_lgc->Branch("npe_lgc_total", &npe_lgc_total, "npe_lgc_total/F");
+// char mlpfile_lgc_name[200];
+// sprintf(mlpfile_lgc_name, "%s_mlp_lgc.root",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+// TFile *mlpfile_lgc=new TFile(mlpfile_lgc_name, "recreate");
+// TTree *mlptree_lgc = new TTree("lgc", "npe");
+// for(int i=0;i<ch_lgc;i++) mlptree_lgc->Branch(Form("npe_lgc%i",i), &npe_lgc[i], Form("npe_lgc%i/F",i));
+// mlptree_lgc->Branch("npe_lgc_total", &npe_lgc_total, "npe_lgc_total/F");
+// 
+// char mlpfile_hgc_name[200];
+// sprintf(mlpfile_hgc_name, "%s_mlp_hgc.root",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+// TFile *mlpfile_hgc=new TFile(mlpfile_hgc_name, "recreate");
+// TTree *mlptree_hgc = new TTree("hgc", "npe");
+// for(int i=0;i<ch_hgc;i++) mlptree_hgc->Branch(Form("npe_hgc%i",i), &npe_hgc[i], Form("npe_hgc%i/F",i));
+// mlptree_hgc->Branch("npe_hgc_total", &npe_hgc_total, "npe_hgc_total/F");
 
-char mlpfile_hgc_name[200];
-sprintf(mlpfile_hgc_name, "%s_mlp_hgc.root",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
-TFile *mlpfile_hgc=new TFile(mlpfile_hgc_name, "recreate");
-TTree *mlptree_hgc = new TTree("hgc", "npe");
-for(int i=0;i<ch_hgc;i++) mlptree_hgc->Branch(Form("npe_hgc%i",i), &npe_hgc[i], Form("npe_hgc%i/F",i));
-mlptree_hgc->Branch("npe_hgc_total", &npe_hgc_total, "npe_hgc_total/F");
+char textfile_name[200];
+sprintf(textfile_name,"%s_pixel.ml",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+ofstream textfile(textfile_name,std::ofstream::trunc);
 
 TFile *file=new TFile(inputfile_name.c_str());
 
@@ -222,9 +226,9 @@ if (found!=std::string::npos)  inputfile_name.replace(found,5,"work");
 char the_filename[500];
 sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
 
-char outputfile_name[200];
-sprintf(outputfile_name, "%s_output.root",the_filename);
-TFile *outputfile=new TFile(outputfile_name, "recreate");
+// char outputfile_name[200];
+// sprintf(outputfile_name, "%s_output.root",the_filename);
+// TFile *outputfile=new TFile(outputfile_name, "recreate");
 
 // prepare for outputs
 // define histograms, output txt files etc...
@@ -552,6 +556,13 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		
 		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc);
 
+		for(int index=0;index<ch_hgc;index++){
+		  if (hit_hgc[index]>0) {
+// 		    cout << i << "\t" << index << "\t" << hit_hgc[index] << endl;		    
+		    textfile << i << "\t" << index << "\t" << hit_hgc[index] << endl;
+		  }
+		}
+
 		bool Is_ok=false;
 		for(int index=0;index<ch_hgc;index++){
 // 		      int pmt_sec=index/16;		  
@@ -640,7 +651,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  hnpe_hgc->Fill(npe_hgc_total);
 		  
 // 		  for(int pmt_id=0;pmt_id<ch_hgc;pmt_id++) cout << npe_hgc[pmt_id] << "\t";
-		  if (npe_hgc_total>0) mlptree_hgc->Fill();
+// 		  if (npe_hgc_total>0) mlptree_hgc->Fill();
 		  
 // 		if (-365< vz_gen/10. && vz_gen/10. < -335){
 		if (7<=theta_gen && theta_gen <=15){ //has to cut to prevent int(-1)=0 !!!!!
@@ -677,13 +688,14 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 
 
 //do outputs
+textfile.close();
 
-outputfile->Write();	
-outputfile->Flush();
+// outputfile->Write();	
+// outputfile->Flush();
 
-mlpfile_lgc->Write();	
-mlpfile_lgc->Flush();
-mlpfile_hgc->Write();	
-mlpfile_hgc->Flush();
+// mlpfile_lgc->Write();	
+// mlpfile_lgc->Flush();
+// mlpfile_hgc->Write();	
+// mlpfile_hgc->Flush();
 
 }
