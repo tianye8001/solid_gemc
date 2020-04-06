@@ -1,17 +1,13 @@
 <gcard>
-<option name="DBHOST" value="soliddb"/>
-<option name="DATABASE" value="test"/>
-<option name="DBUSER" value="soliduser"/>
-<option name="DBPSWD" value="ilovesolid"/>
 
-<detector name="../geometry/magnet/solid_solenoid" factory="TEXT" variation="Original"/>
-<detector name="../geometry/ec_segmented/solid_SIDIS_ec_largeangle" factory="TEXT" variation="Original"/>
-<detector name="../geometry/ec_segmented/solid_SIDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
-<detector name="../geometry/hgc/solid_SIDIS_hgc" factory="TEXT" variation="Original"/>
-<detector name="../geometry/lgc/lg_cherenkov" factory="TEXT" variation="SIDIS"/>
-<detector name="../geometry/mrpc/solid_SIDIS_mrpc_forwardangle" factory="TEXT" variation="Original"/>
-<detector name="../geometry/spd/solid_SIDIS_spd_forwardangle" factory="TEXT" variation="Original"/>
-<detector name="../geometry/spd/solid_SIDIS_spd_largeangle" factory="TEXT" variation="Original"/>
+<detector name="../geometry/magnet_moved/v1/" factory="CAD"/>
+<detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_largeangle" factory="TEXT" variation="Original"/>
+<detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
+<detector name="../geometry/hgc_moved/solid_SIDIS_hgc" factory="TEXT" variation="Original"/>
+<detector name="../geometry/lgc_moved/lg_cherenkov" factory="TEXT" variation="SIDIS"/>
+<detector name="../geometry/mrpc_moved/solid_SIDIS_mrpc_forwardangle" factory="TEXT" variation="Original"/>
+<detector name="../geometry/spd_moved/solid_SIDIS_spd_forwardangle" factory="TEXT" variation="Original"/>
+<detector name="../geometry/spd_moved/solid_SIDIS_spd_largeangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/gem/solid_SIDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_SIDIS_target_NH3" factory="TEXT" variation="Original"/>
 <detector name="../geometry/beamline/solid_SIDIS_beamline_NH3" factory="TEXT" variation="Original"/>

@@ -29,7 +29,7 @@
 /// \author \n &copy; Maurizio Ungaro
 /// \author e-mail: ungaro@jlab.org\n\n\n
 
-const char *GEMC_VERSION = "gemc 2.7";
+const char *GEMC_VERSION = "gemc 2.8";
 
 // G4 headers
 #include "G4RunManager.hh"
@@ -196,7 +196,7 @@ int main( int argc, char **argv )
 	// Process Hit Map
 	gemc_splash.message(" Building gemc Process Hit Factory...");
 	map<string, HitProcess_Factory> hitProcessMap = HitProcess_Map(gemcOpt.optMap["HIT_PROCESS_LIST"].args);
-
+	
 	//addtional hit process
  	solid_hitprocess(hitProcessMap);	
 	
@@ -281,18 +281,7 @@ int main( int argc, char **argv )
 	for(set<string>::iterator fit = ExpHall->activeFields.begin(); fit != ExpHall->activeFields.end(); fit++)
 		gemcOpt.optMap["ACTIVEFIELDS"].args = gemcOpt.optMap["ACTIVEFIELDS"].args + *fit + " ";
 	
-	
-	// Creating the sim_condition map to save to the output
-	gemc_splash.message(" Writing simulation parameters in the output...");
-	
-	// filling gcard option content
-	map<string, string> sim_condition = gemcOpt.getOptMap();
-	// adding detectors conditions to sim_condition
-	mergeMaps(sim_condition, runConds.getDetectorConditionsMap());
-	// adding parameters value to sim_condition
-	mergeMaps(sim_condition, getParametersMap(gParameters));
 
-	
 	// Bank Map, derived from sensitive detector map
 	gemc_splash.message(" Creating gemc Banks Map...");
 	map<string, gBank> banksMap = read_banks(gemcOpt, runConds.get_systems());
@@ -301,10 +290,20 @@ int main( int argc, char **argv )
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 	UImanager->SetCoutDestination(NULL);
 
-
 	// saving simulation condition in the output file
-	if(outContainer.outType != "no")
-	{
+	if(outContainer.outType != "no") {
+		// Creating the sim_condition map to save to the output
+		gemc_splash.message(" Writing simulation parameters in the output...");
+
+		// filling gcard option content
+		map<string, string> sim_condition = gemcOpt.getOptMap();
+		// adding detectors conditions to sim_condition
+		mergeMaps(sim_condition, runConds.getDetectorConditionsMap());
+		// adding parameters value to sim_condition
+		mergeMaps(sim_condition, getParametersMap(gParameters));
+
+		sim_condition["JSON"] = gemcOpt.jSonOptions();
+
 		outputFactory *processOutputFactory  = getOutputFactory(&outputFactoryMap, outContainer.outType);
 		processOutputFactory->recordSimConditions(&outContainer, sim_condition);
 		// then deleting process output pointer, not needed anymore
@@ -321,9 +320,9 @@ int main( int argc, char **argv )
  	
 	///< passing output process factory to sensitive detectors
 	map<string, sensitiveDetector*>::iterator it;
-	for(it = ExpHall->SeDe_Map.begin(); it != ExpHall->SeDe_Map.end(); it++)
+	for(it = ExpHall->SeDe_Map.begin(); it != ExpHall->SeDe_Map.end(); it++) {
 		it->second->hitProcessMap = &hitProcessMap;
-	
+	}
 	
 
 	
@@ -335,7 +334,7 @@ int main( int argc, char **argv )
 	
 	clock_t start_events;
 
-	int nEventsToProcess = gemcOpt.optMap["N"].arg;
+	long int nEventsToProcess = gemcOpt.optMap["N"].arg;
 
 	// if it is not set explicitely, and it is a file input, then run all the event in the file by default
 	// only in batch mode
@@ -381,7 +380,7 @@ int main( int argc, char **argv )
 				start_events = clock();
 				nEventsToProcess--;
 			}
-			sprintf(command, "/run/beamOn %d", nEventsToProcess);
+			sprintf(command, "/run/beamOn %ld", nEventsToProcess);
 			UImanager->ApplyCommand(command);
 		}
 		
@@ -404,7 +403,7 @@ int main( int argc, char **argv )
 				start_events = clock();
 				nEventsToProcess--;
 			}
-			sprintf(command, "/run/beamOn %d", nEventsToProcess);
+			sprintf(command, "/run/beamOn %ld", nEventsToProcess);
 			UImanager->ApplyCommand(command);
 		}
 	}

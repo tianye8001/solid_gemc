@@ -36,17 +36,19 @@ import os
 gemcpath = os.environ['GEMC']+'/'
 env.Append(LIBPATH = gemcpath)
 env.Append(LIBS = "gemc")
-# LIBPATH here is what GEMC used to link all the libraries to gemc.so
+# LIBPATH here is what GEMC used to link all the libraries to libgemc.so
 rpath = env['LIBPATH']
 
 # Include Path
-incpath = ['.',gemcpath, gemcpath+'src', gemcpath+'materials',gemcpath+'mirrors',gemcpath+'parameters',gemcpath+'utilities',gemcpath+'detector',gemcpath+'sensitivity',gemcpath+'physics',gemcpath+'fields',gemcpath+'output',gemcpath+'gui/src',gemcpath+'hitprocess', gemcpath+'hitprocess/clas12', gemcpath+'hitprocess/clas12/bdx', gemcpath+'hitprocess/HPS',gemcpath+'hitprocess/injector', gemcpath+'hitprocess/GlueX']
+incpath = ['.',gemcpath, gemcpath+'src', gemcpath+'materials',gemcpath+'mirrors',gemcpath+'parameters',gemcpath+'utilities',gemcpath+'detector',gemcpath+'sensitivity',gemcpath+'physics',gemcpath+'fields',gemcpath+'output',gemcpath+'gui/src',gemcpath+'hitprocess', gemcpath+'hitprocess/clas12', gemcpath+'hitprocess/clas12/bdx', gemcpath+'hitprocess/HPS',gemcpath+'hitprocess/injector', gemcpath+'hitprocess/GlueX', gemcpath+'hitprocess/eic']
 env.Append(CPPPATH = incpath)
+
+env.Program(source = gemc_sources + hitp_sources, target = "solid_gemc")
 
 #env.Append(LIBPATH = ['lib'])
 #env.Prepend(LIBS =  ['gmaterials', 'gmirrors', 'gparameters', 'gutilities', 'gdetector', 'gsensitivity', 'gphysics', 'gfields', 'ghitprocess', 'goutput', 'ggui'])
+#env.Program(source = gemc_sources, target = "gemc")
 
-env.Program(source = gemc_sources + hitp_sources, target = "solid_gemc")
 
 #if env['LIBRARY'] == "static":
 	#env.Library(source = gemc_sources, target = "gemc")
