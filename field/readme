@@ -1,13 +1,25 @@
-previsou field map at solid_gemc/database_io/field/
-
 == map list ==
 
-CLEOv8, SoLID CLEO2 magnet map,using POSSION, by Zhiwen Zhao 
+https://hallaweb.jlab.org/12GeV/SoLID/download/field/solenoid_v1.dat
+longer endcap, 3D map in 1st quadrant, using TOSCA, by Jay Benesch  in 2018
 
-CLEOv9, longer endcap than CLEOv8,using POSSION, by Zhiwen Zhao using POSSION
+solenoid_CLEOv9, longer endcap than CLEOv8,using POSSION, by Zhiwen Zhao 
+
+solenoid_CLEOv8, SoLID CLEO2 magnet map,using POSSION, by Zhiwen Zhao 
+solenoid_CLEOv8_Bz  (Bz field only, Br is 0)
+Bz1.4T uniform Bz field , close to the peak value of CLEOv8
+
+oxford_target,  SoLID SIDIS NH3 target field, map according to oxford 2012 design, using code "oxford_field.f", by Chao Gu
 
 solenoid_target, SoLID SIDIS NH3 target field, converted from g2p map incorrectly, by Kalyan Allada and Zhiwen Zhao
 
-g2p_target, SoLID SIDIS NH3 target field, original g2p map, using code "g2p_hallbfield.f", by Chao Gu
+g2p_target, original g2p map, using code "g2p_hallbfield.f", by Chao Gu
 
-oxford_target,  SoLID SIDIS NH3 target field, map according to oxford 2012 design, using code "oxford_field.f", by Chao Gu
+== info ===
+
+old info
+https://hallaweb.jlab.org/wiki/index.php/Magnetic_Field_Map
+
+old field map
+https://jlabsvn.jlab.org/svnroot/solid/solid_gemc/database_io/field/
+
