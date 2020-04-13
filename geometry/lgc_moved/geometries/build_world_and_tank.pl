@@ -330,8 +330,8 @@ sub make_tank_CLEO_sidis
 
 
 #front window:
-    $detector{"name"}        = $namePre."Tank2_window_front";
-    $detector{"mother"}      = $namePre."Tank2";
+    $detector{"name"}        = $namePre."Tank_window_front";
+    $detector{"mother"}      = $namePre."Tank";
     $detector{"description"} = "tank window front";
     $detector{"pos"}         = "0*cm 0*cm ".$cleo_sidis_fw_zpos."*cm";
     $detector{"rotation"}    = "0*deg 0*deg 0*deg";
