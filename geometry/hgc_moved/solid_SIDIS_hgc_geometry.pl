@@ -36,10 +36,14 @@ my $Z_target=350;  # distance between the target center and the origin
 
 # Parameters
 ## Chamber
-my $Rmin1_chamber=80.3;  # inner radius of the chamber at the upstream side
-my $Rmax1_chamber=265;  # outer radius of the chamber at the upstream side
-my $Rmin2_chamber=92;  # inner radius of the chamber at the downstream side
-my $Rmax2_chamber=265;  # outer radius of the chamber at the downstream side
+# my $Rmin1_chamber=80.3;  # inner radius of the chamber at the upstream side
+# my $Rmax1_chamber=265;  # outer radius of the chamber at the upstream side
+# my $Rmin2_chamber=92;  # inner radius of the chamber at the downstream side
+# my $Rmax2_chamber=265;  # outer radius of the chamber at the downstream side
+my $Rmin1_chamber=85.5;  # inner radius of the chamber at the upstream side
+my $Rmax1_chamber=260;  # outer radius of the chamber at the upstream side
+my $Rmin2_chamber=89;  # inner radius of the chamber at the downstream side
+my $Rmax2_chamber=260;  # outer radius of the chamber at the downstream side
 my $Zmin_chamber=326;  # z position of the chamber at the upstream side
 my $Zmax_chamber=426;  # z position of the chamber at the downstream side
 
