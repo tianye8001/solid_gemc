@@ -41,12 +41,13 @@ const double DEG=180./3.1415926;   //rad to degree
 
 //#####################################################################################################################################################
 
-int analysis_PVDIS_FOM(string inputfile_name,string runmode="phys", bool Is_tellorig=false,string filetype=""){
+int analysis_PVDIS_FOM(string inputfile_name,string genfile_name,string runmode="phys", bool Is_tellorig=false,string filetype=""){
 
 // gStyle->SetOptStat(11111111);
   gStyle->SetOptStat(0);
 
-TFile *file_rate=new TFile("/work/halla/solid/evgen/eicRate/PVDIS_LD2/rate_solid_PVDIS_LD2_eDIS_1e6.root");
+  //open file from generator
+TFile *file_rate=new TFile(genfile_name.c_str());
 // TFile *file_rate=new TFile("/home/zwzhao/work_halla/solid/solid_svn/solid/evgen/eicRate_20101102/output/PVDIS_LD2/rate_solid_PVDIS_LD2_6.6GeV_eDIS_1e6.root");
   
 //     if (file->IsZombie()) {
@@ -141,15 +142,17 @@ TFile *file=new TFile(inputfile_name.c_str());
 // 	TFile *background_file=new TFile(background_inputfile_name);
 // 	TH1F *h_pe=(TH1F*)background_file->Get("h_pe");
 
-std::size_t found = inputfile_name.rfind("cache");
-if (found!=std::string::npos)  inputfile_name.replace(found,5,"/home/$USER");
+// std::size_t found = inputfile_name.rfind("cache");
+// if (found!=std::string::npos)  inputfile_name.replace(found,5,"/home/$USER");
 
-char the_filename[200];
-sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+// char the_filename[200];
+// sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
 
-char outputfile_name[200];
-sprintf(outputfile_name, "%s_output.root",the_filename);
-TFile *outputfile=new TFile(outputfile_name, "recreate");
+// char outputfile_name[200];
+// sprintf(outputfile_name, "%s_output.root",the_filename);
+// TFile *outputfile=new TFile(outputfile_name, "recreate");
+
+TFile *outputfile=new TFile("output.root", "recreate");
 
 // prepare for outputs
 // define histograms, output txt files etc...

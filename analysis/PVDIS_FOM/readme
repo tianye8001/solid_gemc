@@ -3,7 +3,12 @@ This tool is to calculate PVDIS Figure of Merit which is Apv_Err in Q2 and x bin
 It uses root output from full solid simulation
 
 how to run it
-root 'analysis_PVDIS_FOM("inputfile_name")'
+root 'analysis_PVDIS_FOM("sim.root","gen.root")'
+
+a test
+root 'analysis_PVDIS_FOM("/work/halla/solid/sim/solid_gemc/PVDIS_LD2_JLAB_VERSION_1.3/pass7/farm_solid_PVDIS_LD2_dirty_weighted_eDIS/out.root","/work/halla/solid/sim/solid_gemc/PVDIS_LD2_JLAB_VERSION_1.3/pass7/farm_solid_PVDIS_LD2_dirty_weighted_eDIS/gen.root")'
+
+results are in "output.root"
 
 It use result eDIS from generator eicRate
 Apv is checked with two method
