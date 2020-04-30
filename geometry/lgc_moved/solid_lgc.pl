@@ -84,16 +84,23 @@ if($detPlane){
 #start building the pieces:
 
 if($buildTank){
-    if($use_CLEO){
-	make_tank_CLEO_pvdis();
-	if(!$use_pvdis){
-	    make_tank_CLEO_sidis();
+    #if($use_CLEO){
+	#   make_tank_CLEO_pvdis();
+	#if(!$use_pvdis){
+	#    make_tank_CLEO_sidis();
+	#}else{
+	#    make_tank_CLEO_frontwindow();
+	#}
+    #}else{
+	#  make_tank_BaBar_pvdis();
+    #}
+	if($use_pvdis){
+		make_tank_CLEO_pvdis();
+		make_tank_CLEO_frontwindow();
 	}else{
-	    make_tank_CLEO_frontwindow();
+		make_tank_CLEO_sidis();
 	}
-    }else{
-	make_tank_BaBar_pvdis();
-    }
+	
 }
 if($buildPMTs){
     makePMTs();

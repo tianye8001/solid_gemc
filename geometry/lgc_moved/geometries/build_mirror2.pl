@@ -7,8 +7,8 @@ sub make_mirror2
     
     my $mirrRotPoint = vector(0.0, (-$V0_tg_V->z() + $zMirrRotPoint2)*tan($cr_ang2*$D2R), $zMirrRotPoint2);
 
-    my $Z_front = 200.0 - $V0_tg_V->z();
-    my $Z_end = 301.0 - $V0_tg_V->z();
+    my $Z_front = $frontPlaneZ - $V0_tg_V->z();
+    my $Z_end = $backPlaneZ - $V0_tg_V->z();
     my $R_front_in = $Z_front*tan($Angle_in2*$D2R);
     my $R_front_out = $Z_front*tan($Angle_out2*$D2R);
     my $R_end_in = $Z_end*tan($Angle_in2*$D2R);
@@ -16,7 +16,7 @@ sub make_mirror2
 
     &buildSPmirror($V0_tg_V, $Pos_im_Obs_V, $cr_ang2, $Z_M2);
     my $PosV_temp = $PosV;
-    my $PosV_cone = vector(0.,0.,250.5);
+    my $PosV_cone = vector(0.,0.,250.5);  #virtual cone position needs to be far enough for useful subtraction of geometries
     my $PosV_delta = vector(0., 0., 0.);
     my $PosV_deltaC = vector(0., 0., 0.);
 
@@ -114,6 +114,17 @@ sub make_mirror2
 	$detector{"hit_type"}    = "mirror";
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);
+	
+	if($n==1){
+		print "Mirror sphere properties: \n";
+		print "   location:  ".sprintf('%.3f',$PosV_temp->x())."*cm ".sprintf('%.3f',$PosV_temp->y())."*cm ".sprintf('%.3f',$PosV_temp->z())."*cm\n";
+		print "   dimensions:  ".sprintf('%.3f',$R)."*cm ". sprintf('%.3f',$R + 0.1*$T_M2)."*cm 0.0 360.0*deg 0.0 90.0*deg\n";
+		print "Mirror cone properties: \n";
+		print "   location:  ".sprintf('%.3f',$PosV_cone->x())."*cm ".sprintf('%.3f',$PosV_cone->y())."*cm ".sprintf('%.3f',$PosV_cone->z())."*cm\n";
+		print "   rotation:  "."ordered: zyx ".$rotAng."*deg 0*deg ".(-$mirrAng2)."*deg\n";
+		print "   dimensions:  ".printf('%.3f',$R_front_in)."*cm ". sprintf('%.3f',$R_front_out)."*cm ".sprintf('%.3f',$R_end_in)."*cm ".sprintf('%.3f',$R_end_out)."*cm ".sprintf('%.3f',0.5*($Z_end - $Z_front))."*cm "." 84*deg 12*deg\n";
+		print "relative position: ".sprintf('%.3f',$PosV_temp_CM->x())."*cm ".sprintf('%.3f',$PosV_temp_CM->y())."*cm ".sprintf('%.3f',$PosV_temp_CM->z())."*cm\n";
+	}
 
 
     }

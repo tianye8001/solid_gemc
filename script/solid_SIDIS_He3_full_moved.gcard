@@ -10,6 +10,7 @@
 <detector name="../geometry/spd_moved/solid_SIDIS_spd_largeangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/gem/solid_SIDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_SIDIS_target_He3" factory="TEXT" variation="Original"/>
+<detector name="../geometry/target/solid_SIDIS_target_He3_coil" factory="TEXT" variation="Original"/>
 <detector name="../geometry/beamline/solid_SIDIS_beamline_He3" factory="TEXT" variation="Original"/>
 
 
@@ -26,8 +27,8 @@
 <option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
 
 <option name="FIELD_DIR" value="../field"/>
-<option name="HALL_FIELD" value="solenoid_v1"/>
-<option name="FIELD_PROPERTIES" value="solenoid_v1, 0.01*mm, G4ClassicalRK4,linear"/>
+<option name="HALL_FIELD" value="solenoid_v2"/>
+<option name="FIELD_PROPERTIES" value="solenoid_v2, 0.01*mm, G4ClassicalRK4,linear"/>
 
 <option name="BEAM_P"   value="e-,5.5*GeV,20*deg,0*deg"/>
 <option name="SPREAD_P" value="5.5*GeV,20*deg,180*deg"/>
