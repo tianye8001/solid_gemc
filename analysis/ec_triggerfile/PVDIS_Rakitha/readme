@@ -1,4 +1,7 @@
-note in 2017/04 from Rakitha
+old one in 2016
+PVDIS_LD2_FAEC_electron_trigger_HallDRakitha.C
+http://hallaweb.jlab.org/12GeV/SoLID/download/ec/talk/ecal_HallD_TriggerAnalysis3.pdf
 
-PVDIS_LD2_FAEC_electron_trigger_HallDRakitha.C did not include the sector separation. If a 6+1 cluster from a different sector at lower radius becomes the maximum cluster and fails the trigger threshold cut, then the electron track in the original sector would be lost to no trigger. This was the reason that electron efficiency dropped after including the background. This can happen within a sector but at current EC background rate, such a cluster triggering is rare and not observed. Therefore, the loss of electron trigger due to this effect can be ignored. The sector separation was not included by accident but now it is included. See attached efficiency plots before and after the background. 
-new trigger is Get_PVDIS_trigger_efficiency_EC.C
+new one in 2017/04 from Rakitha
+Get_PVDIS_trigger_efficiency_EC.C
+did not include the sector separation. If a 6+1 cluster from a different sector at lower radius becomes the maximum cluster and fails the trigger threshold cut, then the electron track in the original sector would be lost to no trigger. This was the reason that electron efficiency dropped after including the background. This can happen within a sector but at current EC background rate, such a cluster triggering is rare and not observed. Therefore, the loss of electron trigger due to this effect can be ignored. The sector separation was not included by accident but now it is included. See attached efficiency plots before and after the background. 
