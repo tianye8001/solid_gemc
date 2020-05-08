@@ -20,6 +20,7 @@ make_mirror();
 make_pmt();
 make_scplane_front();
 make_scplane_back();
+make_ec();
 }
 
 # N.B.
@@ -30,7 +31,8 @@ my $DEG=180/3.1415926;  # conversion factor between degrees and radians
 
 # Parameters
 ## Chamber
-my $Ang_chamber=4;
+my $Ang_chamber=-74.55;  #angle from the upstream beamline to the Cherenkov is about 105.45 with a hard to estimate error
+# my $Ang_chamber=4;
 # my $Ang_chamber=0.0;
 my $Rmin1_chamber=0;  # inner radius of the chamber at the upstream side
 my $Rmax1_chamber=14/2*2.54;  # outer radius of the chamber at the upstream side, 14 inch diameter
@@ -38,8 +40,8 @@ my $Rmin2_chamber=0;  # inner radius of the chamber at the downstream side
 my $Rmax2_chamber=14/2*2.54;  # outer radius of the chamber at the downstream side, 14 inch diameter
 # my $Zmin_chamber=1000;  # z position of the chamber at the upstream side
 # my $Zmax_chamber=1254;  # z position of the chamber at the downstream side
-my $Zmin_chamber=1000;  # z position of the chamber at the upstream side
-my $Zmax_chamber=$Zmin_chamber+60*2.54;  # z position of the chamber at the downstream side
+my $Zmin_chamber=543.6+5*2.54;  # z position of the chamber at the upstream side, 
+my $Zmax_chamber=$Zmin_chamber+60*2.54;  # z position of the chamber at the downstream side, see $sc1_zpos_loc
 # my $Zmin_chamber=-300;  # z position of the chamber at the upstream side
 # my $Zmax_chamber=300;  # z position of the chamber at the downstream side
 
@@ -76,19 +78,19 @@ my $mirror_Z=$Zmin_chamber+40*2.54;
 
 ## PMT
 my $half_width = 10.65;  # half width of the PMT
-my $windowhalf_z = 1;  # half thickness of the front side of PMT
+my $windowhalf_z = 0.05;  # half thickness of the front side of PMT
 my $backendhalf_z = 1;   # half thickness of the back side of PMT
 my $half_z = $windowhalf_z + $backendhalf_z;  # total half length of the PMT
 
 ## Scintillators:
-my $sc1_x_hlfln = 7.0*2.54;  #for now, we assume the same size as the outer radius of the tube
-my $sc1_y_hlfln = 7.0*2.54;  
-my $sc2_x_hlfln = 7.0*2.54;
-my $sc2_y_hlfln = 7.0*2.54;
-my $sc_z_hlfln = 2.54/8.0;  #need exact measurement, but we assume they are 1/4" thick
+my $sc1_x_hlfln = 8/2*2.54;  
+my $sc1_y_hlfln = 22/2*2.54;  
+my $sc2_x_hlfln = 8/2*2.54;
+my $sc2_y_hlfln = 22/2*2.54;
+my $sc_z_hlfln = 0.25/2*2.54;
 
-my $sc1_zpos_loc = $Z_window_front - 10.; #10cm in front of front window
-my $sc2_zpos_loc = $Z_window_back + 10.; #10cm behind of front window
+my $sc1_zpos_loc = $Z_window_front - 5*2.54; #5inch before front window, 17 feet 10 inch (543.6cm) to pivot by Jack Seagal
+my $sc2_zpos_loc = $Z_window_back + 5*2.54; #5inch behind back window
 
 my $sc1x = sin(-$Ang_chamber/$DEG)*$sc1_zpos_loc;
 my $sc1y = 0.0;
@@ -98,6 +100,17 @@ my $sc2x = sin(-$Ang_chamber/$DEG)*$sc2_zpos_loc;
 my $sc2y = 0.0;
 my $sc2z = cos($Ang_chamber/$DEG)*$sc2_zpos_loc;
 
+## EC: 4.25in square modules with length 18in in 3x3 array
+my $ec_x_hlfln = 4.25*3/2*2.54;  
+my $ec_y_hlfln = 4.25*3/2*2.54;  
+# my $ec_z_hlfln = 18/2*2.54;
+my $ec_z_hlfln = 0.01/2*2.54;
+
+my $ec_zpos_loc = $Z_window_back + 17*2.54 + $ec_z_hlfln;
+
+my $ec_xpos = sin(-$Ang_chamber/$DEG)*$ec_zpos_loc;
+my $ec_ypos = 0.0;
+my $ec_zpos = cos($Ang_chamber/$DEG)*$ec_zpos_loc;
 
 # Hittype and materials
 my $hitype="solid_hgc";  # alternative: "flux"
@@ -106,13 +119,15 @@ my $material_window_front = "G4_Al";
 my $material_window_back = "G4_POLYVINYL_CHLORIDE";  #actually, the back will be PVC
 # my $material_gas="SL_HGC_C4F8_oneatm";  
 # my $material_pmt_surface = "SL_HGC_C4F8_oneatm";
-# my $material_gas="SL_LGCCgas";
-# my $material_pmt_surface = "SL_LGCCgas";
-my $material_gas="SL_N2gas";
-my $material_pmt_surface = "SL_N2gas";
+my $material_gas="SL_LGCCgas";
+my $material_pmt_surface = "SL_LGCCgas";
+# my $material_gas="SL_N2gas";
+# my $material_pmt_surface = "SL_N2gas";
 my $material_pmt_backend= "Kryptonite";
 my $material_mirror= "SL_HGC_CFRP";
 my $material_scint = "G4_PLASTIC_SC_VINYLTOLUENE";
+# my $material_ec = "G4_SODIUM_IODIDE";
+my $material_ec = "Kryptonite";
 
 sub make_chamber
 {
@@ -354,10 +369,10 @@ sub make_pmt
       $detector{"mother"}      = "$DetectorName\_gas";
       $detector{"description"} = $detector{"name"};
       $detector{"pos"}         = "0*cm 47*cm $mirror_Z*cm";
-      $detector{"rotation"}    =  "ordered: zxy 0*deg 0*deg 0*deg";
+      $detector{"rotation"}    = "-90*deg 0*deg 0*deg";
       $detector{"color"}       = "000000";  #cyan
       $detector{"type"}        = "Box";
-      $detector{"dimensions"}  = "$half_width*cm $half_z*cm $half_width*cm";
+      $detector{"dimensions"}  = "$half_width*cm $half_width*cm $half_z*cm";
       $detector{"material"}    = $material_pmt_surface;
       $detector{"mfield"}      = "no";
       $detector{"ncopy"}       = 1;
@@ -371,11 +386,11 @@ sub make_pmt
       $detector{"name"}        = "$DetectorName\_pmt_surface";     
       $detector{"mother"}      = "$DetectorName\_pmt";
       $detector{"description"} = $detector{"name"};
-      $detector{"pos"}         = "0*cm $windowhalf_z*cm 0*cm";
+      $detector{"pos"}         = "0*cm 0*cm $windowhalf_z*cm";
       $detector{"rotation"}    = "0*deg 0*deg 0*deg";
       $detector{"color"}       = "009999";  #cyan
       $detector{"type"}        = "Box";
-      $detector{"dimensions"}  = "$half_width*cm $windowhalf_z*cm $half_width*cm";
+      $detector{"dimensions"}  = "$half_width*cm $half_width*cm $windowhalf_z*cm";
       $detector{"material"}    = $material_pmt_surface;
       $detector{"mfield"}      = "no";
       $detector{"ncopy"}       = 1;
@@ -394,11 +409,11 @@ sub make_pmt
       $detector{"name"}        = "$DetectorName\_pmt_backend";
       $detector{"mother"}      = "$DetectorName\_pmt";      
       $detector{"description"} = $detector{"name"};
-      $detector{"pos"}         = "0*cm -$backendhalf_z*cm 0*cm";
+      $detector{"pos"}         = "0*cm 0*cm -$backendhalf_z*cm";
       $detector{"rotation"}    = "0*deg 0*deg 0*deg";
       $detector{"color"}       = "000000";  #cyan
       $detector{"type"}        = "Box";
-      $detector{"dimensions"}  = "$half_width*cm $backendhalf_z*cm $half_width*cm";
+      $detector{"dimensions"}  = "$half_width*cm $half_width*cm $backendhalf_z*cm";
       $detector{"material"}    = $material_pmt_backend;
       $detector{"mfield"}      = "no";
       $detector{"ncopy"}       = 1;
@@ -455,6 +470,31 @@ sub make_scplane_back
 	$detector{"sensitivity"} = "flux";
 	$detector{"hit_type"}    = "flux";
 	$detector{"identifiers"} = "id manual 2";
+	print_det(\%configuration, \%detector);
+ 
+}
+
+sub make_ec
+{
+	my %detector=init_det();
+	$detector{"name"}        = "$DetectorName\_ec";
+	$detector{"mother"}      = "$DetectorMother";
+	$detector{"description"} = $detector{"name"};
+	$detector{"pos"}         = "$ec_xpos*cm $ec_ypos*cm $ec_zpos*cm"; 
+	$detector{"rotation"}    = "0*deg $Ang_chamber*deg 0*deg";
+	$detector{"color"}       = "aa4422";
+	$detector{"type"}        = "Box";
+	$detector{"dimensions"}  = "$ec_x_hlfln*cm $ec_y_hlfln*cm $ec_z_hlfln*cm";
+	$detector{"material"}    = $material_ec;
+	$detector{"mfield"}      = "no";
+	$detector{"ncopy"}       = 1;
+	$detector{"pMany"}       = 1;
+	$detector{"exist"}       = 1;
+	$detector{"visible"}     = 1;
+	$detector{"style"}       = 1;
+	$detector{"sensitivity"} = "flux";
+	$detector{"hit_type"}    = "flux";
+	$detector{"identifiers"} = "id manual 3";
 	print_det(\%configuration, \%detector);
  
 }

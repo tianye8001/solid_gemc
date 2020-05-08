@@ -1,8 +1,8 @@
 # Configuration file for new_detector
 
 # Detector name and variation
-detector_name: cc_pro
-variation:     CO2LA
+detector_name: beamline
+variation:     He3
 
 # Factory can be MYQL or TEXT
 factory:       TEXT
@@ -15,7 +15,7 @@ rmax:       10000
 dbhost: localhost
 
 # Comments/Description
-comment:       cc_pro
+comment:       beamline
 
 # Verbosity controls the perl script output
 verbosity: 1
