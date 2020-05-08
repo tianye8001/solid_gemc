@@ -2,11 +2,20 @@ machining learning testing ground
 
 To convert HGC gemc output into a text file, run it on jlab ifarm like
 
-root -l -b -q 'analysis_hgc.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7.root","trigger",false,"single")'
+root -l -b -q 'analysis_hgc.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_e_even_central_1.root","trigger",false,"single")'
 
 The result is an output of text file called *_pixel.ml" with 3 columns separated by tab as 
 "event number","pixel id","number of photon electron"
-where pixel_id=16*64*sector+32*(31-pmt_y)+pmt_x
+where pixel_id=16*64*sector+32*pmt_y+pmt_x
+
+2019 HallC Cerenkov test, signal and background file
+/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1
+cc_pro_SIDIS_He3_e_even_broad_1e5_pixel.ml  
+cc_pro_SIDIS_He3_e_even_central_1e3_pixel.ml  
+cc_pro_SIDIS_He3_e_even_central_1_pixel.ml
+cc_pro_SIDIS_He3_e_even_broad_1e5.root      
+cc_pro_SIDIS_He3_e_even_central_1e3.root      
+cc_pro_SIDIS_He3_e_even_central_1.root
 
 SoLID HGC signal files at
 /work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_inter/
@@ -19,21 +28,3 @@ SoLID background files at
 /cache/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/
 farm_solid_SIDIS_He3_moved_BeamOnTarget_0.561e10_skim_HGCwinCF1.root
 
-2019 HallC Cerenkov test, signal and background file
-/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC
-cc_pro_SIDIS_He3_BeamOnTarget_C4F8_1.871e10_skim.root
-cc_pro_SIDIS_He3_BeamOnTarget_C4F8_3.999e10_skim.root
-cc_pro_SIDIS_He3_BeamOnTarget_CO2_1.957e10_skim.root
-cc_pro_SIDIS_He3_BeamOnTarget_CO2_3.999e10_skim.root
-cc_pro_SIDIS_He3_BeamOnTarget_N2_2e10_skim.root
-cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7.root
-cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7.root
-cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7.root
-cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum1000_1e9_skim.root
-cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7.root
-cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7.root
-cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7.root
-cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum1000_1e9_skim.root
-cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7.root
-cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7.root
-cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7.root
