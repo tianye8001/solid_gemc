@@ -170,7 +170,7 @@ else {
   }
 }
 
-bool Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false;
+bool Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false,Is_C=false;
 if(inputfile_name.find("SIDIS_He3",0) != string::npos) {
   Is_SIDIS_He3=true;
   cout << "SIDIS_He3 setup" << endl;  
@@ -183,14 +183,23 @@ else if(inputfile_name.find("JPsi_LH2",0) != string::npos) {
   Is_JPsi_LH2=true;
   cout << "JPsi_LH2 setup" << endl;  
 }
+else if(inputfile_name.find("_C_",0) != string::npos) {
+  Is_C=true;
+  cout << "Carbon setup" << endl;  
+}
 else {
-    cout << "Not SIDIS_He3 or SIDIS_NH3 or JPsi_LH2 setup" << endl;    
+    cout << "Not SIDIS_He3 or SIDIS_NH3 or JPsi_LH2 setup or C" << endl;    
     return 0;
 }
 
+//Cherenkov sensor for 30 sectors
 const int ch_lgc=270;
-const int ch_hgc=480;
-// const int ch_hgc=30720;		
+const int ch_hgc=480;    //use pmt readout
+// const int ch_hgc=1920;		//use quad readout
+// const int ch_hgc=30720;		//use pixel readout
+
+int sensor_hgc = ch_hgc/30;
+int sensor_trans_hgc = sqrt(sensor_hgc);		
 
 Float_t npe_lgc[ch_lgc],npe_hgc[ch_hgc];
 Float_t npe_lgc_total=0;
@@ -228,24 +237,43 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 
 // prepare for outputs
 // define histograms, output txt files etc...
+
+// 	TH1F *hpe_hgc=new TH1F("pe_hgc","pe;sensor;",sensor_hgc,0,sensor_hgc);
+// 	TH1F *hhit_hgc=new TH1F("hit_hgc","hit;sensor;N_{p.e.} rate(kHz)",sensor_hgc,0,sensor_hgc);
+// 	TH1F *hocc_hgc=new TH1F("occ_hgc","occupancy;sensor;event rate(kHz)",sensor_hgc,0,sensor_hgc);
+// 	
+// 	TH2F *hpe_hgc_2D=new TH2F("pe_hgc_2D","pe;sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);	
+// 	TH2F *hhit_hgc_2D=new TH2F("hit_hgc_2D","hit,N_{p.e.} rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+// 	TH2F *hocc_hgc_2D=new TH2F("occ_hgc_2D","occupancy,event rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+
+	TH1F *hpe_hgc[4],*hhit_hgc[4],*hocc_hgc[4];
+	TH2F *hpe_hgc_2D[4],*hhit_hgc_2D[4],*hocc_hgc_2D[4];	
+	for(int i=0;i<4;i++){
+	  char hstname[200]; 	  
+	  sprintf(hstname,"pe_hgc_%i",i);	  
+	  hpe_hgc[i]=new TH1F(hstname,"pe;sensor;",sensor_hgc,0,sensor_hgc);
+	  sprintf(hstname,"hit_hgc_%i",i);	  
+	  hhit_hgc[i]=new TH1F(hstname,"hit;sensor;N_{p.e.} rate(kHz)",sensor_hgc,0,sensor_hgc);
+	  sprintf(hstname,"occ_hgc_%i",i);	  
+	  hocc_hgc[i]=new TH1F(hstname,"occupancy;sensor;event rate(kHz)",sensor_hgc,0,sensor_hgc);
 	
-	TH2F *hpattern_hgc=new TH2F("pattern_hgc","cc_pro,N_{p.e.};x;y",4,0,4,4,0,4);
-// 	TH2F *hpattern_hgc=new TH2F("pattern_hgc","cc_pro,N_{p.e.};x;y",32,0,32,32,0,32);	
+	  sprintf(hstname,"pe_hgc_2D_%i",i);	  	  
+	  hpe_hgc_2D[i]=new TH2F(hstname,"pe;sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);	
+	  sprintf(hstname,"hit_hgc_2D_%i",i);	  	  
+	  hhit_hgc_2D[i]=new TH2F(hstname,"hit,N_{p.e.} rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+	  sprintf(hstname,"occ_hgc_2D_%i",i);	  	  
+	  hocc_hgc_2D[i]=new TH2F(hstname,"occupancy,event rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+	}
 	
-	TH1F *hhit_hgc=new TH1F("hit_hgc","hit,cc_pro;PMT;N_{p.e.} rate(kHz)",16,0,16);
-	TH1F *hocc_hgc=new TH1F("occ_hgc","occupancy,cc_pro;PMT;event rate(kHz)",16,0,16);
-	TH2F *hhit_hgc_2D=new TH2F("hit_hgc_2D","hit,cc_pro (rear view),N_{p.e.} rate(kHz);PMT_{#phi};PMT_{#theta}",4,0,4,4,0,4);
-	TH2F *hocc_hgc_2D=new TH2F("occ_hgc_2D","occupancy,cc_pro (rear view),event rate(kHz);PMT_{#phi};PMT_{#theta}",4,0,4,4,0,4);
-	
-	TH1F *hnpe_hgc=new TH1F("npe_hgc","cc_pro;Npe;",400,0,200);
+	TH1F *hnpe_hgc=new TH1F("npe_hgc","cc_pro;Npe;count",400,0,200);
 	TH1F *hnpe_hgc_mom[10],*hnpe_hgc_mom_theta[10][10];
 	for(int i=0;i<10;i++){
 	  char hstname[200]; 
 	  sprintf(hstname,"npe_hgc_mom_%i",i);
-	  hnpe_hgc_mom[i]=new TH1F(hstname,"cc_pro;Npe;",400,0,200);
+	  hnpe_hgc_mom[i]=new TH1F(hstname,"cc_pro;Npe;count",400,0,200);
 	  for(int j=0;j<10;j++){
 	    sprintf(hstname,"npe_hgc_mom_theta_%i_%i",i,j);
-	    hnpe_hgc_mom_theta[i][j]=new TH1F(hstname,"cc_pro;Npe;",400,0,200);
+	    hnpe_hgc_mom_theta[i][j]=new TH1F(hstname,"cc_pro;Npe;count",400,0,200);
 	  }	  
 	}	
 	
@@ -257,12 +285,11 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	
 	TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",50,0,50,180,-180,180,55,0,11);   
 	
-	const int n=2;
-	char *detname[n]={"hodoscope front","hodoscope back"};	
+	const int n=3;
+	char *detname[n]={"sc_front","sc_back","ec"};	
 	TH1F *hhit_vz[n];	
 	TH2F *hhit_xy[n],*hhit_PhiR[n];
-	TH1F *hhit_loss[n];
-	TH2F *hhit_momloss[n];
+	TH1F *hhit_E[n],*hhit_Edep[n];		  	
 	for(int i=0;i<n;i++){
 	  char hstname[100];
 	  sprintf(hstname,"hit_vz_%i",i);
@@ -271,10 +298,10 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	  hhit_xy[i]=new TH2F(hstname,detname[i],400,-20,20,400,-20,20);        
 	  sprintf(hstname,"hit_PhiR_%i",i);
 	  hhit_PhiR[i]=new TH2F(hstname,detname[i],360,-180,180,300,0,300);
-	  sprintf(hstname,"hit_loss_%i",i);
-	  hhit_loss[i]=new TH1F(hstname,detname[i],55,0,11);
-	  sprintf(hstname,"hit_momloss_%i",i);
-	  hhit_momloss[i]=new TH2F(hstname,detname[i],55,0,11,200,0,1);	  
+	  sprintf(hstname,"hit_E_%i",i);
+	  hhit_E[i]=new TH1F(hstname,detname[i],1100,0,11);
+	  sprintf(hstname,"hit_Edep_%i",i);
+	  hhit_Edep[i]=new TH1F(hstname,detname[i],1000,0,0.1);	  
 	}
 	
 	TH1F *hhit_mom_hgc_e=new TH1F("hit_mom_hgc_e","hit_mom_hgc_e",100,0,0.05);		
@@ -381,6 +408,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		double rate=var8->at(0);
 		if (filemode=="BeamOnTargetEM" || filemode=="BeamOnTarget") {
 		  if(Is_SIDIS_He3) rate=30e-6/1.6e-19/event_actual/loop_time*add_norm;
+		  if(Is_C) rate=30e-6/1.6e-19/event_actual/loop_time*add_norm;		  
 		  else if(Is_SIDIS_NH3) rate=100e-9/1.6e-19/event_actual/loop_time*add_norm;
 		  else if(Is_JPsi_LH2) rate=3e-6/1.6e-19/event_actual/loop_time*add_norm; 	  
 		  else {
@@ -447,6 +475,8 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  int sec_hgc=0;		
 		
 		//check on EC and other by flux
+// 		 cout << "flux_hitn  " << flux_hitn->size() << endl;
+		double Eec=0,Edepsc1=0,Edepsc2=0;
 		for (Int_t j=0;j<flux_hitn->size();j++) {
 // 	          cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
 
@@ -463,12 +493,21 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  int hit_id=-1;
 		  if(flux_id->at(j)==1) hit_id=0;
 		  else if(flux_id->at(j)==2) hit_id=1;
+		  else if(flux_id->at(j)==3) hit_id=2;		  
 		  else cout << "wrong flux_id" << flux_id->at(j) << endl;
 // 		  if (hit_id==-1) {/cout << flux_id->at(j) << " " << flux_avg_z->at(j) << endl;
 		  
-		  hhit_xy[hit_id]->Fill(flux_avg_lx->at(j)/1e1,flux_avg_ly->at(j)/1e1,rate);
-		  hhit_vz[hit_id]->Fill(hit_vz,rate);
+		  hhit_xy[hit_id]->Fill(flux_avg_lx->at(j)/1e1,flux_avg_ly->at(j)/1e1,rate/1e3);
+		  hhit_vz[hit_id]->Fill(hit_vz,rate/1e3);
 
+		  double E=flux_trackE->at(j)/1e3,Edep=flux_totEdep->at(j)/1e3;		  
+		  hhit_E[hit_id]->Fill(E,rate/1e3);
+		  hhit_Edep[hit_id]->Fill(Edep,rate/1e3);
+		  
+		  if (hit_id==0) Edepsc1 += Edep;
+		  if (hit_id==1) Edepsc2 += Edep;
+		  if (hit_id==2) Eec += E;		  
+		  
 // 		  if (0<=hit_id && hit_id<n){
 // 		    if (flux_tid->at(j)==1) {
 // // 		      if (7< theta_gen && theta_gen < 8){
@@ -484,7 +523,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 // 		  if (0<=hit_id && hit_id<=11) hflux_hitxy[hit_id]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.);
 	    //       else cout << "flux_id->at(j) " << flux_id->at(j) << endl;
 		    
-		}			
+		}	// end of flux		
 
 		//-----------------------	
 		//--- hgc 
@@ -495,7 +534,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		int trigger_hgc[30]={0};
 		int ntrigsecs_hgc=0;
 		
-		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc);
+		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc,ch_hgc);
 
 		bool Is_ok=false;
 		
@@ -503,42 +542,51 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		if(true){
   
 		for(int index=0;index<ch_hgc;index++){
-		      int pmt_hgc=index%16;
-		      int pmt_x=0,pmt_y=0;
-		      switch (pmt_hgc){
-			case 0:	pmt_x=0; pmt_y=3; break;
-			case 1:	pmt_x=1; pmt_y=3; break;
-			case 2:	pmt_x=2; pmt_y=3; break;
-			case 3:	pmt_x=3; pmt_y=3; break;			  
-			case 4:	pmt_x=0; pmt_y=2; break;
-			case 5:	pmt_x=1; pmt_y=2; break;
-			case 6:	pmt_x=2; pmt_y=2; break;
-			case 7:	pmt_x=3; pmt_y=2; break;			  
-			case 8:	pmt_x=0; pmt_y=1; break;
-			case 9:	pmt_x=1; pmt_y=1; break;
-			case 10:	pmt_x=2; pmt_y=1; break;
-			case 11:	pmt_x=3; pmt_y=1; break;			  
-			case 12:	pmt_x=0; pmt_y=0; break;
-			case 13:	pmt_x=1; pmt_y=0; break;
-			case 14:	pmt_x=2; pmt_y=0; break;
-			case 15:	pmt_x=3; pmt_y=0; break;			  
-			default:      break;      
-		      }				      
-		      
+		      int pmt_sec=index/sensor_hgc;		  
+		      int pmt_hgc=index%sensor_hgc;
+// 		      int pmt_x=pmt_hgc%sensor_trans_hgc,pmt_y=sensor_trans_hgc-1-pmt_hgc/sensor_trans_hgc;
+		      int pmt_x=pmt_hgc%sensor_trans_hgc,pmt_y=pmt_hgc/sensor_trans_hgc;		      
+		  
 		      if(hit_hgc[index]>occ_threshold_hgc){
-			Is_ok=true;
-			hhit_hgc->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    
-			hhit_hgc_2D->Fill(pmt_x,pmt_y,hit_hgc[index]*rate/1e3);
+			Is_ok=true;			
 // 			cout << pmt_hgc << " " << pmt_x << " " << pmt_y << endl;
-		      } 
-
-		      if(hit_hgc[index]>occ_threshold_hgc){
-			hocc_hgc->Fill(pmt_hgc,rate/1e3/30.);
-			hocc_hgc_2D->Fill(pmt_x,pmt_y,rate/1e3/30.);
+			
+			hpe_hgc[0]->Fill(pmt_hgc,hit_hgc[index]);	    
+			hpe_hgc_2D[0]->Fill(pmt_x,pmt_y,hit_hgc[index]);			
+			hhit_hgc[0]->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    
+			hhit_hgc_2D[0]->Fill(pmt_x,pmt_y,hit_hgc[index]*rate/1e3);
+			hocc_hgc[0]->Fill(pmt_hgc,rate/1e3);
+			hocc_hgc_2D[0]->Fill(pmt_x,pmt_y,rate/1e3);
+			if (Edepsc2>0.7e-3){
+			  hpe_hgc[1]->Fill(pmt_hgc,hit_hgc[index]);	    
+			  hpe_hgc_2D[1]->Fill(pmt_x,pmt_y,hit_hgc[index]);			
+			  hhit_hgc[1]->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    
+			  hhit_hgc_2D[1]->Fill(pmt_x,pmt_y,hit_hgc[index]*rate/1e3);
+			  hocc_hgc[1]->Fill(pmt_hgc,rate/1e3);
+			  hocc_hgc_2D[1]->Fill(pmt_x,pmt_y,rate/1e3);			  
+			}
+			if (Eec>0.3){
+			  hpe_hgc[2]->Fill(pmt_hgc,hit_hgc[index]);	    
+			  hpe_hgc_2D[2]->Fill(pmt_x,pmt_y,hit_hgc[index]);			
+			  hhit_hgc[2]->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    
+			  hhit_hgc_2D[2]->Fill(pmt_x,pmt_y,hit_hgc[index]*rate/1e3);
+			  hocc_hgc[2]->Fill(pmt_hgc,rate/1e3);
+			  hocc_hgc_2D[2]->Fill(pmt_x,pmt_y,rate/1e3);			  
+			}	
+			if (Edepsc2>0.7e-3 && Eec>0.3){
+			  hpe_hgc[3]->Fill(pmt_hgc,hit_hgc[index]);	    
+			  hpe_hgc_2D[3]->Fill(pmt_x,pmt_y,hit_hgc[index]);			
+			  hhit_hgc[3]->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    
+			  hhit_hgc_2D[3]->Fill(pmt_x,pmt_y,hit_hgc[index]*rate/1e3);
+			  hocc_hgc[3]->Fill(pmt_hgc,rate/1e3);
+			  hocc_hgc_2D[3]->Fill(pmt_x,pmt_y,rate/1e3);			  
+			}	
+			    
 		      }	
-		      
+
 		}		
 
+		
 		if (Is_ok) counter_good++;
 		
 		} //pass hgc trigger in offline		
@@ -563,9 +611,12 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		      
 		      npe_hgc[pmt_id]=hit_hgc[pmt_id];
 // 		      npe_hgc[pmt_id]=1;		      
+
 		    }
 		  }
-		  hnpe_hgc->Fill(npe_hgc_total);
+		  if (npe_hgc_total) hnpe_hgc->Fill(npe_hgc_total);		      
+		  
+// 		  if (npe_hgc_total>0) cout<<"event " << i<< " npe_hgc_total " << npe_hgc_total << endl;		  
 		  
 // 		  for(int pmt_id=0;pmt_id<ch_hgc;pmt_id++) cout << npe_hgc[pmt_id] << "\t";
 // 		  if (npe_hgc_total>0) mlptree_hgc->Fill();
@@ -608,6 +659,25 @@ cout <<" counter_good " << counter_good << endl;
 
 outputfile->Write();	
 outputfile->Flush();
+
+TCanvas *c = new TCanvas("c", "c",1900,900);
+c->Divide(3,2);
+c->cd(1);
+hhit_hgc_2D[0]->Draw("colz");
+c->cd(2);
+hocc_hgc_2D[0]->Draw("colz");
+c->cd(3);
+hpe_hgc_2D[0]->Draw("colz");
+c->cd(4);
+hhit_hgc[0]->Draw();
+c->cd(5);
+hocc_hgc[0]->Draw();
+c->cd(6);
+hpe_hgc[0]->Draw();
+
+TCanvas *c1 = new TCanvas("c1", "c1",1000,900);
+c1->Divide(3,2);
+hnpe_hgc->Draw();
 
 // mlpfile_lgc->Write();	
 // mlpfile_lgc->Flush();

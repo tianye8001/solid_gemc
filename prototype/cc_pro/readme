@@ -1,9 +1,12 @@
 get ready to run on ifarm
-source /group/solid/solid_svn/set_solid 1.3
+source /group/solid/solid_github/JeffersonLab/solid_gemc/set_solid 1.3 /group/solid/apps/jlab_root /group/solid/solid_github/JeffersonLab/solid_gemc
 
-for different gas, change "$material_gas" in cc_pro_geometry.pl and "variation" in config_cc_pro.dat  
 generate detector description 
 cc_pro.pl config_cc_pro.dat
+
+for different gas, change "$material_gas", $material_pmt_surface in cc_pro_geometry.pl
+for location, change $Ang_chamber, $Zmin_chamber in cc_pro_geometry.pl
+and change "variation" in config_cc_pro.dat  
 
 do this for interactive with graphic
 solid_gemc cc_pro.gcard
@@ -15,8 +18,19 @@ convert evio to root, the bank is "solid_hgc"
 evio2root -INPUTF=output.evio -B="cc_pro"
 
 analysis result
-root -l -b -q 'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/  ","trigger",false,"single")'
 
-working dir
+work dir
 /work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/
+data dir
+/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/
+
+pass1 		commit 2802794, CO2 at LA
+pass2 		commit ???, CO2 at LA, change tube inner diameter  from 12.5 to 12.25", PMT to mirror distance from 47cm to 22.75"
+
+has bug of PMT upside down
+old/withoutEC	old in 2019, TCD at 4deg and 10m
+old/withECshort	add two SC planes and EC plane,TCD at 4deg and 10m
+old/pass1	add two beamline Be window and N2 gas, TCD at 75deg and 5.4m
+
 

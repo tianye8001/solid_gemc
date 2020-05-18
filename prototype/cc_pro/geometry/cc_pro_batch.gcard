@@ -1,6 +1,6 @@
 <gcard>
 
-<detector name="cc_pro" factory="TEXT" variation="CO2"/>
+<detector name="cc_pro" factory="TEXT" variation="CO2LA"/>
 <detector name="solid_SIDIS_target_He3" factory="TEXT" variation="Original"/>
 <detector name="beamline" factory="TEXT" variation="He3"/>
 

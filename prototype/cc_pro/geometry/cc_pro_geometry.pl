@@ -47,9 +47,9 @@ my $Zmax_chamber=$Zmin_chamber+60*2.54;  # z position of the chamber at the down
 
 ## Gas
 my $Rmin1_gas=$Rmin1_chamber;  # inner radius of the gas at the upstream side
-my $Rmax1_gas=$Rmax1_chamber-0.75*2.54;  # outer radius of the gas at the upstream side, 12.5 inch diameter
+my $Rmax1_gas=12.25/2*2.54;  # outer radius of the gas at the upstream side, 12.25 inch diameter
 my $Rmin2_gas=$Rmin2_chamber;  # inner radius of the gas at the downstream side
-my $Rmax2_gas=$Rmax2_chamber-0.75*2.54;  # outer radius of the gas at the downstream side, 12.5 inch diameter
+my $Rmax2_gas=12.25/2*2.54;  # outer radius of the gas at the downstream side, 12.25 inch diameter
 
 ## Windows
 my $halfthickness_window_front=0.005/2*2.54;  # half thickness of the front window, 0.005 inch 
@@ -69,19 +69,24 @@ my $Zmax_gas=$Zmax_chamber-$halfthickness_window_back*2;  # z position of the ga
 
 ## Mirror
 my $mirror_Rmin=0;
-# my $mirror_Rmax=17/2*2.54;
-my $mirror_Rmax=12.25/2*2.54;
-# my $mirror_Rmax=13/2*2.54;
+my $mirror_Rmax=$Rmax2_gas;
 my $mirror_halfthickness=1;
 # my $mirror_Z=$Zmin_chamber+203.2;
 my $mirror_Z=$Zmin_chamber+40*2.54;
 
 ## PMT
+# my $PMT_y = 15/2*2.54;
+# my $PMT_y = 47;
+my $PMT_y = 22.75*2.54;  # 22.75" according to Ed Kaczanowicz from Temple
 my $half_width = 10.65;  # half width of the PMT
-my $windowhalf_z = 0.05;  # half thickness of the front side of PMT
-my $backendhalf_z = 1;   # half thickness of the back side of PMT
+my $windowhalf_z = 0.1;  # half thickness of the front side of PMT
+my $backendhalf_z = 0.1;   # half thickness of the back side of PMT
 my $half_z = $windowhalf_z + $backendhalf_z;  # total half length of the PMT
 
+# my $halflength_chamber_t = ($PMT_y-14/2)*2.54;
+# my $halflength_chamber_t = $PMT_y-$Rmax1_chamber;
+my $halflength_chamber_t = $PMT_y;
+ 
 ## Scintillators:
 my $sc1_x_hlfln = 8/2*2.54;  
 my $sc1_y_hlfln = 22/2*2.54;  
@@ -164,10 +169,8 @@ sub make_chamber
  $detector{"material"}    = "Component";
  print_det(\%configuration, \%detector);
  
- my $Zmin_chamber_t = $mirror_Z - (18.5-14/2)*2.54;
- my $Zmax_chamber_t = $mirror_Z + (18.5-14/2)*2.54;
- my $halfthickness_chamber_t = (18.5-14/2)*2.54;
- 
+# my $Zmin_chamber_t = $mirror_Z - (18.5-14/2)*2.54;
+# my $Zmax_chamber_t = $mirror_Z + (18.5-14/2)*2.54;
 #   %detector=init_det(); 
 #  $detector{"name"}        = "$DetectorName\_chamber_t";
 #  $detector{"mother"}      = "$DetectorMother";
@@ -184,11 +187,11 @@ sub make_chamber
  $detector{"name"}        = "$DetectorName\_chamber_t";
  $detector{"mother"}      = "$DetectorMother";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm $halfthickness_chamber_t*cm $mirror_Z*cm";
+ $detector{"pos"}         = "0*cm $PMT_y*cm $mirror_Z*cm";
  $detector{"rotation"}    = "90*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "$Rmin1_chamber*cm $Rmax1_chamber*cm $halfthickness_chamber_t*cm 0*deg 360*deg"; 
+ $detector{"dimensions"}  = "$Rmin1_chamber*cm $Rmax1_chamber*cm $halflength_chamber_t*cm 0*deg 360*deg"; 
  $detector{"material"}    = "Component";
  print_det(\%configuration, \%detector); 
 
@@ -247,19 +250,17 @@ sub make_gas
  $detector{"material"}    = "Component";
  print_det(\%configuration, \%detector);
  
- my $Zmin_gas_t = $mirror_Z - (18.5-14/2)*2.54;
- my $Zmax_gas_t = $mirror_Z + (18.5-14/2)*2.54;
- my $halfthickness_gas_t = (18.5-14/2)*2.54;
+
 
  %detector=init_det(); 
  $detector{"name"}        = "$DetectorName\_gas_t";
  $detector{"mother"}      = "$DetectorName\_chamber";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm $halfthickness_gas_t*cm $mirror_Z*cm";
+ $detector{"pos"}         = "0*cm $PMT_y*cm $mirror_Z*cm";
  $detector{"rotation"}    = "90*deg 0*deg 0*deg";
  $detector{"color"}       = "AACC33";
  $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "$Rmin1_gas*cm $Rmax1_gas*cm $halfthickness_gas_t*cm 0*deg 360*deg"; 
+ $detector{"dimensions"}  = "$Rmin1_gas*cm $Rmax1_gas*cm $halflength_chamber_t*cm 0*deg 360*deg"; 
  $detector{"material"}    = "Component";
  print_det(\%configuration, \%detector); 
 
@@ -368,7 +369,7 @@ sub make_pmt
       $detector{"name"}        = "$DetectorName\_pmt";
       $detector{"mother"}      = "$DetectorName\_gas";
       $detector{"description"} = $detector{"name"};
-      $detector{"pos"}         = "0*cm 47*cm $mirror_Z*cm";
+      $detector{"pos"}         = "0*cm $PMT_y*cm $mirror_Z*cm";
       $detector{"rotation"}    = "-90*deg 0*deg 0*deg";
       $detector{"color"}       = "000000";  #cyan
       $detector{"type"}        = "Box";

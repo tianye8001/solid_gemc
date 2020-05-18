@@ -111,11 +111,15 @@ tree_solid_hgc->SetBranchAddress("avg_t",&solid_hgc_avg_t);
 return;
 }
 
-Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc)
+Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc,Int_t ch_hgc)
 { 
   	TRandom3 rand;
 	rand.SetSeed(0);
 	
+int sensor_hgc = ch_hgc/30;
+int sensor_trans_hgc = sqrt(sensor_hgc);
+// cout << sensor_hgc << " " << sensor_trans_hgc << endl;
+
   double npe_hgc=0;
   
   int counter_in=0,counter_good=0, counter_out=0;  
@@ -166,20 +170,12 @@ Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigg
     // 	  int sector=solid_hgc_id->at(j)/100000-22;  //wrong id matching
 	      int sector=solid_hgc_id->at(j)/10000-220-1;  //match id 2210000 - 2500000
 	      
-	      ///for whole pmt
-    // 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-101.6))/50.8),pmt_y=int((solid_hgc_avg_ly->at(j)-(-101.6))/50.8);    
-    // 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-102))/51),pmt_y=int((solid_hgc_avg_ly->at(j)-(-102))/51); // hgc
-    //hgc_moved
-    //	for whole pmt
-// 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-107))/53.5),pmt_y=int((solid_hgc_avg_ly->at(j)-(-107))/53.5);
-	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-107))/53.5),pmt_y=int((solid_hgc_avg_lz->at(j)-(-107))/53.5); 	
-//   	  cout << sector << " " << 4*(3-pmt_y)+pmt_x << " " << solid_hgc_avg_lx->at(j) << " " << pmt_x << " " << solid_hgc_avg_ly->at(j) << " " << pmt_y << endl;    
-	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<4 && 0<=pmt_y && pmt_y<4){	    
-		hit_hgc[16*sector+4*(3-pmt_y)+pmt_x] += 1;
-// 	  for 64 pixel
-// 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-107))/6.69),pmt_y=int((solid_hgc_avg_ly->at(j)-(-107))/6.69); 
-// 	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<32 && 0<=pmt_y && pmt_y<32){	    	  
-// 		hit_hgc[1024*sector+32*(31-pmt_y)+pmt_x] += 1;		
+	      ///for cc_pro only, depending pmt geometry definition and rotation
+	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2))),pmt_y=int((solid_hgc_avg_ly->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2)));
+	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<sensor_trans_hgc && 0<=pmt_y && pmt_y<sensor_trans_hgc){	    
+		hit_hgc[sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x] += 1;				
+
+//   	  cout << sector << " " << sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x << " " << solid_hgc_avg_lx->at(j) << " " << pmt_x << " " << solid_hgc_avg_ly->at(j) << " " << pmt_y << " " << solid_hgc_avg_x->at(j) << " " << " " << solid_hgc_avg_y->at(j) << " " << solid_hgc_avg_z->at(j) << endl;    
 		
     // 	    hit_hgc[16*sector+4*(3-pmt_y)+pmt_x] += weight;		
 	      }
@@ -193,12 +189,8 @@ Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigg
   
   for(UInt_t i = 0; i < 30; i++){
     Int_t ntrigpmts_hgc =0;
-    //for whole pmt
-    for(Int_t j = 0; j < 16; j++){       
-      if(hit_hgc[i*16+j] >= PEthresh_hgc) ntrigpmts_hgc++;
-      //for 64 pixel
-//     for(Int_t j = 0; j < 1024; j++){       
-//       if(hit_hgc[i*1024+j] >= PEthresh_hgc) ntrigpmts_hgc++;    
+    for(Int_t j = 0; j < sensor_hgc; j++){       
+      if(hit_hgc[i*sensor_hgc+j] >= PEthresh_hgc) ntrigpmts_hgc++;    
     }
     if(ntrigpmts_hgc >= PMTthresh_hgc) {
       ntrigsecs_hgc++;
