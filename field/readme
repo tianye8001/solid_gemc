@@ -1,10 +1,13 @@
 == map list ==
 
 https://hallaweb.jlab.org/12GeV/SoLID/download/field/solenoid_v2.dat
-longer endcap, 3D map in 1st quadrant, using TOSCA, by Jay Benesch  in 2020
+longer endcap with CLEO iron, 3D map in 1st quadrant, using TOSCA, by Jay Benesch  in 2020
 
 https://hallaweb.jlab.org/12GeV/SoLID/download/field/solenoid_v1.dat
-longer endcap, 3D map in 1st quadrant, using TOSCA, by Jay Benesch  in 2018
+longer endcap with new iron, 3D map in 1st quadrant, using TOSCA, by Jay Benesch  in 2018
+refer to
+https://solid.jlab.org/cgi-bin/public/ShowDocument?docid=54
+https://solid.jlab.org/cgi-bin/public/ShowDocument?docid=62
 
 solenoid_CLEOv9, longer endcap than CLEOv8,using POSSION, by Zhiwen Zhao 
 
