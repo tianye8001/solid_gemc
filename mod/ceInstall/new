@@ -1,0 +1,3 @@
+base on https://www.jlab.org/12gev_phys/packages/sources/ceInstall/ceInstall_1.3.tar.gz
+
+change jlab12.env to use python 2 instead 3 on ifarm and keep gemc version
