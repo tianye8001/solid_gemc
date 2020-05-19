@@ -2,4 +2,6 @@ based on https://www.jlab.org/12gev_phys/packages/sources/gemc/gemc-2.3.tar.gz
 
 modify source/physics/PhysicsList.cc to allow hadron physics list only without EM physics list to run
 
+also fix cylindrical-x and cylindrical-y field bug
+
 by Zhiwen Zhao <zwzhao@jlab.org>
