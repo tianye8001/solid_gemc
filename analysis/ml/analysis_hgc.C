@@ -89,8 +89,8 @@ const double DEG=180./3.1415926;   //rad to degree
 
 int analysis_hgc(string inputfile_name,string runmode, bool Is_tellorig=false,string filetype=""){
 
-gStyle->SetOptStat(11111111);
-// gStyle->SetOptStat(0);
+// gStyle->SetOptStat(11111111);
+gStyle->SetOptStat(0);
 
 double rout_cut_FA=0,rin_cut_FA=0,rout_cut_LA=0,rin_cut_LA=0;
 if (runmode=="phys"){
@@ -190,9 +190,9 @@ else {
 
 //Cherenkov sensor for 30 sectors
 const int ch_lgc=270;
-// const int ch_hgc=480;    //use pmt readout
+const int ch_hgc=480;    //use pmt readout
 // const int ch_hgc=1920;		//use quad readout
-const int ch_hgc=30720;		//use pixel readout
+// const int ch_hgc=30720;		//use pixel readout
 
 int sensor_hgc = ch_hgc/30;
 int sensor_trans_hgc = sqrt(sensor_hgc);
@@ -558,14 +558,16 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 		int trigger_hgc[30]={0};
 		int ntrigsecs_hgc=0;
 		
-		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc,ch_hgc);
+		
+		textfile << "event " << i << endl;
+		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc,ch_hgc,textfile);
 
-		for(int index=0;index<ch_hgc;index++){
-		  if (hit_hgc[index]>0) {
+// 		for(int index=0;index<ch_hgc;index++){
+// 		  if (hit_hgc[index]>0) {
 // 		    cout << i << "\t" << index << "\t" << hit_hgc[index] << endl;		    
-		    textfile << i << "\t" << index << "\t" << hit_hgc[index] << endl;
-		  }
-		}
+// 		    textfile << i << "\t" << index << "\t" << hit_hgc[index] << endl;
+// 		  }
+// 		}
 
 		bool Is_ok=false;
 		
@@ -662,13 +664,13 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 textfile.close();
 
 TCanvas *c = new TCanvas("c", "c",1900,900);
-c->Divide(3,1);
+c->Divide(2,1);
 c->cd(1);
 hhit_hgc_2D->Draw("colz");
 c->cd(2);
 hocc_hgc_2D->Draw("colz");
-c->cd(3);
-hnpe_hgc->Draw();
+// c->cd(3);
+// hnpe_hgc->Draw();
 
 // outputfile->Write();	
 // outputfile->Flush();

@@ -111,7 +111,7 @@ tree_solid_hgc->SetBranchAddress("avg_t",&solid_hgc_avg_t);
 return;
 }
 
-Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc,Int_t ch_hgc)
+Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc,Int_t ch_hgc,ofstream &textfile)
 { 
   	TRandom3 rand;
 	rand.SetSeed(0);
@@ -174,8 +174,10 @@ int sensor_trans_hgc = sqrt(sensor_hgc);
 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2))),pmt_y=int((solid_hgc_avg_ly->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2)));
 	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<sensor_trans_hgc && 0<=pmt_y && pmt_y<sensor_trans_hgc){	    
 		hit_hgc[sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x] += 1;				
-
-//   	  cout << sector << " " << sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x << " " << solid_hgc_avg_lx->at(j) << " " << pmt_x << " " << solid_hgc_avg_ly->at(j) << " " << pmt_y << " " << solid_hgc_avg_x->at(j) << " " << " " << solid_hgc_avg_y->at(j) << " " << solid_hgc_avg_z->at(j) << endl;    
+// 		textfile << i << "\t" << index << "\t" << hit_hgc[index] << endl;
+		textfile << sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x << "\t" << solid_hgc_mpid->at(j) << "\t" << solid_hgc_mtid->at(j) << endl;
+//   	  cout << sector << " " << sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x << " " << solid_hgc_avg_x->at(j) << " " << solid_hgc_avg_lx->at(j) << " " << pmt_x << " " << solid_hgc_avg_z->at(j) << " " << solid_hgc_avg_ly->at(j) << " " << pmt_y  << endl;
+// 	  cout << solid_hgc_avg_y->at(j) << " " << solid_hgc_avg_lz->at(j) << endl;    
 		
     // 	    hit_hgc[16*sector+4*(3-pmt_y)+pmt_x] += weight;		
 	      }
