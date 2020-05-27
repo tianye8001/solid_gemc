@@ -1,25 +1,28 @@
+====introduction =================================================================
 machining learning testing ground
 
 To convert HGC gemc output into a text file, run it on jlab ifarm like
 
 root -l -b -q 'analysis_hgc.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_e_even_central_1.root","trigger",false,"single")'
 
+====output =================================================================
 The result is an output of text file called *_pixel.ml" 
-each event starting a new line with content "event numberrrr"
+each event starting a new line with content "event number"
+then it's followed by line "cher cherenkov_hit_number"
 then follow each photoelectron has a line with columns separated by tab as "pixel id"  "mother particle pid"   "mother track id"
-
+...................................................
 pixel_id=16*64*sector+32*pixel_y+pixel_x
 mother particle pid is 11 for electron, -11 for positron
 mother track id is 1 for the initial particle, larger numbers for secondary particles
+...................................................
+then followed by line "flux flux_hit_number" for hit on Cherenkov front window with format below
+textfile << flux_hitn->at(j) << "\t" <<  flux_pid->at(j) << "\t" <<  flux_mpid->at(j) << "\t" <<  flux_tid->at(j) << "\t" <<  flux_mtid->at(j) << "\t" <<  flux_trackE->at(j) << "\t" <<  flux_totEdep->at(j) << "\t" <<  flux_avg_lx->at(j) << "\t" <<  flux_avg_ly->at(j) << "\t" <<  flux_avg_lz->at(j) << "\t" <<  flux_px->at(j) << "\t" <<  flux_py->at(j) << "\t" <<  flux_pz->at(j) << "\t" <<   flux_avg_t->at(j) << endl;  
+refer to their definition at
+https://gemc.jlab.org/gemc/html/documentation/hitDefinition.html
 
-2019 HallC Cerenkov test, signal and background file
-/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1
-cc_pro_SIDIS_He3_e_even_broad_1e5_pixel.ml  
-cc_pro_SIDIS_He3_e_even_central_1e3_pixel.ml  
-cc_pro_SIDIS_He3_e_even_central_1_pixel.ml
-cc_pro_SIDIS_He3_e_even_broad_1e5.root      
-cc_pro_SIDIS_He3_e_even_central_1e3.root      
-cc_pro_SIDIS_He3_e_even_central_1.root
+====output location=================================================================
+2020 HallC Cerenkov test, signal and background file
+/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/*.ml
 
 SoLID HGC signal files at
 /work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_inter/
