@@ -1,2 +1,4 @@
 SIDIS_He3_FAEC_trigger_Ye.C  :  It includes both electron and pion trigger effeciencies for the forward angle EC setup. Due to #theta [16.3,24]cut,there are only 5 radius bins.
 SIDIS_He3_LAEC_trigger_Ye.C  :  It includes both electron and pion trigger effeciencies for the large angle EC setup. Due to #theta [7.5,14.85]cut, there are only 3 radius bins.
+SIDIS_He3_FAEC_hadron_trigger_HallDYe.C----7modules
+SIDIS_He3_LAEC_hadron_trigger_HallDYe.C----7modules
