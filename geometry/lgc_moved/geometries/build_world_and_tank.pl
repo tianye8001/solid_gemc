@@ -1,6 +1,6 @@
 
 #my $cleo_pvdis_fw_zpos = 194.0 + $cleo_fw_hthk;
-my $cleo_pvdis_fw_zpos = 189.0 + $cleo_fw_hthk;
+my $cleo_pvdis_fw_zpos = 189.2 + $cleo_fw_hthk;
 #my $cleo_bw_zpos = 301.0 - $cleo_bw_hthk;
 my $cleo_bw_zpos = 312.0 - $cleo_bw_hthk;
 my $cleo_sidis_fw_zpos = 97.0 + $cleo_fw_hthk;
@@ -239,7 +239,8 @@ sub make_tank_CLEO_frontwindow
     $detector{"rotation"}    = "0*deg 0*deg 0*deg";
     $detector{"color"}       = "FF9900";
     $detector{"type"}        = "Tube";
-    $detector{"dimensions"}  = "65.1*cm 143.9*cm ".$cleo_fw_hthk."*cm 0*deg 360*deg";
+#    $detector{"dimensions"}  = "65.1*cm 143.9*cm ".$cleo_fw_hthk."*cm 0*deg 360*deg";
+ 	$detector{"dimensions"}  = "66.5*cm 127.0*cm ".$cleo_fw_hthk."*cm 0*deg 360*deg";
     $detector{"material"}    = "SL_PVF";
     $detector{"mfield"}      = "no";
     $detector{"ncopy"}       = 1;
