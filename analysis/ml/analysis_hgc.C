@@ -89,8 +89,8 @@ const double DEG=180./3.1415926;   //rad to degree
 
 int analysis_hgc(string inputfile_name,string runmode, bool Is_tellorig=false,string filetype=""){
 
-gStyle->SetOptStat(11111111);
-// gStyle->SetOptStat(0);
+// gStyle->SetOptStat(11111111);
+gStyle->SetOptStat(0);
 
 double rout_cut_FA=0,rin_cut_FA=0,rout_cut_LA=0,rin_cut_LA=0;
 if (runmode=="phys"){
@@ -170,7 +170,7 @@ else {
   }
 }
 
-bool Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false;
+bool Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_LH2=false,Is_C=false;
 if(inputfile_name.find("SIDIS_He3",0) != string::npos) {
   Is_SIDIS_He3=true;
   cout << "SIDIS_He3 setup" << endl;  
@@ -183,14 +183,23 @@ else if(inputfile_name.find("JPsi_LH2",0) != string::npos) {
   Is_JPsi_LH2=true;
   cout << "JPsi_LH2 setup" << endl;  
 }
+else if(inputfile_name.find("_C",0) != string::npos) {
+  Is_C=true;
+  cout << "Carbon setup" << endl;  
+}
 else {
     cout << "Not SIDIS_He3 or SIDIS_NH3 or JPsi_LH2 setup" << endl;    
     return 0;
 }
 
+//Cherenkov sensor for 30 sectors
 const int ch_lgc=270;
 // const int ch_hgc=480;    //use pmt readout
+// const int ch_hgc=1920;		//use quad readout
 const int ch_hgc=30720;		//use pixel readout
+
+int sensor_hgc = ch_hgc/30;
+int sensor_trans_hgc = sqrt(sensor_hgc);
 
 Float_t npe_lgc[ch_lgc],npe_hgc[ch_hgc];
 Float_t npe_lgc_total=0;
@@ -233,23 +242,22 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 // prepare for outputs
 // define histograms, output txt files etc...
 	
-	TH2F *hpattern_hgc=new TH2F("pattern_hgc","cc_pro,N_{p.e.};x;y",4,0,4,4,0,4);
-// 	TH2F *hpattern_hgc=new TH2F("pattern_hgc","cc_pro,N_{p.e.};x;y",32,0,32,32,0,32);	
+	TH2F *hpattern_hgc=new TH2F("pattern_hgc","N_{p.e.};x;y",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
 	
-	TH1F *hhit_hgc=new TH1F("hit_hgc","hit,cc_pro;PMT;N_{p.e.} rate(kHz)",16,0,16);
-	TH1F *hocc_hgc=new TH1F("occ_hgc","occupancy,cc_pro;PMT;event rate(kHz)",16,0,16);
-	TH2F *hhit_hgc_2D=new TH2F("hit_hgc_2D","hit,cc_pro (rear view),N_{p.e.} rate(kHz);PMT_{#phi};PMT_{#theta}",4,0,4,4,0,4);
-	TH2F *hocc_hgc_2D=new TH2F("occ_hgc_2D","occupancy,cc_pro (rear view),event rate(kHz);PMT_{#phi};PMT_{#theta}",4,0,4,4,0,4);
+	TH1F *hhit_hgc=new TH1F("hit_hgc","hit;sensor;N_{p.e.} rate(kHz)",sensor_hgc,0,sensor_hgc);
+	TH1F *hocc_hgc=new TH1F("occ_hgc","occupancy;sensor;event rate(kHz)",sensor_hgc,0,sensor_hgc);
+	TH2F *hhit_hgc_2D=new TH2F("hit_hgc_2D","hit,N_{p.e.} rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+	TH2F *hocc_hgc_2D=new TH2F("occ_hgc_2D","occupancy,event rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
 	
-	TH1F *hnpe_hgc=new TH1F("npe_hgc","cc_pro;Npe;",400,0,200);
+	TH1F *hnpe_hgc=new TH1F("npe_hgc",";Npe;",400,0,200);
 	TH1F *hnpe_hgc_mom[10],*hnpe_hgc_mom_theta[10][10];
 	for(int i=0;i<10;i++){
 	  char hstname[200]; 
 	  sprintf(hstname,"npe_hgc_mom_%i",i);
-	  hnpe_hgc_mom[i]=new TH1F(hstname,"cc_pro;Npe;",400,0,200);
+	  hnpe_hgc_mom[i]=new TH1F(hstname,";Npe;",400,0,200);
 	  for(int j=0;j<10;j++){
 	    sprintf(hstname,"npe_hgc_mom_theta_%i_%i",i,j);
-	    hnpe_hgc_mom_theta[i][j]=new TH1F(hstname,"cc_pro;Npe;",400,0,200);
+	    hnpe_hgc_mom_theta[i][j]=new TH1F(hstname,";Npe;",400,0,200);
 	  }	  
 	}	
 	
@@ -372,7 +380,7 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 // 	for(long int i=520;i<521;i++){  //pip event
 // 	for(long int i=5289;i<5290;i++){	  // background event			  
 // 			cout<<"event " << i<<endl;
-		if (i%1000==0) cout<<i<<"\r";
+// 		if (i%1000==0) cout<<i<<"\r";
 // 		if (i%1000==0) cout<<i<<"\n";
 		
 		//---
@@ -383,6 +391,7 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 		if (filemode=="BeamOnTargetEM" || filemode=="BeamOnTarget") {
 		  if(Is_SIDIS_He3) rate=30e-6/1.6e-19/event_actual/loop_time*add_norm;
 		  else if(Is_SIDIS_NH3) rate=100e-9/1.6e-19/event_actual/loop_time*add_norm;
+		  else if(Is_C) rate=30e-6/1.6e-19/event_actual/loop_time*add_norm;		  		  
 		  else if(Is_JPsi_LH2) rate=3e-6/1.6e-19/event_actual/loop_time*add_norm; 	  
 		  else {
 		    cout << "Not SIDIS_He3 or SIDIS_NH3  or JPsi_LH2 setup" << endl;    
@@ -437,114 +446,11 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 		hgen_ThetaPhi->Fill(theta_gen,phi_gen,rate);                  		
 		hgen_PhiP->Fill(phi_gen,p_gen/1e3,rate);                  				
 		hgen_ThetaPhiP->Fill(theta_gen,phi_gen,p_gen/1e3,rate);                  			
-		///////////////////////////////////////////////////////////////////////////////////////
-		//       do trigger
-		////////////////////////////////////////////////////////////////////////////////////////
-		//---	
-		//---flux tree
-		//---
-		tree_flux->GetEntry(i);
+
 		
-		  int sec_hgc=0;		
 		
-		//check on EC and other by flux
-		for (Int_t j=0;j<flux_hitn->size();j++) {
-// 	          cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
-
-		  int detector_ID=flux_id->at(j)/1000000;
-		  int subdetector_ID=(flux_id->at(j)%1000000)/100000;
-		  int subsubdetector_ID=((flux_id->at(j)%1000000)%100000)/10000;		  
-		  int component_ID=flux_id->at(j)%10000;      
-
-		double hit_vr=sqrt(pow(flux_vx->at(j),2)+pow(flux_vy->at(j),2))/1e1; //mm to cm
-		double hit_vy=flux_vy->at(j)/1e1,hit_vx=flux_vx->at(j)/1e1,hit_vz=flux_vz->at(j)/1e1;           //mm to cm		  
-		double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/1e1; //mm to cm
-		double hit_y=flux_avg_y->at(j)/1e1,hit_x=flux_avg_x->at(j)/1e1,hit_z=flux_avg_z->at(j)/1e1;           //mm to cm		
-		double hit_phi=atan2(hit_y,hit_x)*DEG;       //rad to  deg
-		double hit_p=sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j))/1e3;  //MeV to GeV
+		bool Is_ok=false;
 		
-// 		TVector3 *vec_hit(hit_x,hit_y,hit_z), *vec_v(hit_vx,hit_vy,hit_vz),*vec_p(flux_px->at(j),flux_py->at(j),flux_pz->at(j));
-// 		TVector3 *vec_path=vec_hit-vec_v_gen;
-		  
-		  int hit_id=-1;
-		  if (detector_ID==1 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=0;
-		  if (detector_ID==1 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=1;	  
-		  if (detector_ID==1 && subdetector_ID == 3 && subsubdetector_ID == 1) hit_id=2;	  
-		  if (detector_ID==1 && subdetector_ID == 4 && subsubdetector_ID == 1) hit_id=3;	  
-		  if (detector_ID==1 && subdetector_ID == 5 && subsubdetector_ID == 1) hit_id=4;	  
-		  if (detector_ID==1 && subdetector_ID == 6 && subsubdetector_ID == 1) hit_id=5;	        
-		  if (detector_ID==2 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=6;
-		  if (detector_ID==2 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=7;	              
-		  if (detector_ID==5 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=8;
-		  if (detector_ID==5 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=9;	                          
-		  if (detector_ID==3 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=10;
-		  if (detector_ID==3 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=11;
-		  
-		  if (detector_ID==4 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=12;  
-	 
-		  if (detector_ID==6 && subdetector_ID == 1 && subsubdetector_ID == 1) hit_id=13;
-		  if (detector_ID==6 && subdetector_ID == 2 && subsubdetector_ID == 1) hit_id=14;  
-		  
-// 		  if ((0<=hit_id && hit_id<=9) || hit_id==12){
-		  if (0<=hit_id && hit_id<=9){		  
-		    if(abs(int(flux_pid->at(j))) == 11)	{		    
-		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate);
-		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate);		  
-		    }
-		    else if (int(flux_pid->at(j))==22){		      
-		      //assume 5% photon conversion to hits for detector other than EC
-		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate*0.05);
-		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate*0.05);	
-		    }
-		  }
-		  else if (10<=hit_id && hit_id<n){	      
-		      hhit_xy[hit_id]->Fill(hit_x,hit_y,rate);
-		      hhit_PhiR[hit_id]->Fill(hit_phi,hit_r,rate);		  		      
-		  }
-// 		  else cout << flux_id->at(j) << endl
-
-// 		  if (hit_id==-1) {/cout << flux_id->at(j) << " " << flux_avg_z->at(j) << endl;
-
-		  if (0<=hit_id && hit_id<n){
-		    if (flux_tid->at(j)==1) {
-// 		      if (7< theta_gen && theta_gen < 8){
-// 		      if (-365< vz_gen/10. && vz_gen/10. < -335){
-			hhit_loss[hit_id]->Fill(p_gen/1e3,rate);
-			hhit_momloss[hit_id]->Fill(p_gen/1e3,1-hit_p/(p_gen/1e3),rate);
-// 		      }
-// 		      }
-		    }
-		  }
-		  
-	  
-// 		  if (0<=hit_id && hit_id<=11) hflux_hitxy[hit_id]->Fill(flux_avg_x->at(j)/10.,flux_avg_y->at(j)/10.);
-	    //       else cout << "flux_id->at(j) " << flux_id->at(j) << endl;
-		  
-// 		  if(hit_id==7) {		  
-		  if(hit_id==7 && flux_tid->at(j)==1) {		  		  
-// 		  if(hit_id==7 && (abs(flux_pid->at(j))==211 || abs(flux_pid->at(j))==13 || abs(flux_pid->at(j))==321)) {	  
-// 		    int sec_hgc=0;
-		    int sec_hgc_shift=0;
-		    if (hit_phi>=90+sec_hgc_shift) sec_hgc=int((hit_phi-90-sec_hgc_shift)/12+1);
-		    else sec_hgc=int((hit_phi+360-90-sec_hgc_shift)/12+1);
-		    
-// 		    cout<<  " " << sec_hgc << " " << hit_phi << " 				"  <<  hit_p << endl;
-// 		    theta_gen=acos(pz_gen/p_gen)*DEG;
-// 		    phi_gen=atan2(py_gen,px_gen)*DEG;		    
-// 
-// 		TVector3 *vec_hit(hit_x,hit_y,hit_z), *vec_v(hit_vx,hit_vy,hit_vz),*vec_p(flux_px->at(j),flux_py->at(j),flux_pz->at(j));
-// 		TVector3 *vec_path=vec_hit-vec_v_gen;
-// 		
-// 		    hhit_thetadiff->Fill(theta_gen-atan2(hit_z,hit_r)*DEG));
-// 		    hhit_phidiff->Fill(vec_path.Phi()*DEG-);
-		  }
-// 		  else  cout << hit_id << " " << flux_tid->at(j) << endl;
-// 		    if (hit_id==7) cout<<  " " << flux_tid->at(j) << endl;
-
-		  if(hit_id==7 && abs(flux_pid->at(j))==11 && flux_pz->at(j)>0) hhit_mom_hgc_e->Fill(hit_p);
-		  
-		}			
-
 		//-----------------------	
 		//--- hgc 
 		//-----------------------
@@ -554,74 +460,44 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 		int trigger_hgc[30]={0};
 		int ntrigsecs_hgc=0;
 		
-		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc);
-
-		for(int index=0;index<ch_hgc;index++){
-		  if (hit_hgc[index]>0) {
-// 		    cout << i << "\t" << index << "\t" << hit_hgc[index] << endl;		    
-		    textfile << i << "\t" << index << "\t" << hit_hgc[index] << endl;
-		  }
+		
+		if(solid_hgc_hitn->size()>0) {
+		  Is_ok=true; 
+		  textfile << "event" << "\t" <<  i << endl;
+		  textfile << "cher" << "\t" <<  solid_hgc_hitn->size() << endl;		  
 		}
+		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc,ch_hgc,textfile);
 
-		bool Is_ok=false;
-		for(int index=0;index<ch_hgc;index++){
-// 		      int pmt_sec=index/16;		  
-// 		      int pmt_hgc=index%16;
-// 		      int pmt_x=pmt_hgc%4,pmt_y=pmt_hgc/4;
+// 		for(int index=0;index<ch_hgc;index++){
+// 		  if (hit_hgc[index]>0) {
+// 		    cout << i << "\t" << index << "\t" << hit_hgc[index] << endl;		    
+// 		    textfile << i << "\t" << index << "\t" << hit_hgc[index] << endl;
+// 		  }
+// 		}
 
-		      int pmt_sec=index/1024;		  
-		      int pmt_hgc=index%1024;
-		      int pmt_x=pmt_hgc%32,pmt_y=pmt_hgc/32;
-		  
-// 		      cout << "hgc " << index << "\t" << pmt_sec << "\t" << pmt_hgc << "\t" << pmt_y<< "\t" << pmt_x << endl; 
-		      if(hit_hgc[index]>0) {
-// 			cout<< i << " " << pmt_sec << endl;						
-// 		      if(pmt_sec==21) {		      
-		      if(true) {	    		      
-			hpattern_hgc->Fill(pmt_x,pmt_y,hit_hgc[index]);		
-			Is_ok=true;
-		      }
-		      }
-		}		
-// 		if (Is_ok) continue;	
 		
 // 		if(ntrigsecs_hgc){
 		if(true){
   
-		for(int index=0;index<ch_hgc;index++){
-		      int pmt_hgc=index%16;
-		      int pmt_x=0,pmt_y=0;
-		      switch (pmt_hgc){
-			case 0:	pmt_x=0; pmt_y=3; break;
-			case 1:	pmt_x=1; pmt_y=3; break;
-			case 2:	pmt_x=2; pmt_y=3; break;
-			case 3:	pmt_x=3; pmt_y=3; break;			  
-			case 4:	pmt_x=0; pmt_y=2; break;
-			case 5:	pmt_x=1; pmt_y=2; break;
-			case 6:	pmt_x=2; pmt_y=2; break;
-			case 7:	pmt_x=3; pmt_y=2; break;			  
-			case 8:	pmt_x=0; pmt_y=1; break;
-			case 9:	pmt_x=1; pmt_y=1; break;
-			case 10:	pmt_x=2; pmt_y=1; break;
-			case 11:	pmt_x=3; pmt_y=1; break;			  
-			case 12:	pmt_x=0; pmt_y=0; break;
-			case 13:	pmt_x=1; pmt_y=0; break;
-			case 14:	pmt_x=2; pmt_y=0; break;
-			case 15:	pmt_x=3; pmt_y=0; break;			  
-			default:      break;      
-		      }				      
+		for(int index=0;index<ch_hgc;index++){    
 		      
-		      if(hit_hgc[index]>occ_threshold_hgc){	
+		      int pmt_sec=index/sensor_hgc;		  
+		      int pmt_hgc=index%sensor_hgc;
+// 		      int pmt_x=pmt_hgc%sensor_trans_hgc,pmt_y=sensor_trans_hgc-1-pmt_hgc/sensor_trans_hgc;
+		      int pmt_x=pmt_hgc%sensor_trans_hgc,pmt_y=pmt_hgc/sensor_trans_hgc;		      
+		  
+		      if(hit_hgc[index]>occ_threshold_hgc){
+// 			cout << pmt_hgc << " " << pmt_x << " " << pmt_y << endl;
+			
+			hpattern_hgc->Fill(pmt_x,pmt_y,hit_hgc[index]);		
+			
 			hhit_hgc->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    
 			hhit_hgc_2D->Fill(pmt_x,pmt_y,hit_hgc[index]*rate/1e3);
-// 			cout << pmt_hgc << " " << pmt_x << " " << pmt_y << endl;
-		      } 
 
-		      if(hit_hgc[index]>occ_threshold_hgc){
-			hocc_hgc->Fill(pmt_hgc,rate/1e3/30.);
-			hocc_hgc_2D->Fill(pmt_x,pmt_y,rate/1e3/30.);
+			hocc_hgc->Fill(pmt_hgc,rate/1e3);
+			hocc_hgc_2D->Fill(pmt_x,pmt_y,rate/1e3);
 		      }	
-		      
+
 		}		
 
 		} //pass hgc trigger in offline		
@@ -649,6 +525,8 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 		    }
 		  }
 		  hnpe_hgc->Fill(npe_hgc_total);
+
+// 		  if (npe_hgc_total>0) cout<<"event " << i<< " npe_hgc_total " << npe_hgc_total << endl;		  
 		  
 // 		  for(int pmt_id=0;pmt_id<ch_hgc;pmt_id++) cout << npe_hgc[pmt_id] << "\t";
 // 		  if (npe_hgc_total>0) mlptree_hgc->Fill();
@@ -680,6 +558,26 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 // 		}		  
 // 		  }						
 		 		
+		//---	
+		//---flux tree
+		//---
+		tree_flux->GetEntry(i);
+		
+		if(Is_ok && flux_hitn->size()>0) {
+		  textfile << "flux" << "\t" << flux_hitn->size() << endl;		  
+		}		
+		
+		//check on EC and other by flux
+		for (Int_t j=0;j<flux_hitn->size();j++) {
+// 	          cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
+		  
+
+		  if (Is_ok && flux_id->at(j)==10) {
+		    textfile << flux_hitn->at(j) << "\t" <<  flux_pid->at(j) << "\t" <<  flux_mpid->at(j) << "\t" <<  flux_tid->at(j) << "\t" <<  flux_mtid->at(j) << "\t" <<  flux_trackE->at(j) << "\t" <<  flux_totEdep->at(j) << "\t" <<  flux_avg_lx->at(j) << "\t" <<  flux_avg_ly->at(j) << "\t" <<  flux_avg_lz->at(j) << "\t" <<  flux_px->at(j) << "\t" <<  flux_py->at(j) << "\t" <<  flux_pz->at(j) << "\t" <<   flux_avg_t->at(j) << endl;  
+
+		  }
+		  
+		}			
 		
 
 	} //end event loop
@@ -689,6 +587,15 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 
 //do outputs
 textfile.close();
+
+TCanvas *c = new TCanvas("c", "c",1900,900);
+c->Divide(2,1);
+c->cd(1);
+hhit_hgc_2D->Draw("colz");
+c->cd(2);
+hocc_hgc_2D->Draw("colz");
+// c->cd(3);
+// hnpe_hgc->Draw();
 
 // outputfile->Write();	
 // outputfile->Flush();

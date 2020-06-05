@@ -13,6 +13,19 @@ else {cout << "can't open the file" << endl; return;}
 char textline[200];
 for (int k = 0; k<13; k++) input.getline(textline,200);
 
+// char textline[200];
+// for (int k = 0; k<13; k++) {
+//   input.getline(textline,200);
+//   string sline=textline;
+//   if (sline.find("transverse") !=  string::npos){
+//     cout << sline.substr(sline.find("npoints=\"")+9,sline.find("\"",sline.find("npoints=\""))) << endl;
+// //       cout << sline << endl;
+//   }
+// //     npoints="200"   min="0"  max="199"
+//     
+// //     sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_str());
+// }
+
 //==================================
 // <mfield>
 //        <description name="meic_det1_solenoid_dual_v2" factory="ASCII" comment="meic_det1_solenoid_dual_v2"/>
@@ -75,8 +88,14 @@ char output_filename[100];
 sprintf(output_filename, "%s.root",filename);
 TFile *rootfile=new TFile(output_filename, "recreate");
 
-double Rmin=0,Rmax=500,Zmin=-600,Zmax=600;
-int Num_R=500,Num_Z=1200;
+// for solidnoid map
+// double Rmin=0,Rmax=500,Zmin=-600,Zmax=600;
+// int Num_R=500,Num_Z=1200;
+
+//for oxford_ptarget map
+double Rmin=0,Rmax=199,Zmin=-200,Zmax=200;
+int Num_R=199,Num_Z=400;
+
 const int constNum_R=Num_R+1,constNum_Z=Num_Z+1;
 
 TH1F *hBz_axis = new TH1F("Bz_axis","Bz_axis",Num_Z,Zmin-0.5,Zmax-0.5);

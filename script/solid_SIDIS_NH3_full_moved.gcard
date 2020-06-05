@@ -26,8 +26,8 @@
 <option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
 
 <option name="FIELD_DIR" value="../field"/>
-<option name="HALL_FIELD" value="solenoid_v1"/>
-<option name="FIELD_PROPERTIES" value="solenoid_v1, 0.01*mm, G4ClassicalRK4,linear"/>
+<option name="HALL_FIELD" value="solenoid_v2"/>
+<option name="FIELD_PROPERTIES" value="solenoid_v2, 0.01*mm, G4ClassicalRK4,linear"/>
 
 <option name="BEAM_P"   value="e-,11*GeV,2.555*deg,90*deg"/>
 <option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>

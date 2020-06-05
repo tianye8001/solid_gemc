@@ -139,14 +139,16 @@ void gMappedField::GetFieldValue_Cylindrical( const double x[3], double *Bfield,
 	{
 		LC  = x[0];
 		TC  = sqrt(x[1]*x[1] + x[2]*x[2]);
-		phi = G4ThreeVector(x[2], x[0], x[1]).phi();
+//		phi = G4ThreeVector(x[2], x[0], x[1]).phi();  // old line with bug
+		phi = G4ThreeVector(x[1], x[2], x[0]).phi();  // right hand rule
 	}
 	// map plane is in XZ, phi on Z axis
 	else if(symmetry == "cylindrical-y")
 	{
 		LC  = x[1];
 		TC  = sqrt(x[0]*x[0] + x[2]*x[2]);
-		phi = G4ThreeVector(x[1], x[2], x[0]).phi();
+//		phi = G4ThreeVector(x[1], x[2], x[0]).phi(); // old line with bug
+		phi = G4ThreeVector(x[2], x[0], x[1]).phi(); // right hand rule
 	}
 
 	// map indexes, bottom of the cell

@@ -7,13 +7,13 @@ gStyle->SetOptStat(0);
 
 // char input_dir[100]="/work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_inter";
 // char input_dir[200]="/work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8";
-char input_dir[200]="/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3";
+char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1";
 
-const int m=2;
+const int m=6;
 char* input_filename[m]={
 
-"cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
-"cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
+// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
+// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
 // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
@@ -22,22 +22,19 @@ char* input_filename[m]={
 // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7_output.root",
 // "cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_output.root",
 // "cc_pro_SIDIS_He3_BeamOnTarget_1.871e10_C4F8_skim_output.root",
+
+
+"cc_pro_SIDIS_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+"cc_pro_SIDIS_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+"cc_pro_SIDIS_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+
+"cc_pro_SIDIS_He3_CO2LA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
+"cc_pro_SIDIS_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+"cc_pro_SIDIS_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+
   
 }; 
-// int pid[m]={5,1,5,1};
-// char *hst[m]={"hit_hgc_2D","hit_hgc_2D"};
-// char *hst[m]={"gen_ThetaP","gen_ThetaP"};
-char *hst[m]={"hit_vz_0","hit_vz_1"};
-int color[m]={
-1,2,
-// 1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,29,
-};
-int style[m]={
-1,1,
-};
-float scale[m]={
-1,1
-};
+char *hst[m]={"hit_hgc_2D","hit_hgc_2D","hit_hgc_2D","hit_hgc_2D","hit_hgc_2D","hit_hgc_2D"};
 // char *hst[m]={
 // "npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2",
 // "npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2",

@@ -1,21 +1,22 @@
-= Intro =
 This tool is to calculate PVDIS Figure of Merit which is Apv_Err in Q2 and x bin
 
-= How to use it =
-1. first you need to have inclusive electron generator to generate something like 1e6 electrons with LUND format, then copy the lund file here and name it solid_PVDIS_electron.lund
-2. then source your set_eic and run solid simulation with no physics and no secondary particles 
-gemc solid_PVDIS_electron.gcard
-3. convert output evio to root tree
-evio2root -INPUTF=solid_PVDIS_electron.evio
-4. use the analysis code to look at result  (this code needs modification to work)
-pvdis_FOM.C("solid_PVDIS_electron.root",false)  //without trig cut
-pvdis_FOM.C("solid_PVDIS_electron.root",true)   //with trig cut
+It uses root output from full solid simulation
 
-= history =
+how to run it
+root 'analysis_PVDIS_FOM("sim.root","gen.root")'
 
-This is adopted from solid_gemc/analysistool/baffle/pvdis_FOM.C which take GEMC 1.x output root file and modifed to work with GEMC 2.x output root file
-This is tested with jlab_version=1.2
+a test
+root 'analysis_PVDIS_FOM("/work/halla/solid/sim/solid_gemc/PVDIS_LD2_JLAB_VERSION_1.3/pass7/farm_solid_PVDIS_LD2_dirty_weighted_eDIS/out.root","/work/halla/solid/sim/solid_gemc/PVDIS_LD2_JLAB_VERSION_1.3/pass7/farm_solid_PVDIS_LD2_dirty_weighted_eDIS/gen.root")'
 
-Zhiwen Zhao
-2015/03/30
+results are in "output.root"
 
+It use result eDIS from generator eicRate
+Apv is checked with two method
+1. Apv=0.84e-4*Q2
+2. Apv=Abeam from the generator
+
+Abeam is not stored in root output from full solid simulation yet
+So it has to be read from root output from generator for now
+
+The code analysis_PVDIS_FOM is modified from pvdis_FOM.C to read root output of from full solid simulation
+pvdis_FOM.C is just a copy from https://jlabsvn.jlab.org/svnroot/solid/study/PVDIS_FOM/
