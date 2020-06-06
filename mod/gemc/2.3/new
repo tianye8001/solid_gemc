@@ -1,7 +1,10 @@
 based on https://www.jlab.org/12gev_phys/packages/sources/gemc/gemc-2.3.tar.gz
 
-modify source/physics/PhysicsList.cc to allow hadron physics list only without EM physics list to run
+1. modify source/physics/PhysicsList.cc to allow hadron physics list only without EM physics list to run
+2. modify source/src/MEventAction.cc etc to add option FILTER_HADRON and FILTER_HIGHMOM
+3. fix cylindrical-x and cylindrical-y field bug in source/fields/symmetries/cylindrical.cc
+4. add link io
 
-also fix cylindrical-x and cylindrical-y field bug
+compile it by "scons OPT=1 LIBRARY=shared -j8"
 
 by Zhiwen Zhao <zwzhao@jlab.org>
