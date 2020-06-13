@@ -87,6 +87,7 @@ MEventAction::MEventAction(goptions opts, map<string, double> gpars)
 	gPars            = gpars;
 	MAXP             = (int) gemcOpt.optMap["NGENP"].arg;
 	FILTER_HADRONS   = (int) gemcOpt.optMap["FILTER_HADRONS"].arg;
+	FILTER_HIGHMOM   = (int) gemcOpt.optMap["FILTER_HIGHMOM"].arg;	
 	rw               = runWeights(opts);
 	
 	WRITE_ALLRAW     = replaceCharWithChars(gemcOpt.optMap["ALLRAWS"].args, ",", "  ");
@@ -176,6 +177,7 @@ void MEventAction::EndOfEventAction(const G4Event* evt)
 // 		      	cout << "mom " << mmts[t].mag() << endl;
 			if (mmts[t].mag()>FILTER_HIGHMOM)
 			  {
+// 		      	cout << "mom " << mmts[t].mag() << endl;			    
 			    foundHighmom = 1;
 			    break;
 			  }
