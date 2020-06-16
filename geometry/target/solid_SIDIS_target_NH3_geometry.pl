@@ -70,14 +70,22 @@ sub make_target_field
  }
 }
 
-#1. Scattering chamber : cylinder of  74cm(height) with inner diameter of 45cm and thickness of 2.5cm made of Aluminum.
+# (according to Kalyan in 2014 and 2016)  Scattering chamber : cylinder of  74cm(height) with inner diameter of 45cm and thickness of 2.5cm made of Aluminum.
+# (according to oxford 2012 design "CRABB DESIGN STUDY - October 2012-1.pdf"), in 2020, Zhiwen change to 76cm height and 68cm diameter
+
+my $chamber_height=76;
+my $chamber_diameter=68;
+my $chamber_thk=2.5;
+my $chamber_inner=$chamber_diameter/2-$chamber_thk;
 
 sub make_scattering_chamber
 {
  my $NUM  = 2;
  my @Rin  = (0,0);
- my @Rout = (25,22.5);
- my @Dz   = (37,37); 
+#  my @Rout = (25,22.5);
+#  my @Dz   = (37,37); 
+ my @Rout = ($chamber_diameter/2,$chamber_inner);
+ my @Dz   = ($chamber_height/2,$chamber_height/2); 
  my @name = ("SC_out","SC_in");
  my @mother = ("$DetectorName\_field","$DetectorName\_SC_out"); 
  my @mat  = ("G4_Al","G4_Galactic");
@@ -149,20 +157,29 @@ sub make_scattering_chamber
 #  }
 # }
 
+# some info in 2014 below is not good 
 #2. The scattering chamber has entrance and exit windows on them, made of thin Al ( 0.04cm)
 #  a) beam entrance window dimensions can be small:  20cm wide  and 30cm  height
 #  b) beam exit  window dimensions should be large enough to cover +/- 28deg in the scattering particles. You can keep the same height (30cm) but need at least 100cm width to cover angular range.
+
+# (according to "g2p_target4.xls"), scattering chamber has entrance windows is Al (0.02cm), exit window is Al (0.05 cm) 
 
 sub make_scattering_windows
 {
  my $NUM  = 4;
 #  my @z    = (0.0-350,0.0-350);
  my @z    = (0,0,0,0); 
- my @Rin  = (22.5,24.96,22.5,24.96);
- my @Rout = (24.96,25,24.96,25);
- my @Dz   = (5,5,10,10);
- my @SPhi = (85,85,245,245);
- my @DPhi = (10,10,50,50);
+#  my @Rin  = (22.5,24.96,22.5,24.96);
+#  my @Rout = (24.96,25,24.96,25);
+#  my @Dz   = (5,5,10,10);
+#  my @SPhi = (85,85,245,245);
+#  my @DPhi = (10,10,50,50);
+ 
+ my @Rin  = ($chamber_inner,$chamber_inner+($chamber_thk-0.02),$chamber_inner,$chamber_inner+($chamber_thk-0.04));
+ my @Rout = ($chamber_inner+($chamber_thk-0.02),$chamber_diameter/2,$chamber_inner+($chamber_thk-0.04),$chamber_diameter/2);
+ my @Dz   = (6,6,16.6,16.6);
+ my @SPhi = (80,80,242,242);
+ my @DPhi = (20,20,56,56); 
  my @name = ("entrance_cut","entrance_win","exit_cut","exit_win");
  my @mother = ("$DetectorName\_SC_out","$DetectorName\_SC_out","$DetectorName\_SC_out","$DetectorName\_SC_out");
  my @mat  = ("G4_Galactic","G4_Al","G4_Galactic","G4_Al");

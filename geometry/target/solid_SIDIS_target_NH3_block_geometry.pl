@@ -14,13 +14,17 @@ my $DetectorMother="root";
 sub solid_SIDIS_target_NH3_block
 {
  my $NUM  = 2;
+    #for chamber radius 25cm 
 #  my @z    = (30,30);
- my @z    = (35,35);
- my @y    = (15+2,-15-2); 
+#  my @z    = (35,35);
+#  my @y    = (15+2,-15-2); 
+#  my @Dz   = (15,15);
+#     for chamber radius 34cm 
+ my @z    = (50,50);
+ my @y    = (30+2,-30-2); 
+ my @Dz   = (30,30);
+
  my @rot    = (90,-90); 
-#  my @Rin  = (1.5,1.5);
-#  my @Rout = (30,30);
- my @Dz   = (15,15);
  my @name = ("1","2"); 
  my @mother = ("solid_SIDIS_target_NH3_field","solid_SIDIS_target_NH3_field");
  my @mat  = ("SL_target_NH3_TungstenPowder","SL_target_NH3_TungstenPowder");
@@ -34,14 +38,17 @@ sub solid_SIDIS_target_NH3_block
     $detector{"description"} = "$DetectorName\_$name[$n-1]";
     $detector{"pos"}        = "0*cm $y[$n-1]*cm $z[$n-1]*cm";
     $detector{"rotation"}   = "$rot[$n-1]*deg 0*deg 0*deg";
-#     $detector{"type"}       = "Tube";
-#     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"type"}        = "Trd";
-#     $detector{"dimensions"}  = "4.7*cm 2*cm 4.7*cm 2*cm $Dz[$n-1]*cm";   #regular
+    #for chamber radius 25cm
+#     $detector{"dimensions"}  = "4.7*cm 2*cm 4.7*cm 2*cm $Dz[$n-1]*cm";   #regular, bottom 20deg,top 10deg
 #     $detector{"dimensions"}  = "2.35*cm 1*cm 2.35*cm 1*cm $Dz[$n-1]*cm";  #small
 #     $detector{"dimensions"}  = "4.7*cm 2*cm 2.35*cm 1*cm $Dz[$n-1]*cm";   #small z
 #     $detector{"dimensions"}  = "9.4*cm 4*cm 9.4*cm 4*cm $Dz[$n-1]*cm";   #large
-    $detector{"dimensions"}  = "4.7*cm 2*cm 9.4*cm 4*cm $Dz[$n-1]*cm";   #large z
+#     $detector{"dimensions"}  = "4.7*cm 2*cm 9.4*cm 4*cm $Dz[$n-1]*cm";   #large z
+#     for chamber radius 34cm 
+#     $detector{"dimensions"}  = "7.5*cm 4*cm 7.5*cm 4*cm $Dz[$n-1]*cm";   #regular, bottom 17deg,top 10deg
+#     $detector{"dimensions"}  = "7.5*cm 4*cm 3.75*cm 2*cm $Dz[$n-1]*cm";    #small z
+    $detector{"dimensions"}  = "7.5*cm 4*cm 15*cm 8*cm $Dz[$n-1]*cm";    #large z
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
