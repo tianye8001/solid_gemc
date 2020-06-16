@@ -1,26 +1,18 @@
 Here is a set of scripts to process root tree output from solid_gemc
 
-This is the production area for the these script
-Their devel version are at 
-solid/subsystem/lgc/analysis/analysis_tree_solid_lgc.C
-solid/subsystem/hgc/analysis/analysis_tree_solid_hgc.C
-solid/subsystem/ec/analysis/analysis_tree_solid_ec.C
-solid/subsystem/spd/analysis/analysis_tree_solid_spd.C
-solid/subsystem/mrpc/analysis/analysis_tree_solid_mrpc.C
+individual detector response is handled in their function
+analysis_tree_solid_lgc.C
+analysis_tree_solid_hgc.C
+analysis_tree_solid_ec.C
+analysis_tree_solid_spd.C
+analysis_tree_solid_mrpc.C
 
-The GEMC output root file has different trees from different hit process of different detectors.
-Each tree is processed by an independent routine, they can be called by the main analysis routine which process event by event and combine the result.
+Then they are used for various analysis by
+analysis_PVDIS.C
+analysis_SIDIS.C
+
 flux tree used for the virtual detectors is processed in the main analysis
 
-run the scripts with compliation to avoid error or slowness
-
-for example
-
-root[0].x analysis_PVDIS.C+("solid_gemc_output.root")
-
-root[0].x analysis_SIDIS.C+("solid_gemc_output.root")
-
-getnumber_SIDIS_He3
-getnumber_SIDIS_He3_win
-getnumber_SIDIS_NH3
+run the scripts after compilation to avoid error or slowness
+see example in script getnumber_SIDIS_He3
 

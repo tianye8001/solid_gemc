@@ -2,7 +2,7 @@
 
 https://hallaweb.jlab.org/wiki/index.php/SoLID_full_simulation_and_file_sharing
 
-====== run3 2016 =======
+====== run3 =======
 
 files
 PVDIS_LD2_JLAB_VERSION_1.2/pass1,in 2016/01, new GEM, no LGC, no EC
@@ -10,6 +10,7 @@ PVDIS_LD2_JLAB_VERSION_1.2/pass2,in 2016/02, has LGC, has EC as whole, with moth
 PVDIS_LD2_JLAB_VERSION_1.3/pass3,in 2016/03, add LGC virtual plane,add ec_photon_block,add neutron shielding
 PVDIS_LD2_JLAB_VERSION_1.3/pass4, svn 1193,in 2016/12, use CLEO2 baffle to replace babarmore1 baffle, use ec_segmented to replace ec as a whole, change scattering chamber front and back windows from 200um Al to vacuum, GEM size match 21-36 deg
 PVDIS_LD2_JLAB_VERSION_1.3/pass5, same like pass4, but on centos7.2 instead of centos 6.5
+PVDIS_LD2_JLAB_VERSION_1.3/pass6, same like pass5, using solid_gemc_1.0.0 with container (2020 spring)
 
 ====== run2 20141022 =======
 change based on previous version

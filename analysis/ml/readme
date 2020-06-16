@@ -17,8 +17,10 @@ mother track id is 1 for the initial particle, larger numbers for secondary part
 ...................................................
 then followed by line "flux flux_hit_number" for hit on Cherenkov front window with format below
 textfile << flux_hitn->at(j) << "\t" <<  flux_pid->at(j) << "\t" <<  flux_mpid->at(j) << "\t" <<  flux_tid->at(j) << "\t" <<  flux_mtid->at(j) << "\t" <<  flux_trackE->at(j) << "\t" <<  flux_totEdep->at(j) << "\t" <<  flux_avg_lx->at(j) << "\t" <<  flux_avg_ly->at(j) << "\t" <<  flux_avg_lz->at(j) << "\t" <<  flux_px->at(j) << "\t" <<  flux_py->at(j) << "\t" <<  flux_pz->at(j) << "\t" <<   flux_avg_t->at(j) << endl;  
-refer to their definition at
+refer to entry definition at
 https://gemc.jlab.org/gemc/html/documentation/hitDefinition.html
+refer to pid definition at
+https://hallaweb.jlab.org/wiki/index.php/GMEC_pid
 
 ====output location=================================================================
 2020 HallC Cerenkov test, signal and background file

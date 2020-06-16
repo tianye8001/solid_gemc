@@ -2,16 +2,17 @@
 
 https://hallaweb.jlab.org/wiki/index.php/SoLID_full_simulation_and_file_sharing
 
-====== run3 2016 =======
+====== run3 =======
 
-files
-SIDIS_He3_JLAB_VERSION_1.2/pass1, new GEM, no LGC, no EC, in 2016/01
-SIDIS_He3_JLAB_VERSION_1.2/pass2, optimize hgc,has LGC, has EC as whole, in 2016/02
-SIDIS_He3_JLAB_VERSION_1.3/pass3, turn on mother particle, add LGC virtual plane, use TungstenPowder for He3 collimator which 60% density of Tungsten, use external materail for H3 as SL_target_He3_He3_10amg instead of internal He3_10amg and the result should be same (in 2016/07)
+SIDIS_He3_JLAB_VERSION_1.2/pass1, new GEM, no LGC, no EC, in (2016/01)
+SIDIS_He3_JLAB_VERSION_1.2/pass2, optimize hgc,has LGC, has EC as whole, (2016/02)
+SIDIS_He3_JLAB_VERSION_1.3/pass3, turn on mother particle, add LGC virtual plane, use TungstenPowder for He3 collimator which has 60% density of Tungsten, use external materiel for H3 as SL_target_He3_He3_10amg instead of internal He3_10amg and the result should be same (2016/07)
 SIDIS_He3_JLAB_VERSION_1.3/pass4, ,change SPD scintilator material from PVT alike to PS, 
-SIDIS_He3_JLAB_VERSION_1.3/pass5, fix LASPD overlap with GEM, change LASPD from 5mm to 20mm, FASPD from 3mm to 5mm, use SPD with scintilator material PVT alike, use segemented EC with scintilator material PS
+SIDIS_He3_JLAB_VERSION_1.3/pass5, fix LASPD overlap with GEM, change LASPD from 5mm to 20mm, FASPD from 3mm to 5mm, use SPD with scintilator material PVT alike, use segmented EC with scintilator material PS
 SIDIS_He3_JLAB_VERSION_1.3/pass6,svn rev1153,change LGC mirror,HGC,GEM sector numbering to make its 1st sector center at 96deg, LGC PMT 1st is center at 97.7deg, fix LGC H12700 QE near 200nm from 0.03 to 0.3,GEM has 7 planes and grouped
-SIDIS_He3_JLAB_VERSION_1.3/pass7,svn rev1169,GEM change back to 6 planes
+SIDIS_He3_JLAB_VERSION_1.3/pass7,svn rev1169,GEM change back to 6 planes, used for 2019 precdr
+SIDIS_He3_JLAB_VERSION_1.3/pass8,same like pass7, study HGC window thickness, (2019 spring)
+SIDIS_He3_JLAB_VERSION_1.3/pass9,same like pass7, using solid_gemc_1.0.0 with container, (2020 spring)
 
 ====== run2 20141022======
 change based on previous version
