@@ -11,8 +11,8 @@ SIDIS_He3_JLAB_VERSION_1.3/pass4, ,change SPD scintilator material from PVT alik
 SIDIS_He3_JLAB_VERSION_1.3/pass5, fix LASPD overlap with GEM, change LASPD from 5mm to 20mm, FASPD from 3mm to 5mm, use SPD with scintilator material PVT alike, use segmented EC with scintilator material PS
 SIDIS_He3_JLAB_VERSION_1.3/pass6,svn rev1153,change LGC mirror,HGC,GEM sector numbering to make its 1st sector center at 96deg, LGC PMT 1st is center at 97.7deg, fix LGC H12700 QE near 200nm from 0.03 to 0.3,GEM has 7 planes and grouped
 SIDIS_He3_JLAB_VERSION_1.3/pass7,svn rev1169,GEM change back to 6 planes, used for 2019 precdr
-SIDIS_He3_JLAB_VERSION_1.3/pass8,same like pass7, study HGC window thickness, (2019 spring)
-SIDIS_He3_JLAB_VERSION_1.3/pass9,same like pass7, using solid_gemc_1.0.0 with container, (2020 spring)
+SIDIS_He3_JLAB_VERSION_1.3/pass8,2019 spring, same like pass7, study HGC window thickness
+SIDIS_He3_JLAB_VERSION_1.3/pass9,2020 spring, same like pass7, using solid_gemc_1.0.0 with container
 
 ====== run2 20141022======
 change based on previous version
