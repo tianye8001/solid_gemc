@@ -2,7 +2,7 @@
 
 # Detector name and variation
 detector_name: beamline
-variation:     C
+variation:     He3
 
 # Factory can be MYQL or TEXT
 factory:       TEXT

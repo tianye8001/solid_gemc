@@ -14,19 +14,17 @@ my $DetectorMother="root";
 # my $z_target			= $parameters{"z_target"};
 
 #He3 target
-# my $target_length = 40;
-# my $target_center = 0;
+my $target_length = 40;
 
 #Carbon target
-my $target_length = 0.01*2.54;
-my $target_center = -2.625*2.54;
+# my $target_length = 0.01*2.54;
 
 sub beamline
 {
 make_beam_entrance();
 make_beam_exit();
-# make_beam_coolgas();
-make_beam_coolgas_carbon();
+make_beam_coolgas_He3();
+# make_beam_coolgas_carbon();
 }
 
 sub make_beam_entrance
@@ -56,7 +54,7 @@ sub make_beam_entrance
     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
@@ -97,7 +95,7 @@ sub make_beam_exit
     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
@@ -110,8 +108,7 @@ sub make_beam_exit
  }
 }
 
-
-sub make_beam_coolgas
+sub make_beam_coolgas_He3
 {
 # upstream Be window .01thk, 12.80 from TC, downstream Be window .02thk, 17.25 from TC
 # filled with N2 gas
@@ -122,7 +119,7 @@ sub make_beam_coolgas
  my @Dz   = ((12.80*2.54-$target_length/2)/2-0.1,(17.25*2.54-$target_length/2)/2-0.1,$target_length/2);
  my @name = ("coolgas_upstream","coolgas_downstream","coolgas_around"); 
  my @mother = ("$DetectorMother","$DetectorMother","$DetectorMother");
- my @mat  = ("SL_beamline_N2_1atm","SL_beamline_N2_1atm","SL_beamline_N2_1atm");
+ my @mat  = ("G4_N","G4_N","G4_N");
  my @color = ("808088","808088","808088");
  
  for(my $n=1; $n<=$NUM; $n++)
@@ -138,7 +135,7 @@ sub make_beam_coolgas
     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
@@ -153,16 +150,17 @@ sub make_beam_coolgas
 sub make_beam_coolgas_carbon
 {
 # upstream Be window .01thk, 12.80 from TC, downstream Be window .02thk, 17.25 from TC
-# filled with N2 gas and cabon coil at z=-2.635"
- my $NUM  = 3;
- my @z    = ((-12.80*2.54+$target_center-$target_length/2)/2,(17.25*2.54+$target_center+$target_length/2)/2,$target_center);
- my @Rin  = (0.,0.,0);
- my @Rout = (75,75,0.3*2.54);
- my @Dz   = ((12.80*2.54-$target_center+$target_length/2)/2-0.1,(17.25*2.54-$target_center-$target_length/2)/2-0.1,$target_length/2);
- my @name = ("coolgas_upstream","coolgas_downstream","target_carbon"); 
- my @mother = ("$DetectorMother","$DetectorMother","$DetectorMother");
- my @mat  = ("G4_N","G4_N","G4_C");
- my @color = ("808088","808088","101011");
+# filled with N2 gas and Carbon foils 0.01" thk at z=-200,0,133.35mm https://logbooks.jlab.org/entry/3750828
+ my $coolgas_z=(-12.80*2.54+17.25*2.54)/2;
+ my $NUM  = 4;
+ my @z    = ($coolgas_z,-20-$coolgas_z,0-$coolgas_z,13.335-$coolgas_z);
+ my @Rin  = (0,0,0,0);
+ my @Rout = (75,0.3*2.54,0.3*2.54,0.3*2.54);
+ my @Dz   = ((12.80*2.54+17.25*2.54)/2-0.1,$target_length/2,$target_length/2,$target_length/2);
+ my @name = ("coolgas","target_carbon1","target_carbon2","target_carbon3"); 
+ my @mother = ("$DetectorMother","$DetectorName\_coolgas","$DetectorName\_coolgas","$DetectorName\_coolgas");
+ my @mat  = ("G4_N","G4_C","G4_C","G4_C");
+ my @color = ("808088","101011","101011","101011");
  
  for(my $n=1; $n<=$NUM; $n++)
  {
@@ -177,7 +175,7 @@ sub make_beam_coolgas_carbon
     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
@@ -188,3 +186,44 @@ sub make_beam_coolgas_carbon
     print_det(\%configuration, \%detector);
  }
 }
+
+# sub make_beam_coolgas_carbon
+# {
+# # upstream Be window .01thk, 12.80 from TC, downstream Be window .02thk, 17.25 from TC
+# # filled with N2 gas and cabon coil at z=-2.635"
+# my $target_center = -2.625*2.54;
+# 
+#  my $NUM  = 3;
+#  my @z    = ((-12.80*2.54+$target_center-$target_length/2)/2,(17.25*2.54+$target_center+$target_length/2)/2,$target_center);
+#  my @Rin  = (0.,0.,0);
+#  my @Rout = (75,75,0.3*2.54);
+#  my @Dz   = ((12.80*2.54-$target_center+$target_length/2)/2-0.1,(17.25*2.54-$target_center-$target_length/2)/2-0.1,$target_length/2);
+#  my @name = ("coolgas_upstream","coolgas_downstream","target_carbon"); 
+#  my @mother = ("$DetectorMother","$DetectorMother","$DetectorMother");
+#  my @mat  = ("G4_N","G4_N","G4_C");
+#  my @color = ("808088","808088","101011");
+#  
+#  for(my $n=1; $n<=$NUM; $n++)
+#  {
+#     my %detector=init_det();
+#     $detector{"name"}        = "$DetectorName\_$name[$n-1]";
+#     $detector{"mother"}      = "$mother[$n-1]" ;
+#     $detector{"description"} = "$DetectorName\_$name[$n-1]";
+#     $detector{"pos"}        = "0*cm 0*cm $z[$n-1]*cm";
+#     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+#     $detector{"color"}      = $color[$n-1];
+#     $detector{"type"}       = "Tube";
+#     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
+#     $detector{"material"}   = $mat[$n-1];
+#     $detector{"mfield"}     = "no";
+#     $detector{"ncopy"}      = 1;
+#     $detector{"pMany"}       = 1;
+#     $detector{"exist"}       = 1;
+#     $detector{"visible"}     = 1;
+#     $detector{"style"}       = 0;
+#     $detector{"sensitivity"} = "no";
+#     $detector{"hit_type"}    = "no";
+#     $detector{"identifiers"} = "no";
+#     print_det(\%configuration, \%detector);
+#  }
+# }

@@ -183,7 +183,7 @@ else if(inputfile_name.find("JPsi_LH2",0) != string::npos) {
   Is_JPsi_LH2=true;
   cout << "JPsi_LH2 setup" << endl;  
 }
-else if(inputfile_name.find("_C_",0) != string::npos) {
+else if(inputfile_name.find("_C",0) != string::npos) {
   Is_C=true;
   cout << "Carbon setup" << endl;  
 }
@@ -285,7 +285,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	
 	TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",50,0,50,180,-180,180,55,0,11);   
 	
-	const int n=3;
+	const int n=4;
 	char *detname[n]={"sc_front","sc_back","ec"};	
 	TH1F *hhit_vz[n];	
 	TH2F *hhit_xy[n],*hhit_PhiR[n];
@@ -408,7 +408,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		double rate=var8->at(0);
 		if (filemode=="BeamOnTargetEM" || filemode=="BeamOnTarget") {
 		  if(Is_SIDIS_He3) rate=30e-6/1.6e-19/event_actual/loop_time*add_norm;
-		  if(Is_C) rate=30e-6/1.6e-19/event_actual/loop_time*add_norm;		  
+		  else if(Is_C) rate=30e-6/1.6e-19/event_actual/loop_time*add_norm;		  
 		  else if(Is_SIDIS_NH3) rate=100e-9/1.6e-19/event_actual/loop_time*add_norm;
 		  else if(Is_JPsi_LH2) rate=3e-6/1.6e-19/event_actual/loop_time*add_norm; 	  
 		  else {
@@ -493,7 +493,8 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  int hit_id=-1;
 		  if(flux_id->at(j)==1) hit_id=0;
 		  else if(flux_id->at(j)==2) hit_id=1;
-		  else if(flux_id->at(j)==3) hit_id=2;		  
+		  else if(flux_id->at(j)==3) hit_id=2;
+		  else if(flux_id->at(j)==10) hit_id=3;
 		  else cout << "wrong flux_id" << flux_id->at(j) << endl;
 // 		  if (hit_id==-1) {/cout << flux_id->at(j) << " " << flux_avg_z->at(j) << endl;
 		  
@@ -566,6 +567,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 			  hocc_hgc_2D[1]->Fill(pmt_x,pmt_y,rate/1e3);			  
 			}
 			if (Eec>0.3){
+// 			if (Eec>0.1){
 			  hpe_hgc[2]->Fill(pmt_hgc,hit_hgc[index]);	    
 			  hpe_hgc_2D[2]->Fill(pmt_x,pmt_y,hit_hgc[index]);			
 			  hhit_hgc[2]->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    
@@ -574,6 +576,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 			  hocc_hgc_2D[2]->Fill(pmt_x,pmt_y,rate/1e3);			  
 			}	
 			if (Edepsc2>0.7e-3 && Eec>0.3){
+// 			if (Edepsc2>0.7e-3 && Eec>0.1){
 			  hpe_hgc[3]->Fill(pmt_hgc,hit_hgc[index]);	    
 			  hpe_hgc_2D[3]->Fill(pmt_x,pmt_y,hit_hgc[index]);			
 			  hhit_hgc[3]->Fill(pmt_hgc,hit_hgc[index]*rate/1e3);	    

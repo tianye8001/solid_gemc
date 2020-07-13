@@ -27,11 +27,10 @@ data dir
 /volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/
 version
 pass1 		commit 2802794, CO2 at LA
-pass2 		commit ???, CO2 at LA, change tube inner diameter  from 12.5 to 12.25", PMT to mirror distance from 47cm to 22.75"
+pass2 		commit ???, CO2 at LA, change tube inner diameter from 12.5 to 12.25", PMT to mirror distance from 47cm to 22.75", C1 C2 C3 have front window sensitive
 
 version below has bug of PMT upside down
 old/withoutEC	old in 2019, TCD at 4deg and 10m
 old/withECshort	add two SC planes and EC plane,TCD at 4deg and 10m
-old/pass1	add two beamline Be window and N2 gas, TCD at 75deg and 5.4m
 
 

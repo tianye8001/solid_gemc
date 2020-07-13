@@ -54,7 +54,7 @@ require "beamline_geometry.pl";
 beamline();
 
 #materials definition 
-require "./beamline_materials.pl";
+# require "./beamline_materials.pl";
 
 #hit definition 
 
