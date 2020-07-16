@@ -32,7 +32,7 @@ my $DEG=180/3.1415926;  # conversion factor between degrees and radians
 # Parameters
 ## Chamber
 # my $Ang_chamber=-74.55;  #angle from the upstream beamline to the Cherenkov is about 105.45 with a hard to estimate error
-my $Ang_chamber=3.6;
+my $Ang_chamber=3.5;
 # my $Ang_chamber=4;
 # my $Ang_chamber=0.0;
 my $Rmin1_chamber=0;  # inner radius of the chamber at the upstream side
@@ -43,7 +43,7 @@ my $Rmax2_chamber=14/2*2.54;  # outer radius of the chamber at the downstream si
 # my $Zmax_chamber=1254;  # z position of the chamber at the downstream side
 # my $Zmin_chamber=543.6+5*2.54;  # z position of the chamber at the upstream side, 
 # my $Zmin_chamber=1000+5*2.54;  # z position of the chamber at the upstream side,
-my $Zmin_chamber=1097+5*2.54;  # z position of the chamber at the upstream side, 
+my $Zmin_chamber=1189+5*2.54;  # z position of the chamber at the upstream side, 
 my $Zmax_chamber=$Zmin_chamber+60*2.54;  # z position of the chamber at the downstream side, see $sc1_zpos_loc
 # my $Zmin_chamber=-300;  # z position of the chamber at the upstream side
 # my $Zmax_chamber=300;  # z position of the chamber at the downstream side
