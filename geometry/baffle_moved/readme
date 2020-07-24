@@ -1,0 +1,5 @@
+create baffle with 11 planes + 12th plane (photon blocker before EC) + neutron shielding
+./solid_PVDIS_baffle_CLEO2.pl config_solid_PVDIS_baffle_CLEO2.dat
+
+create baffle observer with 11 planes
+./solid_PVDIS_baffle_observer_CLEO2.pl config_solid_PVDIS_baffle_CLEO2.dat
