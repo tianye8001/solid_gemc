@@ -85,7 +85,7 @@ my $Thickness_shower=$Thickness_layer*$Nlayer;  #43.456cm
 
 my $z_support = $z_shower-$Thickness_shower/2-$Thickness_support/2;  #cm
 my $z_prescint = $z_support-$Thickness_support/2-$Thickness_prescint/2; #cm 
-my $z_shield = $z_prescint-$Thickness_prescint/2-$Thickness_shield/2;  #about 323.4cm
+my $z_shield = $z_prescint-$Thickness_prescint/2-$Thickness_shield/2;  #cm
 print "$z_shower $z_support $z_prescint $z_shield\n";
 
 sub solid_SIDIS_ec_forwardangle

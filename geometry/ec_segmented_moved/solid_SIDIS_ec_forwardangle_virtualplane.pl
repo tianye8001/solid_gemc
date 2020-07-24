@@ -13,21 +13,21 @@ my $DetectorName = 'solid_SIDIS_ec_forwardangle_virtualplane';
 my $DetectorMother="root";
 
 my $z_shower 		= $parameters{"z_shower"};
-my $Rmin 		= $parameters{"Rmin"};
-my $Rmax 		= $parameters{"Rmax"};
+my $Rmin 		= $parameters{"Rmin"}-5;
+my $Rmax 		= $parameters{"Rmax"}+5;
 
 sub solid_SIDIS_ec_forwardangle_virtualplane
 {
 make_front();
 # make_middle();
 # make_inner();
-# make_rear();
+make_rear();
 }
 
 sub make_front
 {
- my $z_vp = $z_shower-27-0.01;
-
+ my $z_vp = $z_shower-25;
+ 
  my %detector=init_det();
  $detector{"name"}        = "$DetectorName\_front";
  $detector{"mother"}      = "root";
@@ -52,22 +52,15 @@ sub make_front
 
 sub make_middle
 {
- my %detector=init_det();
+    my %detector=init_det();
  $detector{"name"}        = "$DetectorName\_middle";
  $detector{"mother"}      = "root";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 414.6*cm";
+ $detector{"pos"}         = "0*cm 0*cm 324.6*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
- $detector{"type"}        = "Cons";
-  my $Rmin1 = 90;
-  my $Rmax1 = 270;
-  my $Rmin2 = 98;
-  my $Rmax2 = 270;
-  my $Dz    = 0.001/2;
-  my $Sphi  = 0;
-  my $Dphi  = 360;
- $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
+ $detector{"type"}        = "Tube";
+ $detector{"dimensions"}  = "$Rmin*cm $Rmax*cm 0.001*cm 0*deg 360*deg"; 
  $detector{"material"}    = "G4_Galactic";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -88,7 +81,7 @@ sub make_inner
  $detector{"name"}        = "$DetectorName\_inner";
  $detector{"mother"}      = "root";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 440*cm";
+ $detector{"pos"}         = "0*cm 0*cm 350*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
@@ -115,22 +108,17 @@ sub make_inner
 
 sub make_rear
 {
- my %detector=init_det();
+ my $z_vp = $z_shower+25;
+ 
+    my %detector=init_det();
  $detector{"name"}        = "$DetectorName\_rear";
  $detector{"mother"}      = "root";
  $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm 466*cm";
+ $detector{"pos"}         = "0*cm 0*cm $z_vp*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
- $detector{"type"}        = "Cons";
-  my $Rmin1 = 90;
-  my $Rmax1 = 270;
-  my $Rmin2 = 90;
-  my $Rmax2 = 270;
-  my $Dz    = 0.001/2;
-  my $Sphi  = 0;
-  my $Dphi  = 360;
- $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
+ $detector{"type"}        = "Tube";
+ $detector{"dimensions"}  = "$Rmin*cm $Rmax*cm 0.001*cm 0*deg 360*deg";
  $detector{"material"}    = "G4_Galactic";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
