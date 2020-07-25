@@ -1,6 +1,6 @@
 
-#my $cleo_pvdis_fw_zpos = 194.0 + $cleo_fw_hthk;
-my $cleo_pvdis_fw_zpos = 189.2 + $cleo_fw_hthk;
+my $cleo_pvdis_fw_zpos = 194.0 + $cleo_fw_hthk;
+# my $cleo_pvdis_fw_zpos = 189.2 + $cleo_fw_hthk;
 #my $cleo_bw_zpos = 301.0 - $cleo_bw_hthk;
 my $cleo_bw_zpos = 312.0 - $cleo_bw_hthk;
 my $cleo_sidis_fw_zpos = 97.0 + $cleo_fw_hthk;
@@ -113,7 +113,8 @@ sub make_tank_CLEO_pvdis
  #   $detector{"dimensions"}  = "0*deg 180*deg 4*counts 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm"; #for cross-section of tank
 
     #$detector{"dimensions"}  = "0*deg 360*deg 4*counts 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
-	$detector{"dimensions"}  = "0*deg 360*deg 5*counts  66.5*cm 69.5*cm 71.5*cm 71.5*cm 85*cm 127.0*cm 150*cm 163.0*cm 263*cm 263*cm 189.2*cm 209.0*cm 225.0*cm 225.0*cm 312*cm";
+	$detector{"dimensions"}  = "0*deg 360*deg 5*counts 63.2*cm 69.3*cm 71*cm 71*cm 83*cm 135*cm 150*cm 163*cm 263*cm 263*cm 194*cm 210*cm 226*cm 226*cm 312*cm";    
+# 	$detector{"dimensions"}  = "0*deg 360*deg 5*counts  66.5*cm 69.5*cm 71.5*cm 71.5*cm 85*cm 127.0*cm 150*cm 163.0*cm 263*cm 263*cm 189.2*cm 209.0*cm 225.0*cm 225.0*cm 312*cm";
 	#$detector{"dimensions"}  = "0*deg 360*deg 4*counts  69.5*cm 71.5*cm 71.5*cm 85*cm 150*cm 163.0*cm 263*cm 263*cm 209.0*cm 225.0*cm 225.0*cm 312*cm";
 #    $detector{"dimensions"}  = "0*deg 180*deg 4*counts 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
 
@@ -321,7 +322,8 @@ sub make_tank_CLEO_sidis
     $detector{"type"}        = "Polycone";
 #    $detector{"dimensions"}  = "0*deg 360*deg 5*counts 58*cm 65*cm 67*cm 67*cm 85*cm 127*cm 144*cm 155*cm 265*cm 265*cm 97*cm 194*cm 209.01*cm 209.01*cm 301*cm";
 #  $detector{"dimensions"}  = "0*deg 360*deg 6*counts  58*cm 66.5*cm 69.5*cm 70.5*cm 70.5*cm 86*cm 127*cm 128.5*cm 153*cm 164.0*cm 264*cm 264*cm 97*cm 189.2*cm 210.0*cm 225.0*cm 225.0*cm 312*cm";
-    $detector{"dimensions"}  = "0*deg 360*deg 6*counts  53*cm 66.5*cm 69.5*cm 71.5*cm 71.5*cm 85*cm 127*cm 127.0*cm 150*cm 163.0*cm 263*cm 263*cm 97*cm 189.2*cm 209.0*cm 225.0*cm 225.0*cm 312*cm";
+	$detector{"dimensions"}  = "0*deg 360*deg 6*counts 50*cm 63.2*cm 69.3*cm 71*cm 71*cm 83*cm 126*cm 135*cm 150*cm 163*cm 263*cm 263*cm 97*cm 194*cm 210*cm 226*cm 226*cm 312*cm";    
+#     $detector{"dimensions"}  = "0*deg 360*deg 6*counts  53*cm 66.5*cm 69.5*cm 71.5*cm 71.5*cm 85*cm 127*cm 127.0*cm 150*cm 163.0*cm 263*cm 263*cm 97*cm 189.2*cm 209.0*cm 225.0*cm 225.0*cm 312*cm";
 	$detector{"material"}   = "SL_LGCCgas_SIDIS";
 #	$detector{"material"}    = "SIDIS_CO2_gas";
     $detector{"mfield"}      = "no";

@@ -118,7 +118,7 @@ sub make_mirror1
 	$detector{"style"}       = 1;
 	$detector{"sensitivity"} = "mirror: LGC_Mirror";
 	$detector{"hit_type"}    = "mirror";
-	$detector{"identifiers"} = "no";
+	$detector{"identifiers"} = "id manual 1";
 	print_det(\%configuration, \%detector);
 	
 	if($n==1){

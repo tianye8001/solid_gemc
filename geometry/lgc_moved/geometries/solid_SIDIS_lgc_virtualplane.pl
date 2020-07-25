@@ -27,10 +27,10 @@ sub make_lg_front
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 58;
-  my $Rmax1 = 127;
-  my $Rmin2 = 58;
-  my $Rmax2 = 127;
+  my $Rmin1 = 50;
+  my $Rmax1 = 126;
+  my $Rmin2 = 50;
+  my $Rmax2 = 126;
   my $Dz    = 0.001/2;
   my $Sphi  = 0;
   my $Dphi  = 360;

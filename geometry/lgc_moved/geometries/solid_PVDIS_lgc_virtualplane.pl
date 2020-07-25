@@ -27,10 +27,10 @@ sub make_front
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CC6633";
  $detector{"type"}        = "Cons";
-  my $Rmin1 = 65;
-  my $Rmax1 = 144;
-  my $Rmin2 = 65;
-  my $Rmax2 = 144;
+  my $Rmin1 = 63;
+  my $Rmax1 = 140;
+  my $Rmin2 = 63;
+  my $Rmax2 = 140;
   my $Dz    = 0.001/2;
   my $Sphi  = 0;
   my $Dphi  = 360;
