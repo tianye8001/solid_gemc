@@ -26,7 +26,7 @@ make_rear();
 
 sub make_front
 {
- my $z_vp = $z_shower-25;
+ my $z_vp = $z_shower-27;
  
  my %detector=init_det();
  $detector{"name"}        = "$DetectorName\_front";
@@ -108,7 +108,7 @@ sub make_inner
 
 sub make_rear
 {
- my $z_vp = $z_shower+25;
+ my $z_vp = $z_shower+22;
  
     my %detector=init_det();
  $detector{"name"}        = "$DetectorName\_rear";
