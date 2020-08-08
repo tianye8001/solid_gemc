@@ -21,6 +21,13 @@ solenoid_target, SoLID SIDIS NH3 target field, converted from g2p map incorrectl
 
 g2p_target, original g2p map, using code "g2p_hallbfield.f", by Chao Gu
 
+== tool ==
+
+mapcompress3D.C reduce 3D map size from Jay Benesch's Opera output map
+
+tool for 2D maps
+plot_solenoid.C  SF7map_compare.C  SF7toGEMCmap.C
+
 == info ===
 
 old info

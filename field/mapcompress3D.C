@@ -34,6 +34,9 @@ for (int j = 0; j<1001*301*301; j++) {
 	output << "\t";	
 	output << y ;
 	output << "\t";		
+	
+// 	Bx=-Bx;By=-By;Bz=-Bz; //flip field
+	
 	if (z>=0) output <<  " ";
 	output << z ;
 	output.precision(1);	
