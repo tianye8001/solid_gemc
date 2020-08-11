@@ -11,8 +11,6 @@ Then they are used for various analysis by
 analysis_PVDIS.C
 analysis_SIDIS.C
 
-flux tree used for the virtual detectors is processed in the main analysis
-
 run the scripts after compilation to avoid error or slowness
-see example in script getnumber_SIDIS_He3
+see example in script getnumber_SIDIS_He3,getnumber_SIDIS_NH3 and getnumber_PVDIS to run it on ifarm
 

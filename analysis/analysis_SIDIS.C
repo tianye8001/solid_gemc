@@ -29,9 +29,9 @@
 using namespace std;
 
 //the wiser curve
-#include "SIDIS_He3_FAEC_electron_trigger_WiserJinHuang.C"
-#include "SIDIS_He3_LAEC_electron_trigger_WiserJinHuang.C"
-#include "SIDIS_He3_FAEC_hadron_trigger_WiserJinHuang.C"
+#include "ec_triggerfile/SIDIS_He3_JinHuang/SIDIS_He3_FAEC_electron_trigger_WiserJinHuang.C"
+#include "ec_triggerfile/SIDIS_He3_JinHuang/SIDIS_He3_LAEC_electron_trigger_WiserJinHuang.C"
+#include "ec_triggerfile/SIDIS_He3_JinHuang/SIDIS_He3_FAEC_hadron_trigger_WiserJinHuang.C"
 // EC efficiency table inside
 
 #include "analysis_tree_solid_lgc.C"
@@ -507,14 +507,17 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		double hit_p=sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j))/1e3;  //MeV to GeV
 		
 		  if(Is_SIDIS_NH3){
-		    if (flux_tid->at(j)==1){		      
-		      if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
-		      if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
-		      if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
-		      if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
-		      if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) Is_passGEM=false;          
-		      if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) Is_passGEM=false;
-		    }
+		    //oxford ptarget field pass3 (old)
+// 		    if (flux_tid->at(j)==1){		      
+// 		      if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
+// 		      if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
+// 		      if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
+// 		      if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) Is_passGEM=false;          
+// 		      if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) Is_passGEM=false;          
+// 		      if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) Is_passGEM=false;
+// 		    }
+		    
+		    
 		  }
 		  
 		}
@@ -660,22 +663,25 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
 		    }	*/	    
 		    
-		    if(abs(int(flux_pid->at(j))) == 11)		      EC_efficiency=get_forward_electron_trigger_e_eff(hit_r, hit_p);		      
-		    else if(int(flux_pid->at(j)) == 22)		      EC_efficiency=get_forward_electron_trigger_e_eff(hit_r, hit_p);	    
-		    else if(abs(int(flux_pid->at(j))) == 211)		      EC_efficiency=get_forward_electron_trigger_pi_eff(hit_r, hit_p);		      
-		    else if(abs(int(flux_pid->at(j))) == 321)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);		
-		    else if(int(flux_pid->at(j)) == 130)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);   
-		    else if(int(flux_pid->at(j)) == 2212)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);
-		    else {EC_efficiency=0; 
-		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
+			if(abs(int(flux_pid->at(j))) == 11)		      EC_efficiency=get_forward_electron_trigger_e_eff(hit_r, hit_p);		      
+			else if(int(flux_pid->at(j)) == 22)		      EC_efficiency=get_forward_electron_trigger_e_eff(hit_r, hit_p);	    
+			else if(abs(int(flux_pid->at(j))) == 211)		      EC_efficiency=get_forward_electron_trigger_pi_eff(hit_r, hit_p);		      
+			else if(abs(int(flux_pid->at(j))) == 321)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);		
+			else if(int(flux_pid->at(j)) == 130)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);   
+			else if(int(flux_pid->at(j)) == 2212)		      EC_efficiency=0.5*get_forward_electron_trigger_pi_eff(hit_r, hit_p);
+			else {EC_efficiency=0; 
+			  if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
+			}
 		    }
-		    }
-		    else if(Is_SIDIS_NH3){
-		      EC_efficiency=1;	
-
-// 		      if ( ((-75<hit_phi && hit_phi<-40 && hit_r/1e1<195)||(70<hit_phi && hit_phi<90 && hit_r/1e1<195))) EC_efficiency=0;
-// 		      else EC_efficiency=1;		      
-// 		      if (Is_passGEM==false) EC_efficiency=0;
+		    else if (Is_SIDIS_NH3){
+			//EC sheet of flame cut		      
+			if ((detector_ID==3 && subdetector_ID==1) && ((-92<hit_phi && hit_phi<-88 && hit_r/1e1<196)||(-78<hit_phi && hit_phi<-35 && hit_r/1e1<190)||(-35<hit_phi && hit_phi<-9 && hit_r/1e1<162)                                                  ||(23<hit_phi && hit_phi<39 && 131<hit_r/1e1 && hit_r/1e1<165)||(39<hit_phi && hit_phi<55 && hit_r/1e1<165)||(55<hit_phi && hit_phi<70 && hit_r/1e1<131))) EC_efficiency=0;
+			else if {
+			  // add NH3 FAEC trigger here
+			  //if (trigger condition is good) EC_efficiency=1
+			  
+			}
+			
 		    }
 
 		    //check to make sure eff is ok
@@ -745,9 +751,6 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
 		    }
 		    }
-// 		    else if(Is_SIDIS_NH3){
-// 		      EC_efficiency=1;
-// 		    }
 		    
 		    //check to make sure eff is ok
 		    if(isnan(EC_efficiency)) cout << "trigger_h_FA_EC " << EC_efficiency << " " << flux_pid->at(j) << endl;		    
@@ -802,23 +805,25 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		    
 		    if(Is_SIDIS_He3){
 		      
-		    if(abs(int(flux_pid->at(j))) == 11)		      EC_efficiency=get_large_electron_trigger_e_eff(hit_r, hit_p);		      
-		    else if(int(flux_pid->at(j)) == 22)		      EC_efficiency=get_large_electron_trigger_e_eff(hit_r, hit_p);	    
-		    else if(abs(int(flux_pid->at(j))) == 211)		      EC_efficiency=get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
-		    else if(abs(int(flux_pid->at(j))) == 321)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
-		    else if(int(flux_pid->at(j)) == 130)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
-		    else if(int(flux_pid->at(j)) == 2212)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);
-		    else {EC_efficiency=0; 
-		      if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
-		    }
-		    }
-		    else if(Is_SIDIS_NH3){
-		      EC_efficiency=1;
-
-// 		      if (((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<95))) EC_efficiency=0;		      
-// 		      else EC_efficiency=1;
-// 		      if (Is_passGEM==false) EC_efficiency=0;		      
+			if(abs(int(flux_pid->at(j))) == 11)		      EC_efficiency=get_large_electron_trigger_e_eff(hit_r, hit_p);		      
+			else if(int(flux_pid->at(j)) == 22)		      EC_efficiency=get_large_electron_trigger_e_eff(hit_r, hit_p);	    
+			else if(abs(int(flux_pid->at(j))) == 211)		      EC_efficiency=get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
+			else if(abs(int(flux_pid->at(j))) == 321)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
+			else if(int(flux_pid->at(j)) == 130)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);		      
+			else if(int(flux_pid->at(j)) == 2212)		      EC_efficiency=0.5*get_large_electron_trigger_pi_eff(hit_r, hit_p);
+			else {EC_efficiency=0; 
+			  if (Is_debug) cout << "unknown particle pid" << flux_pid->at(j) << endl;	      
+			}
 		    }		    
+		    else if (Is_SIDIS_NH3){
+			//EC sheet of flame cut
+			if ((detector_ID==3 && subdetector_ID==2) && ((-92<hit_phi && hit_phi<-88)||(-81<hit_phi && hit_phi<-56 && hit_r/1e1<131)||(-56<hit_phi && hit_phi<-47 && 100<hit_r/1e1 && hit_r/1e1<131)                                               ||(53<hit_phi && hit_phi<63 && 97<hit_r/1e1 && hit_r/1e1<131)||(63<hit_phi && hit_phi<71 && hit_r/1e1<131)||(71<hit_phi && hit_phi<77 && hit_r/1e1<96))) EC_efficiency=0;
+		      	else if {
+			  // add NH3 LAEC trigger here
+			  //if (trigger condition is good) EC_efficiency=1
+			  
+			}		    
+		    }	    
 		    
 		    //check to make sure eff is ok
 		    if(isnan(EC_efficiency)) cout << "trigger_e_LA_EC " << EC_efficiency << " " << flux_pid->at(j) << endl;				    
