@@ -93,7 +93,7 @@ const double DEG=180./3.1415926;   //rad to degree
 
 //#####################################################################################################################################################
 
-int analysis_SIDIS(string inputfile_name,string runmode, bool Is_tellorig=false,string filetype=""){
+int analysis_SIDIS(string inputfile_name,string runmode, bool Is_tellorig=false,string filetype="",string outputdir=""){
 
 // gStyle->SetOptStat(11111111);
   gStyle->SetOptStat(0);
@@ -199,14 +199,19 @@ TFile *file=new TFile(inputfile_name.c_str());
 // 	TH1F *h_pe=(TH1F*)background_file->Get("h_pe");
 
 std::size_t found = inputfile_name.rfind("cache");
-if (found!=std::string::npos)  inputfile_name.replace(found,5,"work");
-
-char the_filename[200];
-sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+char the_filename[400];
+if (outputdir=="original") {
+  if (found!=std::string::npos) inputfile_name.replace(found,5,"work");
+}
+else {
+  inputfile_name=inputfile_name.substr(inputfile_name.rfind("/")+1);
+}
+sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());  
 
 char outputfile_name[200];
 sprintf(outputfile_name, "%s_output.root",the_filename);
 TFile *outputfile=new TFile(outputfile_name, "recreate");
+cout << "output file " << outputfile_name << endl;
 
 // prepare for outputs
 // define histograms, output txt files etc...
@@ -676,7 +681,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		    else if (Is_SIDIS_NH3){
 			//EC sheet of flame cut		      
 			if ((detector_ID==3 && subdetector_ID==1) && ((-92<hit_phi && hit_phi<-88 && hit_r/1e1<196)||(-78<hit_phi && hit_phi<-35 && hit_r/1e1<190)||(-35<hit_phi && hit_phi<-9 && hit_r/1e1<162)                                                  ||(23<hit_phi && hit_phi<39 && 131<hit_r/1e1 && hit_r/1e1<165)||(39<hit_phi && hit_phi<55 && hit_r/1e1<165)||(55<hit_phi && hit_phi<70 && hit_r/1e1<131))) EC_efficiency=0;
-			else if {
+			else {
 			  // add NH3 FAEC trigger here
 			  //if (trigger condition is good) EC_efficiency=1
 			  
@@ -818,7 +823,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		    else if (Is_SIDIS_NH3){
 			//EC sheet of flame cut
 			if ((detector_ID==3 && subdetector_ID==2) && ((-92<hit_phi && hit_phi<-88)||(-81<hit_phi && hit_phi<-56 && hit_r/1e1<131)||(-56<hit_phi && hit_phi<-47 && 100<hit_r/1e1 && hit_r/1e1<131)                                               ||(53<hit_phi && hit_phi<63 && 97<hit_r/1e1 && hit_r/1e1<131)||(63<hit_phi && hit_phi<71 && hit_r/1e1<131)||(71<hit_phi && hit_phi<77 && hit_r/1e1<96))) EC_efficiency=0;
-		      	else if {
+		      	else {
 			  // add NH3 LAEC trigger here
 			  //if (trigger condition is good) EC_efficiency=1
 			  
