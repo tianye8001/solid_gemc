@@ -22,8 +22,9 @@ make_cryostat();
 
 sub make_coil_yoke
 {
- my $NUM  = 17;
- my @name = ("Coil","BarrelYokeInner","BarrelYokeOuter","SlabSpacerUpstream","SlabSpacerDownstream","CoilCollarUpstream","CoilCollarDownstream","EndcapDonut","EndcapBottomInner","EndcapBottomOuter","EndcapNose","FrontPiece","UpstreamShield1","UpstreamShield2","UpstreamShield3","UpstreamShield4","UpstreamShield5");
+ my $NUM  = 15;
+ my @name =
+ ("InnerOctagon","OuterOctagon","SpacerBarUpstream","SpacerBarDownstream","Coil","UpstreamCoilCollar","UpstreamPlug","DownstreamCoilCollar","EndcapNoseCone","EndcapCylinder","Endplate1","Endplate2","ConePlate","EndcapInterface","CorretorRing");
  my $material_coil = "G4_Al";
  my $material_yoke = "G4_Fe";# "Iron";
  my $color_coil = "ff8000";
@@ -37,31 +38,32 @@ sub make_coil_yoke
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "0*cm 0*cm 0*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    if ($n==1) {$detector{"color"} = $color_coil;}
+    if ($n==5) {$detector{"color"} = $color_coil;}
     else {$detector{"color"} = $color_yoke;}
+    
+# modeled after info in appendix of Jay Benesch's magnet model with "SoLID_2020.pdf" in 2020/03
+# use cylinder to replace inner and outer octagon for simplicity
+# geometry polycone defines number of counts with inner radius,outer radius,z position
+# refer to http://geant4-userdoc.web.cern.ch/geant4-userdoc/UsersGuides/ForApplicationDeveloper/html/Detector/Geometry/geomSolids.html#tessellated-solids
+
     $detector{"type"}       = "Polycone";
-    if ($n==1) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 152.30*cm 152.30*cm 154.30*cm 154.30*cm -173.80*cm 173.80*cm";} # Coil
-    if ($n==2) {$detector{"dimensions"} = "0*deg 360*deg 4*counts 177.91*cm 177.91*cm 176.60*cm 176.60*cm 212.60*cm 212.60*cm 212.60*cm 212.60*cm -266.50*cm -189.00*cm -189.00*cm 189.00*cm";} # BarrelYokeInner
-    if ($n==3) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 221.51*cm 221.51*cm 257.50*cm 257.50*cm -266.50*cm 189.00*cm";} # BarrelYokeOuter 
-    if ($n==4) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 212.61*cm 212.61*cm 221.50*cm 221.50*cm -266.50*cm -235.90*cm";} # SlabSpacerUpstream
-    if ($n==5) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 212.61*cm 212.61*cm 221.50*cm 221.50*cm 159.00*cm 189.00*cm";} # SlabSpacerDownstream 
-    if ($n==6) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 144.01*cm 144.01*cm 177.90*cm 177.90*cm -266.50*cm -189.01*cm";} # CoilCollarUpstream 
-    if ($n==7) {$detector{"dimensions"} = "0*deg 360*deg 3*counts 144.00*cm 144.00*cm 156.00*cm 285.00*cm 285.00*cm 285.00*cm 189.01*cm 193.00*cm 209.00*cm";} # CoilCollarDownstream 
-#     if ($n==8) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 270.00*cm 270.00*cm 285.00*cm 285.00*cm 209.01*cm 485.00*cm";} # EndcapDonut
-    if ($n==8) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 270.00*cm 270.00*cm 285.00*cm 285.00*cm 209.01*cm 530.00*cm";} # EndcapDonut
-#     if ($n==9) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 30.00*cm 30.00*cm 285.00*cm 285.00*cm 485.01*cm 500.00*cm";} # EndcapBottomInner
-    if ($n==9) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 30.00*cm 30.00*cm 285.00*cm 285.00*cm 530.01*cm 545.00*cm";} # EndcapBottomInner
-#     if ($n==10) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 30.00*cm 45.00*cm 185.00*cm 170.00*cm 500.01*cm 515.00*cm";} # EndcapBottomOuter
-    if ($n==10) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 30.00*cm 45.00*cm 185.00*cm 170.00*cm 545.01*cm 560.00*cm";} # EndcapBottomOuter
-#     if ($n==11) {$detector{"dimensions"} = "0*deg 360*deg 3*counts 20.00*cm 30.00*cm 30.00*cm 60.00*cm 90.00*cm 90.00*cm 189.00*cm 405.00*cm 485.00*cm";} # EndcapNose
-    if ($n==11) {$detector{"dimensions"} = "0*deg 360*deg 4*counts 20.00*cm 24.27*cm 30.00*cm 30.00*cm 61.00*cm 69.00*cm 90.00*cm 90.00*cm 189.20*cm 210.00*cm 426.00*cm 530.00*cm";} # EndcapNose
-    if ($n==12) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 55.60*cm 70.00*cm 144.00*cm 144.00*cm -237.00*cm -207.00*cm";} # FrontPiece
-    if ($n==13) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 48.50*cm 50.50.00*cm 144.00*cm 144.00*cm -250.50*cm -246.50*cm";} # UpstreamShield1
-    if ($n==14) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 44.60*cm 46.50.00*cm 144.00*cm 144.00*cm -258.50*cm -254.50*cm";} # UpstreamShield2
-    if ($n==15) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 40.10*cm 42.70*cm 144.00*cm 144.00*cm -266.50*cm -262.50*cm";} # UpstreamShield3
-    if ($n==16) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 36.80*cm 38.80*cm 257.50*cm 257.50*cm -274.50*cm -270.50*cm";} # UpstreamShield4
-    if ($n==17) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 33.90*cm 35.30*cm 257.50*cm 257.50*cm -280.50*cm -277.50*cm";} # UpstreamShield5
-    if ($n==1) {$detector{"material"} = $material_coil;}
+    if ($n==1) {$detector{"dimensions"} = "0*deg 360*deg 3*counts 191.075*cm 191.075*cm 191.075*cm 230.142*cm 230.142*cm 217.692*cm -266.7*cm 209.23*cm 224.79*cm";} # Inner Octagon 
+    if ($n==2) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 239.763*cm 239.763*cm 278.832*cm 278.832*cm -266.7*cm 209.23*cm";} # Outer Octagon  
+    if ($n==3) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 230.142*cm 230.142*cm 239.763*cm 239.763*cm -266.7*cm -241.2*cm";} # spacer bar upstream   
+    if ($n==4) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 230.142*cm 230.142*cm 239.763*cm 239.763*cm 182.73*cm 209.23*cm";} # spacer bar downstream
+    if ($n==5) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 151.7*cm 151.7*cm 154.9*cm 154.9*cm -173.75*cm 173.75*cm";} # Coil    
+    if ($n==6) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 144.145*cm 144.145*cm 191.075*cm 191.075*cm -266.7*cm -189.23*cm";} # Upstream coil collar
+    if ($n==7) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 38.94*cm 66.19*cm 144.145*cm 144.145*cm -266.7*cm -208.28*cm";} # Upstream plug
+    if ($n==8) {$detector{"dimensions"} = "0*deg 360*deg 3*counts 144*cm 144*cm 164.447*cm 191.075*cm 191.075*cm 191.075*cm 189.23*cm 199.23*cm 224.79*cm";} # Downstream coil collar
+    if ($n==9) {$detector{"dimensions"} = "0*deg 360*deg 4*counts 19*cm 19.85*cm 25.28*cm 35*cm 61*cm 68.759*cm 85*cm 85*cm 189.23*cm 210*cm 342.27*cm 579.12*cm";} # Endcap nose cone (including cone,zhiwen_taper,cylinderA)
+    if ($n==10) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 270*cm 270*cm 286.51*cm 286.51*cm 209.23*cm 529.59*cm";} # endcap cylinder    
+    if ($n==11) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 85*cm 85*cm 286.51*cm 286.51*cm 529.59*cm 546.1*cm";} # end plate1
+    if ($n==12) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 85*cm 85*cm 286.51*cm 286.51*cm 546.1*cm 562.61*cm";} # end plate2
+    if ($n==13) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 85*cm 85*cm 213.36*cm 196.85*cm 562.61*cm 579.12*cm";} # cone plate
+    if ($n==14) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 278.832*cm 278.832*cm 286.51*cm 286.51*cm 183.83*cm 209.23*cm";} # endcap interface    
+    if ($n==15) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 50.8*cm 50.8*cm 51.435*cm 51.435*cm -278*cm -266.7*cm";} # corrector ring
+
+    if ($n==5) {$detector{"material"} = $material_coil;}
     else {$detector{"material"} = $material_yoke;}
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}	     = 1;

@@ -1,0 +1,4 @@
+solid_solenoid_geometry.pl 
+is a longer endcap magnet modeled after info in appendix of Jay Benesch's magnet model with "SoLID_2020.pdf" in 2020/03 which matches field map of "fields/solenoid_v2.dat"
+this geant4 geometry use cylinder to replace inner and outer octagon for simplicity and add cryostat
+
