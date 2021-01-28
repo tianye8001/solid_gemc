@@ -54,7 +54,9 @@ our %configuration = load_configuration($config_file);
 
 #Geometry definition
 require "solid_solenoid_cryo_geometry.pl";
-# solid_solenoid_cryo();
+solid_solenoid_cryo();
+
+require "solid_solenoid_cryo_material.pl";
 
 #hit and bank definition Execute only when there are changes
 #hit

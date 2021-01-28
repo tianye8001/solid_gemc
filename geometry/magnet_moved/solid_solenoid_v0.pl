@@ -56,8 +56,6 @@ our %configuration = load_configuration($config_file);
 require "solid_solenoid_v0_geometry.pl";
 solid_solenoid();
 
-require "solid_solenoid_material.pl";
-
 #hit and bank definition Execute only when there are changes
 #hit
 # require "./solid_ec_hit.pl";
