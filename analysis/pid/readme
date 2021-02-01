@@ -1,4 +1,4 @@
-tool for particle identification study
+tool for particle identification (PID) study
 
 == compare_e_pibggen.C ========================
 compare inclusive e- and pim rate from generators and apply pi rejection by simple factors
