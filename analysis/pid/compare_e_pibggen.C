@@ -41,7 +41,7 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
    else if (type=="solid_PVDIS_LD2") {
      sprintf(expname, "LD");
      xmin=22;xmax=35;ymin=1.5;ymax=5;
-     rej_FA_low=1e-5;
+     rej_FA_low=1e-4;
      rej_FA_high=5e-3;     
    }
    else {
@@ -91,7 +91,8 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
    int filecount;
     if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) filecount=1000;   
     else if (type=="solid_PVDIS_LD2") filecount=1800;   
-   
+//     filecount=10;    
+    
    for(int i=0; i<filecount;i++){
       string filename_pi_name=Form("%s/LUND/hallD_pion_m_%s_1k_%i.lund",filename_pi.c_str(),expname,i+1);
       ifstream input(filename_pi_name.c_str());
@@ -150,7 +151,7 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
       h_pie->Draw("text colz");
       c_pie->SaveAs(Form("%s_ratio_pie.pdf",type.c_str())); 
       
-   gStyle->SetPaintTextFormat("2.2f");   
+   gStyle->SetPaintTextFormat("2.2f");    
 
       //rejection       
       TCanvas *c_pie_rej = new TCanvas("pie_rej","pie_rej",1800,1000);
@@ -194,9 +195,13 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
 
       h_pie_rej->Scale(1e2); //percent
 
+      //change text size
+      if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) h_pie_rej->SetMarkerSize(1);
+      else if (type=="solid_PVDIS_LD2") h_pie_rej->SetMarkerSize(2);      
+
       h_pie_rej->SetTitle("#pi^{-}/e^{-} ratio (\%) after #pi^{-} rejection;#theta (deg);P (GeV/c)");      
       h_pie_rej->GetXaxis()->SetRangeUser(xmin,xmax);   
-      h_pie_rej->GetYaxis()->SetRangeUser(ymin,ymax);           
+      h_pie_rej->GetYaxis()->SetRangeUser(ymin,ymax);                       
       h_pie_rej->Draw("text colz");
 
 // lines in P vs theta at 11GeV beam

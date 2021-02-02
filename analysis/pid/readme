@@ -4,6 +4,7 @@ tool for particle identification (PID) study
 compare inclusive e- and pim rate from generators and apply pi rejection by simple factors
 
 result_20190129 ----------
+at ifarm
 source /group/solid/apps/root/root_v6.18.04.Linux-centos7-x86_64-gcc4.8/bin/thisroot.csh
 root 'compare_e_pibggen.C("solid_SIDIS_He3","/work/halla/solid/evgen/evgen_inclusive_e/commit11d7751/gen_solid_SIDIS_He3_norad_1e6.root","/work/halla/solid/evgen/solid_bggen/SIDIS_3He")'
 root 'compare_e_pibggen.C("solid_JPsi_LH2","/work/halla/solid/evgen/evgen_inclusive_e/commit11d7751/gen_solid_JPsi_LH2_norad_1e6.root","/work/halla/solid/evgen/solid_bggen/JPsi_LH2")'
