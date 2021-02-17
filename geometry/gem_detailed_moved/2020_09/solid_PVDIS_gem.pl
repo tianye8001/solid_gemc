@@ -43,12 +43,11 @@ our %configuration = load_configuration($config_file);
 #}
 
 # One can change the "variation" here if one is desired different from the config.dat
-$configuration{"detector_name"} = "solid_PVDIS_gem";
-$configuration{"variation"} = "Original";
+# $configuration{"detector_name"} = "solid_PVDIS_gem";
+# $configuration{"variation"} = "Original";
 
 # To get the parameters proper authentication is needed.
 our %parameters    = get_parameters(%configuration);
-# $configuration{"detector_name"} = "solid_PVDIS";
 
 #Geometry definition
 require "solid_PVDIS_gem_geometry.pl";
@@ -63,4 +62,5 @@ require "./solid_gem_materials.pl";
 require "./solid_gem_hit.pl";
 
 # bank definition
+# $configuration{"detector_name"} = "solid_gem";
 require "./solid_gem_bank.pl";

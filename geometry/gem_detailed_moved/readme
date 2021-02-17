@@ -1,0 +1,17 @@
+view gem in graphic mode on ifarm
+
+source /group/solid/solid_github/JeffersonLab/solid_gemc/set_solid 1.3 /group/solid/apps/jlab_root /group/solid/solid_github/JeffersonLab/solid_gemc
+solid_gemc gem.gcard
+
+== 2020_09 =================================================
+layout from UVa, https://solid.jlab.org/cgi-bin/private/ShowDocument?docid=346
+
+assumption
+1. GEM layers have no change (total thickness 15.525mm)
+2. GEM pos Z has no change as in preCDR and it defines GEM plane center
+3. remove PVDIS small sector offset
+4. sector 1 edge starts from phi=90deg (along y-axis), then sector number increase as phi increases
+5. GEM frame as thick as GEM and is made of kapton
+6. GEM plane Rin is defined by GEM inner edge
+7. for SIDIS with overlapping sectors, odd sectors are at front, even sectors are at back. GEM pos Z is for front sector center. the distance between front and back is 10mm, so the total thickess of a plane is 15.525+10+15.525=41.05mm
+8. spacer ????
