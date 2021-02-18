@@ -89,7 +89,7 @@ map<string, double> solid_ec_ps_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 // 	    cout<< "step " << s << "\t"  << "dx "<<dx[s]<< "\t" <<"charge  "<<charge[s] << "\t" << "Edep " << Edep[s] << "\t" <<  "EdepB " << EdepB << "\t";
 
 	    // Integrate energy over entire hit.
-// 	    totEdepB = totEdepB + EdepB;		  
+ 	    totEdepB = totEdepB + EdepB;		  
 	    
 	    // Distances travelled one end of WLS fiber in preshower
 	    dz1   = 100; //assume 100mm, can change to hit dependance later
