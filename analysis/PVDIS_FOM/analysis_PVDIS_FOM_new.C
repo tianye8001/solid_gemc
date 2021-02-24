@@ -138,7 +138,7 @@ const int Nbin=8;
 
 //#####################################################################################################################################################
 
-void analysis_PVDIS_FOM(string filename){
+void analysis_PVDIS_FOM(string filename,bool Is_badroot=false){
 
     // gStyle->SetOptStat(11111111);
     gStyle->SetOptStat(0);
@@ -318,9 +318,9 @@ void analysis_PVDIS_FOM(string filename){
 	    for(int loop_id=1;loop_id<=loop_time;loop_id++){
 		    cout<<"loop.....  "<<loop_id<<endl;
 	    
-	    //should really use N_events, but right now the simulation file
-	    //has an additional entry for some reason
-	    for(long int i=0;i<N_events-1;i++){	  
+	    if (Is_badroot) N_events=N_events-1; //for devel pass1 file with bad root entry
+		    
+	    for(long int i=0;i<N_events;i++){	  
    
 	      
 		    //T->GetEntry(i); //get entry from generator
@@ -330,7 +330,8 @@ void analysis_PVDIS_FOM(string filename){
 		    //---
 		    tree_header->GetEntry(i);
 		    tree_generated->GetEntry(i);
-                    tree_flux->GetEntry(i);
+                    if (Is_badroot) tree_flux->GetEntry(i+1); //for devel pass1 file with bad root entry
+		    else tree_flux->GetEntry(i);
             
 		    double rate= 0, Abeam = 0;
 		    rate = var6->at(0);
