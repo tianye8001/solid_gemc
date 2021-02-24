@@ -20,3 +20,15 @@ So it has to be read from root output from generator for now
 
 The code analysis_PVDIS_FOM is modified from pvdis_FOM.C to read root output of from full solid simulation
 pvdis_FOM.C is just a copy from https://jlabsvn.jlab.org/svnroot/solid/study/PVDIS_FOM/
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analysis_PVDIS_FOM_new.C is the file to get the FOM for PVDIS using simulation file with longer endcap
+
+Just only ROOT (require root 6) and do
+.L analysis_PVDIS_FOM_new.C+
+analysis_PVDIS_FOM(filename)
+
+example file is locaded at: /volatile/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_weighted_eAll_filenum100_1e6.root
+
+currently we can use rate w/o internal radiative effect. Use Is_Rad defined at the beginning of the code to turn it on/off.
+Note that the eDIS generator doesn't have internal radiative effect. Only the eAll generator currently has. 
