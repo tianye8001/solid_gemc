@@ -22,11 +22,13 @@ The code analysis_PVDIS_FOM is modified from pvdis_FOM.C to read root output of 
 pvdis_FOM.C is just a copy from https://jlabsvn.jlab.org/svnroot/solid/study/PVDIS_FOM/
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-analysis_PVDIS_FOM_new.C is the file to get the FOM for PVDIS using simulation file with longer endcap
+analysis_PVDIS_FOM_new.C is the file to get the FOM for PVDIS using simulation file by gemc devel
 
-Just only ROOT (require root 6) and do
+require root 6 and do the following
+source /group/solid/apps/root/root_v6.18.04.Linux-centos7-x86_64-gcc4.8/bin/thisroot.csh
 .L analysis_PVDIS_FOM_new.C+
-analysis_PVDIS_FOM(filename)
+analysis_PVDIS_FOM("filename")    # for normal root files
+analysis_PVDIS_FOM("filename",true)  # for devel pass1 file with bad root entry
 
 example file is locaded at: /volatile/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_weighted_eAll_filenum100_1e6.root
 
