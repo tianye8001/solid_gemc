@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void compare_e_pibggen(string type,string filename_e,string filename_pi){
+void compare_e_pibggen(string type,string filename_e,string filename_pi,string picharge="m"){
    gStyle->SetPalette(kBird);
    gStyle->SetOptStat(0);
   gStyle->SetLabelSize(0.04,"xyz"); // size of axis values
@@ -94,7 +94,7 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
 //     filecount=10;    
     
    for(int i=0; i<filecount;i++){
-      string filename_pi_name=Form("%s/LUND/hallD_pion_m_%s_1k_%i.lund",filename_pi.c_str(),expname,i+1);
+      string filename_pi_name=Form("%s/LUND/hallD_pion_%s_%s_1k_%i.lund",filename_pi.c_str(),picharge.c_str(),expname,i+1);
       ifstream input(filename_pi_name.c_str());
       if (input.good()) {} //cout << "open file " << filename_pi_name << " OK" << "\r";
       else {cout << "can't open the file" << endl; return;}
@@ -127,29 +127,31 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
    TCanvas *c_pi = new TCanvas("pi","pi",1800,1000);
    c_pi->cd(1);
 //    gPad->SetLogz();
-   h_pi->SetTitle("#pi^{-} rate (kHz);#theta (deg);P (GeV/c)");      
+   if (picharge=="m")  h_pi->SetTitle("#pi^{-} rate (kHz);#theta (deg);P (GeV/c)");
+   else   h_pi->SetTitle("#pi^{+} rate (kHz);#theta (deg);P (GeV/c)");      
 //    h_pi->GetXaxis()->SetRangeUser(xmin,xmax);   
 //    h_pi->GetYaxis()->SetRangeUser(ymin,ymax);     
    h_pi->Draw("text colz");
 //    h_pi->SetMaximum(1e13);
 //    h_pi->SetMinimum(1e-3);
-   c_pi->SaveAs(Form("%s_rate_pi.pdf",type.c_str()));         
+   c_pi->SaveAs(Form("%s_rate_pi%s.pdf",type.c_str(),picharge.c_str()));         
    {
    int bin,binxmin,binymin,binzmin,binxmax,binymax,binzmax;  
    bin=h_pi->FindBin(xmin,ymin);  
    h_pi->GetBinXYZ(bin,binxmin,binymin,binzmin);   
    bin=h_pi->FindBin(xmax,ymax);  
    h_pi->GetBinXYZ(bin,binxmax,binymax,binzmax);   
-   cout << "pi- rate in kHz "<< h_pi->Integral(binxmin,binxmax,binymin,binymax) << endl;   
+   cout << "pi rate in kHz "<< h_pi->Integral(binxmin,binxmax,binymin,binymax) << endl;   
    }   
 
       TCanvas *c_pie = new TCanvas("pie","pie",1800,1000);
       TH2F *h_pie=(TH2F*) h_pi->Clone();      
-      h_pie->Divide(h_e);        
-      h_pie->SetTitle("#pi^{-}/e^{-} ratio;#theta (deg);P (GeV/c)");      
+      h_pie->Divide(h_e);
+      if (picharge=="m")        h_pie->SetTitle("#pi^{-}/e^{-} ratio;#theta (deg);P (GeV/c)");      
+      else         h_pie->SetTitle("#pi^{+}/e^{+} ratio;#theta (deg);P (GeV/c)");            
 //       h_pie->GetXaxis()->SetRangeUser(xmin,xmax);   
       h_pie->Draw("text colz");
-      c_pie->SaveAs(Form("%s_ratio_pie.pdf",type.c_str())); 
+      c_pie->SaveAs(Form("%s_rate_pi%se.pdf",type.c_str(),picharge.c_str()));         
       
    gStyle->SetPaintTextFormat("2.2f");    
 
@@ -199,7 +201,8 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
       if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) h_pie_rej->SetMarkerSize(1);
       else if (type=="solid_PVDIS_LD2") h_pie_rej->SetMarkerSize(2);      
 
-      h_pie_rej->SetTitle("#pi^{-}/e^{-} ratio (\%) after #pi^{-} rejection;#theta (deg);P (GeV/c)");      
+      if (picharge=="m") h_pie_rej->SetTitle("#pi^{-}/e^{-} ratio (\%) after #pi^{-} rejection;#theta (deg);P (GeV/c)");      
+      else h_pie_rej->SetTitle("#pi^{+}/e^{+} ratio (\%) after #pi^{+} rejection;#theta (deg);P (GeV/c)");      
       h_pie_rej->GetXaxis()->SetRangeUser(xmin,xmax);   
       h_pie_rej->GetYaxis()->SetRangeUser(ymin,ymax);                       
       h_pie_rej->Draw("text colz");
@@ -256,9 +259,9 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
    }
    }
    
+    c_pie_rej->SaveAs(Form("%s_rate_pi%se_rej.pdf",type.c_str(),picharge.c_str()));         
+   
     //physics cut   
-      c_pie_rej->SaveAs(Form("%s_ratio_pie_rej.pdf",type.c_str()));
-  
    TCanvas *c_pie_rej_cut = new TCanvas("pie_rej_cut","pie_rej_cut",1800,1000);  
     TH2F *h_pie_rej_cut=(TH2F*) h_pie_rej->Clone();              
 
@@ -283,7 +286,6 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
 	    }
 	  }
    h_pie_rej_cut->Draw("text colz");
-
 
    {
    TLegend* leg = new TLegend(0.8, 0.7, 0.9, 0.9);      
@@ -320,5 +322,6 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi){
    }
    }
   
-    c_pie_rej_cut->SaveAs(Form("%s_ratio_pie_rej_cut.pdf",type.c_str()));
+    c_pie_rej_cut->SaveAs(Form("%s_rate_pi%se_rej_cut.pdf",type.c_str(),picharge.c_str()));         
+    
 }
