@@ -1,8 +1,8 @@
 # Configuration file for new_detector
 
 # Detector name and variation
-detector_name: solid_solenoid
-variation:     v0
+detector_name: solid_solenoid_v0
+variation:     Original
 
 # Factory can be MYQL or TEXT
 factory:       TEXT

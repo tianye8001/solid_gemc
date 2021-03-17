@@ -12,7 +12,7 @@ this geant4 geometry use cylinder to replace inner and outer octagon for simplic
 This is replaced by v2 cad file
 
 cad model v1
-"solid_solenoid_v1.stl" is the same as "SoLID_CLEO_MAR_18_v1.0.stl" 
+"solid_solenoid_v1.stl" is the same as "SoLID_CLEO_MAR_18_v1.0.stl" which has various mismatch with field map
 
 cad model v2
 "solid_solenoid_v2.stl" is the same as "SoLID_Iron_Oct20_Update_v2.0.stl"
