@@ -1,8 +1,12 @@
+// this code read a 3D map file and reduce its size by removing unnecessary digits
+// in 6 columns to reduce all coordinates to integer and all B to 0.1 precision
+// just run it like root as a root script
+
 #include <iomanip>
 #include <iostream>
 using namespace std;
 
-void mapcompress3D(string input_filename)
+void mapcompress3D(string input_filename,int nx,int ny,int nz,int skipline)
 {
 
 ifstream input(input_filename.c_str());
@@ -11,15 +15,13 @@ else {cout << "can't open the file" << endl; return;}
 
 ofstream output("output");
 
-// reads and discard the first 13 lines of text
+// reads and discard the first few lines of text
 char textline[200];
-for (int k = 0; k<8; k++) input.getline(textline,200);
+for (int k = 0; k<skipline; k++) input.getline(textline,200);
 
 double x,y,z;
 double  Bx,By,Bz;
-for (int j = 0; j<1001*301*301; j++) {    
-// for (int j = 0; j<1101*301*301; j++) {    
-// for (int j = 0; j<10000; j++) {    
+for (int j = 0; j<nx*ny*nz; j++) {    
 	cout << j << "\r" ;
 	input >> x>>y>>z>> Bx>>By>>Bz;
 	
