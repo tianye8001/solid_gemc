@@ -55,7 +55,7 @@ const char *GEMC_VERSION = "gemc 2.8";
 #include "outputFactory.h"
 #include "HitProcess.h"
 #include "PhysicsList.h"
-#include "options.h"
+#include "gemcOptions.h"
 #include "dmesg_init.h"
 #include "run_conditions.h"
 #include "fieldFactory.h"
@@ -63,7 +63,7 @@ const char *GEMC_VERSION = "gemc 2.8";
 #include "mirrors_factory.h"
 #include "parameter_factory.h"
 #include "string_utilities.h"
-#include "utils.h"
+#include "gemcUtils.h"
 #include "ActionInitialization.h"
 
 // c++ headers
@@ -199,7 +199,7 @@ int main( int argc, char **argv )
 	
 	//addtional hit process
  	solid_hitprocess(hitProcessMap);	
-	
+
 	///< magnetic Field Map
 	gemc_splash.message(" Creating fields Map...");
 	map<string, fieldFactoryInMap> fieldFactoryMap = registerFieldFactories();
@@ -275,8 +275,9 @@ int main( int argc, char **argv )
 	
 	
 	// registering activated field in the option so they're written out
-	if(ExpHall->activeFields.size())
-	gemcOpt.optMap["ACTIVEFIELDS"].args = "";
+	if(ExpHall->activeFields.size()) {
+		gemcOpt.optMap["ACTIVEFIELDS"].args = "";
+	}
 	
 	for(set<string>::iterator fit = ExpHall->activeFields.begin(); fit != ExpHall->activeFields.end(); fit++)
 		gemcOpt.optMap["ACTIVEFIELDS"].args = gemcOpt.optMap["ACTIVEFIELDS"].args + *fit + " ";
@@ -421,7 +422,7 @@ int main( int argc, char **argv )
 
 	
 	delete runManager;
-	return 1;
+	return 0;
 }
 
 

@@ -2,7 +2,7 @@ from init_env import init_environment
 
 # adding ccdb as temporary dependency
 # will be removed once the hit process routines are plugins
-env = init_environment("qt5 geant4 clhep evio xercesc ccdb mlibrary cadmesh")
+env = init_environment("qt5 geant4 clhep evio xercesc ccdb mlibrary cadmesh hipo")
 
 # env.Replace(CXX = "/apps/gcc/4.7.2/bin/g++")
 # env.Replace(CXX = "/usr/bin/clang++")
@@ -13,7 +13,7 @@ env = init_environment("qt5 geant4 clhep evio xercesc ccdb mlibrary cadmesh")
 if env['PLATFORM'] == 'darwin':
 	env.Append(CXXFLAGS='-Wno-absolute-value')
 
-# Hit Processes (addtional)
+# Hit Processes (additional)
 env.Append(CPPPATH = ['hitprocess'])
 hitp_sources = Split("""
 	hitprocess/solid_ec_ps_hitprocess.cc
@@ -24,9 +24,9 @@ hitp_sources = Split("""
 	hitprocess/solid_spd_hitprocess.cc	
 	hitprocess/solid_mrpc_hitprocess.cc
 	""")
-env.Library(source = hitp_sources, target = "lib/hitprocess")
+env.Library(source = hitp_sources, target = "lib/ghitprocess")
 
-#gemc (addtional)
+#gemc (additional)
 env.Append(CPPPATH = 'src')
 gemc_sources = Split("""
 	solid_gemc.cc""")
@@ -36,6 +36,8 @@ import os
 gemcpath = os.environ['GEMC']+'/'
 env.Append(LIBPATH = gemcpath)
 env.Append(LIBS = "gemc")
+hipopath = os.environ['HIPO']+'/slib/'
+env.Append(LIBPATH = hipopath)
 # LIBPATH here is what GEMC used to link all the libraries to libgemc.so
 rpath = env['LIBPATH']
 
