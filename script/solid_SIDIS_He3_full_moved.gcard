@@ -1,6 +1,7 @@
 <gcard>
 
-<detector name="../geometry/magnet_moved/v1/" factory="CAD"/>
+<detector name="../geometry/magnet_moved/solid_solenoid_v2" factory="TEXT" variation="Original"/>
+<detector name="../geometry/magnet_moved/solid_solenoid_cryo" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_largeangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/hgc_moved/solid_SIDIS_hgc" factory="TEXT" variation="Original"/>
@@ -11,7 +12,7 @@
 <detector name="../geometry/gem/solid_SIDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_SIDIS_target_He3" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_SIDIS_target_He3_coil" factory="TEXT" variation="Original"/>
-<detector name="../geometry/beamline/solid_SIDIS_beamline_He3" factory="TEXT" variation="Original"/>
+<detector name="../geometry/beamline_moved/solid_SIDIS_beamline_He3" factory="TEXT" variation="Original"/>
 
 
 <option name="INTEGRATEDRAW" value="flux"/>

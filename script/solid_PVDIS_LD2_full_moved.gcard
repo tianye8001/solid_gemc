@@ -1,13 +1,14 @@
 <gcard>
 
-<detector name="../geometry/magnet_moved/v1/" factory="CAD"/>
+<detector name="../geometry/magnet_moved/solid_solenoid_v2" factory="TEXT" variation="Original"/>
+<detector name="../geometry/magnet_moved/solid_solenoid_cryo" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_PVDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/lgc_moved/lg_cherenkov" factory="TEXT" variation="PVDIS"/>
-<detector name="../geometry/gem/solid_PVDIS_gem" factory="TEXT" variation="Original"/>
+<detector name="../geometry/gem_moved/solid_PVDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_PVDIS_target_enclosure" factory="TEXT" variation="LD2"/>
-<detector name="../geometry/beamline/solid_PVDIS_beamline" factory="TEXT" variation="Original"/>
-<detector name="../geometry/baffle/solid_PVDIS_baffle_CLEO2" factory="TEXT" variation="Original"/>
-<detector name="../geometry/baffle/solid_PVDIS_baffle_observer_CLEO2" factory="TEXT" variation="Original"/>
+<detector name="../geometry/beamline_moved/solid_PVDIS_beamline" factory="TEXT" variation="Original"/>
+<detector name="../geometry/baffle_moved/solid_PVDIS_baffle_CLEO2" factory="TEXT" variation="Original"/>
+<detector name="../geometry/baffle_moved/solid_PVDIS_baffle_observer_CLEO2" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
