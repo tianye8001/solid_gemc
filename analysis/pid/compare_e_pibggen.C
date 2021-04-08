@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void compare_e_pibggen(string type,string filename_e,string filename_pi,string picharge="m"){
+void compare_e_pibggen(string type,string filename_e,string filename_h,string hadron="pim"){
    gStyle->SetPalette(kBird);
    gStyle->SetOptStat(0);
   gStyle->SetLabelSize(0.04,"xyz"); // size of axis values
@@ -22,25 +22,26 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi,string p
    gStyle->SetPaintTextFormat("4.1f");   
 
    char expname[200];
-   double xmin,xmax,ymin,ymax;
+   double min_theta,max_theta,min_p,max_p;
+   double min_Q2=0,max_Q2=14,min_x=0,max_x=1;   
     double rej_FA_low,rej_FA_high,rej_LA;    
    if (type=="solid_JPsi_LH2") {
      sprintf(expname, "JPsi");     
-     xmin=8;xmax=28;ymin=0.5;ymax=7;
+     min_theta=8;max_theta=28;min_p=0.5;max_p=7;
      rej_FA_low=1e-4;
      rej_FA_high=5e-3;     
      rej_LA=5e-3;
    }
    else if (type=="solid_SIDIS_He3") {
      sprintf(expname, "3He");
-     xmin=8;xmax=24;ymin=1;ymax=7;     
+     min_theta=8;max_theta=24;min_p=1;max_p=7;     
      rej_FA_low=1e-4;
      rej_FA_high=5e-3;     
      rej_LA=5e-3;     
    }
    else if (type=="solid_PVDIS_LD2") {
      sprintf(expname, "LD");
-     xmin=22;xmax=35;ymin=1.5;ymax=5;
+     min_theta=22;max_theta=35;min_p=1.5;max_p=5;   
      rej_FA_low=1e-4;
      rej_FA_high=5e-3;     
    }
@@ -48,45 +49,56 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi,string p
      cout << "unknown type" << endl;
      return;
   }
+
+//   cout << min_theta << " " << max_theta << " " << min_p << " " << max_p << " " << endl;
   
-//   cout << xmin << " " << xmax << " " << ymin << " " << ymax << " " << endl;
+  string hadron_title,e_title,hadron_filename;
+  if (hadron=="pim") {hadron_title="#pi^{-}"; e_title="e^{-}"; hadron_filename="pion_m";}
+  else if (hadron=="pip") {hadron_title="#pi^{+}"; e_title="e^{+}"; hadron_filename="pion_p";}
+  else if (hadron=="p") {
+    hadron_title="p";  e_title="e^{+}"; hadron_filename="proton";
+    rej_FA_high=rej_FA_low;	//proton has much higher Cherenkov threshold
+  }
+  else {
+     cout << "unknown hadron" << endl;
+     return;
+  }  
+  
 
    //TFile *file_e=new TFile("/work/halla/solid/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/rate_solid_PVDIS_LD2_eDIS_1e6.root");
    // TFile *file_e=new TFile("/work/halla/solid/zwzhao/solid/solid_svn/solid/evgen/eicRate_20101102/output/rate_solid_PVDIS_LD2_eDIS_50GeV_1e6.root");
    TFile *file_e=new TFile(filename_e.c_str());
    TTree *T_e = (TTree*) file_e->Get("T");
 
-   TCanvas *c_e = new TCanvas("e","e",1800,1000);
-   c_e->cd(1);
-//    gPad->SetLogz();
-//    T_e->Draw("sqrt(px*px+py*py+pz*pz):theta>>h_e(100,0,5,100,0,20)","rate*(W<3&&x>0.35&&theta/3.1415926*180>22&&theta/3.1415926*180<35)","colz");    
-   T_e->Draw("sqrt(px*px+py*py+pz*pz):theta>>h_e(20,5,45,20,0,10)","rate/1e3","text colz");       
-   TH2F *h_e = (TH2F*)gPad->GetPrimitive("h_e");
-   h_e->SetTitle("e^{-} rate (kHz);#theta (deg);P (GeV/c)");      
-//    h_e->GetXaxis()->SetRangeUser(xmin,xmax);
-//    h_e->GetYaxis()->SetRangeUser(ymin,ymax);
-   c_e->SaveAs(Form("%s_rate_e.pdf",type.c_str()));     
+   TCanvas *cPTheta_e = new TCanvas("cPTheta_e","cPTheta_e",1800,1000);
+   T_e->Draw("sqrt(px*px+py*py+pz*pz):theta>>hPTheta_e(20,5,45,20,0,10)","rate/1e3","text colz");       
+   TH2F *hPTheta_e = (TH2F*)gPad->GetPrimitive("hPTheta_e");
+   hPTheta_e->SetTitle("e^{-} rate (kHz);#theta (deg);P (GeV/c)");      
+//    hPTheta_e->GetXaxis()->SetRangeUser(min_theta,max_theta);
+//    hPTheta_e->GetYaxis()->SetRangeUser(min_p,max_p);
+   cPTheta_e->SaveAs(Form("%s_rate_PTheta_e.pdf",type.c_str()));     
    {
-   int bin,binxmin,binymin,binzmin,binxmax,binymax,binzmax;  
-   bin=h_e->FindBin(xmin,ymin);  
-   h_e->GetBinXYZ(bin,binxmin,binymin,binzmin);   
-   bin=h_e->FindBin(xmax,ymax);  
-   h_e->GetBinXYZ(bin,binxmax,binymax,binzmax);   
-   cout << "e- rate in kHz "<< h_e->Integral(binxmin,binxmax,binymin,binymax) << endl;   
+   int bin,binmin_theta,binmin_p,binzmin,binmax_theta,binmax_p,binzmax;  
+   bin=hPTheta_e->FindBin(min_theta,min_p);  
+   hPTheta_e->GetBinXYZ(bin,binmin_theta,binmin_p,binzmin);   
+   bin=hPTheta_e->FindBin(max_theta,max_p);  
+   hPTheta_e->GetBinXYZ(bin,binmax_theta,binmax_p,binzmax);   
+   cout << "e- rate in kHz "<< hPTheta_e->Integral(binmin_theta,binmax_theta,binmin_p,binmax_p) << endl;   
    }   
-   
-//    T_e->Draw("Q2:W>>h_e(100,0,5,100,0,20)","rate*(W<3&&x>0.35&&theta/3.1415926*180>22&&theta/3.1415926*180<35)","colz"); 
-   // T_e->Draw("Q2:W>>h_e(120,0,12,100,0,100)","rate*(W>3&&Q2>1&&Q2>0.2&&theta/3.1415926*180<50)","colz"); 
-//    h_e->SetTitle("e^- rate;W(GeV);Q2(GeV^{2})");
-   // T_e->Draw("Q2:W>>h_e(120,0,12,100,0,100)","rate*(W>3&&Q2>1&&Q2>0.2&&theta/3.1415926*180<50)","colz"); 
-   // h_e->SetTitle("eDIS rate;W(GeV);Q2(GeV^{2})");
-   // T_e->Draw("Q2:x>>h_e(100,0,1,100,0,100)","rate*(W>3&&Q2>1&&Q2>0.2&&theta/3.1415926*180<50)","colz"); 
-   // h_e->SetTitle("eDIS rate;x;Q2(GeV^{2})");
-//    h_e->SetMaximum(1e13);
-//    h_e->SetMinimum(1e-3);
 
+   TCanvas *cQ2x_e = new TCanvas("cQ2x_e","cQ2x_e",1800,1000);      
+   T_e->Draw("Q2:x>>hQ2x_e(10,0,1,14,0,14)","rate/1e3","text colz");        
+   TH2F *hQ2x_e = (TH2F*)gPad->GetPrimitive("hQ2x_e");
+   hQ2x_e->SetTitle("e^{-} rate (kHz);x;Q^{2} (GeV/c)^{2}");      
+//    hPTheta_e->GetXaxis()->SetRangeUser(min_theta,max_theta);
+//    hPTheta_e->GetYaxis()->SetRangeUser(min_p,max_p);
+   cQ2x_e->SaveAs(Form("%s_rate_Q2x_e.pdf",type.c_str()));     
+   
    //get pi
-   TH2F *h_pi=new TH2F("pi","pi",20,5,45,20,0,10);
+   TH2F *hPTheta_pi=new TH2F("hPTheta_pi","hPTheta_pi",20,5,45,20,0,10);
+   TH2F *hQ2x_pi=new TH2F("hQ2x_pi","hQ2x_pi",10,0,1,14,0,14);   
+   TH2F *hPTheta_pi_rej=new TH2F("hPTheta_pi_rej","hPTheta_pi_rej",20,5,45,20,0,10);
+   TH2F *hQ2x_pi_rej=new TH2F("hQ2x_pi_rej","hQ2x_pi_rej",10,0,1,14,0,14);   
    
    int filecount;
     if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) filecount=1000;   
@@ -94,9 +106,9 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi,string p
 //     filecount=10;    
     
    for(int i=0; i<filecount;i++){
-      string filename_pi_name=Form("%s/LUND/hallD_pion_%s_%s_1k_%i.lund",filename_pi.c_str(),picharge.c_str(),expname,i+1);
-      ifstream input(filename_pi_name.c_str());
-      if (input.good()) {} //cout << "open file " << filename_pi_name << " OK" << "\r";
+      string filename_hPTheta_name=Form("%s/LUND/hallD_%s_%s_1k_%i.lund",filename_h.c_str(),hadron_filename.c_str(),expname,i+1);
+      ifstream input(filename_hPTheta_name.c_str());
+      if (input.good()) {} //cout << "open file " << filename_hPTheta_name << " OK" << "\r";
       else {cout << "can't open the file" << endl; return;}
 
       // reads and discard the first 13 lines of text
@@ -115,97 +127,136 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi,string p
 	      double px=particles[6],py=particles[7],pz=particles[8];	      
 	      double p=sqrt(px*px+py*py+pz*pz);
 	      double theta=acos(fabs(pz/p))/3.1416*180;
-	      
-	      h_pi->Fill(theta,p,rate);
-      }
+	      double Q2=4*11*p*sin(theta/2/180*3.1416)*sin(theta/2/180*3.1416);
+	      double x=Q2/2/0.938/(11-p);
+
+	      double rate_rej=rate;
+      	      if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) {		
+		if (theta <15) {//FA
+		  if (p<4) rate_rej=rate*rej_FA_low;
+		  else  rate_rej=rate*rej_FA_high;
+		}
+		else rate_rej=rate*rej_LA;
+	      }
+	      else if (type=="solid_PVDIS_LD2") {      
+		  if (p<4) rate_rej=rate*rej_FA_low;
+		  else  rate_rej=rate*rej_FA_high;
+	      }
+ 
+	      hPTheta_pi->Fill(theta,p,rate);
+	      hQ2x_pi->Fill(x,Q2,rate);	      
+      	      hPTheta_pi_rej->Fill(theta,p,rate_rej);
+	      hQ2x_pi_rej->Fill(x,Q2,rate_rej);	      
+    }
+    
    }
    
    cout << "pi bggen files " << filecount << endl;
 
-   h_pi->Scale(1e-3/filecount);  //in kHz and normalized by filecount
+    //in kHz and normalized by filecount   
+   hPTheta_pi->Scale(1e-3/filecount);
+   hQ2x_pi->Scale(1e-3/filecount);
+   hPTheta_pi_rej->Scale(1e-3/filecount);  
+   hQ2x_pi_rej->Scale(1e-3/filecount);     
    
-   TCanvas *c_pi = new TCanvas("pi","pi",1800,1000);
-   c_pi->cd(1);
-//    gPad->SetLogz();
-   if (picharge=="m")  h_pi->SetTitle("#pi^{-} rate (kHz);#theta (deg);P (GeV/c)");
-   else   h_pi->SetTitle("#pi^{+} rate (kHz);#theta (deg);P (GeV/c)");      
-//    h_pi->GetXaxis()->SetRangeUser(xmin,xmax);   
-//    h_pi->GetYaxis()->SetRangeUser(ymin,ymax);     
-   h_pi->Draw("text colz");
-//    h_pi->SetMaximum(1e13);
-//    h_pi->SetMinimum(1e-3);
-   c_pi->SaveAs(Form("%s_rate_pi%s.pdf",type.c_str(),picharge.c_str()));         
+   TCanvas *cPTheta_pi = new TCanvas("cPTheta_pi","cPTheta_pi",1800,1000);
+   hPTheta_pi->SetTitle(Form("%s rate (kHz);#theta (deg);P (GeV/c)",hadron_title.c_str()));       
+//    hPTheta_pi->GetXaxis()->SetRangeUser(min_theta,max_theta);   
+//    hPTheta_pi->GetYaxis()->SetRangeUser(min_p,max_p);     
+   hPTheta_pi->Draw("text colz");
+//    hPTheta_pi->SetMaximum(1e13);
+//    hPTheta_pi->SetMinimum(1e-3);
+   cPTheta_pi->SaveAs(Form("%s_rate_PTheta_%s.pdf",type.c_str(),hadron.c_str()));         
    {
-   int bin,binxmin,binymin,binzmin,binxmax,binymax,binzmax;  
-   bin=h_pi->FindBin(xmin,ymin);  
-   h_pi->GetBinXYZ(bin,binxmin,binymin,binzmin);   
-   bin=h_pi->FindBin(xmax,ymax);  
-   h_pi->GetBinXYZ(bin,binxmax,binymax,binzmax);   
-   cout << "pi rate in kHz "<< h_pi->Integral(binxmin,binxmax,binymin,binymax) << endl;   
+   int bin,binmin_theta,binmin_p,binzmin,binmax_theta,binmax_p,binzmax;  
+   bin=hPTheta_pi->FindBin(min_theta,min_p);  
+   hPTheta_pi->GetBinXYZ(bin,binmin_theta,binmin_p,binzmin);   
+   bin=hPTheta_pi->FindBin(max_theta,max_p);  
+   hPTheta_pi->GetBinXYZ(bin,binmax_theta,binmax_p,binzmax);   
+   cout << "pi rate in kHz "<< hPTheta_pi->Integral(binmin_theta,binmax_theta,binmin_p,binmax_p) << endl;   
    }   
 
-      TCanvas *c_pie = new TCanvas("pie","pie",1800,1000);
-      TH2F *h_pie=(TH2F*) h_pi->Clone();      
-      h_pie->Divide(h_e);
-      if (picharge=="m")        h_pie->SetTitle("#pi^{-}/e^{-} ratio;#theta (deg);P (GeV/c)");      
-      else         h_pie->SetTitle("#pi^{+}/e^{+} ratio;#theta (deg);P (GeV/c)");            
-//       h_pie->GetXaxis()->SetRangeUser(xmin,xmax);   
-      h_pie->Draw("text colz");
-      c_pie->SaveAs(Form("%s_rate_pi%se.pdf",type.c_str(),picharge.c_str()));         
+   TCanvas *cQ2x_pi = new TCanvas("cQ2x_pi","cQ2x_pi",1800,1000);
+   hQ2x_pi->SetTitle(Form("%s rate (kHz);x;Q^{2} (GeV/c)^{2}",hadron_title.c_str()));       
+//    hQ2x_pi->GetXaxis()->SetRangeUser(min_theta,max_theta);   
+//    hQ2x_pi->GetYaxis()->SetRangeUser(min_p,max_p);     
+   hQ2x_pi->Draw("text colz");
+//    hQ2x_pi->SetMaximum(1e13);
+//    hQ2x_pi->SetMinimum(1e-3);
+   cQ2x_pi->SaveAs(Form("%s_rate_Q2x_%s.pdf",type.c_str(),hadron.c_str()));   
+   
+   // make pi over e plot
+      TCanvas *cPTheta_pie = new TCanvas("cPTheta_pie","cPTheta_pie",1800,1000);
+      TH2F *hPTheta_pie=(TH2F*) hPTheta_pi->Clone();      
+      hPTheta_pie->Divide(hPTheta_e);
+      hPTheta_pie->SetTitle(Form("%s/%s ratio;#theta (deg);P (GeV/c)",hadron_title.c_str(),e_title.c_str()));             
+//       hPTheta_pie->GetXaxis()->SetRangeUser(min_theta,max_theta);   
+      hPTheta_pie->Draw("text colz");
+      cPTheta_pie->SaveAs(Form("%s_ratio_PTheta_%se.pdf",type.c_str(),hadron.c_str()));         
       
+      TCanvas *cQ2x_pie = new TCanvas("cQ2x_pie","cQ2x_pie",1800,1000);
+      TH2F *hQ2x_pie=(TH2F*) hQ2x_pi->Clone();      
+      hQ2x_pie->Divide(hQ2x_e);
+      hQ2x_pie->SetTitle(Form("%s/%s ratio;x;Q^{2} (GeV/c)^{2}",hadron_title.c_str(),e_title.c_str()));       
+//       hQ2x_pie->GetXaxis()->SetRangeUser(min_theta,max_theta);   
+      hQ2x_pie->Draw("text colz");
+      cQ2x_pie->SaveAs(Form("%s_ratio_Q2x_%se.pdf",type.c_str(),hadron.c_str()));         
+   
+      
+   // make pi over e plot with rejection    
    gStyle->SetPaintTextFormat("2.2f");    
+   
+      TCanvas *cPTheta_pie_rej = new TCanvas("cPTheta_pie_rej","cPTheta_pie_rej",1800,1000);   
+      TH2F *hPTheta_pie_rej=(TH2F*) hPTheta_pi_rej->Clone();      
+      hPTheta_pie_rej->Divide(hPTheta_e);           
+      hPTheta_pie_rej->Scale(1e2); //percent
 
-      //rejection       
-      TCanvas *c_pie_rej = new TCanvas("pie_rej","pie_rej",1800,1000);
+      //change text size
+      if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) hPTheta_pie_rej->SetMarkerSize(1);
+      else if (type=="solid_PVDIS_LD2") hPTheta_pie_rej->SetMarkerSize(2);      
+
+// old way doing rejection
+//       TH2F *hPTheta_pie_rej=(TH2F*) hPTheta_pie->Clone();             
+// 	  for (int i = 1; i<=20; i++) {	
+// 	    for (int j = 1; j<=20; j++) {
+// 	      double x=hPTheta_pie_rej->GetXaxis()->GetBinCenter(i);
+// 	      double y=hPTheta_pie_rej->GetYaxis()->GetBinCenter(j);	
+// 
+// 	      if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) {		
+// 		if (x <15) {//FA
+// 		  if (y <4) hPTheta_pie_rej->SetBinContent(i,j,hPTheta_pie_rej->GetBinContent(i,j)*rej_FA_low);
+// 		  else  hPTheta_pie_rej->SetBinContent(i,j,hPTheta_pie_rej->GetBinContent(i,j)*rej_FA_high);
+// 		}
+// 		else hPTheta_pie_rej->SetBinContent(i,j,hPTheta_pie_rej->GetBinContent(i,j)*rej_LA); //LA	      
+// 	      }
+// 	      else if (type=="solid_PVDIS_LD2") {      
+// 		  if (y <4) hPTheta_pie_rej->SetBinContent(i,j,hPTheta_pie_rej->GetBinContent(i,j)*rej_FA_low);
+// 		  else  hPTheta_pie_rej->SetBinContent(i,j,hPTheta_pie_rej->GetBinContent(i,j)*rej_FA_high); 
+// 	      }
+// 	      
+// 	    }
+// 	  }      
       
-      TH2F *h_pie_rej=(TH2F*) h_pie->Clone();             
-	  for (int i = 1; i<=20; i++) {	
+      //clean up for PTheta
+      	  for (int i = 1; i<=20; i++) {	
 	    for (int j = 1; j<=20; j++) {
-	      double x=h_pie_rej->GetXaxis()->GetBinCenter(i);
-	      double y=h_pie_rej->GetYaxis()->GetBinCenter(j);	
-
-	      if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) {		
-		if (x <15) {//FA
-		  if (y <4) h_pie_rej->SetBinContent(i,j,h_pie_rej->GetBinContent(i,j)*rej_FA_low);
-		  else  h_pie_rej->SetBinContent(i,j,h_pie_rej->GetBinContent(i,j)*rej_FA_high);
-		}
-		else h_pie_rej->SetBinContent(i,j,h_pie_rej->GetBinContent(i,j)*rej_LA); //LA	      
-	      }
-	      else if (type=="solid_PVDIS_LD2") {      
-		  if (y <4) h_pie_rej->SetBinContent(i,j,h_pie_rej->GetBinContent(i,j)*rej_FA_low);
-		  else  h_pie_rej->SetBinContent(i,j,h_pie_rej->GetBinContent(i,j)*rej_FA_high); 
-	      }
+	      double x=hPTheta_pie_rej->GetXaxis()->GetBinCenter(i);
+	      double y=hPTheta_pie_rej->GetYaxis()->GetBinCenter(j);	
 	      
+	      if (type=="solid_SIDIS_He3" ) {  	      
+		if (x==16 && y>6) hPTheta_pie_rej->SetBinContent(i,j,0); // cleanup
+		if (x==18 && y>5) hPTheta_pie_rej->SetBinContent(i,j,0); // cleanup	      
+	      }
+	      else if (type=="solid_PVDIS_LD2") {
+		if (x==24 && y>4.5) hPTheta_pie_rej->SetBinContent(i,j,0); // cleanup	      		
+	      }
 	    }
 	  }
 	  
-      //clean up
-      	  for (int i = 1; i<=20; i++) {	
-	    for (int j = 1; j<=20; j++) {
-	      double x=h_pie_rej->GetXaxis()->GetBinCenter(i);
-	      double y=h_pie_rej->GetYaxis()->GetBinCenter(j);	
-	      
-	      if (type=="solid_SIDIS_He3" ) {  	      
-		if (x==16 && y>6) h_pie_rej->SetBinContent(i,j,0); // cleanup
-		if (x==18 && y>5) h_pie_rej->SetBinContent(i,j,0); // cleanup	      
-	      }
-	      else if (type=="solid_PVDIS_LD2") {
-		if (x==24 && y>4.5) h_pie_rej->SetBinContent(i,j,0); // cleanup	      		
-	      }
-	    }
-	  }
-
-      h_pie_rej->Scale(1e2); //percent
-
-      //change text size
-      if (type=="solid_JPsi_LH2" || type=="solid_SIDIS_He3" ) h_pie_rej->SetMarkerSize(1);
-      else if (type=="solid_PVDIS_LD2") h_pie_rej->SetMarkerSize(2);      
-
-      if (picharge=="m") h_pie_rej->SetTitle("#pi^{-}/e^{-} ratio (\%) after #pi^{-} rejection;#theta (deg);P (GeV/c)");      
-      else h_pie_rej->SetTitle("#pi^{+}/e^{+} ratio (\%) after #pi^{+} rejection;#theta (deg);P (GeV/c)");      
-      h_pie_rej->GetXaxis()->SetRangeUser(xmin,xmax);   
-      h_pie_rej->GetYaxis()->SetRangeUser(ymin,ymax);                       
-      h_pie_rej->Draw("text colz");
+      hPTheta_pie_rej->SetTitle(Form("%s/%s ratio (\%) after %s rejection;#theta (deg);P (GeV/c)",hadron_title.c_str(),e_title.c_str(),hadron_title.c_str()));       
+      hPTheta_pie_rej->GetXaxis()->SetRangeUser(min_theta,max_theta);   
+      hPTheta_pie_rej->GetYaxis()->SetRangeUser(min_p,max_p);                       
+      hPTheta_pie_rej->Draw("text colz");
 
 // lines in P vs theta at 11GeV beam
   TF1 *W_2=new TF1("W_2","(0.938*0.938-4+2*0.938*11)/(2*0.938+4*11*sin(x/180.*3.1415926/2)*sin(x/180.*3.1415926/2))",0,180);
@@ -259,69 +310,46 @@ void compare_e_pibggen(string type,string filename_e,string filename_pi,string p
    }
    }
    
-    c_pie_rej->SaveAs(Form("%s_rate_pi%se_rej.pdf",type.c_str(),picharge.c_str()));         
+    cPTheta_pie_rej->SaveAs(Form("%s_ratio_PTheta_%se_rej.pdf",type.c_str(),hadron.c_str()));         
    
+      TCanvas *cQ2x_pie_rej = new TCanvas("cQ2x_pie_rej","cQ2x_pie_rej",1800,1000);	  
+      TH2F *hQ2x_pie_rej=(TH2F*) hQ2x_pi_rej->Clone();      
+      hQ2x_pie_rej->Divide(hQ2x_e);           
+      hQ2x_pie_rej->Scale(1e2); //percent   
+      	  
+      hQ2x_pie_rej->SetTitle(Form("%s/%s ratio (\%) after %s rejection;x;Q^{2} (GeV/c)^{2}",hadron_title.c_str(),e_title.c_str(),hadron_title.c_str()));       
+//       hQ2x_pie_rej->GetXaxis()->SetRangeUser(min_theta,max_theta);   
+//       hQ2x_pie_rej->GetYaxis()->SetRangeUser(min_p,max_p);                       
+      hQ2x_pie_rej->Draw("text colz");
+
+    cQ2x_pie_rej->SaveAs(Form("%s_ratio_Q2x_%se_rej.pdf",type.c_str(),hadron.c_str()));               
+    
     //physics cut   
-   TCanvas *c_pie_rej_cut = new TCanvas("pie_rej_cut","pie_rej_cut",1800,1000);  
-    TH2F *h_pie_rej_cut=(TH2F*) h_pie_rej->Clone();              
-
-    for (int i = 1; i<=20; i++) {	
-	    for (int j = 1; j<=20; j++) {
-	      double x=h_pie_rej_cut->GetXaxis()->GetBinCenter(i);
-	      double y=h_pie_rej_cut->GetYaxis()->GetBinCenter(j);	
-	      
-	      if (type=="solid_SIDIS_He3" ) {  	      
-		if (x>15 && y<3.5) h_pie_rej_cut->SetBinContent(i,j,0); // cut LA at 3.5GeV
-		if (x<9 && y<3.5) h_pie_rej_cut->SetBinContent(i,j,0); // cut FA Q2=1
-		if (x<11 && y<2.5) h_pie_rej_cut->SetBinContent(i,j,0); // cut FA Q2=1
-		if (x<13 && y<1.5) h_pie_rej_cut->SetBinContent(i,j,0); // cut FA Q2=1 
-	      }
-// 	      if (type=="solid_JPsi_LH2" ) {  	      
-// 		if (y<2.5) h_pie_rej_cut->SetBinContent(i,j,0); // for decay lepton 
+//    TCanvas *cPTheta_pie_rej_cut = new TCanvas("pie_rej_cut","pie_rej_cut",1800,1000);  
+//     TH2F *hPTheta_pie_rej_cut=(TH2F*) hPTheta_pie_rej->Clone();              
+// 
+//     for (int i = 1; i<=20; i++) {	
+// 	    for (int j = 1; j<=20; j++) {
+// 	      double x=hPTheta_pie_rej_cut->GetXaxis()->GetBinCenter(i);
+// 	      double y=hPTheta_pie_rej_cut->GetYaxis()->GetBinCenter(j);	
+// 	      
+// 	      if (type=="solid_SIDIS_He3" ) {  	      
+// 		if (x>15 && y<3.5) hPTheta_pie_rej_cut->SetBinContent(i,j,0); // cut LA at 3.5GeV
+// 		if (x<9 && y<3.5) hPTheta_pie_rej_cut->SetBinContent(i,j,0); // cut FA Q2=1
+// 		if (x<11 && y<2.5) hPTheta_pie_rej_cut->SetBinContent(i,j,0); // cut FA Q2=1
+// 		if (x<13 && y<1.5) hPTheta_pie_rej_cut->SetBinContent(i,j,0); // cut FA Q2=1 
 // 	      }
-// 	      if (type=="solid_PVDIS_LD2" ) {  	      
-// 		if (y<1.5) h_pie_rej_cut->SetBinContent(i,j,0); 
-// 	      }
-	      
-	    }
-	  }
-   h_pie_rej_cut->Draw("text colz");
-
-   {
-   TLegend* leg = new TLegend(0.8, 0.7, 0.9, 0.9);      
-   if (type=="solid_SIDIS_He3" ) {
-    W_2->Draw("same");
-    leg->AddEntry(W_2, "W=2","l");    
-    W_3->Draw("same");
-    leg->AddEntry(W_3, "W=3","l");    
-    Q2_1->Draw("same");
-    leg->AddEntry(Q2_1, "Q^{2}=1","l");        
-    Q2_2->Draw("same");
-    leg->AddEntry(Q2_2, "Q^{2}=2","l");        
-    leg->Draw();    
-
-    TLine *line_p = new TLine(15,3.5,25,3.5);    
-    line_p->SetLineWidth(6);
-    line_p->SetLineColor(kGreen);        
-    line_p->Draw("same");
-    TLine *line_theta = new TLine(15,1,15,3.5);    
-    line_theta->SetLineWidth(6);
-    line_theta->SetLineColor(kGreen);        
-    line_theta->Draw("same");     
-   }
-   else if (type=="solid_PVDIS_LD2") {      
-    W_2->Draw("same");
-    leg->AddEntry(W_2, "W=2","l");    
-    W_3->Draw("same");
-    leg->AddEntry(W_3, "W=3","l");    
-    x_35->Draw("same");
-    leg->AddEntry(x_35, "x=0.35","l");        
-    x_55->Draw("same");
-    leg->AddEntry(x_55, "x=0.55","l");        
-    leg->Draw();    
-   }
-   }
-  
-    c_pie_rej_cut->SaveAs(Form("%s_rate_pi%se_rej_cut.pdf",type.c_str(),picharge.c_str()));         
+// // 	      if (type=="solid_JPsi_LH2" ) {  	      
+// // 		if (y<2.5) hPTheta_pie_rej_cut->SetBinContent(i,j,0); // for decay lepton 
+// // 	      }
+// // 	      if (type=="solid_PVDIS_LD2" ) {  	      
+// // 		if (y<1.5) hPTheta_pie_rej_cut->SetBinContent(i,j,0); 
+// // 	      }
+// 	      
+// 	    }
+//     }
+//    hPTheta_pie_rej_cut->Draw("text colz");
+//   
+//     cPTheta_pie_rej_cut->SaveAs(Form("%s_rate_%se_rej_cut.pdf",type.c_str(),hadron.c_str()));         
     
 }
