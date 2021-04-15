@@ -11,13 +11,16 @@ root 'compare_e_pibggen.C("solid_SIDIS_He3","/work/halla/solid/evgen/evgen_inclu
 root 'compare_e_pibggen.C("solid_JPsi_LH2","/work/halla/solid/evgen/evgen_inclusive_e/commit11d7751/gen_solid_JPsi_LH2_norad_1e6.root","/work/halla/solid/evgen/solid_bggen/JPsi_LH2")'
 root 'compare_e_pibggen.C("solid_PVDIS_LD2","/work/halla/solid/evgen/evgen_inclusive_e/commit11d7751/gen_solid_PVDIS_LD2_norad_1e6.root","/work/halla/solid/evgen/solid_bggen/PVDIS_LD2")' # for pi-
 root 'compare_e_pibggen.C("solid_PVDIS_LD2","/work/halla/solid/evgen/evgen_inclusive_e/commit11d7751/gen_solid_PVDIS_LD2_norad_1e6.root","/work/halla/solid/evgen/solid_bggen/PVDIS_LD2","pip")'  # for pi+
+root 'compare_e_pibggen.C("solid_PVDIS_LD2","/work/halla/solid/evgen/evgen_inclusive_e/commit11d7751/gen_solid_PVDIS_LD2_norad_1e6.root","/work/halla/solid/evgen/solid_bggen/PVDIS_LD2","pi0")'  # for pi0
 root 'compare_e_pibggen.C("solid_PVDIS_LD2","/work/halla/solid/evgen/evgen_inclusive_e/commit11d7751/gen_solid_PVDIS_LD2_norad_1e6.root","/work/halla/solid/evgen/solid_bggen/PVDIS_LD2","p")'  # for proton
 
 == analysis_rate.C ====================================
 root -l 'analysis_rate.C+("/cache/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_weighted_eAll_filenum100_1e6.root","e")'
 
+root -l 'analysis_rate.C+("/cache/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_normalized_pi0Bggen_filenum1902_1.902e6.root","pi0")'
+root -l 'analysis_rate.C+("/cache/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_normalized_pimBggen_filenum1622_1.622e6.root","pim")'
+
 root -l 'analysis_rate.C+("/cache/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_normalized_allBggen_filenum2000_2e6.root","pim")'
 root -l 'analysis_rate.C+("/cache/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_normalized_allBggen_filenum2000_2e6.root","pip")'
 root -l 'analysis_rate.C+("/cache/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_normalized_allBggen_filenum2000_2e6.root","pi0")'
 root -l 'analysis_rate.C+("/cache/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_normalized_allBggen_filenum2000_2e6.root","p")'
-

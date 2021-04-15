@@ -55,6 +55,7 @@ void compare_e_pibggen(string type,string filename_e,string filename_h,string ha
   string hadron_title,e_title,hadron_filename;
   if (hadron=="pim") {hadron_title="#pi^{-}"; e_title="e^{-}"; hadron_filename="pion_m";}
   else if (hadron=="pip") {hadron_title="#pi^{+}"; e_title="e^{+}"; hadron_filename="pion_p";}
+  else if (hadron=="pi0") {hadron_title="#pi^{0}"; e_title="e^{-}"; hadron_filename="pion_0";}  
   else if (hadron=="p") {
     hadron_title="p";  e_title="e^{+}"; hadron_filename="proton";
     rej_FA_high=rej_FA_low;	//proton has much higher Cherenkov threshold
@@ -126,7 +127,7 @@ void compare_e_pibggen(string type,string filename_e,string filename_h,string ha
 	      double rate=header[9];
 	      double px=particles[6],py=particles[7],pz=particles[8];	      
 	      double p=sqrt(px*px+py*py+pz*pz);
-	      double theta=acos(fabs(pz/p))/3.1416*180;
+	      double theta=acos(pz/p)/3.1416*180;
 	      double Q2=4*11*p*sin(theta/2/180*3.1416)*sin(theta/2/180*3.1416);
 	      double x=Q2/2/0.938/(11-p);
 
