@@ -110,7 +110,8 @@ int analysis_rate(string inputfile_name,string par="e",string runmode="trigger",
   else if (par=="pim") {par_title="#pi^{-}"; e_title="e^{-}"; par_filename="pion_m";}
   else if (par=="pip") {par_title="#pi^{+}"; e_title="e^{+}"; par_filename="pion_p";}
   else if (par=="p") {    par_title="p";  e_title="e^{+}"; par_filename="proton";  }
-  else if (par=="e") {    par_title="e^{-}";  e_title="e^{+}"; par_filename="e";  }  
+  else if (par=="eany") {    par_title="any e^{-}";  e_title="e^{-}"; par_filename="eany";  }
+  else if (par=="e") {    par_title="e^{-}";  e_title="e^{-}"; par_filename="e";  }  
   else {
      cout << "unknown par" << endl;
      return 0;
@@ -445,7 +446,8 @@ cout << "output file " << outputfile_name << endl;
 // 		    cout << " ec " << flux_tid->at(j) << " " <<  flux_mtid->at(j) << endl;
 		    
 		    //find the original particle and plot its vertex values assuming tracking can reconstruct those
-		    if ((par=="e" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==11) || (par=="pim" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==-211) || (par=="pip" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==211) || (par=="p" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==2212)){
+		    if ((par=="e" && flux_pid->at(j)==11) || (par=="pim" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==-211) || (par=="pip" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==211) || (par=="p" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==2212)){
+// 		    if ((par=="e" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==11) || (par=="pim" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==-211) || (par=="pip" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==211) || (par=="p" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==2212)){
 		      hPTheta->Fill(theta_gen,p_gen,rate/1e3);
 		      hQ2x->Fill(x_gen,Q2_gen,rate/1e3);
 		    }
@@ -461,8 +463,16 @@ cout << "output file " << outputfile_name << endl;
 		      double hit_Q2=4*11*hit_p*sin(hit_theta/2/180*3.1416)*sin(hit_theta/2/180*3.1416);
 		      double hit_x=hit_Q2/2/0.938/(11-hit_p);
 		      hPTheta->Fill(hit_theta,hit_p,rate/1e3);
-		      hQ2x->Fill(hit_x,hit_Q2,rate/1e3);	      
-		      
+		      hQ2x->Fill(hit_x,hit_Q2,rate/1e3);		      
+		    }
+		    
+		    if (par=="eany" && flux_pid->at(j)==11) {
+		      // assume this e- is scattered e- beam and use flux value instead of vertex values
+     		      double hit_theta=atan2(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j),flux_pz->at(j)*flux_pz->at(j))/3.1416*180;
+		      double hit_Q2=4*11*hit_p*sin(hit_theta/2/180*3.1416)*sin(hit_theta/2/180*3.1416);
+		      double hit_x=hit_Q2/2/0.938/(11-hit_p);
+		      hPTheta->Fill(hit_theta,hit_p,rate/1e3);
+		      hQ2x->Fill(hit_x,hit_Q2,rate/1e3);
 		    }
 		    
 		  }
@@ -475,7 +485,7 @@ cout << "output file " << outputfile_name << endl;
 outputfile->Write();	
 outputfile->Flush();
 
-   string type="sim";
+   string type="sim_solid_PVDIS_LD2";
    
    TCanvas *cPTheta = new TCanvas("cPTheta","cPTheta",1800,1000);
    hPTheta->SetTitle(Form("%s rate (kHz);#theta (deg);P (GeV/c)",par_title.c_str()));       

@@ -179,8 +179,6 @@ void compare_e_pibggen(string type,string filename_e,string filename_h,string ha
 
    TCanvas *cQ2x_pi = new TCanvas("cQ2x_pi","cQ2x_pi",1800,1000);
    hQ2x_pi->SetTitle(Form("%s rate (kHz);x;Q^{2} (GeV/c)^{2}",hadron_title.c_str()));       
-//    hQ2x_pi->GetXaxis()->SetRangeUser(min_theta,max_theta);   
-//    hQ2x_pi->GetYaxis()->SetRangeUser(min_p,max_p);     
    hQ2x_pi->Draw("text colz");
 //    hQ2x_pi->SetMaximum(1e13);
 //    hQ2x_pi->SetMinimum(1e-3);
@@ -191,7 +189,8 @@ void compare_e_pibggen(string type,string filename_e,string filename_h,string ha
       TH2F *hPTheta_pie=(TH2F*) hPTheta_pi->Clone();      
       hPTheta_pie->Divide(hPTheta_e);
       hPTheta_pie->SetTitle(Form("%s/%s ratio;#theta (deg);P (GeV/c)",hadron_title.c_str(),e_title.c_str()));             
-//       hPTheta_pie->GetXaxis()->SetRangeUser(min_theta,max_theta);   
+//       hPTheta_pie->GetXaxis()->SetRangeUser(min_theta,max_theta);
+//       hPTheta_pie->GetYaxis()->SetRangeUser(min_p,max_p);
       hPTheta_pie->Draw("text colz");
       cPTheta_pie->SaveAs(Form("%s_ratio_PTheta_%se.pdf",type.c_str(),hadron.c_str()));         
       
