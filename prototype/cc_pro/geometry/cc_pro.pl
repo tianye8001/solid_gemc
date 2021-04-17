@@ -60,19 +60,19 @@ our %configuration = load_configuration($config_file);
 # $configuration{"detector_name"} = "solid_SIDIS";
 
 #Geometry definition
-require "cc_pro_geometry.pl";
-cc_pro_geometry();
+# require "cc_pro_geometry.pl";
+# cc_pro_geometry();
 # require "cc_pro_virtualplane.pl";
 # cc_pro_virtualplane();
 
 #materials
 require "cc_pro_materials.pl";
 
-#mirror
-require "cc_pro_mirror.pl";
-
-#hit definition
-require "solid_hgc_hit.pl";
-
-# bank definition
-require "solid_hgc_bank.pl";
+# #mirror
+# require "cc_pro_mirror.pl";
+# 
+# #hit definition
+# require "solid_hgc_hit.pl";
+# 
+# # bank definition
+# require "solid_hgc_bank.pl";

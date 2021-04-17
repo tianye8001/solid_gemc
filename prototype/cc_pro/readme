@@ -27,10 +27,59 @@ data dir
 /volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/
 version
 pass1 		commit 2802794, CO2 at LA
-pass2 		commit ???, CO2 at LA, change tube inner diameter from 12.5 to 12.25", PMT to mirror distance from 47cm to 22.75", C1 C2 C3 have front window sensitive
+pass2 		commit ???, CO2 at LA, change tube inner diameter from 12.5 to 12.25", PMT to mirror distance from 47cm to 22.75", add C1 C2 C3 target, make Cherenkov front window sensitive
+pass3		fix PMT alignment
+pass4		add beam_exit_long
+pass5		add tcd geometry as mother
+
 
 version below has bug of PMT upside down
 old/withoutEC	old in 2019, TCD at 4deg and 10m
 old/withECshort	add two SC planes and EC plane,TCD at 4deg and 10m
 
+
+==q3 ===================================
+
+root [0] 
+Attaching file /work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/output_quad_cutECmodule9EC0.1_QEscale0.6/cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root as _file0...
+(TFile *) 0x1ce87f0
+root [1] npe_nsensor_hgc_0->Draw("colz")
+Info in <TCanvas::MakeDefCanvas>:  created default TCanvas with name c1
+root [2] npe_nsensor_hgc_0->SetTitle("High Rate Sim;Sim. Number of Photo-electrons;N_Quads")
+root [3]  npe_nsensor_hgc_0->SetAxisRange(0,60,"X");
+root [4] ^C
+root [4]  npe_nsensor_hgc_0->SetAxisRange(3,18,"Y");
+root [5] npe_nsensor_hgc_0->GetXaxis()->SetLabelSize(0.06);
+root [6] npe_nsensor_hgc_0->GetYaxis()->SetLabelSize(0.06);
+root [7] npe_nsensor_hgc_0->SetTitleSize(0.05,"xyz");
+root [8] npe_nsensor_hgc_0->SetTitleSize(0.08,"t");
+root [9] npe_nsensor_hgc_0->SetTitleSize(0.09,"t");
+root [10] npe_nsensor_hgc_0->SetTitleSize(0.10,"t");
+root [11] npe_nsensor_hgc_0->SetTitleSize(0.08,"t");
+root [12] Info in <TCanvas::Print>: file ./c1.png has been created
+ 
+Attaching file /work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/output_cutECmodule9EC0.1_QEscale0.6/cc_pro_He3_overall_CO2LA_dirty_weighted_eDIS_filenum73_0.73e6_skim_output.root as _file0...
+(TFile *) 0x2b04410
+root [1] npe_nsensor_hgc_0->SetTitle("Low Rate Sim;Sim. Number of Photo-electrons;N_Quads")
+root [2] npe_nsensor_hgc_0->Draw("colz")
+Info in <TCanvas::MakeDefCanvas>:  created default TCanvas with name c1
+root [3] npe_nsensor_hgc_0->SetAxisRange(3,18,"Y");
+root [4] npe_nsensor_hgc_0->SetAxisRange(0,60,"X");
+root [5] Info in <TCanvas::Print>: file ./c1.png has been created
+
+root [5]   gStyle->SetTitleSize(0.07,"t");  
+root [6] npe_nsensor_hgc_0->Draw("colz")
+root [7]   gStyle->SetTitleSize(0.08,"xyz"); 
+root [8] npe_nsensor_hgc_0->Draw("colz")
+root [9] npe_nsensor_hgc_0->SetTitleSize(0.08,"xyz"); 
+root [10] npe_nsensor_hgc_0->SetTitleSize(0.07,"xyz"); 
+root [11] npe_nsensor_hgc_0->SetTitleSize(0.02,"xyz"); 
+root [12] npe_nsensor_hgc_0->SetTitleSize(0.05,"xyz"); 
+root [13] npe_nsensor_hgc_0->SetTitleSize(0.01,"xyz"); 
+root [14] npe_nsensor_hgc_0->SetTitleSize(0.05,"xyz"); 
+root [15] npe_nsensor_hgc_0->SetTitleSize(0.08,"t"); 
+root [16] Info in <TCanvas::Print>: file ./c1.png has been created
+
+root [16] npe_nsensor_hgc_0->GetYaxis()->SetLabelSize(0.06);
+root [17] npe_nsensor_hgc_0->GetXaxis()->SetLabelSize(0.06);
 

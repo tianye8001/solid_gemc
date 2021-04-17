@@ -9,6 +9,6 @@
 
 /vis/scene/add/axes 0 -3 -3.5 1 m
 
-/vis/scene/add/scale 1 m x 1 0 0 manual  6 0 1 m
+/vis/scene/add/scale 1 m z 1 0 0 manual  -10 0 10 m
 
 /hits/inactivate

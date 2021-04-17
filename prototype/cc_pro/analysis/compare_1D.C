@@ -1,222 +1,359 @@
 {
 gROOT->Reset();
-gStyle->SetPalette(1);
+// gStyle->SetPalette(1);
 gStyle->SetOptStat(0);
 // gStyle->SetOptStat(1111111);
-gStyle->SetPadRightMargin(0.32);
-
-// char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC";
+// gStyle->SetPadLeftMargin(0.1);
+// gStyle->SetPadRightMargin(0.32);
+//   gStyle->SetLabelSize(0.1,"xyz"); // size of axis values
+  
+// char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/old/withoutEC";
 // char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1";
-
-// const int m=8;
-// char* input_filename[m]={
-// 
-// // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1.871e10_C4F8_skim_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_3.999e10_CO2_skim_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_3.999e10_C4F8_skim_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_5.956e10_CO2_skim_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_5.87e10_C4F8_skim_output.root",
-// 
-// // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_2e10_N2_skim_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1.871e10_C4F8_skim_output.root",
-// 
-// // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_2e10_N2_skim_output.root",
-// 
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1e10_skim_CO2_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1e10_skim_CO2_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1e10_skim_CO2_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1e10_skim_CO2_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1e10_skim_CO2_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1e10_skim_CO2_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1e10_skim_CO2_output.root",
-// // "cc_pro_SIDIS_He3_BeamOnTarget_1e10_skim_CO2_output.root",
-// 
-// "cc_pro_SIDIS_He3_CO2_BeamOnTarget_1.957e10_skim_output.root",
-// // "cc_pro_SIDIS_He3_N2_BeamOnTarget_2e10_skim_output.root",
-// 
-// "cc_pro_SIDIS_He3_BeamOnTarget_1e10_CO2_skim_output.root",
-// "cc_pro_SIDIS_He3_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim_output.root",
-// "cc_pro_SIDIS_He3_CO2_dirty_weighted_eDIS_filenum100_1e6_skim_output.root",
-// "cc_pro_SIDIS_He3_windown_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim_output.root",
-// "cc_pro_SIDIS_He3_windown_CO2_dirty_weighted_eDIS_filenum100_1e6_skim_output.root",
-// "cc_pro_SIDIS_He3_winup_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim_output.root",
-// "cc_pro_SIDIS_He3_winup_CO2_dirty_weighted_eDIS_filenum100_1e6_skim_output.root",
-// 
-// };
-// // int pid[m]={5,1,5,1};
-// // char *label[m]={"HGC NO front win","CF_1","Al_1","CF_10","Al_10","HGCwinNO","HGCwinNO_LGCwinbackNO"};
-// // char *label[m]={"HGC NO front win","CF_1","CF_5","CF_10","Al_1","Al_5","Al_10"};
-// // char *label[m]={"HGC winNO","HGC winCF 1%","CF_5","CF_10","HGC winAl 1%","Al_5","Al_10"};
-// // char *label[m]={"HGC winNO Np.e.>0","HGC winNO Np.e.>1","HGC winCF1% Np.e.>0","HGC winCF1% Np.e.>1","HGC winAl1% Np.e.>0","HGC winAl1% Np.e.>1"};
-// // char *label[m]={"LGC Np.e.>=1","LGC Np.e.>=2","LGC Np.e.>=2 & 2X2","CF_10","HGC winAl 1%","Al_5"};
-// // char *label[m]={"LGC Np.e.>=1","LGC Np.e.>=2","LGC Np.e.>=2 & 2X2","CF_10","HGC winAl 1%","Al_5"};
-// // char *label[m]={"HGC Np.e.>=1","HGC Np.e.>=2","HGC Np.e.>=2 & 2X2","CF_10","HGC winAl 1%","Al_5"};
-// // char *label[m]={,"eDIS (CO2)","eDIS (C4F8)","pimWiser (CO2)","pimWiser (C4F8)","pi0Wiser (CO2)","pi0Wiser (C4F8)","BeamOnTarget (CO2)","BeamOnTarget (C4F8)"};
-// char *label[m]={,"eDIS (N2)","eDIS (C4F8)","pimWiser (N2)","pimWiser (C4F8)","pi0Wiser (N2)","pi0Wiser (C4F8)","BeamOnTarget (N2)","BeamOnTarget (C4F8)"};
-// // int MarkerStyle[m]={20,24,26,21,22,23};
-// // int MarkerStyle[m]={20,26,20,20,20,20,20,20};
-// int MarkerStyle[m]={20,24,21,25,22,26,23,32};
-// // int color[m]={1,1,2,2,3,3};
-// int color[m]={1,1,2,2,3,3,4,4};
-// int style[m]={1,2,1,2,1,2,1,2};
-// char *hst[m]={"hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc"};
-// char *title="hit;PMT;N_{p.e.} rate(kHz) = (event rate * N_{p.e.})";
-// // char *hst[m]={"occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc"};
-// // char *title="occupancy;PMT;event rate(kHz)";
-// 
-// int scale[m]={2,2,2,2,2,2,1,1};  //add both windows to double lumi
-// // double ymin=1e0,ymax=2e3;
-// // double ymin=30,ymax=240;
-// // double ymin=0,ymax=4e4;
-// // double ymin=1,ymax=4e3;
-// // double ymin=1e-3,ymax=2e4;
-// double ymin=1e-3,ymax=1e7;
-// // double xmin=-380,xmax=-310;
-// // char *hst[m]={"fluxR","fluxR","fluxR","fluxR"};
-// // double ymin=1e0,ymax=1e7;
-// // double xmin=0,xmax=60;
-// // int hit_id[m]={8,8,8,8};
-
-// // pass1
-// char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1";
-// const int m=19;
-// char* input_filename[m]={
-// "cc_pro_SIDIS_He3_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9.skim_output.root",
-// "cc_pro_SIDIS_He3_Alup_CO2LA_dirty_normalized_pi0Wiser_filenum99_0.99e9.skim_output.root",
-// "cc_pro_SIDIS_He3_N2up_CO2LA_dirty_normalized_pi0Wiser_filenum97_0.97e9.skim_output.root",
-// "cc_pro_SIDIS_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// "cc_pro_SIDIS_He3_CO2LA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
-// "cc_pro_SIDIS_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// "cc_pro_SIDIS_He3_N2down_CO2LA_dirty_normalized_pi0Wiser_filenum73_0.73e9.skim_output.root",
-// "cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_normalized_pi0Wiser_filenum218_2.18e9.skim_output.root",
-// "cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum97_0.97e9.skim_output.root",
-// 
-// "cc_pro_SIDIS_He3_Beup_CO2LA_dirty_weighted_eDIS_filenum61_0.61e9_skim_output.root",
-// "cc_pro_SIDIS_He3_Alup_CO2LA_dirty_weighted_eDIS_filenum97_0.97e9_skim_output.root",
-// "cc_pro_SIDIS_He3_N2up_CO2LA_dirty_weighted_eDIS_filenum56_0.56e9_skim_output.root",
-// "cc_pro_SIDIS_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-// "cc_pro_SIDIS_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-// "cc_pro_SIDIS_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-// "cc_pro_SIDIS_He3_N2down_CO2LA_dirty_weighted_eDIS_filenum98_0.98e9_skim_output.root",
-// "cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_weighted_eDIS_filenum99_0.99e9_skim_output.root",
-// "cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_weighted_eDIS_filenum63_0.63e9_skim_output.root",
-// 
-// "cc_pro_SIDIS_He3_CO2LA_BeamOnTarget_14.291e10_skim_output.root",
-// };
-// // char *label[m]={,"eDIS (CO2)","eDIS (C4F8)","pimWiser (CO2)","pimWiser (C4F8)","pi0Wiser (CO2)","pi0Wiser (C4F8)","BeamOnTarget (CO2)","BeamOnTarget (C4F8)"};
-// char *label[m]={"eDIS (Be up)","eDIS (Al up)","eDIS (N2 up)","eDIS (win up)","eDIS (He3)","eDIS (win down)","eDIS (N2 down)","eDIS (Al down)","eDIS (Be down)","pi0Wiser (Be up)","pi0Wiser (Al up)","pi0Wiser (N2 up)","pi0Wiser (win up)","pi0Wiser (He3)","pi0Wiser (win down)","pi0Wiser (N2 down)","pi0Wiser (Al down)","pi0Wiser (Be down)","BeamOnTarget"};
-// int MarkerStyle[m]={24,24,24,24,24,24,24,24,24,26,26,26,26,26,26,26,26,26,20};
-// int color[m]={1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9,1};
-// int style[m]={1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,1};
-// char *hst[m]={"occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc","occ_hgc"};
-// // char *hst[m]={"hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc","hit_hgc"};
-// double ymin=1e-4,ymax=1e3;
-// // char *hst[m]={"pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc","pe_hgc"};
-// // char *hst[m]={"npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc"};
-// // double ymin=1,ymax=1e6;
-// // char *hst[m]={"hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0"};
-// // double ymin=1e-10,ymax=1e6;
-
-// pass2
-char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2";
-const int m=26;
-char* input_filename[m]={
-"cc_pro_SIDIS_He3_Beup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_Alup_CO2LA_dirty_weighted_eDIS_filenum98_0.98e9_skim_output.root",
-"cc_pro_SIDIS_He3_N2up_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_N2down_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-// "cc_pro_C_CO2LA_dirty_weighted_eDIS_filenum96_0.96e9_skim_output.root",
-"cc_pro_C1_CO2LA_dirty_weighted_eDIS_filenum99_0.99e9_skim_output.root",
-"cc_pro_C2_CO2LA_dirty_weighted_eDIS_filenum97_0.97e9_skim_output.root",
-"cc_pro_C3_CO2LA_dirty_weighted_eDIS_filenum94_0.94e9_skim_output.root",
-"cc_pro_C_N2_CO2LA_dirty_weighted_eDIS_filenum92_0.92e9_skim_output.root",
-
-"cc_pro_SIDIS_He3_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_Alup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_N2up_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// "cc_pro_SIDIS_He3_N2down_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// "cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// "cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// // "cc_pro_C_CO2LA_dirty_normalized_pi0Wiser_filenum119_1.19e9_skim_output.root",
-// "cc_pro_C1_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// "cc_pro_C2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// "cc_pro_C3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-// "cc_pro_C_N2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-
-"cc_pro_SIDIS_He3_CO2LA_BeamOnTarget_0.966e11_skim_output.root",
-"cc_pro_SIDIS_He3_CO2FA_BeamOnTarget_0.97e10_skim_output.root",
-"cc_pro_SIDIS_He3_C4F8LA_BeamOnTarget_0.964e11_skim_output.root",
-"cc_pro_SIDIS_He3_C4F8FA_BeamOnTarget_0.98e10_skim_output.root",
-"cc_pro_SIDIS_He3_Bedown_C4F8LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_Bedown_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_Bedown_C4F8FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-
-
-};
-// char *label[m]={,"eDIS (CO2)","eDIS (C4F8)","pimWiser (CO2)","pimWiser (C4F8)","pi0Wiser (CO2)","pi0Wiser (C4F8)","BeamOnTarget (CO2)","BeamOnTarget (C4F8)"};
-// char *label[m]={"eDIS (Be up)","eDIS (Al up)","eDIS (N2 up)","eDIS (win up)","eDIS (He3)","eDIS (win down)","eDIS (N2 down)","eDIS (Al down)","eDIS (Be down)","eDIS (C1)","eDIS (C2)","eDIS (C3)","eDIS (C_N2)","pi0Wiser (Be up)","pi0Wiser (Al up)","pi0Wiser (N2 up)","pi0Wiser (win up)","pi0Wiser (He3)","pi0Wiser (win down)","pi0Wiser (N2 down)","pi0Wiser (Al down)","pi0Wiser (Be down)","pi0Wiser (C1)","pi0Wiser (C2)","pi0Wiser (C3)","pi0Wiser (C_N2)"};
-char *label[m]={"eDIS (Be up)","eDIS (Al up)","eDIS (N2 up)","eDIS (win up)","eDIS (He3)","eDIS (win down)","eDIS (N2 down)","eDIS (Al down)","eDIS (Be down)","eDIS (C1)","eDIS (C2)","eDIS (C3)","eDIS (C_N2)","pi0Wiser (Be up)","pi0Wiser (Al up)","pi0Wiser (N2 up)","pi0Wiser (win up)","pi0Wiser (He3)","pi0Wiser (win down)",
-"1","2","3","4","5","6","7"};
-
-int MarkerStyle[m]={24,24,24,24,24,24,24,24,24,24,24,24,24,26,26,26,26,26,26,26,26,26,26,26,26,26};
-int color[m]={1,2,3,4,5,6,7,8,9,11,12,13,14,1,2,3,4,5,6,7,8,9,11,12,13,14};
-int style[m]={1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2};
-char *hst[m]={"occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3","occ_hgc_3"};
-// char *hst[m]={"hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3"};
-double ymin=1e-5,ymax=1e3;
-// char *hst[m]={"pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3"};
-// char *hst[m]={"npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc","npe_hgc"};
-// double ymin=1,ymax=1e6;
-// char *hst[m]={"hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0","hit_E_0"};
-// double ymin=1e-6,ymax=1e6;
-char *title="TCD with CO2 at Large Angle";
 
 // char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2";
 // const int m=2;
 // char* input_filename[m]={
-// "cc_pro_SIDIS_He3_CO2LA_even_e_central_1e3_output.root",
-// "cc_pro_SIDIS_He3_CO2LA_even_e_broad_1e5_output.root",
+// "cc_pro_He3_CO2LA_even_e_central_1e3_output.root",
+// "cc_pro_He3_CO2LA_even_e_broad_1e5_output.root",
 // };
 // char *label[m]={"even e central","even e broad"};
 // int MarkerStyle[m]={24,26};
 // int color[m]={1,1};
 // int style[m]={1,1};
-// char *hst[m]={"pe_hgc_0","pe_hgc_0"};
-// // char *hst[m]={"npe_hgc","npe_hgc"};
+// char *hst[m]={"pe_hgc_3","pe_hgc_3"};
+// // char *hst[m]={"npe_hgc_1","npe_hgc_1"};
 // double ymin=1,ymax=4e4;
 // double xmin=1,xmax=100;
 // char *title="TCD with CO2 at Large Angle";
 
-TCanvas *c = new TCanvas("compare_1D","compare_1D",1200,800);
-c->Divide(1,1);
+// char input_dir[300]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2";
+// const int m=6;
+// char* input_filename[m]={
+// "cc_pro_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",  "cc_pro_Beup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_Bedown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// };
+// char *title="photon time with CO2 at Large Angle";
+// char *label[m]={
+// "eDIS (He3)","eDIS (Be up)","eDIS (Be down)",
+// "pi0Wiser (He3)","pi0Wiser (Be up)","pi0Wiser (Be down)",
+// };
+// int MarkerStyle[m]={
+// 24,24,24,25,25,25,
+// };
+// int color[m]={
+// 1,2,3,1,2,3,
+// };
+// int style[m]={
+// 1,1,1,2,2,2,
+// };
+// char *hst[m]={
+// "time_photon","time_photon","time_photon","time_photon","time_photon","time_photon",
+// };
+// double ymin=1e-6,ymax=1e6;
+
+// // pass2
+// // char input_dir[300]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/output_SC0.7_EC0.3";
+// // char input_dir[300]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/output_SC0.7_EC0.1";
+// // char input_dir[300]="/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/output_trigSC0.7EC0.1/";
+// // char input_dir[300]="/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/output_trigno/";
+// char input_dir[300]="/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/";
+// 
+// const int m=28;
+// 
+// char* input_filename[m]={
+// "cc_pro_Beup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_Alup_CO2LA_dirty_weighted_eDIS_filenum98_0.98e9_skim_output.root",
+// "cc_pro_Aldown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_Bedown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_N2up_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// 
+// "cc_pro_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_N2down_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// "cc_pro_C1_CO2LA_dirty_weighted_eDIS_filenum99_0.99e9_skim_output.root",
+// "cc_pro_C2_CO2LA_dirty_weighted_eDIS_filenum97_0.97e9_skim_output.root",
+// "cc_pro_C3_CO2LA_dirty_weighted_eDIS_filenum94_0.94e9_skim_output.root",
+// "cc_pro_C_N2_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// 
+// "cc_pro_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_Alup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_Aldown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_N2up_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_He3_N2down_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_C1_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// "cc_pro_C2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// // "cc_pro_C3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// // "cc_pro_C_N2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// 
+// // "cc_pro_He3_CO2LA_BeamOnTarget_0.966e11_skim_output.root",
+// // "cc_pro_C_CO2LA_BeamOnTarget_0.99e10_skim_output.root",
+// // "cc_pro_LH2_CO2LA_BeamOnTarget_1e10_skim_output.root",
+// // "cc_pro_LH2x100_CO2LA_BeamOnTarget_0.878e10_skim_output.root",
+// // "cc_pro_LH2x10_CO2LA_BeamOnTarget_0.999e10_skim_output.root",
+// 
+// // "cc_pro_Bedown_C4F8LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",  //test
+// // "cc_pro_He3_C4F8FA_BeamOnTarget_0.98e10_skim_output.root",
+// //"cc_pro_LH2x10_C4F8LA_BeamOnTarget_1e10_skim_output.root",
+// //"cc_pro_LH2x100_C4F8LA_BeamOnTarget_0.99e9_new_skim_output.root",
+// // "cc_pro_LH2x100_C4F8LA_BeamOnTarget_0.952e10_skim_output.root",
+// // "cc_pro_LH2x100_C4F8LA_BeamOnTarget_1.947e10_skim_output.root",
+// 
+// //"cc_pro_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root", //test
+// // "cc_pro_He3_CO2FA_BeamOnTarget_0.97e10_skim_output.root",
+// // "cc_pro_LH2x100_CO2LA_BeamOnTarget_0.988e9_new_skim_output.root",
+// // "cc_pro_LH2x100_CO2LA_BeamOnTarget_0.878e10_skim_output.root",
+// // "cc_pro_LH2x100_CO2LA_BeamOnTarget_1.951e10_skim_output.root",
+// 
+// // "output_old/cc_pro_LH2x100_CO2LA_BeamOnTarget_0.878e10_skim_output.root",
+// // "output_old/cc_pro_LH2x10_CO2LA_BeamOnTarget_0.999e10_skim_output.root",
+// 
+// // "cc_pro_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// 
+// // "cc_pro_LH2x100_C4F8LA_BeamOnTarget_1.947e10_skim_output.root",
+// // "cc_pro_LH2x100_CO2LA_BeamOnTarget_1.951e10_skim_output.root",
+// // "new/cc_pro_LH2x100_C4F8LA_BeamOnTarget_0.981e10_HIGHMOM5MeV_skim_output.root",
+// // "new/cc_pro_LH2x100_CO2LA_BeamOnTarget_0.97e10_HIGHMOM5MeV_skim_output.root",
+// 
+// // "cc_pro_He3_overall_C4F8LA_dirty_normalized_pi0Wiser_filenum100_1e6_skim_output.root",
+// // "cc_pro_He3_overall_CO2LA_dirty_normalized_pi0Wiser_filenum98_0.98e6_skim_output.root",
+// // "cc_pro_He3_overall_C4F8LA_dirty_weighted_eDIS_filenum79_0.79e6_skim_output.root",
+// // "cc_pro_He3_overall_CO2LA_dirty_weighted_eDIS_filenum73_0.73e6_skim_output.root",
+// 
+// "cc_pro_He3_CO2FA_BeamOnTarget_0.99e10_skim_output.root",
+// "cc_pro_He3_CO2FA_dirty_normalized_pi0Wiser_filenum98_0.98e9_skim_output.root",
+// "cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// 
+// // "cc_pro_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// // "cc_pro_LH2x100_CO2LA_BeamOnTarget_0.988e9_new_skim_output.root",
+// // "cc_pro_LH2x100_CO2LA_BeamOnTarget_1.951e10_skim_output.root",
+// 
+// // "cc_pro_LH2x100_C4F8LA_BeamOnTarget_0.99e9_new_skim_output.root",
+// // "cc_pro_LH2x100_C4F8LA_BeamOnTarget_1.947e10_skim_output.root",
+// 
+// // "cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum98_0.98e9_skim_output.root",
+// 
+// // "cc_pro_Alup_CO2FA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+// // "cc_pro_Alup_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// 
+// // "cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // "cc_pro_He3_CO2FA_dirty_normalized_pi0Wiser_filenum98_0.98e9_skim_output.root",
+// // "cc_pro_He3_CO2FA_BeamOnTarget_0.99e10_skim_output.root",
+// 
+// };
+// 
+// // char* input_filename[m]={
+// // "cc_pro_Beup_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // "cc_pro_Alup_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // "cc_pro_Aldown_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // "cc_pro_Bedown_CO2FA_dirty_weighted_eDIS_filenum97_0.97e8_skim_output.root",
+// // "cc_pro_He3_N2up_CO2FA_dirty_weighted_eDIS_filenum10_1e8_skim_output.root",
+// // "cc_pro_He3_winup_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // "cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum98_0.98e8_skim_output.root",
+// // "cc_pro_He3_N2down_CO2FA_dirty_weighted_eDIS_filenum10_1e8_skim_output.root",
+// // "cc_pro_He3_windown_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // "cc_pro_C1_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // "cc_pro_C2_CO2FA_dirty_weighted_eDIS_filenum99_0.99e8_skim_output.root",
+// // "cc_pro_C3_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // "cc_pro_C_N2_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// // 
+// // "cc_pro_Beup_CO2FA_dirty_normalized_pi0Wiser_filenum98_0.98e9_skim_output.root",
+// // "cc_pro_Alup_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// // "cc_pro_Aldown_CO2FA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
+// // "cc_pro_Bedown_CO2FA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
+// // "cc_pro_He3_N2up_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// // "cc_pro_He3_winup_CO2FA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
+// // "cc_pro_He3_CO2FA_dirty_normalized_pi0Wiser_filenum98_0.98e9_skim_output.root",
+// // "cc_pro_He3_windown_CO2FA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
+// // "cc_pro_He3_N2down_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// // "cc_pro_C1_CO2FA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
+// // "cc_pro_C2_CO2FA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
+// // "cc_pro_C3_CO2FA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
+// // // "cc_pro_C_N2_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+// // 
+// // // "cc_pro_He3_CO2FA_BeamOnTarget_0.97e10_skim_output.root",
+// // // "cc_pro_C_CO2FA_BeamOnTarget_1e9_skim_output.root",
+// // 
+// // "cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum98_0.98e9_skim_output.root",
+// // "cc_pro_He3_CO2FA_dirty_normalized_pi0Wiser_filenum98_0.98e9_skim_output.root",
+// // "cc_pro_He3_CO2FA_BeamOnTarget_0.99e10_skim_output.root",
+// // };
+// 
+// // char *title="Cherenkov";
+// // char *title="Signal Sum Distribution";
+// 
+// char *label[m]={
+// "eDIS (Be up)","eDIS (Al up)","eDIS (Al down)","eDIS (Be down)",
+// "eDIS (N2 up)","eDIS (win up)",
+// "pi0Wiser (C4F8)",
+// "eDIS (win down)","eDIS (N2 down)",
+// "eDIS (C1)","eDIS (C2)","eDIS (C3)","eDIS (C_N2)",
+// 
+// "pi0Wiser (Be up)","pi0Wiser (Al up)","pi0Wiser (Al down)","pi0Wiser (Be down)",
+// "pi0Wiser (N2 up)","pi0Wiser (win up)",
+// "pi0Wiser (CO2)",
+// "pi0Wiser (win down)","pi0Wiser (N2 down)",
+// "pi0Wiser (C1)","pi0Wiser (C2)",//"pi0Wiser (C3)",//"pi0Wiser (C_N2)",
+// 
+// // "BeamOnTarget (He3)","BeamOnTarget (C)",
+// // "BeamOnTarget (LH2x10/10)","BeamOnTarget (LH2x100/100)",
+// // "BeamOnTarget","BeamOnTarget",
+// // "e^{-}","#pi^{0}","BeamOnTarget"
+// // "C4F8 BeamOntarget","CO2 BeamOntarget","C4F8 pi0Wiser","CO2 pi0Wiser",
+// "CO2 BeamOntarget","CO2 pi0Wiser","CO2 eDIS",""
+// };
+// 
+// int MarkerStyle[m]={
+// 24,24,24,24,24,24,24,24,24,24,24,24,24,
+// 26,26,26,26,26,26,26,26,26,26,26,26,26,
+// 25,25,
+// };
+// int color[m]={
+// // 1,2,3,4,5,6,7,8,9,10,11,12,13,
+// // 1,2,3,4,5,6,7,8,9,10,11,12,13,
+// // 1,7,3,4,5,6,2,8,9,10,11,12,13,
+// // 1,7,3,4,5,6,2,8,9,10,11,12,13,
+// // 2,2,
+// 1,7,3,4,5,6,3,8,9,10,11,12,13,
+// 1,7,3,4,5,6,2,8,9,10,11,//12,//13,
+// // 1,2,
+// 2,1,2,1,
+// };
+// int style[m]={
+// 1,1,1,1,1,1,1,1,1,1,1,1,1,
+// 2,2,2,2,2,2,2,2,2,2,2,//2,2,
+// 1,1,2,2,
+// };
+// // char *hst[m]={"occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0", "occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0",};
+// // char *hst[m]={"hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_3","hit_hgc_2",};
+// // double ymin=1e-5,ymax=1e3;
+// // double ymin=1e-2,ymax=1e6;
+// // char *hst[m]={"pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3","pe_hgc_3"};
+// char *hst[m]={"npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1",};
+// double xmin=0,xmax=100;
+// double ymin=1e-8,ymax=2e1;
+// // double ymin=1e-8,ymax=1e6;
+// // double ymin=1e0,ymax=1e7;
+// // double ymin=1e-8,ymax=1e6;
+// char *title="";
+// 
+// // char *hst[m]={"motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP","motherP",};
+// // double xmin=0,xmax=0.1;
+// // double ymin=1e-4,ymax=1e2;
+// // char *title="electron P;GeV;rate(kHz)";
+// 
+// // char *hst[m]={"hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele","hit_Eec_ele"};
+// // double ymin=1e-6,ymax=1e6;
+// // double ymin=1e-3,ymax=1e9;
+
+// pass5
+char input_dir[300]="/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass5/";
+// char input_dir[300]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/";
+
+// const int m=11;
+const int m=10;
+
+char* input_filename[m]={
+
+// "cc_pro_NOtarget_Beup_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// "cc_pro_NOtarget_Alup_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// "cc_pro_NOtarget_N2_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// "cc_pro_NOtarget_Bedown_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// "cc_pro_NOtarget_Aldown_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+// 
+// "cc_pro_NOtarget_Beup_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim_output.root",
+// "cc_pro_NOtarget_Alup_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim_output.root",
+// "cc_pro_NOtarget_N2_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim_output.root",
+// "cc_pro_NOtarget_Aldown_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim_output.root",
+// "cc_pro_NOtarget_Bedown_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim_output.root",
+// 
+// "cc_pro_NOtarget_CO2FA_BeamOnTarget_1e10_skim_output.root",
+
+// "cc_pro_NOtarget_CO2FA_BeamOnTarget_1e10_skim_output.root",
+// "cc_pro_NOtarget_CO2FA_BeamOnTarget_1e10_filter_output.root",
+// "cc_pro_NOtarget_CO2FA_HBfield_BeamOnTarget_1e10_filter_output.root",
+  
+"cc_pro_NOtarget_CO2FA_BeamOnTarget_1e10_skim_output.root",
+
+"cc_pro_NOtarget_Beup_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+"cc_pro_NOtarget_N2_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+"cc_pro_NOtarget_Bedown_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim_output.root",
+
+"cc_pro_NOtarget_Beup_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim_output.root",
+"cc_pro_NOtarget_N2_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim_output.root",
+"cc_pro_NOtarget_Bedown_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim_output.root",
+
+"cc_pro_NOtarget_Beup_CO2FA_dirty_normalized_allBggen_filenum300_3e7_skim_output.root",
+"cc_pro_NOtarget_N2_CO2FA_dirty_normalized_allBggen_filenum300_3e7_skim_output.root",
+"cc_pro_NOtarget_Bedown_CO2FA_dirty_normalized_allBggen_filenum300_3e7_skim_output.root",
+
+
+};
+// char *title="Cherenkov";
+// char *title="Signal Sum Distribution";
+
+char *label[m]={
+  "BeamOnTarget",
+  
+// "eDIS (Be up)","eDIS (Al up)","eDIS (N2)","eDIS (Al down)","eDIS (Be down)",
+
+// "pi0Wiser (Be up)","pi0Wiser (Al up)","pi0Wiser (N2)","pi0Wiser (Al down)","pi0Wiser (Be down)",
+
+"eDIS (Be up)","eDIS (N2)","eDIS (Be down)",
+
+"pi0 Wiser (Be up)","pi0 Wiser (N2)","pi0 Wiser (Be down)",
+
+"all Bggen (Be up)","all Bggen (N2)","all Bggen (Be down)",
+
+};
+
+int MarkerStyle[m]={
+24,24,24,24,24,
+24,24,24,24,24,
+// 24,
+};
+int color[m]={
+1,7,3,4,5,6,3,8,9,
+2,
+// 2
+};
+int style[m]={
+1,1,1,1,1,1,1,1,1,1
+// 2,2,2,2,2,
+// 1,
+};
+// char *hst[m]={
+//   "occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0",
+//   "occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0","occ_hgc_0",
+//   "occ_hgc_0",
+// };
+char *hst[m]={
+  "hit_Eec","hit_Eec","hit_Eec",
+  "hit_Eec","hit_Eec","hit_Eec",
+  "hit_Eec","hit_Eec","hit_Eec","hit_Eec",
+//   "hit_Eec",
+};
+// char *hst[m]={"npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1","npe_hgc_1",};
+// double xmin=0,xmax=100;
+// double ymin=1e-8,ymax=2e1;
+// double ymin=1e-8,ymax=1e6;
+// double ymin=1e0,ymax=1e7;
+// double ymin=1e-8,ymax=1e6;
+// char *title="SC back;log10(Edep)(GeV);rate (kHz)";
+// char *title="SC front;log10(Edep)(GeV);rate (kHz)";
+char *title="EC;log10(Edep)(GeV);rate (kHz)";
+
+double occ_threshold_spd_FA=0.5,occ_threshold_spd_LA=3.; 
+// double occ_threshold_ec_preshower=0.8,occ_threshold_ec_shower=12; //in MeV
+double occ_threshold_ec_preshower=0.8,occ_threshold_ec_shower=12; //in MeV
+
 ///option
 bool Is_R=true,Is_Phi=false;
 // bool Is_logy=false;
@@ -225,14 +362,28 @@ bool Is_logx=false;
 // bool Is_logx=true;
 bool Is_cut=false;
 
-TLegend* leg = new TLegend(0.70, 0.98-0.03*m, 0.98, 0.98);
-// TLegend* leg = new TLegend(0.75, 0.98-0.05*3, 0.98, 0.98);
+double xmax_npe[8]={10,20,30,50,50,50,80,80};
+
+TCanvas *c = new TCanvas("c","c",1600,800);
+c->Divide(1,1);
+// c->Divide(4,2);
+// TPaveLabel* ctitle = new TPaveLabel(0.1,0.96,0.9,0.99,"number of photo-electrons");
+// ctitle->Draw();
+
+// TLegend* leg = new TLegend(0.70, 0.98-0.03*m, 0.98, 0.98);
+TLegend* leg = new TLegend(0.8, 0.95-0.07*m, 0.98, 0.95);
 TFile *input[m];
 TH1F *h[m];
+TH1F *h_sum;
 
-double total1=0,total2=0;
+double total_He3_BeamOnTarget=0,total_C_BeamOnTarget=0;
+double total_He3=0,total_C=0;
 for(int i=0;i<m;i++){  
-//   if (i!=4) continue;  
+//    if (i!=26 && i!=6 && i!=19) continue;
+//    if (i!=6 && i!=19) continue;  
+//    if (i !=25 && i!=26) continue;    
+//    if (i < 24 || i>26) continue;      
+//    if (i<10) continue;      
   
   input[i]=new TFile(Form("%s/%s",input_dir,input_filename[i]));
   if (input[i]->IsZombie()) {
@@ -240,16 +391,21 @@ for(int i=0;i<m;i++){
     exit(-1);
   }
   else cout << "open file " << input_filename[i] << endl;
+ 
+// for(int j=0;j<8;j++){    
+//   c->cd(j+1);
   
   char hstname[100];
 //   sprintf(hstname,"%s_%i_%i",hst[i],hit_id[i],pid[i]);    
   sprintf(hstname,"%s",hst[i]);      
+//   sprintf(hstname,"%s_cut_%i",hst[i],j);
+//   sprintf(hstname,"%s_count",hst[i],j); 
   cout << hstname << endl;
   h[i]=(TH1F*) input[i]->Get(hstname);
 
-  if (Is_cut) {
-    for(int j=0;j<h[i]->GetXaxis()->FindBin(cut[i]);j++)  h[i]->SetBinContent(j+1,0);
-  }
+//   if (Is_cut) {
+//     for(int j=0;j<h[i]->GetXaxis()->FindBin(cut[i]);j++)  h[i]->SetBinContent(j+1,0);
+//   }
   
   if(Is_logy) gPad->SetLogy();
   if(Is_logx) gPad->SetLogx();  
@@ -257,48 +413,88 @@ for(int i=0;i<m;i++){
 //   h[i]->SetLineWidth(3);  
 //   h[i]->SetLineStyle(style[i]);
 //    h[i]->Scale(scale[i]);    
-  h[i]->SetMinimum(ymin);
-  h[i]->SetMaximum(ymax);
-//   h[i]->SetAxisRange(xmin,xmax);  
+//   h[i]->SetMinimum(ymin);
+//   h[i]->SetMaximum(ymax);
+//   h[i]->SetAxisRange(xmin,xmax);
+//   h[i]->SetAxisRange(xmin,xmax_npe[j]);  
+//     h[i]->SetAxisRange(0,50);
+//     h[i]->SetAxisRange(0,xmax);     
   h[i]->SetTitle(title);  
 //   if (i==0) h[i]->Draw("C");
 //   else h[i]->Draw("C same");
 
-h[i]->SetMarkerStyle(MarkerStyle[i]);
-h[i]->SetMarkerSize(2);
+// h[i]->SetMarkerStyle(MarkerStyle[i]);
+// h[i]->SetMarkerSize(2);
 h[i]->SetMarkerColor(color[i]);
 h[i]->SetLineColor(color[i]);
+// h[i]->GetXaxis()->SetLabelSize(0.06);
+// h[i]->GetYaxis()->SetLabelSize(0.06);
 
-
-  if (i==0) h[i]->Draw("P");
-  else h[i]->Draw("P same");
-
-//   if (i==0) h[i]->Draw();
-//   else h[i]->Draw("same");
-
-// h[i]->Draw();
-
-//   char *label[m]={"eDIS (Be up)","eDIS (Al up)","eDIS (N2 up)","eDIS (win up)","eDIS (He3)","eDIS (win down)","eDIS (N2 down)","eDIS (Al down)","eDIS (Be down)","eDIS (C1)","eDIS (C2)","eDIS (C3)","eDIS (C_N2)","pi0Wiser (Be up)","pi0Wiser (Al up)","pi0Wiser (N2 up)","pi0Wiser (win up)","pi0Wiser (He3)","pi0Wiser (win down)","pi0Wiser (N2 down)","pi0Wiser (Al down)","pi0Wiser (Be down)","pi0Wiser (C1)","pi0Wiser (C2)","pi0Wiser (C3)","pi0Wiser (C_N2)"};
-  double a=h[i]->Integral();
-//   if (i== 0 || i== 1 ||   i== 7|| i== 8|| i== 11|| i== 12||   i== 18|| i== 19) {total1 += a;total2 += a;}
-//   if (i== 2|| i== 3 || i== 4 || i== 5||i== 6||i== 13|| i== 14|| i== 15|| i== 16 ||i== 17) total1 +=a;
-//   if (i== 9 || i== 10 || i== 20|| i== 21)   total2 +=a;
+// string input_filename_s=input_filename[i];
+// if(input_filename_s.find("LH2x10_",0) != string::npos) {h[i]->Scale(1./150.); cout << "scale0.007" << endl;}
+// else if(input_filename_s.find("LH2x100_",0) != string::npos) {h[i]->Scale(1./1500.); cout << "scale0.0007" << endl;}
+// else {}
   
-  if (i== 0 || i== 1 || i== 7|| i== 8|| i== 13|| i== 14||   i== 20|| i== 21) {total1 += a;total2 += a;}
-  if (i== 2|| i== 3 || i== 4 || i== 5||i== 6||i== 15|| i== 16|| i== 17|| i== 18 ||i== 19) total1 +=a;
-  if (i== 9 || i== 10 ||i== 11 ||i== 12 ||i== 22 ||i== 23 || i== 24|| i== 25)   total2 +=a;
+//scale from 30uA to 1uA
+// if(input_filename_s.find("FA",0) != string::npos) {h[i]->Scale(1./30.); cout << "scale0.033" << endl;}
+
+  //remove spike CO2LA pi0 output_trigSC0.7EC0.1
+//   if (i==25) h[i]->SetBinContent(3+1,h[i]->GetBinContent(3));
+//   if (i==25) h[i]->SetBinContent(9+1,h[i]->GetBinContent(9));  
+
+  //remove spike CO2LA pi0 output_trigno 
+//   if (i==25) h[i]->SetBinContent(6+1,h[i]->GetBinContent(5));
+//   if (i==25) h[i]->SetBinContent(7+1,h[i]->GetBinContent(5));  
+//   if (i==25) h[i]->SetBinContent(17+1,h[i]->GetBinContent(17));  
+
+//   if (i==6) h[i]->Draw("P");
+// //   if (i==0) h[i]->Draw("P");
+//   else h[i]->Draw("P same");
+
+  if (i==0) h[i]->Draw("HIST");
+  else h[i]->Draw("same HIST");
+
+//      h[i]->Draw();
+     
+//   if (i==6) h[i]->Draw();
+// //   if (i==0) h[i]->Draw();
+//   else h[i]->Draw("same");
+// 
+//   if (i==6) h_sum=(TH1F) h[i]->Clone();
+//   if (i==19) h_sum->Add(h[i]);
+// 
+// //   if (i==6 || i==19) h[i]->Scale(6);
+//   if (i==19) h[i]->Scale(6);  
+// 
+//   double a=h[i]->Integral();
+//   
+//   if ((0<=i && i<=3) || (0<=13 && i<=16))   {total_He3 += a;total_C += a;}
+//   if ((4<=i && i<=8) || (0<=17 && i<=21))  {total_He3 += a;}
+//   if ((9<=i && i<=12) || (0<=22 && i<=25))  {total_C += a;}
+//   if (i==26) total_He3_BeamOnTarget =a;
+//   if (i==27) total_C_BeamOnTarget =a;
   
   cout << "GetEntries " << h[i]->GetEntries() << " Integral " << h[i]->Integral()/16. << endl;  
   //   input.Close(); 
   
-  leg->AddEntry(h[i], label[i],"p");  
+//   leg->AddEntry(h[i], label[i],"p");    
+  leg->AddEntry(h[i], label[i],"l");  
+  
+// }
 		
 }
 leg->Draw();
 
-cout << "total1 avg " << total1/16 <<  endl;
-cout << "total2 avg " << total2/16 <<  endl;
+// h_sum->SetLineColor(kRed);
+// h_sum->Draw("same");
 
-c->SaveAs("compare_1D.png");
+cout << "======================================== " <<  endl;
+cout << "He3_BeamOnTarget avg " << total_He3_BeamOnTarget/16 <<  endl;
+cout << "H3 avg " << total_He3/16 <<  endl;
+cout << "C_BeamOnTarget avg " << total_C_BeamOnTarget/16 <<  endl;
+cout << "C avg " << total_C/16 <<  endl;
+
+c->SaveAs("c.png");
+c->SaveAs("c.C");
 
 }

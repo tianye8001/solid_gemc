@@ -1,7 +1,7 @@
 <gcard>
 
-<detector name="cc_pro" factory="TEXT" variation="CO2LA"/>
-<detector name="beamline" factory="TEXT" variation="C"/>  
+<detector name="cc_pro" factory="TEXT" variation="CO2FA"/>
+<detector name="beamline" factory="TEXT" variation="NOtarget"/>  
 
 <option name="INTEGRATEDRAW" value="flux"/>
 

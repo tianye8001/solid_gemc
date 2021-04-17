@@ -73,8 +73,8 @@ double *eff_PMT=QE_H12700_03_WLS_meas;
 //safety factor
 //PMT and assmbly effective area
 //for pion, manual reduce 2
-// double factor=0.8*0.5;
-double factor=0.8;
+double factor=0.8*0.6;
+// double factor=0.8;
 
 vector<int> *solid_hgc_id=0,*solid_hgc_hitn=0;
 vector<int> *solid_hgc_pid=0,*solid_hgc_mpid=0,*solid_hgc_tid=0,*solid_hgc_mtid=0,*solid_hgc_otid=0;
@@ -111,7 +111,8 @@ tree_solid_hgc->SetBranchAddress("avg_t",&solid_hgc_avg_t);
 return;
 }
 
-Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc,Int_t ch_hgc)
+// Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc,Int_t ch_hgc)
+Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc,Int_t ch_hgc,TH1F *htime_photon,Int_t &photon_mtid)
 { 
   	TRandom3 rand;
 	rand.SetSeed(0);
@@ -170,11 +171,13 @@ int sensor_trans_hgc = sqrt(sensor_hgc);
     // 	  int sector=solid_hgc_id->at(j)/100000-22;  //wrong id matching
 	      int sector=solid_hgc_id->at(j)/10000-220-1;  //match id 2210000 - 2500000
 	      
-	      ///for cc_pro only, depending pmt geometry definition and rotation
 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2))),pmt_y=int((solid_hgc_avg_ly->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2)));
 	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<sensor_trans_hgc && 0<=pmt_y && pmt_y<sensor_trans_hgc){	    
-		hit_hgc[sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x] += 1;				
-
+		hit_hgc[sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x] += 1;	
+		
+		htime_photon->Fill(solid_hgc_avg_t->at(j));
+		photon_mtid=solid_hgc_mtid->at(j);
+// 		cout << "photon_mtid " << photon_mtid << endl;
 //   	  cout << sector << " " << sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x << " " << solid_hgc_avg_lx->at(j) << " " << pmt_x << " " << solid_hgc_avg_ly->at(j) << " " << pmt_y << " " << solid_hgc_avg_x->at(j) << " " << " " << solid_hgc_avg_y->at(j) << " " << solid_hgc_avg_z->at(j) << endl;    
 		
     // 	    hit_hgc[16*sector+4*(3-pmt_y)+pmt_x] += weight;		
@@ -192,9 +195,9 @@ int sensor_trans_hgc = sqrt(sensor_hgc);
     for(Int_t j = 0; j < sensor_hgc; j++){       
       if(hit_hgc[i*sensor_hgc+j] >= PEthresh_hgc) ntrigpmts_hgc++;    
     }
+    trigger_hgc[i]=ntrigpmts_hgc;    
     if(ntrigpmts_hgc >= PMTthresh_hgc) {
       ntrigsecs_hgc++;
-      trigger_hgc[i]=1;
     }
   }
   if(ntrigsecs_hgc){

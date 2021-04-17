@@ -1,116 +1,257 @@
 #!/bin/tcsh -f
 
-#pass2
+root -l  'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/cc_pro_Chole_CO2FA_HBfield_BeamOnTarget_1e11_filter.root","trigger",false,"single")'
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C1_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C3_CO2LA_dirty_weighted_eDIS_filenum94_0.94e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C2_CO2LA_dirty_weighted_eDIS_filenum97_0.97e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C1_CO2LA_dirty_weighted_eDIS_filenum99_0.99e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C_CO2LA_dirty_weighted_eDIS_filenum96_0.96e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C_CO2LA_dirty_normalized_pi0Wiser_filenum119_1.19e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C_N2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C_N2_CO2LA_dirty_weighted_eDIS_filenum92_0.92e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Alup_CO2LA_dirty_weighted_eDIS_filenum98_0.98e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Alup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Beup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_N2down_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_N2down_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_N2up_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_N2up_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+root -l  'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/cc_pro_Chole_CO2FA_BeamOnTarget_1e11_filter.root","trigger",false,"single")'
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_CO2LA_BeamOnTarget_0.966e11_skim.root","trigger",false,"single")'
-root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_CO2FA_BeamOnTarget_0.97e10_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_C4F8LA_BeamOnTarget_0.964e11_skim.root","trigger",false,"single")'
-root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_C4F8FA_BeamOnTarget_0.98e10_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Bedown_C4F8LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Bedown_CO2A_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_SIDIS_He3_Bedown_C4F8FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+root -l  'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/cc_pro_NOtarget_CO2FA_BeamOnTarget_1e10_filter.root","trigger",false,"single")'
+
+root -l  'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/cc_pro_NOtarget_CO2FA_HBfield_BeamOnTarget_1e10_filter.root","trigger",false,"single")'
+
+root -l  'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass5/cc_pro_even/cc_pro_He3_CO2LA_TCDonly_even_ecentral_1e3.root","trigger",false,"single",false)'
 
 
+root -l 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass5/cc_pro_Chole_CO2FA_BeamOnTarget_1e10_skim.root","trigger",false,"single",false)'
+
+
+root -l 'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass5/cc_pro_NOtarget_Bedown_CO2FA_dirty_normalized_allBggen_filenum300_3e7_skim.root","trigger",false,"single",false)'
+
+root -l 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass5/cc_pro_NOtarget_Bedown_CO2FA_dirty_normalized_pimWiser_filenum100_1e8_skim.root","trigger",false,"single",false)'
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass5/cc_pro_NOtarget_CO2FA_BeamOnTarget_1e10_skim.root","trigger",false,"single",false)'
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass5/cc_pro_NOtarget_Bedown_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim.root","trigger",false,"single",false)'
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass5/cc_pro_NOtarget_Bedown_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e8_skim.root","trigger",false,"single",false)'
+
+root  'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/cc_pro_He3_CO2LA_even_ecentral_1e3.root","trigger",false,"single")'
+
+root  'analysis_cc_pro.C+("farm_cc_pro_even/cc_pro_He3_CO2FA_tcdonly_even_ecentral_1e3.root","trigger",false,"single")'
+
+root  'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/cc_pro_NOtarget_CO2FA_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+
+
+root  'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/cc_pro_NOtarget_CO2FA_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+
+root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass5/cc_pro_NOtarget_CO2FAtiltY3.0degX0deg_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+
+# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass4/cc_pro_He3_CO2FA_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass4/cc_pro_He3_CO2FA_HBfield_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass4/cc_pro_NOtarget_CO2FA_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass4/cc_pro_NOtarget_CO2FA_HBfield_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+# 
+# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass4/cc_pro_NOtargetNOexit_CO2FA_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass4/cc_pro_NOtargetNOentrance_CO2FA_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_devel/pass4/cc_pro_NOtargetLongexit_CO2FA_BeamOnTarget_1e9_skim.root","trigger",false,"single")'
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_overall_C4F8LA_dirty_normalized_pi0Wiser_filenum100_1e6_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_overall_CO2LA_dirty_normalized_pi0Wiser_filenum98_0.98e6_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_overall_C4F8LA_dirty_weighted_eDIS_filenum79_0.79e6_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_overall_CO2LA_dirty_weighted_eDIS_filenum73_0.73e6_skim.root","trigger",false,"single")'
+
+root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass3/cc_pro_LH2x100_C4F8LA_BeamOnTarget_0.981e10_HIGHMOM5MeV_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass3/cc_pro_LH2x100_CO2LA_BeamOnTarget_0.97e10_HIGHMOM5MeV_skim.root","trigger",false,"single")'
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_BeamOnTarget_0.99e10_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_dirty_normalized_pi0Wiser_filenum98_0.98e9_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim.root","trigger",false,"single")'
+
+root  'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim.root","trigger",false,"single")'
+
+root  'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_dirty_normalized_pi0Wiser_filenum98_0.98e9_skim.root","trigger",false,"single")'
+
+
+
+# cc_pro_He3_overall_C4F8LA_dirty_normalized_pi0Wiser_filenum100_1e6_skim.root  cc_pro_He3_overall_CO2LA_dirty_normalized_pi0Wiser_filenum98_0.98e6_skim.root
+# cc_pro_He3_overall_C4F8LA_dirty_weighted_eDIS_filenum79_0.79e6_skim.root      cc_pro_He3_overall_CO2LA_dirty_weighted_eDIS_filenum73_0.73e6_skim.root
+
+root  'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/farm_cc_pro_He3_C4F8LA_even/cc_pro_He3_C4F8LA_even_ecentral_phi-0.5deg_1e3.root","trigger",false,"single")'
+
+root  'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/farm_cc_pro_He3_C4F8LA_even/cc_pro_He3_C4F8LA_even_ecentral_1e3.root","trigger",false,"single")'
+
+root  'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/farm_cc_pro_He3_CO2LA_even/cc_pro_He3_CO2LA_even_ecentral_phi-0.5deg_1e3.root","trigger",false,"single")'
+root  'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/farm_cc_pro_He3_CO2LA_even/cc_pro_He3_CO2LA_even_ecentral_1e3.root","trigger",false,"single")'
+root  'analysis_cc_pro.C+("/work/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/farm_cc_pro_He3_C4F8LA_even/cc_pro_He3_C4F8LA_even_ebroad_1e5.root","trigger",false,"single")'
+
+
+
+
+# root  'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2LA_even_ecentral_1e3.root","trigger",false,"single")'
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_LH2x10_CO2LA_BeamOnTarget_0.999e10_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_LH2x100_CO2LA_BeamOnTarget_0.878e10_skim.root","trigger",false,"single")'
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_LH2x100_C4F8LA_BeamOnTarget_1.947e10_skim.root","trigger",false,"single")'
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_LH2x100_CO2LA_BeamOnTarget_1.951e10_skim.root","trigger",false,"single")'
+
+
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_C4F8LA_BeamOnTarget_0.964e11_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_Bedown_C4F8LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_C4F8FA_BeamOnTarget_0.98e10_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_BeamOnTarget_0.97e10_skim.root","trigger",false,"single")'
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_BeamOnTarget_0.99e10_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum98_0.98e9_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_dirty_normalized_pi0Wiser_filenum98_0.98e9_skim.root","trigger",false,"single")'
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_LH2x100_CO2LA_BeamOnTarget_0.988e9_new_skim.root","trigger",false,"single")'
+
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_LH2x100_CO2LA_BeamOnTarget_1.951e10_skim.root","trigger",false,"single")'
+
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_Alup_CO2FA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_Alup_CO2FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+
+root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_dirty_weighted_eDIS_filenum100_1e8_skim.root","trigger",false,"single")'
+
+
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_Beup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_Bedown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C1_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C3_CO2LA_dirty_weighted_eDIS_filenum94_0.94e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C2_CO2LA_dirty_weighted_eDIS_filenum97_0.97e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C1_CO2LA_dirty_weighted_eDIS_filenum99_0.99e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C_CO2LA_dirty_weighted_eDIS_filenum96_0.96e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C_CO2LA_dirty_normalized_pi0Wiser_filenum119_1.19e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C_N2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_C_N2_CO2LA_dirty_weighted_eDIS_filenum92_0.92e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Aldown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Aldown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Alup_CO2LA_dirty_weighted_eDIS_filenum98_0.98e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Alup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Bedown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Beup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_N2down_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_N2down_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_N2up_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_N2up_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2LA_BeamOnTarget_0.966e11_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_CO2FA_BeamOnTarget_0.97e10_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_C4F8LA_BeamOnTarget_0.964e11_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_C4F8FA_BeamOnTarget_0.98e10_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Bedown_C4F8LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Bedown_CO2A_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2/cc_pro_He3_Bedown_C4F8FA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+
+
+# 281G    farm_cc_pro_He3_N2down_C4F8FA_dirty_weighted_eDIS
+# 143G    farm_cc_pro_He3_N2down_CO2FA_dirty_weighted_eDIS
+# 293G    farm_cc_pro_He3_N2up_C4F8FA_dirty_weighted_eDIS
+# 151G    farm_cc_pro_He3_N2up_CO2FA_dirty_weighted_eDIS
+# 
+# e instead of pi0
+# farm_cc_pro_He3_N2down_C4F8FA_dirty_normalized_pi0Wiser
+# farm_cc_pro_He3_N2down_CO2FA_dirty_normalized_pi0Wiser
+# farm_cc_pro_He3_N2up_C4F8FA_dirty_normalized_pi0Wiser
+# farm_cc_pro_He3_N2up_CO2FA_dirty_normalized_pi0Wiser
+# 
+# farm_cc_pro_C_N2_C4F8FA_dirty_normalized_pi0Wiser
+# farm_cc_pro_C_N2_CO2FA_dirty_normalized_pi0Wiser
+# 
+# 
+# farm_cc_pro_He3_N2down_CO2LA_dirty_normalized_pi0Wiser
+# farm_cc_pro_He3_N2up_CO2LA_dirty_normalized_pi0Wiser
+# 
+# farm_cc_pro_C_N2_CO2LA_dirty_normalized_pi0Wiser
+# farm_cc_pro_C_N2_CO2LA_dirty_weighted_eDIS
+# file/cc_pro_C_N2_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root
+# file/cc_pro_C_N2_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root
 
 # # pass1
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_CO2LA_BeamOnTarget_14.291e10_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_CO2LA_BeamOnTarget_14.291e10_skim.root","trigger",false,"single")'
 # 
-# # root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_CO2LA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# # root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_CO2LA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim.root","trigger",false,"single")'
 # 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_normalized_pi0Wiser_filenum218_2.18e9.skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_weighted_eDIS_filenum99_0.99e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_Alup_CO2LA_dirty_normalized_pi0Wiser_filenum99_0.99e9.skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_Alup_CO2LA_dirty_weighted_eDIS_filenum97_0.97e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum97_0.97e9.skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_weighted_eDIS_filenum63_0.63e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9.skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_Beup_CO2LA_dirty_weighted_eDIS_filenum61_0.61e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_N2down_CO2LA_dirty_normalized_pi0Wiser_filenum73_0.73e9.skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_N2down_CO2LA_dirty_weighted_eDIS_filenum98_0.98e9_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_N2up_CO2LA_dirty_normalized_pi0Wiser_filenum97_0.97e9.skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_N2up_CO2LA_dirty_weighted_eDIS_filenum56_0.56e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_Aldown_CO2LA_dirty_normalized_pi0Wiser_filenum218_2.18e9.skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_Aldown_CO2LA_dirty_weighted_eDIS_filenum99_0.99e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_Alup_CO2LA_dirty_normalized_pi0Wiser_filenum99_0.99e9.skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_Alup_CO2LA_dirty_weighted_eDIS_filenum97_0.97e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum97_0.97e9.skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_Bedown_CO2LA_dirty_weighted_eDIS_filenum63_0.63e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9.skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_Beup_CO2LA_dirty_weighted_eDIS_filenum61_0.61e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_N2down_CO2LA_dirty_normalized_pi0Wiser_filenum73_0.73e9.skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_N2down_CO2LA_dirty_weighted_eDIS_filenum98_0.98e9_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_N2up_CO2LA_dirty_normalized_pi0Wiser_filenum97_0.97e9.skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_N2up_CO2LA_dirty_weighted_eDIS_filenum56_0.56e9_skim.root","trigger",false,"single")'
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_CO2LA_e_even_broad_1e5.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_CO2LA_e_even_central_1e3.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_CO2LA_e_even_broad_1e5.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_CO2LA_e_even_central_1e3.root","trigger",false,"single")'
 
-# // cp do_it_all.sh farm_cc_pro_SIDIS_He3_Beup_CO2LA_dirty_normalized_pi0Wiser/
-# // cp do_it_all.sh farm_cc_pro_SIDIS_He3_Bedown_CO2LA_dirty_normalized_pi0Wiser/
-# // cp do_it_all.sh farm_cc_pro_SIDIS_He3_Alup_CO2LA_dirty_normalized_pi0Wiser/
-# // cp do_it_all.sh farm_cc_pro_SIDIS_He3_Aldown_CO2LA_dirty_normalized_pi0Wiser/
-# // cp do_it_all.sh farm_cc_pro_SIDIS_He3_N2up_CO2LA_dirty_normalized_pi0Wiser/
-# // cp do_it_all.sh farm_cc_pro_SIDIS_He3_N2down_CO2LA_dirty_normalized_pi0Wiser/
+# // cp do_it_all.sh farm_cc_pro_He3_Beup_CO2LA_dirty_normalized_pi0Wiser/
+# // cp do_it_all.sh farm_cc_pro_He3_Bedown_CO2LA_dirty_normalized_pi0Wiser/
+# // cp do_it_all.sh farm_cc_pro_He3_Alup_CO2LA_dirty_normalized_pi0Wiser/
+# // cp do_it_all.sh farm_cc_pro_He3_Aldown_CO2LA_dirty_normalized_pi0Wiser/
+# // cp do_it_all.sh farm_cc_pro_He3_N2up_CO2LA_dirty_normalized_pi0Wiser/
+# // cp do_it_all.sh farm_cc_pro_He3_N2down_CO2LA_dirty_normalized_pi0Wiser/
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new.root","trigger",false,"single")'
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_new.root","trigger",false,"single")'
-
-
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_N2_BeamOnTarget_2e10_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_BeamOnTarget_1.871e10_C4F8_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_BeamOnTarget_1.957e10_CO2_skim_new.root","trigger",false,"single")'
 
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_CO2_BeamOnTarget_1.957e10_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_weighted_eDIS_N2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_weighted_eDIS_CO2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_normalized_pimWiser_N2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_N2_BeamOnTarget_2e10_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_BeamOnTarget_1.957e10_CO2_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_BeamOnTarget_1.871e10_C4F8_skim.root","trigger",false,"single")'
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_BeamOnTarget_1e10_CO2_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_CO2_dirty_weighted_eDIS_filenum100_1e6_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_windown_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_windown_CO2_dirty_weighted_eDIS_filenum100_1e6_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_winup_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_SIDIS_He3_winup_CO2_dirty_weighted_eDIS_filenum100_1e6_skim.root","trigger",false,"single")'
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_BeamOnTarget_3.999e10_CO2_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_BeamOnTarget_3.999e10_C4F8_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_CO2_BeamOnTarget_1.957e10_skim.root","trigger",false,"single")'
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_BeamOnTarget_5.956e10_CO2_skim.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_BeamOnTarget_5.87e10_C4F8_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_BeamOnTarget_1e10_CO2_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_CO2_dirty_weighted_eDIS_filenum100_1e6_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_windown_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_windown_CO2_dirty_weighted_eDIS_filenum100_1e6_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_winup_CO2_dirty_normalized_pi0Wiser_filenum100_1e6_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1/cc_pro_He3_winup_CO2_dirty_weighted_eDIS_filenum100_1e6_skim.root","trigger",false,"single")'
 
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_weighted_eDIS_N2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_dirty_normalized_pimWiser_N2_filenum100_1e7.root","trigger",false,"single")'
-# root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_SIDIS_He3_BeamOnTarget_2e10_N2_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_BeamOnTarget_3.999e10_CO2_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_BeamOnTarget_3.999e10_C4F8_skim.root","trigger",false,"single")'
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_BeamOnTarget_5.956e10_CO2_skim.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_BeamOnTarget_5.87e10_C4F8_skim.root","trigger",false,"single")'
+
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_weighted_eDIS_N2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_normalized_pi0Wiser_N2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_dirty_normalized_pimWiser_N2_filenum100_1e7.root","trigger",false,"single")'
+# root -l -b -q 'analysis_cc_pro.C+("/cache/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/withoutEC/cc_pro_He3_BeamOnTarget_2e10_N2_skim.root","trigger",false,"single")'
 

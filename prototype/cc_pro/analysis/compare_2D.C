@@ -7,34 +7,19 @@ gStyle->SetOptStat(0);
 
 // char input_dir[100]="/work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_inter";
 // char input_dir[200]="/work/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8";
-char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1";
-
+// char input_dir[200]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass1";
+char input_dir[300]="/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/pass2";
 const int m=6;
+
 char* input_filename[m]={
-
-// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
-// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_new_output.root",
-// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_CO2_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_weighted_eDIS_C4F8_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_CO2_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pimWiser_C4F8_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_CO2_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_dirty_normalized_pi0Wiser_C4F8_filenum100_1e7_output.root",
-// "cc_pro_SIDIS_He3_BeamOnTarget_1.957e10_CO2_skim_output.root",
-// "cc_pro_SIDIS_He3_BeamOnTarget_1.871e10_C4F8_skim_output.root",
-
-
-"cc_pro_SIDIS_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_winup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_windown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
-
-"cc_pro_SIDIS_He3_CO2LA_dirty_normalized_pi0Wiser_filenum99_0.99e9_skim_output.root",
-"cc_pro_SIDIS_He3_winup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-"cc_pro_SIDIS_He3_windown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
-
-  
-}; 
-char *hst[m]={"hit_hgc_2D","hit_hgc_2D","hit_hgc_2D","hit_hgc_2D","hit_hgc_2D","hit_hgc_2D"};
+"cc_pro_He3_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",  "cc_pro_Beup_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+"cc_pro_Bedown_CO2LA_dirty_weighted_eDIS_filenum100_1e9_skim_output.root",
+"cc_pro_He3_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+"cc_pro_Beup_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+"cc_pro_Bedown_CO2LA_dirty_normalized_pi0Wiser_filenum100_1e9_skim_output.root",
+};
+// char *hst[m]={"hit_xy_3","hit_xy_3","hit_xy_3","hit_xy_3","hit_xy_3","hit_xy_3"};
+char *hst[m]={"hit_hgc_2D_0","hit_hgc_2D_0","hit_hgc_2D_0","hit_hgc_2D_0","hit_hgc_2D_0","hit_hgc_2D_0"};
 // char *hst[m]={
 // "npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2",
 // "npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2","npe_hgc_mom_2",
@@ -48,11 +33,11 @@ double xmin=0,xmax=200;
 // int hit_id[m]={8,8,8,8};
 // char *title[m]={"HGC signal Np.e.;MaPMT;MaPMT","HGC signal Np.e.;pixel;pixel"};
 // char *title[m]={"HGC background Np.e.;MaPMT;MaPMT","HGC background Np.e.;pixel;pixel"};
-// TCanvas *c = new TCanvas("compare_2D","compare_2D",1700,800);
-// c->Divide(2,1);		
-TCanvas *c[2];
-c[0]= new TCanvas("compare_2D_1","compare_2D_1",1000,800);
-c[1]= new TCanvas("compare_2D_2","compare_2D_2",1000,800);
+TCanvas *c = new TCanvas("compare_2D","compare_2D",1700,800);
+c->Divide(3,2);		
+// TCanvas *c[2];
+// c[0]= new TCanvas("compare_2D_1","compare_2D_1",1000,800);
+// c[1]= new TCanvas("compare_2D_2","compare_2D_2",1000,800);
 // TCanvas *cc = new TCanvas("compare_2D_proj","compare_2D_proj",1200,800);
 // cc->Divide(2,1);
 ///option
@@ -63,9 +48,9 @@ bool Is_cut=false;
 
 
 TFile *input[m];
-TH1F *h[m];
-// TH2F *h[m];
-TH1D *h_p[m];
+// TH1F *h[m];
+TH2F *h[m];
+// TH1D *h_p[m];
 for(int i=0;i<m;i++){
   input[i]=new TFile(Form("%s/%s",input_dir,input_filename[i]));
   if (input[i]->IsZombie()) {
@@ -83,15 +68,15 @@ for(int i=0;i<m;i++){
 //   sprintf(hstname,"%s","hit_mom_7");
 //   sprintf(hstname,"%s","pattern_hgc");    
   cout << hstname << endl;
-//   h2[i]=(TH2F*) input[i]->Get(hstname);
-  h1[i]=(TH1F*) input[i]->Get(hstname);  
+  h[i]=(TH2F*) input[i]->Get(hstname);
+//   h[i]=(TH1F*) input[i]->Get(hstname);  
 
 //   if (Is_cut) {
 //     for(int j=0;j<h[i]->GetXaxis()->FindBin(cut[i]);j++)  h[i]->SetBinContent(j+1,0);
 //   }
   
-//   c->cd(i+1);
-  c[i]->cd(1);  
+  c->cd(i+1);
+//   c[i]->cd(1);  
 //   gPad->SetLogz();
 //   gPad->SetLogy();
 //   h[i]->SetLineWidth(3);  
@@ -105,7 +90,7 @@ for(int i=0;i<m;i++){
 //   h[i]->SetAxisRange(xmin,xmax);  
 //   h[i]->SetTitle(title[i]);
 //   h[i]->GetXaxis()->CenterTitle();
-      h[i]->Draw();
+      h[i]->Draw("colz");
 
 //   h[i]->Draw("colz");
 
