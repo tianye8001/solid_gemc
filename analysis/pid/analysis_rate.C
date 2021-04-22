@@ -97,8 +97,8 @@ const double DEG=180./3.1415926;   //rad to degree
 int analysis_rate(string inputfile_name,string par="e",string runmode="trigger", bool Is_tellorig=false,string filetype="",string outputdir="",bool Is_new=true){
 
 // gStyle->SetOptStat(11111111);
-// gStyle->SetOptStat(111);
-  gStyle->SetOptStat(0);
+gStyle->SetOptStat(111);
+//   gStyle->SetOptStat(0);
   gStyle->SetLabelSize(0.04,"xyz"); // size of axis values
   gStyle->SetTitleSize(0.04,"xyz");   
   gStyle->SetTitleSize(0.07,"t");    
@@ -351,14 +351,14 @@ cout << "output file " << outputfile_name << endl;
 		}
 		else {
 			tree_header->GetEntry(i);
-			rate=var8->at(0); // old eDIS and eAll generator
+			rate=var8->at(0); // old eDIS and eAll generator,and bggen
 		}
 
 		if (filemode=="BeamOnTargetEM" || filemode=="BeamOnTarget") {
 		  if(Is_SIDIS_He3) rate=15e-6/1.6e-19/event_actual/loop_time*add_norm;
 		  else if(Is_SIDIS_NH3) rate=100e-9/1.6e-19/event_actual/loop_time*add_norm;
 		  else if(Is_JPsi_LH2) rate=3e-6/1.6e-19/event_actual/loop_time*add_norm; 	  
-		  else if(Is_PVDIS_LD2)  rate=50e6/1.6e-19/event_actual/loop_time*add_norm;
+		  else if(Is_PVDIS_LD2)  rate=50e-6/1.6e-19/event_actual/loop_time*add_norm;
 // 		  else {
 // 		    cout << "Not He3 or C or NOtarget setup" << endl;    
 // 		    return 0;
@@ -446,34 +446,26 @@ cout << "output file " << outputfile_name << endl;
 // 		    cout << " ec " << flux_tid->at(j) << " " <<  flux_mtid->at(j) << endl;
 		    
 		    //find the original particle and plot its vertex values assuming tracking can reconstruct those
-		    if ((par=="e" && flux_pid->at(j)==11) || (par=="pim" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==-211) || (par=="pip" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==211) || (par=="p" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==2212)){
-// 		    if ((par=="e" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==11) || (par=="pim" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==-211) || (par=="pip" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==211) || (par=="p" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==2212)){
+// 		    if ((par=="e" && flux_pid->at(j)==11) || (par=="pim" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==-211) || (par=="pip" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==211) || (par=="p" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==2212)){
+		    if ((par=="e" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==11) || (par=="pim" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==-211) || (par=="pip" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==211) || (par=="p" && flux_tid->at(j)==tid_theone && flux_pid->at(j)==2212)){
 		      hPTheta->Fill(theta_gen,p_gen,rate/1e3);
 		      hQ2x->Fill(x_gen,Q2_gen,rate/1e3);
 		    }
 		    
 // 		    for pi0, find the e- from pi0 originally
-		    if (par=="pi0" && flux_otid->at(j)==tid_theone && flux_pid->at(j)==11){
+		      // for eany, assume this e- is scattered e- beam and use flux value instead of vertex values
+		    if ((par=="pi0" && flux_otid->at(j)==tid_theone && flux_pid->at(j)==11) || (par=="eany" && flux_pid->at(j)==11)){
 // 		    for pi0, find the e- from direct decay only pi0 ->e-e+
 // 		    if (par=="pi0" && flux_mtid->at(j)==tid_theone && flux_pid->at(j)==11){
 // 		      cout << " ec " << tid_theone << " " <<  flux_tid->at(j) << " " <<  flux_mtid->at(j) << " " << flux_otid->at(j) << endl;		      
 		      
-		      // assume this e- is scattered e- beam and use flux value instead of vertex values
-     		      double hit_theta=atan2(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j),flux_pz->at(j)*flux_pz->at(j))/3.1416*180;
+//      		      double hit_theta=atan2(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j),flux_pz->at(j)*flux_pz->at(j))/3.1416*180;
+     		      double hit_theta=atan2(sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)),flux_pz->at(j))/3.1416*180;		      
 		      double hit_Q2=4*11*hit_p*sin(hit_theta/2/180*3.1416)*sin(hit_theta/2/180*3.1416);
 		      double hit_x=hit_Q2/2/0.938/(11-hit_p);
 		      hPTheta->Fill(hit_theta,hit_p,rate/1e3);
 		      hQ2x->Fill(hit_x,hit_Q2,rate/1e3);		      
-		    }
-		    
-		    if (par=="eany" && flux_pid->at(j)==11) {
-		      // assume this e- is scattered e- beam and use flux value instead of vertex values
-     		      double hit_theta=atan2(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j),flux_pz->at(j)*flux_pz->at(j))/3.1416*180;
-		      double hit_Q2=4*11*hit_p*sin(hit_theta/2/180*3.1416)*sin(hit_theta/2/180*3.1416);
-		      double hit_x=hit_Q2/2/0.938/(11-hit_p);
-		      hPTheta->Fill(hit_theta,hit_p,rate/1e3);
-		      hQ2x->Fill(hit_x,hit_Q2,rate/1e3);
-		    }
+		    }		    
 		    
 		  }
 		  
