@@ -1,0 +1,5 @@
+./solid_PVDIS_ec_forwardangle.pl config_solid_PVDIS_ec_forwardangle.dat
+
+./solid_SIDIS_ec_forwardangle.pl config_solid_SIDIS_ec_forwardangle.dat
+
+./solid_SIDIS_ec_largeangle.pl config_solid_SIDIS_ec_largeangle.dat
