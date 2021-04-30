@@ -163,7 +163,7 @@ if (inputfile_name.find("_filenum",0) != string::npos) {
 else {
   if (filemode=="rate"){
     cout << "this file is rate dependent, but has no filenum, something is wrong" << endl;  
-    return 0;
+//     return 0;
   }
   else{
     cout << "this file has no filenum, please check if you need filenum for addtional normalization" << endl;      
@@ -189,7 +189,7 @@ else if(inputfile_name.find("_C",0) != string::npos) {
 }
 else {
     cout << "Not SIDIS_He3 or SIDIS_NH3 or JPsi_LH2 setup" << endl;    
-    return 0;
+//     return 0;
 }
 
 //Cherenkov sensor for 30 sectors
@@ -219,9 +219,13 @@ Float_t npe_hgc_total=0;
 // for(int i=0;i<ch_hgc;i++) mlptree_hgc->Branch(Form("npe_hgc%i",i), &npe_hgc[i], Form("npe_hgc%i/F",i));
 // mlptree_hgc->Branch("npe_hgc_total", &npe_hgc_total, "npe_hgc_total/F");
 
-char textfile_name[200];
+char textfile_name[1000];
 sprintf(textfile_name,"%s_pixel.ml",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
 ofstream textfile(textfile_name,std::ofstream::trunc);
+
+char matrixfile_name[1000];
+sprintf(matrixfile_name,"%s_pixel_matrix.ml",inputfile_name.substr(0,inputfile_name.rfind(".")).c_str());
+ofstream matrixfile(matrixfile_name,std::ofstream::trunc);
 
 TFile *file=new TFile(inputfile_name.c_str());
 
@@ -402,7 +406,7 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 		else if (filemode=="rate") rate=rate/filenum/loop_time*add_norm;
 		else {
 		    cout << "Not right filemode" << endl;    
-		    return 0; 
+// 		    return 0; 
 		}
 		
 		double x=var4->at(0);	
@@ -456,7 +460,7 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 		//-----------------------
 		tree_solid_hgc->GetEntry(i);
 
-		double hit_hgc[ch_hgc]={0};
+		int hit_hgc[ch_hgc]={0};
 		int trigger_hgc[30]={0};
 		int ntrigsecs_hgc=0;
 		
@@ -467,7 +471,7 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 		  textfile << "cher" << "\t" <<  solid_hgc_hitn->size() << endl;		  
 		}
 		process_tree_solid_hgc(tree_solid_hgc,hit_hgc,trigger_hgc,ntrigsecs_hgc,PMTthresh_hgc,PEthresh_hgc,ch_hgc,textfile);
-
+		
 // 		for(int index=0;index<ch_hgc;index++){
 // 		  if (hit_hgc[index]>0) {
 // 		    cout << i << "\t" << index << "\t" << hit_hgc[index] << endl;		    
@@ -475,11 +479,13 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 // 		  }
 // 		}
 
-		
+ 		
 // 		if(ntrigsecs_hgc){
 		if(true){
   
 		for(int index=0;index<ch_hgc;index++){    
+// 		  cout << hit_hgc[index] << endl;
+		      matrixfile << hit_hgc[index] << "\t";
 		      
 		      int pmt_sec=index/sensor_hgc;		  
 		      int pmt_hgc=index%sensor_hgc;
@@ -498,7 +504,8 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 			hocc_hgc_2D->Fill(pmt_x,pmt_y,rate/1e3);
 		      }	
 
-		}		
+		}
+		matrixfile << endl;		
 
 		} //pass hgc trigger in offline		
 		
@@ -572,7 +579,8 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 // 	          cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
 		  
 
-		  if (Is_ok && flux_id->at(j)==10) {
+// 		  if (Is_ok && flux_id->at(j)==10) {  // for cc_pro front window
+		  if (Is_ok && flux_id->at(j)==2210000) {  // for solid hgc front virtual plane		    
 		    textfile << flux_hitn->at(j) << "\t" <<  flux_pid->at(j) << "\t" <<  flux_mpid->at(j) << "\t" <<  flux_tid->at(j) << "\t" <<  flux_mtid->at(j) << "\t" <<  flux_trackE->at(j) << "\t" <<  flux_totEdep->at(j) << "\t" <<  flux_avg_lx->at(j) << "\t" <<  flux_avg_ly->at(j) << "\t" <<  flux_avg_lz->at(j) << "\t" <<  flux_px->at(j) << "\t" <<  flux_py->at(j) << "\t" <<  flux_pz->at(j) << "\t" <<   flux_avg_t->at(j) << endl;  
 
 		  }
@@ -587,6 +595,7 @@ sprintf(the_filename, "%s",inputfile_name.substr(0,inputfile_name.rfind(".")).c_
 
 //do outputs
 textfile.close();
+matrixfile.close();
 
 TCanvas *c = new TCanvas("c", "c",1900,900);
 c->Divide(2,1);

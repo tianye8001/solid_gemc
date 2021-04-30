@@ -111,7 +111,7 @@ tree_solid_hgc->SetBranchAddress("avg_t",&solid_hgc_avg_t);
 return;
 }
 
-Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,double *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc,Int_t ch_hgc,ofstream &textfile)
+Bool_t process_tree_solid_hgc(TTree *tree_solid_hgc,int *hit_hgc,Int_t *trigger_hgc, Int_t &ntrigsecs_hgc, Int_t PMTthresh_hgc, Int_t PEthresh_hgc,Int_t ch_hgc,ofstream &textfile)
 { 
   	TRandom3 rand;
 	rand.SetSeed(0);
@@ -167,10 +167,11 @@ int sensor_trans_hgc = sqrt(sensor_hgc);
 	  if (Is_pass){
 	      npe_hgc += 1;
 
-    // 	  int sector=solid_hgc_id->at(j)/100000-22;  //wrong id matching
-	      int sector=solid_hgc_id->at(j)/10000-220-1;  //match id 2210000 - 2500000
+//     	  int sector=solid_hgc_id->at(j)/100000-22;  //wrong id matching
+// 	      int sector=solid_hgc_id->at(j)/10000-220-1;  //match id 2210000 - 2500000
+    	  int sector=(solid_hgc_id->at(j)%100000)/1000-1;  //match id 2201000 - 2230000
+//     	  cout << "sector " << sector << endl;
 	      
-	      ///for cc_pro only, depending pmt geometry definition and rotation
 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2))),pmt_y=int((solid_hgc_avg_ly->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2)));
 	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<sensor_trans_hgc && 0<=pmt_y && pmt_y<sensor_trans_hgc){	    
 		hit_hgc[sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x] += 1;				

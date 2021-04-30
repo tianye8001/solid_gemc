@@ -5,6 +5,7 @@ To convert HGC gemc output into a text file, run it on jlab ifarm like
 
 root -l -b -q 'analysis_hgc.C++("/cache/halla/solid/sim/solid_gemc/SIDIS_He3_JLAB_VERSION_1.3/pass8/farm_solid_SIDIS_He3_moved_BeamOnTarget_0.561e10_skim_HGCwinCF1.root","trigger",false,"single")'
 
+root -l -b -q 'analysis_hgc.C++("/work/halla/solid/zwzhao/solid/output_hgc_study/JLAB_VERSION_1.3/hgc_moved/output_pim_z350_p5.0_theta11.0_phi96_fieldoff_1e5.root","trigger",false,"single")'
 
 ====output =================================================================
 The result is an output of text file called *_pixel.ml" 
