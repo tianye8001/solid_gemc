@@ -87,7 +87,7 @@ const double DEG=180./3.1415926;   //rad to degree
 
 //#####################################################################################################################################################
 
-int analysis_hgc(string inputfile_name,string runmode, bool Is_tellorig=false,string filetype=""){
+int analysis_hgc(string inputfile_name,string runmode="trigger", bool Is_tellorig=false,string filetype=""){
 
 // gStyle->SetOptStat(11111111);
 gStyle->SetOptStat(0);
