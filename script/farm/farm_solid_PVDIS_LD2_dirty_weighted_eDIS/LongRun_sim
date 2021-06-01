@@ -1,6 +1,11 @@
 #!/usr/bin/perl
 # Perl module to run 
 ############################################################
+print "mkdir at volatile disk\n";
+$cdir = `pwd`;
+$odir = $cdir =~ s/w\/halla-scifs17exp/volatile\/halla/r;
+system("mkdir -p $odir");
+
 print "Give the start run number [2000]\n";
 $srunnum = <STDIN>;
 chop($srunnum);
