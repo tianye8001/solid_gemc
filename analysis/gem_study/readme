@@ -1,0 +1,10 @@
+Here is the files and scripts to test GEM
+
+testing GEM hit position with Kryptonite magnet and GEM virtual plane for longer endcap magnet
+
+ssh ifarm
+module load singularity
+(for sidis_He3 setup)
+singularity exec /group/solid/apps/jeffersonlab_jlabce_tagdevel_digestsha256:01eac4333bdd2077233076363983d1898775c6c61e8f5c5b0b9f324c75c4da3c_20200409_s3.5.3.sif ./run_sidis_he3.sh
+(for jpsi setup)
+singularity exec /group/solid/apps/jeffersonlab_jlabce_tagdevel_digestsha256:01eac4333bdd2077233076363983d1898775c6c61e8f5c5b0b9f324c75c4da3c_20200409_s3.5.3.sif ./run_jpsi.sh
