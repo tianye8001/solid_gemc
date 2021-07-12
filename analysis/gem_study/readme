@@ -1,10 +1,20 @@
 Here is the files and scripts to test GEM
 
-testing GEM hit position with Kryptonite magnet and GEM virtual plane for longer endcap magnet
+note
+the following is tested on ifarm 2021/07/12
+Do "module load singularity" before running singularity
 
-ssh ifarm
-module load singularity
+1. testing GEM hit position with Kryptonite magnet and GEM virtual plane (R=10-140cm) for longer endcap magnet
+
 (for sidis_He3 setup)
-singularity exec /group/solid/apps/jeffersonlab_jlabce_tagdevel_digestsha256:01eac4333bdd2077233076363983d1898775c6c61e8f5c5b0b9f324c75c4da3c_20200409_s3.5.3.sif ./run_sidis_he3.sh
+singularity exec /group/solid/apps/jeffersonlab_jlabce_tagdevel_digestsha256:01eac4333bdd2077233076363983d1898775c6c61e8f5c5b0b9f324c75c4da3c_20200409_s3.5.3.sif ./run_gem_sidis_he3_vp.sh
 (for jpsi setup)
-singularity exec /group/solid/apps/jeffersonlab_jlabce_tagdevel_digestsha256:01eac4333bdd2077233076363983d1898775c6c61e8f5c5b0b9f324c75c4da3c_20200409_s3.5.3.sif ./run_jpsi.sh
+singularity exec /group/solid/apps/jeffersonlab_jlabce_tagdevel_digestsha256:01eac4333bdd2077233076363983d1898775c6c61e8f5c5b0b9f324c75c4da3c_20200409_s3.5.3.sif ./run_gem_jpsi_vp.sh
+
+2. test GEM response with different gemc and geant4
+
+(testing gemc commit2fef2c2 and geant4.10.06)
+singularity exec /group/solid/apps/jeffersonlab_jlabce_tagdevel_digestsha256:01eac4333bdd2077233076363983d1898775c6c61e8f5c5b0b9f324c75c4da3c_20200409_s3.5.3.sif ./run_gem_sidis_he3_commit2fef2c2.sh
+
+(testing jlab1.3m with gemc 2.3 and geant4.10.01.p03)
+./run_gem_sidis_he3_jlab1.3m.sh
