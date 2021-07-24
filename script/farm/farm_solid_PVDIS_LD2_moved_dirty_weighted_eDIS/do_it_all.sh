@@ -14,7 +14,7 @@
 source /jlab/devel/ce/jlab.csh
 setenv SoLID_GEMC /group/solid/solid_github/JeffersonLab/solid_gemc
 setenv LD_LIBRARY_PATH ${GEMC}:${LD_LIBRARY_PATH}
-setenv PATH ${SoLID_GEMC}/source/${GEMC_VERSION}:${PATH}
+setenv PATH ${SoLID_GEMC}/source/commit2fef2c2:${PATH}
 #setenv PATH /group/solid/devel/banks/bin:${PATH}
 setenv PATH /group/solid/devel/banks_jlabsolid/bin:${PATH}
 # setenv PATH /group/solid/devel/banks/bin:${PATH}
