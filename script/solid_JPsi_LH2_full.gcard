@@ -1,8 +1,4 @@
 <gcard>
-<option name="DBHOST" value="soliddb"/>
-<option name="DATABASE" value="test"/>
-<option name="DBUSER" value="soliduser"/>
-<option name="DBPSWD" value="ilovesolid"/>
 
 <detector name="../geometry/magnet/solid_solenoid" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented/solid_SIDIS_ec_largeangle" factory="TEXT" variation="Original"/>
@@ -16,12 +12,13 @@
 <detector name="../geometry/target/solid_JPsi_target_LH2" factory="TEXT" variation="Original"/>
 <detector name="../geometry/beamline/solid_JPsi_beamline" factory="TEXT" variation="Original"/>
 
-
 <option name="INTEGRATEDRAW" value="flux"/>
+
+<option name="RECORD_PASSBY" value="1"/>
+<option name="SAVE_ALL_MOTHERS" value="1"/>
 
 <option name="HIT_PROCESS_LIST" value="solid"/>
 <option name="PHYSICS" value="QGSP_BERT+STD+Optical"/>
-<option name="RECORD_PASSBY" value="1"/>
 <option name="HALL_MATERIAL" value="G4_AIR"/>
 
 <option name="MAX_X_POS" value="20000"/>

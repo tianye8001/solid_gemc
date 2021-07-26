@@ -7,14 +7,17 @@
 <detector name="../geometry/gem_moved/solid_PVDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_PVDIS_target_enclosure" factory="TEXT" variation="LD2"/>
 <detector name="../geometry/beamline_moved/solid_PVDIS_beamline" factory="TEXT" variation="Original"/>
-<detector name="../geometry/baffle_moved/solid_PVDIS_baffle_CLEO2" factory="TEXT" variation="Original"/>
-<detector name="../geometry/baffle_moved/solid_PVDIS_baffle_observer_CLEO2" factory="TEXT" variation="Original"/>
+<detector name="../geometry/baffle_moved/solid_PVDIS_baffle_CLEO2" factory="TEXT" variation="Enclosure"/>
+<detector name="../geometry/baffle_moved/solid_PVDIS_baffle_observer_CLEO2" factory="TEXT" variation="Enclosure"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
+<option name="RECORD_PASSBY" value="1"/>
+<option name="SAVE_ALL_MOTHERS" value="1"/>
+<option name="RECORD_OPTICALPHOTONS" value="1"/>
+
 <option name="HIT_PROCESS_LIST" value="solid"/>
 <option name="PHYSICS" value="QGSP_BERT+STD+Optical"/>
-<option name="RECORD_PASSBY" value="1"/>
 <option name="HALL_MATERIAL" value="G4_AIR"/>
 
 <option name="MAX_X_POS" value="20000"/>
