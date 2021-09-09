@@ -33,6 +33,10 @@ atan(py/px) tells the phi angle in rad
 "beam.txt_11GeV_oxford_v8flip" shows solenoid field direction has no effect
 "beam.txt_11GeV_oxfordflip_v8flip" shows solenoid field direction has no effect
 
+"beam.txt_24GeV_oxford_v8" has avg_y=-10.0523mm, theta 1.170 deg and phi 90 deg at z=-4000mm
+"beam.txt_20GeV_oxford_v8" has avg_y=-12.0661mm, theta 1.404 deg and phi 90 deg at z=-4000mm
+
+
 == test particles bending by NH3 target field and SoLID solenoid field ===============================
 
 Use the two field in vacuum with no material and use some virtual planes to observer tracks bending
