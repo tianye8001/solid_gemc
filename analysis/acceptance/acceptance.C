@@ -21,10 +21,10 @@
 
 using namespace std;
 
-void acceptance(string input_filename)
+void acceptance(string input_filename,double Ebeam=11.)
 {
 gROOT->Reset();
-gStyle->SetPalette(1);
+// gStyle->SetPalette(1);
 gStyle->SetOptStat(0);
 // gStyle->SetOptStat(11111);
 
@@ -129,9 +129,6 @@ else if(Is_DDVCS_PVDIS_LH2) {
 }
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
-// std::size_t found = input_filename.rfind("cache");
-// if (found!=std::string::npos)  input_filename.replace(found,5,"work");
-
 char the_filename[200];
 sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_str());
 
@@ -145,6 +142,7 @@ TFile *outputfile=new TFile(output_filename, "recreate");
 
 int binfactor_theta=2;
 int binfactor_p=100;
+int binfactor_p_3D=10;
 int binfactor_phi=1;
 int binfactor_vz=2;
 
@@ -153,13 +151,13 @@ TH2F *hacceptance_ThetaPhi_forwardangle,*hacceptance_ThetaPhi_largeangle;
 TH2F *hacceptance_PhiP_forwardangle,*hacceptance_PhiP_largeangle;
 TH3F *hacceptance_ThetaPhiP_forwardangle,*hacceptance_ThetaPhiP_largeangle;
 
-TH1F *hgen_P=new TH1F("gen_P","gen_P",int(11*binfactor_p),0,11);
+TH1F *hgen_P=new TH1F("gen_P","gen_P",int(Ebeam*binfactor_p),0,Ebeam);
 TH1F *hgen_Theta=new TH1F("gen_Theta","gen_Theta",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);
 TH1F *hgen_Phi=new TH1F("gen_Phi","gen_Phi",int(360*binfactor_phi),-180,180);
-TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","gen_ThetaP",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(11*binfactor_p),0,11);
+TH2F *hgen_ThetaP=new TH2F("gen_ThetaP","gen_ThetaP",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(Ebeam*binfactor_p),0,Ebeam);
 TH2F *hgen_ThetaPhi=new TH2F("gen_ThetaPhi","gen_ThetaPhi",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(360*binfactor_phi),-180,180);     
-TH2F *hgen_PhiP=new TH2F("gen_PhiP","gen_PhiP",int(360*binfactor_phi),-180,180,int(11*binfactor_p),0,11);
-TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,110,0,11);   
+TH2F *hgen_PhiP=new TH2F("gen_PhiP","gen_PhiP",int(360*binfactor_phi),-180,180,int(Ebeam*binfactor_p),0,Ebeam);
+TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,int(Ebeam*binfactor_p_3D),0,Ebeam);   
 
 TH2F *hgen_ThetaVz=new TH2F("gen_ThetaVz","gen_ThetaVz",int((vz_max-vz_min)*binfactor_vz),vz_min,vz_max,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);   
 TH2F *hgen_ThetaVr=new TH2F("gen_ThetaVr","gen_ThetaVr",20,0,1,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);
@@ -180,23 +178,23 @@ for(int i=0;i<m;i++){
    char hstname[100];
    
    sprintf(hstname,"flux_P_%i",i);
-   hflux_P[i]=new TH1F(hstname,hstname,int(11*binfactor_p),0,11);
+   hflux_P[i]=new TH1F(hstname,hstname,int(Ebeam*binfactor_p),0,Ebeam);
    sprintf(hstname,"flux_Theta_%i",i);
    hflux_Theta[i]=new TH1F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max); 
    sprintf(hstname,"flux_Phi_%i",i);
    hflux_Phi[i]=new TH1F(hstname,hstname,int(360*binfactor_phi),-180,180); 
    
    sprintf(hstname,"flux_ThetaP_%i",i);
-   hflux_ThetaP[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(11*binfactor_p),0,11);        
+   hflux_ThetaP[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(Ebeam*binfactor_p),0,Ebeam);        
    hflux_ThetaP[i]->SetTitle(Form("particles detected by %s;vertex #theta (deg);vertex P (GeV)",title[i]));   
    sprintf(hstname,"flux_ThetaPhi_%i",i);   
    hflux_ThetaPhi[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(360*binfactor_phi),-180,180); 
    hflux_ThetaPhi[i]->SetTitle(Form("particles detected by %s;vertex #theta (deg);vertex Phi (GeV)",title[i]));   
    sprintf(hstname,"flux_PhiP_%i",i);   
-   hflux_PhiP[i]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,int(11*binfactor_p),0,11);
+   hflux_PhiP[i]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,int(Ebeam*binfactor_p),0,Ebeam);
    hflux_PhiP[i]->SetTitle(Form("particles detected by %s;vertex #phi (deg);vertex P (GeV)",title[i]));  
    sprintf(hstname,"flux_ThetaPhiP_%i",i);   
-   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,110,0,11);   
+   hflux_ThetaPhiP[i]=new TH3F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,int(Ebeam*binfactor_p_3D),0,Ebeam);   
    hflux_ThetaPhiP[i]->SetTitle(Form("particles detected by %s;vertex #theta (deg);vertex #phi (deg);vertex P (GeV)",title[i]));   
     
    sprintf(hstname,"flux_ThetaVz_%i",i);
@@ -207,7 +205,7 @@ for(int i=0;i<m;i++){
    hflux_ThetaVr[i]->SetTitle("flux;vertex R (cm);vertex #theta (deg)");            
   
    sprintf(hstname,"acceptance_P_%i",i);
-   hacceptance_P[i]=new TH1F(hstname,hstname,int(11*binfactor_p),0,11);
+   hacceptance_P[i]=new TH1F(hstname,hstname,int(Ebeam*binfactor_p),0,Ebeam);
    hacceptance_P[i]->SetTitle(Form("acceptance by %s;vertex P (GeV);",title[i]));
    sprintf(hstname,"acceptance_Theta_%i",i);
    hacceptance_Theta[i]=new TH1F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max);    
@@ -217,16 +215,16 @@ for(int i=0;i<m;i++){
    hacceptance_Phi[i]->SetTitle(Form("acceptance by %s;vertex #phi (deg));",title[i]));   
    
    sprintf(hstname,"acceptance_ThetaP_%i",i);
-   hacceptance_ThetaP[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(11*binfactor_p),0,11);     
+   hacceptance_ThetaP[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(Ebeam*binfactor_p),0,Ebeam);     
    hacceptance_ThetaP[i]->SetTitle(Form("acceptance by %s;vertex #theta (deg);vertex P (GeV)",title[i]));
    sprintf(hstname,"acceptance_ThetaPhi_%i",i);
    hacceptance_ThetaPhi[i]=new TH2F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,int(360*binfactor_phi),-180,180);     
    hacceptance_ThetaPhi[i]->SetTitle(Form("acceptance by %s;vertex #theta (deg);vertex #phi (deg)",title[i]));
    sprintf(hstname,"acceptance_PhiP_%i",i);
-   hacceptance_PhiP[i]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,int(11*binfactor_p),0,11);
+   hacceptance_PhiP[i]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,int(Ebeam*binfactor_p),0,Ebeam);
    hacceptance_PhiP[i]->SetTitle(Form("acceptance by %s;vertex #phi (deg);vertex P (GeV)",title[i]));      
    sprintf(hstname,"acceptance_ThetaPhiP_%i",i);   
-   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,110,0,11);
+   hacceptance_ThetaPhiP[i]=new TH3F(hstname,hstname,int((theta_max-theta_min)*binfactor_theta),theta_min,theta_max,180,-180,180,int(Ebeam*binfactor_p_3D),0,Ebeam);
    hacceptance_ThetaPhiP[i]->SetTitle(Form("acceptance by %s;vertex #theta (deg);vertex #phi (deg);vertex P (GeV)",title[i]));
 
    sprintf(hstname,"acceptance_ThetaVz_%i",i);
@@ -238,14 +236,14 @@ for(int i=0;i<m;i++){
 }
 
 TH2F *hhit_PR[2][2];
-hhit_PR[0][0]=new TH2F("hit_PR_0_0","all electrons reach FAEC and GEM;R(cm);Mom(GeV)",160,80,240,1100,0,11);
-hhit_PR[0][1]=new TH2F("hit_PR_0_1","electrons (Q2>1) reach FAEC and GEM;R(cm);Mom(GeV)",160,80,240,1100,0,11);
-hhit_PR[1][0]=new TH2F("hit_PR_1_0","all electrons reach LAEC and GEM;R(cm);Mom(GeV)",80,70,150,1100,0,11);
-hhit_PR[1][1]=new TH2F("hit_PR_1_1","electrons (Q2>1) reach LAEC and GEM;R(cm);Mom(GeV)",80,70,150,1100,0,11);  
+hhit_PR[0][0]=new TH2F("hit_PR_0_0","all electrons reach FAEC and GEM;R(cm);Mom(GeV)",160,80,240,1100,0,Ebeam);
+hhit_PR[0][1]=new TH2F("hit_PR_0_1","electrons (Q2>1) reach FAEC and GEM;R(cm);Mom(GeV)",160,80,240,1100,0,Ebeam);
+hhit_PR[1][0]=new TH2F("hit_PR_1_0","all electrons reach LAEC and GEM;R(cm);Mom(GeV)",80,70,150,1100,0,Ebeam);
+hhit_PR[1][1]=new TH2F("hit_PR_1_1","electrons (Q2>1) reach LAEC and GEM;R(cm);Mom(GeV)",80,70,150,1100,0,Ebeam);  
 
 TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);  
 
-TH2F *hlinearity_GEM34=new TH2F("linearity_GEM34","linearity_GEM34",1000,theta_min,theta_max,2200,0,11);
+TH2F *hlinearity_GEM34=new TH2F("linearity_GEM34","linearity_GEM34",1000,theta_min,theta_max,2200,0,Ebeam);
 
 TH1F *hmissingGEM_forwardangle=new TH1F("missingGEM_forwardangle","missingGEM_forwardangle",6,0.5,6.5);
 TH1F *hmissingGEM_largeangle=new TH1F("missingGEM_largeangle","missingGEM_largeangle",6,0.5,6.5);
@@ -260,34 +258,34 @@ for(int i=0;i<n;i++){
    char hstname[100];
 
    sprintf(hstname,"hit_rMom_%i",i);
-   hhit_rMom[i]=new TH2F(hstname,hstname,300,0,300,int(11*binfactor_p),0,11);  
+   hhit_rMom[i]=new TH2F(hstname,hstname,300,0,300,int(Ebeam*binfactor_p),0,Ebeam);  
    
 //    sprintf(hstname,"hit_phidiffMom_%i",i);
-//    hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,int(11*binfactor_p),0,11);  
+//    hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,int(Ebeam*binfactor_p),0,Ebeam);  
 //    sprintf(hstname,"hit_thetadiffMom_%i",i);
-//    hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,int(11*binfactor_p),0,11);  
+//    hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,int(Ebeam*binfactor_p),0,Ebeam);  
 //    sprintf(hstname,"hit_anglediffMom_%i",i);
-//    hhit_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,180,int(11*binfactor_p),0,11);     
+//    hhit_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,180,int(Ebeam*binfactor_p),0,Ebeam);     
 //    
 //    sprintf(hstname,"mom_phidiffMom_%i",i);
-//    hmom_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,int(11*binfactor_p),0,11);  
+//    hmom_phidiffMom[i]=new TH2F(hstname,hstname,7200,-360,360,int(Ebeam*binfactor_p),0,Ebeam);  
 //    sprintf(hstname,"mom_thetadiffMom_%i",i);
-//    hmom_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,int(11*binfactor_p),0,11);  
+//    hmom_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-180,180,int(Ebeam*binfactor_p),0,Ebeam);  
 //    sprintf(hstname,"mom_anglediffMom_%i",i);
-//    hmom_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,180,int(11*binfactor_p),0,11);        
+//    hmom_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,180,int(Ebeam*binfactor_p),0,Ebeam);        
    sprintf(hstname,"hit_phidiffMom_%i",i);
-   hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-10,10,int(11*binfactor_p),0,11);  
+   hhit_phidiffMom[i]=new TH2F(hstname,hstname,7200,-10,10,int(Ebeam*binfactor_p),0,Ebeam);  
    sprintf(hstname,"hit_thetadiffMom_%i",i);
-   hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-10,10,int(11*binfactor_p),0,11);  
+   hhit_thetadiffMom[i]=new TH2F(hstname,hstname,3600,-10,10,int(Ebeam*binfactor_p),0,Ebeam);  
    sprintf(hstname,"hit_anglediffMom_%i",i);
-   hhit_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,20,int(11*binfactor_p),0,11);     
+   hhit_anglediffMom[i]=new TH2F(hstname,hstname,1800,0,20,int(Ebeam*binfactor_p),0,Ebeam);     
    
    sprintf(hstname,"mom_phidiffMom_%i",i);
-   hmom_phidiffMom[i]=new TH2F(hstname,hstname,100,-360,360,int(11*binfactor_p),0,11);  
+   hmom_phidiffMom[i]=new TH2F(hstname,hstname,100,-360,360,int(Ebeam*binfactor_p),0,Ebeam);  
    sprintf(hstname,"mom_thetadiffMom_%i",i);
-   hmom_thetadiffMom[i]=new TH2F(hstname,hstname,100,-5,5,int(11*binfactor_p),0,11);  
+   hmom_thetadiffMom[i]=new TH2F(hstname,hstname,100,-5,5,int(Ebeam*binfactor_p),0,Ebeam);  
    sprintf(hstname,"mom_anglediffMom_%i",i);
-   hmom_anglediffMom[i]=new TH2F(hstname,hstname,100,0,20,int(11*binfactor_p),0,11);        
+   hmom_anglediffMom[i]=new TH2F(hstname,hstname,100,0,20,int(Ebeam*binfactor_p),0,Ebeam);        
    
 }
 
@@ -302,7 +300,7 @@ for(int i=0;i<n;i++){
    sprintf(hstname,"hit_PhiZ_%i_%i",i,j);
    hhit_PhiZ[i][j]=new TH2F(hstname,hstname,int(360*binfactor_phi),-180,180,400,-300,700);          
    sprintf(hstname,"Ploss_%i_%i",i,j);   
-   hPloss[i][j]=new TH2F(hstname,hstname,110,0,1.1,110,0,11);
+   hPloss[i][j]=new TH2F(hstname,hstname,110,0,1.1,int(Ebeam*binfactor_p_3D),0,Ebeam);
 }}
   
 const int Nplate=22;
@@ -442,7 +440,7 @@ for (Int_t i=0;i<nevent;i++) {
       TVector3 coor_gen(0,0,0);
       TVector3 mom_gen(0,0,0);
       
-      TLorentzVector beam(0,0,11000,11000);      
+      TLorentzVector beam(0,0,Ebeam,Ebeam);      
       TLorentzVector mom4_gen(0,0,0,0);
       double Q2=0;
       
@@ -451,12 +449,12 @@ for (Int_t i=0;i<nevent;i++) {
   for (int j=0;j<gen_pid->size();j++) {
 //       cout << gen_pid->at(j) << " " << gen_px->at(j) << " " << gen_py->at(j) << " " << gen_pz->at(j) << " " << gen_vx->at(j) << " " << gen_vy->at(j) << " " << gen_vz->at(j) << endl; 
       pid_gen=gen_pid->at(j);
-      px_gen=gen_px->at(j)/1e3;    	//from MeV to GeV
-      py_gen=gen_py->at(j)/1e3;		//from MeV to GeV
-      pz_gen=gen_pz->at(j)/1e3; 	//from MeV to GeV
-      vx_gen=gen_vx->at(j)/1e1;    	//from mm to cm
-      vy_gen=gen_vy->at(j)/1e1;		//from mm to cm
-      vz_gen=gen_vz->at(j)/1e1;  	//from mm to cm
+      px_gen=gen_px->at(j)/1e3;    	//in GeV
+      py_gen=gen_py->at(j)/1e3;		//in GeV
+      pz_gen=gen_pz->at(j)/1e3;     	//in GeV
+      vx_gen=gen_vx->at(j)/1e1;    	//in cm
+      vy_gen=gen_vy->at(j)/1e1;		//in cm
+      vz_gen=gen_vz->at(j)/1e1;		//in cm
 
       coor_gen.SetXYZ(vx_gen,vy_gen,vz_gen);
       mom_gen.SetXYZ(px_gen,py_gen,pz_gen);
@@ -468,8 +466,8 @@ for (Int_t i=0;i<nevent;i++) {
       phi_gen=mom_gen.Phi()*DEG;     //in deg
 
       if (pid_gen==11) {
-	mom4_gen.SetXYZT(px_gen,py_gen,pz_gen,sqrt(0.511*0.511+p_gen*p_gen));                
-	Q2=-(beam-mom4_gen).Mag2()/1e6;
+	mom4_gen.SetXYZT(px_gen,py_gen,pz_gen,sqrt(0.511e-3*0.511e-3+p_gen*p_gen));                
+	Q2=-(beam-mom4_gen).Mag2();
       }
       
       hgen_P->Fill(p_gen);      
@@ -512,7 +510,7 @@ for (Int_t i=0;i<nevent;i++) {
       continue;
     }
     
-    double p_flux=sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j))/1e3;   //MeV to GeV
+    double p_flux=sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j))/1e3;
     if (p_flux/p_gen<0.8) {
       counter_loss++;            
 // 	cout << "mom " << p_gen << " change to " << p_flux << " at " << flux_id->at(j) << endl;       
@@ -565,18 +563,18 @@ for (Int_t i=0;i<nevent;i++) {
       mom_GEM4.SetXYZ(flux_px->at(j),flux_py->at(j),flux_pz->at(j));   
     }
     
-     double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/1e1;  //mm to cm
-     double hit_y=flux_avg_y->at(j)/1e1,hit_x=flux_avg_x->at(j)/1e1,hit_z=flux_avg_z->at(j)/1e1;	//mm to cm
+     double hit_r=sqrt(pow(flux_avg_x->at(j),2)+pow(flux_avg_y->at(j),2))/1e1;
+     double hit_y=flux_avg_y->at(j)/1e1,hit_x=flux_avg_x->at(j)/1e1,hit_z=flux_avg_z->at(j)/1e1;
      
 //      double hit_phi=atan2(flux_avg_y->at(j)-vy_gen,flux_avg_x->at(j)-vx_gen);
-// //      double hit_theta=atan((hit_r/1e1-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;        
+// //      double hit_theta=atan((hit_r-sqrt(vx_gen*vx_gen+vy_gen*vy_gen))/(320-vz_gen))*DEG;        
 //      double hit_theta=atan(sqrt(pow(flux_avg_x->at(j)-vx_gen,2)+pow(flux_avg_y->at(j)-vy_gen,2))/(flux_avg_z->at(j)-vz_gen))*DEG;
 
      double hit_phi=(coor_acc-coor_gen).Phi()*DEG;
      double hit_theta=(coor_acc-coor_gen).Theta()*DEG;     
 //      cout << hit_phi << " " << hit_theta << endl;
      
-     hhit_rz->Fill(flux_avg_z->at(j),hit_r);
+     hhit_rz->Fill(hit_z,hit_r);
      
       hhit_phidiffMom[hit_id]->Fill((hit_phi-phi_gen),p_gen);
       hhit_thetadiffMom[hit_id]->Fill((hit_theta-theta_gen),p_gen);
@@ -594,8 +592,8 @@ for (Int_t i=0;i<nevent;i++) {
      hPloss[hit_id][0]->Fill(p_flux/p_gen,p_gen);      
      
     //check hit on baffleplate
-//     if (detector_ID==0 && subsubdetector_ID==0) hbaffleplate[subdetector_ID-1]->Fill(flux_avg_x->at(j),flux_avg_y->at(j));
-//     if (detector_ID==0 && subsubdetector_ID==1) hbaffleplate_observer[subdetector_ID-1]->Fill(flux_avg_x->at(j),flux_avg_y->at(j));
+//     if (detector_ID==0 && subsubdetector_ID==0) hbaffleplate[subdetector_ID-1]->Fill(hit_x,hit_u);
+//     if (detector_ID==0 && subsubdetector_ID==1) hbaffleplate_observer[subdetector_ID-1]->Fill(hit_x,hit_u);
     if (flux_id->at(j)<100) hbaffleplate_observer[flux_id->at(j)-1]->Fill(hit_x,hit_y);    
     
     //check hit on GEM
@@ -657,7 +655,7 @@ for (Int_t i=0;i<nevent;i++) {
     else if (Is_SIDIS_NH3){     
       // only acceptance area not in sheet of flame
       
-//       //wrong ptarget field
+      //wrong ptarget field (used in result_SIDIS_NH3/201503)
 //       if ((detector_ID==3 && subdetector_ID==1) && ((-74<hit_phi && hit_phi<-38 && hit_r<195)||(-92<hit_phi && hit_phi<-88 && hit_r<120)||(50<hit_phi && hit_phi<80 && hit_r<195))) continue;                
 //       if ((detector_ID==3 && subdetector_ID==2) && ((-85<hit_phi && hit_phi<-60)||(65<hit_phi && hit_phi<85))) continue;                
 //       
@@ -668,29 +666,29 @@ for (Int_t i=0;i<nevent;i++) {
 //       if ((detector_ID==1 && subdetector_ID==5) && ((-92<hit_phi && hit_phi<-65)||(66<hit_phi && hit_phi<92))) continue;          
 //       if ((detector_ID==1 && subdetector_ID==6) && ((-92<hit_phi && hit_phi<-58)||(66<hit_phi && hit_phi<95))) continue;    
 
-//       //oxford ptarget field with  gemc handling cylindircal-x field wrong
-//       //cut gem      
-//       if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;          
-//       if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;  
-//       //cut LGC
-//       if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;
-//       //cut HGC
-//       if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-40 && hit_r<180)||(65<hit_phi && hit_phi<90 && hit_r<180))) continue;   //  subdetector_ID should be 2, not 1           
-//       //cut FASPD
-//       if ((detector_ID==5 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
-//       //cut LASPD
-//       if ((detector_ID==5 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<90))) continue;       
-//       //cut FAMRPC
-//       if ((detector_ID==4 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
-//       //cut EC    
-//       if ((detector_ID==3 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40 && hit_r<195)||(70<hit_phi && hit_phi<90 && hit_r<195))) continue;                
-//       if ((detector_ID==3 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<95))) continue;
+      //oxford ptarget field with  gemc handling cylindircal-x field wrong  (used in result_SIDIS_NH3/201710)
+      //cut gem      
+      if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+      if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;          
+      if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;  
+      //cut LGC
+      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;
+      //cut HGC
+      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-40 && hit_r<180)||(65<hit_phi && hit_phi<90 && hit_r<180))) continue;                
+      //cut FASPD
+      if ((detector_ID==5 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
+      //cut LASPD
+      if ((detector_ID==5 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<90))) continue;       
+      //cut FAMRPC
+      if ((detector_ID==4 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
+      //cut EC    
+      if ((detector_ID==3 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40 && hit_r<195)||(70<hit_phi && hit_phi<90 && hit_r<195))) continue;                
+      if ((detector_ID==3 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<95))) continue;
       
-      //oxford ptarget field with  gemc handling cylindircal-x field correctly
+      //oxford ptarget field with gemc handling cylindircal-x field correctly (used in result_SIDIS_NH3/202012)
       //cut gem     
       if ((detector_ID==1 && subdetector_ID==1) && ((-91<hit_phi && hit_phi<-78)||(79<hit_phi && hit_phi<90))) continue;         
       if ((detector_ID==1 && subdetector_ID==2) && ((-93<hit_phi && hit_phi<-72)||(75<hit_phi && hit_phi<92))) continue;         
@@ -709,10 +707,15 @@ for (Int_t i=0;i<nevent;i++) {
       //cut FAMRPC
       if ((detector_ID==4 && subdetector_ID==1) && ((-67<hit_phi && hit_phi<-56 && hit_r<181)||(-49<hit_phi && hit_phi<-11 && hit_r<143)||(40<hit_phi && hit_phi<62 && hit_r<143))) continue;
       //cut FAEC   
-      if ((detector_ID==3 && subdetector_ID==1) && ((-92<hit_phi && hit_phi<-88 && hit_r<196)||(-78<hit_phi && hit_phi<-35 && hit_r<190)||(-35<hit_phi && hit_phi<-9 && hit_r<162) || (23<hit_phi && hit_phi<39 && 131<hit_r && hit_r<165)||(39<hit_phi && hit_phi<55 && hit_r<165)||(55<hit_phi && hit_phi<70 && hit_r<131))) continue; 
+//       if ((detector_ID==3 && subdetector_ID==1) && ((-92<hit_phi && hit_phi<-88 && hit_r<196)||(-78<hit_phi && hit_phi<-35 && hit_r<190)||(-35<hit_phi && hit_phi<-9 && hit_r<162) || (23<hit_phi && hit_phi<39 && 131<hit_r && hit_r<165)||(39<hit_phi && hit_phi<55 && hit_r<165)||(55<hit_phi && hit_phi<70 && hit_r<131))) continue; 
       // cut LAEC    
-      if ((detector_ID==3 && subdetector_ID==2) && ((-92<hit_phi && hit_phi<-88)||(-81<hit_phi && hit_phi<-56 && hit_r<131)||(-56<hit_phi && hit_phi<-47 && 100<hit_r && hit_r<131) || (53<hit_phi && hit_phi<63 && 97<hit_r && hit_r<131)||(63<hit_phi && hit_phi<71 && hit_r<131)||(71<hit_phi && hit_phi<77 && hit_r<96))) continue;
-
+//       if ((detector_ID==3 && subdetector_ID==2) && ((-92<hit_phi && hit_phi<-88)||(-81<hit_phi && hit_phi<-56 && hit_r<131)||(-56<hit_phi && hit_phi<-47 && 100<hit_r && hit_r<131) || (53<hit_phi && hit_phi<63 && 97<hit_r && hit_r<131)||(63<hit_phi && hit_phi<71 && hit_r<131)||(71<hit_phi && hit_phi<77 && hit_r<96))) continue;
+      //EC sheet of flame newest redesigned cuts (2020_December)      
+      //cut FAEC         
+      if ((detector_ID==3 && subdetector_ID==1) && ((-92<hit_phi && hit_phi<-88 && hit_r<194)||(-79<hit_phi && hit_phi<-67 && hit_r<154)||(-67<hit_phi && hit_phi<-52 && hit_r<185)||(-52<hit_phi && hit_phi<-22 && hit_r<160)||(-22<hit_phi && hit_phi<-10 && 115<hit_r && hit_r<145)  ||(30<hit_phi && hit_phi<38 && 140<hit_r && hit_r<155)||(38<hit_phi && hit_phi<45 && 122<hit_r && hit_r<155)||(45<hit_phi && hit_phi<50 && 106<hit_r && hit_r<137)||(50<hit_phi && hit_phi<53 && 106<hit_r && hit_r<137)||(53<hit_phi && hit_phi<68 && hit_r<120)))                 continue;
+      //cut LAEC         
+      if ((detector_ID==3 && subdetector_ID==2) && ((-92<hit_phi && hit_phi<-88 && hit_r<140)||(-82<hit_phi && hit_phi<-80 && hit_r<90)||(-80<hit_phi && hit_phi<-72 && hit_r<116)||(-72<hit_phi && hit_phi<-67 && hit_r<95)||(-67<hit_phi && hit_phi<-61 && hit_r<107)||(-61<hit_phi && hit_phi<-58 && 95<hit_r && hit_r<129)||(-58<hit_phi && hit_phi<-54 && 104<hit_r && hit_r<129)||(-54<hit_phi && hit_phi<-48 && 117<hit_r && hit_r<129) ||(57<hit_phi && hit_phi<60 && 116<hit_r && hit_r<127)||(60<hit_phi && hit_phi<65 && 97<hit_r && hit_r<123)||(65<hit_phi && hit_phi<71 && 95<hit_r && hit_r<111)||(71<hit_phi && hit_phi<75 && hit_r<95))) continue;
+      
       acc[hit_id]=1; 
     }
     else if (Is_JPsi){
@@ -727,16 +730,16 @@ for (Int_t i=0;i<nevent;i++) {
     }    
        
        ///DIRC cut
-//        double x=flux_avg_x->at(j),y=flux_avg_y->at(j);
+//        double x=flux_avg_x->at(j)/1e1,y=flux_avg_y->at(j)/1e1;
 //         if (detector_ID==3 && subdetector_ID==1) {
 // // 	  if ((fabs(x)<98 && fabs(y) <98) || fabs(x)>181 || fabs(y)>181) continue;  // 4 side
 // //           if ( (y>-98 && y<196+sqrt(3)*x && y<196-sqrt(3)*x) || (y<-181 || y>362+sqrt(3)*x || y>362-sqrt(3)*x) ) continue;  // 3 side, y=196+-sqrt(3)*x,y=362+-sqrt(3)*x
 // 	  if (fabs(y)<98 || fabs(y)>181) continue;  // 2 side, up and down
 // 	}
        
-//         if (vx_gen != flux_vx->at(j)) cout << "vx " << vx_gen << " " << flux_vx->at(j) <<endl;
-//         if (vy_gen != flux_vy->at(j)) cout << "vy " << vy_gen << " " << flux_vy->at(j) <<endl;
-//         if (vz_gen != flux_vz->at(j)) cout << "vz " << vz_gen << " " << flux_vz->at(j) <<endl;		  
+//         if (vx_gen != flux_vx->at(j)/1e1) cout << "vx " << vx_gen << " " << flux_vx->at(j)/1e1 <<endl;
+//         if (vy_gen != flux_vy->at(j)/1e1) cout << "vy " << vy_gen << " " << flux_vy->at(j)/1e1 <<endl;
+//         if (vz_gen != flux_vz->at(j)/1e1) cout << "vz " << vz_gen << " " << flux_vz->at(j)/1e1 <<endl;		  
     }        
     //check all hits, end ============================================================
 
@@ -838,8 +841,8 @@ for (Int_t i=0;i<nevent;i++) {
       hflux_PhiP[pattern_id]->Fill(phi_gen,p_gen);	
       hflux_ThetaPhiP[pattern_id]->Fill(theta_gen,phi_gen,p_gen);
       
-      hflux_ThetaVz[pattern_id]->Fill(vz_gen,theta_gen,rate);
-      hflux_ThetaVr[pattern_id]->Fill(sqrt(vx_gen*vx_gen+vy_gen*vy_gen),theta_gen,rate);
+      hflux_ThetaVz[pattern_id]->Fill(vz_gen/1e1,theta_gen,rate);
+      hflux_ThetaVr[pattern_id]->Fill(sqrt(vx_gen*vx_gen+vy_gen*vy_gen)/1e1,theta_gen,rate);
     }
       
     if (counter_hit[0]>1 || counter_hit[1]>1) {
@@ -959,25 +962,25 @@ c_acc->Divide(4,2);
 c_acc->cd(1);
 gPad->SetLogy(1);
 hacceptance_ThetaP[0]->Draw("colz");
-hacceptance_ThetaP[0]->SetAxisRange(0.1,11,"Y");
+hacceptance_ThetaP[0]->SetAxisRange(0.1,Ebeam,"Y");
 c_acc->cd(2);
 hacceptance_ThetaPhi[0]->Draw("colz");
 c_acc->cd(3);
 gPad->SetLogy(1);
 hacceptance_PhiP[0]->Draw("colz");
-hacceptance_PhiP[0]->SetAxisRange(0.1,11,"Y");
+hacceptance_PhiP[0]->SetAxisRange(0.1,Ebeam,"Y");
 c_acc->cd(4);
 hacceptance_ThetaPhiP[0]->Draw("box");
 c_acc->cd(5);
 gPad->SetLogy(1);
 hacceptance_ThetaP[1]->Draw("colz");
-hacceptance_ThetaP[1]->SetAxisRange(0.1,11,"Y");
+hacceptance_ThetaP[1]->SetAxisRange(0.1,Ebeam,"Y");
 c_acc->cd(6);
 hacceptance_ThetaPhi[1]->Draw("colz");
 c_acc->cd(7);
 gPad->SetLogy(1);
 hacceptance_PhiP[1]->Draw("colz");
-hacceptance_PhiP[1]->SetAxisRange(0.1,11,"Y");
+hacceptance_PhiP[1]->SetAxisRange(0.1,Ebeam,"Y");
 c_acc->cd(8);
 hacceptance_ThetaPhiP[1]->Draw("box");
 // c_acc->cd(7);
