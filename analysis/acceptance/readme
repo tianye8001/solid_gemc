@@ -56,8 +56,8 @@ The histograms are
 * result_SIDIS_NH3/201503, with wrong ptarget field and the sheet of flame cut is NOT applied
 * result_SIDIS_NH3/201710, with oxford ptarget field and gemc handling cylindircal-x field wrong and the 201710 sheet of flame cut is applied
 * result_SIDIS_NH3/202012_24GeV, like 202012 with 24GeV beam
-* result_SIDIS_JPsi/201501, with target position at z=-315cm
-* result_SIDIS_JPsi/201501,  like 201501 with 24GeV beam
+* result_JPsi/201501, with target position at z=-315cm
+* result_JPsi/201501_24GeV,  like 201501 with 24GeV beam
 
 "full geometry" results are 
 * result_SIDIS_NH3/202012, with oxford ptarget field and gemc handling cylindircal-x field correctly and the 202012 sheet of flame cut is applied
