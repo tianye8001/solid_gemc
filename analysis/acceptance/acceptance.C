@@ -644,7 +644,7 @@ for (Int_t i=0;i<nevent;i++) {
       
       R_hit_EC=hit_r;
     }
-    
+    //additional cut
     if (Is_PVDIS){
       acc[hit_id]=1;      
     }
@@ -668,25 +668,25 @@ for (Int_t i=0;i<nevent;i++) {
 
       //oxford ptarget field with  gemc handling cylindircal-x field wrong  (used in result_SIDIS_NH3/201710)
       //cut gem      
-      if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
-      if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
-      if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
-      if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
-      if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;          
-      if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;  
-      //cut LGC
-      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;
-      //cut HGC
-      if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-40 && hit_r<180)||(65<hit_phi && hit_phi<90 && hit_r<180))) continue;                
-      //cut FASPD
-      if ((detector_ID==5 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
-      //cut LASPD
-      if ((detector_ID==5 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<90))) continue;       
-      //cut FAMRPC
-      if ((detector_ID==4 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
-      //cut EC    
-      if ((detector_ID==3 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40 && hit_r<195)||(70<hit_phi && hit_phi<90 && hit_r<195))) continue;                
-      if ((detector_ID==3 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<95))) continue;
+//       if ((detector_ID==1 && subdetector_ID==1) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==2) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==3) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==4) && ((-95<hit_phi && hit_phi<-75)||(75<hit_phi && hit_phi<95))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==5) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;          
+//       if ((detector_ID==1 && subdetector_ID==6) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;  
+//       //cut LGC
+//       if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-55)||(70<hit_phi && hit_phi<90))) continue;
+//       //cut HGC
+//       if ((detector_ID==2 && subdetector_ID==1) && ((-85<hit_phi && hit_phi<-40 && hit_r<180)||(65<hit_phi && hit_phi<90 && hit_r<180))) continue;                
+//       //cut FASPD
+//       if ((detector_ID==5 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
+//       //cut LASPD
+//       if ((detector_ID==5 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<90))) continue;       
+//       //cut FAMRPC
+//       if ((detector_ID==4 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40)||(70<hit_phi && hit_phi<95))) continue; 
+//       //cut EC    
+//       if ((detector_ID==3 && subdetector_ID==1) && ((-75<hit_phi && hit_phi<-40 && hit_r<195)||(70<hit_phi && hit_phi<90 && hit_r<195))) continue;                
+//       if ((detector_ID==3 && subdetector_ID==2) && ((-90<hit_phi && hit_phi<-60)||(60<hit_phi && hit_phi<95))) continue;
       
       //oxford ptarget field with gemc handling cylindircal-x field correctly (used in result_SIDIS_NH3/202012)
       //cut gem     
