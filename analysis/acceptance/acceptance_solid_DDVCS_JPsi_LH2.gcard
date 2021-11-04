@@ -1,6 +1,6 @@
 <gcard>
 
-<detector name="../../solid_gemc2/geometry/old/solid_DDVCS_JPsi_LH2" factory="TEXT" variation="Original"/>
+<detector name="../../geometry/old/solid_DDVCS_JPsi_LH2" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
@@ -14,7 +14,7 @@
 <option name="MAX_Z_POS" value="20000"/>
 <option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
 
-<option name="FIELD_DIR" value="../../solid_gemc2/field"/>
+<option name="FIELD_DIR" value="../../field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv8"/>
 
 <option name="BEAM_P"   value="mu-,5.5*GeV,20*deg,0*deg"/>
