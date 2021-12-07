@@ -1,9 +1,4 @@
 <gcard>
-<option name="DBHOST" value="soliddb"/>
-<option name="DATABASE" value="test"/>
-<option name="DBUSER" value="soliduser"/>
-<option name="DBPSWD" value="ilovesolid"/>
-
 <detector name="../geometry/old/solid_SIDIS_NH3_simple" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>

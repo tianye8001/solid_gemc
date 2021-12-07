@@ -10,7 +10,7 @@
 <detector name="../geometry/mrpc_moved/solid_SIDIS_mrpc_forwardangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/spd_moved/solid_SIDIS_spd_forwardangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/spd_moved/solid_SIDIS_spd_largeangle" factory="TEXT" variation="Original"/>
-<detector name="../geometry/gem/solid_SIDIS_gem" factory="TEXT" variation="Original"/>
+<detector name="../geometry/gem_moved/solid_SIDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_SIDIS_target_NH3" factory="TEXT" variation="Original"/>
 <detector name="../geometry/beamline/solid_SIDIS_beamline_NH3" factory="TEXT" variation="Original"/>
 
