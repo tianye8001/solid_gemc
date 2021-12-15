@@ -29,7 +29,8 @@ map<string, double> solid_lgc_HitProcess :: integrateDgt(MHit* aHit, int hitn)
   vector<identifier> identity = aHit->GetId();
 	
   // if the particle is not an opticalphoton return empty bank
-  if(aHit->GetPID() != 0) return dgtz;
+//   if(aHit->GetPID() != 0) return dgtz;
+  if(aHit->GetPID() != -22) return dgtz;  //optical photon pid changed from 0 to -22 in geant4.10.7
   trueInfos tInfos(aHit);
 	
   // Since the hit involves a PMT which detects photons with a certain quantum efficiency (QE)
@@ -50,7 +51,8 @@ map<string, double> solid_lgc_HitProcess :: integrateDgt(MHit* aHit, int hitn)
   for(unsigned int s=0; s<nsteps; s++)
     {
       // selecting optical photons
-      if(pids[s] == 0)
+//       if(pids[s] == 0) 
+	if(pids[s] == -22) //optical photon pid changed from 0 to -22 in geant4.10.7
 	{
 	  // insert this step into the set of track ids (set can only have unique values).
 	  pair< set<int> ::iterator, bool> newtrack = TIDS.insert(tids[s]);
