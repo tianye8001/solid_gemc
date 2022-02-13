@@ -4,7 +4,7 @@ The setup gives a complete definition of the detector.
 
 detector definition are in text files.
 It include geometry and sensitivity,material,mirror,hit,bank definition.
-The perl scripts is are producde these text files
+The perl scripts is are produce these text files
 Except the parameter text file has all external parameter, it is edit by hand.
 
 A perl script will call other perl scripts and use parameter file to produce all other texts by running command below

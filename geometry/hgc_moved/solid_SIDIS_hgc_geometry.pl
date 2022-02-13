@@ -54,11 +54,12 @@ my $Rmin2_gas=$Rmin2_chamber+0.5;  # inner radius of the gas at the downstream s
 my $Rmax2_gas=$Rmax2_chamber-0.5;  # outer radius of the gas at the downstream side
 
 ## Windows
-my $halfthickness_window_front_1=0.0215;  # half thickness of the 1st front window
-my $halfthickness_window_front_2=0.0065;  # half thickness of the 2nd front window
-my $halfthickness_window_back=0.05;  # half thickness of the back window
+# my $halfthickness_window_front_1=0.0215;  # half thickness of the 1st front window
+# my $halfthickness_window_front_2=0.0065;  # half thickness of the 2nd front window
+my $halfthickness_window_front_1=0.2/2;  # half thickness of the 1st front window
+my $halfthickness_window_back=2.54*0.25/2;  # half thickness of the back window
 my $Z_window_front_1=$Zmin_chamber+$halfthickness_window_front_1;  # z position of the 1st front window
-my $Z_window_front_2=$Zmin_chamber+$halfthickness_window_front_1*2+$halfthickness_window_front_2;   # z position of the 2nd front window
+# my $Z_window_front_2=$Zmin_chamber+$halfthickness_window_front_1*2+$halfthickness_window_front_2;   # z position of the 2nd front window
 my $Z_window_back=$Zmax_chamber-$halfthickness_window_back;   # z position of the back window
 my $Rmin_window_front=$Rmin1_gas;  # inner radius of the front windows
 my $Rmax_window_front=187;  # outer radius of the front windows
@@ -66,7 +67,8 @@ my $Rmin_window_back=$Rmin2_gas;  # inner radius of the back windows
 my $Rmax_window_back=$Rmax2_gas;  # outer radius of the back windows
 
 ## Gas Cont.
-my $Zmin_gas=$Zmin_chamber+($halfthickness_window_front_1*2+$halfthickness_window_front_2*2);  # z position of the gas at the upstream side
+# my $Zmin_gas=$Zmin_chamber+($halfthickness_window_front_1*2+$halfthickness_window_front_2*2);  # z position of the gas at the upstream side
+my $Zmin_gas=$Zmin_chamber+$halfthickness_window_front_1*2;  # z position of the gas at the upstream side
 my $Zmax_gas=$Zmax_chamber-$halfthickness_window_back*2;  # z position of the gas at the downstream side
 
 ## Cone
@@ -113,8 +115,9 @@ my $hitype="solid_hgc";  # alternative: "flux"
 my $material_chamber="G4_Al";
 my $material_gas="SL_HGC_C4F8O";  # alternative: "G4_Al"
 my $material_block="SL_HGC_C4F8O";  # alternative: "G4_Al"
-my $material_window_front_1 = "SL_HGC_kevlar";  # alternative: "G4_Al"
-my $material_window_front_2 = "SL_HGC_mylar";  # alternative: "G4_Al"
+# my $material_window_front_1 = "SL_HGC_kevlar";  # alternative: "G4_Al"
+# my $material_window_front_2 = "SL_HGC_mylar";  # alternative: "G4_Al"
+my $material_window_front_1 = "G4_Al";
 my $material_window_back = "G4_Al";
 my $material_cone= "G4_GLASS_PLATE";
 my $material_pmt_surface = "SL_HGC_C4F8O";  # alternative: "G4_GLASS_PLATE" or "SL_HGC_pmt_surface"
@@ -233,25 +236,25 @@ sub make_window_front
  $detector{"identifiers"} = "no";
  print_det(\%configuration, \%detector);
  
- $detector{"name"}        = "$DetectorName\_window_front_2";
- $detector{"mother"}      = "$DetectorName\_chamber";
- $detector{"description"} = $detector{"name"};
- $detector{"pos"}         = "0*cm 0*cm $Z_window_front_2*cm";
- $detector{"rotation"}    = "0*deg 0*deg 0*deg";
- $detector{"color"}       = "CC33CC";
- $detector{"type"}        = "Tube";
- $detector{"dimensions"}  = "$Rmin_window_front*cm $Rmax_window_front*cm $halfthickness_window_front_2*cm 0*deg 360*deg";
- $detector{"material"}    = $material_window_front_2;
- $detector{"mfield"}      = "no";
- $detector{"ncopy"}       = 1;
- $detector{"pMany"}       = 1;
- $detector{"exist"}       = 1;
- $detector{"visible"}     = 1;
- $detector{"style"}       = 1;
- $detector{"sensitivity"} = "no";
- $detector{"hit_type"}    = "no";
- $detector{"identifiers"} = "no";
- print_det(\%configuration, \%detector);  
+#  $detector{"name"}        = "$DetectorName\_window_front_2";
+#  $detector{"mother"}      = "$DetectorName\_chamber";
+#  $detector{"description"} = $detector{"name"};
+#  $detector{"pos"}         = "0*cm 0*cm $Z_window_front_2*cm";
+#  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
+#  $detector{"color"}       = "CC33CC";
+#  $detector{"type"}        = "Tube";
+#  $detector{"dimensions"}  = "$Rmin_window_front*cm $Rmax_window_front*cm $halfthickness_window_front_2*cm 0*deg 360*deg";
+#  $detector{"material"}    = $material_window_front_2;
+#  $detector{"mfield"}      = "no";
+#  $detector{"ncopy"}       = 1;
+#  $detector{"pMany"}       = 1;
+#  $detector{"exist"}       = 1;
+#  $detector{"visible"}     = 1;
+#  $detector{"style"}       = 1;
+#  $detector{"sensitivity"} = "no";
+#  $detector{"hit_type"}    = "no";
+#  $detector{"identifiers"} = "no";
+#  print_det(\%configuration, \%detector);  
 }
 
 sub make_window_back
@@ -482,7 +485,8 @@ sub make_pmt
       $detector{"style"}       = 1;
       $detector{"sensitivity"} = $hitype;
       $detector{"hit_type"}    = $hitype;
-      my $id=2200000+$i*10000;      
+#       my $id=2200000+$i*10000;      old and bad 
+      my $id=2200000+$i*1000;      
       $detector{"identifiers"} = "id manual $id";      
       print_det(\%configuration, \%detector);
    
