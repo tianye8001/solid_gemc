@@ -11,11 +11,9 @@ longer endcap magnet modeled after info in appendix of Jay Benesch's magnet mode
 this geant4 geometry use cylinder to replace inner and outer octagon for simplicity
 This is replaced by v2 cad file
 
-cad model v1
-"solid_solenoid_v1.stl" is the same as "SoLID_CLEO_MAR_18_v1.0.stl" which has various mismatch with field map
+cad model "v1_cad/SoLID_CLEO_MAR_18_v1.0.stl" 
 
-cad model v2
-"solid_solenoid_v2.stl" is the same as "SoLID_Iron_Oct20_Update_v2.0.stl"
+cad model "v2_cad/SoLID_Iron_Oct20_Update_v2.0_vc.stl"
 
 more cad model info refer to 
 https://solid.jlab.org/wiki/index.php/Engineering_Integration_and_CAD#magnet
