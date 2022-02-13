@@ -14,7 +14,7 @@ sub solid_SIDIS_hgc_geometry
 {
 make_chamber();
 make_gas();
-make_block();
+# make_block();
 make_window_front();
 make_window_back();
 make_cone();
@@ -294,7 +294,7 @@ sub make_block
       $detector{"rotation"}    = "0*deg 0*deg 0*deg";
       $detector{"color"}       = "22CC33";  
       $detector{"type"}        = "Polycone";
-      $detector{"dimensions"}  = "$sector_start*deg 0.000005*deg 2*counts $Rmin1_gas*cm $Rmin2_gas*cm $Rmax1_gas*cm $Rmax2_gas*cm $Zmin_gas*cm $Zmax_gas*cm";      
+      $detector{"dimensions"}  = "$sector_start*deg 0.0000005*deg 2*counts $Rmin1_gas*cm $Rmin2_gas*cm $Rmax1_gas*cm $Rmax2_gas*cm $Zmin_gas*cm $Zmax_gas*cm";
       $detector{"material"}    = $material_block;
       $detector{"mfield"}      = "no";
       $detector{"ncopy"}       = 1;
