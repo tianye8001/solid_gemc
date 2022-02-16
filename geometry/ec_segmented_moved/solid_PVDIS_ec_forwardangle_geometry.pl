@@ -20,6 +20,7 @@ my $color_gap="80ff77";
 my $color_support="123456";
 my $color_wrap_sectorodd="00ffff";
 my $color_wrap_sectoreven="ffff00";
+my $color_rod="654321";
 
 my $material_abs="G4_Pb";
 my $material_scint="G4_POLYSTYRENE";
@@ -27,6 +28,7 @@ my $material_scint="G4_POLYSTYRENE";
 my $material_gap="G4_MYLAR";
 my $material_support="G4_Al";
 my $material_wrap="G4_MYLAR";
+my $material_rod="G4_STAINLESS-STEEL";
 
 # config mostly from CaloSim/include/Config.h
 # Sampling ratio = 0.253017(EM) 0.285811(MIP) 0.34+-0.04(H)
@@ -55,6 +57,8 @@ my $Thickness_prescint 	= $parameters{"Thickness_prescint"};
 my $Thickness_support 	= $parameters{"Thickness_support"};
 my $Angle_module        = $parameters{"Angle_module"};
 my $Radius_shower 	= $parameters{"Radius_shower"};
+my $Radius_rod 		= $parameters{"Radius_rod"};
+my $R_rod 		= $parameters{"R_rod"};
 my $z_shower 		= $parameters{"z_shower"};
 my $Rmin 		= $parameters{"Rmin"};
 my $Rmax 		= $parameters{"Rmax"};
@@ -79,6 +83,8 @@ for(my $i=1; $i<=$total_module; $i++)
   $sector[$i-1] = $parameters{"id$i\_sector"};
 #   print "$idx[$i-1] \n";
 }
+
+my $vis_inner=0;
 
 my $Thickness_layer=$Thickness_lead+$Thickness_scint+$Thickness_gap; #0.224cm
 my $Thickness_shower=$Thickness_layer*$Nlayer;  #43.456cm
@@ -123,12 +129,13 @@ sub make_ec_shield
 sub make_ec_module
 {   
 # build the module 424 x=-39.116cm y=-120.984cm first, at radius near 125cm, it exist in all three calorimeter, then make copy of it
-# the original has to be made before copies, because GEMC make volume in alphabetic order of names, the origin name has to be before copies, one way to do it is to make it shorter
+# the original has to be made before copies, otherwise it can have segmentation fault. because GEMC make volume in alphabetic order of names, one way to make sure the original built first is to make the original name shorter
+
 	  make_ec_module_shower(424);
 	  make_ec_module_prescint(424);
 	  make_ec_module_support(424);
 	  
-#    for(my $i=1; $i<=34; $i++)   
+#    for(my $i=424; $i<=424; $i++)   
    for(my $i=1; $i<=$total_module; $i++)   
     {
       if($i==424) {next;}
@@ -155,7 +162,6 @@ sub make_ec_module_shower()
     my %detector=init_det();
  
     my $Dr = $Radius_shower;
-    my $Dr_wrap = $Radius_shower+0.2;        
     my $Dz_shower = $Thickness_shower/2;
 
     if($id == 424){ $detector{"name"}        = "$DetectorName\_showe$id";}
@@ -189,26 +195,6 @@ sub make_ec_module_shower()
 	my $Dz_layer = $Thickness_layer/2;   
 	my $layerZ = -$Dz_shower+($j-0.5)*$Thickness_layer;
 	
-#         $detector{"name"}        = "$DetectorName\_shower$id\_layer$j";
-#         $detector{"mother"}      = "$DetectorName\_shower$id";
-#         $detector{"description"} = $detector{"name"};
-#         $detector{"pos"}        = "0*cm 0*cm $layerZ*cm";
-#         $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-#         $detector{"color"}      = "$color_gap";       
-# 	$detector{"type"}       = "Pgon";
-# 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_layer*cm $Dz_layer*cm";
-#         $detector{"material"}   = "$material_gap";
-#         $detector{"mfield"}     = "no";
-#         $detector{"ncopy"}      = 1;
-#         $detector{"pMany"}       = 1;
-#         $detector{"exist"}       = 1;
-# 	$detector{"visible"}     = 1;
-# 	$detector{"style"}       = 0;
-# 	$detector{"sensitivity"} = "no";
-# 	$detector{"hit_type"}    = "no";
-# 	$detector{"identifiers"} = "no";
-# 	print_det(\%configuration, \%detector);
-
 	my $leadZ = $layerZ-$Dz_layer+$Thickness_lead/2;
 	my $Dz_lead = $Thickness_lead/2;
 	
@@ -228,12 +214,41 @@ sub make_ec_module_shower()
         $detector{"ncopy"}      = 1;
         $detector{"pMany"}       = 1;
         $detector{"exist"}       = 1;
-	$detector{"visible"}     = 0;
-	$detector{"style"}       = 1;     	
+	$detector{"visible"}     = $vis_inner;
+	$detector{"style"}       = 0;     	
 	$detector{"sensitivity"} = "no";
 	$detector{"hit_type"}    = "no";
 	$detector{"identifiers"} = "no";	
-	print_det(\%configuration, \%detector);  # comment out this to minimize mem at gui mode
+	print_det(\%configuration, \%detector);
+	
+	if($j == 1){
+	  for(my $l=1; $l<=6; $l++){
+	    $detector{"name"}        = "$DetectorName\_showe$id\_leadrod$l";
+	    $detector{"mother"}      = "$DetectorName\_showe$id\_lead1";
+	    $detector{"description"} = $detector{"name"};
+	    my $rod_x=$Radius_shower*cos(($l-1)*60/180*3.1416);
+	    my $rod_y=$Radius_shower*sin(($l-1)*60/180*3.1416);
+	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
+	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+	    $detector{"color"}      = "$color_rod";
+	    if($l == 1){
+	    $detector{"type"}       = "Tube";
+	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_lead*cm 0*deg 360*deg";    
+	    }
+	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_leadrod1";}	
+	    $detector{"material"}   = $material_rod;
+	    $detector{"mfield"}     = "no";
+	    $detector{"ncopy"}      = 1;
+	    $detector{"pMany"}       = 1;
+	    $detector{"exist"}       = 1;
+	    $detector{"visible"}     = $vis_inner;
+	    $detector{"style"}       = 1;     	
+	    $detector{"sensitivity"} = "no";
+	    $detector{"hit_type"}    = "no";
+	    $detector{"identifiers"} = "no";	
+	    print_det(\%configuration, \%detector);
+	  }
+	}
 	
 	my $Dz_gap = $Thickness_gap/4;	
 	
@@ -255,12 +270,41 @@ sub make_ec_module_shower()
         $detector{"ncopy"}      = 1;
         $detector{"pMany"}       = 1;
         $detector{"exist"}       = 1;
-	$detector{"visible"}     = 0;
-	$detector{"style"}       = 1;
+	$detector{"visible"}     = $vis_inner;
+	$detector{"style"}       = 0;
 	$detector{"sensitivity"} = "no";
 	$detector{"hit_type"}    = "no";
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);
+	
+	if($j == 1){
+	  for(my $l=1; $l<=6; $l++){
+	    $detector{"name"}        = "$DetectorName\_showe$id\_gapfrontrod$l";
+	    $detector{"mother"}      = "$DetectorName\_showe$id\_gapfront1";
+	    $detector{"description"} = $detector{"name"};
+	    my $rod_x=$Radius_shower*cos(($l-1)*60/180*3.1416);
+	    my $rod_y=$Radius_shower*sin(($l-1)*60/180*3.1416);
+	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
+	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+	    $detector{"color"}      = "$color_rod";
+	    if($l == 1){
+	    $detector{"type"}       = "Tube";
+	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_gap*cm 0*deg 360*deg";    
+	    }
+	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapfrontrod1";}	
+	    $detector{"material"}   = $material_rod;
+	    $detector{"mfield"}     = "no";
+	    $detector{"ncopy"}      = 1;
+	    $detector{"pMany"}       = 1;
+	    $detector{"exist"}       = 1;
+	    $detector{"visible"}     = $vis_inner;
+	    $detector{"style"}       = 1;     	
+	    $detector{"sensitivity"} = "no";
+	    $detector{"hit_type"}    = "no";
+	    $detector{"identifiers"} = "no";	
+	    print_det(\%configuration, \%detector);
+	  }
+	}		
 	
 	my $gapbackZ = $layerZ-$Dz_layer+$Thickness_lead+$Dz_gap*2+$Thickness_scint+$Dz_gap;
 
@@ -280,165 +324,75 @@ sub make_ec_module_shower()
         $detector{"ncopy"}      = 1;
         $detector{"pMany"}       = 1;
         $detector{"exist"}       = 1;
-	$detector{"visible"}     = 0;
-	$detector{"style"}       = 1;
+	$detector{"visible"}     = $vis_inner;
+	$detector{"style"}       = 0;
 	$detector{"sensitivity"} = "no";
 	$detector{"hit_type"}    = "no";
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);	
 	
-# 	my $scintZ = $layerZ-$Dz_layer+$Thickness_lead+$Thickness_scint/2;
-# 	my $Dz_scint = $Thickness_scint/2;	
-# 
-#         $detector{"name"}        = "$DetectorName\_shower$id\_scint$j";
-#         $detector{"mother"}      = "$DetectorName\_shower$id";
-#         $detector{"description"} = $detector{"name"};
-#         $detector{"pos"}        = "0*cm 0*cm $scintZ*cm";
-#         $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-#         $detector{"color"}      = "$color_scint";
-#         if($j == 1){        
-# 	$detector{"type"}       = "Pgon";
-# 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_scint*cm $Dz_scint*cm";
-# 	}
-# 	else {  $detector{"type"}       = "CopyOf $DetectorName\_shower$id\_scint1";}       	
-#         $detector{"material"}   = $material_scint;
-#         $detector{"mfield"}     = "no";
-#         $detector{"ncopy"}      = 1;
-#         $detector{"pMany"}       = 1;
-#         $detector{"exist"}       = 1;
-# 	$detector{"visible"}     = 1;
-# 	$detector{"style"}       = 1;
-# 	$detector{"sensitivity"} = $ec_sen;
-# 	$detector{"hit_type"}    = $ec_sen;
-# 	my $ID = 3100000+$id;
-# 	$detector{"identifiers"} = "id manual $ID";	
-# 	print_det(\%configuration, \%detector);	
+	if($j == 1){
+	  for(my $l=1; $l<=6; $l++){
+	    $detector{"name"}        = "$DetectorName\_showe$id\_gapbackrod$l";
+	    $detector{"mother"}      = "$DetectorName\_showe$id\_gapback1";
+	    $detector{"description"} = $detector{"name"};
+	    my $rod_x=$Radius_shower*cos(($l-1)*60/180*3.1416);
+	    my $rod_y=$Radius_shower*sin(($l-1)*60/180*3.1416);
+	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
+	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+	    $detector{"color"}      = "$color_rod";
+	    if($l == 1){
+	    $detector{"type"}       = "Tube";
+	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_gap*cm 0*deg 360*deg";    
+	    }
+	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapbackrod1";}	
+	    $detector{"material"}   = $material_rod;
+	    $detector{"mfield"}     = "no";
+	    $detector{"ncopy"}      = 1;
+	    $detector{"pMany"}       = 1;
+	    $detector{"exist"}       = 1;
+	    $detector{"visible"}     = $vis_inner;
+	    $detector{"style"}       = 1;     	
+	    $detector{"sensitivity"} = "no";
+	    $detector{"hit_type"}    = "no";
+	    $detector{"identifiers"} = "no";	
+	    print_det(\%configuration, \%detector);
+	  }
+	}		
 	
-# 	my $gapZ = $layerZ-$Dz_layer+$Thickness_lead+$Thickness_scint+$Thickness_gap/2;
-# 	my $Dz_gap = $Thickness_gap/2;
-# 	
-#         $detector{"name"}        = "$DetectorName\_shower$id\_layer$j\_gap";
-#         $detector{"mother"}      = "$DetectorName\_shower$id";
-#         $detector{"description"} = $detector{"name"};
-#         $detector{"pos"}        = "0*cm 0*cm $gapZ*cm";
-#         $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-#         $detector{"color"}      = "$color_abs";
-#         if($j == 1){
-# 	$detector{"type"}       = "Pgon";
-# 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_gap*cm $Dz_gap*cm";
-#         $detector{"material"}   = $material_gap;
-# 	}
-# 	else {  $detector{"type"}       = "CopyOf $DetectorName\_shower424\_layer1\_gap";}        
-#         $detector{"mfield"}     = "no";
-#         $detector{"ncopy"}      = 1;
-#         $detector{"pMany"}       = 1;
-#         $detector{"exist"}       = 1;
-# 	$detector{"visible"}     = 1;
-# 	$detector{"style"}       = 1;
-# 	$detector{"sensitivity"} = "no";
-# 	$detector{"hit_type"}    = "no";
-# 	$detector{"identifiers"} = "no";	
-# # 	print_det(\%configuration, \%detector);	
+	  my $scintZ = $layerZ-$Dz_layer+$Thickness_lead+$Dz_gap*2+$Thickness_scint/2;	
+	  my $Dz_scint = $Thickness_scint/2;	
+	  
+	  for(my $l=1; $l<=6; $l++){
+	    if($j == 1){ $detector{"name"}        = "$DetectorName\_showe$id\_scin$j\_rod$l";}
+	    else {$detector{"name"}        = "$DetectorName\_showe$id\_scint$j\_rod$l";}
+	    $detector{"mother"}      = "$DetectorName\_showe$id";
+	    $detector{"description"} = $detector{"name"};
+	    my $rod_x=$Radius_shower*cos(($l-1)*60/180*3.1416);
+	    my $rod_y=$Radius_shower*sin(($l-1)*60/180*3.1416);
+	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm $scintZ*cm";
+	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+	    $detector{"color"}      = "$color_rod";
+	    if(($j == 1) && ($l == 1)){
+	    $detector{"type"}       = "Tube";
+	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_scint*cm 0*deg 360*deg";    
+	    }
+	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_scin1_rod1";}	
+	    $detector{"material"}   = $material_rod;
+	    $detector{"mfield"}     = "no";
+	    $detector{"ncopy"}      = 1;
+	    $detector{"pMany"}       = 1;
+	    $detector{"exist"}       = 1;
+	    $detector{"visible"}     = $vis_inner;
+	    $detector{"style"}       = 1;     	
+	    $detector{"sensitivity"} = "no";
+	    $detector{"hit_type"}    = "no";
+	    $detector{"identifiers"} = "no";	
+	    print_det(\%configuration, \%detector);
+	  }
+	
     }    
     }
-
-# 	my $Dz_layer = $Thickness_layer/2;  
-# 	$detector{"name"}        = "$DetectorName\_shower$id\_layer";
-#         $detector{"mother"}      = "$DetectorName\_shower$id";
-#         $detector{"description"} = $detector{"name"};
-# #         $detector{"description"} = "Replica: 3*counts $Nlayer*counts $Thickness_layer*cm 0*mm";
-# 	$detector{"type"}       = "Pgon";
-# 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr_wrap*cm $Dr_wrap*cm -$Dz_layer*cm $Dz_layer*cm";	
-# # 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_layer*cm $Dz_layer*cm";
-#         $detector{"material"}   = "$material_gap";  
-#         $detector{"mfield"}     = "no";
-#         $detector{"ncopy"}      = 1;
-#         $detector{"pMany"}       = 1;
-#         $detector{"exist"}       = 1;
-# 	$detector{"visible"}     = 1;
-# 	$detector{"style"}       = 0;
-# 	$detector{"sensitivity"} = "no";
-# 	$detector{"hit_type"}    = "no";
-# 	$detector{"identifiers"} = "no";        
-# # 	print_det(\%configuration, \%detector);	
-# 	
-#         $detector{"name"}        = "$DetectorName\_shower$id\_layer_replica";
-#         $detector{"mother"}      = "$DetectorName\_shower$id";
-#         $detector{"description"} = $detector{"name"};
-# 	$detector{"type"}       = "ReplicaOf: $DetectorName\_shower$id\_layer";	
-# 	$detector{"dimensions"} = "3 $Nlayer*counts $Thickness_layer*cm 0*cm";	
-#         $detector{"material"}   = "OfReplica";
-# # 	print_det(\%configuration, \%detector);	
-# 	
-# 	my $leadZ = -$Dz_layer+$Thickness_lead/2;
-# 	my $Dz_lead = $Thickness_lead/2;
-# 
-#         $detector{"name"}        = "$DetectorName\_shower$id\_lead";
-#         $detector{"mother"}      = "$DetectorName\_shower$id\_layer_replica";
-#         $detector{"description"} = $detector{"name"};
-#         $detector{"pos"}        = "0*cm 0*cm $leadZ*cm";
-#         $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-#         $detector{"color"}      = "$color_abs";
-# 	$detector{"type"}       = "Pgon";
-# 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_lead*cm $Dz_lead*cm";
-#         $detector{"material"}   = $material_abs;
-#         $detector{"mfield"}     = "no";
-#         $detector{"ncopy"}      = 1;
-#         $detector{"pMany"}       = 1;
-#         $detector{"exist"}       = 1;
-# 	$detector{"visible"}     = 1;
-# 	$detector{"style"}       = 1;
-# 	$detector{"sensitivity"} = "no";
-# 	$detector{"hit_type"}    = "no";
-# 	$detector{"identifiers"} = "no";
-# # 	print_det(\%configuration, \%detector);
-# 
-# 	my $scintZ = -$Dz_layer+$Thickness_lead+$Thickness_scint/2;
-# 	my $Dz_scint = $Thickness_scint/2;	
-# 
-#         $detector{"name"}        = "$DetectorName\_shower$id\_scint";
-#         $detector{"mother"}      = "$DetectorName\_shower$id\_layer";
-#         $detector{"description"} = $detector{"name"};
-#         $detector{"pos"}        = "0*cm 0*cm $scintZ*cm";
-#         $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-#         $detector{"color"}      = "$color_scint";
-# 	$detector{"type"}       = "Pgon";
-# 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_scint*cm $Dz_scint*cm";
-#         $detector{"material"}   = $material_scint;
-#         $detector{"mfield"}     = "no";
-#         $detector{"ncopy"}      = 1;
-#         $detector{"pMany"}       = 1;
-#         $detector{"exist"}       = 1;
-# 	$detector{"visible"}     = 1;
-# 	$detector{"style"}       = 1;
-# 	$detector{"sensitivity"} = $ec_sen;
-# 	$detector{"hit_type"}    = $ec_sen;
-# 	my $ID = 3100000+$id;
-# 	$detector{"identifiers"} = "id manual $ID";
-# # 	print_det(\%configuration, \%detector);  
-# 	
-# 	my $gapZ = -$Dz_layer+$Thickness_lead+$Thickness_scint+$Thickness_gap/2;
-# 	my $Dz_gap = $Thickness_gap/2;	
-# 
-#         $detector{"name"}        = "$DetectorName\_shower$id\_gap";
-#         $detector{"mother"}      = "$DetectorName\_shower$id\_layer";
-#         $detector{"description"} = $detector{"name"};
-#         $detector{"pos"}        = "0*cm 0*cm $gapZ*cm";
-#         $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-#         $detector{"color"}      = "$color_gap";
-# 	$detector{"type"}       = "Pgon";
-# 	$detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Dr*cm $Dr*cm -$Dz_gap*cm $Dz_gap*cm";
-#         $detector{"material"}   = $material_gap;
-#         $detector{"mfield"}     = "no";
-#         $detector{"ncopy"}      = 1;
-#         $detector{"pMany"}       = 1;
-#         $detector{"exist"}       = 1;
-# 	$detector{"visible"}     = 1;
-# 	$detector{"style"}       = 1;
-# 	$detector{"sensitivity"} = "no";
-# 	$detector{"hit_type"}    = "no";
-# 	$detector{"identifiers"} = "no";
-# # 	print_det(\%configuration, \%detector);  
 
 }
 
