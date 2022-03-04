@@ -98,7 +98,7 @@ map<string, double> solid_ec_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 	    // Distances travelled backward to the module end
 	    dz1   = length_half - Lpos[s].z();
 	    // Distances travelled forward, then reflect back to the module end		  
-	    dz2   = 2 * length_half - (length_half - Lpos[s].z());
+	    dz2   = 4 * length_half - (length_half - Lpos[s].z());
 // 	    cout<<"Lpos "<<Lpos[s].z()<< "\t" <<"dz1 "<<dz1 << "\t";
 	    
 	    // Calculate attenuated energy which reach module end
