@@ -45,17 +45,18 @@ our %configuration = load_configuration($config_file);
 #}
 
 # One can change the "variation" here if one is desired different from the config.dat
-# $configuration{"detector_name"} = "solid_solenoid_cryo";
-# $configuration{"variation"} = "Original";
+# $configuration{"detector_name"} = "solid_solenoid";
+# $configuration{"variation"} = "v2";
 
 # To get the parameters proper authentication is needed.
 # our %parameters    = get_parameters(%configuration);
 # $configuration{"detector_name"} = "solid_PVDIS";
 
 #Geometry definition
-require "solid_solenoid_cryo_geometry.pl";
-solid_solenoid_cryo();
+require "solid_solenoid_v3_geometry.pl";
+solid_solenoid();
 
+# 
 #hit and bank definition Execute only when there are changes
 #hit
 # require "./solid_ec_hit.pl";

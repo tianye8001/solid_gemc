@@ -15,9 +15,10 @@ my $DetectorMother="root";
 sub solid_solenoid_cryo
 {
 make_cryostat();
+make_coilCLEO();
 }
 
-# from CLEO-II NIM paper "The cryostat consists of a 12 mm thick outer cylinder, a 10 mm inner cylinder and two 20 mm thick end flanges which are bolted and sealed with O-rings."
+# from CLEO-II NIM paper "the stainless cryostat" "consists of a 12 mm thick outer cylinder, a 10 mm inner cylinder and two 20 mm thick end flanges which are bolted and sealed with O-rings."
 
 sub make_cryostat
 {
@@ -27,7 +28,7 @@ sub make_cryostat
  my @Rout = (144.00+0.10,176.60-0.01,176.60-0.01,176.60-0.01);
  my @Dz   = ((189*2-2-2)/2,(189*2-2-2)/2,2/2-0.005,2/2-0.005);
  my @name = ("CryostatInner","CryostatOuter","CryostatFlangeUpstream","CryostatFlangeDownstream");
- my $material="SL_StainlessSteel";
+ my $material="G4_STAINLESS-STEEL";
  my $color="ffffff";
 
  for(my $n=1; $n<=$Nplate; $n++)
@@ -53,4 +54,28 @@ sub make_cryostat
     $detector{"identifiers"} = "no";
     print_det(\%configuration, \%detector);
  }
+}
+
+sub make_coilCLEO
+{
+    my %detector=init_det();
+    $detector{"name"}        = "$DetectorName\_coilCLEO";
+    $detector{"mother"}      = "$DetectorMother";
+    $detector{"description"} = $detector{"name"};
+    $detector{"pos"}        = "0*cm 0*cm 0*cm";
+    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+    $detector{"color"}      = "ff8000";
+    $detector{"type"}       = "Polycone";
+    $detector{"dimensions"} = "0*deg 360*deg 2*counts 151.7*cm 151.7*cm 154.9*cm 154.9*cm -173.75*cm 173.75*cm";
+    $detector{"material"}   = "G4_Al";
+    $detector{"mfield"}     = "no";
+    $detector{"ncopy"}      = 1;
+    $detector{"pMany"}       = 1;
+    $detector{"exist"}       = 1;
+    $detector{"visible"}     = 1;
+    $detector{"style"}       = 1;
+    $detector{"sensitivity"} = "no";
+    $detector{"hit_type"}    = "no";
+    $detector{"identifiers"} = "no";
+    print_det(\%configuration, \%detector);
 }

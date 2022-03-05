@@ -7,9 +7,10 @@ solid_solenoid_v0_geometry.pl
 longer endcap magnet as a copy and paste of shorter magnet from "../magnet/solid_solenoid_geometry.pl", then make endcap longer by 45cm
 
 solid_solenoid_v2_geometry.pl 
-longer endcap magnet modeled after info in appendix of Jay Benesch's magnet model with "SoLID_2020.pdf" in 2020/03 which matches field map of "fields/solenoid_v2.dat" and 
-this geant4 geometry use cylinder to replace inner and outer octagon for simplicity
-This is replaced by v2 cad file
+longer endcap magnet modeled after info in appendix of Jay Benesch's magnet model with "SoLID_2020.pdf" in 2020/03 which matches field map of "field/solenoid_v2.dat" and 
+
+solid_solenoid_v3_geometry.pl 
+longer endcap magnet modeled after info in appendix of Jay Benesch's magnet model with "SoLID_2020vs2022.pdf" in 2022/03 which matches field map of "field/solenoid_v3.dat" and 
 
 cad model "v1_cad/SoLID_CLEO_MAR_18_v1.0.stl" 
 
