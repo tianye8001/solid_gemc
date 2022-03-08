@@ -11,17 +11,11 @@ my $DetectorName = 'solid_SIDIS_target_He3';
 
 my $DetectorMother="root";
 
-my $z_target			= $parameters{"z_target"};
-my $z_collimator_upstream	= $parameters{"z_collimator_upstream"};
-my $z_collimator_downstream	= $parameters{"z_collimator_downstream"};
-
-my $material_collimator = "SL_target_He3_TungstenPowder";
+my $z_target			= -350;
 
 sub solid_SIDIS_target_He3
 {
 make_target();
-make_collimator_upstream();
-make_collimator_downstream();
 }
 
 #  --     Target  ==================================
@@ -70,66 +64,4 @@ sub make_target
     $detector{"identifiers"} = "no";
     print_det(\%configuration, \%detector);
  }
-}
-
-sub make_collimator_upstream
-{
-    my %detector=init_det();
-    $detector{"name"}        = "$DetectorName\_upstream";
-    $detector{"mother"}      = "$DetectorMother" ;
-    $detector{"description"} = $detector{"name"};
-    $detector{"pos"}        = "0*cm 0*cm $z_collimator_upstream*cm";
-    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = "003300";
-    $detector{"type"}       = "Cons";
-    my $Rmin1 = 1.3;
-    my $Rmax1 = 2.7;
-    my $Rmin2 = 2.6;
-    my $Rmax2 = 5.4;
-    my $Dz    = 5;
-    my $Sphi  = 0;
-    my $Dphi  = 360;
-    $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
-    $detector{"material"}   = "$material_collimator";
-    $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = 1;
-    $detector{"pMany"}       = 1;
-    $detector{"exist"}       = 1;
-    $detector{"visible"}     = 1;
-    $detector{"style"}       = 1;
-    $detector{"sensitivity"} = "no";
-    $detector{"hit_type"}    = "no";
-    $detector{"identifiers"} = "no";
-    print_det(\%configuration, \%detector);
-}
-
-sub make_collimator_downstream
-{
-    my %detector=init_det();
-    $detector{"name"}        = "$DetectorName\_downstream";
-    $detector{"mother"}      = "$DetectorMother" ;
-    $detector{"description"} = $detector{"name"};
-    $detector{"pos"}        = "0*cm 0*cm $z_collimator_downstream*cm";
-    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = "003300";
-    $detector{"type"}       = "Cons";
-    my $Rmin1 = 1.3;
-    my $Rmax1 = 2.7;
-    my $Rmin2 = 2.6;
-    my $Rmax2 = 5.4;
-    my $Dz    = 5;
-    my $Sphi  = 0;
-    my $Dphi  = 360;
-    $detector{"dimensions"}  = "$Rmin1*cm $Rmax1*cm $Rmin2*cm $Rmax2*cm $Dz*cm $Sphi*deg $Dphi*deg";
-    $detector{"material"}   = "$material_collimator";
-    $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = 1;
-    $detector{"pMany"}       = 1;
-    $detector{"exist"}       = 1;
-    $detector{"visible"}     = 1;
-    $detector{"style"}       = 1;
-    $detector{"sensitivity"} = "no";
-    $detector{"hit_type"}    = "no";
-    $detector{"identifiers"} = "no";
-    print_det(\%configuration, \%detector);
 }

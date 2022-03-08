@@ -112,17 +112,7 @@ sub define_material
 	$mat{"density"}       = "2.760";  #in g/cm3
 	$mat{"ncomponents"}   = "5";
 	$mat{"components"}    = "G4_SILICON_DIOXIDE 0.608 G4_ALUMINUM_OXIDE 0.143 G4_CALCIUM_OXIDE 0.065 SL_target_He3_BaO 0.182 SL_target_He3_SrO 0.002";
-	print_mat(\%configuration, \%mat);
-	
-	#Tungsten Powder	
-	%mat = init_mat();
-	$mat{"name"}          = "SL_target_He3_TungstenPowder";
-	$mat{"description"}   = "Tungsten Powder";
-	$mat{"density"}       = "11.25";  #in g/cm3
-	$mat{"ncomponents"}   = "1";
-	$mat{"components"}    = "G4_W 1";
 	print_mat(\%configuration, \%mat);	
-	
 }
 define_material();
 

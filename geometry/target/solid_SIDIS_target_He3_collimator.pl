@@ -43,18 +43,18 @@ our %configuration = load_configuration($config_file);
 #}
 
 # One can change the "variation" here if one is desired different from the config.dat
-$configuration{"detector_name"} = "solid_SIDIS_target_He3";
+$configuration{"detector_name"} = "solid_SIDIS_target_He3_collimator";
 $configuration{"variation"} = "Original";
 
 # To get the parameters proper authentication is needed.
-our %parameters    = get_parameters(%configuration);
+#sour %parameters    = get_parameters(%configuration);
 
 #Geometry definition
-require "solid_SIDIS_target_He3_geometry.pl";
-solid_SIDIS_target_He3();
+require "solid_SIDIS_target_He3_collimator_geometry.pl";
+solid_SIDIS_target_He3_collimator();
 
 #materials definition 
-require "./solid_SIDIS_target_He3_materials.pl";
+require "./solid_SIDIS_target_He3_collimator_materials.pl";
 
 #hit definition 
 
