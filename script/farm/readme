@@ -1,16 +1,9 @@
 here are some scripts to submit farm job for solid simulation
-(note this is not using for swif workflow submission, only old style simple Auger submission
+(note this is not using swif workflow submission, only old style direct job submission
 
 SoLID full simulations at /work/halla/solid/sim/solid_gemc/ are done by these scripts
 
-farm_solid_PVDIS_LD2_dirty_weighted_eDIS is an example using code compiled on ifarm directly
-
-farm_solid_PVDIS_LD2_moved_dirty_weighted_eDIS is an example using code compiled inside a singularity container
-which has a "load_singularity.sh" to run "do_it_all.sh" inside the container.
-This is mainly because farm job command can't run singularity directly
-
-To use it, do the following
-====================================================
+how to use ===============================================
 at ifarm, "cp -rpv thisdir /work/halla/solid/$USER/thisdir"
 
 run "./LongRun_sim" to create output dir at /volatile/halla/solid/$USER/thisdir and give start and end run numbers
@@ -20,18 +13,34 @@ many job submission scripts jsc* will be created and submitted one after anther 
 It also define the output file names
 
 Once job submitted, you can check its status by "jobstat -u $USER" or https://scicomp.jlab.org
-wait for output files, out.*.root and out.*.log will appear in the output dir
 
-If any job fails or the output files have problem, check farm out and err files at /farm_out/$USER for detailed reason
-====================================================
+output files including out.*.root and out.*.log will appear in the output dir
+job err and out files will be there too
 
-note
-1. modify "do_it_all.sh" and "load_singularity.sh" for your jobs and test first on ifarm to check its actual mem use and disk use, then adjust them in "exec_sim"
-2. test a few of your job quickly using "TRACK : debug" by edit "exec_sim"
-3. You may use "hadd" in root to add all resulting root files into a single root file
-4. To overcome root file default 100GB size limit, you can do "root 'haddbig.C+'", then "setenv LD_PRELOAD $PWD/haddbig_C.so" before running "hadd"
+== note  =================================================
 
-refer to SoLID disk space rules
+* modify "do_it_all.sh" and "load_singularity.sh" for your jobs and test first on ifarm to check its actual mem use and disk use, then adjust them in "exec_sim"
+* test a few of your job quickly using "--partition=priority" by edit "exec_sim" 
+* You may use "hadd" in root to add all output root files into a single root file. to overcome root file default 100GB size limit, you can do "root 'haddbig.C+'", then "setenv LD_PRELOAD $PWD/haddbig_C.so" before running "hadd"
+
+refer to 
+SoLID disk space rules
 https://solid.jlab.org/wiki/index.php/Software#disk_space_and_access_rule
-and jlab SciComp documents
+jlab SciComp documents
+https://scicomp.jlab.org/docs/farm_slurm_batch
 https://scicomp.jlab.org/docs/SciCompResources
+
+==outdated Auger stuff ===============================================
+
+* If any job fails or the output files have problem, check farm out and err files at /farm_out/$USER for detailed reason
+* test a few of your job quickly using "TRACK : debug" by edit "exec_sim"
+
+"farm_solid_PVDIS_LD2_dirty_weighted_eDIS"
+Auger example using code compiled on ifarm directly
+
+"farm_solid_PVDIS_LD2_moved_dirty_weighted_eDIS"
+Auger example using code compiled inside a singularity container
+which has a "load_singularity.sh" to run "do_it_all.sh" inside the container.
+This is mainly because farm job command can't run singularity directly
+
+farm_by_yez (old scripts by Zhihong Ye)

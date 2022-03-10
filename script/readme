@@ -1,6 +1,14 @@
 scripts to run solid_gemc simulation 
 
-== current gcard show full SoLID simulation in graphic mode==
+==  gcard show full SoLID simulation with longer endcap in graphic mode==
+solid_PVDIS_LD2_moved_full.gcard
+solid_SIDIS_He3_moved_full.gcard
+solid_SIDIS_NH3_moved_full.gcard
+solid_JPsi_LH2_moved_full.gcard
+solid_DDVCS_JPsi_LH2_moved_full.gcard
+solid_DDVCS_PVDIS_LH2_moved_full.gcard
+
+==  gcard show full SoLID simulation in graphic mode==
 solid_PVDIS_LD2_full.gcard
 solid_SIDIS_He3_full.gcard
 solid_SIDIS_NH3_full.gcard
@@ -24,7 +32,5 @@ solid_slice.vis
 
 == farm script ==
 
-script to run full simulation in batch mode are under "farm", see readme there
-
-"farm_by_yez" is outdated
+scripts to run full simulation in batch mode are under "farm", see readme there
 
