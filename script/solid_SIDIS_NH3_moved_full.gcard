@@ -2,7 +2,6 @@
 
 <detector name="../geometry/magnet_moved/solid_solenoid_v3" factory="TEXT" variation="Original"/>
 <detector name="../geometry/magnet_moved/solid_solenoid_cryo" factory="TEXT" variation="Original"/>
-<detector name="../geometry/magnet_moved/solid_solenoid" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_largeangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/hgc_moved/solid_SIDIS_hgc" factory="TEXT" variation="Original"/>
