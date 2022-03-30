@@ -18,8 +18,7 @@ make_gas();
 make_window_front();
 # make_window_back();
 make_cone();
-## make_shield();
-## make_cone_front();
+make_shieldback();
 make_pmt();
 make_mirror();
 }
@@ -77,18 +76,11 @@ my $Zmid_gas=$Zmid_chamber;
 my $Zmax_gas=$Zmax_chamber-$halfthickness_window_back*2;  # z position of the gas at the downstream side
 
 ## Cone
-my $ang_upper = 126;  # angle between the PMT and the upper side of the cone in degrees
-my $ang_lower = 126;  # angle between the PMT and the lower side of the cone in degrees
-my $halflength_upper = 12;  # half length of the upper side of the cone
-my $halflength_lower_extend = $halflength_upper*cos(($ang_upper-90)/$DEG)/cos(($ang_lower-90)/$DEG);  # extended half length of the lower side of the cone, used in the definition of the larger cone to be cut
-my $halflength_lower = 
-
-## Shield
-my $shield_front_half_length = 5;  # half length of the shield in front of the PMT
-my $shield_back_half_length = 10;  # half length of the shield behind the PMT
-my $shield_total_half_length = $shield_front_half_length+$shield_back_half_length;  # total half length of the shield
-my $shield_inner_radius = 20;  # inner radius of the shield
-my $shield_outer_radius = $shield_inner_radius+0.3;  # outer radius of the shield
+# my $ang_upper = 126;  # angle between the PMT and the upper side of the cone in degrees
+# my $ang_lower = 126;  # angle between the PMT and the lower side of the cone in degrees
+# my $halflength_upper = 12;  # half length of the upper side of the cone
+# my $halflength_lower_extend = $halflength_upper*cos(($ang_upper-90)/$DEG)/cos(($ang_lower-90)/$DEG);  # extended half length of the lower side of the cone, used in the definition of the larger cone to be cut
+# my $halflength_lower = 
 
 ## Mirror
 ### Radius of the mirror
@@ -124,21 +116,31 @@ my $material_block="SL_HGC_C4F8O";  # alternative: "G4_Al"
 # my $material_window_front_2 = "SL_HGC_mylar";  # alternative: "G4_Al"
 my $material_window_front_1 = "G4_Al";
 my $material_window_back = "G4_Al";
-my $material_cone= "G4_GLASS_PLATE";
+my $material_cone= "G4_Fe";
 my $material_pmt_surface = "SL_HGC_C4F8O";  # alternative: "G4_GLASS_PLATE" or "SL_HGC_pmt_surface"
 my $material_pmt_backend= "Kryptonite";
 my $material_mirror= "SL_HGC_CFRP";
 
-
-my $rmin_w_end = 16; 
-my $z_w_half = 8.09;
-my $dis_P_PMT = 135;
-my $z_angle_min = 390;
-
-my $image_x = 0.;
+#for round cone
 my $rmin_w_front_cone = 10.65; 
 my $rmax_w_front_cone = $rmin_w_front_cone+0.57;
+my $rmin_w_end = 16; 
 my $rmax_w_end = $rmin_w_end+0.57;
+
+#for trapezoid cone
+my $trd_dx1_inner = $half_width + 0.5;
+my $trd_dy1_inner = $half_width + 0.5;
+my $trd_dx2_inner = 22.41;
+my $trd_dy2_inner = 16;
+my $trd_dx1_outer = $trd_dx1_inner + 0.5;
+my $trd_dy1_outer = $trd_dy1_inner + 0.5;
+my $trd_dx2_outer = $trd_dx2_inner + 0.5;
+my $trd_dy2_outer = $trd_dy2_inner + 0.5;
+my $trd_dz = 8.09;
+my $shieldback_dz = 10;
+
+my $dis_P_PMT = 135;
+my $z_angle_min = 390;
 my $z_angle_max = 420;
 
 my $Angle_in = 7;
@@ -163,6 +165,7 @@ my $pos_P = vector(0,$pos_sphere_center->y()-$sphere_r_inner*sin($ang_CPT-$Angle
 my $pos_PMT = $pos_P+$dis_P_PMT*$dir_P_PMT;
 my $image_y = $pos_PMT->y();
 my $image_z = $pos_PMT->z();
+my $image_x = 0;
 print "PMT position $image_y $image_z\n";
 my $pos_x_sphere=sprintf('%f',$pos_sphere_center->y());
 my $pos_y_sphere=sprintf('%f',$pos_sphere_center->x());
@@ -313,8 +316,8 @@ sub make_block
 
 sub make_cone
 {   
-  my $pos_r = $image_y-sin($ang_tilt/$DEG)*$z_w_half;  
-  my $pos_z = $image_z+cos($ang_tilt/$DEG)*$z_w_half;
+  my $pos_r = $image_y-sin($ang_tilt/$DEG)*$trd_dz;  
+  my $pos_z = $image_z+cos($ang_tilt/$DEG)*$trd_dz;
      for(my $i=1; $i<=$N; $i++){
       my $pos_x = $pos_r*cos(($i-1)*$ang_width/$DEG+$sec_start/$DEG);
       my $pos_y = $pos_r*sin(($i-1)*$ang_width/$DEG+$sec_start/$DEG);    
@@ -331,7 +334,7 @@ sub make_cone
       $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
       $detector{"color"}       = "3dff84";  
       $detector{"type"}        = "Trd";
-      $detector{"dimensions"}  = "$rmax_w_front_cone*cm 22.51*cm $rmax_w_front_cone*cm $rmax_w_end*cm 8.09*cm";   
+      $detector{"dimensions"}  = "$trd_dx1_outer*cm $trd_dx2_outer*cm $trd_dy1_outer*cm $trd_dy2_outer*cm $trd_dz*cm";   
       $detector{"material"}    = "Component";
       print_det(\%configuration, \%detector);  
 
@@ -343,7 +346,7 @@ sub make_cone
       $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
       $detector{"color"}       = "3dff84";  
       $detector{"type"}        = "Trd";
-      $detector{"dimensions"}  = "$rmin_w_front_cone*cm 22.41*cm $rmin_w_front_cone*cm $rmin_w_end*cm 8.09*cm";   
+      $detector{"dimensions"}  = "$trd_dx1_inner*cm $trd_dx2_inner*cm $trd_dy1_inner*cm $trd_dy2_inner*cm $trd_dz*cm";   
       $detector{"material"}    = "Component";
       print_det(\%configuration, \%detector);
       
@@ -365,80 +368,70 @@ sub make_cone
       $detector{"style"}       = 1;
       $detector{"sensitivity"} = "mirror: SL_HGC_mirror";
       $detector{"hit_type"}    = "mirror";
-      $detector{"identifiers"} = "no";      
+      my $id=2200000+$i*1000+2;
+      $detector{"identifiers"} = "id manual $id";      
       print_det(\%configuration, \%detector);
 
                
     }
 }
 
-
-sub make_shield
-{
-  my $pos_r = $image_y+sin($ang_tilt/$DEG)*($shield_back_half_length-$shield_front_half_length);  
-  my $pos_z = $image_z-cos($ang_tilt/$DEG)*($shield_back_half_length-$shield_front_half_length);
+sub make_shieldback
+{   
+  my $pos_r = $image_y-sin($ang_tilt/$DEG)*(-$shieldback_dz-0.1);  
+  my $pos_z = $image_z+cos($ang_tilt/$DEG)*(-$shieldback_dz-0.1);
      for(my $i=1; $i<=$N; $i++){
       my $pos_x = $pos_r*cos(($i-1)*$ang_width/$DEG+$sec_start/$DEG);
       my $pos_y = $pos_r*sin(($i-1)*$ang_width/$DEG+$sec_start/$DEG);    
       my $ang_zrot=-(($i+-1)*$ang_width+$sec_start);
       my $ang_xrot=0;
       my $ang_yrot=$ang_tilt; 
-
+      
+      
       my %detector=init_det();
-      $detector{"name"}        = "$DetectorName\_shield_$i";
+      $detector{"name"}        = "$DetectorName\_shieldbackout_$i";
       $detector{"mother"}      = "$DetectorName\_gas";
       $detector{"description"} = $detector{"name"};
       $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";  
       $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
-      $detector{"color"}       = "808080";  
-      $detector{"type"}        = "Tube";
-      $detector{"dimensions"}  = "$shield_inner_radius*cm $shield_outer_radius*cm $shield_total_half_length*cm 0*deg 360*deg";   
+      $detector{"color"}       = "3dff84";  
+      $detector{"type"}        = "Box";
+      $detector{"dimensions"}  = "$trd_dx1_outer*cm $trd_dy1_outer*cm $shieldback_dz*cm";        
+      $detector{"material"}    = "Component";
+      print_det(\%configuration, \%detector);  
+
+      %detector=init_det();
+      $detector{"name"}        = "$DetectorName\_shieldbackin_$i";
+      $detector{"mother"}      = "$DetectorName\_gas";
+      $detector{"description"} = $detector{"name"};
+      $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";  
+      $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
+      $detector{"color"}       = "3dff84";  
+      $detector{"type"}        = "Box";
+      $detector{"dimensions"}  = "$trd_dx1_inner*cm $trd_dy1_inner*cm $shieldback_dz*cm";        
+      $detector{"material"}    = "Component";
+      print_det(\%configuration, \%detector);
+      
+      %detector=init_det();
+      $detector{"name"}        = "$DetectorName\_shieldback_$i";
+      $detector{"mother"}      = "$DetectorName\_gas";
+      $detector{"description"} = $detector{"name"};
+      $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";  
+      $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
+      $detector{"color"}       = "3dff84";  
+      $detector{"type"}        = "Operation:@ $DetectorName\_shieldbackout_$i - $DetectorName\_shieldbackin_$i";
+      $detector{"dimensions"}  = "0";   
       $detector{"material"}    = $material_cone;
       $detector{"mfield"}      = "no";
       $detector{"ncopy"}       = 1;
       $detector{"pMany"}       = 1;
       $detector{"exist"}       = 1;
       $detector{"visible"}     = 1;
-      $detector{"style"}       = 1;
-      $detector{"sensitivity"} = "mirror: SL_HGC_mirror";
-      $detector{"hit_type"}    = "mirror";      
-      $detector{"identifiers"} = "id manual 3";         
-      print_det(\%configuration, \%detector);           
-    }
-}
-
-sub make_cone_front
-{
-  my $pos_r = $image_y-sin($ang_tilt/$DEG)*$z_w_half-sin($ang_tilt/$DEG);  
-  my $pos_z = $image_z+cos($ang_tilt/$DEG)*$z_w_half+cos($ang_tilt/$DEG);
-     for(my $i=1; $i<=$N; $i++){
-      my $pos_x = $pos_r*cos(($i-1)*$ang_width/$DEG+$sec_start/$DEG);
-      my $pos_y = $pos_r*sin(($i-1)*$ang_width/$DEG+$sec_start/$DEG);    
-      my $ang_zrot=-(($i+-1)*$ang_width+$sec_start);
-      my $ang_xrot=0;
-      my $ang_yrot=$ang_tilt; 
-        
-      my %detector=init_det();
-      $detector{"name"}        = "$DetectorName\_cone_front_$i";
-      $detector{"mother"}      = "$DetectorName\_gas";
-      $detector{"description"} = $detector{"name"};
-      $detector{"pos"}         = "$pos_x*cm $pos_y*cm $pos_z*cm";  
-      $detector{"rotation"}    =  "ordered: zxy $ang_zrot*deg $ang_xrot*deg $ang_yrot*deg";
-      $detector{"color"}       = "111111";  
-      $detector{"type"}        = "Cons";
-      $detector{"dimensions"}  = "$rmin_w_front_cone*cm $rmax_w_front_cone*cm $rmin_w_end*cm $rmax_w_end*cm $z_w_half*cm 0*deg 360*deg";   
-      $detector{"material"}    = $material_gas;
-      $detector{"mfield"}      = "no";
-      $detector{"ncopy"}       = 1;
-      $detector{"pMany"}       = 1;
-      $detector{"exist"}       = 1;
-      $detector{"visible"}     = 1;
-      $detector{"style"}       = 1;
-      $detector{"sensitivity"} = "flux";
-      $detector{"hit_type"}    = "flux";      
-      my $id=2212000+$i;
-      $detector{"identifiers"} = "id manual $id";         
-      print_det(\%configuration, \%detector);           
+      $detector{"style"}       = 0;
+      $detector{"sensitivity"} = "no";
+      $detector{"hit_type"}    = "no";
+      $detector{"identifiers"} = "no";      
+      print_det(\%configuration, \%detector);
     }
 }
 
@@ -569,7 +562,8 @@ sub make_mirror
       $detector{"style"}       = 1;        
       $detector{"sensitivity"} = "mirror: SL_HGC_mirror";
       $detector{"hit_type"}    = "mirror";
-      $detector{"identifiers"} = "no";      
+      my $id=2200000+$i*1000+1;      
+      $detector{"identifiers"} = "id manual $id";      
       print_det(\%configuration, \%detector);  
       }
 }
