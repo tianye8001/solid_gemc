@@ -17,39 +17,26 @@ sub solid_SIDIS_beamline_He3
 {
 make_beam_entrance();
 make_beam_exit();
-make_beam_coolgas();
+make_beam_coolgas_He3();
 }
 
-#C --     Beam pipe: entrance
-#C
-#GPARVOL02  'BMP1'  235  'HALL'    0.    0. -175.    0  'TUBE'  3   0.    1.25    150.   
-#GPARVOL03  'BMV1'  203  'BMP1'    0.    0.    0.    0  'TUBE'  3   0.    1.22    150.   
-#GPARVOL04  'BMD1'   99  'BMV1'    0.    0. -149.9   0  'TUBE'  3   0.    1.22      0.1  
-#GPARVOL05  'BMW1'  265  'BMV1'    0.    0.  149.9   0  'TUBE'  3   0.    1.22      0.0125 
+my $z_target = -350;
+my $z_win_upstream = -375; 
+my $z_win_downstream = -325; 
 
 sub make_beam_entrance
 {
-#  my $NUM  = 4;
-#  my @z    = (-375,0.,-149.9,149.9875);
-#  my @Rin  = (0.,0.,0.,0.);
-#  my @Rout = (5,4.95,4.95,4.95);
-#  my @Dz   = (150,150,0.1,0.0125);
-#  my @name = ("BMP1","BMV1","BMD1","BMW1"); 
-#  my @mother = ("$DetectorMother","$DetectorName\_BMP1","$DetectorName\_BMV1","$DetectorName\_BMV1"); 
-#  my @mat  = ("G4_Al","G4_Galactic","G4_Galactic","G4_BERYLLIUM_OXIDE");
+# used during hallc He3 run 2020, upstream Be window .01thk, 12.80 inch from target center at pivot,and 0.0002" thk Al cover, inner diameter 2.067" outter diameter 2.375", length 200cm
+ my @z    = ($z_win_upstream-100,0,-100+0.01*2.54/2,100-0.0002*2.54-0.01*2.54/2,100-0.0002*2.54/2);
+ my @Rin  = (0.,0.,0.,0.,0);
+ my @Rout = (2.375/2*2.54,2.067/2*2.54,2.067/2*2.54,2.067/2*2.54,2.067/2*2.54);
+ my @Dz   = (100,100,0.01*2.54/2,0.01*2.54/2,0.0002*2.54/2);
  
- my $NUM  = 4;
- my @name = ("BMP1","BMV1","BMD1","BMW1"); 
- my @mother = ("$DetectorMother","$DetectorName\_BMP1","$DetectorName\_BMV1","$DetectorName\_BMV1"); 
- my @mat  = ("G4_Al","G4_Galactic","G4_Galactic","G4_BERYLLIUM_OXIDE");
- my @color = ("0000ff","808080","808080","00FFFF");
-
-# C           #       name              mat sen F Fmx Fan stmx  Elo epsi st(mu,lo)  user words
-#             #       name               A    Z    g/cm3        RLcm   Int.len cm
-# GPARMED19  235 'Alum,  mf$          '   9  0  1 30. -1. -1.   -1.   0.2    -1.
-# GPARMED04  203 'Vacuum,    mf$      '  16  0  1 30. -1.  2.0  -1.   0.1    -1.
-# GPARMED43   99 'Dead absorber$      '  10  0  0  0. -1. -1.   -1.   1.     -1.
-# GPARMED63  265 'Be, mf             $'   5  0  1 30. -1. -1.   -1.   0.05   -1.
+ my $NUM  = 5;
+ my @name = ("BMP1","BMV1","BMD1","BMW1","BMC1"); 
+ my @mother = ("$DetectorMother","$DetectorName\_BMP1","$DetectorName\_BMV1","$DetectorName\_BMV1","$DetectorName\_BMV1"); 
+ my @mat  = ("G4_Al","G4_Galactic","G4_Galactic","G4_Be","G4_Al");
+ my @color = ("0000ff","808080","808080","00FFFF","FF00FF");
 
  for(my $n=1; $n<=$NUM; $n++)
  {
@@ -57,20 +44,14 @@ sub make_beam_entrance
     $detector{"name"}        = "$DetectorName\_$name[$n-1]";
     $detector{"mother"}      = "$mother[$n-1]" ;
     $detector{"description"} = "$DetectorName\_$name[$n-1]";
-#     $detector{"pos"}        = "0*cm 0*cm $z[$n-1]*cm";
-    $detector{"pos"}        = "0*cm 0*cm 0*cm";
+    $detector{"pos"}        = "0*cm 0*cm $z[$n-1]*cm";
     $detector{"rotation"}   = "0*deg 0*deg 0*deg";
     $detector{"color"}      = $color[$n-1];
-#     $detector{"type"}       = "Tube";
-#     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
-    $detector{"type"}       = "Polycone";
-    if ($n==1) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 2*cm 2*cm -675*cm -375*cm";}
-    if ($n==2) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 1.95*cm 1.95*cm -675*cm -375*cm";}
-    if ($n==3) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 1.95*cm 1.95*cm -675*cm -674.9*cm";}
-    if ($n==4) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 1.95*cm 1.95*cm -375.01*cm -375*cm";}
+    $detector{"type"}       = "Tube";
+    $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
     $detector{"visible"}     = 1;
@@ -83,7 +64,6 @@ sub make_beam_entrance
  }
 }
 
-
 #C --     Beam pipe: exit
 #C
 #GPARVOL10  'B3PP'  235  'HALL'    0.    0.  335.    0  'CONE'  5  310.  0.   1.80   0.  40.00  
@@ -93,25 +73,19 @@ sub make_beam_entrance
 
 sub make_beam_exit
 {
- my $NUM  = 4;
-#  my @z    = (335.-350,0.,309,-309.9);
-#  my @Rmin1  = (0.,0.,0.,0.);
-#  my @Rmax1 = (1.80,1.70,38.0,1.7);
-#  my @Rmin2  = (0.,0.,0.,0.);
-#  my @Rmax2 = (40.,39.,38.,1.7);
-#  my @Dz   = (310.,310.,1.,0.0125);
-# to avoid overlap with downsteam yoke
-#  my @z    = (-325+412.5,0.,412.4,-412.4875);
-#  my @Rmin1  = (0.,0.,0.,0.);
-#  my @Rmax1 = (1.80,1.70,28.9,1.7);
-#  my @Rmin2  = (0.,0.,0.,0.);
-#  my @Rmax2 = (29.,28.9,28.9,1.7);
-#  my @Dz   = (412.5,412.5,0.1,0.0125);
- my @name = ("B3PP","B3PV","B3DM","B3W1"); 
- my @mother=("$DetectorMother","$DetectorName\_B3PP","$DetectorName\_B3PV","$DetectorName\_B3PV");
- my @mat  = ("G4_Al","G4_Galactic","G4_Galactic","G4_BERYLLIUM_OXIDE");
- my @color = ("0000ff","808080","808080","00FFFF");
+# used during hallc He3 run 2020, downstream Be window .02thk, 17.25 inch from target center at pivot,and 0.001" thk Al cover, inner diameter 2.067" outter diameter 2.375"
+# solid need smaller window to avoid target collimator
+ my $NUM  = 5;
+ my @name = ("B3PP","B3PV","B3DM","B3W1","B3W2"); 
+ my @mother=("$DetectorMother","$DetectorName\_B3PP","$DetectorName\_B3PV","$DetectorName\_B3PV","$DetectorName\_B3PV");
+ my @mat  = ("G4_Al","G4_Galactic","G4_Galactic","G4_Al","G4_Be");
+ my @color = ("0000ff","808080","808080","FF00FF","00FFFF");
 
+ my $thk_Al = 0.001*2.54;
+ my $thk_Be = 0.02*2.54;
+ my $pos_end_Al = $z_win_downstream + $thk_Al;
+ my $pos_end_Be = $pos_end_Al + $thk_Be; 
+ 
  for(my $n=1; $n<=$NUM; $n++)
  {
 #     my $pnumber     = cnumber($n-1, 10);
@@ -129,7 +103,10 @@ sub make_beam_exit
     if ($n==1) {$detector{"dimensions"} = "0*deg 360*deg 3*counts 0*cm 0*cm 0*cm 1.05*cm 19*cm 19*cm -325*cm 190*cm 550*cm";}
     if ($n==2) {$detector{"dimensions"} = "0*deg 360*deg 3*counts 0*cm 0*cm 0*cm 1.*cm 18.95*cm 18.95*cm -325*cm 190*cm 550*cm";}
     if ($n==3) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 18.95*cm 18.95*cm 549.9*cm 550*cm";}
-    if ($n==4) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 1.*cm 1.*cm -325*cm -324.99*cm";}
+#     if ($n==4) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 1.*cm 1.*cm -325*cm -324.99*cm";} # 0.01 BeO
+    if ($n==4) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 1.*cm 1.*cm $z_win_downstream*cm $pos_end_Al*cm";}
+    if ($n==5) {$detector{"dimensions"} = "0*deg 360*deg 2*counts 0*cm 0*cm 1.*cm 1.*cm $pos_end_Al*cm $pos_end_Be*cm";}    
+
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = $n;
@@ -145,26 +122,21 @@ sub make_beam_exit
  }
 }
 
-
-sub make_beam_coolgas
+sub make_beam_coolgas_He3
 {
- my $NUM  = 2;
- my @z    = (-372.5,-327.5);
- my @Rin  = (0.,0.);
- my @Rout = (1,1);
- my @Dz   = (2.48,2.48);
- my @name = ("coolgas_upstream","coolgas_downstream"); 
- my @mother = ("$DetectorMother","$DetectorMother");
- my @mat  = ("SL_beamline_He4_1atm","SL_beamline_He4_1atm");
- my @color = ("808000","808000");
-
-# C           #       name              mat sen F Fmx Fan stmx  Elo epsi st(mu,lo)  user words
-#             #       name               A    Z    g/cm3        RLcm   Int.len cm
-# GPARMED19  235 'Alum,  mf$          '   9  0  1 30. -1. -1.   -1.   0.2    -1.
-# GPARMED04  203 'Vacuum,    mf$      '  16  0  1 30. -1.  2.0  -1.   0.1    -1.
-# GPARMED43   99 'Dead absorber$      '  10  0  0  0. -1. -1.   -1.   1.     -1.
-# GPARMED63  265 'Be, mf             $'   5  0  1 30. -1. -1.   -1.   0.05   -1.
-
+# upstream window 25cm from target center, downstream window 25cm from target center
+# filled with N2 gas or He4 gas
+ my $half_target_length=40/2.;
+ my $NUM  = 3;
+ my @z    = (($z_win_upstream+$z_target-$half_target_length)/2.,($z_win_downstream+$z_target+$half_target_length)/2.,$z_target);
+ my @Rin  = (0.,0.,1.1);
+ my @Rout = (50,50,50);
+ my @Dz   = (($z_target-$half_target_length-$z_win_upstream)/2.0,($z_win_downstream-$z_target-$half_target_length)/2.0,$half_target_length);
+ my @name = ("coolgas_upstream","coolgas_downstream","coolgas_around"); 
+ my @mother = ("$DetectorMother","$DetectorMother","$DetectorMother");
+ my @mat  = ("G4_N","G4_N","G4_N");
+ my @color = ("808088","808088","808088");
+ 
  for(my $n=1; $n<=$NUM; $n++)
  {
     my %detector=init_det();
@@ -178,11 +150,11 @@ sub make_beam_coolgas
     $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
     $detector{"material"}   = $mat[$n-1];
     $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = $n;
+    $detector{"ncopy"}      = 1;
     $detector{"pMany"}       = 1;
     $detector{"exist"}       = 1;
-    $detector{"visible"}     = 1;
-    $detector{"style"}       = 1;
+    $detector{"visible"}     = 0;
+    $detector{"style"}       = 0;
     $detector{"sensitivity"} = "no";
     $detector{"hit_type"}    = "no";
     $detector{"identifiers"} = "no";
