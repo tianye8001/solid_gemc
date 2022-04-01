@@ -1,7 +1,7 @@
 # Configuration file for new_detector
 
 # Detector name and variation
-detector_name: solid_PVDIS_ec_forwardangle
+detector_name: detector
 variation:     Original
 
 # Factory can be MYQL or TEXT
@@ -15,7 +15,7 @@ rmax:       10000
 dbhost: localhost
 
 # Comments/Description
-comment:       solid_PVDIS_ec_forwardangle
+comment:       detector
 
 # Verbosity controls the perl script output
 verbosity: 1

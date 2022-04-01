@@ -1,5 +1,14 @@
-./solid_PVDIS_ec_forwardangle.pl config_solid_PVDIS_ec_forwardangle.dat
+To produce ec text files, scripts run slightly differently than typical gemc detector construction. 
+We use one standard config.dat, then specify detector name as option as follow
+./solid_ec.pl solid_PVDIS_ec_forwardangle
+./solid_ec.pl solid_SIDIS_ec_forwardangle
+./solid_ec.pl solid_SIDIS_ec_largeangle
 
-./solid_SIDIS_ec_forwardangle.pl config_solid_SIDIS_ec_forwardangle.dat
+layout according to ANL design for ec_forwardangle in "analysis/ec_layout"
+module according to ANL drawing "200318"
 
-./solid_SIDIS_ec_largeangle.pl config_solid_SIDIS_ec_largeangle.dat
+== log =======
+
+2022/03/31 by Zhiwen Zhao
+add 6mm diameter rod and simplify scripts 
+

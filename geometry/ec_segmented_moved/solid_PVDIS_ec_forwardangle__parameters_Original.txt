@@ -8,7 +8,7 @@ Thickness_support	| 2	               | cm   | Thickness_support       | - |  - |
 Angle_module		| 30	               | deg  | Angle_module            | - |  - | - | - | - | -
 Radius_shower		| 5.413                | cm   | Radius_shower	  	| - |  - | - | - | - | -
 Radius_rod		| 5.6255               | cm   | Radius_rod	  	| - |  - | - | - | - | -
-R_rod			| 0.2555               | cm   | R_rod		  	| - |  - | - | - | - | -
+R_rod			| 0.3	               | cm   | R_rod		  	| - |  - | - | - | - | -
 z_shower		| 360                  | cm   | z_shower       		| - |  - | - | - | - | -
 Rmin			| 100   	       | cm   | Rmin       		| - |  - | - | - | - | -
 Rmax			| 265	               | cm   | Rmax      		| - |  - | - | - | - | -
