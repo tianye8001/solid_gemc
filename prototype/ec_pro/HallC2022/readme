@@ -1,0 +1,16 @@
+get ready to run on ifarm
+source /group/solid/solid_github/JeffersonLab/solid_gemc/set_solid 1.3 /group/solid/apps/jlab_root /group/solid/solid_github/JeffersonLab/solid_gemc
+
+geometry
+"cc_pro_tcd" is virtual mother volume, all detector should be its daughter
+for "cc_pro_tcd" location, change $AngY_tcd, $rmin_chamber in cc_pro_geometry.pl and change "variation" in config_cc_pro.dat
+for different gas in Cherenkov, change "$material_gas", $material_pmt_surface in cc_pro_geometry.pl and change "variation" in config_cc_pro.dat
+
+do this for interactive with graphic
+solid_gemc hallc2022.gcard
+
+convert evio to root, the bank is "solid_hgc"
+evio2root -INPUTF=output.evio -B="cc_pro,solid_gem"
+
+analysis result
+root -l -b -q 'analysis_cc_pro.C+("/volatile/halla/solid/sim/solid_gemc/cc_pro_JLAB_VERSION_1.3/  ","trigger",false,"single")'
