@@ -212,7 +212,7 @@ sub make_chamber
  $detector{"mother"}      = "$DetectorName\_tcd";
  $detector{"description"} = $detector{"name"};
  $detector{"pos"}         = "0*cm 0*cm 0*cm";
- $detector{"rotation"}    = "0*deg 0*deg 0*deg";
+ $detector{"rotation"}    = "0*deg 0*deg -90*deg";
  $detector{"color"}       = "ff0000";
  $detector{"type"}        = "Operation:@ $DetectorName\_chamber_l + $DetectorName\_chamber_t";
  $detector{"dimensions"}  = "0";      
