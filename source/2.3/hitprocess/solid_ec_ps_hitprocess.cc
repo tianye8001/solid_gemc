@@ -52,7 +52,7 @@ map<string, double> solid_ec_ps_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 	// Get the shower half_length along z
 // 	double length_half = aHit->GetDetector().dimensions[0]; // Units: mm
 // 	cout <<"length_half "<< aHit->GetDetector().dimensions[0] <<" "<< aHit->GetDetector().dimensions[1] <<" "<< aHit->GetDetector().dimensions[2] << endl;
-	double length_half = 220; // Units: mm
+// 	double length_half = 220; // Units: mm
 	
 	// Get info about detector material to eveluate Birks effect
 // 	double birks_constant=aHit->GetDetector().GetLogical()->GetMaterial()->GetIonisation()->GetBirksConstant();
@@ -77,9 +77,9 @@ map<string, double> solid_ec_ps_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 	// variables for hit:
 	double totEdepB = 0.;      // total Energy deposit,scaled in accordance with Birk's effect
 	double totEend = 0.;      // total attenuated energy as it arrives at end of module	
-	double Edep_seg[10]={0,0,0,0,0,0,0,0,0,0};	
-	double EdepB_seg[10]={0,0,0,0,0,0,0,0,0,0};	
-	double Eend_seg[10]={0,0,0,0,0,0,0,0,0,0};	
+// 	double Edep_seg[10]={0,0,0,0,0,0,0,0,0,0};	
+// 	double EdepB_seg[10]={0,0,0,0,0,0,0,0,0,0};	
+// 	double Eend_seg[10]={0,0,0,0,0,0,0,0,0,0};	
 		
 	if(tInfos.eTot>0){
 	  for(unsigned int s=0; s<nsteps; s++)
@@ -91,15 +91,15 @@ map<string, double> solid_ec_ps_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 	    // Integrate energy over entire hit.
  	    totEdepB = totEdepB + EdepB;		  
 	    
-	    // Distances travelled one end of WLS fiber in preshower
-	    dz1   = 100; //assume 100mm, can change to hit dependance later
-	    // Distances travelled the other end of WLS fiber in preshower
-	    dz2   = 100; //assume 100mm, can change to hit dependance later
+	    // Distances traveled one end of WLS fiber in preshower
+	    dz1   = 400; //total length 80cm according to Xiaochao Zheng
+	    dz2   = 400; //total length 80cm according to Xiaochao Zheng	    
 // 	    cout<<"Lpos "<<Lpos[s].z()<< "\t" <<"dz1 "<<dz1 << "\t";
 	    
 	    // Calculate attenuated energy which reach module end
-	    double attlength_D=3600; //Unit mm, WLS Y11(200)  http://kuraraypsf.jp/psf/ws.html
-	    Eend  = 0.5 * EdepB * exp(-dz1/attlength_D) + 0.5 * EdepB * exp(-dz2/attlength_D);
+// 	    double attlength_D=3600; //Unit mm, WLS Y11(200)  http://kuraraypsf.jp/psf/ws.html
+	    double attlength_D=2000; //both attenuated and bent loss, according to Xiaochao Zheng	    
+	    Eend  =  0.5 * EdepB * exp(-dz1/attlength_D) + 0.5 * EdepB * exp(-dz2/attlength_D);
 	    
 	    // Integrate energy over entire hit.
 	    totEend = totEend + Eend;		  

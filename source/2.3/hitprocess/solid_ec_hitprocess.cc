@@ -91,16 +91,16 @@ map<string, double> solid_ec_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 	    // Integrate energy over entire hit.
 	    totEdepB = totEdepB + EdepB;		  
 	    
-	    // Distances travelled backward to the module end
-	    dz1   = length_half - Lpos[s].z();
-	    // Distances travelled forward, then reflect back to the module end		  
-	    dz2   = 4 * length_half - (length_half - Lpos[s].z());
+	    // Distances traveled backward to the module end
+	    dz1   = length_half - Lpos[s].z() + 200; // 20cm additional WLS according to Xiaochao Zheng
+	    // Distances traveled forward, then reflect back to the module end		  
+	    dz2   = 4 * length_half - (length_half - Lpos[s].z()) + 200; // 20cm additional WLS according to Xiaochao Zheng
 // 	    cout<<"Lpos "<<Lpos[s].z()<< "\t" <<"dz1 "<<dz1 << "\t";
 	    
 	    // Calculate attenuated energy which reach module end
-	    double attlength_D=3600; //Unit mm, WLS Y11(200)  http://kuraraypsf.jp/psf/ws.html
+	    double attlength_D=3000; //Unit mm, BCF91A, overall loss  according to Xiaochao Zheng	    
 	    //assume 50% light goes forward, 50% goes backward, assume 40% loss from reflection at front fiber end
-	    Eend  = 0.5 * EdepB * exp(-dz1/attlength_D) + 0.3 * EdepB * exp(-dz2/attlength_D);  
+	    Eend  = 0.5 * EdepB * exp(-dz1/attlength_D) + 0.5 * 0.6 * EdepB * exp(-dz2/attlength_D);  
 	    
 	    // Integrate energy over entire hit.
 	    totEend = totEend + Eend;		  
