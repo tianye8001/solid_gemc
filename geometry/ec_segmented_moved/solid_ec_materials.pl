@@ -86,6 +86,18 @@ sub define_materials
 	$mat{"components"}    = "Ba 1 S 1 O 4";
 	print_mat(\%configuration, \%mat);
 
+# from Dong li
+# 序号  组分	型号	重量	备注		Materials 	type		weight
+# 1	聚酯	3#A	115			POLYESTER-3		3#A		115
+# 2	环氧树脂	604	105			epoxy resin		604		105
+# 3	环氧硅油	604硅油	10			Epoxy silicone oil	604silicone oil	10
+# 4	硫酸钡	BaS04	95			barium sulfate		BaS04		95
+# 5	钛白粉	R216	168			titanium pigment	R216		168
+# 6	流平剂	922	5			flatting agent		922		5
+# 7	光亮剂	701	5			brightener		701		5
+# 8	消泡剂	安息香	2			antifoamer		benzoin		2
+# 9	增电剂	SA2483	1.5			Electrostatic agent	SA2483		1.5
+
     #Chendi Shen  Here is the datasheet for the TiO2 powder paint that will be used for module SDU4: power painting.pdf. THU2 used a similar paint but that factory has been closed.
     # https://hallaweb.jlab.org/experiment/PVDIS/SoLID/EC/meetings/20180412/powder%20painting.pdf	
 	
