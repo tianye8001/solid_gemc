@@ -1,8 +1,9 @@
 <gcard>
 
+<detector name="beamline" factory="TEXT" variation="NOtarget"/> 
 <detector name="cc_pro" factory="TEXT" variation="CO2FA"/>
 <detector name="solid_gem" factory="TEXT" variation="Original"/>
-<detector name="beamline" factory="TEXT" variation="NOtarget"/>  
+<detector name="solid_ec" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
