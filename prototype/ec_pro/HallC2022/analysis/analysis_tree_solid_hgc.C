@@ -79,8 +79,8 @@ double *eff_PMT=QE_LAPPD_WLS_meas;
 //safety factor
 //PMT and assmbly effective area
 //for pion, manual reduce 2
-double factor=0.8*0.6;
-// double factor=0.8;
+// double factor=0.8*0.6;
+double factor=0.8;
 
 vector<int> *solid_hgc_id=0,*solid_hgc_hitn=0;
 vector<int> *solid_hgc_pid=0,*solid_hgc_mpid=0,*solid_hgc_tid=0,*solid_hgc_mtid=0,*solid_hgc_otid=0;
@@ -134,7 +134,8 @@ int sensor_trans_hgc = sqrt(sensor_hgc);
     for (Int_t j=0;j<solid_hgc_hitn->size();j++) {
 //       cout << "solid_hgc " << " !!! " << solid_hgc_hitn->at(j) << " " << solid_hgc_id->at(j) << " " << solid_hgc_pid->at(j) << " " << solid_hgc_mpid->at(j) << " " << solid_hgc_tid->at(j) << " " << solid_hgc_mtid->at(j) << " " << solid_hgc_trackE->at(j) << " " << solid_hgc_totEdep->at(j) << " " << solid_hgc_avg_x->at(j) << " " << solid_hgc_avg_y->at(j) << " " << solid_hgc_avg_z->at(j) << " " << solid_hgc_avg_lx->at(j) << " " << solid_hgc_avg_ly->at(j) << " " << solid_hgc_avg_lz->at(j) << " " << solid_hgc_px->at(j) << " " << solid_hgc_py->at(j) << " " << solid_hgc_pz->at(j) << " " << solid_hgc_vx->at(j) << " " << solid_hgc_vy->at(j) << " " << solid_hgc_vz->at(j) << " " << solid_hgc_mvx->at(j) << " " << solid_hgc_mvy->at(j) << " " << solid_hgc_mvz->at(j) << " " << solid_hgc_avg_t->at(j) << endl;  
 
-      if (solid_hgc_pid->at(j)==0) {count_photon++;}
+//       if (solid_hgc_pid->at(j)==0) {count_photon++;}
+      if (solid_hgc_pid->at(j)==-22) {count_photon++;}    // >= geant4.10.7
       else {
 //       else cout << "pid wrong " << solid_hgc_pid->at(j) << endl;  //there are many
 	continue;
@@ -175,9 +176,12 @@ int sensor_trans_hgc = sqrt(sensor_hgc);
 	      npe_hgc += 1;
 
     // 	  int sector=solid_hgc_id->at(j)/100000-22;  //wrong id matching
-	      int sector=solid_hgc_id->at(j)/10000-220-1;  //match id 2210000 - 2500000
+// 	      int sector=solid_hgc_id->at(j)/10000-220-1;  //match id 2210000 - 2500000
+	      int sector=0;  //match id 2210000 - 2500000	      
 	      
-	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2))),pmt_y=int((solid_hgc_avg_ly->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2)));
+// 	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2))),pmt_y=int((solid_hgc_avg_ly->at(j)-(-106.6))/(106.6/(sensor_trans_hgc/2)));
+	  int pmt_x=int((solid_hgc_avg_lx->at(j)-(-53.))/(53./(sensor_trans_hgc/2))),pmt_y=int((solid_hgc_avg_ly->at(j)-(-53.))/(53./(sensor_trans_hgc/2)));
+
 	      if(0<=sector && sector<30 && 0<=pmt_x && pmt_x<sensor_trans_hgc && 0<=pmt_y && pmt_y<sensor_trans_hgc){	    
 		hit_hgc[sensor_hgc*sector+sensor_trans_hgc*pmt_y+pmt_x] += 1;	
 		

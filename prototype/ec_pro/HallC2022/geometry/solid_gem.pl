@@ -2,6 +2,7 @@
 
 use strict;
 use lib ("$ENV{GEMC}/io");
+use lib ("$ENV{GEMC}/api/perl");
 use parameters;
 use utils;
 
@@ -51,8 +52,8 @@ our %configuration = load_configuration($config_file);
 # $configuration{"detector_name"} = "solid_PVDIS";
 
 #Geometry definition
-require "solid_gem_geometry.pl";
-solid_gem_geometry();
+require "./solid_gem_geometry.pl";
+require "./solid_gem_virtualplane.pl";
 
 #materials definition 
 require "./solid_gem_materials.pl";

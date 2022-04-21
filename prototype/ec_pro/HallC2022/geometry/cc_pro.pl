@@ -2,6 +2,7 @@
 
 use strict;
 use lib ("$ENV{GEMC}/io");
+use lib ("$ENV{GEMC}/api/perl");
 use parameters;
 use utils;
 
@@ -59,17 +60,17 @@ our %configuration = load_configuration($config_file);
 # our %parameters    = get_parameters(%configuration);
 
 #Geometry definition
-require "cc_pro_geometry.pl";
+require "./cc_pro_geometry.pl";
 cc_pro_geometry();
 
 #materials
-require "cc_pro_materials.pl";
+require "./cc_pro_materials.pl";
 
 #mirror
-require "cc_pro_mirror.pl";
+require "./cc_pro_mirror.pl";
 
 #hit definition
-require "solid_hgc_hit.pl";
+require "./solid_hgc_hit.pl";
 
 # bank definition
-require "solid_hgc_bank.pl";
+require "./solid_hgc_bank.pl";

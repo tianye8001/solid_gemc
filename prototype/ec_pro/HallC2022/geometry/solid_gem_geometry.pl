@@ -16,8 +16,8 @@ sub solid_gem_geometry
 make_gem();
 }
 
-my $z1	= -55*2.54/2-5-2;
-my $z2	= -55*2.54/2-5-1;
+my $z1	= -55*2.54/2-3-5;
+my $z2	= -55*2.54/2-3-1;
 my $hx	= 10;
 my $hy	= 10;
 
@@ -181,3 +181,6 @@ my @hittype = ("no","no","no","no","solid_gem","solid_gem","solid_gem","no","sol
     }
  }
 }
+
+solid_gem_geometry();
+1;

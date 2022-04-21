@@ -29,6 +29,7 @@
 using namespace std;
 
 #include "analysis_tree_solid_hgc.C"
+#include "analysis_tree_solid_ec.C"
 
 // some numbers to be hard coded 
 // make sure they are correct while using this script
@@ -89,13 +90,13 @@ const double DEG=180./3.1415926;   //rad to degree
 
 //#####################################################################################################################################################
 
-int analysis_cc_pro(string inputfile_name,string runmode="trigger", bool Is_tellorig=false,string filetype="",bool Is_new=true){
+int analysis(string inputfile_name,string runmode="trigger", bool Is_tellorig=false,string filetype="",bool Is_new=true){
 
 // gStyle->SetOptStat(11111111);
-// gStyle->SetOptStat("ioue");
-gStyle->SetOptStat(0);
+gStyle->SetOptStat("ioue");
+// gStyle->SetOptStat(0);
 
-gStyle->SetPalette(57);
+// gStyle->SetPalette(57);
 
 double rout_cut_FA=0,rin_cut_FA=0,rout_cut_LA=0,rin_cut_LA=0;
 if (runmode=="phys"){
@@ -196,7 +197,8 @@ else {
 //Cherenkov sensor for 30 sectors
 const int ch_lgc=270;
 // const int ch_hgc=480;    	//pmt readout
-const int ch_hgc=1920;	//quad readout
+// const int ch_hgc=1920;	//quad readout
+const int ch_hgc=480;	//quad readout
 // const int ch_hgc=30720;		//pixel readout
 
 const int sensor_hgc = ch_hgc/30;
@@ -240,12 +242,12 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 // define histograms, output txt files etc...
 
 // 	TH1F *hpe_hgc=new TH1F("pe_hgc","pe;sensor;",sensor_hgc,0,sensor_hgc);
-// 	TH1F *hhit_hgc=new TH1F("hit_hgc","hit;sensor;N_{p.e.} rate(kHz)",sensor_hgc,0,sensor_hgc);
-// 	TH1F *hocc_hgc=new TH1F("occ_hgc","occupancy;sensor;rate(kHz)",sensor_hgc,0,sensor_hgc);
+// 	TH1F *hhit_hgc=new TH1F("hit_hgc","hit;sensor;N_{p.e.} rate(Hz)",sensor_hgc,0,sensor_hgc);
+// 	TH1F *hocc_hgc=new TH1F("occ_hgc","occupancy;sensor;rate(Hz)",sensor_hgc,0,sensor_hgc);
 // 	
 // 	TH2F *hpe_hgc_2D=new TH2F("pe_hgc_2D","pe;sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);	
-// 	TH2F *hhit_hgc_2D=new TH2F("hit_hgc_2D","hit,N_{p.e.} rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
-// 	TH2F *hocc_hgc_2D=new TH2F("occ_hgc_2D","occupancy,rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+// 	TH2F *hhit_hgc_2D=new TH2F("hit_hgc_2D","hit,N_{p.e.} rate(Hz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+// 	TH2F *hocc_hgc_2D=new TH2F("occ_hgc_2D","occupancy,rate(Hz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
 
 	TH1F *hpe_hgc[4],*hhit_hgc[4],*hocc_hgc[4];
 	TH2F *hpe_hgc_2D[4],*hhit_hgc_2D[4],*hocc_hgc_2D[4];	
@@ -254,16 +256,16 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	  sprintf(hstname,"pe_hgc_%i",i);	  
 	  hpe_hgc[i]=new TH1F(hstname,"N_{p.e.};sensor;",sensor_hgc,0,sensor_hgc);
 	  sprintf(hstname,"hit_hgc_%i",i);	  
-	  hhit_hgc[i]=new TH1F(hstname,"N_{p.e.}*rate(kHz);sensor;N_{p.e.} rate(kHz)",sensor_hgc,0,sensor_hgc);
+	  hhit_hgc[i]=new TH1F(hstname,"N_{p.e.}*rate(Hz);sensor;N_{p.e.} rate(Hz)",sensor_hgc,0,sensor_hgc);
 	  sprintf(hstname,"occ_hgc_%i",i);	  
-	  hocc_hgc[i]=new TH1F(hstname,"rate(kHz);sensor; rate(kHz)",sensor_hgc,0,sensor_hgc);
+	  hocc_hgc[i]=new TH1F(hstname,"rate(Hz);sensor; rate(Hz)",sensor_hgc,0,sensor_hgc);
 	
 	  sprintf(hstname,"pe_hgc_2D_%i",i);	  	  
 	  hpe_hgc_2D[i]=new TH2F(hstname,"N_{p.e.};sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);	
 	  sprintf(hstname,"hit_hgc_2D_%i",i);	  	  
-	  hhit_hgc_2D[i]=new TH2F(hstname,"N_{p.e.}*rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+	  hhit_hgc_2D[i]=new TH2F(hstname,"N_{p.e.}*rate(Hz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
 	  sprintf(hstname,"occ_hgc_2D_%i",i);	  	  
-	  hocc_hgc_2D[i]=new TH2F(hstname,"rate(kHz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
+	  hocc_hgc_2D[i]=new TH2F(hstname,"rate(Hz);sensor_lx;sensor_ly",sensor_trans_hgc,0,sensor_trans_hgc,sensor_trans_hgc,0,sensor_trans_hgc);
 	}
 	
 // 	TH1F *htime_photon[2];
@@ -271,31 +273,31 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 // 	htime_photon[1]=new TH1F("time_photon_1","time",400,0,1000);	
 	TH1F *htime_photon=new TH1F("time_photon","time_photon;t (ns)",100,0,100);
 
-	TH1F *hmotherP=new TH1F("motherP","mother particle rate (kHz);P (GeV);",5500,0,11);
+	TH1F *hmotherP=new TH1F("motherP","mother particle rate (Hz);P (GeV);",5500,0,11);
 
 	TH1F *hmother_procid=new TH1F("mother_procid","mother_procid",150,-0.5,149.5);
 
 	TH1F *hmother_tid=new TH1F("mother_tid","mother_tid",100,0,100);	
 	TH1F *hmother_pid=new TH1F("mother_pid","mother_pid",200,-100,100);
-	TH1F *hmother_vz=new TH1F("mother_vz","mother particle rate (kHz);vz (cm);",1300,-100,1200);	
-	TH2F *hmother_vzvx=new TH2F("mother_vzvx","mother particle rate (kHz);vz (cm); vx (cm)",1300,-100,1200,1000,-20,20);		
+	TH1F *hmother_vz=new TH1F("mother_vz","mother particle rate (Hz);vz (cm);",1300,-100,1200);	
+	TH2F *hmother_vzvx=new TH2F("mother_vzvx","mother particle rate (Hz);vz (cm); vx (cm)",1300,-100,1200,1000,-20,20);		
 
 	TH1F *hgrandma_tid=new TH1F("grandma_tid","grandma_tid",100,0,100);	
 	TH1F *hgrandma_pid=new TH1F("grandma_pid","grandma_pid",200,-100,100);
-	TH1F *hgrandma_vz=new TH1F("grandma_vz","grandma particle rate (kHz);vz (cm);",1300,-100,1200);	
-	TH2F *hgrandma_vzvx=new TH2F("grandma_vzvx","grandma particle rate (kHz);vz (cm); vx (cm)",1300,-100,1200,1000,-20,20);	
+	TH1F *hgrandma_vz=new TH1F("grandma_vz","grandma particle rate (Hz);vz (cm);",1300,-100,1200);	
+	TH2F *hgrandma_vzvx=new TH2F("grandma_vzvx","grandma particle rate (Hz);vz (cm); vx (cm)",1300,-100,1200,1000,-20,20);	
 	
 	TH1F *hnpe_hgc_count[2],*hnpe_hgc[2];
 	TH1F *hnpe_sensor_hgc_count[2][sensor_hgc],*hnpe_sensor_hgc[2][sensor_hgc];		
 	TH2F *hnpe_nsensor_hgc_count[2],*hnpe_nsensor_hgc[2];	
 	for(int j=0;j<2;j++){	
 	  hnpe_hgc_count[j]=new TH1F(Form("npe_hgc_count_%i",j),";Npe;count",100,0,100);		
-	  hnpe_hgc[j]=new TH1F(Form("npe_hgc_%i",j),";Npe;rate(kHz)",100,0,100);
+	  hnpe_hgc[j]=new TH1F(Form("npe_hgc_%i",j),";Npe;rate(Hz)",100,0,100);
 	  hnpe_nsensor_hgc_count[j]=new TH2F(Form("npe_nsensor_hgc_count_%i",j),";Npe;Nsensor",100,0,100,sensor_hgc+1,-0.5,sensor_hgc+0.5);
 	  hnpe_nsensor_hgc[j]=new TH2F(Form("npe_nsensor_hgc_%i",j),";Npe;Nsensor",100,0,100,sensor_hgc,0.5,sensor_hgc+0.5);
 	  for(int i=0;i<sensor_hgc;i++){	
 	    hnpe_sensor_hgc_count[j][i]=new TH1F(Form("npe_sensor_hgc_count_%i_%i",j,i),";Npe;count",30,0,30);		
-	    hnpe_sensor_hgc[j][i]=new TH1F(Form("npe_sensor_hgc_%i_%i",j,i),";Npe;rate(kHz)",30,0,30);
+	    hnpe_sensor_hgc[j][i]=new TH1F(Form("npe_sensor_hgc_%i_%i",j,i),";Npe;rate(Hz)",30,0,30);
 	  }	  
 	}
 	
@@ -304,7 +306,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	  for(int j=0;j<2;j++){	
 	  char hstname[200]; 
 	  sprintf(hstname,"npe_hgc_cut_%i_%i",i,j);
-	  hnpe_hgc_cut[i][j]=new TH1F(hstname,";Npe;rate(kHz)",200,0,200);
+	  hnpe_hgc_cut[i][j]=new TH1F(hstname,";Npe;rate(Hz)",200,0,200);
 	  }	  
 	}	
 
@@ -327,50 +329,52 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	
 	TH3F *hgen_ThetaPhiP=new TH3F("gen_ThetaPhiP","gen_ThetaPhiP",50,0,50,180,-180,180,55,0,11);   
 	
-	const int n=4;
-	char *detname[n]={"sc_front","sc_back","ec"};	
-	TH1F *hhit_vz[n];	
-	TH2F *hhit_xy[n],*hhit_PhiR[n];
+	const int n=7;
+	string detname[n]={"sc_front","sc_back","ec_front","ec_back","gem1","gem2","cc_win"};
+	TH1F *hhit_vz[n];
+	TH2F *hhit_xy[n],*hhit_xy_orig[n],*hhit_PhiR[n];
 	TH1F *hhit_E[n],*hhit_E_mip[n],*hhit_E_photonele[n],*hhit_E_ele[n],*hhit_Edep[n];		  	
 	for(int i=0;i<n;i++){
 	  char hstname[100];
 	  sprintf(hstname,"hit_vz_%i",i);
-	  hhit_vz[i]=new TH1F(hstname,detname[i],1600,-100,1500);  
+	  hhit_vz[i]=new TH1F(hstname,detname[i].c_str(),1600,-100,1500);  
 	  sprintf(hstname,"hit_xy_%i",i);
-	  hhit_xy[i]=new TH2F(hstname,detname[i],400,-20,20,400,-20,20);        
+	  hhit_xy[i]=new TH2F(hstname,detname[i].c_str(),400,-20,20,400,-20,20);        
+	  sprintf(hstname,"hit_xy_orig_%i",i);
+	  hhit_xy_orig[i]=new TH2F(hstname,detname[i].c_str(),100,-20,20,100,-20,20);        
 	  sprintf(hstname,"hit_PhiR_%i",i);
-	  hhit_PhiR[i]=new TH2F(hstname,detname[i],360,-180,180,300,0,300);
+	  hhit_PhiR[i]=new TH2F(hstname,detname[i].c_str(),360,-180,180,300,0,300);
 	  sprintf(hstname,"hit_E_%i",i);
-	  hhit_E[i]=new TH1F(hstname,detname[i],1100,0,11);
+	  hhit_E[i]=new TH1F(hstname,detname[i].c_str(),1100,0,11);
 	  sprintf(hstname,"hit_E_mip_%i",i);
-	  hhit_E_mip[i]=new TH1F(hstname,detname[i],1100,0,11);
+	  hhit_E_mip[i]=new TH1F(hstname,detname[i].c_str(),1100,0,11);
 	  sprintf(hstname,"hit_E_photonele_%i",i);
-	  hhit_E_photonele[i]=new TH1F(hstname,detname[i],1100,0,11);
+	  hhit_E_photonele[i]=new TH1F(hstname,detname[i].c_str(),1100,0,11);
 	  sprintf(hstname,"hit_E_ele_%i",i);
-	  hhit_E_ele[i]=new TH1F(hstname,detname[i],1100,0,11);	  
+	  hhit_E_ele[i]=new TH1F(hstname,detname[i].c_str(),1100,0,11);	  
 	  sprintf(hstname,"hit_Edep_%i",i);
-	  hhit_Edep[i]=new TH1F(hstname,detname[i],1000,0,0.1);	  
+	  hhit_Edep[i]=new TH1F(hstname,detname[i].c_str(),1000,0,0.1);	  
 	}
 	
-// 	TH1F *hhit_Edepsc1=new TH1F("hit_Edepsc1","SC1;Edep (GeV);rate(kHz)",1000,0,0.1);
-// 	TH1F *hhit_Edepsc2=new TH1F("hit_Edepsc2","SC2;Edep (GeV);rate(kHz)",1000,0,0.1);
-// 	TH1F *hhit_Eec=new TH1F("hit_Eec","EC;(GeV);rate(kHz)",1100,0,11);
-// 	TH1F *hhit_Eec_photonele=new TH1F("hit_Eec_photonele","EC (photon,e-/e+);E(GeV);rate(kHz)",1100,0,11);
-// 	TH1F *hhit_Eec_ele=new TH1F("hit_Eec_ele","EC (e-/e+);E(GeV);rate(kHz)",1100,0,11);			
-// 	TH1F *hhit_Pec_pion=new TH1F("hit_Pec_pion","EC;P(GeV);rate(kHz)",1100,0,11);
-// 	TH1F *hhit_Pec_proton=new TH1F("hit_Pec_proton","EC;P(GeV);rate(kHz)",1100,0,11);	
+// 	TH1F *hhit_Edepsc1=new TH1F("hit_Edepsc1","SC1;Edep (GeV);rate(Hz)",1000,0,0.1);
+// 	TH1F *hhit_Edepsc2=new TH1F("hit_Edepsc2","SC2;Edep (GeV);rate(Hz)",1000,0,0.1);
+// 	TH1F *hhit_Eec=new TH1F("hit_Eec","EC;(GeV);rate(Hz)",1100,0,11);
+// 	TH1F *hhit_Eec_photonele=new TH1F("hit_Eec_photonele","EC (photon,e-/e+);E(GeV);rate(Hz)",1100,0,11);
+// 	TH1F *hhit_Eec_ele=new TH1F("hit_Eec_ele","EC (e-/e+);E(GeV);rate(Hz)",1100,0,11);			
+// 	TH1F *hhit_Pec_pion=new TH1F("hit_Pec_pion","EC;P(GeV);rate(Hz)",1100,0,11);
+// 	TH1F *hhit_Pec_proton=new TH1F("hit_Pec_proton","EC;P(GeV);rate(Hz)",1100,0,11);	
 
-	TH1F *hprocid_sc1=new TH1F("procid_sc1","SC1;ProcID;rate(kHz)",150,-0.5,149.5);
-	TH1F *hprocid_sc2=new TH1F("procid_sc2","SC2;ProcID;rate(kHz)",150,-0.5,149.5);
-	TH1F *hprocid_ec=new TH1F("procid_ec","EC;ProcID;rate(kHz)",150,-0.5,149.5);
+	TH1F *hprocid_sc1=new TH1F("procid_sc1","SC1;ProcID;rate(Hz)",150,-0.5,149.5);
+	TH1F *hprocid_sc2=new TH1F("procid_sc2","SC2;ProcID;rate(Hz)",150,-0.5,149.5);
+	TH1F *hprocid_ec=new TH1F("procid_ec","EC;ProcID;rate(Hz)",150,-0.5,149.5);
 
-	TH1F *hhit_Edepsc1=new TH1F("hit_Edepsc1","SC1;log10(Edep)(GeV);rate(kHz)",100,-6,-1);
-	TH1F *hhit_Edepsc2=new TH1F("hit_Edepsc2","SC2;log10(Edep)(GeV);rate(kHz)",100,-6,-1);
-	TH1F *hhit_Eec=new TH1F("hit_Eec","EC (all);log10(E)(GeV);rate(kHz)",70,-6,1);
-	TH1F *hhit_Eec_photonele=new TH1F("hit_Eec_photonele","EC (photon,e-/e+);log10(E)(GeV);rate(kHz)",70,-6,1);
-	TH1F *hhit_Eec_ele=new TH1F("hit_Eec_ele","EC (e-/e+);log10(E)(GeV);rate(kHz)",70,-6,1);			
-	TH1F *hhit_Pec_pion=new TH1F("hit_Pec_pion","EC;log10(P)(GeV);rate(kHz)",70,-6,1);
-	TH1F *hhit_Pec_proton=new TH1F("hit_Pec_proton","EC;log10(P)(GeV);rate(kHz)",70,-6,1);	
+	TH1F *hhit_Edepsc1=new TH1F("hit_Edepsc1","SC1;log10(Edep)(GeV);rate(Hz)",100,-6,-1);
+	TH1F *hhit_Edepsc2=new TH1F("hit_Edepsc2","SC2;log10(Edep)(GeV);rate(Hz)",100,-6,-1);
+	TH1F *hhit_Eec=new TH1F("hit_Eec","EC (all);log10(E)(GeV);rate(Hz)",70,-6,1);
+	TH1F *hhit_Eec_photonele=new TH1F("hit_Eec_photonele","EC (photon,e-/e+);log10(E)(GeV);rate(Hz)",70,-6,1);
+	TH1F *hhit_Eec_ele=new TH1F("hit_Eec_ele","EC (e-/e+);log10(E)(GeV);rate(Hz)",70,-6,1);			
+	TH1F *hhit_Pec_pion=new TH1F("hit_Pec_pion","EC;log10(P)(GeV);rate(Hz)",70,-6,1);
+	TH1F *hhit_Pec_proton=new TH1F("hit_Pec_proton","EC;log10(P)(GeV);rate(Hz)",70,-6,1);	
 	
 	double hit_Edepsc1_count[3],hit_Edepsc2_count[3];
 	double hit_Eec_count[3],hit_Eec_photonele_count[3],hit_Eec_ele_count[3];
@@ -379,6 +383,10 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	double hit_Pec_proton_count;
 	
 	TH1F *hhit_mom_hgc_e=new TH1F("hit_mom_hgc_e","hit_mom_hgc_e",100,0,0.05);		
+	
+	
+	TH2F *hec_Eend_2D=new TH2F("ec_Eend_2D","EC;Eend_shower;Eend_preshower",200,0,500,100,0,100);
+	
 	//-------------------------
 	//   get trees in the real data file
 	//-------------------------
@@ -469,6 +477,12 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	//information recorded by hgc
 	TTree* tree_solid_hgc= (TTree*) file->Get("solid_hgc");
 	setup_tree_solid_hgc(tree_solid_hgc);	
+
+	//information recorded by ec
+	TTree* tree_solid_ec= (TTree*) file->Get("solid_ec");
+	TTree* tree_solid_ec_ps= (TTree*) file->Get("solid_ec_ps");
+	setup_tree_solid_ec(tree_solid_ec);	
+	setup_tree_solid_ec_ps(tree_solid_ec_ps);	
 	
 	TRandom3 rand;
 	rand.SetSeed(0);
@@ -484,9 +498,6 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	//----------------------------
 	//      loop trees
 	//---------------------------
-	for(int loop_id=1;loop_id<=loop_time;loop_id++){
-		cout<<"loop.....  "<<loop_id<<endl;
-	
 	for(long int i=0;i<N_events;i++){	  		
 // 	for(long int i=1;i<N_events-1;i++){	  				
 // 	for(long int i=0;i<N_events/100;i++){	  
@@ -494,7 +505,8 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 // 	for(long int i=520;i<521;i++){  //pip event
 // 	for(long int i=5289;i<5290;i++){	  // background event			  
 // 			cout<<"" << i<<endl;
-		if (i%1000==0) cout<<i<<"\r";
+		cout<<"event " << i << "\r";
+// 		if (i%1000==0) cout<<i<<"\r";
 // 		if (i%1000==0) cout<<i<<"\n";
 		
 		//---
@@ -527,6 +539,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		    cout << "Not right filemode" << endl;    
 		    return 0; 
 		}
+// 		cout << "rate " << rate << endl;
 		
 /*		double x=var4->at(0);	
 		double y=var5->at(0);
@@ -584,7 +597,6 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		//check on EC and other by flux
 // 		 cout << "flux_hitn  " << flux_hitn->size() << endl;
 		double Eec=0,Eec_photonele=0,Eec_ele=0,Edepsc1=0,Edepsc2=0;
-		
 		for (Int_t j=0;j<flux_hitn->size();j++) {
 // 	          cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
 
@@ -601,100 +613,51 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  int hit_id=-1;
 		  if(flux_id->at(j)==1) hit_id=0; // SC front,SC1
 		  else if(flux_id->at(j)==2) hit_id=1; // SC back, SC2
-		  else if(flux_id->at(j)==3) hit_id=2; // EC
-		  else if(flux_id->at(j)==10) hit_id=3; // Cherenkov front window
+		  else if(flux_id->at(j)==3) hit_id=2; // EC front
+		  else if(flux_id->at(j)==4) hit_id=3; // EC back	  
+		  else if(flux_id->at(j)==5) hit_id=4; // GEM 1	  
+		  else if(flux_id->at(j)==6) hit_id=5; // GEM 2	  
+		  else if(flux_id->at(j)==10) hit_id=6; // Cherenkov front window
 		  else cout << "wrong flux_id" << flux_id->at(j) << endl;
 // 		  if (hit_id==-1) {/cout << flux_id->at(j) << " " << flux_avg_z->at(j) << endl;
 		  
-		  hhit_xy[hit_id]->Fill(flux_avg_lx->at(j)/1e1,flux_avg_ly->at(j)/1e1,rate/1e3);
-		  hhit_vz[hit_id]->Fill(hit_vz,rate/1e3);
+		  hhit_xy[hit_id]->Fill(flux_avg_lx->at(j)/1e1,flux_avg_ly->at(j)/1e1,rate);
+		  hhit_vz[hit_id]->Fill(hit_vz,rate);
+		  
+		  if (flux_tid->at(j) == 1){
+		    hhit_xy_orig[hit_id]->Fill(flux_avg_lx->at(j)/1e1,flux_avg_ly->at(j)/1e1,rate);
+		  }		  
 
 		  double E=flux_trackE->at(j)/1e3,Edep=flux_totEdep->at(j)/1e3;		  
-		  hhit_Edep[hit_id]->Fill(Edep,rate/1e3);		  
-		  hhit_E[hit_id]->Fill(E,rate/1e3);
-		  if (abs(flux_pid->at(j)) == 211 || flux_pid->at(j)==2212|| flux_pid->at(j)==13) hhit_E_mip[hit_id]->Fill(E,rate/1e3);
-		  if (abs(flux_pid->at(j)) == 11 || flux_pid->at(j)==22) hhit_E_photonele[hit_id]->Fill(E,rate/1e3);
-		  if (abs(flux_pid->at(j)) == 11) hhit_E_ele[hit_id]->Fill(E,rate/1e3);  
-		  
-// 		  if (hit_id==1 && 1e-3<Edep && Edep <2e-3) {		  
-// 		  if (hit_id==2 && 0.93<E && E <1) {
-// 		  cout << "flux " << " !!! " << " " << flux_pid->at(j) << " " <<  flux_totEdep->at(j) << endl;
-// 		  cout << "flux " << " !!! " << flux_hitn->at(j) << " " << flux_id->at(j) << " " << flux_pid->at(j) << " " << flux_mpid->at(j) << " " << flux_tid->at(j) << " " << flux_mtid->at(j) << " " << flux_trackE->at(j) << " " << flux_totEdep->at(j) << " " << flux_avg_x->at(j) << " " << flux_avg_y->at(j) << " " << flux_avg_z->at(j) << " " << flux_avg_lx->at(j) << " " << flux_avg_ly->at(j) << " " << flux_avg_lz->at(j) << " " << flux_px->at(j) << " " << flux_py->at(j) << " " << flux_pz->at(j) << " " << flux_vx->at(j) << " " << flux_vy->at(j) << " " << flux_vz->at(j) << " " << flux_mvx->at(j) << " " << flux_mvy->at(j) << " " << flux_mvz->at(j) << " " << flux_avg_t->at(j) << endl;  
-// 		  }
+		  hhit_Edep[hit_id]->Fill(Edep,rate);		  
+		  hhit_E[hit_id]->Fill(E,rate);
+		  if (abs(flux_pid->at(j)) == 211 || flux_pid->at(j)==2212|| flux_pid->at(j)==13) hhit_E_mip[hit_id]->Fill(E,rate);
+		  if (abs(flux_pid->at(j)) == 11 || flux_pid->at(j)==22) hhit_E_photonele[hit_id]->Fill(E,rate);
+		  if (abs(flux_pid->at(j)) == 11) hhit_E_ele[hit_id]->Fill(E,rate);  
 		  
 		  if (hit_id==0) {
 		    Edepsc1 += Edep;
-		    hprocid_sc1->Fill(flux_procID->at(j),rate/1e3);
+// 		    hprocid_sc1->Fill(flux_procID->at(j),rate);
 		  }
-		  if (hit_id==1) {
+		  else if (hit_id==1) {
 		    Edepsc2 += Edep;
-		    hprocid_sc2->Fill(flux_procID->at(j),rate/1e3);
-		  }		  
-		  if (hit_id==2) {
-// 		    cout <<  "x,y " << fabs(flux_avg_lx->at(j)) << " " << fabs(flux_avg_ly->at(j)) << endl;
-		    //EC central module (made of 4 small module)
-		    if (fabs(flux_avg_lx->at(j))/10.<4.25*2.54/2. && fabs(flux_avg_ly->at(j))/10.<4.25*2.54/2.){
-		    //EC central c9_4 small module https://logbooks.jlab.org/entry/3853160		    
-// 		     if (fabs(flux_avg_lx->at(j)/1e1-(-4.25*2.54/2/2))<4.25*2.54/2/2 && fabs(flux_avg_ly->at(j)/1e1-(-4.25*2.54/2/2))<4.25*2.54/2/2){
-		    
-// 		      if (flux_pid->at(j) == 22) 
-			Eec += E;
-		    }		    
-		    if (abs(flux_pid->at(j)) == 11 || flux_pid->at(j)==22) Eec_photonele +=E;
-		    if (abs(flux_pid->at(j)) == 11) Eec_ele +=E;	
-		    
-		    if (abs(flux_pid->at(j)) == 211 ) {hhit_Pec_pion->Fill(log10(hit_p),rate/1e3); hit_Pec_pion_count += rate/1e3;}	    
-		    if (abs(flux_pid->at(j)) == 2212) {hhit_Pec_proton->Fill(log10(hit_p),rate/1e3); hit_Pec_proton_count += rate/1e3;}	    
-		    
-		    hprocid_ec->Fill(flux_procID->at(j),rate/1e3);
-		  }		  
-	  
-		  //fill every hits
-// 		  if (hit_id==0) {
-// 		    Edepsc1 += Edep;
-// 		    hprocid_sc1->Fill(flux_procID->at(j),rate/1e3);
-// 		    
-// 		    hhit_Edepsc1->Fill(log10(Edep),rate/1e3);
-// 		  }
-// 		  if (hit_id==1) {
-// 		    Edepsc2 += Edep;
-// 		    hprocid_sc2->Fill(flux_procID->at(j),rate/1e3);
-// 
-// 		    hhit_Edepsc2->Fill(log10(Edep),rate/1e3);		    
-// 		  }		  
-// 		  if (hit_id==2) {  //new change 2021/02/21
-// 		    Eec += E;
-// 		    hhit_Eec->Fill(log10(E),rate/1e3);		    
-// 		    
-// 		    if (abs(flux_pid->at(j)) == 11 || flux_pid->at(j)==22) {
-// 		      Eec_photonele +=E;
-// 		      hhit_Eec_photonele->Fill(log10(E),rate/1e3);
-// 		    }
-// 		    if (abs(flux_pid->at(j)) == 11) {
-// 		      Eec_ele +=E;	
-// 		      hhit_Eec_ele->Fill(log10(E),rate/1e3);		      
-// 		    }
-// 		    
-// 		    if (abs(flux_pid->at(j)) == 211 ) {hhit_Pec_pion->Fill(log10(hit_p),rate/1e3); hit_Pec_pion_count += rate/1e3;}	    
-// 		    if (abs(flux_pid->at(j)) == 2212) {hhit_Pec_proton->Fill(log10(hit_p),rate/1e3); hit_Pec_proton_count += rate/1e3;}	    
-// 		    
-// 		    hprocid_ec->Fill(flux_procID->at(j),rate/1e3);
-// 		  }		  
+// 		    hprocid_sc2->Fill(flux_procID->at(j),rate);
+		  }
 		    
 		}	// end of flux		
 
 		//fill every events
-// 		  hhit_Edepsc1->Fill(Edepsc1,rate/1e3);
-// 		  hhit_Edepsc2->Fill(Edepsc2,rate/1e3);
-// 		  hhit_Eec->Fill(Eec,rate/1e3);
-// 		  hhit_Eec_photonele->Fill(Eec_photonele,rate/1e3);		  
-// 		  hhit_Eec_ele->Fill(Eec_ele,rate/1e3);	
+// 		  hhit_Edepsc1->Fill(Edepsc1,rate);
+// 		  hhit_Edepsc2->Fill(Edepsc2,rate);
+// 		  hhit_Eec->Fill(Eec,rate);
+// 		  hhit_Eec_photonele->Fill(Eec_photonele,rate);		  
+// 		  hhit_Eec_ele->Fill(Eec_ele,rate);	
 
-		  hhit_Edepsc1->Fill(log10(Edepsc1),rate/1e3);
-		  hhit_Edepsc2->Fill(log10(Edepsc2),rate/1e3);
-		  hhit_Eec->Fill(log10(Eec),rate/1e3);
-		  hhit_Eec_photonele->Fill(log10(Eec_photonele),rate/1e3);		  
-		  hhit_Eec_ele->Fill(log10(Eec_ele),rate/1e3);	
+		  hhit_Edepsc1->Fill(log10(Edepsc1),rate);
+		  hhit_Edepsc2->Fill(log10(Edepsc2),rate);
+		  hhit_Eec->Fill(log10(Eec),rate);
+		  hhit_Eec_photonele->Fill(log10(Eec_photonele),rate);		  
+		  hhit_Eec_ele->Fill(log10(Eec_ele),rate);	
   
 // 		  if (Edepsc2>0.7e-3 && Eec>0.1) Is_trig=true;
 		  if (Eec>0.01) Is_trig=true;	  
@@ -714,18 +677,18 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  if(flux_id->at(j)==1) {
 // 		      cout << "photon_mtid " << photon_mtid << endl;		      		    
 		    if(flux_tid->at(j)==photon_mtid) {
-		      hmotherP->Fill(sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j))/1e3,rate/1e3);
-		      hmother_tid->Fill(flux_tid->at(j),rate/1e3);		      		      
-		      hmother_pid->Fill(flux_pid->at(j),rate/1e3);
-		      hmother_vz->Fill(flux_vz->at(j)/10.,rate/1e3);
-		      hmother_vzvx->Fill(flux_vz->at(j)/10.,flux_vx->at(j)/10.,rate/1e3);		      		      
+		      hmotherP->Fill(sqrt(flux_px->at(j)*flux_px->at(j)+flux_py->at(j)*flux_py->at(j)+flux_pz->at(j)*flux_pz->at(j))/1e3,rate);
+		      hmother_tid->Fill(flux_tid->at(j),rate);		      		      
+		      hmother_pid->Fill(flux_pid->at(j),rate);
+		      hmother_vz->Fill(flux_vz->at(j)/10.,rate);
+		      hmother_vzvx->Fill(flux_vz->at(j)/10.,flux_vx->at(j)/10.,rate);		      		      
 
-		      hmother_procid->Fill(flux_procID->at(j),rate/1e3);	  		      
+		      hmother_procid->Fill(flux_procID->at(j),rate);	  		      
 		      
-		      hgrandma_tid->Fill(flux_mtid->at(j),rate/1e3);		      		      
-		      hgrandma_pid->Fill(flux_mpid->at(j),rate/1e3);	
-		      hgrandma_vz->Fill(flux_mvz->at(j)/10.,rate/1e3);
-		      hgrandma_vzvx->Fill(flux_mvz->at(j)/10.,flux_mvx->at(j)/10.,rate/1e3);		      		      
+		      hgrandma_tid->Fill(flux_mtid->at(j),rate);		      		      
+		      hgrandma_pid->Fill(flux_mpid->at(j),rate);	
+		      hgrandma_vz->Fill(flux_mvz->at(j)/10.,rate);
+		      hgrandma_vzvx->Fill(flux_mvz->at(j)/10.,flux_mvx->at(j)/10.,rate);		      		      
 		    }
 		    
 // 		    else cout << "photon_mtid " << photon_mtid << endl;
@@ -747,35 +710,35 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 			
 			hpe_hgc[0]->Fill(sensor_num,hit_hgc[sensor_id]);	    
 			hpe_hgc_2D[0]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]);			
-			hhit_hgc[0]->Fill(sensor_num,hit_hgc[sensor_id]*rate/1e3);	    
-			hhit_hgc_2D[0]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]*rate/1e3);
-			hocc_hgc[0]->Fill(sensor_num,rate/1e3);
-			hocc_hgc_2D[0]->Fill(sensor_x,sensor_y,rate/1e3);
+			hhit_hgc[0]->Fill(sensor_num,hit_hgc[sensor_id]*rate);	    
+			hhit_hgc_2D[0]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]*rate);
+			hocc_hgc[0]->Fill(sensor_num,rate);
+			hocc_hgc_2D[0]->Fill(sensor_x,sensor_y,rate);
 			if (Edepsc2>0.7e-3){
 			  hpe_hgc[1]->Fill(sensor_num,hit_hgc[sensor_id]);	    
 			  hpe_hgc_2D[1]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]);			
-			  hhit_hgc[1]->Fill(sensor_num,hit_hgc[sensor_id]*rate/1e3);	    
-			  hhit_hgc_2D[1]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]*rate/1e3);
-			  hocc_hgc[1]->Fill(sensor_num,rate/1e3);
-			  hocc_hgc_2D[1]->Fill(sensor_x,sensor_y,rate/1e3);			  
+			  hhit_hgc[1]->Fill(sensor_num,hit_hgc[sensor_id]*rate);	    
+			  hhit_hgc_2D[1]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]*rate);
+			  hocc_hgc[1]->Fill(sensor_num,rate);
+			  hocc_hgc_2D[1]->Fill(sensor_x,sensor_y,rate);			  
 			}
 // 			if (Eec>0.3){
 			if (Eec>0.1){		  
 			  hpe_hgc[2]->Fill(sensor_num,hit_hgc[sensor_id]);	    
 			  hpe_hgc_2D[2]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]);			
-			  hhit_hgc[2]->Fill(sensor_num,hit_hgc[sensor_id]*rate/1e3);	    
-			  hhit_hgc_2D[2]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]*rate/1e3);
-			  hocc_hgc[2]->Fill(sensor_num,rate/1e3);
-			  hocc_hgc_2D[2]->Fill(sensor_x,sensor_y,rate/1e3);			  
+			  hhit_hgc[2]->Fill(sensor_num,hit_hgc[sensor_id]*rate);	    
+			  hhit_hgc_2D[2]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]*rate);
+			  hocc_hgc[2]->Fill(sensor_num,rate);
+			  hocc_hgc_2D[2]->Fill(sensor_x,sensor_y,rate);			  
 			}	
 // 			if (Edepsc2>0.7e-3 && Eec>0.3){
 			if (Edepsc2>0.7e-3 && Eec>0.1){
 			  hpe_hgc[3]->Fill(sensor_num,hit_hgc[sensor_id]);	    
 			  hpe_hgc_2D[3]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]);			
-			  hhit_hgc[3]->Fill(sensor_num,hit_hgc[sensor_id]*rate/1e3);	    
-			  hhit_hgc_2D[3]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]*rate/1e3);
-			  hocc_hgc[3]->Fill(sensor_num,rate/1e3);
-			  hocc_hgc_2D[3]->Fill(sensor_x,sensor_y,rate/1e3);			  
+			  hhit_hgc[3]->Fill(sensor_num,hit_hgc[sensor_id]*rate);	    
+			  hhit_hgc_2D[3]->Fill(sensor_x,sensor_y,hit_hgc[sensor_id]*rate);
+			  hocc_hgc[3]->Fill(sensor_num,rate);
+			  hocc_hgc_2D[3]->Fill(sensor_x,sensor_y,rate);			  
 			}			    
 		      }	
 
@@ -814,18 +777,18 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		    event_good++;
 		    
 		    hnpe_hgc_count[0]->Fill(npe_hgc_total);		    
-		    hnpe_hgc[0]->Fill(npe_hgc_total,rate/1e3);
+		    hnpe_hgc[0]->Fill(npe_hgc_total,rate);
 		    for(int sensor_id=0;sensor_id<sensor_hgc;sensor_id++) {	
 		      if (hit_hgc[sensor_id]>0) {
 			hnpe_sensor_hgc_count[0][sensor_id]->Fill(hit_hgc[sensor_id]);		    
-			hnpe_sensor_hgc[0][sensor_id]->Fill(hit_hgc[sensor_id],rate/1e3);		    
+			hnpe_sensor_hgc[0][sensor_id]->Fill(hit_hgc[sensor_id],rate);		    
 		      }
 		    }
 		    
 		    hnpe_nsensor_hgc_count[0]->Fill(npe_hgc_total,trigger_hgc[0]);		    
-		    hnpe_nsensor_hgc[0]->Fill(npe_hgc_total,trigger_hgc[0],rate/1e3);		    
+		    hnpe_nsensor_hgc[0]->Fill(npe_hgc_total,trigger_hgc[0],rate);		    
 		    if (1<=trigger_hgc[0] && trigger_hgc[0]<=sensor_hgc){
-		      hnpe_hgc_cut[trigger_hgc[0]-1][0]->Fill(npe_hgc_total,rate/1e3);
+		      hnpe_hgc_cut[trigger_hgc[0]-1][0]->Fill(npe_hgc_total,rate);
 		    }
 		    else cout << "wrong trigger_hgc[0] " << trigger_hgc[0] << endl;
 		  }
@@ -833,18 +796,18 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		    event_trig_good++;
 		    
 		    hnpe_hgc_count[1]->Fill(npe_hgc_total_trigged);		    
-		    hnpe_hgc[1]->Fill(npe_hgc_total_trigged,rate/1e3);	
+		    hnpe_hgc[1]->Fill(npe_hgc_total_trigged,rate);	
 		    for(int sensor_id=0;sensor_id<sensor_hgc;sensor_id++) {	
 		      if (hit_hgc[sensor_id]>0) {		      
 			hnpe_sensor_hgc_count[1][sensor_id]->Fill(hit_hgc[sensor_id]);		    
-			hnpe_sensor_hgc[1][sensor_id]->Fill(hit_hgc[sensor_id],rate/1e3);		    
+			hnpe_sensor_hgc[1][sensor_id]->Fill(hit_hgc[sensor_id],rate);		    
 		      }
 		    }		    
 		    
 		    hnpe_nsensor_hgc_count[1]->Fill(npe_hgc_total_trigged,trigger_hgc[0]);		    
-		    hnpe_nsensor_hgc[1]->Fill(npe_hgc_total_trigged,trigger_hgc[0],rate/1e3);		    		    
+		    hnpe_nsensor_hgc[1]->Fill(npe_hgc_total_trigged,trigger_hgc[0],rate);		    		    
 		    if (1<=trigger_hgc[0] && trigger_hgc[0]<=sensor_hgc){
-		      hnpe_hgc_cut[trigger_hgc[0]-1][1]->Fill(npe_hgc_total_trigged,rate/1e3);
+		      hnpe_hgc_cut[trigger_hgc[0]-1][1]->Fill(npe_hgc_total_trigged,rate);
 		    }
 		    else cout << "wrong trigger_hgc[0] " << trigger_hgc[0] << endl;
 		  }
@@ -882,10 +845,19 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 // 		  }						
 		 		
 		
+		// process ec
+		tree_solid_ec->GetEntry(i);
+		tree_solid_ec_ps->GetEntry(i);
+		
+	      double Eend_ec=0;
+	      double Eend_ec_ps=0;	
 
+	      process_tree_solid_ec(tree_solid_ec,tree_solid_ec_ps,Eend_ec,Eend_ec_ps);
+
+	      hec_Eend_2D->Fill(Eend_ec,Eend_ec_ps);
+	      
 	} //end loop
 	
-	} //end loop time
 
 cout <<" sensor_good " << sensor_good << endl;
 cout <<" event_good " << event_good << endl;
@@ -896,131 +868,158 @@ cout <<" event_trig_good " << event_trig_good << endl;
 outputfile->Write();	
 outputfile->Flush();
 
-cout << "hocc_hgc[0]/sensor_hgc " << hocc_hgc[0]->Integral()/sensor_hgc << endl;
+// cout << "hocc_hgc[0]/sensor_hgc " << hocc_hgc[0]->Integral()/sensor_hgc << endl;
 
-TCanvas *c0 = new TCanvas("c0", "c0",1900,900);
-c0->Divide(3,2);
-c0->cd(1);
-hhit_hgc_2D[0]->Draw("colz");
-c0->cd(2);
-hocc_hgc_2D[0]->Draw("colz");
-c0->cd(3);
-hpe_hgc_2D[0]->Draw("colz");
-c0->cd(4);
-hhit_hgc[0]->Draw("HIST");
-c0->cd(5);
-hocc_hgc[0]->Draw("HIST");
-c0->cd(6);
-hpe_hgc[0]->Draw("HIST");
-c0->SaveAs("c0.png");
+// TCanvas *c0 = new TCanvas("c0", "c0",1900,900);
+// c0->Divide(3,2);
+// c0->cd(1);
+// hhit_hgc_2D[0]->Draw("colz");
+// c0->cd(2);
+// hocc_hgc_2D[0]->Draw("colz");
+// c0->cd(3);
+// hpe_hgc_2D[0]->Draw("colz");
+// c0->cd(4);
+// hhit_hgc[0]->Draw("HIST");
+// c0->cd(5);
+// hocc_hgc[0]->Draw("HIST");
+// c0->cd(6);
+// hpe_hgc[0]->Draw("HIST");
+// c0->SaveAs("c0.png");
 
-TCanvas *c1 = new TCanvas("c1", "c1",1000,900);
+TCanvas *c_cc = new TCanvas("cc", "cc",1600,900);
+c_cc->Divide(2,1);
+c_cc->cd(1);
 hnpe_hgc_count[0]->SetAxisRange(0,100);  
 hnpe_hgc_count[0]->Draw("HIST");
-c1->SaveAs("c1.png");
-
-
-TCanvas *c2 = new TCanvas("c2", "c2",1000,900);
-// hpe_hgc_2D[0]->Scale(1/1e3);
+c_cc->cd(2);
 hpe_hgc_2D[0]->Draw("colz");
 // c2->SaveAs("c2.png");
+// c1->SaveAs("c1.png");
 
-TCanvas *c3 = new TCanvas("c3", "c3",1000,900);
-hocc_hgc[0]->Draw();
-c3->SaveAs("c3.png");
+TCanvas *c_hit_xy_orig = new TCanvas("hit_xy_orig", "hit_xy_orig",1000,600);
+c_hit_xy_orig->Divide(4,2);
+c_hit_xy_orig->cd(1);
+hhit_xy_orig[0]->Draw("colz");
+c_hit_xy_orig->cd(2);
+hhit_xy_orig[1]->Draw("colz");
+c_hit_xy_orig->cd(3);
+hhit_xy_orig[2]->Draw("colz");
+c_hit_xy_orig->cd(4);
+hhit_xy_orig[3]->Draw("colz");
+c_hit_xy_orig->cd(5);
+hhit_xy_orig[4]->Draw("colz");
+c_hit_xy_orig->cd(6);
+hhit_xy_orig[5]->Draw("colz");
+c_hit_xy_orig->cd(7);
+hhit_xy_orig[6]->Draw("colz");
 
-TCanvas *c_npe_nsensor_hgc = new TCanvas("npe_nsensor_hgc", "npe_nsensor_hgc",1800,1000);
-c_npe_nsensor_hgc->Divide(2,2);
-c_npe_nsensor_hgc->cd(1);
-hnpe_nsensor_hgc_count[0]->Draw("colz");
-c_npe_nsensor_hgc->cd(2);
-hnpe_nsensor_hgc_count[1]->Draw("colz");
-c_npe_nsensor_hgc->cd(3);
-hnpe_nsensor_hgc[0]->Draw("colz");
-c_npe_nsensor_hgc->cd(4);
-hnpe_nsensor_hgc[1]->Draw("colz");
+TCanvas *c_EC = new TCanvas("EC", "EC",1000,900);
+hec_Eend_2D->Draw("colz");
 
-TCanvas *c_npe_nsensor_hgc_before = new TCanvas("npe_nsensor_hgc_before", "npe_nsensor_hgc_before",1800,1000);
-hnpe_nsensor_hgc[1]->SetTitle(";;");
-hnpe_nsensor_hgc[1]->Draw("colz");
 
-TCanvas *c_npe_nsensor_hgc_after = new TCanvas("npe_nsensor_hgc_after", "npe_nsensor_hgc_after",1800,1000);
-TH2F *hnpe_nsensor_hgc_after=(TH2F*) hnpe_nsensor_hgc[1]->Clone();
-for(int x=0;x<100;x++) {	
-hnpe_nsensor_hgc_after->SetBinContent(x,1,0);
-hnpe_nsensor_hgc_after->SetBinContent(x,2,0);
-// hnpe_nsensor_hgc_after->SetBinContent(x,3,0);  //for quad
-}
-hnpe_nsensor_hgc_after->SetTitle(";;");
-hnpe_nsensor_hgc_after->Draw("colz");
+TCanvas *c_sc = new TCanvas("sc", "sc",1800,1000);
+gPad->SetLogy();
+hhit_Edepsc1->SetLineColor(kBlack);
+hhit_Edepsc1->Draw();
+hhit_Edepsc2->SetLineColor(kRed);
+hhit_Edepsc2->Draw("same");
 
-TCanvas *c_npe = new TCanvas("npe", "npe",1000,900);
-// hpe_hgc_2D[0]->Scale(1/1e3);
-hnpe_hgc[0]->Draw();
-c_npe->SaveAs("c_npe.png");
+// TCanvas *c3 = new TCanvas("c3", "c3",1000,900);
+// hocc_hgc[0]->Draw();
+// c3->SaveAs("c3.png");
+
+// TCanvas *c_npe_nsensor_hgc = new TCanvas("npe_nsensor_hgc", "npe_nsensor_hgc",1800,1000);
+// c_npe_nsensor_hgc->Divide(2,2);
+// c_npe_nsensor_hgc->cd(1);
+// hnpe_nsensor_hgc_count[0]->Draw("colz");
+// c_npe_nsensor_hgc->cd(2);
+// hnpe_nsensor_hgc_count[1]->Draw("colz");
+// c_npe_nsensor_hgc->cd(3);
+// hnpe_nsensor_hgc[0]->Draw("colz");
+// c_npe_nsensor_hgc->cd(4);
+// hnpe_nsensor_hgc[1]->Draw("colz");
+// 
+// TCanvas *c_npe_nsensor_hgc_before = new TCanvas("npe_nsensor_hgc_before", "npe_nsensor_hgc_before",1800,1000);
+// hnpe_nsensor_hgc[1]->SetTitle(";;");
+// hnpe_nsensor_hgc[1]->Draw("colz");
+// 
+// TCanvas *c_npe_nsensor_hgc_after = new TCanvas("npe_nsensor_hgc_after", "npe_nsensor_hgc_after",1800,1000);
+// TH2F *hnpe_nsensor_hgc_after=(TH2F*) hnpe_nsensor_hgc[1]->Clone();
+// for(int x=0;x<100;x++) {	
+// hnpe_nsensor_hgc_after->SetBinContent(x,1,0);
+// hnpe_nsensor_hgc_after->SetBinContent(x,2,0);
+// // hnpe_nsensor_hgc_after->SetBinContent(x,3,0);  //for quad
+// }
+// hnpe_nsensor_hgc_after->SetTitle(";;");
+// hnpe_nsensor_hgc_after->Draw("colz");
+
+// TCanvas *c_npe = new TCanvas("npe", "npe",1000,900);
+// // hpe_hgc_2D[0]->Scale(1/1e3);
+// hnpe_hgc[0]->Draw();
+// c_npe->SaveAs("c_npe.png");
 // cout << "npe_hgc_0 " << " " << hnpe_hgc[0]->Integral() << endl;
 
-TCanvas *c_npe_sensor = new TCanvas("npe_sensor", "npe_sensor",1000,900);
-c_npe_sensor->Divide(sensor_trans_hgc,sensor_trans_hgc);
-for(int sensor_id=0;sensor_id<sensor_hgc;sensor_id++) {	
-  c_npe_sensor->cd(sensor_id+1);
-  hnpe_sensor_hgc[0][sensor_id]->Draw();
-//   cout << "npe_sensor_hgc_0 " << sensor_id  << " "  << hnpe_sensor_hgc[0][sensor_id]->Integral() << endl;  
-}
-c_npe_sensor->SaveAs("c_npe_sensor.png");
+// TCanvas *c_npe_sensor = new TCanvas("npe_sensor", "npe_sensor",1000,900);
+// c_npe_sensor->Divide(sensor_trans_hgc,sensor_trans_hgc);
+// for(int sensor_id=0;sensor_id<sensor_hgc;sensor_id++) {	
+//   c_npe_sensor->cd(sensor_id+1);
+//   hnpe_sensor_hgc[0][sensor_id]->Draw();
+// //   cout << "npe_sensor_hgc_0 " << sensor_id  << " "  << hnpe_sensor_hgc[0][sensor_id]->Integral() << endl;  
+// }
+// c_npe_sensor->SaveAs("c_npe_sensor.png");
 
 
-TCanvas *c_6 = new TCanvas("c6", "c6",1000,600);
-c_6->Divide(3,1);
-c_6->cd(1);
-htime_photon->Draw("HIST");
-c_6->cd(2);
-gPad->SetLogx();
-hmotherP->Draw("HIST");
-c_6->cd(3);
+// TCanvas *c_6 = new TCanvas("c6", "c6",1000,600);
+// c_6->Divide(3,1);
+// c_6->cd(1);
+// htime_photon->Draw("HIST");
+// c_6->cd(2);
 // gPad->SetLogx();
-hmother_procid->Draw("HIST");
+// hmotherP->Draw("HIST");
+// c_6->cd(3);
+// // gPad->SetLogx();
+// hmother_procid->Draw("HIST");
 
-TCanvas *c_mother = new TCanvas("mother", "mother",1800,1000);
-c_mother->Divide(4,2);
-c_mother->cd(1);
-gPad->SetLogy();
-hmother_tid->Draw("HIST");
-c_mother->cd(2);
-gPad->SetLogy();
-hmother_pid->Draw("HIST");
-c_mother->cd(3);
-gPad->SetLogy();
-hmother_vz->Draw("HIST");
-c_mother->cd(4);
-gPad->SetLogz();
-hmother_vzvx->Draw("colz");
-c_mother->cd(5);
-gPad->SetLogy();
-hgrandma_tid->Draw("HIST");
-c_mother->cd(6);
-gPad->SetLogy();
-hgrandma_pid->Draw("HIST");
-c_mother->cd(7);
-gPad->SetLogy();
-hgrandma_vz->Draw("HIST");
-c_mother->cd(8);
-gPad->SetLogz();
-hgrandma_vzvx->Draw("colz");
+// TCanvas *c_mother = new TCanvas("mother", "mother",1800,1000);
+// c_mother->Divide(4,2);
+// c_mother->cd(1);
+// gPad->SetLogy();
+// hmother_tid->Draw("HIST");
+// c_mother->cd(2);
+// gPad->SetLogy();
+// hmother_pid->Draw("HIST");
+// c_mother->cd(3);
+// gPad->SetLogy();
+// hmother_vz->Draw("HIST");
+// c_mother->cd(4);
+// gPad->SetLogz();
+// hmother_vzvx->Draw("colz");
+// c_mother->cd(5);
+// gPad->SetLogy();
+// hgrandma_tid->Draw("HIST");
+// c_mother->cd(6);
+// gPad->SetLogy();
+// hgrandma_pid->Draw("HIST");
+// c_mother->cd(7);
+// gPad->SetLogy();
+// hgrandma_vz->Draw("HIST");
+// c_mother->cd(8);
+// gPad->SetLogz();
+// hgrandma_vzvx->Draw("colz");
 
-TCanvas *c_mother_final= new TCanvas("mother_final", "mother_final",1900,1000);
-c_mother_final->Divide(3,1);
-c_mother_final->cd(1);
-gPad->SetLogy();
-hmother_vz->Draw("HIST");
-c_mother_final->cd(2);
-gPad->SetLogz();
-hmother_vzvx->Draw("colz");
-c_mother_final->cd(3);
-gPad->SetLogx();
-hmotherP->Draw("HIST");
-c_mother_final->SaveAs("mother_final.png");
-c_mother_final->SaveAs("mother_final.pdf");
+// TCanvas *c_mother_final= new TCanvas("mother_final", "mother_final",1900,1000);
+// c_mother_final->Divide(3,1);
+// c_mother_final->cd(1);
+// gPad->SetLogy();
+// hmother_vz->Draw("HIST");
+// c_mother_final->cd(2);
+// gPad->SetLogz();
+// hmother_vzvx->Draw("colz");
+// c_mother_final->cd(3);
+// gPad->SetLogx();
+// hmotherP->Draw("HIST");
+// c_mother_final->SaveAs("mother_final.png");
+// c_mother_final->SaveAs("mother_final.pdf");
 
 
 // TCanvas *c_sc_count = new TCanvas("sc_count", "sc_count",1800,1000);
@@ -1043,49 +1042,6 @@ c_mother_final->SaveAs("mother_final.pdf");
 // c_ec_count->cd(3);
 // hhit_Eec_ele_count->Draw();
 // cout << hhit_Eec_ele_count->GetBinContent(1) << " " << hhit_Eec_ele_count->GetBinContent(2) << " " << hhit_Eec_ele_count->GetBinContent(3) << endl;
-
-TCanvas *c_ecsc = new TCanvas("ecsc", "ecsc",1800,1000);
-c_ecsc->Divide(3,2);
-c_ecsc->cd(1);
-gPad->SetLogy();
-hhit_Edepsc1->SetLineColor(kBlack);
-hhit_Edepsc1->Draw();
-hhit_Edepsc2->SetLineColor(kRed);
-hhit_Edepsc2->Draw("same");
-c_ecsc->cd(2);
-gPad->SetLogy();
-hhit_Eec->SetLineColor(kBlack);
-hhit_Eec->Draw();
-hhit_Eec_photonele->SetLineColor(kRed);
-hhit_Eec_photonele->Draw("same");
-hhit_Eec_ele->SetLineColor(kBlue);
-hhit_Eec_ele->Draw("same");
-c_ecsc->cd(3);
-gPad->SetLogy();
-hhit_Pec_pion->SetLineColor(kBlack);
-hhit_Pec_pion->Draw();
-hhit_Pec_proton->SetLineColor(kRed);
-hhit_Pec_proton->Draw("same");
-c_ecsc->cd(4);
-hprocid_sc1->Draw("HIST");
-c_ecsc->cd(5);
-hprocid_sc1->Draw("HIST");
-c_ecsc->cd(6);
-hprocid_ec->Draw("HIST");
-
-cout << hhit_Edepsc1->Integral(hhit_Edepsc1->FindBin(-5),hhit_Edepsc1->GetNbinsX())/11 << " " << hhit_Edepsc1->Integral(hhit_Edepsc1->FindBin(-4),hhit_Edepsc1->GetNbinsX())/11 << " " <<hhit_Edepsc1->Integral(hhit_Edepsc1->FindBin(-3),hhit_Edepsc1->GetNbinsX())/11 << endl;
-
-cout << hhit_Edepsc2->Integral(hhit_Edepsc2->FindBin(-5),hhit_Edepsc2->GetNbinsX())/11 << " " << hhit_Edepsc2->Integral(hhit_Edepsc2->FindBin(-4),hhit_Edepsc2->GetNbinsX())/11 << " " <<hhit_Edepsc2->Integral(hhit_Edepsc2->FindBin(-3),hhit_Edepsc2->GetNbinsX())/11 << endl;
-
-cout << hhit_Eec->Integral(hhit_Eec->FindBin(-2),hhit_Eec->GetNbinsX())/9 << " " << hhit_Eec->Integral(hhit_Eec->FindBin(-1),hhit_Eec->GetNbinsX())/9 << " " <<hhit_Eec->Integral(hhit_Eec->FindBin(log10(0.2)),hhit_Eec->GetNbinsX())/9 << endl;
-
-cout << hhit_Eec_photonele->Integral(hhit_Eec_photonele->FindBin(-2),hhit_Eec_photonele->GetNbinsX())/9 << " " << hhit_Eec_photonele->Integral(hhit_Eec_photonele->FindBin(-1),hhit_Eec_photonele->GetNbinsX())/9 << " " <<hhit_Eec_photonele->Integral(hhit_Eec_photonele->FindBin(log10(0.2)),hhit_Eec_photonele->GetNbinsX())/9 << endl;
-
-cout << hhit_Eec_ele->Integral(hhit_Eec_ele->FindBin(-2),hhit_Eec_ele->GetNbinsX())/9 << " " << hhit_Eec_ele->Integral(hhit_Eec_ele->FindBin(-1),hhit_Eec_ele->GetNbinsX())/9 << " " <<hhit_Eec_ele->Integral(hhit_Eec_ele->FindBin(log10(0.2)),hhit_Eec_ele->GetNbinsX())/9 << endl;
-
-cout << hhit_Pec_pion->Integral()/9 << endl;
-
-cout << hhit_Pec_proton->Integral()/9 << endl;
 
 // cout << hit_Edepsc1_count[0]/11 << " " << hit_Edepsc1_count[1]/11 << " " << hit_Edepsc1_count[2]/11 << endl;
 // 

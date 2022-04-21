@@ -2,6 +2,7 @@
 
 use strict;
 use lib ("$ENV{GEMC}/io");
+use lib ("$ENV{GEMC}/api/perl");
 use parameters;
 use utils;
 
@@ -50,8 +51,7 @@ $configuration{"variation"} = "NOtarget";
 # our %parameters    = get_parameters(%configuration);
 
 #Geometry definition
-require "beamline_geometry.pl";
-beamline();
+require "./beamline_geometry.pl";
 
 #materials definition 
 

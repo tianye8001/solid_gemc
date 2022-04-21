@@ -51,7 +51,8 @@ sub make_front
  $detector{"style"}       = 0;
  $detector{"sensitivity"} = "flux";
  $detector{"hit_type"}    = "flux";
- my $ID = $detID+10000;
+#  my $ID = $detID+10000;
+ my $ID = 3;
  $detector{"identifiers"} = "id manual $ID";
  print_det(\%configuration, \%detector);
 }
@@ -137,7 +138,8 @@ sub make_rear
  $detector{"style"}       = 0;
  $detector{"sensitivity"} = "flux";
  $detector{"hit_type"}    = "flux";
- my $ID = $detID+40000;
+#  my $ID = $detID+40000;
+ my $ID = 4;
  $detector{"identifiers"} = "id manual $ID";
  print_det(\%configuration, \%detector);
 }

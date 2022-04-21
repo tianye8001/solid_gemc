@@ -58,11 +58,11 @@ else{}
 print "detID $detID \n";
 
 #Geometry definition
-require "solid_ec_geometry.pl";
-require "solid_ec_virtualplane.pl";
+require "./solid_ec_geometry.pl";
+require "./solid_ec_virtualplane.pl";
 
 #materials
-require "solid_ec_materials.pl";
+require "./solid_ec_materials.pl";
 
 #hit and bank definition Execute only when there are changes
 #hit

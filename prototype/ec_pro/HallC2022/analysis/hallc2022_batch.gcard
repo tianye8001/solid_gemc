@@ -1,30 +1,26 @@
 <gcard>
 
-<detector name="beamline" factory="TEXT" variation="NOtarget"/> 
-<detector name="cc_pro" factory="TEXT" variation="CO2FA"/>
-<detector name="solid_gem" factory="TEXT" variation="Original"/>
-<detector name="solid_ec" factory="TEXT" variation="Original"/>
+<detector name="../geometry/beamline" factory="TEXT" variation="NOtarget"/> 
+<detector name="../geometry/cc_pro" factory="TEXT" variation="CO2FA"/>
+<detector name="../geometry/solid_gem" factory="TEXT" variation="Original"/>
+<detector name="../geometry/solid_ec" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
+<option name="RECORD_PASSBY" value="1"/>
+<option name="SAVE_ALL_MOTHERS" value="1"/>
+<option name="RECORD_OPTICALPHOTONS" value="1"/>
+
 <option name="HIT_PROCESS_LIST" value="solid"/>
 <option name="PHYSICS" value="QGSP_BERT+STD+Optical"/>
-<option name="RECORD_PASSBY" value="1"/>
-<option name="HALL_MATERIAL" value="G4_AIR"/>
+<option name="HALL_MATERIAL" value="G4_Galactic"/>
 
 <option name="MAX_X_POS" value="20000"/>
 <option name="MAX_Y_POS" value="20000"/>
 <option name="MAX_Z_POS" value="20000"/>
 <option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
 
-<option name="BEAM_P"   value="e-,1*GeV,3.5*deg,180*deg"/>
-<option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
-<option name="BEAM_V"   value="(0,0,0)cm"/>
-<option name="SPREAD_V" value="(0,0)cm"/>
-
-<option name="geometry" value="1000x1000"/>
-<option name="HIGH_RES" value="1"/>
-<option name="USE_GUI"  value="1"/>
+<option name="USE_GUI"  value="0"/>
 
 </gcard>
 

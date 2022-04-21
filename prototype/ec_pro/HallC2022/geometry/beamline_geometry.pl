@@ -319,3 +319,6 @@ sub make_beam_coolgas_carbon_hole
     print_det(\%configuration, \%detector);
  }
 }
+
+beamline();
+1;
