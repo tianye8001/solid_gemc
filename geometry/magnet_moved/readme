@@ -1,0 +1,22 @@
+this dir is for longer endcap magnet, while "../magnet" is for shorter endcap
+
+To produce solenoid cryo text file, run this
+./solid_solenoid_cryo_geometry.pl config_solid_solenoid_cryo.dat
+
+To produce solenoid text files, scripts run slightly differently than typical gemc detector construction. 
+We use one standard config.dat, then specify detector name as option as follow
+./solid_solenoid.pl v4
+
+solid_solenoid_v0_geometry.pl 
+longer endcap magnet as a copy and paste of shorter magnet from "../magnet/solid_solenoid_geometry.pl", then make endcap longer by 45cm
+
+longer endcap magnet modeled after info in appendix of Jay Benesch's notes, refer to ../../field/readme
+solid_solenoid_v2_geometry.pl 
+solid_solenoid_v3_geometry.pl 
+solid_solenoid_v4_geometry.pl 
+
+longer endcap cad model,refer to https://solid.jlab.org/wiki/index.php/Engineering_Integration_and_CAD#magnet
+cad model "v1_cad/SoLID_CLEO_MAR_18_v1.0.stl" 
+cad model "v2_cad/SoLID_Iron_Oct20_Update_v2.0_vc.stl"
+
+
