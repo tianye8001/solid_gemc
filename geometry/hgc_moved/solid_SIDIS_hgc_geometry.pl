@@ -35,6 +35,8 @@ my $Z_target=350;  # distance between the target center and the origin
 
 # Parameters
 ## Chamber
+my $Rmin0_chamber=190;  
+my $Rmax0_chamber=240;  
 my $Rmin1_chamber=77;  # inner radius of the chamber at the upstream side
 my $Rmax1_chamber=240;  # outer radius of the chamber at the upstream side
 my $Rmin2_chamber=87; 
@@ -42,11 +44,14 @@ my $Rmax2_chamber=240;
 my $Rmin3_chamber=225;  # inner radius of the chamber at the downstream side
 my $Rmax3_chamber=240;  # outer radius of the chamber at the downstream side
 
+my $Z0_chamber=316;  # z position of the chamber at the upstream side
 my $Zmin_chamber=326;  # z position of the chamber at the upstream side
 my $Zmid_chamber=416;  # z position of the chamber at the upstream side
 my $Zmax_chamber=426;  # z position of the chamber at the downstream side
 
 ## Gas
+my $Rmin0_gas=$Rmin0_chamber+2.54*1.25;
+my $Rmax0_gas=$Rmax0_chamber-2.54;  
 my $Rmin1_gas=$Rmin1_chamber+2.54*1.25;  # inner radius of the gas at the upstream side
 my $Rmax1_gas=$Rmax1_chamber-2.54;  # outer radius of the gas at the upstream side
 my $Rmin2_gas=$Rmin2_chamber+2.54*1.25; 
@@ -71,6 +76,7 @@ my $Rmax_window_back=$Rmax2_gas;  # outer radius of the back windows
 
 ## Gas Cont.
 # my $Zmin_gas=$Zmin_chamber+($halfthickness_window_front_1*2+$halfthickness_window_front_2*2);  # z position of the gas at the upstream side
+my $Z0_gas=$Z0_chamber+1;
 my $Zmin_gas=$Zmin_chamber+$halfthickness_window_front_1*2;  # z position of the gas at the upstream side
 my $Zmid_gas=$Zmid_chamber;  
 my $Zmax_gas=$Zmax_chamber-$halfthickness_window_back*2;  # z position of the gas at the downstream side
@@ -182,7 +188,8 @@ sub make_chamber
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Polycone";
- $detector{"dimensions"}  = "0*deg 360*deg 3*counts $Rmin1_chamber*cm $Rmin2_chamber*cm $Rmin3_chamber*cm $Rmax1_chamber*cm $Rmax2_chamber*cm $Rmax3_chamber*cm $Zmin_chamber*cm $Zmid_chamber*cm $Zmax_chamber*cm";
+#  $detector{"dimensions"}  = "0*deg 360*deg 3*counts $Rmin1_chamber*cm $Rmin2_chamber*cm $Rmin3_chamber*cm $Rmax1_chamber*cm $Rmax2_chamber*cm $Rmax3_chamber*cm $Zmin_chamber*cm $Zmid_chamber*cm $Zmax_chamber*cm";
+ $detector{"dimensions"}  = "0*deg 360*deg 5*counts $Rmin0_chamber*cm $Rmin0_chamber*cm $Rmin1_chamber*cm $Rmin2_chamber*cm $Rmin3_chamber*cm $Rmax0_chamber*cm $Rmax1_chamber*cm $Rmax1_chamber*cm $Rmax2_chamber*cm $Rmax3_chamber*cm $Z0_chamber*cm $Zmin_chamber*cm $Zmin_chamber*cm $Zmid_chamber*cm $Zmax_chamber*cm";
  $detector{"material"}    = "$material_chamber";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -206,7 +213,8 @@ sub make_gas
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Polycone";
- $detector{"dimensions"}  = "0*deg 360*deg 3*counts $Rmin1_gas*cm $Rmin2_gas*cm $Rmin3_gas*cm $Rmax1_gas*cm $Rmax2_gas*cm $Rmax3_gas*cm $Zmin_gas*cm $Zmid_gas*cm $Zmax_gas*cm";
+#  $detector{"dimensions"}  = "0*deg 360*deg 3*counts $Rmin1_gas*cm $Rmin2_gas*cm $Rmin3_gas*cm $Rmax1_gas*cm $Rmax2_gas*cm $Rmax3_gas*cm $Zmin_gas*cm $Zmid_gas*cm $Zmax_gas*cm";
+ $detector{"dimensions"}  = "0*deg 360*deg 5*counts $Rmin0_gas*cm $Rmin0_gas*cm $Rmin1_gas*cm $Rmin2_gas*cm $Rmin3_gas*cm $Rmax0_gas*cm $Rmax1_gas*cm $Rmax1_gas*cm $Rmax2_gas*cm $Rmax3_gas*cm $Z0_gas*cm $Zmin_gas*cm $Zmin_gas*cm $Zmid_gas*cm $Zmax_gas*cm";
  $detector{"material"}    = "$material_gas";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
