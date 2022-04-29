@@ -1,6 +1,6 @@
 <gcard>
 
-<detector name="../geometry/magnet_moved/solid_solenoid_v3" factory="TEXT" variation="Original"/>
+<detector name="../geometry/magnet_moved/solid_solenoid" factory="TEXT" variation="v4"/>
 <detector name="../geometry/magnet_moved/solid_solenoid_cryo" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_largeangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/ec_segmented_moved/solid_SIDIS_ec_forwardangle" factory="TEXT" variation="Original"/>
@@ -28,9 +28,9 @@
 <option name="MAX_Z_POS" value="20000"/>
 <option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
 
-<option name="FIELD_DIR" value="../field"/>
-<option name="HALL_FIELD" value="solenoid_v3"/>
-<option name="FIELD_PROPERTIES" value="solenoid_v3, 0.01*mm, G4ClassicalRK4,linear"/>
+<option name="FIELD_DIR" value="/group/solid/www/solid/html/files/field"/>
+<option name="HALL_FIELD" value="solenoid_v4"/>
+<option name="FIELD_PROPERTIES" value="solenoid_v4, 0.01*mm, G4ClassicalRK4,linear"/>
 
 <option name="BEAM_P"   value="e-,11*GeV,2.555*deg,90*deg"/>
 <option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
