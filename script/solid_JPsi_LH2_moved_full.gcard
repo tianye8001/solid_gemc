@@ -12,7 +12,7 @@
 <detector name="../geometry/spd_moved/solid_SIDIS_spd_largeangle" factory="TEXT" variation="Original"/>
 <detector name="../geometry/gem_moved/solid_SIDIS_gem" factory="TEXT" variation="Original"/>
 <detector name="../geometry/target/solid_JPsi_target_LH2" factory="TEXT" variation="Original"/>
-<detector name="../geometry/beamline/solid_JPsi_beamline" factory="TEXT" variation="Original"/>
+<detector name="../geometry/beamline_moved/solid_JPsi_beamline" factory="TEXT" variation="Original"/>
 
 <option name="INTEGRATEDRAW" value="flux"/>
 
@@ -33,11 +33,16 @@
 <option name="HALL_FIELD" value="solenoid_v4"/>
 <option name="FIELD_PROPERTIES" value="solenoid_v4, 0.01*mm, G4ClassicalRK4,linear"/>
 
-<option name="BEAM_P"   value="e-,5.5*GeV,20*deg,0*deg"/>
-<option name="SPREAD_P" value="5.5*GeV,20*deg,180*deg"/>
-<option name="BEAM_V"   value="(0,0,-315)cm"/>
-<option name="SPREAD_V" value="(0.3,20)cm"/>
+<option name="BEAM_P"   value="e-,5.5*GeV,12*deg,76*deg"/>
+<option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
+<option name="BEAM_V"   value="(0,0,-350)cm"/>
+<option name="SPREAD_V" value="(0,0)cm"/>
 
+<option name="LUMI_EVENT"  value="1, 1*ns, 1*ns" />
+<option name="LUMI_P"   value="e+,2*GeV,20*deg,280*deg"/>
+<option name="LUMI_SPREAD_P" value="0*GeV,0*deg,0*deg"/>
+<option name="LUMI_V"   value="(0,0,-350)cm"/>
+<option name="LUMI_SPREAD_V" value="(0,0)cm"/>
 
 <option name="EXEC_MACRO" value="solid_slice.vis"/>
 <option name="geometry" value="1000x1000"/>
