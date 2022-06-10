@@ -1,5 +1,5 @@
 ===== general idea  ================================================
-Acceptance is basic information about the detector. Running simulation is usually the only way to have it accurately when there's field and complicated geometry involved. But once the simulation is done and the info stored in some format. You don't need to run simulation again to obtain it. 
+geometry acceptance is basic information about the detector. Running simulation is usually the only way to have it accurately when there's field and complicated geometry involved. But once the simulation is done and the info stored in some format. You don't need to run simulation again to obtain it. 
 
 In general, a particle accepted or not by a detector somewhere is determined by the particle type, momentum, angle and vertex position.
 We can run simulation with a single particle type with various mom and angle from a fixed vertex and summarize the acceptance as histogram with value 0 or 1 in dimension of mom, theta, phi angle of this kind of particle at this vertex
@@ -27,7 +27,7 @@ When analyzing results, include cuts to choose good detector areas because flux 
 "simple geometry"
 1. run simulation with the gcard included like "gemc acceptance_solid_SIDIS_He3.gcard"
 2. convert output from evio to root like "evio2root -INPUTF=acceptance_solid_SIDIS_He3_electron_1e7.evio"
-3. analyze results by "root 'acceptance.C+("acceptance_solid_SIDIS_He3_electron_1e7.root")'" (the script runs much faster when compiled)
+3. analyze results by "root 'acceptance.C+("acceptance_solid_SIDIS_He3_electron_1e7.root",11)'" where 11 is ebeam energy used to define histogram range. (the script runs much faster when compiled)
 4. there are many histograms in a root file acceptance_solid_SIDIS_He3_electron_1e7_output.root
 5. there are a few histograms in another root file acceptance_solid_SIDIS_He3_electron_1e7_output_final.root which is only some histograms for late use and some picture file output 
 
