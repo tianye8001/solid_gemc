@@ -34,3 +34,16 @@ example file is locaded at: /volatile/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERS
 
 currently we can use rate w/o internal radiative effect. Use Is_Rad defined at the beginning of the code to turn it on/off.
 Note that the eDIS generator doesn't have internal radiative effect. Only the eAll generator currently has. 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+analysis_PVDIS_FOM_sim.cxx and fileReducer.cxx are the latest file to get the FOM for PVDIS using simulation file by gemc devel
+fileReduce.cxx takes the GEMC simulation output, and extract useful info for the FOM. The reason is that the GEMC outputs are 
+usually very large and they contain too many other infomation that is not needed for the FOM. Change the input file name on line 41. 
+And then in root do:
+.L fileReducer.cxx+
+fileReducer()
+
+One can then take the output of fileReducer and feed it into analysis_PVDIS_FOM_sim.cxx to get the FOM.
+If one wants to get the FOM for the 6.6 GeV beam energy, one will need to comment out line 41.
+To run the code, in root, one can do:
+.L analysis_PVDIS_FOM_sim.cxx
+analysis_PVDIS_FOM_sim("input_file_name.root")

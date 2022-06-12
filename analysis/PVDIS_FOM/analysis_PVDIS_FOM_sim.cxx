@@ -77,12 +77,12 @@ double bin[Nbin][4]={
 };
 #endif
 
-void analysis_PVDIS_FOM_sim()
+void analysis_PVDIS_FOM_sim(string inputFileName)
 {
     //use the output from the fileReducer
     gStyle->SetOptStat(0);
-    TFile* f = new TFile("/home/wxiong/Documents/resonance_more/output_PVDIS_fileReducer_11GeV_21_redo.root", "READ");
-    TTree* t = (TTree*)f->Get("T_T");
+    TFile* f = new TFile(Form("%s", inputFileName.c_str()), "READ");
+    TTree* t = (TTree*)f->Get("T");
     double Q2 = 0;
     double W = 0;
     double x = 0;
