@@ -31,14 +31,16 @@
 //then set this to false
 const bool SplitFiles = false;
 
-void fileReducer()
+void fileReducer(string inputFileName)
 {
     double rout_cut_FA=270,rin_cut_FA=110,rout_cut_LA=0,rin_cut_LA=0;
     unsigned int numberOfFile = 0;
     
     vector<string> input_sim_file;
     if (!SplitFiles){
-        input_sim_file.push_back("/lustre19/expphy/volatile/halla/solid/tianye/container/eAll_commited4fe_rod_6mm_4.4/eAll_commited4fe_rod_6mm_4.4_100files_1e6.root");
+//         input_sim_file.push_back("/lustre19/expphy/volatile/halla/solid/tianye/container/eAll_commited4fe_rod_6mm_4.4/eAll_commited4fe_rod_6mm_4.4_100files_1e6.root");
+        input_sim_file.push_back(inputFileName.c_str());
+
         
         string sToFind = "files_";
         std::size_t found = input_sim_file[0].find(sToFind);
@@ -68,7 +70,8 @@ void fileReducer()
     }
     
 
-    TFile* outFile = new TFile("output_PVDIS_fileReducer_4.4GeV_eAll.root", "RECREATE");
+//     TFile* outFile = new TFile("output_PVDIS_fileReducer_4.4GeV_eAll.root", "RECREATE");
+    TFile* outFile = new TFile("output_reduced.root", "RECREATE");
     TTree* outTree = new TTree("T", "T");
     double Ei = 0.;
     double Q2 = 0;

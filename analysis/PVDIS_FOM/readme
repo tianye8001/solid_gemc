@@ -1,49 +1,60 @@
 This tool is to calculate PVDIS Figure of Merit which is Apv_Err in Q2 and x bin
 
-It uses root output from full solid simulation
+It uses root output from solid gemc simulation
+
+~~update 2022/06   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+by Weizhi Xiong
+
+analysis_PVDIS_FOM_sim.cxx and fileReducer.cxx are the latest file to get the FOM for PVDIS using simulation file by gemc devel
+fileReduce.cxx takes the GEMC simulation output, and extract useful info for the FOM. The reason is that the GEMC outputs are usually very large and they contain too many other information that is not needed for the FOM. 
+And then in root do:
+.L fileReducer.cxx+
+fileReducer("input_file_name.root")
+a file output_reduced.root is produced
+
+One can then take the output of fileReducer and feed it into analysis_PVDIS_FOM_sim.cxx to get the FOM.
+If one wants to get the FOM for the 6.6 GeV beam energy, one will need to comment out line 41.
+To run the code, in root, one can do:
+.L analysis_PVDIS_FOM_sim.cxx+
+analysis_PVDIS_FOM_sim("output_reduced.root")
+
+~~update 2021/02 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+by Weizhi Xiong
+
+analysis_PVDIS_FOM.C_devel is the file to get the FOM for PVDIS using simulation file by gemc devel
+
+require root 6 and do the following
+source /group/solid/apps/root/root_v6.18.04.Linux-centos7-x86_64-gcc4.8/bin/thisroot.csh
+.L analysis_PVDIS_FOM.C_devel+
+analysis_PVDIS_FOM("filename")    # for normal root files
+analysis_PVDIS_FOM("filename",true)  # for devel pass1 file with bad root entry
+
+example file is at: /cache/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_weighted_eAll_filenum100_1e6.root
+
+currently we can use rate w/o internal radiative effect. Use Is_Rad defined at the beginning of the code to turn it on/off.
+Note that the eDIS generator doesn't have internal radiative effect. Only the eAll generator currently has. 
+
+~~update 2020/04  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+by Zhiwen Zhao
 
 how to run it
-root 'analysis_PVDIS_FOM("sim.root","gen.root")'
+root 'analysis_PVDIS_FOM.C("sim.root","gen.root")'
 
-a test
+for example
 root 'analysis_PVDIS_FOM("/work/halla/solid/sim/solid_gemc/PVDIS_LD2_JLAB_VERSION_1.3/pass7/farm_solid_PVDIS_LD2_dirty_weighted_eDIS/out.root","/work/halla/solid/sim/solid_gemc/PVDIS_LD2_JLAB_VERSION_1.3/pass7/farm_solid_PVDIS_LD2_dirty_weighted_eDIS/gen.root")'
 
 results are in "output.root"
 
 It use result eDIS from generator eicRate
 Apv is checked with two method
-1. Apv=0.84e-4*Q2
-2. Apv=Abeam from the generator
+1. 0.84e-4*Q2
+2. Abeam from the generator
 
 Abeam is not stored in root output from full solid simulation yet
 So it has to be read from root output from generator for now
 
-The code analysis_PVDIS_FOM is modified from pvdis_FOM.C to read root output of from full solid simulation
+The code analysis_PVDIS_FOM.C is modified from pvdis_FOM.C to read root output of from full solid simulation
 pvdis_FOM.C is just a copy from https://jlabsvn.jlab.org/svnroot/solid/study/PVDIS_FOM/
 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-analysis_PVDIS_FOM_new.C is the file to get the FOM for PVDIS using simulation file by gemc devel
-
-require root 6 and do the following
-source /group/solid/apps/root/root_v6.18.04.Linux-centos7-x86_64-gcc4.8/bin/thisroot.csh
-.L analysis_PVDIS_FOM_new.C+
-analysis_PVDIS_FOM("filename")    # for normal root files
-analysis_PVDIS_FOM("filename",true)  # for devel pass1 file with bad root entry
-
-example file is locaded at: /volatile/halla/solid/sim/solid_gemc/PVDIS_JLAB_VERSION_devel/pass2/solid_PVDIS_LD2_moved_dirty_weighted_eAll_filenum100_1e6.root
-
-currently we can use rate w/o internal radiative effect. Use Is_Rad defined at the beginning of the code to turn it on/off.
-Note that the eDIS generator doesn't have internal radiative effect. Only the eAll generator currently has. 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-analysis_PVDIS_FOM_sim.cxx and fileReducer.cxx are the latest file to get the FOM for PVDIS using simulation file by gemc devel
-fileReduce.cxx takes the GEMC simulation output, and extract useful info for the FOM. The reason is that the GEMC outputs are 
-usually very large and they contain too many other infomation that is not needed for the FOM. Change the input file name on line 41. 
-And then in root do:
-.L fileReducer.cxx+
-fileReducer()
-
-One can then take the output of fileReducer and feed it into analysis_PVDIS_FOM_sim.cxx to get the FOM.
-If one wants to get the FOM for the 6.6 GeV beam energy, one will need to comment out line 41.
-To run the code, in root, one can do:
-.L analysis_PVDIS_FOM_sim.cxx
-analysis_PVDIS_FOM_sim("input_file_name.root")
