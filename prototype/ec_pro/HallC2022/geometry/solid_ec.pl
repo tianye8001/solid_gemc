@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-# use strict;
+use strict;
 use lib ("$ENV{GEMC}/io");
 use lib ("$ENV{GEMC}/api/perl");
 use parameters;
@@ -11,7 +11,7 @@ use hit;
 use bank;
 use math;
 
-use Math::Trig;
+# use Math::Trig;
 # use Math::MatrixReal;
 # use Math::VectorReal;
 
@@ -35,27 +35,31 @@ if( scalar @ARGV != 1)
 }
 
 # Loading configuration file and paramters
-# my $config_file   = $ARGV[0];
-my $config_file   = "config_solid_ec.dat";
+my $config_file   = $ARGV[0];
 our %configuration = load_configuration($config_file);
 
 # One can change the "variation" here if one is desired different from the config.dat
-# $configuration{"detector_name"} = "solid_PVDIS_ec_forwardangle";
-$configuration{"detector_name"} = "$ARGV[0]";
+$configuration{"detector_name"} = "solid_ec";
 $configuration{"variation"} = "Original";
 
 # To get the parameters proper authentication is needed.
 our %parameters    = get_parameters(%configuration);
 
-our $DetectorName=$ARGV[0];
-print "DetectorName $DetectorName \n";
+%configuration = load_configuration($config_file);
+$configuration{"detector_name"} = "solid_ec";
 
-our $detID=0;
-if($DetectorName eq "solid_ec"){
-    $detID=3100000;
-}
-else{}
-print "detID $detID \n";
+# our $DetectorName=$ARGV[0];
+# print "DetectorName $DetectorName \n";
+
+# our $detID=0;
+# if($DetectorName eq "solid_ec"){
+#     $detID=3100000;
+# }
+# else{}
+# print "detID $detID \n";
+
+our $DetectorName= "solid_ec";
+our $detID=3100000;
 
 #Geometry definition
 require "./solid_ec_geometry.pl";

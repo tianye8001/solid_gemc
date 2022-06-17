@@ -1,7 +1,8 @@
 #!/usr/bin/perl -w
 
-use strict;
+# use strict;
 use lib ("$ENV{GEMC}/io");
+use lib ("$ENV{GEMC}/api/perl");
 use utils;
 use mirrors;
 
@@ -25,7 +26,7 @@ if( scalar @ARGV != 1)
 
 
 # Loading configuration file and paramters
-our %configuration = load_configuration($ARGV[0]);
+# our %configuration = load_configuration($ARGV[0]);
 
 # One can change the "variation" here if one is desired different from the config.dat
 # $configuration{"variation"} = "myvar";

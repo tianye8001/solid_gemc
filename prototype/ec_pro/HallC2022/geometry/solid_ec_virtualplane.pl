@@ -13,12 +13,13 @@ use Math::Trig;
 # my $DetectorMother="root";
 my $DetectorMother="cc_pro_tcd";
 
-my $z_shower 		= $parameters{"z_shower"};
+# my $z_shower 		= $parameters{"z_shower"};
 # my $Rmin 		= $parameters{"Rmin"}-5;
 # my $Rmax 		= $parameters{"Rmax"}+5;
 my $Rmin 		= $parameters{"Rmin"};
 my $Rmax 		= $parameters{"Rmax"};
 
+my $z_shower = 56*2.54/2+4.5+1.5+14.7+5+2+0.6+1.5+2+15.1+1.1+2.4+2+45/2.; 
 
 sub solid_ec_virtualplane
 {

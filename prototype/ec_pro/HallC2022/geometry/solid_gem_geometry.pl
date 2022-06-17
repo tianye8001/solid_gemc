@@ -1,4 +1,4 @@
-use strict;
+# use strict;
 use warnings;
 our %detector;
 our %configuration;
@@ -16,10 +16,10 @@ sub solid_gem_geometry
 make_gem();
 }
 
-my $z1	= -55*2.54/2-3-5;
-my $z2	= -55*2.54/2-3-1;
-my $hx	= 10;
-my $hy	= 10;
+my $z1	= -56*2.54/2-6.5-5-7.5-1.5/2;
+my $z2	=  56*2.54/2+4.5+1.5/2;
+my $hx	= 5;
+my $hy	= 5;
 
 my @PlateZ = ($z1,$z2);
 

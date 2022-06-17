@@ -31,8 +31,9 @@
 #     e.g. by "mass fraction" or by "mole fraction" or volumn etc.
 #
  
-use strict;
+# use strict;
 use lib ("$ENV{GEMC}/io");
+use lib ("$ENV{GEMC}/api/perl");
 use utils;
 use materials;
 
@@ -54,7 +55,7 @@ if( scalar @ARGV != 1)
 }
 
 # Loading configuration file from argument
-our %configuration = load_configuration($ARGV[0]);
+# our %configuration = load_configuration($ARGV[0]);
 
 sub define_material
 {

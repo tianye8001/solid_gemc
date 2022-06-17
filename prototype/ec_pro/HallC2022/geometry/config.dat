@@ -1,8 +1,8 @@
 # Configuration file for new_detector
 
 # Detector name and variation
-detector_name: solid_gem
-variation:     Original
+detector_name: detector
+variation:     CO2LA
 
 # Factory can be MYQL or TEXT
 factory:       TEXT
@@ -15,7 +15,7 @@ rmax:       10000
 dbhost: localhost
 
 # Comments/Description
-comment:       solid_gem
+comment:       detector
 
 # Verbosity controls the perl script output
 verbosity: 1

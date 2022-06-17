@@ -1,12 +1,13 @@
 =geometry details ==
-"cc_pro_tcd" is a virtual mother volume and all detector should be its daughter
-for "cc_pro_tcd" location, change $AngY_tcd, $rmin_chamber in cc_pro_geometry.pl and change "variation" in config_cc_pro.dat
+"cc_pro_tcd" is a virtual mother volume and all detector should be its daughters
+for "cc_pro_tcd" location, change $AngY_tcd (angle relative to beam direction) , $rmin_chamber (cc tank front window relative to target center) in cc_pro_geometry.pl and change "variation" in config_cc_pro.dat
 for different gas in Cherenkov, change "$material_gas", $material_pmt_surface in cc_pro_geometry.pl and change "variation" in config_cc_pro.dat
 
 = run simulation =====
 get ready to run on ifarm 
 cd your_work_dir
 git clone https://github.com/JeffersonLab/solid_gemc.git  (or do git pull)
+cd solid_gemc
 module load singularity/3.9.5
 singularity shell -s /bin/tcsh -B ${PWD}:/solid_gemc /group/solid/apps/jeffersonlab_jlabce_tag2.5_digest:sha256:9b9a9ec8c793035d5bfe6651150b54ac298f5ad17dca490a8039c530d0302008_20220413_s3.9.5.sif
 set prompt = '[#Container# %n@%m %c]$ '
@@ -19,19 +20,20 @@ scons OPT=1 -j4  (compile solid_gemc, do it once)
 create or update geometry 
 cd $SoLID_GEMC/prototype/ec_pro/HallC2022/geometry/
 ./beamline.pl config_beamline.dat
-./cc_pro.pl config_cc_pro.dat
-./solid_gem.pl config_solid_gem.dat 
-./solid_ec.pl solid_ec
+./cc_pro.pl config.dat
+./solid_spd.pl config.dat 
+./solid_gem.pl config.dat 
+./solid_ec.pl config.dat
 
 run with graphic 
 cd $SoLID_GEMC/prototype/ec_pro/HallC2022/analysis
 solid_gemc hallc2022.gcard
 
 run without graphic 
-solid_gemc hallc2022_batch.gcard -BEAM_P="e-,2*GeV,3.5*deg,180*deg" -BEAM_V="(0,0,0)cm" -OUTPUT="evio,out_even.evio" -N=1e2
+solid_gemc hallc2022_batch.gcard -BEAM_P="e-,3*GeV,73*deg,0*deg" -BEAM_V="(0,0,0)cm" -OUTPUT="evio,out_even.evio" -N=1e2
 
 convert to root file
-evio2root -INPUTF=out_even.evio -B="../geometry/cc_pro ../geometry/solid_ec ../geometry/solid_gem" -R="flux"
+evio2root -INPUTF=out_even.evio -B="../geometry/cc_pro ../geometry/solid_ec ../geometry/solid_gem ../geometry/solid_spd" -R="flux"
 
 exit container
 ctrl-d or exit

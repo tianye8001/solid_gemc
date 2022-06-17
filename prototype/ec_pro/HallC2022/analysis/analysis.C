@@ -30,6 +30,7 @@ using namespace std;
 
 #include "analysis_tree_solid_hgc.C"
 #include "analysis_tree_solid_ec.C"
+#include "analysis_tree_solid_spd.C"
 
 // some numbers to be hard coded 
 // make sure they are correct while using this script
@@ -483,6 +484,10 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	TTree* tree_solid_ec_ps= (TTree*) file->Get("solid_ec_ps");
 	setup_tree_solid_ec(tree_solid_ec);	
 	setup_tree_solid_ec_ps(tree_solid_ec_ps);	
+
+	//information recorded by spd
+	TTree* tree_solid_spd= (TTree*) file->Get("solid_spd");
+	setup_tree_solid_spd(tree_solid_spd);	
 	
 	TRandom3 rand;
 	rand.SetSeed(0);
@@ -614,8 +619,8 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  if(flux_id->at(j)==1) hit_id=0; // SC front,SC1
 		  else if(flux_id->at(j)==2) hit_id=1; // SC back, SC2
 		  else if(flux_id->at(j)==3) hit_id=2; // EC front
-		  else if(flux_id->at(j)==4) hit_id=3; // EC back	  
-		  else if(flux_id->at(j)==5) hit_id=4; // GEM 1	  
+		  else if(flux_id->at(j)==4) hit_id=3; // EC back
+		  else if(flux_id->at(j)==5) hit_id=4; // GEM 1
 		  else if(flux_id->at(j)==6) hit_id=5; // GEM 2	  
 		  else if(flux_id->at(j)==10) hit_id=6; // Cherenkov front window
 		  else cout << "wrong flux_id" << flux_id->at(j) << endl;
@@ -626,7 +631,7 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  
 		  if (flux_tid->at(j) == 1){
 		    hhit_xy_orig[hit_id]->Fill(flux_avg_lx->at(j)/1e1,flux_avg_ly->at(j)/1e1,rate);
-		  }		  
+		  }
 
 		  double E=flux_trackE->at(j)/1e3,Edep=flux_totEdep->at(j)/1e3;		  
 		  hhit_Edep[hit_id]->Fill(Edep,rate);		  
@@ -635,14 +640,14 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 		  if (abs(flux_pid->at(j)) == 11 || flux_pid->at(j)==22) hhit_E_photonele[hit_id]->Fill(E,rate);
 		  if (abs(flux_pid->at(j)) == 11) hhit_E_ele[hit_id]->Fill(E,rate);  
 		  
-		  if (hit_id==0) {
-		    Edepsc1 += Edep;
-// 		    hprocid_sc1->Fill(flux_procID->at(j),rate);
-		  }
-		  else if (hit_id==1) {
-		    Edepsc2 += Edep;
-// 		    hprocid_sc2->Fill(flux_procID->at(j),rate);
-		  }
+// 		  if (hit_id==0) {
+// 		    Edepsc1 += Edep;
+// // 		    hprocid_sc1->Fill(flux_procID->at(j),rate);
+// 		  }
+// 		  else if (hit_id==1) {
+// 		    Edepsc2 += Edep;
+// // 		    hprocid_sc2->Fill(flux_procID->at(j),rate);
+// 		  }
 		    
 		}	// end of flux		
 
@@ -653,8 +658,8 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 // 		  hhit_Eec_photonele->Fill(Eec_photonele,rate);		  
 // 		  hhit_Eec_ele->Fill(Eec_ele,rate);	
 
-		  hhit_Edepsc1->Fill(log10(Edepsc1),rate);
-		  hhit_Edepsc2->Fill(log10(Edepsc2),rate);
+// 		  hhit_Edepsc1->Fill(log10(Edepsc1),rate);
+// 		  hhit_Edepsc2->Fill(log10(Edepsc2),rate);
 		  hhit_Eec->Fill(log10(Eec),rate);
 		  hhit_Eec_photonele->Fill(log10(Eec_photonele),rate);		  
 		  hhit_Eec_ele->Fill(log10(Eec_ele),rate);	
@@ -855,6 +860,18 @@ TFile *outputfile=new TFile(outputfile_name, "recreate");
 	      process_tree_solid_ec(tree_solid_ec,tree_solid_ec_ps,Eend_ec,Eend_ec_ps);
 
 	      hec_Eend_2D->Fill(Eend_ec,Eend_ec_ps);
+	      
+		// process spd
+		tree_solid_spd->GetEntry(i);
+		
+	      double Edep_sc1=0, Edep_sc2=0, Edep_spd1=0, Edep_spd2=0;
+
+	      process_tree_solid_spd_simple(tree_solid_spd,Edep_sc1,Edep_sc2,Edep_spd1,Edep_spd2);
+	      
+// 	      cout << "sc and spd Edep " << Edep_sc1 << "\t" << Edep_sc2 << "\t" << Edep_spd1 << "\t" << Edep_spd2 << endl;
+	      
+		  hhit_Edepsc1->Fill(log10(Edep_sc1),rate);
+		  hhit_Edepsc2->Fill(log10(Edep_sc2),rate);
 	      
 	} //end loop
 	

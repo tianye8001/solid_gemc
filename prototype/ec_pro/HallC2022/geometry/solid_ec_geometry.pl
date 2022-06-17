@@ -63,7 +63,7 @@ my $Angle_module        = $parameters{"Angle_module"};
 my $Radius_shower 	= $parameters{"Radius_shower"};
 my $Radius_rod 		= $parameters{"Radius_rod"};
 my $R_rod 		= $parameters{"R_rod"};
-my $z_shower 		= $parameters{"z_shower"};
+# my $z_shower 		= $parameters{"z_shower"};
 my $Rmin 		= $parameters{"Rmin"};
 my $Rmax 		= $parameters{"Rmax"};
 my $Sphi 		= $parameters{"Sphi"};
@@ -89,6 +89,8 @@ for(my $i=1; $i<=$total_module; $i++)
 }
 
 my $vis_inner=0;
+
+my $z_shower = 56*2.54/2+4.5+1.5+14.7+5+2+0.6+1.5+2+15.1+1.1+2.4+2+45/2.; 
 
 my $Thickness_layer=$Thickness_lead+$Thickness_scint+$Thickness_gap+$Thickness_paint; #0.234cm
 my $Thickness_shower=$Thickness_layer*$Nlayer;  #45.395cm
@@ -286,34 +288,34 @@ sub make_ec_module_shower()
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);
 	
-	if($j == 1){
-	  for(my $l=1; $l<=6; $l++){
-	    $detector{"name"}        = "$DetectorName\_showe$id\_paintfrontrod$l";
-	    $detector{"mother"}      = "$DetectorName\_showe$id\_paintfront1";
-	    $detector{"description"} = $detector{"name"};
-	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
-	    my $rod_y=$Radius_rod*sin(($l-1)*60/180*3.1416);
-	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
-	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-	    $detector{"color"}      = "$color_rod";
-	    if($l == 1){
-	    $detector{"type"}       = "Tube";
-	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_paint*cm 0*deg 360*deg";    
-	    }
-	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_paintfrontrod1";}	
-	    $detector{"material"}   = $material_rod;
-	    $detector{"mfield"}     = "no";
-	    $detector{"ncopy"}      = 1;
-	    $detector{"pMany"}       = 1;
-	    $detector{"exist"}       = 1;
-	    $detector{"visible"}     = $vis_inner;
-	    $detector{"style"}       = 1;     	
-	    $detector{"sensitivity"} = "no";
-	    $detector{"hit_type"}    = "no";
-	    $detector{"identifiers"} = "no";	
-	    print_det(\%configuration, \%detector);
-	  }
-	}		
+# 	if($j == 1){
+# 	  for(my $l=1; $l<=6; $l++){
+# 	    $detector{"name"}        = "$DetectorName\_showe$id\_paintfrontrod$l";
+# 	    $detector{"mother"}      = "$DetectorName\_showe$id\_paintfront1";
+# 	    $detector{"description"} = $detector{"name"};
+# 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
+# 	    my $rod_y=$Radius_rod*sin(($l-1)*60/180*3.1416);
+# 	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
+# 	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+# 	    $detector{"color"}      = "$color_rod";
+# 	    if($l == 1){
+# 	    $detector{"type"}       = "Tube";
+# 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_paint*cm 0*deg 360*deg";    
+# 	    }
+# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_paintfrontrod1";}	
+# 	    $detector{"material"}   = $material_rod;
+# 	    $detector{"mfield"}     = "no";
+# 	    $detector{"ncopy"}      = 1;
+# 	    $detector{"pMany"}       = 1;
+# 	    $detector{"exist"}       = 1;
+# 	    $detector{"visible"}     = $vis_inner;
+# 	    $detector{"style"}       = 1;     	
+# 	    $detector{"sensitivity"} = "no";
+# 	    $detector{"hit_type"}    = "no";
+# 	    $detector{"identifiers"} = "no";	
+# 	    print_det(\%configuration, \%detector);
+# 	  }
+# 	}		
 	
 	my $paintbackZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint;
 
@@ -340,34 +342,34 @@ sub make_ec_module_shower()
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);	
 	
-	if($j == 1){
-	  for(my $l=1; $l<=6; $l++){
-	    $detector{"name"}        = "$DetectorName\_showe$id\_paintbackrod$l";
-	    $detector{"mother"}      = "$DetectorName\_showe$id\_paintback1";
-	    $detector{"description"} = $detector{"name"};
-	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
-	    my $rod_y=$Radius_rod*sin(($l-1)*60/180*3.1416);
-	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
-	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-	    $detector{"color"}      = "$color_rod";
-	    if($l == 1){
-	    $detector{"type"}       = "Tube";
-	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_paint*cm 0*deg 360*deg";    
-	    }
-	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_paintbackrod1";}	
-	    $detector{"material"}   = $material_rod;
-	    $detector{"mfield"}     = "no";
-	    $detector{"ncopy"}      = 1;
-	    $detector{"pMany"}       = 1;
-	    $detector{"exist"}       = 1;
-	    $detector{"visible"}     = $vis_inner;
-	    $detector{"style"}       = 1;     	
-	    $detector{"sensitivity"} = "no";
-	    $detector{"hit_type"}    = "no";
-	    $detector{"identifiers"} = "no";	
-	    print_det(\%configuration, \%detector);
-	  }
-	}
+# 	if($j == 1){
+# 	  for(my $l=1; $l<=6; $l++){
+# 	    $detector{"name"}        = "$DetectorName\_showe$id\_paintbackrod$l";
+# 	    $detector{"mother"}      = "$DetectorName\_showe$id\_paintback1";
+# 	    $detector{"description"} = $detector{"name"};
+# 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
+# 	    my $rod_y=$Radius_rod*sin(($l-1)*60/180*3.1416);
+# 	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
+# 	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+# 	    $detector{"color"}      = "$color_rod";
+# 	    if($l == 1){
+# 	    $detector{"type"}       = "Tube";
+# 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_paint*cm 0*deg 360*deg";    
+# 	    }
+# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_paintbackrod1";}	
+# 	    $detector{"material"}   = $material_rod;
+# 	    $detector{"mfield"}     = "no";
+# 	    $detector{"ncopy"}      = 1;
+# 	    $detector{"pMany"}       = 1;
+# 	    $detector{"exist"}       = 1;
+# 	    $detector{"visible"}     = $vis_inner;
+# 	    $detector{"style"}       = 1;     	
+# 	    $detector{"sensitivity"} = "no";
+# 	    $detector{"hit_type"}    = "no";
+# 	    $detector{"identifiers"} = "no";	
+# 	    print_det(\%configuration, \%detector);
+# 	  }
+# 	}
 	
 	#build gap
 	my $Dz_gap = $Thickness_gap/4;	
@@ -397,34 +399,34 @@ sub make_ec_module_shower()
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);
 	
-	if($j == 1){
-	  for(my $l=1; $l<=6; $l++){
-	    $detector{"name"}        = "$DetectorName\_showe$id\_gapfrontrod$l";
-	    $detector{"mother"}      = "$DetectorName\_showe$id\_gapfront1";
-	    $detector{"description"} = $detector{"name"};
-	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
-	    my $rod_y=$Radius_rod*sin(($l-1)*60/180*3.1416);
-	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
-	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-	    $detector{"color"}      = "$color_rod";
-	    if($l == 1){
-	    $detector{"type"}       = "Tube";
-	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_gap*cm 0*deg 360*deg";    
-	    }
-	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapfrontrod1";}	
-	    $detector{"material"}   = $material_rod;
-	    $detector{"mfield"}     = "no";
-	    $detector{"ncopy"}      = 1;
-	    $detector{"pMany"}       = 1;
-	    $detector{"exist"}       = 1;
-	    $detector{"visible"}     = $vis_inner;
-	    $detector{"style"}       = 1;     	
-	    $detector{"sensitivity"} = "no";
-	    $detector{"hit_type"}    = "no";
-	    $detector{"identifiers"} = "no";	
-	    print_det(\%configuration, \%detector);
-	  }
-	}		
+# 	if($j == 1){
+# 	  for(my $l=1; $l<=6; $l++){
+# 	    $detector{"name"}        = "$DetectorName\_showe$id\_gapfrontrod$l";
+# 	    $detector{"mother"}      = "$DetectorName\_showe$id\_gapfront1";
+# 	    $detector{"description"} = $detector{"name"};
+# 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
+# 	    my $rod_y=$Radius_rod*sin(($l-1)*60/180*3.1416);
+# 	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
+# 	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+# 	    $detector{"color"}      = "$color_rod";
+# 	    if($l == 1){
+# 	    $detector{"type"}       = "Tube";
+# 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_gap*cm 0*deg 360*deg";    
+# 	    }
+# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapfrontrod1";}	
+# 	    $detector{"material"}   = $material_rod;
+# 	    $detector{"mfield"}     = "no";
+# 	    $detector{"ncopy"}      = 1;
+# 	    $detector{"pMany"}       = 1;
+# 	    $detector{"exist"}       = 1;
+# 	    $detector{"visible"}     = $vis_inner;
+# 	    $detector{"style"}       = 1;     	
+# 	    $detector{"sensitivity"} = "no";
+# 	    $detector{"hit_type"}    = "no";
+# 	    $detector{"identifiers"} = "no";	
+# 	    print_det(\%configuration, \%detector);
+# 	  }
+# 	}		
 	
 	my $gapbackZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint*2+$Dz_gap*2+$Thickness_scint+$Dz_gap;
 
@@ -451,34 +453,34 @@ sub make_ec_module_shower()
 	$detector{"identifiers"} = "no";
 	print_det(\%configuration, \%detector);	
 	
-	if($j == 1){
-	  for(my $l=1; $l<=6; $l++){
-	    $detector{"name"}        = "$DetectorName\_showe$id\_gapbackrod$l";
-	    $detector{"mother"}      = "$DetectorName\_showe$id\_gapback1";
-	    $detector{"description"} = $detector{"name"};
-	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
-	    my $rod_y=$Radius_rod*sin(($l-1)*60/180*3.1416);
-	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
-	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-	    $detector{"color"}      = "$color_rod";
-	    if($l == 1){
-	    $detector{"type"}       = "Tube";
-	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_gap*cm 0*deg 360*deg";    
-	    }
-	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapbackrod1";}	
-	    $detector{"material"}   = $material_rod;
-	    $detector{"mfield"}     = "no";
-	    $detector{"ncopy"}      = 1;
-	    $detector{"pMany"}       = 1;
-	    $detector{"exist"}       = 1;
-	    $detector{"visible"}     = $vis_inner;
-	    $detector{"style"}       = 1;     	
-	    $detector{"sensitivity"} = "no";
-	    $detector{"hit_type"}    = "no";
-	    $detector{"identifiers"} = "no";	
-	    print_det(\%configuration, \%detector);
-	  }
-	}		
+# 	if($j == 1){
+# 	  for(my $l=1; $l<=6; $l++){
+# 	    $detector{"name"}        = "$DetectorName\_showe$id\_gapbackrod$l";
+# 	    $detector{"mother"}      = "$DetectorName\_showe$id\_gapback1";
+# 	    $detector{"description"} = $detector{"name"};
+# 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
+# 	    my $rod_y=$Radius_rod*sin(($l-1)*60/180*3.1416);
+# 	    $detector{"pos"}        = "$rod_x*cm $rod_y*cm 0*cm";
+# 	    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
+# 	    $detector{"color"}      = "$color_rod";
+# 	    if($l == 1){
+# 	    $detector{"type"}       = "Tube";
+# 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_gap*cm 0*deg 360*deg";    
+# 	    }
+# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapbackrod1";}	
+# 	    $detector{"material"}   = $material_rod;
+# 	    $detector{"mfield"}     = "no";
+# 	    $detector{"ncopy"}      = 1;
+# 	    $detector{"pMany"}       = 1;
+# 	    $detector{"exist"}       = 1;
+# 	    $detector{"visible"}     = $vis_inner;
+# 	    $detector{"style"}       = 1;     	
+# 	    $detector{"sensitivity"} = "no";
+# 	    $detector{"hit_type"}    = "no";
+# 	    $detector{"identifiers"} = "no";	
+# 	    print_det(\%configuration, \%detector);
+# 	  }
+# 	}		
 	
 	#build scint rod
 	  my $scintZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint*2+$Dz_gap*2+$Thickness_scint/2;	
