@@ -2,19 +2,20 @@
 #source this script to setup solid_gemc software
 
 #default jlabce version, or use command option to use other version
-setenv JLAB_VERSION 1.3
+setenv JLAB_VERSION 2.5
 if( "$1" != "" ) setenv JLAB_VERSION $1
 
 setenv JLAB_ROOT /jlab
 if( "$2" != "" ) setenv JLAB_ROOT $2
 
 #default repo, change it to your location
-setenv SoLID_GEMC /solid/solid_gemc
+setenv SoLID_GEMC /solid_gemc 
+# setenv SoLID_GEMC /solid/solid_gemc # default in container for 1.3
 if( "$3" != "" ) setenv SoLID_GEMC $3
 
 #no need to modify variables below generally
 #========================================================================
-source $JLAB_ROOT/$JLAB_VERSION/ce/jlab.csh       #setup basic enviroment variables 
+source $JLAB_ROOT/$JLAB_VERSION/ce/jlab.csh       #setup basic environment variables 
 
 # add path for "libgemc.so"
 if( "$JLAB_VERSION" == "1.2" || "$JLAB_VERSION" == "1.3"  ) setenv LD_LIBRARY_PATH ${GEMC}/source:${LD_LIBRARY_PATH}   
@@ -23,14 +24,3 @@ endif
 
 # add path for "solid_gemc" binary
 setenv PATH ${SoLID_GEMC}/source/${GEMC_VERSION}:${PATH} 
-
-# setenv GEMC_HOST soliddb.jlab.org   #use this if your system is on jlab network
-# #setenv GEMC_HOST 127.0.0.1       #use this if you are tunnleing to access mysql server
-# setenv GEMC_DB solid_geometry       #the official detector database
-# setenv GEMC_BANK solid_banks        #the official output bank info
-# #setenv GEMC_DB   test              #user geometry for test
-# #setenv GEMC_BANK test              #user banks for test
-# setenv GEMC_USER soliduser          #this user only can read database, used for run simulation
-# setenv GEMC_PASS ilovesolid         #readonly user password
-# #setenv GEMC_USER soliddev          #this user can read and write, used for update database
-# #setenv GEMC_PASS                   #ask other solid gemc develeoper for this password
