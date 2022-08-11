@@ -20,9 +20,9 @@ my $DEG=180/3.1415926;  # conversion factor between degrees and radians
 ## Chamber
 my $AngX_tcd=0.0;
 # my $AngY_tcd=0.0;
-# my $AngY_tcd=-74.55;  #2020 hallc test, 74.55deg at left side of beam direction, angle from the upstream beamline to the Cherenkov is about 105.45 with a hard to estimate error,  
-# my $AngY_tcd=3.5; #2020 hallc test, 3.5deg at right side of beam direction
-my $AngY_tcd=-73; #2022 hallc test, 73deg at left side of beam direction
+# my $AngY_tcd=-74.55;  #2020 hallc test, large angle 74.55deg at left side of beam direction, angle from the upstream beamline to the Cherenkov is about 105.45 with a hard to estimate error,  
+# my $AngY_tcd=3.5; #2020 hallc test, small angle 3.5deg at right side of beam direction
+my $AngY_tcd=-82.2; #2022 hallc test, large angle at left side of beam direction, according to survey and alignment to target center is very good within 0.3deg
 
 # at 2020 hallc test
 # measurement done at front scintilator plane ($sc1_r) which is 5" before chamber front window
@@ -31,7 +31,7 @@ my $AngY_tcd=-73; #2022 hallc test, 73deg at left side of beam direction
 # my $rmin_chamber=1189+5*2.54;  # z position of the chamber entrance at small angle
 
 # at 2022 hallc test
-my $rmin_chamber=820-30.5;  # z position of the chamber entrance  at large angle,
+my $rmin_chamber=843.69;  # z position of the chamber entrance at large angle according to survey
 
 # my $halflength_chamber_l = 60*2.54/2;
 my $halflength_chamber_l = 56*2.54/2;
