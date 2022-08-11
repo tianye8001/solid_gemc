@@ -17,7 +17,6 @@ sub solid_SIDIS_beamline_He3
 {
 make_beam_entrance();
 make_beam_exit();
-make_beam_coolgas_He3();
 }
 
 my $z_target = -350;
@@ -144,42 +143,3 @@ sub make_beam_exit
  }
 }
 
-sub make_beam_coolgas_He3
-{
-# upstream window 25cm from target center, downstream window 25cm from target center
-# filled with N2 gas or He4 gas
- my $half_target_length=40/2.;
- my $NUM  = 3;
- my @z    = (($z_win_upstream+$z_target-$half_target_length)/2.,($z_win_downstream+$z_target+$half_target_length)/2.,$z_target);
- my @Rin  = (0.,0.,1.1);
- my @Rout = (50,50,50);
- my @Dz   = (($z_target-$half_target_length-$z_win_upstream)/2.0,($z_win_downstream-$z_target-$half_target_length)/2.0,$half_target_length);
- my @name = ("coolgas_upstream","coolgas_downstream","coolgas_around"); 
- my @mother = ("$DetectorMother","$DetectorMother","$DetectorMother");
- my @mat  = ("G4_N","G4_N","G4_N");
- my @color = ("808088","808088","808088");
- 
- for(my $n=1; $n<=$NUM; $n++)
- {
-    my %detector=init_det();
-    $detector{"name"}        = "$DetectorName\_$name[$n-1]";
-    $detector{"mother"}      = "$mother[$n-1]" ;
-    $detector{"description"} = "$DetectorName\_$name[$n-1]";
-    $detector{"pos"}        = "0*cm 0*cm $z[$n-1]*cm";
-    $detector{"rotation"}   = "0*deg 0*deg 0*deg";
-    $detector{"color"}      = $color[$n-1];
-    $detector{"type"}       = "Tube";
-    $detector{"dimensions"} = "$Rin[$n-1]*cm $Rout[$n-1]*cm $Dz[$n-1]*cm 0*deg 360*deg";
-    $detector{"material"}   = $mat[$n-1];
-    $detector{"mfield"}     = "no";
-    $detector{"ncopy"}      = 1;
-    $detector{"pMany"}       = 1;
-    $detector{"exist"}       = 1;
-    $detector{"visible"}     = 0;
-    $detector{"style"}       = 0;
-    $detector{"sensitivity"} = "no";
-    $detector{"hit_type"}    = "no";
-    $detector{"identifiers"} = "no";
-    print_det(\%configuration, \%detector);
- }
-}
