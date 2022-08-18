@@ -31,7 +31,7 @@ my $AngY_tcd=-82.2; #2022 hallc test, large angle at left side of beam direction
 # my $rmin_chamber=1189+5*2.54;  # z position of the chamber entrance at small angle
 
 # at 2022 hallc test
-my $rmin_chamber=843.69;  # z position of the chamber entrance at large angle according to survey
+my $rmin_chamber=850.7;  # r position of the chamber entrance at large angle according to survey, sqrt(8.4369^2+1.09^2)=850.7
 
 # my $halflength_chamber_l = 60*2.54/2;
 my $halflength_chamber_l = 56*2.54/2;
