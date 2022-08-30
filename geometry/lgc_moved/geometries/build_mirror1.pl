@@ -21,7 +21,7 @@ sub make_mirror1
     print "sphere R: $R\n";
 
     my $PosV_temp = $PosV;
-    my $PosV_cone = vector(0.,0.,250.5);
+    my $PosV_cone = vector(0.,0.,260.5);
     my $PosV_delta = vector(0., 0., 0.);
     my $PosV_deltaC = vector(0., 0., 0.);
     
@@ -122,6 +122,7 @@ sub make_mirror1
 	print_det(\%configuration, \%detector);
 	
 	if($n==1){
+		print $R_front_in." ".$R_front_out." ".$R_end_in." ".$R_end_out."\n";
 		print "Mirror sphere properties: \n";
 		print "   location:  ".sprintf('%.3f',$PosV_temp->x())."*cm ".sprintf('%.3f',$PosV_temp->y())."*cm ".sprintf('%.3f',$PosV_temp->z())."*cm\n";
 		print "   dimensions:  ".sprintf('%.3f',$R)."*cm ". sprintf('%.3f',$R + 0.1*$T_M1)."*cm 0.0 360.0*deg 0.0 90.0*deg\n";

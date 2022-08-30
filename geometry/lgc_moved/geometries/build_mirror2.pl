@@ -16,7 +16,8 @@ sub make_mirror2
 
     &buildSPmirror($V0_tg_V, $Pos_im_Obs_V, $cr_ang2, $Z_M2);
     my $PosV_temp = $PosV;
-    my $PosV_cone = vector(0.,0.,250.5);  #virtual cone position needs to be far enough for useful subtraction of geometries
+#    my $PosV_cone = vector(0.,0.,250.5);  #virtual cone position needs to be far enough for useful subtraction of geometries
+ 	my $PosV_cone = vector(0.,0.,260.5);  #virtual cone position needs to be far enough for useful subtraction of geometries
     my $PosV_delta = vector(0., 0., 0.);
     my $PosV_deltaC = vector(0., 0., 0.);
 

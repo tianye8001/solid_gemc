@@ -60,7 +60,7 @@ sub makeCones
 	$detector{"style"}       = 1;
 	$detector{"sensitivity"} = "mirror: LGC_WinstonCone";
 	$detector{"hit_type"}    = "mirror";
-	$detector{"identifiers"} = "no";
+	$detector{"identifiers"} = "id manual 3";
 
 	print_det(\%configuration, \%detector);
 

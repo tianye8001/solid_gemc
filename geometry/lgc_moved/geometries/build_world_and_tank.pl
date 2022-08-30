@@ -108,15 +108,27 @@ sub make_tank_CLEO_pvdis
     $detector{"rotation"}    = "0*deg 0*deg 0*deg";
     $detector{"color"}       = "FF9900";
     $detector{"type"}        = "Polycone";
+	#older settings:
   #  $detector{"dimensions"}  = "0*deg 360*deg 4*counts 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
  #   $detector{"dimensions"}  = "0*deg 180*deg 4*counts 65*cm 67*cm 85*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
  #   $detector{"dimensions"}  = "0*deg 180*deg 4*counts 71*cm 73*cm 73*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm"; #for cross-section of tank
 
     #$detector{"dimensions"}  = "0*deg 360*deg 4*counts 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
-	$detector{"dimensions"}  = "0*deg 360*deg 5*counts 63.2*cm 69.3*cm 71*cm 71*cm 83*cm 135*cm 150*cm 163*cm 263*cm 263*cm 194*cm 210*cm 226*cm 226*cm 312*cm";    
+	
 # 	$detector{"dimensions"}  = "0*deg 360*deg 5*counts  66.5*cm 69.5*cm 71.5*cm 71.5*cm 85*cm 127.0*cm 150*cm 163.0*cm 263*cm 263*cm 189.2*cm 209.0*cm 225.0*cm 225.0*cm 312*cm";
 	#$detector{"dimensions"}  = "0*deg 360*deg 4*counts  69.5*cm 71.5*cm 71.5*cm 85*cm 150*cm 163.0*cm 263*cm 263*cm 209.0*cm 225.0*cm 225.0*cm 312*cm";
 #    $detector{"dimensions"}  = "0*deg 180*deg 4*counts 65*cm 67*cm 67*cm 85*cm 144*cm 155*cm 265*cm 265*cm 194*cm 209.01*cm 209.01*cm 301*cm";
+
+#current, standard nose
+$detector{"dimensions"}  = "0*deg 360*deg 5*counts 63.2*cm 69.3*cm 71*cm 71*cm 83*cm 135*cm 150*cm 163*cm 263*cm 263*cm 194*cm 210*cm 226*cm 226*cm 312*cm";
+if($use_modNose){
+	#current, alt-nose (7 deg):
+	#$detector{"dimensions"}  = "0*deg 360*deg 6*counts 52.43*cm 64.34*cm 66.3*cm 68.27*cm 68.27*cm 78.83*cm 126*cm 135*cm 150*cm 163*cm 263*cm 263*cm 97*cm 194*cm 210*cm 226*cm 226*cm 312*cm";
+	#current, alt-nose (6.5 deg):
+	#$detector{"dimensions"}  = "0*deg 360*deg 6*counts 48.65*cm 59.70*cm 61.5*cm 63.35*cm 63.35*cm 73.14*cm 126*cm 135*cm 150*cm 163*cm 263*cm 263*cm 97*cm 194*cm 210*cm 226*cm 226*cm 312*cm";
+	#including cable space:
+	$detector{"dimensions"}  = "0*deg 360*deg 5*counts 59.70*cm 61.5*cm 63.35*cm 63.35*cm 73.14*cm 130*cm 145*cm 163*cm 263*cm 263*cm 194*cm 210*cm 232*cm 226*cm 312*cm";
+}	
 
 
 #    if($use_pvdis){
@@ -320,10 +332,26 @@ sub make_tank_CLEO_sidis
     $detector{"rotation"}    = "0*deg 0*deg 0*deg";
     $detector{"color"}       = "FF9900";
     $detector{"type"}        = "Polycone";
+	#older settings:
 #    $detector{"dimensions"}  = "0*deg 360*deg 5*counts 58*cm 65*cm 67*cm 67*cm 85*cm 127*cm 144*cm 155*cm 265*cm 265*cm 97*cm 194*cm 209.01*cm 209.01*cm 301*cm";
-#  $detector{"dimensions"}  = "0*deg 360*deg 6*counts  58*cm 66.5*cm 69.5*cm 70.5*cm 70.5*cm 86*cm 127*cm 128.5*cm 153*cm 164.0*cm 264*cm 264*cm 97*cm 189.2*cm 210.0*cm 225.0*cm 225.0*cm 312*cm";
-	$detector{"dimensions"}  = "0*deg 360*deg 6*counts 50*cm 63.2*cm 69.3*cm 71*cm 71*cm 83*cm 126*cm 135*cm 150*cm 163*cm 263*cm 263*cm 97*cm 194*cm 210*cm 226*cm 226*cm 312*cm";    
+#  $detector{"dimensions"}  = "0*deg 360*deg 6*counts  58*cm 66.5*cm 69.5*cm 70.5*cm 70.5*cm 86*cm 127*cm 128.5*cm 153*cm 164.0*cm 264*cm 264*cm 97*cm 189.2*cm 210.0*cm 225.0*cm 225.0*cm 312*cm";	
 #     $detector{"dimensions"}  = "0*deg 360*deg 6*counts  53*cm 66.5*cm 69.5*cm 71.5*cm 71.5*cm 85*cm 127*cm 127.0*cm 150*cm 163.0*cm 263*cm 263*cm 97*cm 189.2*cm 209.0*cm 225.0*cm 225.0*cm 312*cm";
+
+#current, standard nose:
+
+	$detector{"dimensions"}  = "0*deg 360*deg 6*counts 50*cm 63.2*cm 69.3*cm 71*cm 71*cm 83*cm 126*cm 135*cm 150*cm 163*cm 263*cm 263*cm 97*cm 194*cm 210*cm 226*cm 226*cm 312*cm";    
+	
+	
+	if($use_modNose){
+		#current, alt-nose (7 deg):
+		#$detector{"dimensions"}  = "0*deg 360*deg 6*counts 52.43*cm 64.34*cm 66.3*cm 68.27*cm 68.27*cm 78.83*cm 126*cm 135*cm 150*cm 163*cm 263*cm 263*cm 97*cm 194*cm 210*cm 226*cm 226*cm 312*cm";
+		#current, alt-nose (6.5 deg):
+		#$detector{"dimensions"}  = "0*deg 360*deg 6*counts 48.65*cm 59.70*cm 61.5*cm 63.35*cm 63.35*cm 73.14*cm 126*cm 135*cm 150*cm 163*cm 263*cm 263*cm 97*cm 194*cm 210*cm 226*cm 226*cm 312*cm";
+		#including cable space:
+		$detector{"dimensions"}  = "0*deg 360*deg 6*counts 48.65*cm 59.70*cm 61.5*cm 63.35*cm 63.35*cm 73.14*cm 130*cm 130*cm 145*cm 163*cm 263*cm 263*cm 97*cm 194*cm 210*cm 232*cm 226*cm 312*cm";
+	}	
+
+
 	$detector{"material"}   = "SL_LGCCgas_SIDIS";
 #	$detector{"material"}    = "SIDIS_CO2_gas";
     $detector{"mfield"}      = "no";

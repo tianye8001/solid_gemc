@@ -24,14 +24,14 @@ use Math::VectorReal qw(:all);
 use Getopt::Long;
 use Math::Trig;
 
-do 'common/my_vars.pl';  #sets the neccissary variable names
-require 'common/common_functions.pl';  #rotations and mirror building functions.
+do './common/my_vars.pl';  #sets the neccissary variable names
+require './common/common_functions.pl';  #rotations and mirror building functions.
 
 #use 'configs/'.$ARGV[0];  #sets variable values for geometry;
 if($#ARGV < 0){
-    do 'configs/pvdis_CLEO_nominal.pl';
+    do './configs/pvdis_CLEO_nominal.pl';
 }else{
-    do $ARGV[0];
+    do './'.$ARGV[0];
 }
 
 #file settings:
@@ -45,39 +45,39 @@ if($DEBUG){
 	}
 }
 #make geometry:
-require 'geometries/build_world_and_tank.pl';
-require 'geometries/build_pmts.pl';
-require 'geometries/build_cones.pl';
-require 'geometries/build_mirror1.pl';
-#require 'geometries/build_flatMirrorArray_test.pl';
-require 'geometries/build_mirror2.pl';
-require 'geometries/build_mirror3.pl';
-require 'geometries/build_support.pl';
-require 'geometries/build_blinder.pl';
+require './geometries/build_world_and_tank.pl';
+require './geometries/build_pmts.pl';
+require './geometries/build_cones.pl';
+require './geometries/build_mirror1.pl';
+#require './geometries/build_flatMirrorArray_test.pl';
+require './geometries/build_mirror2.pl';
+require './geometries/build_mirror3.pl';
+require './geometries/build_support.pl';
+require './geometries/build_blinder.pl';
 # make_mother();
 
 #note: lowEM files not on repo yet -- MP: 01/20/16
 if($lowEM){
-    require 'lowEM/solid_CLEO_PVDIS_baffle_inspection.pl';
+    require './lowEM/solid_CLEO_PVDIS_baffle_inspection.pl';
     make_baffle_plate_inner();
     make_baffle_plate_outer();
 #    make_baffle_plate();
     make_baffle_blocks();
-    require 'lowEM/solid_CLEO_PVDIS_beamline.pl';
+    require './lowEM/solid_CLEO_PVDIS_beamline.pl';
     make_beam_entrance();
     make_beam_exit();
-    require 'lowEM/solid_CLEO_solenoid.pl';
+    require './lowEM/solid_CLEO_solenoid.pl';
     make_coil_yoke();
     make_cryostat();
-    require 'lowEM/solid_CLEO_PVDIS_target.pl'; 
+    require './lowEM/solid_CLEO_PVDIS_target.pl'; 
     make_target_PVDIS_target();
-    require 'lowEM/solid_CLEO_PVDIS_absorber.pl';
+    require './lowEM/solid_CLEO_PVDIS_absorber.pl';
     make_absorber_forwarangle_1();
     make_absorber_forwarangle_2();
 }
 
 if($detPlane){
-    require 'build_detPlane.pl';
+    require './build_detPlane.pl';
     makeDetPlanes();
 }
 
@@ -133,14 +133,14 @@ if($buildBlinders){
 }
 
 if($use_pvdis){
-require "geometries/solid_PVDIS_lgc_virtualplane.pl";
+require "./geometries/solid_PVDIS_lgc_virtualplane.pl";
 solid_PVDIS_lgc_virtualplane();
 }
 else {
-require "geometries/solid_SIDIS_lgc_virtualplane.pl";
+require "./geometries/solid_SIDIS_lgc_virtualplane.pl";
 solid_SIDIS_lgc_virtualplane();
 }
-require 'solid_lgc_mirror.pl';
-require 'solid_lgc_OptMats.pl';
-require 'solid_lgc_bank.pl';
-require 'solid_lgc_hit.pl';
+require './solid_lgc_mirror.pl';
+require './solid_lgc_OptMats.pl';
+require './solid_lgc_bank.pl';
+require './solid_lgc_hit.pl';

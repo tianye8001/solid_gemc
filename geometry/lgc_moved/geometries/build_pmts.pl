@@ -174,7 +174,7 @@ sub makePMTs
 		$detector{"style"}       = 1;
 		$detector{"sensitivity"} = "mirror: LGC_PMT_LightStop";
 		$detector{"hit_type"}    = "mirror";
-		$detector{"identifiers"} = "no";
+		$detector{"identifiers"} = "id manual 4";
 		if($writedet){
 		    print_det(\%configuration, \%detector);
 		}
