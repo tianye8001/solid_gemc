@@ -112,9 +112,15 @@ sub makePMTs
 				$detector{"color"}      = "00cc00";
 			    }
 			}
-			$detector{"type"}       = "Box";
-			$detector{"dimensions"} = ($pmt_x/8.0 - 0.0001)."*cm ".($pmt_x/8.0 - 0.0001)."*cm 0.0001*mm"; #shrink pixels by a um to keep away overlaps, since this is a half length, it equates to a total of 4um gap between pixels...  Probably smaller than actual dead area.
-			$detector{"material"}   = "SL_H12700";
+			if($jpix == 0 && $kpix == 0){
+				$detector{"type"}       = "Box";
+				$detector{"dimensions"} = ($pmt_x/8.0 - 0.001)."*cm ".($pmt_x/8.0 - 0.001)."*cm 0.0001*mm"; #shrink pixels by a um to keep away overlaps, since this is a half length, it equates to a total of 4um gap between pixels...  Probably smaller than actual dead area.
+				$detector{"material"}   = "SL_H12700";
+			}else{
+				$detector{"type"}       = "CopyOf ".$namePre."PMT_".&sec($n)."_".$curr_pmt."_1";
+				#$detector{"dimensions"} = "";
+				#$detector{"material"}   = "";
+			}
 			$detector{"mfield"}     = "no";
 			$detector{"ncopy"}      = 1;
 			$detector{"pMany"}       = 1;
