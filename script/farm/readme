@@ -12,14 +12,17 @@ run "./LongRun_sim" to create output dir at /volatile/halla/solid/$USER/thisdir 
 many job submission scripts jsc* will be created and submitted one after anther by "exec_sim"
 
 Once job submitted, you can check its status by "squeue -u $USER" or https://scicomp.jlab.org
-
+ 
 output files including out.*.root and out.*.log will appear in the output dir
 
 == note  =================================================
 
 * modify "do_it_all.sh" and "load_singularity.sh" for your jobs and test first on ifarm to check its actual mem use and disk use, then adjust them in "exec_sim"
-* test a few of your job quickly using "--partition=priority" by edit "exec_sim" 
+* test a few of your job quickly using "#SBATCH --partition=priority" by edit "exec_sim" 
 * If any job fails or the output files have problem, check farm out and err files at /farm_out/$USER for detailed reason
+* Slurm memory specification (#SBATCH --mem) allocates real memory. If you are unsure of your job's memory needs, submit a test job with email notification enabled, (#SBATCH --mail-type=END) or use the seff command on a recently completed job, seff <Jobid>. The email or seff output will show the peak memory use of your job and help you to tune it. Choose a memory allocation that is as low as possible for your job to run. This will help to schedule efficiently and increase throughput.
+* by default, slurm job runs in the dir where the job is submitted, to avoid disk io problem, use "cd /scratch/slurm/\$SLURM_JOBID" to run job at local node disk and then copy or move output files 
+* slurm can't use file on /mss with auto-caching, only swif workflow can. so you have to do jcache to get file from /mss to /cache
 * You may use "hadd" in root to add all output root files into a single root file. to overcome root file default 100GB size limit, you can do "root 'haddbig.C+'", then "setenv LD_PRELOAD $PWD/haddbig_C.so" before running "hadd"
 
 refer to 
@@ -44,4 +47,5 @@ Auger example using code compiled inside a singularity container
 which has a "load_singularity.sh" to run "do_it_all.sh" inside the container.
 This is mainly because farm job command can't run singularity directly
 
-farm_by_yez (old scripts by Zhihong Ye)
+"farm_by_yez"
+old scripts by Zhihong Ye
