@@ -30,12 +30,12 @@ gStyle->SetOptStat(0);
 
 const double DEG=180./3.1415926;
 
-bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_DDVCS_JPsi_LH2=false,Is_DDVCS_PVDIS_LH2=false,Is_JPsi=false;
+bool Is_PVDIS=false,Is_SIDIS_He3=false,Is_SIDIS_NH3=false,Is_JPsi_DDVCS=false,Is_PVDIS_DDVCS=false,Is_JPsi=false;
 if (input_filename.find("SIDIS_He3",0) != string::npos) Is_SIDIS_He3=true;
 else if (input_filename.find("SIDIS_NH3",0) != string::npos) Is_SIDIS_NH3=true;
-else if (input_filename.find("DDVCS_JPsi_LH2",0) != string::npos) Is_DDVCS_JPsi_LH2=true;
+else if (input_filename.find("JPsi_DDVCS",0) != string::npos) Is_JPsi_DDVCS=true;
 else if (input_filename.find("JPsi",0) != string::npos) Is_JPsi=true;
-else if (input_filename.find("DDVCS_PVDIS_LH2",0) != string::npos) Is_DDVCS_PVDIS_LH2=true;
+else if (input_filename.find("PVDIS_DDVCS",0) != string::npos) Is_PVDIS_DDVCS=true;
 else if (input_filename.find("PVDIS",0) != string::npos) Is_PVDIS=true;
 else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
 
@@ -80,7 +80,7 @@ else if (Is_JPsi){
   rin_cut_LA=83;   //cut at the actual edge  
   cout << " JPsi rcut " << rin_cut_FA << " " << rout_cut_FA << " " << rin_cut_LA << " " << rout_cut_LA <<  endl;
 }
-else if(Is_DDVCS_JPsi_LH2 || Is_DDVCS_PVDIS_LH2){
+else if(Is_JPsi_DDVCS || Is_PVDIS_DDVCS){
   rout_cut_FA=1000;     //target at -350,ec front at 415 with angle 15
   rin_cut_FA=0;   //cut at the actual edge
   rout_cut_LA=1000;   //target at -350,ec front at -65 with angle 24
@@ -115,19 +115,19 @@ else if (Is_JPsi){
     vz_max=-305;    
     vz_min=-325;
 }
-else if(Is_DDVCS_JPsi_LH2) {
-    theta_max=40;
+else if(Is_JPsi_DDVCS) {
+    theta_max=50;
     theta_min=0;    
     vz_max=-305;    
     vz_min=-325;    
 }
-else if(Is_DDVCS_PVDIS_LH2) {
+else if(Is_PVDIS_DDVCS) {
     theta_max=50;
     theta_min=10;    
     vz_max=40;    
     vz_min=-20;        
 }
-else {cout << "not PVDIS or SIDIS or JPsi " << endl; return;}
+else {cout << "not PVDIS or SIDIS or JPsi or DDVCS" << endl; return;}
 
 char the_filename[200];
 sprintf(the_filename, "%s",input_filename.substr(0,input_filename.rfind(".")).c_str());
@@ -140,8 +140,9 @@ TFile *outputfile=new TFile(output_filename, "recreate");
 // int binfactor_p=20;
 // int binfactor_phi=1;
 
-int binfactor_theta=2;
+// int binfactor_p=10;
 int binfactor_p=100;
+int binfactor_theta=2;
 int binfactor_p_3D=10;
 int binfactor_phi=1;
 int binfactor_vz=2;
@@ -241,14 +242,14 @@ hhit_PR[0][1]=new TH2F("hit_PR_0_1","electrons (Q2>1) reach FAEC and GEM;R(cm);M
 hhit_PR[1][0]=new TH2F("hit_PR_1_0","all electrons reach LAEC and GEM;R(cm);Mom(GeV)",80,70,150,1100,0,Ebeam);
 hhit_PR[1][1]=new TH2F("hit_PR_1_1","electrons (Q2>1) reach LAEC and GEM;R(cm);Mom(GeV)",80,70,150,1100,0,Ebeam);  
 
-TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1000,-400,600,300,0,300);  
+TH2F *hhit_rz=new TH2F("hit_rz","hit_rz",1200,-400,800,350,0,350);  
 
 TH2F *hlinearity_GEM34=new TH2F("linearity_GEM34","linearity_GEM34",1000,theta_min,theta_max,2200,0,Ebeam);
 
 TH1F *hmissingGEM_forwardangle=new TH1F("missingGEM_forwardangle","missingGEM_forwardangle",6,0.5,6.5);
 TH1F *hmissingGEM_largeangle=new TH1F("missingGEM_largeangle","missingGEM_largeangle",6,0.5,6.5);
 
-const int n=15;
+const int n=21;
 
 TH2F *hhit_rMom[n];
 TH2F *hhit_phidiffMom[n],*hhit_thetadiffMom[n],*hhit_anglediffMom[n];
@@ -324,14 +325,14 @@ vector <double> *var1=0,*var2=0,*var3=0,*var4=0,*var5=0,*var6=0,*var7=0,*var8=0;
 tree_header->SetBranchAddress("evn",&evn);
 tree_header->SetBranchAddress("evn_type",&evn_type);
 tree_header->SetBranchAddress("beamPol",&beamPol);
-tree_header->SetBranchAddress("var1",&var1);
-tree_header->SetBranchAddress("var2",&var2);
-tree_header->SetBranchAddress("var3",&var3);
-tree_header->SetBranchAddress("var4",&var4);
-tree_header->SetBranchAddress("var5",&var5);
-tree_header->SetBranchAddress("var6",&var6);
-tree_header->SetBranchAddress("var7",&var7);
-tree_header->SetBranchAddress("var8",&var8);
+// tree_header->SetBranchAddress("var1",&var1);
+// tree_header->SetBranchAddress("var2",&var2);
+// tree_header->SetBranchAddress("var3",&var3);
+// tree_header->SetBranchAddress("var4",&var4);
+// tree_header->SetBranchAddress("var5",&var5);
+// tree_header->SetBranchAddress("var6",&var6);
+// tree_header->SetBranchAddress("var7",&var7);
+// tree_header->SetBranchAddress("var8",&var8);
 
 TTree *tree_generated = (TTree*) file->Get("generated");
 vector <int> *gen_pid=0;
@@ -503,6 +504,7 @@ for (Int_t i=0;i<nevent;i++) {
     // remove decay product
     if (flux_tid->at(j)!= 1) {
 //     if (flux_pid->at(j)!= pid_gen) {
+//     if (flux_pid->at(j)!= 13) {      
 //     if (abs(flux_pid->at(j)) != 13 && abs(flux_pid->at(j)) != 211 ) {      
       Is_decay=true; 
       counter_decay++;            
@@ -532,13 +534,13 @@ for (Int_t i=0;i<nevent;i++) {
     else if (flux_id->at(j)==3210000) hit_id=11;
     else if (flux_id->at(j)==4110000) hit_id=12;	        
     else if (flux_id->at(j)==6110000) hit_id=13;
-    else if (flux_id->at(j)==6100000) hit_id=14;	    
-//     else if (flux_id->at(j)==6110000) hit_id=8;
-//     else if (flux_id->at(j)==6120000) hit_id=8;    
-//     else if (flux_id->at(j)==6130000) hit_id=8;        
-//     else if (flux_id->at(j)==6140000) hit_id=8;            
-//     else if (flux_id->at(j)==6210000) hit_id=9;
-//     else if (flux_id->at(j)==6100000) hit_id=9;    
+    else if (flux_id->at(j)==6120000) hit_id=14;	    
+    else if (flux_id->at(j)==6130000) hit_id=15;
+    else if (flux_id->at(j)==6140000) hit_id=16;	    
+    else if (flux_id->at(j)==6210000) hit_id=17;
+    else if (flux_id->at(j)==6220000) hit_id=18;	    
+    else if (flux_id->at(j)==6310000) hit_id=19;
+    else if (flux_id->at(j)==6320000) hit_id=20;	    
     else continue;  //skip other detector for now
 
 //     if (hit_id==9) cout << "flux_id->at(j) " << flux_avg_z->at(j) << endl;
@@ -606,7 +608,7 @@ for (Int_t i=0;i<nevent;i++) {
 //        my @Rin = (36,21,25,32,42,55);
 //        my @Rout = (87,98,112,135,100,123);
       double Rin[6]={0,0,0,0,0,0},Rout[6]={0,0,0,0,0,0};
-      if (Is_PVDIS || Is_DDVCS_PVDIS_LH2){
+      if (Is_PVDIS || Is_PVDIS_DDVCS){
 	Rin[0]=48;Rin[1]=59;Rin[2]=65;Rin[3]=105;Rin[4]=109;Rin[5]=0;     
         Rout[0]=122;Rout[1]=143;Rout[2]=143;Rout[3]=230;Rout[4]=237;Rout[5]=300;
       }
@@ -644,6 +646,7 @@ for (Int_t i=0;i<nevent;i++) {
       
       R_hit_EC=hit_r;
     }
+    
     //additional cut
     if (Is_PVDIS){
       acc[hit_id]=1;      
@@ -721,10 +724,10 @@ for (Int_t i=0;i<nevent;i++) {
     else if (Is_JPsi){
       acc[hit_id]=1;      
     }
-    else if (Is_DDVCS_JPsi_LH2){
+    else if (Is_JPsi_DDVCS){
       acc[hit_id]=1;      
     }
-    else if (Is_DDVCS_PVDIS_LH2){
+    else if (Is_PVDIS_DDVCS){
       acc[hit_id]=1;
 
     }    
@@ -758,6 +761,7 @@ for (Int_t i=0;i<nevent;i++) {
       hlinearity_GEM34->SetBinContent(int((theta_gen-theta_min)/((theta_max-theta_min)/1000.)),p_gen/(11/2200.),(coor_GEM4-coor_GEM3).Angle(mom_GEM3)*DEG);            
     }
     
+    //choose FA and LA acceptance condition
     int pattern_id=-1;       
     if (Is_PVDIS){    
 //       if (acc[6]==1) pattern_id=0;  //hit on FAEC
@@ -817,18 +821,19 @@ for (Int_t i=0;i<nevent;i++) {
       if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[10]==1) pattern_id=0; //hit on FAEC and GEM
       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[11]==1) pattern_id=1; //hit on LAEC and GEM
     }
-    else if (Is_DDVCS_JPsi_LH2){
-//       if (acc[8]==1) pattern_id=0;  //hit on forward angle muon det behind endcap
-//       if (acc[9]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut
-      if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[13]==1) pattern_id=0;  //hit on forward angle muon det behind endcap and all gem
-      if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[14]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut and all gem      
+    else if (Is_JPsi_DDVCS){
+//       cout << " here " << endl;      
+      if (acc[16]==1) pattern_id=0; 
+      if (acc[17]==1) pattern_id=1; 
+//       if (acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[5]==1&&acc[13]==1) pattern_id=0;  //hit on forward angle muon det behind endcap and all gem
+//       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[14]==1) pattern_id=1;	  //hit on large angle muon det outside of endcap donut and all gem      
     }    
-    else if (Is_DDVCS_PVDIS_LH2){
+    else if (Is_PVDIS_DDVCS){
 //       if (acc[8]==1) pattern_id=0;  //hit on FAEC      
       if (acc[0]==1&&acc[1]==1&&acc[2]==1&&acc[3]==1&&acc[4]==1&&acc[13]==1) pattern_id=0; //hit on forward angle muon det behind endcap and all gem
     }        
     
-
+    //fill flux hit histogram
     int counter_hit[2]={0,0};
     if(pattern_id != -1){   
       counter_hit[pattern_id]++;      
@@ -927,6 +932,7 @@ for (int i=11;i<22;i++){
 c_baffleplate->SaveAs(Form("%s_%s",the_filename,"baffleplate.png"));
 }
 
+//get acceptance histogram
 for(int i=0;i<m;i++) {
   hacceptance_P[i]->Divide(hflux_P[i],hgen_P);  
   hacceptance_P[i]->SetMinimum(0);  
@@ -983,6 +989,15 @@ hacceptance_PhiP[1]->Draw("colz");
 hacceptance_PhiP[1]->SetAxisRange(0.1,Ebeam,"Y");
 c_acc->cd(8);
 hacceptance_ThetaPhiP[1]->Draw("box");
+
+TCanvas *c_acc_1D_P = new TCanvas("acc_1D_P","acc_1D_P",1800,1000);
+c_acc_1D_P->Divide(2,1);
+c_acc_1D_P->cd(1);
+hacceptance_P[0]->Draw();
+c_acc_1D_P->cd(2);
+hacceptance_P[1]->Draw();
+
+
 // c_acc->cd(7);
 // hacceptance_P[0]->Draw();
 // c_acc->cd(8);
@@ -1179,7 +1194,7 @@ hacceptance_ThetaPhiP_largeangle->SetNameTitle("acceptance_ThetaPhiP_largeangle"
 
 // gStyle->SetOptStat(0);
 
-if (Is_PVDIS || Is_DDVCS_PVDIS_LH2){ 
+if (Is_PVDIS || Is_PVDIS_DDVCS){ 
 TCanvas *c_acceptance_2D = new TCanvas("acceptance_2D","acceptance_2D",800,600);
 // c_acceptance_all->Divide(1,3);
 // c_acceptance_all->cd(1);
