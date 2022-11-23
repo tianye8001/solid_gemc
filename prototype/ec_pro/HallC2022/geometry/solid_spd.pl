@@ -45,6 +45,7 @@ $configuration{"detector_name"} = "solid_spd";
 
 #Geometry definition
 require "./solid_spd_geometry.pl";
+require "./solid_spd_virtualplane.pl";
 
 #materials
 require "./solid_spd_materials.pl";

@@ -55,6 +55,7 @@ $configuration{"variation"} = "LH2";
 require "./beamline_geometry.pl";
 
 #materials definition 
+require "./beamline_materials.pl";
 
 #hit definition 
 
