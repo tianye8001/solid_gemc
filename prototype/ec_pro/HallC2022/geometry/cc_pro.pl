@@ -54,7 +54,7 @@ our %configuration = load_configuration($config_file);
 
 # One can change the "variation" here if one is desired different from the config.dat
 $configuration{"detector_name"} = "cc_pro";
-# $configuration{"variation"} = "CO2FA";
+$configuration{"variation"} = "CO2LA";
 
 # To get the parameters proper authentication is needed.
 # our %parameters    = get_parameters(%configuration);

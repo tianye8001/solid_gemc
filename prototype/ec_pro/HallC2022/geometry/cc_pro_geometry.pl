@@ -124,7 +124,7 @@ sub make_tcd
  $detector{"rotation"}    = "$AngX_tcd*deg $AngY_tcd*deg 0*deg";
  $detector{"color"}       = "CCCC33";
  $detector{"type"}        = "Box";
- $detector{"dimensions"}  = "30*cm 50*cm 200*cm";
+ $detector{"dimensions"}  = "35*cm 60*cm 250*cm";
  $detector{"material"}    = "G4_AIR";
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;

@@ -7,7 +7,7 @@ our %parameters;
 use Getopt::Long;
 use Math::Trig;
 
-# my $DetectorName = 'solid_PVDIS_ec_forwardangle';
+my $DetectorName = 'solid_ec';
 
 # my $DetectorMother="root";
 my $DetectorMother="cc_pro_tcd";
@@ -63,13 +63,15 @@ my $Angle_module        = $parameters{"Angle_module"};
 my $Radius_shower 	= $parameters{"Radius_shower"};
 my $Radius_rod 		= $parameters{"Radius_rod"};
 my $R_rod 		= $parameters{"R_rod"};
-# my $z_shower 		= $parameters{"z_shower"};
+my $z_shower 		= $parameters{"z_shower"};
 my $Rmin 		= $parameters{"Rmin"};
 my $Rmax 		= $parameters{"Rmax"};
 my $Sphi 		= $parameters{"Sphi"};
 my $Dphi 		= $parameters{"Dphi"};
 my $total_module 	= $parameters{"total_module"};
 my $total_module_active	= $parameters{"total_module_active"};
+my $thismodule		= $parameters{"thismodule"};
+
 
 my @status;
 my @idy;
@@ -90,8 +92,6 @@ for(my $i=1; $i<=$total_module; $i++)
 
 my $vis_inner=0;
 
-my $z_shower = 56*2.54/2+4.5+1.5+14.7+5+2+0.6+1.5+2+15.1+1.1+2.4+2+45/2.; 
-
 my $Thickness_layer=$Thickness_lead+$Thickness_scint+$Thickness_gap+$Thickness_paint; #0.234cm
 my $Thickness_shower=$Thickness_layer*$Nlayer;  #45.395cm
 
@@ -100,11 +100,15 @@ my $z_prescint = $z_support-$Thickness_support/2-$Thickness_prescint/2; #cm
 my $z_shield = $z_prescint-$Thickness_prescint/2-$Thickness_shield/2;  #cm
 print "z_shower z_support z_prescint z_shield $z_shower $z_support $z_prescint $z_shield\n";
 
-my $this=1;
+# preshower lead is build as a while piece
+# each EC shower module layer is made of sublayers "0.005cm paint + 0.05cm lead + 0.005cm paint + 0.012cm mylar + 0.15cm scint + 0.012cm mylar"
+# we build the whole module with scint and be sensitive, then put all others sublayer volumes as its insensitive daughters 
+# to minimize mem use, we use copy in geant4. we build 1 module and copy it. and within that module, we build 1st layer and copy it. we do that to preshower and support later also
+# 6 stainless steel rods going through the whole EC module. we build them as daughter volume in each sublayer of 1st layer, then copy it. in each sublayer, we build 1st rod and copy it. rods in scint needs to build/copy one by one because scint is a whole volume. (we turn off rods in paint and mylar to save mem and speed up sim running for now, which is 15% rod mass)
 
 sub solid_ec_geometry()
 {
-make_ec_shield();
+make_ec_shield(); # preshower lead
 make_ec_module();
 }
 
@@ -119,10 +123,8 @@ sub make_ec_shield
  $detector{"pos"}         = "0*cm 0*cm $z_shield*cm";
  $detector{"rotation"}    = "0*deg 0*deg 0*deg";
  $detector{"color"}       = "$color_abs";
-#  $detector{"type"}       = "Tube";
-#  $detector{"dimensions"} = "$Rmin*cm $Rmax*cm $Dz*cm $Sphi*deg $Dphi*deg";
- $detector{"type"}       = "Box";
- $detector{"dimensions"} = "13*cm 13*cm $Dz*cm";
+ $detector{"type"}       = "Tube";
+ $detector{"dimensions"} = "$Rmin*cm $Rmax*cm $Dz*cm $Sphi*deg $Dphi*deg";
  $detector{"material"}    = $material_abs;
  $detector{"mfield"}      = "no";
  $detector{"ncopy"}       = 1;
@@ -141,14 +143,14 @@ sub make_ec_module
 # build the module 424 x=-39.116cm y=-120.984cm first, at radius near 125cm, it exist in all three calorimeter, then make copy of it
 # the original has to be made before copies, otherwise it can have segmentation fault. because GEMC make volume in alphabetic order of names, one way to make sure the original built first is to make the original name shorter
 
-	  make_ec_module_shower($this);
-	  make_ec_module_prescint($this);
-	  make_ec_module_support($this);
+	  make_ec_module_shower($thismodule);
+	  make_ec_module_prescint($thismodule);
+	  make_ec_module_support($thismodule);
 	  
-#    for(my $i=$this; $i<=$this; $i++)   
+#    for(my $i=$thismodule; $i<=$thismodule; $i++)   
    for(my $i=1; $i<=$total_module; $i++)   
     {
-      if($i==$this) {next;}
+      if($i== $thismodule) {next;}
       if($status[$i-1] eq 1) {      
 	my $R=sqrt($x[$i-1]*$x[$i-1]+$y[$i-1]*$y[$i-1]);
 # 	if (130<$R && $R<140 ){
@@ -174,7 +176,7 @@ sub make_ec_module_shower()
     
     my $Dz_shower = $Thickness_shower/2;
 
-    if($id == $this){ $detector{"name"}        = "$DetectorName\_showe$id";} #use shorter name so it can be built first
+    if($id == $thismodule){ $detector{"name"}        = "$DetectorName\_showe$id";} #use shorter name so it can be built first
     else {$detector{"name"}        = "$DetectorName\_shower$id";}
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
@@ -182,11 +184,11 @@ sub make_ec_module_shower()
     $detector{"rotation"}   = "0*deg 0*deg $Angle_module*deg";
     if ($sector[$id-1]%2 eq 0) {$detector{"color"}      = $color_wrap_sectoreven;}
     else {$detector{"color"}      = $color_wrap_sectorodd;}
-    if($id == $this){ 
+    if($id == $thismodule){ 
     $detector{"type"}       = "Pgon";
     $detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Radius_shower*cm $Radius_shower*cm -$Dz_shower*cm $Dz_shower*cm";
     }    
-    else {  $detector{"type"}       = "CopyOf $DetectorName\_showe$this";}         
+    else {  $detector{"type"}       = "CopyOf $DetectorName\_showe$thismodule";}         
     $detector{"material"}   = "$material_scint";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
@@ -200,13 +202,22 @@ sub make_ec_module_shower()
     $detector{"identifiers"} = "id manual $ID";
     print_det(\%configuration, \%detector); 
 
-   if($id == $this){
+   if($id == $thismodule){
    for(my $j=1; $j<=$Nlayer; $j++){
 	my $Dz_layer = $Thickness_layer/2;   
 	my $layerZ = -$Dz_shower+($j-0.5)*$Thickness_layer;
 	
-	my $leadZ = $layerZ-$Dz_layer+$Thickness_lead/2;
-	my $Dz_lead = $Thickness_lead/2;
+	my $Dz_paint = $Thickness_paint/4;	
+	my $Dz_lead = $Thickness_lead/2;	
+	my $Dz_gap = $Thickness_gap/4;		
+	my $Dz_scint = $Thickness_scint/2;		
+
+	my $paintfrontZ = $layerZ-$Dz_layer+$Dz_paint;	
+	my $leadZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead/2;	
+	my $paintbackZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint;	
+	my $gapfrontZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint*2+$Dz_gap;	
+	my $scintZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint*2+$Dz_gap*2+$Thickness_scint/2;	
+	my $gapbackZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint*2+$Dz_gap*2+$Thickness_scint+$Dz_gap;
 	
         $detector{"name"}        = "$DetectorName\_showe$id\_lead$j";
         $detector{"mother"}      = "$DetectorName\_showe$id";
@@ -233,7 +244,7 @@ sub make_ec_module_shower()
 	
 	if($j == 1){
 	  for(my $l=1; $l<=6; $l++){
-	    $detector{"name"}        = "$DetectorName\_showe$id\_leadrod$l";
+	    $detector{"name"}        = "$DetectorName\_showe$id\_lead1_rod$l";
 	    $detector{"mother"}      = "$DetectorName\_showe$id\_lead1";
 	    $detector{"description"} = $detector{"name"};
 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
@@ -245,7 +256,7 @@ sub make_ec_module_shower()
 	    $detector{"type"}       = "Tube";
 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_lead*cm 0*deg 360*deg";    
 	    }
-	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_leadrod1";}	
+	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_lead1_rod1";}	
 	    $detector{"material"}   = $material_rod;
 	    $detector{"mfield"}     = "no";
 	    $detector{"ncopy"}      = 1;
@@ -261,10 +272,6 @@ sub make_ec_module_shower()
 	}
 
 	#build paint
-	my $Dz_paint = $Thickness_paint/4;	
-	
-	my $paintfrontZ = $layerZ-$Dz_layer+$Dz_paint;
-
         $detector{"name"}        = "$DetectorName\_showe$id\_paintfront$j";
         $detector{"mother"}      = "$DetectorName\_showe$id";
         $detector{"description"} = $detector{"name"};
@@ -290,7 +297,7 @@ sub make_ec_module_shower()
 	
 # 	if($j == 1){
 # 	  for(my $l=1; $l<=6; $l++){
-# 	    $detector{"name"}        = "$DetectorName\_showe$id\_paintfrontrod$l";
+# 	    $detector{"name"}        = "$DetectorName\_showe$id\_paintfront1_rod$l";
 # 	    $detector{"mother"}      = "$DetectorName\_showe$id\_paintfront1";
 # 	    $detector{"description"} = $detector{"name"};
 # 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
@@ -302,7 +309,7 @@ sub make_ec_module_shower()
 # 	    $detector{"type"}       = "Tube";
 # 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_paint*cm 0*deg 360*deg";    
 # 	    }
-# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_paintfrontrod1";}	
+# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_paintfront1_rod1";}	
 # 	    $detector{"material"}   = $material_rod;
 # 	    $detector{"mfield"}     = "no";
 # 	    $detector{"ncopy"}      = 1;
@@ -317,8 +324,6 @@ sub make_ec_module_shower()
 # 	  }
 # 	}		
 	
-	my $paintbackZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint;
-
         $detector{"name"}        = "$DetectorName\_showe$id\_paintback$j";
         $detector{"mother"}      = "$DetectorName\_showe$id";
         $detector{"description"} = $detector{"name"};
@@ -344,7 +349,7 @@ sub make_ec_module_shower()
 	
 # 	if($j == 1){
 # 	  for(my $l=1; $l<=6; $l++){
-# 	    $detector{"name"}        = "$DetectorName\_showe$id\_paintbackrod$l";
+# 	    $detector{"name"}        = "$DetectorName\_showe$id\_paintback1_rod$l";
 # 	    $detector{"mother"}      = "$DetectorName\_showe$id\_paintback1";
 # 	    $detector{"description"} = $detector{"name"};
 # 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
@@ -356,7 +361,7 @@ sub make_ec_module_shower()
 # 	    $detector{"type"}       = "Tube";
 # 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_paint*cm 0*deg 360*deg";    
 # 	    }
-# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_paintbackrod1";}	
+# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_paintback1_rod1";}	
 # 	    $detector{"material"}   = $material_rod;
 # 	    $detector{"mfield"}     = "no";
 # 	    $detector{"ncopy"}      = 1;
@@ -372,10 +377,6 @@ sub make_ec_module_shower()
 # 	}
 	
 	#build gap
-	my $Dz_gap = $Thickness_gap/4;	
-	
-	my $gapfrontZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint*2+$Dz_gap;
-	
         $detector{"name"}        = "$DetectorName\_showe$id\_gapfront$j";
         $detector{"mother"}      = "$DetectorName\_showe$id";
         $detector{"description"} = $detector{"name"};
@@ -401,7 +402,7 @@ sub make_ec_module_shower()
 	
 # 	if($j == 1){
 # 	  for(my $l=1; $l<=6; $l++){
-# 	    $detector{"name"}        = "$DetectorName\_showe$id\_gapfrontrod$l";
+# 	    $detector{"name"}        = "$DetectorName\_showe$id\_gapfront1_rod$l";
 # 	    $detector{"mother"}      = "$DetectorName\_showe$id\_gapfront1";
 # 	    $detector{"description"} = $detector{"name"};
 # 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
@@ -413,7 +414,7 @@ sub make_ec_module_shower()
 # 	    $detector{"type"}       = "Tube";
 # 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_gap*cm 0*deg 360*deg";    
 # 	    }
-# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapfrontrod1";}	
+# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapfront1_rod1";}	
 # 	    $detector{"material"}   = $material_rod;
 # 	    $detector{"mfield"}     = "no";
 # 	    $detector{"ncopy"}      = 1;
@@ -427,8 +428,6 @@ sub make_ec_module_shower()
 # 	    print_det(\%configuration, \%detector);
 # 	  }
 # 	}		
-	
-	my $gapbackZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint*2+$Dz_gap*2+$Thickness_scint+$Dz_gap;
 
         $detector{"name"}        = "$DetectorName\_showe$id\_gapback$j";
         $detector{"mother"}      = "$DetectorName\_showe$id";
@@ -455,7 +454,7 @@ sub make_ec_module_shower()
 	
 # 	if($j == 1){
 # 	  for(my $l=1; $l<=6; $l++){
-# 	    $detector{"name"}        = "$DetectorName\_showe$id\_gapbackrod$l";
+# 	    $detector{"name"}        = "$DetectorName\_showe$id\_gapback1_rod$l";
 # 	    $detector{"mother"}      = "$DetectorName\_showe$id\_gapback1";
 # 	    $detector{"description"} = $detector{"name"};
 # 	    my $rod_x=$Radius_rod*cos(($l-1)*60/180*3.1416);
@@ -467,7 +466,7 @@ sub make_ec_module_shower()
 # 	    $detector{"type"}       = "Tube";
 # 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_gap*cm 0*deg 360*deg";    
 # 	    }
-# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapbackrod1";}	
+# 	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_gapback1_rod1";}	
 # 	    $detector{"material"}   = $material_rod;
 # 	    $detector{"mfield"}     = "no";
 # 	    $detector{"ncopy"}      = 1;
@@ -483,11 +482,8 @@ sub make_ec_module_shower()
 # 	}		
 	
 	#build scint rod
-	  my $scintZ = $layerZ-$Dz_layer+$Dz_paint*2+$Thickness_lead+$Dz_paint*2+$Dz_gap*2+$Thickness_scint/2;	
-	  my $Dz_scint = $Thickness_scint/2;	
-
 	  for(my $l=1; $l<=6; $l++){
-	    if($j == 1){ $detector{"name"}        = "$DetectorName\_showe$id\_scin$j\_rod$l";}
+	    if($j == 1){ $detector{"name"}        = "$DetectorName\_showe$id\_scint$j\_rod$l";}
 	    else {$detector{"name"}        = "$DetectorName\_showe$id\_scint$j\_rod$l";}
 	    $detector{"mother"}      = "$DetectorName\_showe$id";
 	    $detector{"description"} = $detector{"name"};
@@ -500,7 +496,7 @@ sub make_ec_module_shower()
 	    $detector{"type"}       = "Tube";
 	    $detector{"dimensions"} = "0*cm $R_rod*cm $Dz_scint*cm 0*deg 360*deg";    
 	    }
-	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_scin1_rod1";}	
+	    else{  $detector{"type"}       = "CopyOf $DetectorName\_showe$id\_scint1_rod1";}	
 	    $detector{"material"}   = $material_rod;
 	    $detector{"mfield"}     = "no";
 	    $detector{"ncopy"}      = 1;
@@ -528,18 +524,18 @@ sub make_ec_module_prescint()
     
     my %detector=init_det();
 
-    if($id == $this){ $detector{"name"}        = "$DetectorName\_prescin$id";} #use shorter name so it can be built first
+    if($id == $thismodule){ $detector{"name"}        = "$DetectorName\_prescin$id";} #use shorter name so it can be built first
     else {$detector{"name"}        = "$DetectorName\_prescint$id";}    
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "$x[$id-1]*cm $y[$id-1]*cm $z_prescint*cm";
     $detector{"rotation"}   = "0*deg 0*deg $Angle_module*deg";
     $detector{"color"}      = $color_scint;
-    if($id == $this){ 
+    if($id == $thismodule){ 
     $detector{"type"}       = "Pgon";
     $detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Radius_shower*cm $Radius_shower*cm -$Dz_prescint*cm $Dz_prescint*cm";
     }    
-    else {  $detector{"type"}       = "CopyOf $DetectorName\_prescin$this";}      
+    else {  $detector{"type"}       = "CopyOf $DetectorName\_prescin$thismodule";}      
     $detector{"material"}   = "$material_scint";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;
@@ -563,18 +559,18 @@ sub make_ec_module_support()
     
     my %detector=init_det();
 
-    if($id == $this){ $detector{"name"}        = "$DetectorName\_suppor$id";} #use shorter name so it can be built first
+    if($id == $thismodule){ $detector{"name"}        = "$DetectorName\_suppor$id";} #use shorter name so it can be built first
     else {$detector{"name"}        = "$DetectorName\_support$id";}    
     $detector{"mother"}      = "$DetectorMother" ;
     $detector{"description"} = $detector{"name"};
     $detector{"pos"}        = "$x[$id-1]*cm $y[$id-1]*cm $z_support*cm";
     $detector{"rotation"}   = "0*deg 0*deg $Angle_module*deg";
     $detector{"color"}      = $color_support;
-    if($id == $this){ 
+    if($id == $thismodule){ 
     $detector{"type"}       = "Pgon";
     $detector{"dimensions"} = "$Sphi*deg $Dphi*deg 6*counts 2*counts 0*cm 0*cm $Radius_shower*cm $Radius_shower*cm -$Dz_support*cm $Dz_support*cm";
     }    
-    else {  $detector{"type"}       = "CopyOf $DetectorName\_suppor$this";}         
+    else {  $detector{"type"}       = "CopyOf $DetectorName\_suppor$thismodule";}         
     $detector{"material"}   = "$material_support";
     $detector{"mfield"}     = "no";
     $detector{"ncopy"}      = 1;

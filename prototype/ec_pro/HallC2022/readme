@@ -1,7 +1,9 @@
 =geometry details ==
 "cc_pro_tcd" is a virtual mother volume and all detector should be its daughters
-for "cc_pro_tcd" location, change $AngY_tcd (angle relative to beam direction) , $rmin_chamber (cc tank front window relative to target center) in cc_pro_geometry.pl and change "variation" in config_cc_pro.dat
-for different gas in Cherenkov, change "$material_gas", $material_pmt_surface in cc_pro_geometry.pl and change "variation" in config_cc_pro.dat
+for "cc_pro_tcd" location, change $AngY_tcd (angle relative to beam direction) , $rmin_chamber (cc tank front window relative to target center) in cc_pro_geometry.pl 
+for different gas in Cherenkov, change "$material_gas", $material_pmt_surface in cc_pro_geometry.pl 
+and change "variation" in cc_pro.pl for correct name
+and change "variation" in 
 
 = run simulation =====
 get ready to run on ifarm 
@@ -19,7 +21,7 @@ scons OPT=1 -j4  (compile solid_gemc, do it once)
 
 create or update geometry 
 cd $SoLID_GEMC/prototype/ec_pro/HallC2022/geometry/
-./beamline.pl config_beamline.dat
+./beamline.pl config.dat
 ./cc_pro.pl config.dat
 ./solid_spd.pl config.dat 
 ./solid_gem.pl config.dat 

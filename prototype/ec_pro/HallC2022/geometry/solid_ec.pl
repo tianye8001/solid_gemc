@@ -45,9 +45,6 @@ $configuration{"variation"} = "Original";
 # To get the parameters proper authentication is needed.
 our %parameters    = get_parameters(%configuration);
 
-%configuration = load_configuration($config_file);
-$configuration{"detector_name"} = "solid_ec";
-
 # our $DetectorName=$ARGV[0];
 # print "DetectorName $DetectorName \n";
 

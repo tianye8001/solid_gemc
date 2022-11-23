@@ -2,7 +2,7 @@
 
 # Detector name and variation
 detector_name: detector
-variation:     CO2LA
+variation:     Original
 
 # Factory can be MYQL or TEXT
 factory:       TEXT

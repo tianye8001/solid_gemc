@@ -32,7 +32,7 @@ make_rear();
 sub make_front
 {
 #  my $z_vp = $z_shower-27;
- my $z_vp = $z_shower-28;
+ my $z_vp = $z_shower-29;
  
  my %detector=init_det();
  $detector{"name"}        = "$DetectorName\_virtualplane_front";
