@@ -22,7 +22,8 @@ my $AngX_tcd=0.0;
 # my $AngY_tcd=0.0;
 # my $AngY_tcd=-74.55;  #2020 hallc test, large angle 74.55deg at left side of beam direction, angle from the upstream beamline to the Cherenkov is about 105.45 with a hard to estimate error,  
 # my $AngY_tcd=3.5; #2020 hallc test, small angle 3.5deg at right side of beam direction
-my $AngY_tcd=-82.2; #2022 hallc test, large angle at left side of beam direction, according to survey and alignment to target center is very good within 0.3deg
+#my $AngY_tcd=-82.2; #2022 hallc test, large angle at left side of beam direction, according to survey and alignment to target center is very good within 0.3deg
+my $AngY_tcd=8; #2022 hallc test, large angle at left side of beam direction, according to survey and alignment to target center is very good within 0.3deg
 
 # at 2020 hallc test
 # measurement done at front scintilator plane ($sc1_r) which is 5" before chamber front window

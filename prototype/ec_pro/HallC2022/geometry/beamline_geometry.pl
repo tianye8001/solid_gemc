@@ -463,21 +463,21 @@ sub make_beam_coolgas_carbon_hole
 
 sub make_beam_LH2_CH
 { # Target windows 2024-T3 aluminum 0.02 inches thick. The Chamber has an inner and outer radisus of 41 and 45 inches respectively.        
- my $NUM  = 4;
- my @z    = (0,0,0,0);
+ my $NUM  = 5;
+ my @z    = (0,0,0,0,0);
 # my @z    = (0,0,0,0);
- my @Rin  = (41/2*2.54,0,(45./2-0.02)*2.54,41/2*2.54);
- my @phi  = (-90,-90,0,0);
+ my @Rin  = (41/2*2.54,0,(45./2-0.02)*2.54,41/2*2.54,(45./2-0.02)*2.54);
+ my @phi  = (-90,-90,0,0,0);
  #my @phi  = (-90,0,-90,0);
- my @thetaT  = (360.,360.,113.5,113.5);
- my @thetaS  = (0,0,66.5,66.5);
- my @Rout = (45./2*2.54,41/2*2.54,45./2*2.54,(45./2-0.02)*2.54);
- my @Dz   = (44.75/2*2.54,44.75/2*2.54,17.0/2*2.54,17.0/2*2.54);
- my @name = ("$DetectorName\_TACHR","$DetectorName\_TACHI","$DetectorName\_TACWI","$DetectorName\_TACWI2");
- my @mother=("$DetectorMother","$DetectorMother","$DetectorName\_TACHR","$DetectorName\_TACHR");
+ my @thetaT  = (360.,360.,113.5,113.5,92.1);
+ my @thetaS  = (0,0,66.5,66.5,87.89);
+ my @Rout = (45./2*2.54,41/2*2.54,45./2*2.54,(45./2-0.02)*2.54,45./2*2.54);
+ my @Dz   = (44.75/2*2.54,44.75/2*2.54,17.0/2*2.54,17.0/2*2.54,1.66/2*2.54);
+ my @name = ("$DetectorName\_TACHR","$DetectorName\_TACHI","$DetectorName\_TACWI","$DetectorName\_TACWI2","$DetectorName\_TACWIH");
+ my @mother=("$DetectorMother","$DetectorMother","$DetectorName\_TACHR","$DetectorName\_TACHR","$DetectorName\_TACWI");
  #my @mother=("$DetectorMother","$DetectorName\_TACHR","$DetectorMother","$DetectorName\_TACWI");
- my @mat  = ("G4_Al","G4_Galactic","Al_2024","G4_Galactic");
- my @color  = ("808080","FF00FF","00FFFF","0000ff");
+ my @mat  = ("G4_Al","G4_Galactic","Al_2024","G4_Galactic","G4_Galactic");
+ my @color  = ("808080","FF00FF","00FFFF","0000ff","ff00ff");
 
  for(my $n=1; $n<=$NUM; $n++)
  {
@@ -544,17 +544,17 @@ sub make_beam_LH2
 }
 sub make_beam_LH2_CH_con
 { # connector between target chamber and the front end of the beam pipe.       
- my $NUM  = 3;
- my @z    = (0,45./2*2.54+20.5/2,0);
- my @y    = ((45.-0.02)/2*2.54,0,0);
- my @phi  = (-90,0,0);
- my @Rin  = (0,0,0);
- my @Rout = (1.66/2*2.54,1.66/2*2.54,1.38/2*2.54);
- my @Dz   = (0.02/2*2.54,20.5/2,20.5/2);
- my @name = ("$DetectorName\_TACWH","$DetectorName\_TACCN","$DetectorName\_TACCNV");
- my @mother=("$DetectorName\_TACWI","$DetectorMother","$DetectorName\_TACCN");
- my @mat  = ("G4_Galactic","G4_Al","G4_Galactic");
- my @color  = ("ff00ff","101011","ff00ff");
+ my $NUM  = 2;
+ my @z    = (45./2*2.54+20.5/2,0);
+ my @y    = (0,0);
+ my @phi  = (0,0);
+ my @Rin  = (0,0);
+ my @Rout = (1.66/2*2.54,1.38/2*2.54);
+ my @Dz   = (20.5/2,20.5/2);
+ my @name = ("$DetectorName\_TACCN","$DetectorName\_TACCNV");
+ my @mother=("$DetectorMother","$DetectorName\_TACCN");
+ my @mat  = ("G4_Al","G4_Galactic");
+ my @color  = ("101011","ff00ff");
 
  for(my $n=1; $n<=$NUM; $n++)
  {
