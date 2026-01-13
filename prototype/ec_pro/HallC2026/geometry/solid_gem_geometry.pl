@@ -14,7 +14,7 @@ my $DetectorMother="cc_pro_tcd";
 sub solid_gem_geometry
 {
 make_gem();
-make_coli();
+#make_coli();
 #make_coli2();
 }
 

@@ -21,8 +21,12 @@ my $x5  = 9.1;
 my $y4  = 0;
 my $y5  = 0;
 my $z1	= -98;
-my $z3  = -167;
-my $z13  = -167-2.2;
+#11ring
+#my $z3  = -167;
+#my $z13  = -167-2.2;
+#33ring
+my $z3  = -167-29;
+my $z13  = -167-2.2-29;
 my $z2  = -131;
 my $z6  = -267;
 my $z16  = -267-2.2;
@@ -131,10 +135,10 @@ make_gem_right();
 make_gem_top();
 make_gem_bottom();
 make_gem_back();
-make_Tunnel_left();
-make_Tunnel_right();
-make_Tunnel_top();
-make_Tunnel_bottom();
+#make_Tunnel_left();
+#make_Tunnel_right();
+#make_Tunnel_top();
+#make_Tunnel_bottom();
 }
 
 sub make_1
