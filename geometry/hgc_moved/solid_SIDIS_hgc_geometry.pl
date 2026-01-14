@@ -560,7 +560,7 @@ sub make_mirror
       $detector{"material"}    = "Component";            
       print_det(\%configuration, \%detector);      
       
-      my $ang_zrot = -($sec_start+($i-1)*$ang_width);      
+#       my $ang_zrot = -($sec_start+($i-1)*$ang_width);
       
 # Make the subtraction of the inner ellipsoid from the outer barrel:
 # the "Operation:@" indicates that gemc should assume the coordinates
