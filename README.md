@@ -8,10 +8,13 @@ It includes all codes of defining and running simulation, digitizing and analyzi
 
 It should be run with container from [solid_release](https://github.com/JeffersonLab/solid_release) which has prerequisites included. 
 
-Read the gemc simulation general note https://solid.jlab.org/wiki/index.php/Gemc_simulation_general_note and solid software wiki https://solid.jlab.org/wiki/index.php/Software
+Read [gemc simulation general note](https://solid.jlab.org/wiki/index.php/Gemc_simulation_general_note) and [solid software wiki](https://solid.jlab.org/wiki/index.php/Software)
 
 code structure
 --------
+
+you can ask questions using [deepwiki](https://deepwiki.com/JeffersonLab/solid_gemc)
+
 * "geometry", detector definition
 * "field" field definition
 * "script" example script to run simulation
@@ -21,13 +24,14 @@ code structure
 * "mod" some modification of original gemc code to fit solid need
 * "prototype" code for solid prototype simulation
 
+
 development rule and how to contribute
 --------
 * Use "master" branch as devel version and github release as production version
 * most small development will be done by "fork->modify->submit pull request" mode.
 * some major collaborative development can be done with "branch->modify->submit pull request" mode as needed 
 
-To keep the fork in sync, do this on your computer
+To keep your fork in sync, do it simply on github. the alternative is do it on your computer as follows
 * git clone https://github.com/[your_github_name]/solid_gemc.git
 * git remote add upstream https://github.com/JeffersonLab/solid_gemc.git
 * git fetch upstream
