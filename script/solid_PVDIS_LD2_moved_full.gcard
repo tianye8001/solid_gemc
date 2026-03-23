@@ -25,9 +25,9 @@
 <option name="MAX_Z_POS" value="20000"/>
 <option name="HALL_DIMENSIONS" value="20*m,20*m,20*m"/>
 
-<option name="FIELD_DIR" value="/group/solid/www/solid/html/files/field"/>
-<option name="HALL_FIELD" value="solenoid_v4"/>
-<option name="FIELD_PROPERTIES" value="solenoid_v4, 0.01*mm, G4ClassicalRK4,linear"/>
+<option name="FIELD_DIR" value="../field"/>
+<option name="HALL_FIELD" value="solenoid_CLEOv9"/>
+<option name="FIELD_PROPERTIES" value="solenoid_CLEOv9, 1*mm, G4ClassicalRK4,linear"/>
 
 <option name="BEAM_P"   value="e-,5.5*GeV,25*deg,76*deg"/>
 <option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
@@ -64,6 +64,10 @@
 <option name="CHECK_OVERLAPS"  value="1"/>
 <option name="USE_GUI"  value="0"/>
 
+
+<option name="FIELD_DIR" value="/group/solid/www/solid/html/files/field"/>
+<option name="HALL_FIELD" value="solenoid_v4"/>
+<option name="FIELD_PROPERTIES" value="solenoid_v4, 1*mm, G4ClassicalRK4,linear"/>
 
 <option name="N" value="1e4"/>
 <option name="OUTPUT" value="evio,output_theta8_z0_blockon_fieldoff_1e4.evio"/>
