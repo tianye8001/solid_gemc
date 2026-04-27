@@ -66,9 +66,12 @@ gStyle->SetPadColor(0);
 // "#pi^{-}",
 // "K^{-}",    
 // };
-// char* dir1="solid_SIDIS_He3_full_lgc/";
-//   char* dir1="solid_SIDIS_He3_full_lgcec/";
-char* dir1="solid_PVDIS_LD2_full_lgcec/";
+
+char* dir1="../aiml/solid_SIDIS_He3_full_hgc/";
+// char* dir1="../aiml/solid_SIDIS_He3_full_lgc/";
+// char* dir1="../aiml/solid_SIDIS_He3_full_lgcec/";
+// char* dir1="../aiml/solid_PVDIS_LD2_full_lgcec/";
+// char* dir1="../aiml/solid_PVDIS_LD2_full_lgcec/";
 
 // char* dir2="backgroundno_nodecaytrack/";
 // char* dir2="background3sector_nodecaytrack/";
@@ -76,6 +79,13 @@ char* dir2="background3sectordouble_nodecaytrack/";
 
 const int n=2;
 char* input_filename[n]={
+// "solid_SIDIS_He3_moved_full_pim_z350_p2.5_theta8.0_1e6_output.root",
+// "solid_SIDIS_He3_moved_full_km_z350_p2.5_theta8.0_1e6_output.root",
+
+"solid_SIDIS_He3_moved_full_pim_z350_p7.5_theta14.5_1e6_output.root",
+"solid_SIDIS_He3_moved_full_km_z350_p7.5_theta14.5_1e6_output.root",
+
+
 // "solid_SIDIS_He3_moved_full_ele_z350_p2.5_theta8.0_1e6_output.root",
 // "solid_SIDIS_He3_moved_full_pim_z350_p2.5_theta8.0_1e6_output.root",
 // "solid_SIDIS_He3_moved_full_ele_z350_p4.5_theta14.5_1e6_output.root",
@@ -84,12 +94,14 @@ char* input_filename[n]={
 // "solid_SIDIS_He3_moved_full_ele_z350_p3.0_theta12.0_1e6_output.root",
 // "solid_SIDIS_He3_moved_full_pim_z350_p3.0_theta12.0_1e6_output.root",
 
-"solid_PVDIS_LD2_moved_full_ele_z10_p2.5_theta22_1e6_output.root",
-"solid_PVDIS_LD2_moved_full_pim_z10_p2.5_theta22_1e6_output.root",    
+// "solid_PVDIS_LD2_moved_full_ele_z10_p2.5_theta22_1e6_output.root",
+// "solid_PVDIS_LD2_moved_full_pim_z10_p2.5_theta22_1e6_output.root",
 };
 char* label[2]={
-"e^{-}",
-"#pi^{-}",    
+// "e^{-}",
+// "#pi^{-}",
+"#pi^{-}",
+"K^{-}",
 };
 
 // char* dir1="solid_PVDIS_LD2_full_lgc/";
@@ -183,7 +195,8 @@ for(int i=0;i<2;i++){
 //   h_cut[2*j+i]->SetAxisRange(0.8,1,"Y");        
   h_cut[2*j+i]->SetAxisRange(0,1,"Y");          
   h_cut[2*j+i]->SetAxisRange(0,100,"X");  
-  h_cut[2*j+i]->SetTitle(";Npe cut;FOM");
+  // h_cut[2*j+i]->SetTitle(";Npe cut;FOM");
+  h_cut[2*j+i]->SetTitle(";Npe cut;eff");
   
   if (i==0) {
     h_cut[2*j+i]->SetLineColor(kRed);  
