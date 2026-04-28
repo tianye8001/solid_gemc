@@ -34,11 +34,15 @@ use run option -NO_FIELD="all" to turn off all field at run time.
 
 ### how to do it all together
 
-run "load.sh" which will run "run.sh" inside container
+run "load.sh $location_solid_gemc" which will run "run.sh" inside the container
 
-"run.sh" can run batch simulation and produce root files at dir "output"
+$location_solid_gemc is where your solid_gemc git repo clone is
+
+"run.sh" then run batch simulation and produce root files at dir "output"
 
 ## how to analyze results
+
+do this outside of the container
 
 module use /group/halla/modulefiles
 module load root
@@ -46,3 +50,7 @@ module load root
 alias root 'root -l --web=off'
 
 root -b -q -l 'analysis.C+("output.root","hgc",false,false)'
+
+analysis output will be in output_output.root
+
+
