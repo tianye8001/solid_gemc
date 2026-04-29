@@ -2,7 +2,7 @@
 
 source /jlab/2.5/ce/jlab.csh
 setenv SoLID_GEMC /solid_gemc
-setenv GEMC $SoLID_GEMC/mod/gemc/2.9
+setenv GEMC $SoLID_GEMC/mod/gemc/$GEMC_VERSION
 setenv LD_LIBRARY_PATH ${GEMC}:${LD_LIBRARY_PATH}
 setenv PATH ${SoLID_GEMC}/source/${GEMC_VERSION}:${PATH}
 

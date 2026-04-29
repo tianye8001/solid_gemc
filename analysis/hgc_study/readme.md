@@ -34,9 +34,9 @@ use run option -NO_FIELD="all" to turn off all field at run time.
 
 ### how to do it all together
 
-run "load.sh $location_solid_gemc" which will run "run.sh" inside the container
+setenv location_solid_gemc where_your_solid_gemc
 
-$location_solid_gemc is where your solid_gemc git repo clone is
+run "load.sh ${location_solid_gemc}" which will run "run.sh" inside the container
 
 "run.sh" then run batch simulation and produce root files at dir "output"
 
