@@ -13,6 +13,7 @@
 
 <option name="FIELD_DIR" value="../../field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv9"/>
+<option name="FIELD_PROPERTIES" value="solenoid_CLEOv9, 1*mm, G4ClassicalRK4,linear"/>
 
 <option name="MAX_X_POS" value="20000"/>
 <option name="MAX_Y_POS" value="20000"/>
