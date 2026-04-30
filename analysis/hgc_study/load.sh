@@ -5,8 +5,9 @@
 # lsmem | cat >> out.log
 # pwd | cat >> out.log
 
-#setenv location_soft /scigroup/cvmfs/halla/solid/soft
-setenv location_soft /cvmfs/oasis.opensciencegrid.org/jlab/halla/solid/soft/
+# setenv location_soft /scigroup/cvmfs/halla/solid/soft
+# setenv location_soft /cvmfs/oasis.opensciencegrid.org/jlab/halla/solid/soft/
+setenv location_soft /group/solid/soft
 
 setenv location_solid_gemc $1
 
