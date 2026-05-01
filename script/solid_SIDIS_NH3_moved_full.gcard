@@ -31,6 +31,8 @@
 <option name="FIELD_DIR" value="../field"/>
 <option name="HALL_FIELD" value="solenoid_CLEOv9"/>
 <option name="FIELD_PROPERTIES" value="solenoid_CLEOv9, 1*mm, G4ClassicalRK4,linear"/>
+<option name="FIELD_PROPERTIES" value="oxford_ptarget, 1*mm, G4ClassicalRK4,linear"/>
+<option name="DISPLACE_FIELDMAP" value="oxford_ptarget,0*cm,0*cm,-350*cm"/>
 
 <option name="BEAM_P"   value="e-,5.5*GeV,12*deg,70*deg"/>
 <option name="SPREAD_P" value="0*GeV,0*deg,0*deg"/>
