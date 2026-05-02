@@ -1,6 +1,9 @@
 == Info =============================================================
 This is to test SoLID field map
 
+== test field with RK4 directly
+test_geantino_field.py use rk4_propagate.py to test field bending and compare with gemc
+
 == note about gemc ==============================================================
 general note
 it needs MAX_FIELD_STEP to be small value close to ???????
@@ -14,7 +17,6 @@ about gemc 2.3 in JLAB_VERSION 1.3
 
 == test SoLID SIDIS NH3 beam bending ======================================
 
-????????????????????????????
 gemc solidgem.gcard -BEAM_P="chargedgeantino,11*GeV,12*deg,0*deg" -BEAM_V="(0,0,-350)cm" -FIELD_DIR="../../field" -HALL_FIELD="solenoid_CLEOv8" -FIELD_PROPERTIES="solenoid_CLEOv8, 1*mm, G4ClassicalRK4,linear" -MAX_FIELD_STEP=1
 
 
@@ -32,7 +34,8 @@ solid_gemc beam_1field.gcard -BEAM_P="chargedgeantino,11*GeV,180*deg,0*deg" -BEA
 
 "beam.txt_11GeV_solenoid_v4p_5Tv1p_trans" has avg_y=-52.4332028571mm,py=-587.053650705MeV,pz=-10984.3237394MeV, theta 3.059deg and phi 90deg at z=-4500mm
 "beam.txt_8.8GeV_solenoid_v4p_5Tv1p_trans" has avg_y=-65.5920126203mm,py=-587.009331309MeV,pz=-8780.39976567MeV, theta 3.825deg and phi 90deg at z=-4500mm
-"beam.txt_11GeV_solenoid_v4p_5Tv1n_trans" has avg_y=52.435621065mm,py=587.070287409MeV,pz=-10984.3228502MeV, theta 3.059deg and phi -90deg at z=-4500mm
+"beam.txt_11GeV_solenoid_v4p_5Tv1n_trans" has avg_y=52.435621065mm,py=587.07028740lr
+9MeV,pz=-10984.3228502MeV, theta 3.059deg and phi -90deg at z=-4500mm
 "beam.txt_8.8GeV_solenoid_v4p_5Tv1n_trans" has avg_y=65.5946927124mm,py=587.021083088MeV,pz=-8780.39897999MeV, theta 3.825deg and phi -90deg at z=-4500mm
 
 solid_gemc beam_1field.gcard -BEAM_P="chargedgeantino,11*GeV,180*deg,0*deg" -BEAM_V="(0,0,0)cm" -FIELD_DIR="/group/solid/www/solid/html/files/field" -HALL_FIELD="solenoid_v4_5Tv1TransPos" -FIELD_PROPERTIES="solenoid_v4_5Tv1TransPos, 1*mm, G4ClassicalRK4,linear"
