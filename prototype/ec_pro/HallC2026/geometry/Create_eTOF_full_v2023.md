@@ -1,6 +1,6 @@
 # eTOF Detector Geometry Structure Analysis
 
-This document provides a detailed breakdown of the **eTOF (endcap Time-of-Flight)** detector geometry structure as defined in [geo.C](file:///home/zwzhao/agy/mrpc/geo.C).
+This document provides a detailed breakdown of the **eTOF (endcap Time-of-Flight)** detector geometry structure as defined in Create_eTOF_full_v2023.C.
 
 ---
 
