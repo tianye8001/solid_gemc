@@ -164,13 +164,13 @@ sub make_mrpc_layers
         
         # Configure gas gaps to be sensitive to track hits
         if ($layer->{name} =~ /^gap_/) {
-            $detector{"sensitivity"} = "flux";
-            $detector{"hit_type"}    = "flux";
+            $detector{"sensitivity"} = "solid_mrpc";
+            $detector{"hit_type"}    = "solid_mrpc";
             $detector{"identifiers"} = "id manual $layer->{name}";
         } else {
             $detector{"sensitivity"} = "no";
-            $detector{"hit_type"}    = "";
-            $detector{"identifiers"} = "";
+            $detector{"hit_type"}    = "no";
+            $detector{"identifiers"} = "no";
         }
         
         print_det(\%main::configuration, \%detector);
