@@ -19,7 +19,7 @@ my $DetectorMother="cc_pro_tcd";
 my $Rmin 		= $parameters{"Rmin"};
 my $Rmax 		= $parameters{"Rmax"};
 
-my $z_shower = 135.69; 
+my $z_shower = 176.42; 
 
 sub solid_ec_virtualplane
 {

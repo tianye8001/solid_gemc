@@ -1,0 +1,9 @@
+            urgroove  |              bankid  |                                  urgroove bank ID  | 2300   |                  Di  
+            urgroove  |              sector  |                              module/sector number  |    1   |                  Di  
+            urgroove  |               layer  |                             readout layer or view  |    2   |                  Di  
+            urgroove  |           component  |                                      strip number  |    3   |                  Di  
+            urgroove  |           ADC_order  |                                          always 0  |    4   |                  Di  
+            urgroove  |             ADC_ADC  |                                               ADC  |    5   |                  Di  
+            urgroove  |            ADC_time  |                                              time  |    6   |                  Dd  
+            urgroove  |             ADC_ped  |                                          pedestal  |    7   |                  Di  
+            urgroove  |                hitn  |                                        hit number  |   99   |                  Di  

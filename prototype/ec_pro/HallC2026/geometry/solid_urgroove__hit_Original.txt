@@ -1,0 +1,1 @@
+            urgroove  |      uRGroove hit definitions  |   region sector chamber layer component  | 0.1*KeV   |   50*ns   |    1*mm   |   20*um   |    1*ns   |    2*ns   |     100   |     -20   |   50*ns  

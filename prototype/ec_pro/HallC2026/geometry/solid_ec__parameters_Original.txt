@@ -10,7 +10,7 @@ Angle_module		| 30	               | deg  | Angle_module            | - |  - | - 
 Radius_shower		| 5.413                | cm   | Radius_shower	  	| - |  - | - | - | - | -
 Radius_rod		| 5.6255               | cm   | Radius_rod	  	| - |  - | - | - | - | -
 R_rod			| 0.3	               | cm   | R_rod		  	| - |  - | - | - | - | -
-z_shower		| 135.69               | cm   | z_shower 56*2.54/2+4.5+1.5+14.7+5+2+0.6+1.5+2+15.1+1.1+2.4+2+45/2. | - |  - | - | - | - | -
+z_shower		| 176.42               | cm   | z_shower 56*2.54/2+4.5+1.5+14.7+5+2+0.6+1.5+2+15.1+1.1+2.4+2+45/2. | - |  - | - | - | - | -
 Rmin			| 0	   	       | cm   | Rmin       		| - |  - | - | - | - | -
 Rmax			| 15	               | cm   | Rmax      		| - |  - | - | - | - | -
 Sphi			| 0  	               | deg  | Sphi       		| - |  - | - | - | - | -
