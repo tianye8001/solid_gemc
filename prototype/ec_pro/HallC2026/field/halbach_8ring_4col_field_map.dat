@@ -1,5 +1,5 @@
 <mfield>
-  <description name="halbach_33ring_4col_field_map" factory="ASCII" comment="halbach_33ring_4col_field_map"/>
+  <description name="halbach_8ring_4col_field_map" factory="ASCII" comment="halbach_8ring_4col_field_map"/>
        <symmetry type="cartesian_3D" format="map" integration="ClassicalRK4" minStep="0.01*mm"/>
        <map>
                <coordinate>
