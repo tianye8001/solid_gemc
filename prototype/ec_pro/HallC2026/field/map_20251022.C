@@ -1,5 +1,5 @@
 // The permanent magnet is made by ring with cad file "../geometry/magnet_cad_11rings/MagnetCubes_21.stl" and ../geometry/magnet_cad_11rings/AnnularPlateHardcoded-AnnularPlate_21.stl"
-// each ring is about 24mm long with 15mm diameter inner space
+// each ring is about 24mm long with about 15mm diameter inner space
 //its map is as follows (1st column is radius relative to main axis z, 2nd column is Bx field, while By=0 and Bz=0)
 // 0.0000		1961.3753
 // 3.7331		1964.1460
@@ -30,12 +30,13 @@ ofstream output("output",ios::trunc);
     // this function can fit the data, refer to "map_fit_20251022.png"
     TF1 *f=new TF1("f","4.2659e-3 * pow(x,3) - 2.8327e-2 * pow(x,2) + 3.6691 * x + 1950.7985",0,70);
 
+    //make each ring 30mm thick to make geometry easier
     for (double x=-70;x<=70;x=x+7){
         for (double y=-70;y<=70;y=y+7){
-            // for (double z=0;z<=24;z=z+24){ //1 ring
-            // for (double z=0;z<=254;z=z+254){ //11 rings
-            // for (double z=0;z<=381;z=z+381){//16 rings
-            for (double z=0;z<=813;z=z+813){//33 rings
+            // for (double z=0;z<=30;z=z+30){ //1 ring
+            // for (double z=0;z<=330;z=z+330){ //11 rings
+            // for (double z=0;z<=480;z=z+480){//16 rings
+            for (double z=0;z<=990;z=z+990){//33 rings
                 output << x << "\t" << y << "\t" << z << "\t" << f->Eval(sqrt(x*x+y*y)) << "\t" << 0 << "\t" << 0 << endl;
             }
         }
