@@ -1,5 +1,3 @@
-// The permanent magnet is made by ring with cad file "../geometry/magnet_cad_11rings/MagnetCubes_21.stl" and ../geometry/magnet_cad_11rings/AnnularPlateHardcoded-AnnularPlate_21.stl"
-// each ring is about 24mm long with about 15mm diameter inner space
 //its map is as follows (1st column is radius relative to main axis z, 2nd column is Bx field, while By=0 and Bz=0)
 // 0.0000		1961.3753
 // 3.7331		1964.1460
@@ -22,7 +20,7 @@
 // 67.1959		3363.8778
 // 70.9290		3601.6357
 
- // refer to "map_shape_20221022_1.png" and "map_shape_20221022_2.png"
+ // refer to "ring_d_14cm_rho_Beff.xlsx","map_shape_20221022_1.png" and "map_shape_20221022_2.png"
 
 {
 ofstream output("output",ios::trunc);
