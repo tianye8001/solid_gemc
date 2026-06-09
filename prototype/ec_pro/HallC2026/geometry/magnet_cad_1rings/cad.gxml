@@ -1,0 +1,4 @@
+<gxml>
+	<volume name="MagnetCubes_21" mother="cc_pro_tcd" color="8899dd"  material="G4_Fe"   position="0*cm 0*cm -134*cm"  rotation="0*deg 0*deg 0*deg"/>
+	<volume name="AnnularPlateHardcoded-AnnularPlate_21" mother="cc_pro_tcd" color="00ff77"  material="G4_POLYCARBONATE"  position="0*cm 0*cm -134*cm"  rotation="0*deg 0*deg 0*deg"/>
+</gxml>
