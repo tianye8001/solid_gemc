@@ -213,8 +213,9 @@ sub make_lmu_size_gem_modules
             {
                 $detector{"sensitivity"} = "urwell";
                 $detector{"hit_type"}    = "urwell";
+		my $sector_id = 100 + $module_id;
                 $detector{"identifiers"} =
-                    "region manual 1 sector manual $module_id chamber manual 1 layer manual 1 component manual 1";
+                    "region manual 1 sector manual $sector_id chamber manual 1 layer manual 1 component manual 1";
             }
             else
             {

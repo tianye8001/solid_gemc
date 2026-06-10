@@ -31,8 +31,8 @@ my $y0 = 0;
 # These use the first two positions from the current uRWell geometry style.
 # Adjust as needed.
 my @module_z = (
-   -71.12-38.66,
-   -71.12-22.15,
+      -71.12-38.66,
+      -71.12-22.15,
 );
 
 # No flip by default.
@@ -174,7 +174,7 @@ sub make_urgroove
 
         $detector{"material"}    = "G4_AIR";
         $detector{"visible"}     = 1;
-        $detector{"style"}       = 1;
+        $detector{"style"}       = 0;
 
         set_common(\%detector);
         print_checked_det(\%detector);
