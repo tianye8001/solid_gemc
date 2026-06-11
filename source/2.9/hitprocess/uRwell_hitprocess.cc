@@ -8,6 +8,7 @@
 #include "G4CachedMagneticField.hh"
 #include "CLHEP/Vector/ThreeVector.h"
 #include "G4Trap.hh"
+#include "G4Box.hh"
 
 
 // CLHEP units
@@ -144,12 +145,18 @@ vector<identifier> uRwell_HitProcess::processID(vector<identifier> id, G4Step* a
              ->GetTopTransform()
              .TransformPoint(xyz);
 
-    // The LMU strip algorithm expects the sensitive volume to be a G4Trap.
+    // The original LMU strip algorithm was written for G4Trap volumes.
+    // For the HallC2026 compact rectangular geometries, the sensitive gas
+    // volume can be a G4Box.  Treat a Box as a special trapezoid with
+    // equal small and large x half-lengths, so the same strip-finding code
+    // can still be used and the component field becomes a real strip ID.
     G4VTouchable* TH = (G4VTouchable*) aStep->GetPreStepPoint()->GetTouchable();
-    G4Trap* Trap = dynamic_cast<G4Trap*>(TH->GetSolid());
+    G4VSolid* solid = TH->GetSolid();
+    G4Trap* Trap = dynamic_cast<G4Trap*>(solid);
+    G4Box*  Box  = dynamic_cast<G4Box*>(solid);
 
-    if (Trap == nullptr) {
-        cout << "Warning: uRwell sensitive volume is not G4Trap. Returning original id." << endl;
+    if (Trap == nullptr && Box == nullptr) {
+        cout << "Warning: uRwell sensitive volume is neither G4Trap nor G4Box. Returning original id." << endl;
 
         if (id.size() > 0) {
             id[id.size() - 1].id_sharing = 1.0;
@@ -159,15 +166,29 @@ vector<identifier> uRwell_HitProcess::processID(vector<identifier> id, G4Step* a
     }
 
     bool isProto = false;
-    if (Trap->GetName().find("proto") != std::string::npos) {
+    if (solid->GetName().find("proto") != std::string::npos) {
         isProto = true;
     }
 
-    // Get trapezoid dimensions from the actual G4Trap volume
-    uRwellC.Xhalf_base      = Trap->GetXHalfLength1();
-    uRwellC.Xhalf_Largebase = Trap->GetXHalfLength2();
-    uRwellC.Yhalf           = Trap->GetYHalfLength1();
-    uRwellC.Zhalf           = Trap->GetZHalfLength();
+    if (Trap != nullptr) {
+        // Get trapezoid dimensions from the actual G4Trap volume.
+        uRwellC.Xhalf_base      = Trap->GetXHalfLength1();
+        uRwellC.Xhalf_Largebase = Trap->GetXHalfLength2();
+        uRwellC.Yhalf           = Trap->GetYHalfLength1();
+        uRwellC.Zhalf           = Trap->GetZHalfLength();
+    }
+    else {
+        // G4Box case: rectangular active area.
+        // Geant4 lengths here are in the same CLHEP units used by lxyz.
+        uRwellC.Xhalf_base      = Box->GetXHalfLength();
+        uRwellC.Xhalf_Largebase = Box->GetXHalfLength();
+        uRwellC.Yhalf           = Box->GetYHalfLength();
+        uRwellC.Zhalf           = Box->GetZHalfLength();
+        /*cout << "DEBUG uRwell G4Box branch used. "
+     << "Box Xhalf=" << Box->GetXHalfLength()/mm
+     << " Yhalf=" << Box->GetYHalfLength()/mm
+     << endl;*/
+    }
 
     double depe = aStep->GetTotalEnergyDeposit();
     double time = aStep->GetPostStepPoint()->GetGlobalTime();
@@ -233,7 +254,11 @@ vector<identifier> uRwell_HitProcess::processID(vector<identifier> id, G4Step* a
     uRwellC.get_strip_info("strip_v", isProto);
     vector<uRwell_strip_found> multi_hit_v =
         URwell_strip.FindStrip(lxyz, depe, uRwellC, time, isProto);
-
+    /*cout << "DEBUG uRwell returned IDs: ";
+    for (unsigned int ii = 0; ii < id.size(); ii++) {
+        cout<<" [id="<<id[ii].id<<", sharing="<<id[ii].id_sharing<<"]";
+    }
+    cout << endl;*/
     //cout << "uRwell V strips found: " << multi_hit_v.size() << endl;
 
     for (unsigned int h = 0; h < multi_hit_v.size(); h++) {
