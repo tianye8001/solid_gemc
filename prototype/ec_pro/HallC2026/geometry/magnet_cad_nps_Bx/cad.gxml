@@ -1,0 +1,3 @@
+<gxml>
+	<volume name="nps_corrector" mother="cc_pro_tcd" color="8899dd"  material="G4_Fe"   position="0*cm 0*cm -145*cm"  rotation="0*deg 0*deg 0*deg"/>
+</gxml>

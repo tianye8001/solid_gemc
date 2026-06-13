@@ -1,0 +1,22 @@
+<mfield>
+  <description name="nps_corrector_Bx" factory="ASCII" comment="nps_corrector_Bx"/>
+       <symmetry type="cartesian_3D" format="map" integration="ClassicalRK4" minStep="0.01*mm"/>
+       <map>
+               <coordinate>
+                       <first name="X" npoints="2" min="-70" max="70" units="mm"/>
+                       <second name="Y" npoints="2" min="-35" max="35" units="mm"/>
+                       <third name="Z" npoints="2" min="0" max="210" units="mm"/>
+               </coordinate>
+               <field unit="gauss"/>
+               <interpolation type="linear"/>
+               <shift z="0" units="cm"/>
+       </map>
+</mfield>
+-35	-70	0	2043  0    0
+-35	-70	210	2043  0    0
+-35	 70	0	2043  0    0
+-35	 70	210	2043  0    0
+ 35	-70	0	2043  0    0
+ 35	-70	210	2043  0    0
+ 35	 70	0	2043  0    0
+ 35	 70	210	2043  0    0
