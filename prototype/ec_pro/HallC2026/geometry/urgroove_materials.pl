@@ -100,6 +100,14 @@ sub materials
     $mat{"ncomponents"} = "4";
     $mat{"components"}  = "G4_Si 0.1 G4_O 0.2 G4_C 0.35 G4_H 0.35";
     print_mat(\%configuration, \%mat);
+
+    %mat = init_mat();
+    $mat{"name"}        = "EM528";
+    $mat{"description"} = "EM528 adhesive";
+    $mat{"density"}     = "1.16";  # replace if known
+    $mat{"ncomponents"} = "4";
+    $mat{"components"}  = "G4_C 0.5918 G4_H 0.1060 G4_N 0.0920 G4_O 0.2102";
+    print_mat(\%configuration, \%mat);
 }
 
 1;

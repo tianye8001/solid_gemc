@@ -1,0 +1,9 @@
+          solid_mrpc  |              bankid  |                                solid_mrpc bank ID  | 2400   |                  Di  
+          solid_mrpc  |              sector  |                           MRPC module number: 1-4  |    1   |                  Di  
+          solid_mrpc  |               layer  |                    gas gap or readout layer index  |    2   |                  Di  
+          solid_mrpc  |           component  |                         strip or component number  |    3   |                  Di  
+          solid_mrpc  |           ADC_order  |                                          always 0  |    4   |                  Di  
+          solid_mrpc  |             ADC_ADC  |                                               ADC  |    5   |                  Di  
+          solid_mrpc  |            ADC_time  |                                              time  |    6   |                  Dd  
+          solid_mrpc  |             ADC_ped  |                                          pedestal  |    7   |                  Di  
+          solid_mrpc  |                hitn  |                                        hit number  |   99   |                  Di  

@@ -20,7 +20,6 @@ my $USE_VOLUME_TABLE = 0;
 # If you want to temporarily reuse the already-compiled uRWell hit process,
 # you may set it to "urwell" for testing.
 my $HIT_TYPE = "urgroove";
-#my $HIT_TYPE = "no";
 
 my $NMODULES = 2;
 
@@ -31,8 +30,8 @@ my $y0 = 0;
 # These use the first two positions from the current uRWell geometry style.
 # Adjust as needed.
 my @module_z = (
-      -71.12-38.66,
-      -71.12-22.15,
+    71.12 + 17.34,
+    71.12 + 45.76,
 );
 
 # No flip by default.
@@ -41,21 +40,25 @@ my @module_flipped = (
     0,
 );
 
-# Match the LMU-style SoLID uRWell transverse size.
-# Full transverse size = 10.2 cm x 10.2 cm.
-my $manual_hx = 5.1;  # cm
-my $manual_hy = 5.1;  # cm
-
-# Compact SoLID uRGroove mother half-thickness.
-# Similar to the compact SoLID uRWell geometry: keep a small container around
-# the real material stack instead of the large LMU 2.8241 cm half-Z box.
-my $urwell_mother_z_half = 0.50;  # cm
+# GEM-like transverse size.
+my $manual_hx = 5.12;  # cm
+my $manual_hy = 5.12;  # cm
 
 # uRGroove detail configuration.
-my $drift_gap_cm        = 0.300;  # 3 mm
-my $groove_depth_cm     = 0.005;  # 50 um
-my $groove_top_width_cm = 0.007;  # 70 um
+# Layer stack and thicknesses follow the information from Jaydeep:
+#   Kapton, uRGrooveGas, Copper, EM528, Carbon, Kapton,
+#   Copper, uRGrooveGas, Copper, Kapton
+# with thicknesses in cm:
+#   0.0035, 0.3, 0.001, 0.0028, 0.00001,
+#   0.005, 0.001, 0.3, 0.0005, 0.0035
+#
+# Note: the geometry uses valid GEMC material names:
+#   uRGrooveGas -> urgroove_gas
+#   Copper      -> Cu
+#   EM528       -> glue   # placeholder material already defined in urgroove_materials.pl
+#   Carbon      -> dlc    # carbon/DLC material already defined in urgroove_materials.pl
 my $readout_pitch_cm    = 0.020;  # 200 um
+my $groove_top_width_cm = 0.007;  # 70 um
 
 # For 10.24 cm full width, this is about 512 strips.
 my $approx_nstrips = int((2.0*$manual_hx)/$readout_pitch_cm + 0.5);
@@ -108,32 +111,21 @@ sub make_urgroove
 {
     my %detector;
 
-    # Simplified uRGroove layer stack.
-    #
-    # Main difference from uRWell:
-    #   - 3 mm drift gas layer is the sensitive ionization volume.
-    #   - amplification zone is represented by a 50 um groove gas layer.
-    #
-    # The microscopic 70 um groove top width and 200 um readout pitch are stored
-    # above as parameters for a future dedicated C++ uRGroove hit process. This
-    # simplified Perl geometry does not instantiate hundreds of individual grooves.
+    # uRGroove layer stack from Jaydeep.
+    # Format: [group, GEMC material name, thickness in cm, display label].
+    # The display label is kept in the volume description so the generated geometry
+    # file is easy to compare with the requested layer list.
     my @layers = (
-        ["window",        "kapton",       0.005],
-        ["window",        "Al",           0.002],
-
-        ["drift",         "urgroove_gas", $drift_gap_cm],
-
-        ["groove",        "urgroove_gas", $groove_depth_cm],
-        ["groove_edge",   "kapton",       0.005],
-        ["resistive",     "dlc",          0.001],
-
-        ["readout1",      "Cu",           0.002],
-        ["readout1",      "g10",          0.050],
-        ["readout1",      "Cu",           0.002],
-
-        ["readout2",      "glue",         0.005],
-        ["readout2",      "g10",          0.050],
-        ["readout2",      "Cu",           0.002],
+        ["window",     "kapton",       0.0035,  "Kapton"],
+        ["gas1",       "urgroove_gas", 0.3000,  "uRGrooveGas"],
+        ["copper1",    "Cu",           0.0010,  "Copper"],
+        ["adhesive",   "EM528",         0.0028,  "EM528"],
+        ["carbon",     "dlc",          0.00001, "Carbon"],
+        ["kapton_mid", "kapton",       0.0050,  "Kapton"],
+        ["copper2",    "Cu",           0.0010,  "Copper"],
+        ["gas2",       "urgroove_gas", 0.3000,  "uRGrooveGas"],
+        ["copper3",    "Cu",           0.0005,  "Copper"],
+        ["kapton_out", "kapton",       0.0035,  "Kapton"],
     );
 
     my $total_thickness = 0.0;
@@ -141,9 +133,7 @@ sub make_urgroove
         $total_thickness += $L->[2];
     }
 
-    # Use compact uRWell-like mother half-thickness.
-    # The uRGroove layers are already centered because z starts at -total_thickness/2.
-    my $mother_z_half = $urwell_mother_z_half;
+    my $mother_z_half = $total_thickness/2.0 + 0.20;
 
     for (my $imod = 0; $imod < $NMODULES; $imod++)
     {
@@ -158,7 +148,7 @@ sub make_urgroove
             "SoLID uRGroove module $imod mother; groove top ${groove_top_width_cm} cm; pitch ${readout_pitch_cm} cm; approx strips $approx_nstrips";
         $detector{"pos"}         = "$x0*cm $y0*cm $z0*cm";
         $detector{"rotation"}    = "0*deg 0*deg 0*deg";
-        $detector{"color"}       = "00aaaa";
+        $detector{"color"}       = "aaaaaa";
         $detector{"type"}        = "Box";
         $detector{"dimensions"}  = "$manual_hx*cm $manual_hy*cm $mother_z_half*cm";
 
@@ -174,7 +164,7 @@ sub make_urgroove
 
         $detector{"material"}    = "G4_AIR";
         $detector{"visible"}     = 1;
-        $detector{"style"}       = 0;
+        $detector{"style"}       = 1;
 
         set_common(\%detector);
         print_checked_det(\%detector);
@@ -187,7 +177,7 @@ sub make_urgroove
 
         foreach my $L (@layers_this_module)
         {
-            my ($group, $mat, $thick) = @$L;
+            my ($group, $mat, $thick, $label) = @$L;
             my $zhalf = $thick/2.0;
             my $zpos = $z + $thick/2.0;
             $z += $thick;
@@ -196,14 +186,16 @@ sub make_urgroove
 
             $detector{"name"}        = "${DetectorName}_${group}_${mat}_${i}";
             $detector{"mother"}      = $DetectorName;
-            $detector{"description"} = "uRGroove module $imod $group $mat layer";
+            $detector{"description"} = "uRGroove module $imod $group layer; requested material label $label; thickness $thick cm";
             $detector{"pos"}         = "0*cm 0*cm $zpos*cm";
             $detector{"rotation"}    = "0*deg 0*deg 0*deg";
             $detector{"color"}       = exists $color{$mat} ? $color{$mat} : "aaaaaa";
 
-            # Match the LMU-style SoLID uRWell size/shape: Box layers.
-            $detector{"type"}        = "Box";
-            $detector{"dimensions"}  = "$manual_hx*cm $manual_hy*cm $zhalf*cm";
+            $detector{"type"}        = "G4Trap";
+            $detector{"dimensions"} =
+                "$zhalf*cm 0*deg 0*deg " .
+                "$manual_hy*cm $manual_hx*cm $manual_hx*cm 0*deg " .
+                "$manual_hy*cm $manual_hx*cm $manual_hx*cm 0*deg";
 
             if ($USE_VOLUME_TABLE) {
                 my ($type_from_table, $dim_from_table) =
@@ -219,15 +211,18 @@ sub make_urgroove
             $detector{"visible"}     = 1;
             $detector{"style"}       = 1;
 
-            # Sensitive ionization volume: the 3 mm drift gas.
-	    if ($group eq "drift" && $mat eq "urgroove_gas") {
-	    # if (0 && $group eq "drift" && $mat eq "urgroove_gas") {
+            # Sensitive ionization volumes: the uRGrooveGas layers.
+            # layer manual 1 -> first gas layer, layer manual 2 -> second gas layer.
+            # If only one of these gas layers should be sensitive, change this block
+            # to select only gas1 or gas2.
+            if ($mat eq "urgroove_gas") {
+                my $readout_layer = ($group eq "gas2") ? 2 : 1;
                 $detector{"sensitivity"} = $HIT_TYPE;
                 $detector{"hit_type"}    = $HIT_TYPE;
 
                 $detector{"identifiers"} =
                     "region manual 1 sector manual " . ($imod + 1) .
-                    " chamber manual 1 layer manual 1 component manual 1";
+                    " chamber manual 1 layer manual $readout_layer component manual 1";
             }
 
             set_common(\%detector);
