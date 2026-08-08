@@ -1,0 +1,12 @@
+# Build artifacts (SCons)
+mod/**/*.o
+mod/**/*.a
+mod/**/*.so
+mod/**/.sconsign.dblite
+mod/gemc/*/gemc
+
+source/**/*.o
+source/**/*.a
+source/**/*.so
+source/**/.sconsign.dblite
+source/*/solid_gemc
