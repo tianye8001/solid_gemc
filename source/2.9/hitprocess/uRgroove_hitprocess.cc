@@ -50,12 +50,14 @@ static uRgrooveConstants initializeuRgrooveConstants(int runno, string digiVaria
 	 data.clear(); calib->GetCalib(data,uRgroove.database);
 	 // all dimensions are in mm
 	 */
-	/*number of strip in each chambers*/
-	urgrooveC.number_strip_chamber[0] = 542;
-	urgrooveC.number_strip_chamber[1] = 628;
-	urgrooveC.number_strip_chamber[2] = 714;
+	// HallC2026 compact uRGroove: 10.24 cm active width and 0.2 mm pitch.
+	// The legacy chamber-count array is not used by the local HallC2026 numbering,
+	// but keep it internally consistent with the per-layer strip count.
+	urgrooveC.number_strip_chamber[0] = 512;
+	urgrooveC.number_strip_chamber[1] = 512;
+	urgrooveC.number_strip_chamber[2] = 512;
 	
-	urgrooveC.number_of_strip = 1884; //Total number of strip
+	urgrooveC.number_of_strip = 512; // strips per U/V readout layer
 	urgrooveC.stripU_stereo_angle = -10 ; // angle between strip and trapezoid base in degree
 	urgrooveC.stripU_pitch = 0.2;  // mm, uRGroove readout pitch: 200 um
 
@@ -213,7 +215,9 @@ vector<identifier> uRgroove_HitProcess::processID(vector<identifier> id, G4Step*
     //cout << "uRgroove U strips found: " << multi_hit_u.size() << endl;
 
     for (unsigned int h = 0; h < multi_hit_u.size(); h++) {
-        if (multi_hit_u.at(h).numberID<1) continue;
+        if (multi_hit_u.at(h).numberID < 1 ||
+            multi_hit_u.at(h).numberID > uRgrooveC.number_of_strip ||
+            multi_hit_u.at(h).weight <= 0) continue;
     /*cout << "  U strip " << h
          << " numberID = " << multi_hit_u.at(h).numberID
          << " weight = " << multi_hit_u.at(h).weight
@@ -264,7 +268,9 @@ cout<<endl;*/
     //cout << "uRgroove V strips found: " << multi_hit_v.size() << endl;
 
     for (unsigned int h = 0; h < multi_hit_v.size(); h++) {
-        if (multi_hit_v.at(h).numberID<1) continue;
+        if (multi_hit_v.at(h).numberID < 1 ||
+            multi_hit_v.at(h).numberID > uRgrooveC.number_of_strip ||
+            multi_hit_v.at(h).weight <= 0) continue;
 	
    /* cout << "  V strip " << h
          << " numberID = " << multi_hit_v.at(h).numberID

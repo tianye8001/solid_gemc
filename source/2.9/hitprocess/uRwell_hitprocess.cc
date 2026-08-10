@@ -51,11 +51,11 @@ static uRwellConstants initializeuRwellConstants(int runno, string digiVariation
 	 // all dimensions are in mm
 	 */
 	/*number of strip in each chambers*/
-	urwellC.number_strip_chamber[0] = 542;
-	urwellC.number_strip_chamber[1] = 628;
-	urwellC.number_strip_chamber[2] = 714;
+	urwellC.number_strip_chamber[0] = 128;
+	urwellC.number_strip_chamber[1] = 128;
+	urwellC.number_strip_chamber[2] = 128;
 	
-	urwellC.number_of_strip = 1884; //Total number of strip
+	urwellC.number_of_strip = 128; //Total number of strip
 	urwellC.stripU_stereo_angle = -10 ; // angle between strip and trapezoid base in degree
 	urwellC.stripU_pitch = 1.;  //mm
 
@@ -208,12 +208,21 @@ vector<identifier> uRwell_HitProcess::processID(vector<identifier> id, G4Step* a
     uRwellC.get_strip_info("strip_u", isProto);
     vector<uRwell_strip_found> multi_hit_u =
         URwell_strip.FindStrip(lxyz, depe, uRwellC, time, isProto);
+    /*cout << "DEBUG sector=" << id[1].id
+     << " layer U, x=" << lxyz.x()/mm
+     << " y=" << lxyz.y()/mm
+     << " strips found=" << multi_hit_u.size()
+     << endl;*/
 
     //cout << "uRwell U strips found: " << multi_hit_u.size() << endl;
 
     for (unsigned int h = 0; h < multi_hit_u.size(); h++) {
+    /*cout << "  U strip numberID=" << multi_hit_u.at(h).numberID
+         << " weight=" << multi_hit_u.at(h).weight
+         << endl;*/
         if (multi_hit_u.at(h).numberID<1) continue;
-    /*cout << "  U strip " << h
+
+    	/*cout << "  U strip " << h
          << " numberID = " << multi_hit_u.at(h).numberID
          << " weight = " << multi_hit_u.at(h).weight
          << " time = " << multi_hit_u.at(h).time
@@ -261,7 +270,15 @@ vector<identifier> uRwell_HitProcess::processID(vector<identifier> id, G4Step* a
     cout << endl;*/
     //cout << "uRwell V strips found: " << multi_hit_v.size() << endl;
 
+/*cout << "DEBUG sector=" << id[1].id
+     << " layer V, x=" << lxyz.x()/mm
+     << " y=" << lxyz.y()/mm
+     << " strips found=" << multi_hit_v.size()
+     << endl;*/
     for (unsigned int h = 0; h < multi_hit_v.size(); h++) {
+  /*  cout << "  V strip numberID=" << multi_hit_v.at(h).numberID
+         << " weight=" << multi_hit_v.at(h).weight
+         << endl;*/
         if (multi_hit_v.at(h).numberID<1) continue;
 	
    /* cout << "  V strip " << h

@@ -8,148 +8,54 @@
 
 vector<uRgroove_strip_found> uRgroove_strip::FindStrip(G4ThreeVector xyz , double Edep, uRgrooveConstants uRgroovec, double time, bool isProto)
 {
-	
-	vector<uRgroove_strip_found> strip_found;
-	vector<uRgroove_strip_found> strip_found_temp;
-	uRgroove_strip_found ClosestStrip;
-	double time_strip =0; // gauss(time_gemc + time_dz + time_redout, sigma_dt);
-	
-	// int N_strip = Number_of_strip(uRgroovec);
-	
-	int N_el = 1e6*Edep/uRgroovec.w_i;
-	
-	if (N_el ==0){
-		ClosestStrip.numberID = -15000;
-		ClosestStrip.weight = 1;
-		ClosestStrip.time = -1;
-		strip_found.push_back(ClosestStrip);
-		return strip_found;
-	}
-	
-	N_el = G4Poisson(N_el*uRgroovec.gain);
-	
-	// strip reference frame
-	
-	
-	double x_real = xyz.x()*cos(M_PI*uRgroovec.get_stereo_angle()/180) + xyz.y()*sin(M_PI*uRgroovec.get_stereo_angle()/180);
-	double y_real = xyz.y()*cos(M_PI*uRgroovec.get_stereo_angle()/180) - xyz.x()*sin(M_PI*uRgroovec.get_stereo_angle()/180);
-	double z_real = xyz.z();
-	
-	
-	double time_dz = fabs(-uRgroovec.Zhalf/cm + z_real/cm)/uRgroovec.v_drift ;
-	
-	int ClosestStrip_ID = round((y_real)/uRgroovec.get_strip_pitch());
-	
-	double weight=Weight_td(ClosestStrip_ID, x_real, y_real, z_real, uRgroovec, isProto);
-	double strip_length_toReadout =cal_length(strip_endpoint1, xyz);
-	double time_toReadout = strip_length_toReadout/uRgroovec.v_eff_readout;
-	if(uRgroovec.v_eff_readout ==0) time_toReadout=0;
-	time_strip = time + time_dz + time_toReadout + G4RandGauss::shoot(0., uRgroovec.sigma_time);
-	
-	ClosestStrip.numberID = ClosestStrip_ID;
-	ClosestStrip.weight = weight;
-	ClosestStrip.time = time_strip;
-	strip_found_temp.push_back(ClosestStrip);
-	
-	//To look around closest strip
-	uRgroove_strip_found NextStrip;
-	
-	int strip_num=0;
-	double weight_next=1;
-	double weight_previous=1;
-	int clus =1;
-	
-	while(weight_next>=0. || weight_previous>=0.){
-		
-		//Look at the next strip
-		strip_num = ClosestStrip_ID + clus;
-		weight_next = Weight_td(strip_num, x_real, y_real, z_real, uRgroovec, isProto);
-		if(weight_next!=-1){
-			NextStrip.numberID = strip_num;
-			NextStrip.weight = weight_next;
-			strip_length_toReadout =cal_length(strip_endpoint1, xyz);
-			time_toReadout = strip_length_toReadout/uRgroovec.v_eff_readout;
-			if(uRgroovec.v_eff_readout ==0) time_toReadout=0;
-			NextStrip.time = time + time_dz + time_toReadout + G4RandGauss::shoot(0., uRgroovec.sigma_time);
-			strip_found_temp.push_back(NextStrip);
-		}
-		
-		//Look at the previous strip
-		strip_num = ClosestStrip_ID - clus;
-	    weight_previous = Weight_td(strip_num, x_real, y_real, z_real, uRgroovec, isProto);
-		if(weight_previous!=-1){
-			NextStrip.numberID = strip_num;
-			NextStrip.weight = weight_previous;
-			strip_length_toReadout =cal_length(strip_endpoint1, xyz);
-			time_toReadout = strip_length_toReadout/uRgroovec.v_eff_readout;
-			if(uRgroovec.v_eff_readout ==0) time_toReadout=0;
-			NextStrip.time = time + time_dz + time_toReadout + G4RandGauss::shoot(0., uRgroovec.sigma_time);
-			strip_found_temp.push_back(NextStrip);
-		}
-		clus++;
-		
-	}
-	
-	
-	/* New strip ID numeration: 1.... Number_of_strips. Number of involved strips is the size of the vector strip_found_temp  */
-	
-	auto max = std::max_element( strip_found_temp.begin(), strip_found_temp.end(),
-										 []( const uRgroove_strip_found &a, const uRgroove_strip_found &b )
-										 {
-		return a.numberID < b.numberID;
-	} );
-	
-	auto min = std::min_element( strip_found_temp.begin(), strip_found_temp.end(),
-										 []( const uRgroove_strip_found &a, const uRgroove_strip_found &b )
-										 {
-		return a.numberID < b.numberID;
-	} );
-	
-	auto avg = round((max->numberID + min->numberID)/2);
-	//	auto number_of_strip = Number_of_strip(uRgroovec);
-	
-	for (unsigned int i=0; i<strip_found_temp.size();i++){
-	//	cout <<"b: "<<strip_found_temp.at(i).numberID<<endl;
-		strip_found_temp.at(i).numberID = strip_found_temp.at(i).numberID - avg + strip_found_temp.size()/2 ;
-//		cout <<"a: "<<strip_found_temp.at(i).numberID<<endl;
+    vector<uRgroove_strip_found> strip_found;
+    uRgroove_strip_found ThisStrip;
 
-	}
-	
-	double Nel_left=N_el;
-	double renorm=0;
-	double weight_this_strip;
-	int Nel_this_strip=0;
-	
-	for (unsigned int i=0;i<strip_found_temp.size();i++){
-		if (Nel_left==0||renorm==1){
-			strip_found_temp.at(i).weight=0;
-		}
-		if (renorm!=1&&Nel_left!=0){
-			weight_this_strip=strip_found_temp.at(i).weight/(1-renorm);
-			Nel_this_strip=GetBinomial(Nel_left,weight_this_strip);
-			renorm+=strip_found_temp.at(i).weight;
-			strip_found_temp.at(i).weight=Nel_this_strip;
-			Nel_left-=Nel_this_strip;
-		}
-	}
-	
-	for (unsigned int i=0;i<strip_found_temp.size();i++){
-		if(strip_found_temp.at(i).weight>0) strip_found.push_back(strip_found_temp[i]);
-	}
-	
-	if (strip_found.size() ==0){
-		ClosestStrip.numberID = -15000;
-		ClosestStrip.weight = 1;
-		ClosestStrip.time = -1;
-		strip_found.push_back(ClosestStrip);
-		
-	}
-	
+    // Convert deposited energy to the number of primary electrons.
+    int N_el = 1e6*Edep/uRgroovec.w_i;
 
-	return strip_found;
-	
+    if (N_el == 0) {
+        ThisStrip.numberID = -15000;
+        ThisStrip.weight   = 1;
+        ThisStrip.time     = -1;
+        strip_found.push_back(ThisStrip);
+        return strip_found;
+    }
+
+    N_el = G4Poisson(N_el*uRgroovec.gain);
+
+    // Transform the hit position into the strip coordinate frame.
+    // y_real is the coordinate perpendicular to the strip direction.
+    double x_real = xyz.x()*cos(M_PI*uRgroovec.get_stereo_angle()/180) + xyz.y()*sin(M_PI*uRgroovec.get_stereo_angle()/180);
+    double y_real = xyz.y()*cos(M_PI*uRgroovec.get_stereo_angle()/180) - xyz.x()*sin(M_PI*uRgroovec.get_stereo_angle()/180);
+    double z_real = xyz.z();
+
+    // HallC2026 local strip numbering, following the corrected uRwell scheme:
+    // component = 1 ... number_of_strip for each sector and U/V readout layer.
+    // With Yhalf = 5.12 cm and number_of_strip = 512, pitch = 0.2 mm.
+    // This replaces the old cluster-centered renumbering that could produce component 0.
+    double pitch = 2.0*uRgroovec.Yhalf/uRgroovec.number_of_strip;
+    int stripID = (int) floor((y_real + uRgroovec.Yhalf)/pitch) + 1;
+
+    // Reject hits outside the active strip range.
+    if (stripID < 1 || stripID > uRgroovec.number_of_strip) {
+        ThisStrip.numberID = -15000;
+        ThisStrip.weight   = 1;
+        ThisStrip.time     = -1;
+        strip_found.push_back(ThisStrip);
+        return strip_found;
+    }
+
+    // Drift-time contribution.
+    double time_dz = fabs(-uRgroovec.Zhalf/cm + z_real/cm)/uRgroovec.v_drift;
+
+    ThisStrip.numberID = stripID;
+    ThisStrip.weight   = N_el;
+    ThisStrip.time     = time + time_dz + G4RandGauss::shoot(0., uRgroovec.sigma_time);
+
+    strip_found.push_back(ThisStrip);
+    return strip_found;
 }
-
 
 double uRgroove_strip::Weight_td(int strip, double x, double y, double z, uRgrooveConstants uRgroovec, bool isProto){
 	double wght;

@@ -8,147 +8,54 @@
 
 vector<uRwell_strip_found> uRwell_strip::FindStrip(G4ThreeVector xyz , double Edep, uRwellConstants uRwellc, double time, bool isProto)
 {
-	
 	vector<uRwell_strip_found> strip_found;
-	vector<uRwell_strip_found> strip_found_temp;
-	uRwell_strip_found ClosestStrip;
-	double time_strip =0; // gauss(time_gemc + time_dz + time_redout, sigma_dt);
-	
-	// int N_strip = Number_of_strip(uRwellc);
-	
+	uRwell_strip_found ThisStrip;
+
+	// Convert deposited energy to the number of primary electrons.
 	int N_el = 1e6*Edep/uRwellc.w_i;
-	
-	if (N_el ==0){
-		ClosestStrip.numberID = -15000;
-		ClosestStrip.weight = 1;
-		ClosestStrip.time = -1;
-		strip_found.push_back(ClosestStrip);
+
+	if (N_el == 0) {
+		ThisStrip.numberID = -15000;
+		ThisStrip.weight   = 1;
+		ThisStrip.time     = -1;
+		strip_found.push_back(ThisStrip);
 		return strip_found;
 	}
-	
+
 	N_el = G4Poisson(N_el*uRwellc.gain);
-	
-	// strip reference frame
-	
-	
+
+	// Transform the hit position into the strip coordinate frame.
+	// y_real is the coordinate perpendicular to the strip direction.
 	double x_real = xyz.x()*cos(M_PI*uRwellc.get_stereo_angle()/180) + xyz.y()*sin(M_PI*uRwellc.get_stereo_angle()/180);
 	double y_real = xyz.y()*cos(M_PI*uRwellc.get_stereo_angle()/180) - xyz.x()*sin(M_PI*uRwellc.get_stereo_angle()/180);
 	double z_real = xyz.z();
-	
-	
-	double time_dz = fabs(-uRwellc.Zhalf/cm + z_real/cm)/uRwellc.v_drift ;
-	
-	int ClosestStrip_ID = round((y_real)/uRwellc.get_strip_pitch());
-	
-	double weight=Weight_td(ClosestStrip_ID, x_real, y_real, z_real, uRwellc, isProto);
-	double strip_length_toReadout =cal_length(strip_endpoint1, xyz);
-	double time_toReadout = strip_length_toReadout/uRwellc.v_eff_readout;
-	if(uRwellc.v_eff_readout ==0) time_toReadout=0;
-	time_strip = time + time_dz + time_toReadout + G4RandGauss::shoot(0., uRwellc.sigma_time);
-	
-	ClosestStrip.numberID = ClosestStrip_ID;
-	ClosestStrip.weight = weight;
-	ClosestStrip.time = time_strip;
-	strip_found_temp.push_back(ClosestStrip);
-	
-	//To look around closest strip
-	uRwell_strip_found NextStrip;
-	
-	int strip_num=0;
-	double weight_next=1;
-	double weight_previous=1;
-	int clus =1;
-	
-	while(weight_next>=0. || weight_previous>=0.){
-		
-		//Look at the next strip
-		strip_num = ClosestStrip_ID + clus;
-		weight_next = Weight_td(strip_num, x_real, y_real, z_real, uRwellc, isProto);
-		if(weight_next!=-1){
-			NextStrip.numberID = strip_num;
-			NextStrip.weight = weight_next;
-			strip_length_toReadout =cal_length(strip_endpoint1, xyz);
-			time_toReadout = strip_length_toReadout/uRwellc.v_eff_readout;
-			if(uRwellc.v_eff_readout ==0) time_toReadout=0;
-			NextStrip.time = time + time_dz + time_toReadout + G4RandGauss::shoot(0., uRwellc.sigma_time);
-			strip_found_temp.push_back(NextStrip);
-		}
-		
-		//Look at the previous strip
-		strip_num = ClosestStrip_ID - clus;
-	    weight_previous = Weight_td(strip_num, x_real, y_real, z_real, uRwellc, isProto);
-		if(weight_previous!=-1){
-			NextStrip.numberID = strip_num;
-			NextStrip.weight = weight_previous;
-			strip_length_toReadout =cal_length(strip_endpoint1, xyz);
-			time_toReadout = strip_length_toReadout/uRwellc.v_eff_readout;
-			if(uRwellc.v_eff_readout ==0) time_toReadout=0;
-			NextStrip.time = time + time_dz + time_toReadout + G4RandGauss::shoot(0., uRwellc.sigma_time);
-			strip_found_temp.push_back(NextStrip);
-		}
-		clus++;
-		
-	}
-	
-	
-	/* New strip ID numeration: 1.... Number_of_strips. Number of involved strips is the size of the vector strip_found_temp  */
-	
-	auto max = std::max_element( strip_found_temp.begin(), strip_found_temp.end(),
-										 []( const uRwell_strip_found &a, const uRwell_strip_found &b )
-										 {
-		return a.numberID < b.numberID;
-	} );
-	
-	auto min = std::min_element( strip_found_temp.begin(), strip_found_temp.end(),
-										 []( const uRwell_strip_found &a, const uRwell_strip_found &b )
-										 {
-		return a.numberID < b.numberID;
-	} );
-	
-	auto avg = round((max->numberID + min->numberID)/2);
-	//	auto number_of_strip = Number_of_strip(uRwellc);
-	
-	for (unsigned int i=0; i<strip_found_temp.size();i++){
-	//	cout <<"b: "<<strip_found_temp.at(i).numberID<<endl;
-		strip_found_temp.at(i).numberID = strip_found_temp.at(i).numberID - avg + strip_found_temp.size()/2 ;
-//		cout <<"a: "<<strip_found_temp.at(i).numberID<<endl;
 
-	}
-	
-	double Nel_left=N_el;
-	double renorm=0;
-	double weight_this_strip;
-	int Nel_this_strip=0;
-	
-	for (unsigned int i=0;i<strip_found_temp.size();i++){
-		if (Nel_left==0||renorm==1){
-			strip_found_temp.at(i).weight=0;
-		}
-		if (renorm!=1&&Nel_left!=0){
-			weight_this_strip=strip_found_temp.at(i).weight/(1-renorm);
-			Nel_this_strip=GetBinomial(Nel_left,weight_this_strip);
-			renorm+=strip_found_temp.at(i).weight;
-			strip_found_temp.at(i).weight=Nel_this_strip;
-			Nel_left-=Nel_this_strip;
-		}
-	}
-	
-	for (unsigned int i=0;i<strip_found_temp.size();i++){
-		if(strip_found_temp.at(i).weight>0) strip_found.push_back(strip_found_temp[i]);
-	}
-	
-	if (strip_found.size() ==0){
-		ClosestStrip.numberID = -15000;
-		ClosestStrip.weight = 1;
-		ClosestStrip.time = -1;
-		strip_found.push_back(ClosestStrip);
-		
-	}
-	
+	// For the rectangular beam-test uRWell geometry, use local strip numbering:
+	// component = 1 ... number_of_strip for each sector and readout layer.
+	// This avoids the old CLAS12 centered strip numbering, which returned 0 near the detector center.
+	double pitch = 2.0*uRwellc.Yhalf/uRwellc.number_of_strip;
+	int stripID = (int) floor((y_real + uRwellc.Yhalf)/pitch) + 1;
 
+	// Reject hits outside the active strip range.
+	if (stripID < 1 || stripID > uRwellc.number_of_strip) {
+		ThisStrip.numberID = -15000;
+		ThisStrip.weight   = 1;
+		ThisStrip.time     = -1;
+		strip_found.push_back(ThisStrip);
+		return strip_found;
+	}
+
+	// Drift-time contribution.
+	double time_dz = fabs(-uRwellc.Zhalf/cm + z_real/cm)/uRwellc.v_drift;
+
+	ThisStrip.numberID = stripID;
+	ThisStrip.weight   = N_el;
+	ThisStrip.time     = time + time_dz + G4RandGauss::shoot(0., uRwellc.sigma_time);
+
+	strip_found.push_back(ThisStrip);
 	return strip_found;
-	
 }
+
 
 
 double uRwell_strip::Weight_td(int strip, double x, double y, double z, uRwellConstants uRwellc, bool isProto){

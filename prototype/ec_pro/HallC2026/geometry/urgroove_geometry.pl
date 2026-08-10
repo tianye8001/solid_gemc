@@ -55,12 +55,12 @@ my $manual_hy = 5.12;  # cm
 # Note: the geometry uses valid GEMC material names:
 #   uRGrooveGas -> urgroove_gas
 #   Copper      -> Cu
-#   EM528       -> glue   # placeholder material already defined in urgroove_materials.pl
-#   Carbon      -> dlc    # carbon/DLC material already defined in urgroove_materials.pl
+#   EM528       -> EM528
+#   Carbon      -> dlc
 my $readout_pitch_cm    = 0.020;  # 200 um
 my $groove_top_width_cm = 0.007;  # 70 um
 
-# For 10.24 cm full width, this is about 512 strips.
+# For 10.24 cm full width and 0.020 cm pitch, this is 512 strips.
 my $approx_nstrips = int((2.0*$manual_hx)/$readout_pitch_cm + 0.5);
 
 my %color = (
@@ -70,6 +70,7 @@ my %color = (
     "gas"          => "afb0ba",
     "Cu"           => "fd7f00",
     "dlc"          => "14b6ce",
+    "EM528"        => "14ce3d",
     "glue"         => "14ce3d",
     "g10"          => "aa44d8"
 );
@@ -211,18 +212,19 @@ sub make_urgroove
             $detector{"visible"}     = 1;
             $detector{"style"}       = 1;
 
-            # Sensitive ionization volumes: the uRGrooveGas layers.
-            # layer manual 1 -> first gas layer, layer manual 2 -> second gas layer.
-            # If only one of these gas layers should be sensitive, change this block
-            # to select only gas1 or gas2.
+            # Keep both physical uRGroove gas regions sensitive for now.
+            # gas1/gas2 are physical volumes, not the logical U/V readout layers.
+            # uRgroove_HitProcess::processID() maps each sensitive gas hit to:
+            #   layer 1 -> U strips
+            #   layer 2 -> V strips
+            # Therefore both gas regions start from the same manual identifier.
             if ($mat eq "urgroove_gas") {
-                my $readout_layer = ($group eq "gas2") ? 2 : 1;
                 $detector{"sensitivity"} = $HIT_TYPE;
                 $detector{"hit_type"}    = $HIT_TYPE;
 
                 $detector{"identifiers"} =
                     "region manual 1 sector manual " . ($imod + 1) .
-                    " chamber manual 1 layer manual $readout_layer component manual 1";
+                    " chamber manual 1 layer manual 1 component manual 1";
             }
 
             set_common(\%detector);
