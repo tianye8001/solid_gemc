@@ -24,8 +24,10 @@ my $sc4_y2_hlfln = 4.5/2;
 my $sc4_x_hlfln = 18./2;  
 my $sc_z_hlfln = 1./2;
 my $sc2_z_hlfln = 2./2;
-my $Z_sc1 = -56*2.54/2-8.26-1./2;
-my $Z_sc2 =  56*2.54/2+4.5+8.5+6.12+5.62+6.89+2./2;  
+#my $Z_sc1 = -56*2.54/2-8.26-1./2;
+#my $Z_sc2 =  56*2.54/2+4.5+8.5+6.12+5.62+6.89+2./2;  
+my $Z_sc1 = -140.61+0.5+60.9;
+my $Z_sc2 = -140.61+0.5+408.5;  
 
 my $spd1_x_hlfln = 10./2;  
 my $spd1_y_hlfln = 25./2;  
@@ -99,7 +101,8 @@ sub make_sc2
 }
 sub make_sc3
 {
- my $z_sc3 = -56*2.54/2+30.48+243.84+22.86+1/2.;
+	# my $z_sc3 = -56*2.54/2+30.48+243.84+22.86+1/2.;
+ my $z_sc3 = -140.61+0.5+241.8;
 	my %detector=init_det();
 	$detector{"name"}        = "$DetectorName\_sc3";
 	$detector{"mother"}      = "$DetectorMother";
@@ -123,7 +126,8 @@ sub make_sc3
 }
 sub make_sc4
 {
- my $z_sc4 = 56*2.54/2+4.5+8.5+6.12+2./2;
+	# my $z_sc4 = 56*2.54/2+4.5+8.5+6.12+2./2;
+ my $z_sc4 = -140.61+0.5+40.5;
 	my %detector=init_det();
 	$detector{"name"}        = "$DetectorName\_sc4";
 	$detector{"mother"}      = "$DetectorMother";
