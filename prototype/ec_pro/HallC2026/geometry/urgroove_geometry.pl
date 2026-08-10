@@ -212,13 +212,12 @@ sub make_urgroove
             $detector{"visible"}     = 1;
             $detector{"style"}       = 1;
 
-            # Keep both physical uRGroove gas regions sensitive for now.
-            # gas1/gas2 are physical volumes, not the logical U/V readout layers.
+            # Sensitive ionization volume:
+            # only gas1 is sensitive, based on Jaydeep's confirmation.
             # uRgroove_HitProcess::processID() maps each sensitive gas hit to:
             #   layer 1 -> U strips
             #   layer 2 -> V strips
-            # Therefore both gas regions start from the same manual identifier.
-            if ($mat eq "urgroove_gas") {
+            if ($group eq "gas1" && $mat eq "urgroove_gas") {
                 $detector{"sensitivity"} = $HIT_TYPE;
                 $detector{"hit_type"}    = $HIT_TYPE;
 
