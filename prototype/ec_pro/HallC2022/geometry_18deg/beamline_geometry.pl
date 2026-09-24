@@ -51,6 +51,7 @@ make_beam_LH2_CH();
 #make_beam_LD2();
 #make_beam_carbon();
 make_beam_LH2_CH_con();
+make_beamline_hallc_2022_vacuum();
 #make_target();
 }
 sub make_beam_entrance_cryo
@@ -678,6 +679,108 @@ sub make_beam_dummy
     print_det(\%configuration, \%detector);
  }
 }
+# All dimensions are in mm.
+#
+# The beamline is divided into coaxial cylindrical sections.  The first
+# section bridges the target-chamber connector vacuum, whose downstream face
+# is at z = 776.5 mm, to the STL beamline beginning at z = 899.043 mm. Adjacent
+# sections share an end plane, so the vacuum is continuous in z without
+# sibling-volume overlap.  Radii retain at least about 0.8 mm clearance from
+# the actual faceted STL inner surface.  Narrower filler sections are used in
+# flange and transition regions where extending a neighboring large tube
+# would intersect the STL.
 
+sub make_beamline_hallc_2022_vacuum
+{
+    my @zmin = (
+          776.500,
+          899.043,
+         2958.571,
+         2972.271,
+         5591.409,
+         5600.001,
+         5716.303,
+         5752.229,
+        10853.453,
+        11069.844,
+        12634.374,
+        12689.349,
+        16479.299,
+        16537.449,
+        18958.975,
+        20604.816,
+        24462.712,
+        26692.310
+    );
+
+    my @zmax = (
+          899.043,
+         2958.571,
+         2972.271,
+         5591.409,
+         5600.001,
+         5716.303,
+         5752.229,
+        10853.453,
+        11069.844,
+        12634.374,
+        12689.349,
+        16479.299,
+        16537.449,
+        18958.975,
+        20604.816,
+        24462.712,
+        26692.310,
+        27910.510
+    );
+    my @Rout = (
+         17.000,
+         25.000,
+         25.000,
+         38.000,
+         37.500,
+         98.000,
+         98.000,
+        125.750,
+        125.750,
+        150.000,
+        150.000,
+        217.000,
+        217.000,
+        293.000,
+        276.500,
+        293.000,
+        276.500,
+        293.000
+    );
+
+    my $NUM = scalar(@zmin);
+
+    for(my $i=0; $i<$NUM; $i++)
+    {
+        my $index = sprintf("%02d", $i+1);
+        my $z     = ($zmin[$i] + $zmax[$i])/2.0;
+        my $Dz    = ($zmax[$i] - $zmin[$i])/2.0;
+
+        my %detector = init_det();
+        $detector{"name"}        = "beamline_hallc_2022_vac$index";
+        $detector{"mother"}      = $DetectorMother;
+        $detector{"description"} = "Continuous Hall C 2022 beamline vacuum";
+        $detector{"pos"}         = "0*mm 0*mm $z*mm";
+        $detector{"rotation"}    = "0*deg 0*deg 0*deg";
+        $detector{"color"}       = "00ffff4";
+        $detector{"type"}        = "Tube";
+        $detector{"dimensions"}  = "0*mm $Rout[$i]*mm $Dz*mm 0*deg 360*deg";
+        $detector{"material"}    = "G4_Galactic";
+        $detector{"mfield"}      = "no";
+        $detector{"ncopy"}       = 1;
+        $detector{"pMany"}       = 1;
+        $detector{"exist"}       = 1;
+        $detector{"visible"}     = 1;
+        $detector{"style"}       = 1;
+        $detector{"sensitivity"} = "no";
+        print_det(\%configuration, \%detector);
+    }
+}
 beamline();
 1;
